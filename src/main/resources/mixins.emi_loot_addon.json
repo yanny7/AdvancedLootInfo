@@ -1,0 +1,47 @@
+{
+  "required": true,
+  "package": "com.yanny.emi_loot_addon.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinApplyBonusCount",
+    "MixinBinomialDistributionGenerator",
+    "MixinBinomialWithBonusCount",
+    "MixinCompositeEntryBase",
+    "MixinCompositeLootItemCondition",
+    "MixinDamageSourceCondition",
+    "MixinDamageSourcePredicate",
+    "MixinEnchantRandomlyFunction",
+    "MixinEnchantWithLevelsFunction",
+    "MixinExplorationMapFunction",
+    "MixinIntRange",
+    "MixinInvertedLootItemCondition",
+    "MixinItemPredicate",
+    "MixinLimitCount",
+    "MixinLootingEnchantFunction",
+    "MixinLootItem",
+    "MixinLootItemBlockStatePropertyCondition",
+    "MixinLootItemConditionalFunction",
+    "MixinLootPool",
+    "MixinLootPoolEntryContainer",
+    "MixinLootPoolSingletonContainer",
+    "MixinLootTable",
+    "MixinLootTableReference",
+    "MixinMatchTool",
+    "MixinSetEnchantmentsFunction",
+    "MixinSetItemCountFunction",
+    "MixinSetItemDamageFunction",
+    "MixinSetPotionFunction",
+    "MixinSetStewEffectFunction",
+    "MixinStatePropertiesPredicate",
+    "MixinTagEntry",
+    "MixinTagPredicate",
+    "MixinUniformBonusCount",
+    "MixinUniformGenerator"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
