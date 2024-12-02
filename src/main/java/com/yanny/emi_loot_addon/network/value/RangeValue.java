@@ -75,9 +75,10 @@ public final class RangeValue {
         }
     }
 
-    public void multiply(float value) {
+    public RangeValue multiply(float value) {
         this.min *= value;
         this.max *= value;
+        return this;
     }
 
     public void multiply(RangeValue value) {
@@ -93,6 +94,11 @@ public final class RangeValue {
 
     public void addMax(float value) {
         this.max += value;
+        this.isRange = true;
+    }
+
+    public void addMax(RangeValue value) {
+        this.max += value.max;
         this.isRange = true;
     }
 

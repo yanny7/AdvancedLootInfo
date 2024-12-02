@@ -3,11 +3,13 @@ package com.yanny.emi_loot_addon.compatibility;
 import com.yanny.emi_loot_addon.network.*;
 import com.yanny.emi_loot_addon.network.function.ApplyBonusFunction;
 import com.yanny.emi_loot_addon.network.function.FunctionType;
+import com.yanny.emi_loot_addon.network.function.LootingEnchantFunction;
 import com.yanny.emi_loot_addon.network.function.SetCountFunction;
 import com.yanny.emi_loot_addon.network.value.RangeValue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +61,20 @@ public final class ItemData {
 
                 return Map.entry(enchantment, bonusCount);
             }
+        }
+
+        list = functions.stream().filter((f) -> f.type == FunctionType.LOOTING_ENCHANT).toList();
+
+        for (LootFunction f : list) {
+            LootingEnchantFunction function = (LootingEnchantFunction) f;
+
+            for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
+                RangeValue value = new RangeValue(count);
+                value.addMax(new RangeValue(function.value).multiply(level));
+                bonusCount.put(level, value);
+            }
+
+            return Map.entry(Enchantments.MOB_LOOTING, bonusCount);
         }
 
         return null;

@@ -57,9 +57,9 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             getBonusCount(itemData).forEach(widget::appendTooltip);
 
             widget.appendTooltip(Component.literal(itemData.conditions.stream().map((c) -> c.type).toList().toString()))
-                    .appendTooltip(Component.literal(itemData.functions.stream().map((f) -> f.type).toList().toString()))
-                    .recipeContext(this);
+                    .appendTooltip(Component.literal(itemData.functions.stream().map((f) -> f.type).toList().toString()));
 
+            widget.recipeContext(this);
             widgetHolder.add(widget);
 
             if ((pos[0] + 18) / (9*18) > 0) {
