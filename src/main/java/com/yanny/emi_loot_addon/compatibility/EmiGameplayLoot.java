@@ -9,6 +9,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class EmiGameplayLoot extends EmiBaseLoot {
     public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(Utils.modLoc("gameplay_loot"), EmiStack.of(Items.FISHING_ROD));
 

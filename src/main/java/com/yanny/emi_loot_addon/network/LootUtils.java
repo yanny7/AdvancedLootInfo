@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.emi_loot_addon.mixin.*;
 import com.yanny.emi_loot_addon.network.condition.*;
 import com.yanny.emi_loot_addon.network.function.*;
+import com.yanny.emi_loot_addon.network.value.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -11,8 +12,6 @@ import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
 import org.slf4j.Logger;
@@ -138,54 +137,10 @@ public class LootUtils {
         return new LootGroup(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()), List.of());
     }
 
-    public static int[] getInt(LootContext lootContext, NumberProvider numberProvider) {
-        int[] count = new int[]{-1, -1};
-
-        try {
-            if (numberProvider.getType() == NumberProviders.UNIFORM) {
-                MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
-                count[0] = uniformGenerator.getMin().getInt(lootContext);
-                count[1] = uniformGenerator.getMax().getInt(lootContext);
-            } else if (numberProvider.getType() == NumberProviders.BINOMIAL) {
-                MixinBinomialDistributionGenerator binomialGenerator = (MixinBinomialDistributionGenerator) numberProvider;
-                count[0] = 0;
-                count[1] = binomialGenerator.getN().getInt(lootContext);
-            } else {
-                count[0] = numberProvider.getInt(lootContext);
-            }
-        } catch (Exception ignored) {
-            count[0] = 1;
-        }
-
-        return count;
-    }
-
-    public static float[] getFloat(LootContext lootContext, NumberProvider numberProvider) {
-        float[] count = new float[]{-1, -1};
-
-        try {
-            if (numberProvider.getType() == NumberProviders.UNIFORM) {
-                MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
-                count[0] = uniformGenerator.getMin().getFloat(lootContext);
-                count[1] = uniformGenerator.getMax().getFloat(lootContext);
-            } else if (numberProvider.getType() == NumberProviders.BINOMIAL) {
-                MixinBinomialDistributionGenerator binomialGenerator = (MixinBinomialDistributionGenerator) numberProvider;
-                count[0] = 0;
-                count[1] = binomialGenerator.getN().getFloat(lootContext);
-            } else {
-                count[0] = numberProvider.getFloat(lootContext);
-            }
-        } catch (Exception ignored) {
-            count[0] = 1;
-        }
-
-        return count;
-    }
-
     private static LootEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, float chance) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
-        int[] rolls = getInt(context, mixinLootPool.getRolls());
-        float[] bonusRolls = getFloat(context, mixinLootPool.getBonusRolls());
+        RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
+        RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
         return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, chance, true), rolls, bonusRolls, List.of(), List.of());
     }
 

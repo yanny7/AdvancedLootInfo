@@ -112,7 +112,9 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
         @Override
         public void calculateCount(RangeValue count, int level) {
-            count.multiplyMax(level);
+            if (level > 0) {
+                count.multiplyMax(level + 1);
+            }
         }
 
         @Override

@@ -16,6 +16,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class EmiEntityLoot extends EmiBaseLoot {
     public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(Utils.modLoc("entity_loot"), EmiStack.of(Items.ZOMBIE_HEAD));
 
