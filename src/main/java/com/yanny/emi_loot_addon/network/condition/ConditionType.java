@@ -26,6 +26,20 @@ public enum ConditionType {
     UNKNOWN
     ;
 
+    public int getBitIndex() {
+        return ordinal() + 32;
+    }
+
+    public static ConditionType of (int bitIndex) {
+        bitIndex -= 32;
+
+        if (ConditionType.values().length > bitIndex && bitIndex > 0) {
+            return ConditionType.values()[bitIndex];
+        } else {
+            return ConditionType.UNKNOWN;
+        }
+    }
+
     public static ConditionType of(LootItemConditionType type) {
         if (type == LootItemConditions.INVERTED) {
             return INVERTED;

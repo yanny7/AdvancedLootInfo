@@ -14,7 +14,12 @@ public final class EmiUtils {
     private EmiUtils() {}
 
     @NotNull
-    public static MutableComponent translate(String key, Object... args) {
+    public static MutableComponent translatableType(Enum<?> type, Object... args) {
+        return translatable("emi.type.emi_loot_addon." + type.name().toLowerCase(), args);
+    }
+
+    @NotNull
+    public static MutableComponent translatable(String key, Object... args) {
         return Component.translatable(key, Arrays.stream(args).map((arg) -> {
             if (arg instanceof MutableComponent) {
                 return arg;
@@ -31,6 +36,16 @@ public final class EmiUtils {
 
     @NotNull
     public static MutableComponent value(Object value, String unit) {
-        return Component.translatable("emi.description.emi_loot_addon.unit", value, unit).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
+        return Component.translatable("emi.util.emi_loot_addon.two_values", value, unit).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
+    }
+
+    @NotNull
+    public static MutableComponent pair(Object value1, Object value2) {
+        return Component.translatable("emi.util.emi_loot_addon.two_values_with_space", value1, value2).withStyle(TEXT_STYLE);
+    }
+
+    @NotNull
+    public static MutableComponent list(Object... args) {
+        return Component.translatable("emi.util.emi_loot_addon.list." + args.length, args).withStyle(TEXT_STYLE);
     }
 }

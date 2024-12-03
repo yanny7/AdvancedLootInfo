@@ -4,6 +4,7 @@ import com.yanny.emi_loot_addon.network.*;
 import com.yanny.emi_loot_addon.network.condition.ConditionType;
 import com.yanny.emi_loot_addon.network.condition.RandomChanceCondition;
 import com.yanny.emi_loot_addon.network.condition.RandomChanceWithLootingCondition;
+import com.yanny.emi_loot_addon.network.condition.TableBonusCondition;
 import com.yanny.emi_loot_addon.network.function.ApplyBonusFunction;
 import com.yanny.emi_loot_addon.network.function.FunctionType;
 import com.yanny.emi_loot_addon.network.function.LootingEnchantFunction;
@@ -31,7 +32,8 @@ public final class ItemData {
     public final List<LootCondition> conditions;
     @Nullable
     public final Map.Entry<Enchantment, Map<Integer, RangeValue>> bonusCount;
-    public final Map<Integer, RangeValue> bonusChance;
+    @Nullable
+    public final Map.Entry<Enchantment, Map<Integer, RangeValue>> bonusChance;
 
     public ItemData(ResourceLocation item, float chance, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
@@ -44,8 +46,8 @@ public final class ItemData {
         this.bonusChance = getBonusChance(conditions, chance);
     }
 
-    @NotNull
-    private static Map<Integer, RangeValue> getBonusChance(List<LootCondition> conditions, float chance) {
+    @Nullable
+    private static Map.Entry<Enchantment, Map<Integer, RangeValue>> getBonusChance(List<LootCondition> conditions, float chance) {
         Map<Integer, RangeValue> bonusChance = new HashMap<>();
 
         List<LootCondition> list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE_WITH_LOOTING).toList();
@@ -59,9 +61,27 @@ public final class ItemData {
             }
 
             c.HANDLED = true;
+            return Map.entry(Enchantments.MOB_LOOTING, bonusChance);
         }
 
-        return bonusChance;
+        list = conditions.stream().filter((f) -> f.type == ConditionType.TABLE_BONUS).toList();
+
+        for (LootCondition c : list) {
+            TableBonusCondition condition = (TableBonusCondition) c;
+            Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(condition.location);
+
+            if (enchantment != null) {
+                for (int level = 1; level < condition.values.length; level++) {
+                    RangeValue value = new RangeValue(condition.values[level]);
+                    bonusChance.put(level, value.multiply(100));
+                }
+
+                c.HANDLED = true;
+                return Map.entry(enchantment, bonusChance);
+            }
+        }
+
+        return null;
     }
 
     private static RangeValue getChance(List<LootCondition> conditions, float chance) {
@@ -79,6 +99,14 @@ public final class ItemData {
         for (LootCondition c : list) {
             RandomChanceCondition condition = (RandomChanceCondition) c;
             value.multiply(condition.probability);
+            c.HANDLED = true;
+        }
+
+        list = conditions.stream().filter((f) -> f.type == ConditionType.TABLE_BONUS).toList();
+
+        for (LootCondition c : list) {
+            TableBonusCondition condition = (TableBonusCondition) c;
+            value.set(new RangeValue(condition.values[0]));
             c.HANDLED = true;
         }
 

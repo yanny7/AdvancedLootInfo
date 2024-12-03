@@ -1,16 +1,22 @@
 package com.yanny.emi_loot_addon.compatibility;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yanny.emi_loot_addon.Utils;
 import com.yanny.emi_loot_addon.network.RangeValue;
+import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class LootSlotWidget extends SlotWidget {
+    public static final ResourceLocation TEXTURE = Utils.modLoc("textures/gui/mini.png");
+    public static final EmiTexture TNT_TEXTURE = new EmiTexture(TEXTURE, 0, 0, 4, 4);
+
     @Nullable private Component count;
     boolean isRange = false;
 

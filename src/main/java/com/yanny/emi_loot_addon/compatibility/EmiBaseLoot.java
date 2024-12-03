@@ -1,6 +1,10 @@
 package com.yanny.emi_loot_addon.compatibility;
 
+import com.yanny.emi_loot_addon.network.LootCondition;
 import com.yanny.emi_loot_addon.network.LootGroup;
+import com.yanny.emi_loot_addon.network.condition.AllOfCondition;
+import com.yanny.emi_loot_addon.network.condition.AnyOfCondition;
+import com.yanny.emi_loot_addon.network.condition.InvertedCondition;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -9,7 +13,6 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -57,6 +60,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             widget.appendTooltip(getCount(itemData));
             getBonusCount(itemData).forEach(widget::appendTooltip);
 
+            getConditions(itemData.conditions).forEach(widget::appendTooltip);
+
             widget.appendTooltip(Component.literal(itemData.conditions.stream().filter((c) -> !c.HANDLED).map((c) -> c.type).toList().toString()))
                     .appendTooltip(Component.literal(itemData.functions.stream().filter((f) -> !f.HANDLED).map((f) -> f.type).toList().toString()));
 
@@ -72,17 +77,53 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     @NotNull
+    private static List<Component> getConditions(List<LootCondition> conditions) {
+        List<Component> components = new LinkedList<>();
+
+        for (LootCondition condition : conditions) {
+            switch (condition.type) {
+                case ALL_OF -> components.add(EmiUtils.translatableType(
+                        condition.type,
+                        EmiUtils.list(getConditions(((AllOfCondition) condition).terms).toArray())
+                ));
+                case ANY_OF -> components.add(EmiUtils.translatableType(
+                        condition.type,
+                        EmiUtils.list(getConditions(((AnyOfCondition) condition).terms).toArray())
+                ));
+                case INVERTED -> components.add(EmiUtils.translatableType(
+                        condition.type,
+                        EmiUtils.list(getConditions(List.of(((InvertedCondition) condition).term)).toArray())
+                ));
+                case SURVIVES_EXPLOSION -> components.add(EmiUtils.translatableType(condition.type));
+                case RANDOM_CHANCE,
+                     TABLE_BONUS,
+                     RANDOM_CHANCE_WITH_LOOTING -> {
+                    continue;
+                }
+                default -> { //TODO remove
+                    components.add(Component.literal(condition.type.name()));
+                    continue;
+                }
+            }
+
+            condition.HANDLED = true;
+        }
+
+        return components;
+    }
+
+    @NotNull
     private static Component getCount(ItemData data) {
-        return EmiUtils.translate("emi.description.emi_loot_addon.count", data.count);
+        return EmiUtils.translatable("emi.description.emi_loot_addon.count", data.count);
     }
 
     @NotNull
     private static Component getChance(ItemData data) {
         if ((!data.rolls.isRange() && data.rolls.min() > 1) || (data.rolls.isRange() && data.rolls.max() > 1)) {
-            return EmiUtils.translate("emi.description.emi_loot_addon.chance_rolls", EmiUtils.value(data.rolls.toIntString(), "x"), EmiUtils.value(data.chance, "%"));
+            return EmiUtils.translatable("emi.description.emi_loot_addon.chance_rolls", EmiUtils.value(data.rolls.toIntString(), "x"), EmiUtils.value(data.chance, "%"));
         }
 
-        return EmiUtils.translate("emi.description.emi_loot_addon.chance", EmiUtils.value(data.chance, "%"));
+        return EmiUtils.translatable("emi.description.emi_loot_addon.chance", EmiUtils.value(data.chance, "%"));
     }
 
     @NotNull
@@ -90,10 +131,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Component> components = new LinkedList<>();
 
         if (data.bonusChance != null) {
-            data.bonusChance.forEach((level, value) -> components.add(EmiUtils.translate(
+            data.bonusChance.getValue().forEach((level, value) -> components.add(EmiUtils.translatable(
                     "emi.description.emi_loot_addon.chance_bonus",
-                    value,
-                    Component.translatable(Enchantments.MOB_LOOTING.getDescriptionId()),
+                    EmiUtils.value(value, "%"),
+                    Component.translatable(data.bonusChance.getKey().getDescriptionId()),
                     Component.translatable("enchantment.level." + level)
             )));
         }
@@ -106,7 +147,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Component> components = new LinkedList<>();
 
         if (data.bonusCount != null) {
-            data.bonusCount.getValue().forEach((level, value) -> components.add(EmiUtils.translate(
+            data.bonusCount.getValue().forEach((level, value) -> components.add(EmiUtils.translatable(
                     "emi.description.emi_loot_addon.count_bonus",
                     value,
                     Component.translatable(data.bonusCount.getKey().getDescriptionId()),

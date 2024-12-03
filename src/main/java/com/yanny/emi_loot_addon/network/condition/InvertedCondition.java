@@ -21,7 +21,7 @@ public class InvertedCondition extends LootCondition {
     public InvertedCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         termType = buf.readEnum(ConditionType.class);
-        term = LootUtils.CONDITION_DECODE_MAP.get(termType).apply(type, buf);
+        term = LootUtils.CONDITION_DECODE_MAP.get(termType).apply(termType, buf);
     }
 
     @Override
