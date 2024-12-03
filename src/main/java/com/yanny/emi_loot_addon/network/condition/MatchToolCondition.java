@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -45,7 +44,7 @@ public class MatchToolCondition extends LootCondition {
         }
     }
 
-    public MatchToolCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public MatchToolCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         items = new HashSet<>();
 
@@ -65,7 +64,7 @@ public class MatchToolCondition extends LootCondition {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeBoolean(tag != null);
         if (tag != null) {
             buf.writeResourceLocation(tag);

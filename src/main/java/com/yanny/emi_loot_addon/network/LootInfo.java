@@ -2,7 +2,6 @@ package com.yanny.emi_loot_addon.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ public final class LootInfo extends LootEntry {
     public final ResourceLocation item;
     public final float chance;
 
-    public LootInfo(@NotNull FriendlyByteBuf buf) {
+    public LootInfo(FriendlyByteBuf buf) {
         super(buf);
         item = buf.readResourceLocation();
         chance = buf.readFloat();
@@ -23,15 +22,15 @@ public final class LootInfo extends LootEntry {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeResourceLocation(item);
         buf.writeFloat(chance);
     }
 
     @Override
-    public Type getType() {
-        return Type.INFO;
+    public EntryType getType() {
+        return EntryType.INFO;
     }
 
     @Override

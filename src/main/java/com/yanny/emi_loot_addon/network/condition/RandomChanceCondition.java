@@ -5,7 +5,6 @@ import com.yanny.emi_loot_addon.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
 
 public class RandomChanceCondition extends LootCondition {
     public final float probability;
@@ -15,13 +14,13 @@ public class RandomChanceCondition extends LootCondition {
         probability = ((MixinLootItemRandomChanceCondition) condition).getProbability();
     }
 
-    public RandomChanceCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public RandomChanceCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         probability = buf.readFloat();
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeFloat(probability);
     }
 }

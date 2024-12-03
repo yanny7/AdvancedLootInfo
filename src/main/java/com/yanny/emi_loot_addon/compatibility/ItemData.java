@@ -8,7 +8,6 @@ import com.yanny.emi_loot_addon.network.function.ApplyBonusFunction;
 import com.yanny.emi_loot_addon.network.function.FunctionType;
 import com.yanny.emi_loot_addon.network.function.LootingEnchantFunction;
 import com.yanny.emi_loot_addon.network.function.SetCountFunction;
-import com.yanny.emi_loot_addon.network.value.RangeValue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -17,14 +16,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@ParametersAreNonnullByDefault
 public final class ItemData {
     public final Item item;
     public final RangeValue count;
@@ -47,6 +44,7 @@ public final class ItemData {
         this.bonusChance = getBonusChance(conditions, chance);
     }
 
+    @NotNull
     private static Map<Integer, RangeValue> getBonusChance(List<LootCondition> conditions, float chance) {
         Map<Integer, RangeValue> bonusChance = new HashMap<>();
 
@@ -59,6 +57,8 @@ public final class ItemData {
                 RangeValue value = new RangeValue(chance * (condition.percent + level * condition.multiplier));
                 bonusChance.put(level, value.multiply(100));
             }
+
+            c.HANDLED = true;
         }
 
         return bonusChance;
@@ -71,6 +71,7 @@ public final class ItemData {
         for (LootCondition c : list) {
             RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
             value.multiply(condition.percent);
+            c.HANDLED = true;
         }
 
         list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE).toList();
@@ -78,6 +79,7 @@ public final class ItemData {
         for (LootCondition c : list) {
             RandomChanceCondition condition = (RandomChanceCondition) c;
             value.multiply(condition.probability);
+            c.HANDLED = true;
         }
 
         return value.multiply(100);
@@ -100,6 +102,7 @@ public final class ItemData {
                     bonusCount.put(level, value);
                 }
 
+                f.HANDLED = true;
                 return Map.entry(enchantment, bonusCount);
             }
         }
@@ -115,6 +118,7 @@ public final class ItemData {
                 bonusCount.put(level, value);
             }
 
+            f.HANDLED = true;
             return Map.entry(Enchantments.MOB_LOOTING, bonusCount);
         }
 
@@ -133,9 +137,14 @@ public final class ItemData {
             } else {
                 value.set(function.count);
             }
+
+            f.HANDLED = true;
         });
 
-        functions.stream().filter((f) -> f.type == FunctionType.APPLY_BONUS).forEach((f) -> ((ApplyBonusFunction) f).formula.calculateCount(value, 0));
+        functions.stream().filter((f) -> f.type == FunctionType.APPLY_BONUS).forEach((f) -> {
+            ((ApplyBonusFunction) f).formula.calculateCount(value, 0);
+            f.HANDLED = true;
+        });
 
         return value;
     }

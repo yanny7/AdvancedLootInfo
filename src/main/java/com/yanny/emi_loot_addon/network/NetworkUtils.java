@@ -33,6 +33,7 @@ public class NetworkUtils {
         }
     }
 
+    @NotNull
     private static DistHolder<Client, Server> registerClientLootInfoPropagator(SimpleChannel channel) {
         Client client = new Client();
         Server server = new Server(channel);
@@ -42,6 +43,7 @@ public class NetworkUtils {
         return new DistHolder<>(client, server);
     }
 
+    @NotNull
     private static DistHolder<Client, Server> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
@@ -53,14 +55,14 @@ public class NetworkUtils {
     public static class Client {
         public List<InfoSyncMessage> lootEntries = new LinkedList<>();
 
-        public void onLootInfo(@NotNull InfoSyncMessage msg, @NotNull Supplier<NetworkEvent.Context> contextSupplier) {
+        public void onLootInfo(InfoSyncMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
             LOGGER.info("Received loot table: {}", msg.location);
             NetworkEvent.Context context = contextSupplier.get();
             context.enqueueWork(() -> lootEntries.add(msg));
             context.setPacketHandled(true);
         }
 
-        public void onClear(@NotNull ClearMessage msg, @NotNull Supplier<NetworkEvent.Context> contextSupplier) {
+        public void onClear(ClearMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
             lootEntries.clear();
             NetworkEvent.Context context = contextSupplier.get();
             context.enqueueWork(() -> lootEntries.clear());
@@ -76,7 +78,7 @@ public class NetworkUtils {
             this.channel = channel;
         }
 
-        public void sendMessage(@NotNull Player player) {
+        public void sendMessage(Player player) {
             if (player instanceof ServerPlayer serverPlayer) {
                 channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClearMessage());
                 manager.getKeys(LootDataType.TABLE).forEach((location) -> {
@@ -102,10 +104,10 @@ public class NetworkUtils {
         public ClearMessage() {
         }
 
-        public ClearMessage(@NotNull FriendlyByteBuf buf) {
+        public ClearMessage(FriendlyByteBuf buf) {
         }
 
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
         }
     }
 
@@ -118,12 +120,12 @@ public class NetworkUtils {
             this.value = value;
         }
 
-        public InfoSyncMessage(@NotNull FriendlyByteBuf buf) {
+        public InfoSyncMessage(FriendlyByteBuf buf) {
             location = buf.readResourceLocation();
             value = new LootGroup(buf);
         }
 
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(location);
             value.encode(buf);
         }

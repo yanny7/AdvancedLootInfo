@@ -1,7 +1,7 @@
 package com.yanny.emi_loot_addon.compatibility;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.emi_loot_addon.network.value.RangeValue;
+import com.yanny.emi_loot_addon.network.RangeValue;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;

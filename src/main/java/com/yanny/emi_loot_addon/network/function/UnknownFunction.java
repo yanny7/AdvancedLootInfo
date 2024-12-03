@@ -4,7 +4,6 @@ import com.yanny.emi_loot_addon.network.LootFunction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import org.jetbrains.annotations.NotNull;
 
 public class UnknownFunction extends LootFunction {
 
@@ -12,12 +11,12 @@ public class UnknownFunction extends LootFunction {
         super(FunctionType.of(function.getType()));
     }
 
-    public UnknownFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public UnknownFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
 
     }
 }

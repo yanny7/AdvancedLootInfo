@@ -3,14 +3,13 @@ package com.yanny.emi_loot_addon.network.function;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import org.jetbrains.annotations.NotNull;
 
 public class SetNbtFunction extends LootConditionalFunction {
     public SetNbtFunction(LootContext lootContext, LootItemFunction function) {
         super(lootContext, function);
     }
 
-    public SetNbtFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public SetNbtFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type, buf);
     }
 }

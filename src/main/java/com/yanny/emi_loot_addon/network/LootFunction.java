@@ -10,14 +10,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class LootFunction {
+    public boolean HANDLED = false;
+
     public final FunctionType type;
 
     public LootFunction(FunctionType type) {
         this.type = type;
     }
 
-    public abstract void encode(@NotNull FriendlyByteBuf buf);
+    public abstract void encode(FriendlyByteBuf buf);
 
+    @NotNull
     public static List<LootFunction> of(LootContext lootContext, LootItemFunction[] functions) {
         List<LootFunction> list = new LinkedList<>();
 
@@ -28,7 +31,8 @@ public abstract class LootFunction {
         return list;
     }
 
-    public static List<LootFunction> decode(@NotNull FriendlyByteBuf buf) {
+    @NotNull
+    public static List<LootFunction> decode(FriendlyByteBuf buf) {
         int count = buf.readInt();
         List<LootFunction> list = new LinkedList<>();
 
@@ -40,7 +44,7 @@ public abstract class LootFunction {
         return list;
     }
 
-    public static void encode(@NotNull FriendlyByteBuf buf, List<LootFunction> list) {
+    public static void encode(FriendlyByteBuf buf, List<LootFunction> list) {
         buf.writeInt(list.size());
         list.forEach((f) -> {
             buf.writeEnum(f.type);

@@ -25,6 +25,7 @@ public class EmiLootMod {
 
         INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator(channel);
     }
+
     public EmiLootMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

@@ -1,4 +1,4 @@
-package com.yanny.emi_loot_addon.network.value;
+package com.yanny.emi_loot_addon.network;
 
 import com.yanny.emi_loot_addon.mixin.MixinBinomialWithBonusCount;
 import com.yanny.emi_loot_addon.mixin.MixinUniformGenerator;
@@ -8,9 +8,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
 public final class RangeValue {
     private float min;
     private float max;

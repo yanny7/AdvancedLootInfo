@@ -1,7 +1,6 @@
 package com.yanny.emi_loot_addon.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,15 +13,15 @@ public class LootGroup extends LootEntry {
         this.entries = entries;
     }
 
-    public LootGroup(@NotNull FriendlyByteBuf buf) {
+    public LootGroup(FriendlyByteBuf buf) {
         super(buf);
         int count = buf.readInt();
         List<LootEntry> entries = new LinkedList<>();
 
         for (int i = 0; i < count; i++) {
-            Type type = buf.readEnum(Type.class);
+            EntryType entryType = buf.readEnum(EntryType.class);
 
-            switch (type) {
+            switch (entryType) {
                 case GROUP -> entries.add(new LootGroup(buf));
                 case INFO -> entries.add(new LootInfo(buf));
                 case POOL -> entries.add(new LootPoolEntry(buf));
@@ -37,7 +36,7 @@ public class LootGroup extends LootEntry {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeInt(entries.size());
 
@@ -48,8 +47,8 @@ public class LootGroup extends LootEntry {
     }
 
     @Override
-    public Type getType() {
-        return Type.GROUP;
+    public EntryType getType() {
+        return EntryType.GROUP;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.yanny.emi_loot_addon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -18,61 +17,62 @@ import java.util.Objects;
 
 public class Utils {
     @NotNull
-    public static ResourceLocation mcLoc(@NotNull String path) {
+    public static ResourceLocation mcLoc(String path) {
         return new ResourceLocation(path);
     }
 
     @NotNull
-    public static ResourceLocation mcBlockLoc(@NotNull String path) {
+    public static ResourceLocation mcBlockLoc(String path) {
         return mcLoc(ModelProvider.BLOCK_FOLDER + "/" + path);
     }
 
     @NotNull
-    public static ResourceLocation mcItemLoc(@NotNull String path) {
+    public static ResourceLocation mcItemLoc(String path) {
         return mcLoc(ModelProvider.ITEM_FOLDER + "/" + path);
     }
 
     @NotNull
-    public static ResourceLocation modLoc(@NotNull String path) {
+    public static ResourceLocation modLoc(String path) {
         return  new ResourceLocation(EmiLootMod.MOD_ID, path);
     }
 
     @NotNull
-    public static ResourceLocation modLoc(@NotNull Item item) {
+    public static ResourceLocation modLoc(Item item) {
         return modLoc(loc(item).getPath());
     }
 
     @NotNull
-    public static ResourceLocation modLoc(@NotNull RegistryObject<?> object) {
+    public static ResourceLocation modLoc(RegistryObject<?> object) {
         return modLoc(object.getId().getPath());
     }
 
     @NotNull
-    public static ResourceLocation modBlockLoc(@NotNull String path) {
+    public static ResourceLocation modBlockLoc(String path) {
         return modLoc(ModelProvider.BLOCK_FOLDER + "/" + path);
     }
 
     @NotNull
-    public static ResourceLocation modItemLoc(@NotNull String path) {
+    public static ResourceLocation modItemLoc(String path) {
         return modLoc(ModelProvider.ITEM_FOLDER + "/" + path);
     }
 
     @NotNull
-    public static ResourceLocation loc(@NotNull Block block) {
+    public static ResourceLocation loc(Block block) {
         return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block));
     }
 
     @NotNull
-    public static ResourceLocation loc(@NotNull Item item) {
+    public static ResourceLocation loc(Item item) {
         return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
     }
 
     @NotNull
-    public static ResourceLocation blockLoc(@NotNull Block block) {
+    public static ResourceLocation blockLoc(Block block) {
         ResourceLocation loc = loc(block);
         return new ResourceLocation(loc.getNamespace(), ModelProvider.BLOCK_FOLDER + "/" + loc.getPath());
     }
 
+    @NotNull
     public static String getPath(RegistryObject<?> object) {
         return object.getId().getPath();
     }
@@ -82,6 +82,7 @@ public class Utils {
         return "has_" + item.location().getPath();
     }
 
+    @NotNull
     public static String getHasItem(RegistryObject<?> item) {
         return "has_" + getPath(item);
     }
@@ -92,7 +93,7 @@ public class Utils {
     }
 
     @NotNull
-    public static CompoundTag saveBlockPos(@NotNull BlockPos pos) {
+    public static CompoundTag saveBlockPos(BlockPos pos) {
         CompoundTag tag = new CompoundTag();
         tag.putInt("x", pos.getX());
         tag.putInt("y", pos.getY());
@@ -101,13 +102,13 @@ public class Utils {
     }
 
     @NotNull
-    public static BlockPos loadBlockPos(@NotNull CompoundTag tag) {
+    public static BlockPos loadBlockPos(CompoundTag tag) {
         return new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z"));
     }
 
     @SafeVarargs
     @NotNull
-    public static <E extends Enum<E>> EnumSet<E> merge(@NotNull EnumSet<E> first, @NotNull E ...list) {
+    public static <E extends Enum<E>> EnumSet<E> merge(EnumSet<E> first, E ...list) {
         EnumSet<E> copy = first.clone();
         copy.addAll(Arrays.asList(list));
         return copy;
@@ -115,7 +116,7 @@ public class Utils {
 
     @SafeVarargs
     @NotNull
-    public static <E extends Enum<E>> EnumSet<E> exclude(@NotNull EnumSet<E> enumSet, @NotNull E ...list) {
+    public static <E extends Enum<E>> EnumSet<E> exclude(EnumSet<E> enumSet, E ...list) {
         EnumSet<E> copy = enumSet.clone();
         for (E e : list) {
             copy.remove(e);
@@ -124,7 +125,7 @@ public class Utils {
     }
 
     @NotNull
-    public static <E extends Enum<E>> EnumSet<E> exclude(@NotNull EnumSet<E> enumSet, @NotNull EnumSet<E> toRemove) {
+    public static <E extends Enum<E>> EnumSet<E> exclude(EnumSet<E> enumSet, EnumSet<E> toRemove) {
         EnumSet<E> copy = enumSet.clone();
         copy.removeAll(toRemove);
         return copy;

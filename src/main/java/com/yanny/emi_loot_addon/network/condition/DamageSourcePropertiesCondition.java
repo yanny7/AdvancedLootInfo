@@ -8,7 +8,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class DamageSourcePropertiesCondition extends LootCondition {
                 .map((tag) -> Map.entry(((MixinTagPredicate<?>) tag).getTag().location(), ((MixinTagPredicate<?>) tag).getExpected())).collect(Collectors.toList());
     }
 
-    public DamageSourcePropertiesCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public DamageSourcePropertiesCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         damageSources = new LinkedList<>();
 
@@ -36,7 +35,7 @@ public class DamageSourcePropertiesCondition extends LootCondition {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeInt(damageSources.size());
         damageSources.forEach((d) -> {
             buf.writeResourceLocation(d.getKey());

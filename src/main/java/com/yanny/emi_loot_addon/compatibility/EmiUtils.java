@@ -5,10 +5,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
-@ParametersAreNonnullByDefault
 public final class EmiUtils {
     private static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
     private static final ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
@@ -26,10 +24,12 @@ public final class EmiUtils {
         }).toArray()).withStyle(TEXT_STYLE);
     }
 
+    @NotNull
     public static MutableComponent value(Object value) {
         return Component.literal(value.toString()).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
     }
 
+    @NotNull
     public static MutableComponent value(Object value, String unit) {
         return Component.translatable("emi.description.emi_loot_addon.unit", value, unit).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
     }

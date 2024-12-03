@@ -9,10 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
-@ParametersAreNonnullByDefault
 public class EmiBlockLoot extends EmiBaseLoot {
     public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(Utils.modLoc("block_loot"), EmiStack.of(Items.DIAMOND_PICKAXE));
 

@@ -6,7 +6,6 @@ import com.yanny.emi_loot_addon.network.LootUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
 
 public class InvertedCondition extends LootCondition {
     public final ConditionType termType;
@@ -19,14 +18,14 @@ public class InvertedCondition extends LootCondition {
         term = LootUtils.CONDITION_MAP.get(termType).apply(lootContext, termCondition);
     }
 
-    public InvertedCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public InvertedCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         termType = buf.readEnum(ConditionType.class);
         term = LootUtils.CONDITION_DECODE_MAP.get(termType).apply(type, buf);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeEnum(termType);
         term.encode(buf);
     }

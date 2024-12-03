@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.yanny.emi_loot_addon.mixin.*;
 import com.yanny.emi_loot_addon.network.condition.*;
 import com.yanny.emi_loot_addon.network.function.*;
-import com.yanny.emi_loot_addon.network.value.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -14,15 +13,14 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@ParametersAreNonnullByDefault
 public class LootUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final Map<FunctionType, BiFunction<LootContext, LootItemFunction, LootFunction>> FUNCTION_MAP = new HashMap<>();
@@ -128,6 +126,7 @@ public class LootUtils {
         CONDITION_DECODE_MAP.put(ConditionType.UNKNOWN, UnknownCondition::new);
     }
 
+    @NotNull
     public static LootGroup parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, float chance) {
         MixinLootTable lootTable = (MixinLootTable) table;
         List<LootEntry> lootInfos = new LinkedList<>();
@@ -137,6 +136,7 @@ public class LootUtils {
         return new LootGroup(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()), List.of());
     }
 
+    @NotNull
     private static LootEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, float chance) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
@@ -146,6 +146,7 @@ public class LootUtils {
         return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, chance, true), rolls, bonusRolls, functions, conditions);
     }
 
+    @NotNull
     private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, float chance, boolean weighted) {
         List<LootEntry> lootInfos = new LinkedList<>();
         int sumWeight = Arrays.stream(entries).filter(entry -> entry instanceof LootPoolSingletonContainer).mapToInt(entry -> ((MixinLootPoolSingletonContainer) entry).getWeight()).sum();
@@ -180,7 +181,6 @@ public class LootUtils {
                 int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 
                 lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, getChance.apply(weight)));
-//                lootInfos.addAll(parseTagEntry((TagEntry) entry, chance * (weight / (float)sumWeight)));
             } else if (type == LootPoolEntries.ALTERNATIVES || type == LootPoolEntries.SEQUENCE || type == LootPoolEntries.GROUP) {
                 lootInfos.add(new LootGroup(parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, chance, false), List.of(), List.of()));
             } else if (type == LootPoolEntries.ITEM) {
@@ -195,9 +195,11 @@ public class LootUtils {
         return lootInfos;
     }
 
+    @NotNull
     private static LootInfo parseLootItem(LootItem lootItem, LootContext lootContext, float chance) {
+        ResourceLocation location = ForgeRegistries.ITEMS.getKey(((MixinLootItem) lootItem).getItem());
         return new LootInfo(
-                ForgeRegistries.ITEMS.getKey(((MixinLootItem) lootItem).getItem()),
+                location,
                 LootFunction.of(lootContext, ((MixinLootPoolSingletonContainer) lootItem).getFunctions()),
                 LootCondition.of(lootContext, ((MixinLootPoolEntryContainer) lootItem).getConditions()),
                 chance

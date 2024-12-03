@@ -4,7 +4,6 @@ import com.yanny.emi_loot_addon.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
 
 public class LocationCheckCondition extends LootCondition {
 
@@ -12,12 +11,12 @@ public class LocationCheckCondition extends LootCondition {
         super(ConditionType.of(condition.getType()));
     }
 
-    public LocationCheckCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public LocationCheckCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
 
     }
 }

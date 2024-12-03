@@ -29,7 +29,7 @@ public class BlockStatePropertyCondition extends LootCondition {
                 .map(Property::of).collect(Collectors.toList());
     }
 
-    public BlockStatePropertyCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public BlockStatePropertyCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         block = buf.readResourceLocation();
         properties = new LinkedList<>();
@@ -42,7 +42,7 @@ public class BlockStatePropertyCondition extends LootCondition {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         buf.writeResourceLocation(block);
         buf.writeInt(properties.size());
         properties.forEach((p) -> {
@@ -88,19 +88,19 @@ public class BlockStatePropertyCondition extends LootCondition {
             this.type = type;
         }
 
-        public abstract void encode(@NotNull FriendlyByteBuf buf);
+        public abstract void encode(FriendlyByteBuf buf);
 
         public static Property of(StatePropertiesPredicate.PropertyMatcher property) {
             PropertyType type = PropertyType.of(property);
             return PROPERTY_MAP.get(type).apply(type, property);
         }
 
-        public static Property decode(@NotNull FriendlyByteBuf buf) {
+        public static Property decode(FriendlyByteBuf buf) {
             PropertyType type = buf.readEnum(PropertyType.class);
             return PROPERTY_DECODE_MAP.get(type).apply(type, buf);
         }
 
-        public static void encode(@NotNull FriendlyByteBuf buf, Property property) {
+        public static void encode(FriendlyByteBuf buf, Property property) {
             buf.writeEnum(property.type);
             property.encode(buf);
         }
@@ -111,12 +111,12 @@ public class BlockStatePropertyCondition extends LootCondition {
             super(type);
         }
 
-        public ExactProperty(PropertyType type, @NotNull FriendlyByteBuf buf) {
+        public ExactProperty(PropertyType type, FriendlyByteBuf buf) {
             super(type);
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
 
         }
     }
@@ -126,12 +126,12 @@ public class BlockStatePropertyCondition extends LootCondition {
             super(type);
         }
 
-        public RangeProperty(PropertyType type, @NotNull FriendlyByteBuf buf) {
+        public RangeProperty(PropertyType type, FriendlyByteBuf buf) {
             super(type);
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
 
         }
     }
@@ -141,12 +141,12 @@ public class BlockStatePropertyCondition extends LootCondition {
             super(type);
         }
 
-        public UnknownProperty(PropertyType type, @NotNull FriendlyByteBuf buf) {
+        public UnknownProperty(PropertyType type, FriendlyByteBuf buf) {
             super(type);
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
 
         }
     }

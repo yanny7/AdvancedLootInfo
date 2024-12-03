@@ -1,7 +1,6 @@
 package com.yanny.emi_loot_addon.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -9,7 +8,7 @@ public abstract class LootEntry {
     public final List<LootFunction> functions;
     public final List<LootCondition> conditions;
 
-    LootEntry(@NotNull FriendlyByteBuf buf) {
+    LootEntry(FriendlyByteBuf buf) {
         functions = LootFunction.decode(buf);
         conditions = LootCondition.decode(buf);
     }
@@ -19,9 +18,9 @@ public abstract class LootEntry {
         this.conditions = conditions;
     }
 
-    public abstract Type getType();
+    public abstract EntryType getType();
 
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         LootFunction.encode(buf, functions);
         LootCondition.encode(buf, conditions);
     }

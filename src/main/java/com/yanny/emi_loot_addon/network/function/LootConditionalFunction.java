@@ -6,7 +6,6 @@ import com.yanny.emi_loot_addon.network.LootFunction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -18,13 +17,13 @@ public class LootConditionalFunction extends LootFunction {
         conditions = LootCondition.of(context, ((MixinLootItemConditionalFunction) function).getPredicates());
     }
 
-    public LootConditionalFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public LootConditionalFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type);
         conditions = LootCondition.decode(buf);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         LootCondition.encode(buf, conditions);
     }
 }

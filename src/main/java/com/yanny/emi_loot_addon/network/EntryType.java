@@ -1,6 +1,6 @@
 package com.yanny.emi_loot_addon.network;
 
-public enum Type {
+public enum EntryType {
     INFO,
     GROUP,
     POOL

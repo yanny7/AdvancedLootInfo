@@ -1,13 +1,12 @@
 package com.yanny.emi_loot_addon.network.function;
 
 import com.yanny.emi_loot_addon.mixin.MixinSetStewEffectFunction;
-import com.yanny.emi_loot_addon.network.value.RangeValue;
+import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class SetStewEffectFunction extends LootConditionalFunction {
         ));
     }
 
-    public SetStewEffectFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public SetStewEffectFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type, buf);
         int count = buf.readInt();
 
@@ -36,7 +35,7 @@ public class SetStewEffectFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeInt(effectMap.size());
         effectMap.forEach((location, level) -> {

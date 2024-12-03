@@ -3,14 +3,13 @@ package com.yanny.emi_loot_addon.network.function;
 import com.yanny.emi_loot_addon.mixin.MixinApplyBonusCount;
 import com.yanny.emi_loot_addon.mixin.MixinBinomialWithBonusCount;
 import com.yanny.emi_loot_addon.mixin.MixinUniformBonusCount;
-import com.yanny.emi_loot_addon.network.value.RangeValue;
+import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +26,14 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         formula = Formula.of(((MixinApplyBonusCount) function).getFormula());
     }
 
-    public ApplyBonusFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public ApplyBonusFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type, buf);
         enchantment = buf.readResourceLocation();
         formula = Formula.decode(buf);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeResourceLocation(enchantment);
         Formula.encode(buf, formula);
@@ -84,18 +83,18 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
         public abstract void calculateCount(RangeValue count, int level);
 
-        public abstract void encode(@NotNull FriendlyByteBuf buf);
+        public abstract void encode(FriendlyByteBuf buf);
 
         public static Formula of(ApplyBonusCount.Formula formula) {
             return FORMULA_MAP.get(FormulaType.of(formula.getType())).apply(formula);
         }
 
-        public static Formula decode(@NotNull FriendlyByteBuf buf) {
+        public static Formula decode(FriendlyByteBuf buf) {
             FormulaType type = buf.readEnum(FormulaType.class);
             return FORMULA_DECODE_MAP.get(type).apply(type, buf);
         }
 
-        public static void encode(@NotNull FriendlyByteBuf buf, Formula formula) {
+        public static void encode(FriendlyByteBuf buf, Formula formula) {
             buf.writeEnum(formula.type);
             formula.encode(buf);
         }
@@ -106,7 +105,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
             super(FormulaType.of(formula.getType()));
         }
 
-        public OreGenFormula(FormulaType type, @NotNull FriendlyByteBuf buf) {
+        public OreGenFormula(FormulaType type, FriendlyByteBuf buf) {
             super(type);
         }
 
@@ -118,7 +117,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
         }
     }
 
@@ -130,7 +129,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
             extraRounds = ((MixinBinomialWithBonusCount) formula).getExtraRounds();
         }
 
-        public BinomialFormula(FormulaType type, @NotNull FriendlyByteBuf buf) {
+        public BinomialFormula(FormulaType type, FriendlyByteBuf buf) {
             super(type);
             extraRounds = buf.readInt();
         }
@@ -141,7 +140,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
             buf.writeInt(extraRounds);
         }
     }
@@ -154,7 +153,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
             bonusMultiplier = ((MixinUniformBonusCount) formula).getBonusMultiplier();
         }
 
-        public UniformFormula(FormulaType type, @NotNull FriendlyByteBuf buf) {
+        public UniformFormula(FormulaType type, FriendlyByteBuf buf) {
             super(type);
             bonusMultiplier = buf.readInt();
         }
@@ -167,7 +166,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
             buf.writeInt(bonusMultiplier);
         }
     }
@@ -177,7 +176,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
             super(FormulaType.of(formula.getType()));
         }
 
-        public UnknownFormula(FormulaType type, @NotNull FriendlyByteBuf buf) {
+        public UnknownFormula(FormulaType type, FriendlyByteBuf buf) {
             super(type);
         }
 
@@ -187,7 +186,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         }
 
         @Override
-        public void encode(@NotNull FriendlyByteBuf buf) {
+        public void encode(FriendlyByteBuf buf) {
         }
     }
 }

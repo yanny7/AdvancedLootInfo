@@ -10,14 +10,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class LootCondition {
+    public boolean HANDLED = false;
+
     public final ConditionType type;
 
     public LootCondition(ConditionType type) {
         this.type = type;
     }
 
-    public abstract void encode(@NotNull FriendlyByteBuf buf);
+    public abstract void encode(FriendlyByteBuf buf);
 
+    @NotNull
     public static List<LootCondition> of(LootContext lootContext, LootItemCondition[] conditions) {
         List<LootCondition> list = new LinkedList<>();
 
@@ -28,7 +31,8 @@ public abstract class LootCondition {
         return list;
     }
 
-    public static List<LootCondition> decode(@NotNull FriendlyByteBuf buf) {
+    @NotNull
+    public static List<LootCondition> decode(FriendlyByteBuf buf) {
         int count = buf.readInt();
         List<LootCondition> list = new LinkedList<>();
 
@@ -40,7 +44,7 @@ public abstract class LootCondition {
         return list;
     }
 
-    public static void encode(@NotNull FriendlyByteBuf buf, List<LootCondition> list) {
+    public static void encode(FriendlyByteBuf buf, List<LootCondition> list) {
         buf.writeInt(list.size());
         list.forEach((f) -> {
             buf.writeEnum(f.type);

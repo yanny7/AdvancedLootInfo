@@ -3,10 +3,9 @@ package com.yanny.emi_loot_addon.datagen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.data.event.GatherDataEvent;
-import org.jetbrains.annotations.NotNull;
 
 public class DataGeneration {
-    public static void generate(@NotNull GatherDataEvent event) {
+    public static void generate(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
 

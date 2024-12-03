@@ -12,12 +12,10 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     protected final LootGroup message;
     protected final List<ItemData> itemDataList;
@@ -59,8 +57,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             widget.appendTooltip(getCount(itemData));
             getBonusCount(itemData).forEach(widget::appendTooltip);
 
-            widget.appendTooltip(Component.literal(itemData.conditions.stream().map((c) -> c.type).toList().toString()))
-                    .appendTooltip(Component.literal(itemData.functions.stream().map((f) -> f.type).toList().toString()));
+            widget.appendTooltip(Component.literal(itemData.conditions.stream().filter((c) -> !c.HANDLED).map((c) -> c.type).toList().toString()))
+                    .appendTooltip(Component.literal(itemData.functions.stream().filter((f) -> !f.HANDLED).map((f) -> f.type).toList().toString()));
 
             widget.recipeContext(this);
             widgetHolder.add(widget);

@@ -1,8 +1,6 @@
 package com.yanny.emi_loot_addon.network;
 
-import com.yanny.emi_loot_addon.network.value.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,21 +14,21 @@ public final class LootPoolEntry extends LootGroup {
         this.bonusRolls = bonusRolls;
     }
 
-    public LootPoolEntry(@NotNull FriendlyByteBuf buf) {
+    public LootPoolEntry(FriendlyByteBuf buf) {
         super(buf);
         rolls = new RangeValue(buf);
         bonusRolls = new RangeValue(buf);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         rolls.encode(buf);
         bonusRolls.encode(buf);
     }
 
     @Override
-    public Type getType() {
-        return Type.POOL;
+    public EntryType getType() {
+        return EntryType.POOL;
     }
 }

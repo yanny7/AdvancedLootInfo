@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +19,7 @@ public class EnchantRandomlyFunction extends LootConditionalFunction {
         enchantments = ((MixinEnchantRandomlyFunction) function).getEnchantments().stream().map(ForgeRegistries.ENCHANTMENTS::getKey).collect(Collectors.toList());
     }
 
-    public EnchantRandomlyFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public EnchantRandomlyFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type, buf);
         int count = buf.readInt();
         enchantments = new LinkedList<>();
@@ -31,7 +30,7 @@ public class EnchantRandomlyFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeInt(enchantments.size());
         enchantments.forEach(buf::writeResourceLocation);

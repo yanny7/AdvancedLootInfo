@@ -17,13 +17,13 @@ public class CompositeCondition extends LootCondition {
         terms = LootCondition.of(lootContext, ((MixinCompositeLootItemCondition) condition).getTerms());
     }
 
-    public CompositeCondition(ConditionType type, @NotNull FriendlyByteBuf buf) {
+    public CompositeCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
         terms = LootCondition.decode(buf);
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         LootCondition.encode(buf, terms);
     }
 }

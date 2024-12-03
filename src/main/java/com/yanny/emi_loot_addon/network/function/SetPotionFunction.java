@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 public class SetPotionFunction extends LootConditionalFunction {
     public final ResourceLocation potion;
@@ -16,13 +15,13 @@ public class SetPotionFunction extends LootConditionalFunction {
         potion = ForgeRegistries.POTIONS.getKey(((MixinSetPotionFunction) function).getPotion());
     }
 
-    public SetPotionFunction(FunctionType type, @NotNull FriendlyByteBuf buf) {
+    public SetPotionFunction(FunctionType type, FriendlyByteBuf buf) {
         super(type, buf);
         potion = buf.readResourceLocation();
     }
 
     @Override
-    public void encode(@NotNull FriendlyByteBuf buf) {
+    public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeResourceLocation(potion);
     }
