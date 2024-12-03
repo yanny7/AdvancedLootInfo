@@ -18,6 +18,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.description.emi_loot_addon.unit", "%s%s");
         add("emi.description.emi_loot_addon.chance", "Chance: %s");
         add("emi.description.emi_loot_addon.chance_rolls", "Chance: [%s] %s");
+        add("emi.description.emi_loot_addon.chance_bonus", "    -> %s (%s %s)");
         add("emi.description.emi_loot_addon.count", "Count: %s");
         add("emi.description.emi_loot_addon.count_bonus", "    -> %s (%s %s)");
     }

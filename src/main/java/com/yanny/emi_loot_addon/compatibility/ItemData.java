@@ -1,6 +1,9 @@
 package com.yanny.emi_loot_addon.compatibility;
 
 import com.yanny.emi_loot_addon.network.*;
+import com.yanny.emi_loot_addon.network.condition.ConditionType;
+import com.yanny.emi_loot_addon.network.condition.RandomChanceCondition;
+import com.yanny.emi_loot_addon.network.condition.RandomChanceWithLootingCondition;
 import com.yanny.emi_loot_addon.network.function.ApplyBonusFunction;
 import com.yanny.emi_loot_addon.network.function.FunctionType;
 import com.yanny.emi_loot_addon.network.function.LootingEnchantFunction;
@@ -31,15 +34,53 @@ public final class ItemData {
     public final List<LootCondition> conditions;
     @Nullable
     public final Map.Entry<Enchantment, Map<Integer, RangeValue>> bonusCount;
+    public final Map<Integer, RangeValue> bonusChance;
 
     public ItemData(ResourceLocation item, float chance, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
         this.functions = functions;
         this.conditions = conditions;
-        this.chance = new RangeValue(chance * 100);
+        this.chance = getChance(conditions, chance);
         this.count = getCount(functions);
         this.rolls = getRolls(rolls, bonusRolls);
         this.bonusCount = getBonusCount(functions, this.count);
+        this.bonusChance = getBonusChance(conditions, chance);
+    }
+
+    private static Map<Integer, RangeValue> getBonusChance(List<LootCondition> conditions, float chance) {
+        Map<Integer, RangeValue> bonusChance = new HashMap<>();
+
+        List<LootCondition> list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE_WITH_LOOTING).toList();
+
+        for (LootCondition c : list) {
+            RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
+
+            for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
+                RangeValue value = new RangeValue(chance * (condition.percent + level * condition.multiplier));
+                bonusChance.put(level, value.multiply(100));
+            }
+        }
+
+        return bonusChance;
+    }
+
+    private static RangeValue getChance(List<LootCondition> conditions, float chance) {
+        RangeValue value = new RangeValue(chance);
+        List<LootCondition> list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE_WITH_LOOTING).toList();
+
+        for (LootCondition c : list) {
+            RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
+            value.multiply(condition.percent);
+        }
+
+        list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE).toList();
+
+        for (LootCondition c : list) {
+            RandomChanceCondition condition = (RandomChanceCondition) c;
+            value.multiply(condition.probability);
+        }
+
+        return value.multiply(100);
     }
 
     @Nullable

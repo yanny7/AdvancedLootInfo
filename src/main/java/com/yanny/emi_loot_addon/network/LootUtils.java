@@ -141,7 +141,9 @@ public class LootUtils {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
         RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
-        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, chance, true), rolls, bonusRolls, List.of(), List.of());
+        List<LootFunction> functions = LootFunction.of(context, mixinLootPool.getFunctions());
+        List<LootCondition> conditions = LootCondition.of(context, mixinLootPool.getConditions());
+        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, chance, true), rolls, bonusRolls, functions, conditions);
     }
 
     private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, float chance, boolean weighted) {

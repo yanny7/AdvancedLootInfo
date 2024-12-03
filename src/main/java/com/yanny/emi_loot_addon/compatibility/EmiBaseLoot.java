@@ -9,6 +9,7 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -50,8 +51,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     public void addWidgets(WidgetHolder widgetHolder, int[] pos) {
         for (ItemData itemData : itemDataList) {
             SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1])
-                    .setCount(itemData.count)
-                    .appendTooltip(getChance(itemData));
+                    .setCount(itemData.count);
+
+            widget.appendTooltip(getChance(itemData));
+            getBonusChance(itemData).forEach(widget::appendTooltip);
 
             widget.appendTooltip(getCount(itemData));
             getBonusCount(itemData).forEach(widget::appendTooltip);
@@ -70,6 +73,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
+    @NotNull
     private static Component getCount(ItemData data) {
         return EmiUtils.translate("emi.description.emi_loot_addon.count", data.count);
     }
@@ -83,18 +87,33 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         return EmiUtils.translate("emi.description.emi_loot_addon.chance", EmiUtils.value(data.chance, "%"));
     }
 
+    @NotNull
+    private static List<Component> getBonusChance(ItemData data) {
+        List<Component> components = new LinkedList<>();
+
+        if (data.bonusChance != null) {
+            data.bonusChance.forEach((level, value) -> components.add(EmiUtils.translate(
+                    "emi.description.emi_loot_addon.chance_bonus",
+                    value,
+                    Component.translatable(Enchantments.MOB_LOOTING.getDescriptionId()),
+                    Component.translatable("enchantment.level." + level)
+            )));
+        }
+
+        return components;
+    }
+
+    @NotNull
     private static List<Component> getBonusCount(ItemData data) {
         List<Component> components = new LinkedList<>();
 
         if (data.bonusCount != null) {
-            data.bonusCount.getValue().forEach((level, value) -> {
-                components.add(EmiUtils.translate(
-                        "emi.description.emi_loot_addon.count_bonus",
-                        value,
-                        Component.translatable(data.bonusCount.getKey().getDescriptionId()),
-                        Component.translatable("enchantment.level." + level)
-                ));
-            });
+            data.bonusCount.getValue().forEach((level, value) -> components.add(EmiUtils.translate(
+                    "emi.description.emi_loot_addon.count_bonus",
+                    value,
+                    Component.translatable(data.bonusCount.getKey().getDescriptionId()),
+                    Component.translatable("enchantment.level." + level)
+            )));
         }
 
         return components;

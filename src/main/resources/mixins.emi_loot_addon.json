@@ -21,6 +21,8 @@
     "MixinLootItem",
     "MixinLootItemBlockStatePropertyCondition",
     "MixinLootItemConditionalFunction",
+    "MixinLootItemRandomChanceCondition",
+    "MixinLootItemRandomChanceWithLootingCondition",
     "MixinLootPool",
     "MixinLootPoolEntryContainer",
     "MixinLootPoolSingletonContainer",
