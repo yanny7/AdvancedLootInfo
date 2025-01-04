@@ -1,11 +1,13 @@
 package com.yanny.emi_loot_addon.network;
 
 import com.mojang.logging.LogUtils;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.api.distmarker.Dist;
@@ -38,7 +40,7 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), InfoSyncMessage.class, InfoSyncMessage::encode, InfoSyncMessage::new, client::onLootInfo);
+        channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, client::onLootInfo);
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, client::onClear);
         return new DistHolder<>(client, server);
     }
@@ -47,15 +49,15 @@ public class NetworkUtils {
     private static DistHolder<Client, Server> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), InfoSyncMessage.class, InfoSyncMessage::encode, InfoSyncMessage::new, (m, c) -> {});
+        channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, (m, c) -> {});
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, (m, c) -> {});
         return new DistHolder<>(null, server);
     }
 
     public static class Client {
-        public List<InfoSyncMessage> lootEntries = new LinkedList<>();
+        public List<InfoSyncLootTableMessage> lootEntries = new LinkedList<>();
 
-        public void onLootInfo(InfoSyncMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+        public void onLootInfo(InfoSyncLootTableMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
             LOGGER.info("Received loot table: {}", msg.location);
             NetworkEvent.Context context = contextSupplier.get();
             context.enqueueWork(() -> lootEntries.add(msg));
@@ -78,18 +80,19 @@ public class NetworkUtils {
             this.channel = channel;
         }
 
-        public void sendMessage(Player player) {
+        public void syncLootTables(Player player) {
             if (player instanceof ServerPlayer serverPlayer) {
                 channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClearMessage());
                 manager.getKeys(LootDataType.TABLE).forEach((location) -> {
                     LootTable table = manager.getElement(LootDataType.TABLE, location);
 
-                    if (table != null && (player.level() instanceof ServerLevel serverLevel)) {
+                    if (table != null && table != LootTable.EMPTY && (player.level() instanceof ServerLevel serverLevel)) {
                         LootParams lootParams = (new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY);
                         LootContext lootContext = new LootContext.Builder(lootParams).create(null);
-                        LootGroup lootGroup = LootUtils.parseLoot(table, manager, lootContext, 1f);
-                        LOGGER.info("Data: {}: {}", location, lootGroup);
-                        channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncMessage(location, lootGroup));
+                        ObjectArrayList<Item> items = new ObjectArrayList<>();
+                        LootGroup lootGroup = LootUtils.parseLoot(table, manager, lootContext, items, 1f);
+
+                        channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootGroup));
                     }
                 });
             }
@@ -111,16 +114,16 @@ public class NetworkUtils {
         }
     }
 
-    public static class InfoSyncMessage {
+    public static class InfoSyncLootTableMessage {
         public final ResourceLocation location;
         public final LootGroup value;
 
-        public InfoSyncMessage(ResourceLocation location, LootGroup value) {
+        public InfoSyncLootTableMessage(ResourceLocation location, LootGroup value) {
             this.location = location;
             this.value = value;
         }
 
-        public InfoSyncMessage(FriendlyByteBuf buf) {
+        public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
             location = buf.readResourceLocation();
             value = new LootGroup(buf);
         }

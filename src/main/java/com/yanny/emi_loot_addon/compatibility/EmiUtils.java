@@ -14,8 +14,8 @@ public final class EmiUtils {
     private EmiUtils() {}
 
     @NotNull
-    public static MutableComponent translatableType(Enum<?> type, Object... args) {
-        return translatable("emi.type.emi_loot_addon." + type.name().toLowerCase(), args);
+    public static MutableComponent translatableType(String prefix, Enum<?> type, Object... args) {
+        return translatable(prefix + "." + type.name().toLowerCase(), args);
     }
 
     @NotNull
@@ -31,7 +31,11 @@ public final class EmiUtils {
 
     @NotNull
     public static MutableComponent value(Object value) {
-        return Component.literal(value.toString()).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
+        if (value instanceof MutableComponent) {
+            return ((MutableComponent) value).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
+        } else {
+            return Component.literal(value.toString()).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
+        }
     }
 
     @NotNull
@@ -47,5 +51,23 @@ public final class EmiUtils {
     @NotNull
     public static MutableComponent list(Object... args) {
         return Component.translatable("emi.util.emi_loot_addon.list." + args.length, args).withStyle(TEXT_STYLE);
+    }
+
+    @NotNull
+    public static MutableComponent pad(int count, Object arg) {
+        if (count > 0) {
+            return pair(Component.translatable("emi.util.emi_loot_addon.pad." + count), arg);
+        } else {
+            if (arg instanceof MutableComponent) {
+                return ((MutableComponent) arg).withStyle(TEXT_STYLE);
+            } else {
+                return Component.literal(arg.toString()).withStyle(TEXT_STYLE);
+            }
+        }
+    }
+
+    @NotNull
+    public static MutableComponent keyValue(Object key, Object value) {
+        return translatable("emi.util.emi_loot_addon.key_value", key instanceof MutableComponent ? key : Component.literal(key.toString()), value(value));
     }
 }

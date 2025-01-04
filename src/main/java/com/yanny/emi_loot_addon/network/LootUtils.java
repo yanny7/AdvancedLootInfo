@@ -127,27 +127,27 @@ public class LootUtils {
     }
 
     @NotNull
-    public static LootGroup parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, float chance) {
+    public static LootGroup parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance) {
         MixinLootTable lootTable = (MixinLootTable) table;
         List<LootEntry> lootInfos = new LinkedList<>();
         List<LootPool> pools = lootTable.getPools();
 
-        pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, chance)));
+        pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, items, chance)));
         return new LootGroup(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()), List.of());
     }
 
     @NotNull
-    private static LootEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, float chance) {
+    private static LootEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, List<Item> items, float chance) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
         RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
         List<LootFunction> functions = LootFunction.of(context, mixinLootPool.getFunctions());
         List<LootCondition> conditions = LootCondition.of(context, mixinLootPool.getConditions());
-        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, chance, true), rolls, bonusRolls, functions, conditions);
+        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, items, chance, true), rolls, bonusRolls, functions, conditions);
     }
 
     @NotNull
-    private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, float chance, boolean weighted) {
+    private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, List<Item> items, float chance, boolean weighted) {
         List<LootEntry> lootInfos = new LinkedList<>();
         int sumWeight = Arrays.stream(entries).filter(entry -> entry instanceof LootPoolSingletonContainer).mapToInt(entry -> ((MixinLootPoolSingletonContainer) entry).getWeight()).sum();
 
@@ -171,7 +171,7 @@ public class LootUtils {
                 int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 
                 if (table != null) {
-                    lootInfos.add(parseLoot(table, manager, lootContext, getChance.apply(weight)));
+                    lootInfos.add(parseLoot(table, manager, lootContext, items, getChance.apply(weight)));
                 } else {
                     LOGGER.warn("Invalid LootTable reference {}", location);
                 }
@@ -180,13 +180,13 @@ public class LootUtils {
             } else if (type == LootPoolEntries.TAG) {
                 int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 
-                lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, getChance.apply(weight)));
+                lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, getChance.apply(weight)));
             } else if (type == LootPoolEntries.ALTERNATIVES || type == LootPoolEntries.SEQUENCE || type == LootPoolEntries.GROUP) {
-                lootInfos.add(new LootGroup(parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, chance, false), List.of(), List.of()));
+                lootInfos.add(new LootGroup(parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false), List.of(), List.of()));
             } else if (type == LootPoolEntries.ITEM) {
                 int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 
-                lootInfos.add(parseLootItem((LootItem) entry, lootContext, getChance.apply(weight)));
+                lootInfos.add(parseLootItem((LootItem) entry, lootContext, items, getChance.apply(weight)));
             } else {
                 LOGGER.warn("Unknown LootPool entry type {}", type);
             }
@@ -196,8 +196,11 @@ public class LootUtils {
     }
 
     @NotNull
-    private static LootInfo parseLootItem(LootItem lootItem, LootContext lootContext, float chance) {
-        ResourceLocation location = ForgeRegistries.ITEMS.getKey(((MixinLootItem) lootItem).getItem());
+    private static LootInfo parseLootItem(LootItem lootItem, LootContext lootContext, List<Item> items, float chance) {
+        Item item = ((MixinLootItem) lootItem).getItem();
+        ResourceLocation location = ForgeRegistries.ITEMS.getKey(item);
+
+        items.add(item);
         return new LootInfo(
                 location,
                 LootFunction.of(lootContext, ((MixinLootPoolSingletonContainer) lootItem).getFunctions()),
@@ -206,12 +209,14 @@ public class LootUtils {
         );
     }
 
-    private static List<LootEntry> parseTagEntry(TagEntry entry, LootContext lootContext, float chance) {
+    private static List<LootEntry> parseTagEntry(TagEntry entry, LootContext lootContext, List<Item> items, float chance) {
         ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
 
         if (tags != null) {
             return tags.getTag(((MixinTagEntry) entry).getTag()).stream().map((item) -> {
                 ResourceLocation location = ForgeRegistries.ITEMS.getKey(item);
+
+                items.add(item);
                 return new LootInfo(
                         location,
                         LootFunction.of(lootContext, ((MixinLootPoolSingletonContainer) entry).getFunctions()),

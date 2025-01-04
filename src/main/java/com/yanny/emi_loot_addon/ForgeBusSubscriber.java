@@ -14,6 +14,6 @@ public class ForgeBusSubscriber {
 
     @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
-        EmiLootMod.INFO_PROPAGATOR.server().sendMessage(event.getEntity());
+        EmiLootMod.INFO_PROPAGATOR.server().syncLootTables(event.getEntity());
     }
 }
