@@ -18,6 +18,7 @@
     "MixinEnchantWithLevelsFunction",
     "MixinEntityEquipmentPredicate",
     "MixinEntityFlagsPredicate",
+    "MixinEntityHasScoreCondition",
     "MixinEntityPredicate",
     "MixinEntityTypePredicate",
     "MixinEntityTypePredicate$TagPredicate",

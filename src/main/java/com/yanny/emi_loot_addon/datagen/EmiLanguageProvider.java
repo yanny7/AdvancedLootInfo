@@ -27,12 +27,16 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.type.emi_loot_addon.survives_explosion", "Must survive explosion");
         add("emi.type.emi_loot_addon.killed_by_player", "Must be killed by player");
         add("emi.type.emi_loot_addon.explosion_decay", "Explosion decreases amount");
+        add("emi.type.emi_loot_addon.entity_properties", "Entity Properties:");
+        add("emi.type.emi_loot_addon.entity_scores", "Entity Scores:");
+        add("emi.type.emi_loot_addon.block_state_property", "Block State Property:");
 
-        add("emi.enum.target.this", "This entity:");
-        add("emi.enum.target.killer", "Killer:");
-        add("emi.enum.target.direct_killer", "Directly killed by:");
-        add("emi.enum.target.killer_player", "Last damaged by player:");
+        add("emi.enum.target.this", "This entity");
+        add("emi.enum.target.killer", "Killer");
+        add("emi.enum.target.direct_killer", "Directly killed by");
+        add("emi.enum.target.killer_player", "Last damaged by player");
 
+        add("emi.property.predicate.target", "Target: %s");
         add("emi.property.predicate.entity_type", "Entity Type:");
         add("emi.property.predicate.dist_to_player", "Distance:");
         add("emi.property.predicate.location", "Location:");
@@ -104,6 +108,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.sub_entity.advancements", "Advancements:");
         add("emi.property.sub_entity.advancement.done", "Done: %s");
         add("emi.property.sub_entity.size", "Size: %s");
+        add("emi.property.scores.score", "Score:");
 
         add("emi.util.emi_loot_addon.two_values", "%s%s");
         add("emi.util.emi_loot_addon.two_values_with_space", "%s %s");

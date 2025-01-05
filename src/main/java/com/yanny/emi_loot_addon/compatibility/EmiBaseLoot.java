@@ -4,10 +4,8 @@ import com.google.gson.JsonObject;
 import com.yanny.emi_loot_addon.mixin.*;
 import com.yanny.emi_loot_addon.network.LootCondition;
 import com.yanny.emi_loot_addon.network.LootGroup;
-import com.yanny.emi_loot_addon.network.condition.AllOfCondition;
-import com.yanny.emi_loot_addon.network.condition.AnyOfCondition;
-import com.yanny.emi_loot_addon.network.condition.EntityPropertiesCondition;
-import com.yanny.emi_loot_addon.network.condition.InvertedCondition;
+import com.yanny.emi_loot_addon.network.RangeValue;
+import com.yanny.emi_loot_addon.network.condition.*;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -107,6 +105,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 case SURVIVES_EXPLOSION,
                      KILLED_BY_PLAYER -> components.add(translatableType("emi.type.emi_loot_addon", condition.type));
                 case ENTITY_PROPERTIES -> components.addAll(getEntityProperties((EntityPropertiesCondition) condition));
+                case ENTITY_SCORES -> components.addAll(getEntityScores((EntityScoresCondition) condition));
+                case BLOCK_STATE_PROPERTY -> components.addAll(getBlockStatePropertyCondition((BlockStatePropertyCondition) condition));
                 case RANDOM_CHANCE,
                      TABLE_BONUS,
                      RANDOM_CHANCE_WITH_LOOTING -> {
@@ -128,7 +128,31 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private static List<Component> getEntityProperties(EntityPropertiesCondition condition) {
         List<Component> components = new LinkedList<>();
 
-        addEntityPredicate(components, 0, translatableType("emi.enum.target", condition.target), condition.predicate);
+        components.add(translatableType("emi.type.emi_loot_addon", condition.type));
+        addEntityPredicate(components, 1, translatableType("emi.enum.target", condition.target), condition.predicate);
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getEntityScores(EntityScoresCondition condition) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(translatableType("emi.type.emi_loot_addon", condition.type));
+        components.add(pad(1, translatable("emi.property.predicate.target", value(translatableType("emi.enum.target", condition.target)))));
+        components.add(pad(1, translatable("emi.property.scores.score")));
+        condition.scores.forEach((score, tuple) -> {
+            components.add(pad(2, keyValue(score, RangeValue.rangeToString(tuple.getA(), tuple.getB()))));
+        });
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getBlockStatePropertyCondition(BlockStatePropertyCondition condition) {
+        List<Component> components = new LinkedList<>();
+
+        addStateProperties(components, 0, translatableType("emi.type.emi_loot_addon", condition.type), condition.properties);
 
         return components;
     }
@@ -314,7 +338,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
                 predicate.getBlocks().forEach((block) -> components.add(pad(pad + 2, value(translatable(block.getDescriptionId())))));
             }
-            addStateProperties(components, pad + 1, "emi.property.block.state", predicate.getProperties());
+            addStateProperties(components, pad + 1, translatable("emi.property.block.state"), predicate.getProperties());
             addNbtPredicate(components, pad + 1, "emi.property.block.nbt", predicate.getNbt());
         }
     }
@@ -331,15 +355,15 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             if (predicate.getFluid() != null) {
                 components.add(pad(pad + 1, translatable("emi.property.fluid.fluid", value(translatable(predicate.getFluid().getFluidType().getDescriptionId())))));
             }
-            addStateProperties(components, pad + 1, "emi.property.fluid.state", predicate.getProperties());
+            addStateProperties(components, pad + 1, translatable("emi.property.fluid.state"), predicate.getProperties());
         }
     }
 
-    private static void addStateProperties(List<Component> components, int pad, String key, StatePropertiesPredicate propertiesPredicate) {
+    private static void addStateProperties(List<Component> components, int pad, Component component, StatePropertiesPredicate propertiesPredicate) {
         if (propertiesPredicate != StatePropertiesPredicate.ANY) {
             MixinStatePropertiesPredicate predicate = (MixinStatePropertiesPredicate) propertiesPredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             predicate.getProperties().forEach((propertyMatcher) -> addPropertyMatcher(components, pad + 1, propertyMatcher));
         }
@@ -509,6 +533,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
+    @NotNull
     private static String toString(MixinMinMaxBounds.Doubles doubles) {
         if (doubles.getMin() != null) {
             if (doubles.getMax() != null) {
@@ -529,6 +554,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
+    @NotNull
     private static String toString(MixinMinMaxBounds.Ints ints) {
         if (ints.getMin() != null) {
             if (ints.getMax() != null) {

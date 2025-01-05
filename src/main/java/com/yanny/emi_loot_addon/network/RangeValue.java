@@ -7,6 +7,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class RangeValue {
     private float min;
@@ -52,9 +53,11 @@ public final class RangeValue {
     }
 
     @NotNull
-    public static RangeValue of(LootContext lootContext, NumberProvider numberProvider) {
+    public static RangeValue of(LootContext lootContext, @Nullable NumberProvider numberProvider) {
         try {
-            if (numberProvider.getType() == NumberProviders.UNIFORM) {
+            if (numberProvider == null) {
+                return new RangeValue(false, true);
+            } else if (numberProvider.getType() == NumberProviders.UNIFORM) {
                 MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
                 return new RangeValue(of(lootContext, uniformGenerator.getMin()).min(), of(lootContext, uniformGenerator.getMax()).max());
             } else if (numberProvider.getType() == NumberProviders.BINOMIAL) {
@@ -209,6 +212,22 @@ public final class RangeValue {
             return String.format("%d", (int) value);
         } else {
             return String.format("%.2f", value);
+        }
+    }
+
+    public static String rangeToString(RangeValue min, RangeValue max) {
+        if (min.isUnknown()) {
+            return max.toString();
+        } else {
+            if (max.isUnknown()) {
+                return min.toString();
+            } else {
+                if (min.toString().equals(max.toString())) {
+                    return min.toString();
+                } else {
+                    return min + " - " + max;
+                }
+            }
         }
     }
 }
