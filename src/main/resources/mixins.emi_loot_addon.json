@@ -8,8 +8,10 @@
     "MixinBinomialWithBonusCount",
     "MixinBlockPredicate",
     "MixinBonusLevelTableCondition",
+    "MixinCanToolPerformAction",
     "MixinCompositeEntryBase",
     "MixinCompositeLootItemCondition",
+    "MixinConditionReference",
     "MixinDamageSourceCondition",
     "MixinDamageSourcePredicate",
     "MixinDistancePredicate",
@@ -33,6 +35,7 @@
     "MixinLighthingBoltPredicate",
     "MixinLightPredicate",
     "MixinLimitCount",
+    "MixinLocationCheck",
     "MixinLocationPredicate",
     "MixinLootingEnchantFunction",
     "MixinLootItem",
@@ -67,9 +70,13 @@
     "MixinStatePropertiesPredicate$RangedPropertyMatcher",
     "MixinTagEntry",
     "MixinTagPredicate",
+    "MixinTimeCheck",
     "MixinUniformBonusCount",
-    "MixinUniformGenerator"
+    "MixinUniformGenerator",
+    "MixinValueCheckCondition",
+    "MixinWeatherCheck"
   ],
+  "refmap": "mixins.emi_loot_addon.refmap.json",
   "client": [
   ],
   "injectors": {

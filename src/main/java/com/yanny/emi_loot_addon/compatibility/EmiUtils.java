@@ -49,11 +49,6 @@ public final class EmiUtils {
     }
 
     @NotNull
-    public static MutableComponent list(Object... args) {
-        return Component.translatable("emi.util.emi_loot_addon.list." + args.length, args).withStyle(TEXT_STYLE);
-    }
-
-    @NotNull
     public static MutableComponent pad(int count, Object arg) {
         if (count > 0) {
             return pair(Component.translatable("emi.util.emi_loot_addon.pad." + count), arg);

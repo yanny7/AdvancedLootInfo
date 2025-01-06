@@ -103,6 +103,7 @@ public class LootUtils {
         CONDITION_MAP.put(ConditionType.REFERENCE, ReferenceCondition::new);
         CONDITION_MAP.put(ConditionType.TIME_CHECK, TimeCheckCondition::new);
         CONDITION_MAP.put(ConditionType.VALUE_CHECK, ValueCheckCondition::new);
+        CONDITION_MAP.put(ConditionType.LOOT_CONDITION_TYPE, CanToolPerformActionCondition::new);
         CONDITION_MAP.put(ConditionType.UNKNOWN, UnknownCondition::new);
 
         CONDITION_DECODE_MAP.put(ConditionType.INVERTED, InvertedCondition::new);
@@ -123,6 +124,7 @@ public class LootUtils {
         CONDITION_DECODE_MAP.put(ConditionType.REFERENCE, ReferenceCondition::new);
         CONDITION_DECODE_MAP.put(ConditionType.TIME_CHECK, TimeCheckCondition::new);
         CONDITION_DECODE_MAP.put(ConditionType.VALUE_CHECK, ValueCheckCondition::new);
+        CONDITION_DECODE_MAP.put(ConditionType.LOOT_CONDITION_TYPE, CanToolPerformActionCondition::new);
         CONDITION_DECODE_MAP.put(ConditionType.UNKNOWN, UnknownCondition::new);
     }
 

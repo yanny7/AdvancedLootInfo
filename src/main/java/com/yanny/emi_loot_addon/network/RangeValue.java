@@ -217,13 +217,13 @@ public final class RangeValue {
 
     public static String rangeToString(RangeValue min, RangeValue max) {
         if (min.isUnknown()) {
-            return max.toString();
+            return "<" + max;
         } else {
             if (max.isUnknown()) {
-                return min.toString();
+                return "≥" + min;
             } else {
                 if (min.toString().equals(max.toString())) {
-                    return min.toString();
+                    return "=" + min;
                 } else {
                     return min + " - " + max;
                 }

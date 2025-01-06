@@ -6,7 +6,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class KilledByPlayerCondition extends LootCondition {
-
     public KilledByPlayerCondition(LootContext lootContext, LootItemCondition condition) {
         super(ConditionType.of(condition.getType()));
     }

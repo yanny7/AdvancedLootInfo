@@ -21,15 +21,23 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.description.emi_loot_addon.count", "Count: %s");
         add("emi.description.emi_loot_addon.count_bonus", "%s (%s %s)");
 
-        add("emi.type.emi_loot_addon.all_of", "All must pass [%s]");
-        add("emi.type.emi_loot_addon.any_of", "None must pass [%s]");
-        add("emi.type.emi_loot_addon.inverted", "Inverted %s");
+        add("emi.type.emi_loot_addon.all_of", "All must pass:");
+        add("emi.type.emi_loot_addon.any_of", "Any of:");
+        add("emi.type.emi_loot_addon.inverted", "Inverted:");
         add("emi.type.emi_loot_addon.survives_explosion", "Must survive explosion");
         add("emi.type.emi_loot_addon.killed_by_player", "Must be killed by player");
         add("emi.type.emi_loot_addon.explosion_decay", "Explosion decreases amount");
         add("emi.type.emi_loot_addon.entity_properties", "Entity Properties:");
         add("emi.type.emi_loot_addon.entity_scores", "Entity Scores:");
         add("emi.type.emi_loot_addon.block_state_property", "Block State Property:");
+        add("emi.type.emi_loot_addon.match_tool", "Match Tool:");
+        add("emi.type.emi_loot_addon.damage_source_properties", "Damage Source Properties:");
+        add("emi.type.emi_loot_addon.location_check", "Location Check:");
+        add("emi.type.emi_loot_addon.weather_check", "Weather Check:");
+        add("emi.type.emi_loot_addon.reference", "Reference: %s");
+        add("emi.type.emi_loot_addon.time_check", "Time Check:");
+        add("emi.type.emi_loot_addon.value_check", "Value Check:");
+        add("emi.type.emi_loot_addon.loot_condition_type", "Can Tool Perform Action: %s");
 
         add("emi.enum.target.this", "This entity");
         add("emi.enum.target.killer", "Killer");
@@ -50,7 +58,6 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.predicate.passenger", "Passenger:");
         add("emi.property.predicate.targeted_entity", "Targeted Entity:");
         add("emi.property.predicate.team", "Team: %s");
-
         add("emi.property.dist_predicate.horizontal", "Hor.: %s");
         add("emi.property.dist_predicate.absolute", "Abs.: %s");
         add("emi.property.dist_predicate.x", "X: %s");
@@ -109,19 +116,23 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.sub_entity.advancement.done", "Done: %s");
         add("emi.property.sub_entity.size", "Size: %s");
         add("emi.property.scores.score", "Score:");
+        add("emi.property.damage_source.direct_entity", "Direct Entity:");
+        add("emi.property.damage_source.source_entity", "Source Entity:");
+        add("emi.property.damage_source.tags", "Tags:");
+        add("emi.property.location_check.location", "Location:");
+        add("emi.property.location_check.offset", "Offset:");
+        add("emi.property.location_check.x", "X: %s");
+        add("emi.property.location_check.y", "Y: %s");
+        add("emi.property.location_check.z", "Z: %s");
+        add("emi.property.weather_check.is_raining", "Is Raining: %s");
+        add("emi.property.weather_check.is_thundering", "Is Thundering: %s");
+        add("emi.property.time_check.period", "Period: %s");
+        add("emi.property.time_check.value", "Value: %s");
+        add("emi.property.value_check.provider", "Provider: %s");
+        add("emi.property.value_check.range", "Range: %s");
 
         add("emi.util.emi_loot_addon.two_values", "%s%s");
         add("emi.util.emi_loot_addon.two_values_with_space", "%s %s");
-        add("emi.util.emi_loot_addon.list.0", "[]");
-        add("emi.util.emi_loot_addon.list.1", "[%s]");
-        add("emi.util.emi_loot_addon.list.2", "[%s, %s]");
-        add("emi.util.emi_loot_addon.list.3", "[%s, %s, %s]");
-        add("emi.util.emi_loot_addon.list.4", "[%s, %s, %s, %s]");
-        add("emi.util.emi_loot_addon.list.5", "[%s, %s, %s, %s, %s]");
-        add("emi.util.emi_loot_addon.list.6", "[%s, %s, %s, %s, %s, %s]");
-        add("emi.util.emi_loot_addon.list.7", "[%s, %s, %s, %s, %s, %s, %s]");
-        add("emi.util.emi_loot_addon.list.8", "[%s, %s, %s, %s, %s, %s, %s, %s]");
-        add("emi.util.emi_loot_addon.list.9", "[%s, %s, %s, %s, %s, %s, %s, %s, %s]");
         add("emi.util.emi_loot_addon.pad.1", "  ->");
         add("emi.util.emi_loot_addon.pad.2", "    ->");
         add("emi.util.emi_loot_addon.pad.3", "      ->");

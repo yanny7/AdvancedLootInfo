@@ -2,6 +2,7 @@ package com.yanny.emi_loot_addon.network.condition;
 
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraftforge.common.loot.CanToolPerformAction;
 
 public enum ConditionType {
     INVERTED,
@@ -22,6 +23,7 @@ public enum ConditionType {
     REFERENCE,
     TIME_CHECK,
     VALUE_CHECK,
+    LOOT_CONDITION_TYPE,
 
     UNKNOWN
     ;
@@ -77,6 +79,8 @@ public enum ConditionType {
             return TIME_CHECK;
         } else if (type == LootItemConditions.VALUE_CHECK) {
             return VALUE_CHECK;
+        } else if (type == CanToolPerformAction.LOOT_CONDITION_TYPE) {
+            return LOOT_CONDITION_TYPE;
         } else {
             return UNKNOWN;
         }

@@ -65,7 +65,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             widget.appendTooltip(getCount(itemData));
             getBonusCount(itemData).forEach(widget::appendTooltip);
 
-            getConditions(itemData.conditions).forEach(widget::appendTooltip);
+            getConditions(itemData.conditions, 0).forEach(widget::appendTooltip);
 
             widget.appendTooltip(Component.literal(itemData.conditions.stream().filter((c) -> !c.HANDLED).map((c) -> c.type).toList().toString()))
                     .appendTooltip(Component.literal(itemData.functions.stream().filter((f) -> !f.HANDLED).map((f) -> f.type).toList().toString()));
@@ -82,39 +82,34 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     @NotNull
-    private static List<Component> getConditions(List<LootCondition> conditions) {
+    private static List<Component> getConditions(List<LootCondition> conditions, int pad) {
         List<Component> components = new LinkedList<>();
 
         for (LootCondition condition : conditions) {
             switch (condition.type) {
-                case ALL_OF -> components.add(translatableType(
-                        "emi.type.emi_loot_addon",
-                        condition.type,
-                        list(getConditions(((AllOfCondition) condition).terms).toArray())
-                ));
-                case ANY_OF -> components.add(translatableType(
-                        "emi.type.emi_loot_addon",
-                        condition.type,
-                        list(getConditions(((AnyOfCondition) condition).terms).toArray())
-                ));
-                case INVERTED -> components.add(translatableType(
-                        "emi.type.emi_loot_addon",
-                        condition.type,
-                        list(getConditions(List.of(((InvertedCondition) condition).term)).toArray())
-                ));
+                case ALL_OF -> components.addAll(getAllOfCondition((AllOfCondition) condition, pad));
+                case ANY_OF -> components.addAll(getAnyOfCondition((AnyOfCondition) condition, pad));
+                case INVERTED -> components.addAll(getInvertedCondition((InvertedCondition) condition, pad));
                 case SURVIVES_EXPLOSION,
-                     KILLED_BY_PLAYER -> components.add(translatableType("emi.type.emi_loot_addon", condition.type));
-                case ENTITY_PROPERTIES -> components.addAll(getEntityProperties((EntityPropertiesCondition) condition));
-                case ENTITY_SCORES -> components.addAll(getEntityScores((EntityScoresCondition) condition));
-                case BLOCK_STATE_PROPERTY -> components.addAll(getBlockStatePropertyCondition((BlockStatePropertyCondition) condition));
+                     KILLED_BY_PLAYER -> components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+                case ENTITY_PROPERTIES -> components.addAll(getEntityPropertiesCondition((EntityPropertiesCondition) condition, pad));
+                case ENTITY_SCORES -> components.addAll(getEntityScoresCondition((EntityScoresCondition) condition, pad));
+                case BLOCK_STATE_PROPERTY -> components.addAll(getBlockStatePropertyCondition((BlockStatePropertyCondition) condition, pad));
+                case MATCH_TOOL -> components.addAll(getMatchToolCondition((MatchToolCondition) condition, pad));
+                case DAMAGE_SOURCE_PROPERTIES -> components.addAll(getDamageSourceCondition((DamageSourcePropertiesCondition) condition, pad));
+                case LOCATION_CHECK -> components.addAll(getLocationCheckCondition((LocationCheckCondition) condition, pad));
+                case WEATHER_CHECK -> components.addAll(getWeatherCheckCondition((WeatherCheckCondition) condition, pad));
+                case REFERENCE -> components.addAll(getReferenceCondition((ReferenceCondition) condition, pad));
+                case TIME_CHECK -> components.addAll(getTimeCheckCondition((TimeCheckCondition) condition, pad));
+                case VALUE_CHECK -> components.addAll(getValueCheckCondition((ValueCheckCondition) condition, pad));
+                case LOOT_CONDITION_TYPE -> components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type, value(((CanToolPerformActionCondition) condition).action))));
                 case RANDOM_CHANCE,
                      TABLE_BONUS,
                      RANDOM_CHANCE_WITH_LOOTING -> {
                     continue;
                 }
-                default -> { //TODO remove
-                    components.add(Component.literal(condition.type.name()));
-                    continue;
+                default -> {
+                    //TODO logger
                 }
             }
 
@@ -125,34 +120,142 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     @NotNull
-    private static List<Component> getEntityProperties(EntityPropertiesCondition condition) {
+    private static List<Component> getAllOfCondition(AllOfCondition condition, int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(translatableType("emi.type.emi_loot_addon", condition.type));
-        addEntityPredicate(components, 1, translatableType("emi.enum.target", condition.target), condition.predicate);
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        components.addAll(getConditions(condition.terms, pad + 1));
 
         return components;
     }
 
     @NotNull
-    private static List<Component> getEntityScores(EntityScoresCondition condition) {
+    private static List<Component> getAnyOfCondition(AnyOfCondition condition, int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(translatableType("emi.type.emi_loot_addon", condition.type));
-        components.add(pad(1, translatable("emi.property.predicate.target", value(translatableType("emi.enum.target", condition.target)))));
-        components.add(pad(1, translatable("emi.property.scores.score")));
-        condition.scores.forEach((score, tuple) -> {
-            components.add(pad(2, keyValue(score, RangeValue.rangeToString(tuple.getA(), tuple.getB()))));
-        });
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        components.addAll(getConditions(condition.terms, pad + 1));
 
         return components;
     }
 
     @NotNull
-    private static List<Component> getBlockStatePropertyCondition(BlockStatePropertyCondition condition) {
+    private static List<Component> getInvertedCondition(InvertedCondition condition, int pad) {
         List<Component> components = new LinkedList<>();
 
-        addStateProperties(components, 0, translatableType("emi.type.emi_loot_addon", condition.type), condition.properties);
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        components.addAll(getConditions(List.of(condition.term), pad + 1));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getEntityPropertiesCondition(EntityPropertiesCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        addEntityPredicate(components, pad + 1, translatable("emi.property.predicate.target", value(translatableType("emi.enum.target", condition.target))), condition.predicate);
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getEntityScoresCondition(EntityScoresCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        components.add(pad(pad + 1, translatable("emi.property.predicate.target", value(translatableType("emi.enum.target", condition.target)))));
+        components.add(pad(pad + 1, translatable("emi.property.scores.score")));
+        condition.scores.forEach((score, tuple) -> components.add(pad(pad + 2, keyValue(score, RangeValue.rangeToString(tuple.getA(), tuple.getB())))));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getBlockStatePropertyCondition(BlockStatePropertyCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        addStateProperties(components, pad, translatableType("emi.type.emi_loot_addon", condition.type), condition.properties);
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getMatchToolCondition(MatchToolCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        addItemPredicate(components, pad, translatableType("emi.type.emi_loot_addon", condition.type), condition.predicate);
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getDamageSourceCondition(DamageSourcePropertiesCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        addDamageSourcePredicate(components, pad, translatableType("emi.type.emi_loot_addon", condition.type), condition.predicate);
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getLocationCheckCondition(LocationCheckCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        addLocationPredicate(components, pad + 1, "emi.property.location_check.location", condition.predicate);
+        components.add(pad(pad + 1, translatable("emi.property.location_check.offset")));
+        components.add(pad(pad + 2, translatable("emi.property.location_check.x", condition.offset.getX())));
+        components.add(pad(pad + 2, translatable("emi.property.location_check.y", condition.offset.getY())));
+        components.add(pad(pad + 2, translatable("emi.property.location_check.z", condition.offset.getZ())));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getWeatherCheckCondition(WeatherCheckCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+
+        if (condition.isRaining != null) {
+            components.add(pad(pad + 1, translatable("emi.property.weather_check.is_raining", condition.isRaining)));
+        }
+
+        if (condition.isThundering != null) {
+            components.add(pad(pad + 1, translatable("emi.property.weather_check.is_thundering", condition.isThundering)));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getReferenceCondition(ReferenceCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type, condition.name)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getTimeCheckCondition(TimeCheckCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        components.add(pad(pad + 1, translatable("emi.property.time_check.period", condition.period)));
+        components.add(pad(pad + 1, translatable("emi.property.time_check.value", RangeValue.rangeToString(condition.min, condition.max))));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getValueCheckCondition(ValueCheckCondition condition, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
+        components.add(pad(pad + 1, translatable("emi.property.value_check.provider", condition.provider)));
+        components.add(pad(pad + 1, translatable("emi.property.value_check.range", RangeValue.rangeToString(condition.min, condition.max))));
 
         return components;
     }
@@ -215,7 +318,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             addLocationPredicate(components, pad + 1, "emi.property.predicate.stepping_on_location", predicate.getSteppingOnLocation());
             addMobEffectsPredicate(components, pad + 1, "emi.property.predicate.effect", predicate.getEffects());
             addNbtPredicate(components, pad + 1, "emi.property.predicate.nbt", predicate.getNbt());
-            addEntityFlagsPredicate(components, pad + 1, "emi.property.predicate.entity_flags", predicate.getFlags());
+            addEntityFlagsPredicate(components, pad + 1, "emi.property.predicate.flags", predicate.getFlags());
             addEntityEquipmentPredicate(components, pad + 1, "emi.property.predicate.equipment", predicate.getEquipment());
             addEntitySubPredicate(components, pad + 1, "emi.property.predicate.entity_sub_type", predicate.getSubPredicate());
             addEntityPredicate(components, pad + 1, translatable("emi.property.predicate.vehicle"), predicate.getVehicle());
@@ -253,6 +356,26 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             addMinMaxBounds(components, pad + 1, "emi.property.dist_predicate.z", predicate.getZ());
             addMinMaxBounds(components, pad + 1, "emi.property.dist_predicate.horizontal", predicate.getHorizontal());
             addMinMaxBounds(components, pad + 1, "emi.property.dist_predicate.absolute", predicate.getAbsolute());
+        }
+    }
+
+    private static void addDamageSourcePredicate(List<Component> components, int pad, Component component, DamageSourcePredicate damageSourcePredicate) {
+        if (damageSourcePredicate != DamageSourcePredicate.ANY) {
+            MixinDamageSourcePredicate predicate = (MixinDamageSourcePredicate) damageSourcePredicate;
+
+            components.add(pad(pad, component));
+
+            if (!predicate.getTags().isEmpty()) {
+                components.add(pad(pad + 1, translatable("emi.property.damage_source.tags")));
+                predicate.getTags().forEach((tagPredicate) -> {
+                    MixinTagPredicate<?> p = (MixinTagPredicate<?>) tagPredicate;
+
+                    components.add(pad(pad + 2, keyValue(p.getTag().location().toString(), p.getExpected())));
+                });
+            }
+
+            addEntityPredicate(components, pad + 1, translatable("emi.property.damage_source.direct_entity"), predicate.getDirectEntity());
+            addEntityPredicate(components, pad + 1, translatable("emi.property.damage_source.source_entity"), predicate.getSourceEntity());
         }
     }
 
@@ -389,12 +512,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
             components.add(pad(pad, translatable(key)));
 
-            addItemPredicate(components, pad + 1, "emi.property.equipment.head", predicate.getHead());
-            addItemPredicate(components, pad + 1, "emi.property.equipment.chest", predicate.getChest());
-            addItemPredicate(components, pad + 1, "emi.property.equipment.legs", predicate.getLegs());
-            addItemPredicate(components, pad + 1, "emi.property.equipment.feet", predicate.getFeet());
-            addItemPredicate(components, pad + 1, "emi.property.equipment.mainhand", predicate.getMainhand());
-            addItemPredicate(components, pad + 1, "emi.property.equipment.offhand", predicate.getOffhand());
+            addItemPredicate(components, pad + 1, translatable("emi.property.equipment.head"), predicate.getHead());
+            addItemPredicate(components, pad + 1, translatable("emi.property.equipment.chest"), predicate.getChest());
+            addItemPredicate(components, pad + 1, translatable("emi.property.equipment.legs"), predicate.getLegs());
+            addItemPredicate(components, pad + 1, translatable("emi.property.equipment.feet"), predicate.getFeet());
+            addItemPredicate(components, pad + 1, translatable("emi.property.equipment.mainhand"), predicate.getMainhand());
+            addItemPredicate(components, pad + 1, translatable("emi.property.equipment.offhand"), predicate.getOffhand());
         }
     }
 
@@ -468,11 +591,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addItemPredicate(List<Component> components, int pad, String key, ItemPredicate itemPredicate) {
+    private static void addItemPredicate(List<Component> components, int pad, Component component, ItemPredicate itemPredicate) {
         if (itemPredicate != ItemPredicate.ANY) {
             MixinItemPredicate predicate = (MixinItemPredicate) itemPredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             if (predicate.getTag() != null) {
                 components.add(pad(pad + 1, translatable("emi.property.item.tag", predicate.getTag().location().toString())));
@@ -526,7 +649,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     private static void addPropertyMatcher(List<Component> components, int pad, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
         if (propertyMatcher instanceof MixinStatePropertiesPredicate.ExactPropertyMatcher matcher) {
-            components.add(pad(pad, value(matcher.getName() + "=" + matcher.getValue())));
+            components.add(pad(pad, keyValue(matcher.getName(), matcher.getValue())));
         }
         if (propertyMatcher instanceof MixinStatePropertiesPredicate.RangedPropertyMatcher matcher) {
             components.add(pad(pad, value(matcher.getName() + "=[" + matcher.getMinValue() + "-" + matcher.getMaxValue() + "]")));
@@ -543,7 +666,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                     return String.format("=%.1f", doubles.getMin());
                 }
             } else {
-                return String.format(">%.1f", doubles.getMin());
+                return String.format("≥%.1f", doubles.getMin());
             }
         } else {
             if (doubles.getMax() != null) {
@@ -564,7 +687,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                     return String.format("=%d", ints.getMin());
                 }
             } else {
-                return String.format(">%d", ints.getMin());
+                return String.format("≥%d", ints.getMin());
             }
         } else {
             if (ints.getMax() != null) {

@@ -6,7 +6,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class UnknownCondition extends LootCondition {
-
     public UnknownCondition(LootContext lootContext, LootItemCondition condition) {
         super(ConditionType.of(condition.getType()));
     }

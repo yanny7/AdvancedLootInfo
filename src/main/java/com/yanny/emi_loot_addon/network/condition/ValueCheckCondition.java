@@ -1,22 +1,36 @@
 package com.yanny.emi_loot_addon.network.condition;
 
+import com.yanny.emi_loot_addon.mixin.MixinIntRange;
+import com.yanny.emi_loot_addon.mixin.MixinValueCheckCondition;
 import com.yanny.emi_loot_addon.network.LootCondition;
+import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class ValueCheckCondition extends LootCondition {
+    public final RangeValue provider;
+    public final RangeValue min;
+    public final RangeValue max;
 
     public ValueCheckCondition(LootContext lootContext, LootItemCondition condition) {
         super(ConditionType.of(condition.getType()));
+        provider = RangeValue.of(lootContext, ((MixinValueCheckCondition) condition).getProvider());
+        min = RangeValue.of(lootContext, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMin());
+        max = RangeValue.of(lootContext, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMax());
     }
 
     public ValueCheckCondition(ConditionType type, FriendlyByteBuf buf) {
         super(type);
+        provider = new RangeValue(buf);
+        min = new RangeValue(buf);
+        max = new RangeValue(buf);
     }
 
     @Override
     public void encode(FriendlyByteBuf buf) {
-
+        provider.encode(buf);
+        min.encode(buf);
+        max.encode(buf);
     }
 }

@@ -16,6 +16,7 @@ public abstract class LootCondition {
 
     public LootCondition(ConditionType type) {
         this.type = type;
+        System.out.println(type.name());
     }
 
     public abstract void encode(FriendlyByteBuf buf);
