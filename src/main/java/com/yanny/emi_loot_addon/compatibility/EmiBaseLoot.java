@@ -203,7 +203,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatableType("emi.type.emi_loot_addon", condition.type)));
-        addLocationPredicate(components, pad + 1, "emi.property.location_check.location", condition.predicate);
+        addLocationPredicate(components, pad + 1, translatable("emi.property.location_check.location"), condition.predicate);
         components.add(pad(pad + 1, translatable("emi.property.location_check.offset")));
         components.add(pad(pad + 2, translatable("emi.property.location_check.x", condition.offset.getX())));
         components.add(pad(pad + 2, translatable("emi.property.location_check.y", condition.offset.getY())));
@@ -312,14 +312,14 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
             components.add(pad(pad, component));
 
-            addEntityTypePredicate(components, pad + 1, "emi.property.predicate.entity_type", predicate.getEntityType());
-            addDistancePredicate(components, pad + 1, "emi.property.predicate.dist_to_player", predicate.getDistanceToPlayer());
-            addLocationPredicate(components, pad + 1, "emi.property.predicate.location", predicate.getLocation());
-            addLocationPredicate(components, pad + 1, "emi.property.predicate.stepping_on_location", predicate.getSteppingOnLocation());
-            addMobEffectsPredicate(components, pad + 1, "emi.property.predicate.effect", predicate.getEffects());
+            addEntityTypePredicate(components, pad + 1, translatable("emi.property.predicate.entity_type"), predicate.getEntityType());
+            addDistancePredicate(components, pad + 1, translatable("emi.property.predicate.dist_to_player"), predicate.getDistanceToPlayer());
+            addLocationPredicate(components, pad + 1, translatable("emi.property.predicate.location"), predicate.getLocation());
+            addLocationPredicate(components, pad + 1, translatable("emi.property.predicate.stepping_on_location"), predicate.getSteppingOnLocation());
+            addMobEffectsPredicate(components, pad + 1, translatable("emi.property.predicate.effect"), predicate.getEffects());
             addNbtPredicate(components, pad + 1, "emi.property.predicate.nbt", predicate.getNbt());
-            addEntityFlagsPredicate(components, pad + 1, "emi.property.predicate.flags", predicate.getFlags());
-            addEntityEquipmentPredicate(components, pad + 1, "emi.property.predicate.equipment", predicate.getEquipment());
+            addEntityFlagsPredicate(components, pad + 1, translatable("emi.property.predicate.flags"), predicate.getFlags());
+            addEntityEquipmentPredicate(components, pad + 1, translatable("emi.property.predicate.equipment"), predicate.getEquipment());
             addEntitySubPredicate(components, pad + 1, "emi.property.predicate.entity_sub_type", predicate.getSubPredicate());
             addEntityPredicate(components, pad + 1, translatable("emi.property.predicate.vehicle"), predicate.getVehicle());
             addEntityPredicate(components, pad + 1, translatable("emi.property.predicate.passenger"), predicate.getPassenger());
@@ -331,11 +331,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addEntityTypePredicate(List<Component> components, int pad, String key, EntityTypePredicate entityTypePredicate) {
+    private static void addEntityTypePredicate(List<Component> components, int pad, Component component, EntityTypePredicate entityTypePredicate) {
         if (entityTypePredicate != EntityTypePredicate.ANY) {
             MixinEntityTypePredicate predicate = (MixinEntityTypePredicate) entityTypePredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             if (predicate instanceof MixinEntityTypePredicate.TypePredicate typePredicate) {
                 components.add(pad(pad + 1, value(typePredicate.getType().getDescription())));
@@ -346,11 +346,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addDistancePredicate(List<Component> components, int pad, String key, DistancePredicate distancePredicate) {
+    private static void addDistancePredicate(List<Component> components, int pad, Component component, DistancePredicate distancePredicate) {
         if (distancePredicate != DistancePredicate.ANY) {
             MixinDistancePredicate predicate = (MixinDistancePredicate) distancePredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
             addMinMaxBounds(components, pad + 1, "emi.property.dist_predicate.x", predicate.getX());
             addMinMaxBounds(components, pad + 1, "emi.property.dist_predicate.y", predicate.getY());
             addMinMaxBounds(components, pad + 1, "emi.property.dist_predicate.z", predicate.getZ());
@@ -379,11 +379,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addLocationPredicate(List<Component> components, int pad, String key, LocationPredicate predicate) {
+    private static void addLocationPredicate(List<Component> components, int pad, Component component, LocationPredicate predicate) {
         if (predicate != LocationPredicate.ANY) {
             MixinLocationPredicate locationPredicate = (MixinLocationPredicate) predicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
             addMinMaxBounds(components, pad + 1, "emi.property.location.x", locationPredicate.getX());
             addMinMaxBounds(components, pad + 1, "emi.property.location.y", locationPredicate.getY());
             addMinMaxBounds(components, pad + 1, "emi.property.location.z", locationPredicate.getZ());
@@ -392,16 +392,16 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             addResourceKey(components, pad + 1, "emi.property.location.dimension", locationPredicate.getDimension());
             addBoolean(components, pad + 1, "emi.property.location.smokey", locationPredicate.getSmokey());
             addLight(components, pad + 1, "emi.property.location.light", locationPredicate.getLight());
-            addBlock(components, pad + 1, "emi.property.location.block", locationPredicate.getBlock());
-            addFluid(components, pad + 1, "emi.property.location.fluid", locationPredicate.getFluid());
+            addBlock(components, pad + 1, translatable("emi.property.location.block"), locationPredicate.getBlock());
+            addFluid(components, pad + 1, translatable("emi.property.location.fluid"), locationPredicate.getFluid());
         }
     }
 
-    private static void addMobEffectsPredicate(List<Component> components, int pad, String key, MobEffectsPredicate predicate) {
+    private static void addMobEffectsPredicate(List<Component> components, int pad, Component component, MobEffectsPredicate predicate) {
         if (predicate != MobEffectsPredicate.ANY) {
             MixinMobEffectPredicate locationPredicate = (MixinMobEffectPredicate) predicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             locationPredicate.getEffects().forEach((effect, instancePredicate) -> {
                 MixinMobEffectPredicate.MobEffectInstancePredicate mobEffectInstancePredicate = (MixinMobEffectPredicate.MobEffectInstancePredicate) instancePredicate;
@@ -447,11 +447,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addBlock(List<Component> components, int pad, String key, BlockPredicate blockPredicate) {
+    private static void addBlock(List<Component> components, int pad, Component component, BlockPredicate blockPredicate) {
         if (blockPredicate != BlockPredicate.ANY) {
             MixinBlockPredicate predicate = (MixinBlockPredicate) blockPredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             if (predicate.getTag() != null) {
                 components.add(pad(pad + 1, translatable("emi.property.block.tag", predicate.getTag().location().toString())));
@@ -466,11 +466,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addFluid(List<Component> components, int pad, String key, FluidPredicate fluidPredicate) {
+    private static void addFluid(List<Component> components, int pad, Component component, FluidPredicate fluidPredicate) {
         if (fluidPredicate != FluidPredicate.ANY) {
             MixinFluidPredicate predicate = (MixinFluidPredicate) fluidPredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             if (predicate.getTag() != null) {
                 components.add(pad(pad + 1, translatable("emi.property.fluid.tag", predicate.getTag().location().toString())));
@@ -492,11 +492,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addEntityFlagsPredicate(List<Component> components, int pad, String key, EntityFlagsPredicate entityFlagsPredicate) {
+    private static void addEntityFlagsPredicate(List<Component> components, int pad, Component component, EntityFlagsPredicate entityFlagsPredicate) {
         if (entityFlagsPredicate != EntityFlagsPredicate.ANY) {
             MixinEntityFlagsPredicate predicate = (MixinEntityFlagsPredicate) entityFlagsPredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             addBoolean(components, pad + 1, "emi.property.flags.on_fire", predicate.getIsOnFire());
             addBoolean(components, pad + 1, "emi.property.flags.is_baby", predicate.getIsBaby());
@@ -506,11 +506,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
-    private static void addEntityEquipmentPredicate(List<Component> components, int pad, String key, EntityEquipmentPredicate entityEquipmentPredicate) {
+    private static void addEntityEquipmentPredicate(List<Component> components, int pad, Component component, EntityEquipmentPredicate entityEquipmentPredicate) {
         if (entityEquipmentPredicate != EntityEquipmentPredicate.ANY) {
             MixinEntityEquipmentPredicate predicate = (MixinEntityEquipmentPredicate) entityEquipmentPredicate;
 
-            components.add(pad(pad, translatable(key)));
+            components.add(pad(pad, component));
 
             addItemPredicate(components, pad + 1, translatable("emi.property.equipment.head"), predicate.getHead());
             addItemPredicate(components, pad + 1, translatable("emi.property.equipment.chest"), predicate.getChest());
