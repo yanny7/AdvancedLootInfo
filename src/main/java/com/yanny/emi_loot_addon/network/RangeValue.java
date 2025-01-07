@@ -1,6 +1,6 @@
 package com.yanny.emi_loot_addon.network;
 
-import com.yanny.emi_loot_addon.mixin.MixinBinomialWithBonusCount;
+import com.yanny.emi_loot_addon.mixin.MixinBinomialDistributionGenerator;
 import com.yanny.emi_loot_addon.mixin.MixinUniformGenerator;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -61,8 +61,8 @@ public final class RangeValue {
                 MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
                 return new RangeValue(of(lootContext, uniformGenerator.getMin()).min(), of(lootContext, uniformGenerator.getMax()).max());
             } else if (numberProvider.getType() == NumberProviders.BINOMIAL) {
-                MixinBinomialWithBonusCount binomialGenerator = (MixinBinomialWithBonusCount) numberProvider;
-                return new RangeValue(0, binomialGenerator.getExtraRounds());
+                MixinBinomialDistributionGenerator binomialGenerator = (MixinBinomialDistributionGenerator) numberProvider;
+                return new RangeValue(0, binomialGenerator.getN().getFloat(lootContext));
             } else if (numberProvider.getType() == NumberProviders.CONSTANT) {
                 return new RangeValue(numberProvider.getFloat(lootContext));
             } else if (numberProvider.getType() == NumberProviders.SCORE) {

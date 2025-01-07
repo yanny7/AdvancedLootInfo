@@ -92,7 +92,13 @@ public class NetworkUtils {
                         ObjectArrayList<Item> items = new ObjectArrayList<>();
                         LootGroup lootGroup = LootUtils.parseLoot(table, manager, lootContext, items, 1f);
 
-                        channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootGroup));
+                        if (!items.isEmpty()) {
+                            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootGroup));
+                        } else {
+                            LOGGER.warn("LootTable {} has no items!", location);
+                        }
+                    } else {
+                        LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
                     }
                 });
             }

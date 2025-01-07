@@ -61,6 +61,7 @@
     "MixinSetEnchantmentsFunction",
     "MixinSetItemCountFunction",
     "MixinSetItemDamageFunction",
+    "MixinSetNbtFunction",
     "MixinSetPotionFunction",
     "MixinSetStewEffectFunction",
     "MixinSlimePredicate",

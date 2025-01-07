@@ -38,7 +38,7 @@ public enum FunctionType {
         return ordinal();
     }
 
-    public static FunctionType of (int bitIndex) {
+    public static FunctionType of(int bitIndex) {
         if (FunctionType.values().length > bitIndex && bitIndex > 0) {
             return FunctionType.values()[bitIndex];
         } else {
