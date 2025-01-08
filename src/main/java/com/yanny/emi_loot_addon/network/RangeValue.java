@@ -150,6 +150,15 @@ public final class RangeValue {
         return isUnknown;
     }
 
+    public void clamp(RangeValue min, RangeValue max) {
+        if (this.min < min.min) {
+            this.min = min.min;
+        }
+        if (this.max > max.max) {
+            this.max = max.max;
+        }
+    }
+
     public void encode(FriendlyByteBuf buf) {
         buf.writeFloat(min);
         buf.writeFloat(max);

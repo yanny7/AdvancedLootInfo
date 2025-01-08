@@ -7,21 +7,21 @@ import com.yanny.emi_loot_addon.network.LootFunction;
 import com.yanny.emi_loot_addon.network.LootGroup;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import com.yanny.emi_loot_addon.network.condition.*;
-import com.yanny.emi_loot_addon.network.function.EnchantRandomlyFunction;
-import com.yanny.emi_loot_addon.network.function.EnchantWithLevelsFunction;
-import com.yanny.emi_loot_addon.network.function.SetEnchantmentsFunction;
-import com.yanny.emi_loot_addon.network.function.SetNbtFunction;
+import com.yanny.emi_loot_addon.network.function.*;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -74,8 +74,6 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             getConditions(itemData.conditions, 0).forEach(widget::appendTooltip);
             getFunctions(itemData.functions, 0).forEach(widget::appendTooltip);
 
-            widget.appendTooltip(Component.literal(itemData.functions.stream().filter((f) -> !f.HANDLED).map((f) -> f.type).toList().toString()));
-
             widget.recipeContext(this);
             widgetHolder.add(widget);
 
@@ -111,15 +109,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 case LOOT_CONDITION_TYPE -> components.add(pad(pad, translatableType("emi.type.emi_loot_addon.condition", condition.type, value(((CanToolPerformActionCondition) condition).action))));
                 case RANDOM_CHANCE,
                      TABLE_BONUS,
-                     RANDOM_CHANCE_WITH_LOOTING -> {
-                    continue;
-                }
+                     RANDOM_CHANCE_WITH_LOOTING -> {}
                 default -> {
                     //TODO logger
                 }
             }
-
-            condition.HANDLED = true;
         }
 
         return components;
@@ -135,17 +129,33 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 case ENCHANT_RANDOMLY -> components.addAll(getEnchantRandomly((EnchantRandomlyFunction) function, pad));
                 case SET_ENCHANTMENTS -> components.addAll(getSetEnchantments((SetEnchantmentsFunction) function, pad));
                 case SET_NBT -> components.addAll(getSetNbtFunction((SetNbtFunction) function, pad));
+                case SET_DAMAGE -> components.addAll(getSetDamageFunction((SetDamageFunction) function, pad));
+                case SET_ATTRIBUTES -> components.addAll(getSetAttributesFunction((SetAttributesFunction) function, pad));
+                case SET_NAME -> components.addAll(getSetNameFunction((SetNameFunction) function, pad));
+                case EXPLORATION_MAP -> components.addAll(getExplorationMapFunction((ExplorationMapFunction) function, pad));
+                case SET_STEW_EFFECT -> components.addAll(getSetStewEffectFunction((SetStewEffectFunction) function, pad));
+                case COPY_NAME -> components.addAll(getCopyNameFunction((CopyNameFunction) function, pad));
+                case SET_CONTENTS -> components.addAll(getSetContentsFunction((SetContentsFunction) function, pad));
+                case SET_LOOT_TABLE -> components.addAll(getSetLootTableFunction((SetLootTableFunction) function, pad));
+                case EXPLOSION_DECAY,
+                     COPY_NBT -> components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+                case SET_LORE -> components.addAll(getSetLoreFunction((SetLoreFunction) function, pad));
+                case FILL_PLAYER_HEAD -> components.addAll(getFillPlayerHeadFunction((FillPlayerHeadFunction) function, pad));
+                case COPY_STATE -> components.addAll(getCopyStateFunction((CopyStateFunction) function, pad));
+                case SET_BANNER_PATTERN -> components.addAll(getSetBannerPatternFunction((SetBannerPatternFunction) function, pad));
+                case SET_POTION -> components.addAll(getSetPotionFunction((SetPotionFunction) function, pad));
+                case SET_INSTRUMENT -> components.addAll(getSetInstrumentFunction((SetInstrumentFunction) function, pad));
+                case REFERENCE -> components.addAll(getReferenceFunction((ReferenceFunction) function, pad));
                 case APPLY_BONUS,
                      LOOTING_ENCHANT,
-                     SET_COUNT -> {
-                    continue;
-                }
+                     SET_COUNT,
+                     LIMIT_COUNT,
+                     FURNACE_SMELT -> {}
+                    //TODO debug print these values
                 default -> {
                     //TODO logger
                 }
             }
-
-            function.HANDLED = true;
         }
 
         return components;
@@ -388,6 +398,214 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
         components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
         components.add(pad(pad + 1, value(function.tag)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetDamageFunction(SetDamageFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_damage.damage", function.damage)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_damage.add", function.add)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetAttributesFunction(SetAttributesFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+
+        function.modifiers.forEach((modifier) -> {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_attributes.name", modifier.name())));
+            components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.attribute", value(translatable(ForgeRegistries.ATTRIBUTES.getValue(modifier.attribute()).getDescriptionId())))));
+            components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.operation", AttributeModifier.Operation.fromValue(modifier.operation()))));
+            components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.amount", modifier.amount())));
+
+            if (modifier.id() != null) {
+                components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.id", modifier.id())));
+            }
+
+            if (!modifier.slots().isEmpty()) {
+                components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.slots")));
+                modifier.slots().forEach((slot) -> components.add(pad(pad + 3, value(slot))));
+            }
+        });
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetNameFunction(SetNameFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_name.name", function.name)));
+
+        if (function.resolutionContext != null) {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_name.resolution_context", translatableType("emi.enum.target", function.resolutionContext))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getExplorationMapFunction(ExplorationMapFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.destination", function.structure)));
+        components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.map_decoration", MapDecoration.Type.byIcon(function.mapDecoration))));
+        components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.zoom", function.zoom)));
+        components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.search_radius", function.searchRadius)));
+        components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.skip_known_structures", function.skipKnownStructures)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetStewEffectFunction(SetStewEffectFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+
+        function.effectMap.forEach((effect, duration) -> {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_stew_effect.effect", translatable(ForgeRegistries.MOB_EFFECTS.getValue(effect).getDescriptionId()), duration)));
+        });
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getCopyNameFunction(CopyNameFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.copy_name.source", value(translatableType("emi.enum.name_source",
+                net.minecraft.world.level.storage.loot.functions.CopyNameFunction.NameSource.getByName(function.source))))));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetContentsFunction(SetContentsFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_contents.type", function.blockEntityType)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetLootTableFunction(SetLootTableFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_loot_table.name", function.name)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_loot_table.seed", function.seed)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_loot_table.type", function.blockEntityType)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetLoreFunction(SetLoreFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_lore.replace", function.replace)));
+
+        if (function.resolutionContext != null) {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_lore.resolution_context", value(translatableType("emi.enum.target", function.resolutionContext)))));
+        }
+
+        components.add(pad(pad + 1, translatable("emi.property.function.set_lore.lore")));
+        function.lore.forEach((l) -> components.add(pad(pad + 2, l)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getFillPlayerHeadFunction(FillPlayerHeadFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.fill_player_head.target", function.entityTarget)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getCopyStateFunction(CopyStateFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.copy_state.block", value(translatable(function.block.getDescriptionId())))));
+
+        if (!function.properties.isEmpty()) {
+            components.add(pad(pad + 1, translatable("emi.property.function.copy_state.properties", function.properties)));
+            function.properties.forEach((property) -> components.add(pad(pad + 2, value(property.getName()))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetBannerPatternFunction(SetBannerPatternFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_banner_pattern.append", function.append)));
+
+        if (!function.patterns.isEmpty()) {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_banner_pattern.patterns")));
+
+            function.patterns.forEach((pair) -> {
+                components.add(pad(pad + 2, value(BuiltInRegistries.BANNER_PATTERN.getKey(pair.getFirst().get()))));
+                components.add(pad(pad + 3, translatable("emi.property.function.set_banner_pattern.color", pair.getSecond().getName())));
+            });
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetPotionFunction(SetPotionFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_potion.name", function.potion.getName(""))));
+
+        if (!function.potion.getEffects().isEmpty()) {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_potion.effects")));
+
+            function.potion.getEffects().forEach((effect) -> components.add(pad(pad + 2, value(translatable(effect.getDescriptionId())))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getSetInstrumentFunction(SetInstrumentFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_instrument.options", function.options.location())));
+
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getReferenceFunction(ReferenceFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", function.type)));
+        components.add(pad(pad + 1, translatable("emi.property.function.reference.name", function.name)));
 
         return components;
     }

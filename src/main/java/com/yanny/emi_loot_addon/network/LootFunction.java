@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class LootFunction {
-    public boolean HANDLED = false;
 
     public final FunctionType type;
 

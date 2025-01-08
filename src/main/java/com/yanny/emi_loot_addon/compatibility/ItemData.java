@@ -5,10 +5,7 @@ import com.yanny.emi_loot_addon.network.condition.ConditionType;
 import com.yanny.emi_loot_addon.network.condition.RandomChanceCondition;
 import com.yanny.emi_loot_addon.network.condition.RandomChanceWithLootingCondition;
 import com.yanny.emi_loot_addon.network.condition.TableBonusCondition;
-import com.yanny.emi_loot_addon.network.function.ApplyBonusFunction;
-import com.yanny.emi_loot_addon.network.function.FunctionType;
-import com.yanny.emi_loot_addon.network.function.LootingEnchantFunction;
-import com.yanny.emi_loot_addon.network.function.SetCountFunction;
+import com.yanny.emi_loot_addon.network.function.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -60,7 +57,6 @@ public final class ItemData {
                 bonusChance.put(level, value.multiply(100));
             }
 
-            c.HANDLED = true;
             return Map.entry(Enchantments.MOB_LOOTING, bonusChance);
         }
 
@@ -76,7 +72,6 @@ public final class ItemData {
                     bonusChance.put(level, value.multiply(100));
                 }
 
-                c.HANDLED = true;
                 return Map.entry(enchantment, bonusChance);
             }
         }
@@ -91,7 +86,6 @@ public final class ItemData {
         for (LootCondition c : list) {
             RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
             value.multiply(condition.percent);
-            c.HANDLED = true;
         }
 
         list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE).toList();
@@ -99,7 +93,6 @@ public final class ItemData {
         for (LootCondition c : list) {
             RandomChanceCondition condition = (RandomChanceCondition) c;
             value.multiply(condition.probability);
-            c.HANDLED = true;
         }
 
         list = conditions.stream().filter((f) -> f.type == ConditionType.TABLE_BONUS).toList();
@@ -107,7 +100,6 @@ public final class ItemData {
         for (LootCondition c : list) {
             TableBonusCondition condition = (TableBonusCondition) c;
             value.set(new RangeValue(condition.values[0]));
-            c.HANDLED = true;
         }
 
         return value.multiply(100);
@@ -130,7 +122,6 @@ public final class ItemData {
                     bonusCount.put(level, value);
                 }
 
-                f.HANDLED = true;
                 return Map.entry(enchantment, bonusCount);
             }
         }
@@ -146,7 +137,6 @@ public final class ItemData {
                 bonusCount.put(level, value);
             }
 
-            f.HANDLED = true;
             return Map.entry(Enchantments.MOB_LOOTING, bonusCount);
         }
 
@@ -166,12 +156,16 @@ public final class ItemData {
                 value.set(function.count);
             }
 
-            f.HANDLED = true;
         });
 
         functions.stream().filter((f) -> f.type == FunctionType.APPLY_BONUS).forEach((f) -> {
             ((ApplyBonusFunction) f).formula.calculateCount(value, 0);
-            f.HANDLED = true;
+        });
+
+        functions.stream().filter((f) -> f.type == FunctionType.LIMIT_COUNT).forEach((f) -> {
+            LimitCountFunction function = (LimitCountFunction) f;
+
+            value.clamp(function.min, function.max);
         });
 
         return value;

@@ -10,13 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class LootCondition {
-    public boolean HANDLED = false;
 
     public final ConditionType type;
 
     public LootCondition(ConditionType type) {
         this.type = type;
-        System.out.println(type.name());
     }
 
     public abstract void encode(FriendlyByteBuf buf);
