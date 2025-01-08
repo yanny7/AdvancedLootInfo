@@ -157,6 +157,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.condition.time_check.value", "Value: %s");
         add("emi.property.condition.value_check.provider", "Provider: %s");
         add("emi.property.condition.value_check.range", "Range: %s");
+        add("emi.property.function.conditions", "Conditions:");
 
         add("emi.property.function.enchant_with_levels.levels", "Levels: %s");
         add("emi.property.function.enchant_with_levels.treasure", "Treasure: %s");
@@ -206,6 +207,9 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.util.emi_loot_addon.pad.3", "      ->");
         add("emi.util.emi_loot_addon.pad.4", "        ->");
         add("emi.util.emi_loot_addon.pad.5", "          ->");
+        add("emi.util.emi_loot_addon.pad.6", "            ->");
+        add("emi.util.emi_loot_addon.pad.7", "              ->");
+        add("emi.util.emi_loot_addon.pad.8", "                ->");
         add("emi.util.emi_loot_addon.key_value", "%s: %s");
     }
 }

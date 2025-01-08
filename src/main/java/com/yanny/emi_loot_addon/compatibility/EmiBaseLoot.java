@@ -156,6 +156,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                     //TODO logger
                 }
             }
+
+            if (function instanceof LootConditionalFunction conditionalFunction) {
+                components.addAll(getConditionalFunction(conditionalFunction, pad + 1));
+            }
         }
 
         return components;
@@ -358,6 +362,20 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
         return components;
     }
+
+    @NotNull
+    private static List<Component> getConditionalFunction(LootConditionalFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        if (!function.conditions.isEmpty()) {
+            components.add(pad(pad, translatable("emi.property.function.conditions")));
+            components.addAll(getConditions(function.conditions, pad + 1));
+        }
+
+        return components;
+    }
+
+
 
     @NotNull
     private static List<Component> getEnchantRandomly(EnchantRandomlyFunction function, int pad) {

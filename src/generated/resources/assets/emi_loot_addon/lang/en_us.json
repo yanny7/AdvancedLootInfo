@@ -101,6 +101,7 @@
   "emi.property.condition.value_check.range": "Range: %s",
   "emi.property.condition.weather_check.is_raining": "Is Raining: %s",
   "emi.property.condition.weather_check.is_thundering": "Is Thundering: %s",
+  "emi.property.function.conditions": "Conditions:",
   "emi.property.function.copy_name.source": "Source: %s",
   "emi.property.function.copy_state.block": "Block: %s",
   "emi.property.function.copy_state.properties": "Properties:",
@@ -185,6 +186,9 @@
   "emi.util.emi_loot_addon.pad.3": "      ->",
   "emi.util.emi_loot_addon.pad.4": "        ->",
   "emi.util.emi_loot_addon.pad.5": "          ->",
+  "emi.util.emi_loot_addon.pad.6": "            ->",
+  "emi.util.emi_loot_addon.pad.7": "              ->",
+  "emi.util.emi_loot_addon.pad.8": "                ->",
   "emi.util.emi_loot_addon.two_values": "%s%s",
   "emi.util.emi_loot_addon.two_values_with_space": "%s %s"
 }
