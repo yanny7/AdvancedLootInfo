@@ -22,6 +22,9 @@ import java.util.stream.Stream;
 
 public final class ItemData {
     public final Item item;
+    public final float rawChance;
+    public final RangeValue rawRolls;
+    public final RangeValue rawBonusRolls;
     public final RangeValue count;
     public final RangeValue chance;
     public final RangeValue rolls;
@@ -34,6 +37,9 @@ public final class ItemData {
 
     public ItemData(ResourceLocation item, float chance, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
+        this.rawChance = chance;
+        this.rawRolls = rolls;
+        this.rawBonusRolls = bonusRolls;
         this.functions = functions;
         this.conditions = conditions;
         this.chance = getChance(conditions, chance);

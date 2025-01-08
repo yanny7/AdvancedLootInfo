@@ -1,6 +1,7 @@
 package com.yanny.emi_loot_addon.compatibility;
 
 import com.google.gson.JsonObject;
+import com.yanny.emi_loot_addon.EmiLootMod;
 import com.yanny.emi_loot_addon.mixin.*;
 import com.yanny.emi_loot_addon.network.LootCondition;
 import com.yanny.emi_loot_addon.network.LootFunction;
@@ -65,6 +66,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1])
                     .setCount(itemData.count);
 
+            if (EmiLootMod.CONFIGURATION.isDebug()) {
+                widget.appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
+                widget.appendTooltip(translatable("emi.debug.bonus_rolls", itemData.rawBonusRolls));
+                widget.appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
+            }
+
             widget.appendTooltip(getChance(itemData));
             getBonusChance(itemData).forEach(widget::appendTooltip);
 
@@ -109,7 +116,13 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 case LOOT_CONDITION_TYPE -> components.add(pad(pad, translatableType("emi.type.emi_loot_addon.condition", condition.type, value(((CanToolPerformActionCondition) condition).action))));
                 case RANDOM_CHANCE,
                      TABLE_BONUS,
-                     RANDOM_CHANCE_WITH_LOOTING -> {}
+                     RANDOM_CHANCE_WITH_LOOTING -> {
+                    if (EmiLootMod.CONFIGURATION.isDebug()) {
+                        switch (condition.type) {
+                            case RANDOM_CHANCE -> components.add(pad(pad, translatable("emi.debug.random_chance", ((RandomChanceCondition) condition).probability)));
+                        }
+                    }
+                }
                 default -> {
                     //TODO logger
                 }
@@ -150,7 +163,15 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                      LOOTING_ENCHANT,
                      SET_COUNT,
                      LIMIT_COUNT,
-                     FURNACE_SMELT -> {}
+                     FURNACE_SMELT -> {
+                    switch (function.type) {
+                        case SET_COUNT -> components.add(pad(pad, translatable("emi.debug.set_count", ((SetCountFunction) function).count, ((SetCountFunction) function).add)));
+                        case LIMIT_COUNT -> {
+                            LimitCountFunction l = (LimitCountFunction) function;
+                            components.add(pad(pad, translatable("emi.debug.limit_count", l.min, l.max)));
+                        }
+                    }
+                }
                     //TODO debug print these values
                 default -> {
                     //TODO logger
@@ -250,10 +271,13 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
         components.add(pad(pad, translatableType("emi.type.emi_loot_addon.condition", condition.type)));
         addLocationPredicate(components, pad + 1, translatable("emi.property.condition.location_check.location"), condition.predicate);
-        components.add(pad(pad + 1, translatable("emi.property.condition.location_check.offset")));
-        components.add(pad(pad + 2, translatable("emi.property.condition.location_check.x", condition.offset.getX())));
-        components.add(pad(pad + 2, translatable("emi.property.condition.location_check.y", condition.offset.getY())));
-        components.add(pad(pad + 2, translatable("emi.property.condition.location_check.z", condition.offset.getZ())));
+
+        if (condition.offset.getX() != 0 && condition.offset.getY() != 0 && condition.offset.getZ() != 0) {
+            components.add(pad(pad + 1, translatable("emi.property.condition.location_check.offset")));
+            components.add(pad(pad + 2, translatable("emi.property.condition.location_check.x", condition.offset.getX())));
+            components.add(pad(pad + 2, translatable("emi.property.condition.location_check.y", condition.offset.getY())));
+            components.add(pad(pad + 2, translatable("emi.property.condition.location_check.z", condition.offset.getZ())));
+        }
 
         return components;
     }
