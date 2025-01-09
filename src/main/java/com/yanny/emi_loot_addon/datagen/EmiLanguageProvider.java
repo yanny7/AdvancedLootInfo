@@ -71,6 +71,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.enum.name_source.killer_player", "Last damaged by player");
         add("emi.enum.name_source.block_entity", "Block Entity");
 
+        add("emi.property.condition.unknown", "Unknown Condition: %s");
         add("emi.property.condition.predicate.target", "Target: %s");
         add("emi.property.condition.predicate.entity_type", "Entity Type:");
         add("emi.property.condition.predicate.dist_to_player", "Distance:");
@@ -159,6 +160,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.condition.value_check.range", "Range: %s");
         add("emi.property.function.conditions", "Conditions:");
 
+        add("emi.property.function.unknown", "Unknown Function: %s");
         add("emi.property.function.enchant_with_levels.levels", "Levels: %s");
         add("emi.property.function.enchant_with_levels.treasure", "Treasure: %s");
         add("emi.property.function.enchant_randomly.enchantments", "Available Enchantments:");

@@ -63,8 +63,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     public void addWidgets(WidgetHolder widgetHolder, int[] pos) {
         for (ItemData itemData : itemDataList) {
-            SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1])
-                    .setCount(itemData.count);
+            SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1]).setCount(itemData.count);
 
             if (EmiLootMod.CONFIGURATION.isDebug()) {
                 widget.appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
@@ -114,6 +113,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 case TIME_CHECK -> components.addAll(getTimeCheckCondition((TimeCheckCondition) condition, pad));
                 case VALUE_CHECK -> components.addAll(getValueCheckCondition((ValueCheckCondition) condition, pad));
                 case LOOT_CONDITION_TYPE -> components.add(pad(pad, translatableType("emi.type.emi_loot_addon.condition", condition.type, value(((CanToolPerformActionCondition) condition).action))));
+                case UNKNOWN -> components.add(pad(pad, translatable("emi.property.condition.unknown", ((UnknownCondition) condition).conditionType)));
                 case RANDOM_CHANCE,
                      TABLE_BONUS,
                      RANDOM_CHANCE_WITH_LOOTING -> {
@@ -159,6 +159,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 case SET_POTION -> components.addAll(getSetPotionFunction((SetPotionFunction) function, pad));
                 case SET_INSTRUMENT -> components.addAll(getSetInstrumentFunction((SetInstrumentFunction) function, pad));
                 case REFERENCE -> components.addAll(getReferenceFunction((ReferenceFunction) function, pad));
+                case UNKNOWN -> components.add(pad(pad, translatable("emi.property.function.unknown", ((UnknownFunction) function).functionType)));
                 case APPLY_BONUS,
                      LOOTING_ENCHANT,
                      SET_COUNT,
