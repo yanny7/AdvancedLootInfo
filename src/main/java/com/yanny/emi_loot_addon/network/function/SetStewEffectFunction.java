@@ -3,14 +3,19 @@ package com.yanny.emi_loot_addon.network.function;
 import com.yanny.emi_loot_addon.mixin.MixinSetStewEffectFunction;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.pad;
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.translatable;
 
 public class SetStewEffectFunction extends LootConditionalFunction {
     public final Map<ResourceLocation, RangeValue> effectMap;
@@ -42,5 +47,16 @@ public class SetStewEffectFunction extends LootConditionalFunction {
             buf.writeResourceLocation(location);
             level.encode(buf);
         });
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = super.getTooltip(pad);
+
+        effectMap.forEach((effect, duration) -> {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_stew_effect.effect", translatable(ForgeRegistries.MOB_EFFECTS.getValue(effect).getDescriptionId()), duration)));
+        });
+
+        return components;
     }
 }

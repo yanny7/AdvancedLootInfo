@@ -176,7 +176,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.function.set_attributes.id", "Id: %s");
         add("emi.property.function.set_attributes.slots", "Slots:");
         add("emi.property.function.set_name.name", "Name: %s");
-        add("emi.property.function.set_name.resolution_context", "Resolution Context: %s");
+        add("emi.property.function.set_name.resolution_context", "Entity: %s");
         add("emi.property.function.exploration_map.destination", "Destination: %s");
         add("emi.property.function.exploration_map.map_decoration", "Map Decoration: %s");
         add("emi.property.function.exploration_map.zoom", "Zoom: %s");
@@ -189,7 +189,7 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.property.function.set_loot_table.seed", "Seed: %s");
         add("emi.property.function.set_loot_table.type", "Type: %s");
         add("emi.property.function.set_lore.replace", "Replace: %s");
-        add("emi.property.function.set_lore.resolution_context", "Resolution Context: %s");
+        add("emi.property.function.set_lore.resolution_context", "Entity: %s");
         add("emi.property.function.set_lore.lore", "Lore:");
         add("emi.property.function.fill_player_head.target", "Target: %s");
         add("emi.property.function.copy_state.block", "Block: %s");

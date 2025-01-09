@@ -2,12 +2,16 @@ package com.yanny.emi_loot_addon.network;
 
 import com.yanny.emi_loot_addon.network.function.FunctionType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.pad;
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.translatableType;
 
 public abstract class LootFunction {
 
@@ -18,6 +22,14 @@ public abstract class LootFunction {
     }
 
     public abstract void encode(FriendlyByteBuf buf);
+
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.function", type)));
+
+        return components;
+    }
 
     @NotNull
     public static List<LootFunction> of(LootContext lootContext, LootItemFunction[] functions) {

@@ -2,6 +2,7 @@ package com.yanny.emi_loot_addon.network;
 
 import com.yanny.emi_loot_addon.network.condition.ConditionType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -9,8 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class LootCondition {
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.pad;
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.translatableType;
 
+public abstract class LootCondition {
     public final ConditionType type;
 
     public LootCondition(ConditionType type) {
@@ -19,12 +22,21 @@ public abstract class LootCondition {
 
     public abstract void encode(FriendlyByteBuf buf);
 
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatableType("emi.type.emi_loot_addon.condition", type)));
+
+        return components;
+    }
+
     @NotNull
     public static List<LootCondition> of(LootContext lootContext, LootItemCondition[] conditions) {
         List<LootCondition> list = new LinkedList<>();
 
         for (LootItemCondition condition : conditions) {
-            list.add(LootUtils.CONDITION_MAP.getOrDefault(ConditionType.of(condition.getType()), LootUtils.CONDITION_MAP.get(ConditionType.UNKNOWN)).apply(lootContext, condition));
+            list.add(LootUtils.CONDITION_MAP.getOrDefault(ConditionType.of(condition.getType()),
+                    LootUtils.CONDITION_MAP.get(ConditionType.UNKNOWN)).apply(lootContext, condition));
         }
 
         return list;

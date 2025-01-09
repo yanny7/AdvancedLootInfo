@@ -5,8 +5,14 @@ import com.yanny.emi_loot_addon.mixin.MixinValueCheckCondition;
 import com.yanny.emi_loot_addon.network.LootCondition;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
+import java.util.List;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.pad;
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.translatable;
 
 public class ValueCheckCondition extends LootCondition {
     public final RangeValue provider;
@@ -32,5 +38,15 @@ public class ValueCheckCondition extends LootCondition {
         provider.encode(buf);
         min.encode(buf);
         max.encode(buf);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = super.getTooltip(pad);
+
+        components.add(pad(pad + 1, translatable("emi.property.condition.value_check.provider", provider)));
+        components.add(pad(pad + 1, translatable("emi.property.condition.value_check.range", RangeValue.rangeToString(min, max))));
+
+        return components;
     }
 }

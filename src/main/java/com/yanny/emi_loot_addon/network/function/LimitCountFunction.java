@@ -1,12 +1,20 @@
 package com.yanny.emi_loot_addon.network.function;
 
+import com.yanny.emi_loot_addon.EmiLootMod;
 import com.yanny.emi_loot_addon.mixin.MixinIntRange;
 import com.yanny.emi_loot_addon.mixin.MixinLimitCount;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.pad;
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.translatable;
 
 public class LimitCountFunction extends LootConditionalFunction {
     public final RangeValue min;
@@ -30,5 +38,16 @@ public class LimitCountFunction extends LootConditionalFunction {
         super.encode(buf);
         min.encode(buf);
         max.encode(buf);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = new LinkedList<>();
+
+        if (EmiLootMod.CONFIGURATION.isDebug()) {
+            components.add(pad(pad, translatable("emi.debug.limit_count", min, max)));
+        }
+
+        return components;
     }
 }

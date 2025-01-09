@@ -5,6 +5,7 @@ import com.yanny.emi_loot_addon.mixin.MixinBinomialWithBonusCount;
 import com.yanny.emi_loot_addon.mixin.MixinUniformBonusCount;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -37,6 +39,11 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         super.encode(buf);
         buf.writeResourceLocation(enchantment);
         Formula.encode(buf, formula);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        return List.of();
     }
 
     public enum FormulaType {

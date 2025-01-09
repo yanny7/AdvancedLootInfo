@@ -3,8 +3,14 @@ package com.yanny.emi_loot_addon.network.function;
 import com.yanny.emi_loot_addon.mixin.MixinSetItemDamageFunction;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+
+import java.util.List;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.pad;
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.translatable;
 
 public class SetDamageFunction extends LootConditionalFunction {
     public final RangeValue damage;
@@ -27,5 +33,15 @@ public class SetDamageFunction extends LootConditionalFunction {
         super.encode(buf);
         damage.encode(buf);
         buf.writeBoolean(add);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = super.getTooltip(pad);
+
+        components.add(pad(pad + 1, translatable("emi.property.function.set_damage.damage", damage)));
+        components.add(pad(pad + 1, translatable("emi.property.function.set_damage.add", add)));
+
+        return components;
     }
 }

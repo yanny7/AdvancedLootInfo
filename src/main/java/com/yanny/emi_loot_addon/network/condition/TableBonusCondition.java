@@ -3,10 +3,13 @@ package com.yanny.emi_loot_addon.network.condition;
 import com.yanny.emi_loot_addon.mixin.MixinBonusLevelTableCondition;
 import com.yanny.emi_loot_addon.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
 
 public class TableBonusCondition extends LootCondition {
     public final ResourceLocation location;
@@ -38,5 +41,10 @@ public class TableBonusCondition extends LootCondition {
         for (float value : values) {
             buf.writeFloat(value);
         }
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        return List.of();
     }
 }

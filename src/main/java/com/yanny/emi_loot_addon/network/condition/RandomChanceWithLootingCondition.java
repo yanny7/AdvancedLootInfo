@@ -3,8 +3,11 @@ package com.yanny.emi_loot_addon.network.condition;
 import com.yanny.emi_loot_addon.mixin.MixinLootItemRandomChanceWithLootingCondition;
 import com.yanny.emi_loot_addon.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
+import java.util.List;
 
 public class RandomChanceWithLootingCondition extends LootCondition {
     public final float percent;
@@ -26,5 +29,10 @@ public class RandomChanceWithLootingCondition extends LootCondition {
     public void encode(FriendlyByteBuf buf) {
         buf.writeFloat(percent);
         buf.writeFloat(multiplier);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        return List.of();
     }
 }

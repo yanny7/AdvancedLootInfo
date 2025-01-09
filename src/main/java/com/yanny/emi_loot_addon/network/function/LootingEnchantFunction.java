@@ -3,8 +3,11 @@ package com.yanny.emi_loot_addon.network.function;
 import com.yanny.emi_loot_addon.mixin.MixinLootingEnchantFunction;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+
+import java.util.List;
 
 public class LootingEnchantFunction extends LootConditionalFunction {
     public final RangeValue value;
@@ -27,5 +30,10 @@ public class LootingEnchantFunction extends LootConditionalFunction {
         super.encode(buf);
         value.encode(buf);
         buf.writeInt(limit);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        return List.of();
     }
 }

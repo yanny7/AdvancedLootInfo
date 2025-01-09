@@ -8,7 +8,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.*;
 
 public class SetNameFunction extends LootConditionalFunction {
     public final Component name;
@@ -33,5 +36,18 @@ public class SetNameFunction extends LootConditionalFunction {
         super.encode(buf);
         buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(name));
         buf.writeOptional(Optional.ofNullable(resolutionContext != null ? resolutionContext.getName() : null), FriendlyByteBuf::writeUtf);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = super.getTooltip(pad);
+
+        components.add(pad(pad + 1, translatable("emi.property.function.set_name.name", name)));
+
+        if (resolutionContext != null) {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_name.resolution_context", translatableType("emi.enum.target", resolutionContext))));
+        }
+
+        return components;
     }
 }

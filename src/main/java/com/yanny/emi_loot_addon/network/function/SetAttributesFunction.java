@@ -3,8 +3,10 @@ package com.yanny.emi_loot_addon.network.function;
 import com.yanny.emi_loot_addon.mixin.MixinSetAttributesFunction;
 import com.yanny.emi_loot_addon.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.*;
 
 public class SetAttributesFunction extends LootConditionalFunction {
     public final List<Modifier> modifiers;
@@ -82,6 +86,29 @@ public class SetAttributesFunction extends LootConditionalFunction {
                 buf.writeUtf(slot);
             }
         }
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = super.getTooltip(pad);
+
+        modifiers.forEach((modifier) -> {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_attributes.name", modifier.name())));
+            components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.attribute", value(translatable(ForgeRegistries.ATTRIBUTES.getValue(modifier.attribute()).getDescriptionId())))));
+            components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.operation", AttributeModifier.Operation.fromValue(modifier.operation()))));
+            components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.amount", modifier.amount())));
+
+            if (modifier.id() != null) {
+                components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.id", modifier.id())));
+            }
+
+            if (!modifier.slots().isEmpty()) {
+                components.add(pad(pad + 2, translatable("emi.property.function.set_attributes.slots")));
+                modifier.slots().forEach((slot) -> components.add(pad(pad + 3, value(slot))));
+            }
+        });
+
+        return components;
     }
 
     public record Modifier(

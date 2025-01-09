@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.yanny.emi_loot_addon.compatibility.EmiUtils.*;
+
 public class SetLoreFunction extends LootConditionalFunction {
     public final boolean replace;
     public final List<Component> lore;
@@ -47,5 +49,21 @@ public class SetLoreFunction extends LootConditionalFunction {
         buf.writeInt(lore.size());
         lore.forEach((l) -> buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(l)));
         buf.writeOptional(Optional.ofNullable(resolutionContext != null ? resolutionContext.getName() : null), FriendlyByteBuf::writeUtf);
+    }
+
+    @Override
+    public List<Component> getTooltip(int pad) {
+        List<Component> components = super.getTooltip(pad);
+
+        components.add(pad(pad + 1, translatable("emi.property.function.set_lore.replace", replace)));
+
+        if (resolutionContext != null) {
+            components.add(pad(pad + 1, translatable("emi.property.function.set_lore.resolution_context", value(translatableType("emi.enum.target", resolutionContext)))));
+        }
+
+        components.add(pad(pad + 1, translatable("emi.property.function.set_lore.lore")));
+        lore.forEach((l) -> components.add(pad(pad + 2, l)));
+
+        return components;
     }
 }
