@@ -1,4 +1,0 @@
-@ParametersAreNonnullByDefault
-package com.yanny.emi_loot_addon.configuration;
-
-import javax.annotation.ParametersAreNonnullByDefault;
