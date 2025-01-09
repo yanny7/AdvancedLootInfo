@@ -25,4 +25,9 @@ public class EmiBlockLoot extends EmiBaseLoot {
         widgetHolder.addSlot(inputs.get(0), 4 * 18, 0);
         addWidgets(widgetHolder, new int[]{0, 22});
     }
+
+    @Override
+    public int getDisplayHeight() {
+        return 22 + (outputs.size() / 9 + 1) * 18;
+    }
 }

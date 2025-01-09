@@ -20,6 +20,11 @@ public class EmiGameplayLoot extends EmiBaseLoot {
     public void addWidgets(WidgetHolder widgetHolder, int[] pos) {
         widgetHolder.addText(Component.translatable(id.getPath().substring(1)), 0, 0, 0, false);
 
-        super.addWidgets(widgetHolder, new int[]{0, 12});
+        super.addWidgets(widgetHolder, new int[]{0, 10});
+    }
+
+    @Override
+    public int getDisplayHeight() {
+        return 12 + (outputs.size() / 9 + 1) * 18;
     }
 }

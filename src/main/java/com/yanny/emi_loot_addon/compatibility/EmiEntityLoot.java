@@ -16,6 +16,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SpawnEggItem;
+
+import java.util.List;
 
 public class EmiEntityLoot extends EmiBaseLoot {
     public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(Utils.modLoc("entity_loot"), EmiStack.of(Items.ZOMBIE_HEAD));
@@ -25,6 +28,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
     public EmiEntityLoot(ResourceLocation id, EntityType<?> entityType, LootGroup message) {
         super(CATEGORY, id, message);
         this.entityType = entityType;
+        catalysts = List.of(EmiStack.of(SpawnEggItem.byId(entityType)));
     }
 
     @Override
@@ -35,7 +39,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
             widgets.add(new Widget() {
                 @Override
                 public Bounds getBounds() {
-                    return new Bounds(0, 0, 72, 36);
+                    return new Bounds(0, 0, widgets.getWidth(), 48);
                 }
 
                 @Override
@@ -43,11 +47,26 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     Entity entity = entityType.create(level);
 
                     if (entity instanceof LivingEntity livingEntity) {
-                        InventoryScreen.renderEntityInInventoryFollowsMouse(draw, (int) (4.5 * 18), 64, 20, mouseX, mouseY, livingEntity);
+                        //draw.enableScissor(draw.guiWidth() / 2 - 64, 64, draw.guiWidth() / 2 + 64, 256);
+                        int length = Minecraft.getInstance().font.width(livingEntity.getName());
+
+                        draw.drawString(Minecraft.getInstance().font, livingEntity.getName(), (widgets.getWidth() - length) / 2, 0, 0, false);
+                        InventoryScreen.renderEntityInInventoryFollowsMouse(draw, (int) (4.5 * 18), 48, (int) (30 / entityType.getDimensions().height),
+                                -mouseX + ((float) widgets.getWidth() / 2), -mouseY + 32 , livingEntity);
+                        //draw.disableScissor();
                     }
                 }
             });
             addWidgets(widgets, new int[]{0, 72});
         }
+
+        catalysts.forEach((catalyst) -> {
+            widgets.addSlot(catalyst, 0, 0);
+        });
+    }
+
+    @Override
+    public int getDisplayHeight() {
+        return 72 + (outputs.size() / 9 + 1) * 18;
     }
 }
