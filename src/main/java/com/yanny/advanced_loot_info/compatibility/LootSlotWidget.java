@@ -1,23 +1,18 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.advanced_loot_info.Utils;
 import com.yanny.advanced_loot_info.network.RangeValue;
-import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 public class LootSlotWidget extends SlotWidget {
-    public static final ResourceLocation TEXTURE = Utils.modLoc("textures/gui/mini.png");
-    public static final EmiTexture TNT_TEXTURE = new EmiTexture(TEXTURE, 0, 0, 4, 4);
-
-    @Nullable private Component count;
+    @Nullable
+    private Component count;
     boolean isRange = false;
 
     public LootSlotWidget(EmiIngredient stack, int x, int y) {
@@ -45,7 +40,8 @@ public class LootSlotWidget extends SlotWidget {
                 stack.translate(x + 17, y + 13, 200);
                 stack.pushPose();
                 stack.scale(0.5f, 0.5f, 0.5f);
-                draw.drawString(font, count, -font.width(count), 0, 16777215, true);
+                //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
+                draw.drawString(font, count, -font.width(count), 0, 16777215, false);
                 stack.popPose();
             } else {
                 stack.translate(x + 18, y + 10, 200);

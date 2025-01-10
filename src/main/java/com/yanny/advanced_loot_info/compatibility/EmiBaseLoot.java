@@ -24,7 +24,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     protected final List<ItemData> itemDataList;
 
     public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootGroup message) {
-        super(category, id, 9 * 18, 1024);
+        super(category, id, 9 * 18, 256);
         this.message = message;
         itemDataList = ItemData.parse(message);
         outputs = itemDataList.stream()

@@ -13,7 +13,6 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
@@ -23,12 +22,12 @@ import java.util.List;
 public class EmiEntityLoot extends EmiBaseLoot {
     public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(Utils.modLoc("entity_loot"), EmiStack.of(Items.ZOMBIE_HEAD));
 
-    private final EntityType<?> entityType;
+    private final Entity entity;
 
-    public EmiEntityLoot(ResourceLocation id, EntityType<?> entityType, LootGroup message) {
+    public EmiEntityLoot(ResourceLocation id, Entity entity, LootGroup message) {
         super(CATEGORY, id, message);
-        this.entityType = entityType;
-        catalysts = List.of(EmiStack.of(SpawnEggItem.byId(entityType)));
+        this.entity = entity;
+        catalysts = List.of(EmiStack.of(SpawnEggItem.byId(entity.getType())));
     }
 
     @Override
@@ -44,14 +43,12 @@ public class EmiEntityLoot extends EmiBaseLoot {
 
                 @Override
                 public void render(GuiGraphics draw, int mouseX, int mouseY, float delta) {
-                    Entity entity = entityType.create(level);
-
                     if (entity instanceof LivingEntity livingEntity) {
                         //draw.enableScissor(draw.guiWidth() / 2 - 64, 64, draw.guiWidth() / 2 + 64, 256);
                         int length = Minecraft.getInstance().font.width(livingEntity.getName());
 
                         draw.drawString(Minecraft.getInstance().font, livingEntity.getName(), (widgets.getWidth() - length) / 2, 0, 0, false);
-                        InventoryScreen.renderEntityInInventoryFollowsMouse(draw, (int) (4.5 * 18), 48, (int) (30 / entityType.getDimensions().height),
+                        InventoryScreen.renderEntityInInventoryFollowsMouse(draw, (int) (4.5 * 18), 48, (int) (30 / EmiEntityLoot.this.entity.getType().getDimensions().height),
                                 -mouseX + ((float) widgets.getWidth() / 2), -mouseY + 32 , livingEntity);
                         //draw.disableScissor();
                     }
