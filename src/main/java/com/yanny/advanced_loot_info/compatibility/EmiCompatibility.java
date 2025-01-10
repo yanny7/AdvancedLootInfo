@@ -1,12 +1,12 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.EmiLootMod;
-import com.yanny.advanced_loot_info.Utils;
 import com.yanny.advanced_loot_info.network.LootGroup;
 import com.yanny.advanced_loot_info.network.NetworkUtils;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
+import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +17,7 @@ import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,8 +27,6 @@ import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
-    public static final ResourceLocation TEXTURE = Utils.modLoc("textures/gui/emi.png");
-
     @Override
     public void register(EmiRegistry emiRegistry) {
         registerLootTable(emiRegistry);
@@ -90,9 +89,26 @@ public class EmiCompatibility implements EmiPlugin {
 
             for (Map.Entry<ResourceLocation, LootGroup> entry : map.entrySet()) {
                 ResourceLocation location = entry.getKey();
-                registry.addCategory(EmiGameplayLoot.CATEGORY);
-                registry.addRecipe(new EmiGameplayLoot(new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entry.getValue()));
+                EmiRecipeCategory category = getRecipeCategory(location);
+
+                registry.addCategory(category);
+                registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entry.getValue()));
             }
         }
+    }
+
+    private static @NotNull EmiRecipeCategory getRecipeCategory(ResourceLocation location) {
+        EmiRecipeCategory category = EmiGameplayLoot.GAMEPLAY_CATEGORY;
+
+        if (location.getPath().startsWith("chest")) {
+            category = EmiGameplayLoot.CHEST_CATEGORY;
+        } else if (location.getPath().startsWith("fishing")) {
+            category = EmiGameplayLoot.FISHING_CATEGORY;
+        } else if (location.getPath().startsWith("archaeology")) {
+            category = EmiGameplayLoot.ARCHAEOLOGY_CATEGORY;
+        } else if (location.getPath().startsWith("gameplay/hero_of_the_village")) {
+            category = EmiGameplayLoot.HERO_CATEGORY;
+        }
+        return category;
     }
 }

@@ -13,7 +13,11 @@ class EmiLanguageProvider extends LanguageProvider {
     protected void addTranslations() {
         add("emi.category.advanced_loot_info.block_loot", "Block Drops");
         add("emi.category.advanced_loot_info.entity_loot", "Entity Drops");
-        add("emi.category.advanced_loot_info.gameplay_loot", "Gameplay Drops");
+        add("emi.category.advanced_loot_info.chest_loot", "Chest Loot");
+        add("emi.category.advanced_loot_info.fishing_loot", "Fishing Loot");
+        add("emi.category.advanced_loot_info.archaeology_loot", "Archaeology Loot");
+        add("emi.category.advanced_loot_info.hero_loot", "Hero of the Village Loot");
+        add("emi.category.advanced_loot_info.gameplay_loot", "Gameplay Loot");
 
         add("emi.description.advanced_loot_info.chance", "Chance: %s");
         add("emi.description.advanced_loot_info.chance_rolls", "Chance: [%s] %s");
@@ -220,5 +224,76 @@ class EmiLanguageProvider extends LanguageProvider {
         add("emi.debug.random_chance", "Random Chance: %s");
         add("emi.debug.set_count", "Set Count: %s (Add: %s)");
         add("emi.debug.limit_count", "Limit Count: [%s .. %s]");
+
+        add("advanced_loot_info/loot_table/chests/ancient_city_ice_box", "Ancient City Ice Box Chest");
+        add("advanced_loot_info/loot_table/chests/simple_dungeon", "Simple Dungeon Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_mason", "Village Mason Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_temple", "Village Temple Chest");
+        add("advanced_loot_info/loot_table/chests/bastion_treasure", "Bastion Treasure Chest");
+        add("advanced_loot_info/loot_table/chests/ruined_portal", "Ruined Portal Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_fisher", "Village Fisher Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_toolsmith", "Village Toolsmith Chest");
+        add("advanced_loot_info/loot_table/chests/shipwreck_map", "Shipwreck Map Chest");
+        add("advanced_loot_info/loot_table/chests/shipwreck_supply", "Shipwreck Supply Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_snowy_house", "Village Snowy House Chest");
+        add("advanced_loot_info/loot_table/chests/stronghold_crossing", "Stronghold Crossing Chest");
+        add("advanced_loot_info/loot_table/chests/nether_bridge", "Nether Bridge Chest");
+        add("advanced_loot_info/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
+        add("advanced_loot_info/loot_table/chests/shipwreck_treasure", "Shipwreck Treasure Chest");
+        add("advanced_loot_info/loot_table/chests/stronghold_corridor", "Stronghold Corridor Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_fletcher", "Village Fletcher Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_tannery", "Village Tannery Chest");
+        add("advanced_loot_info/loot_table/chests/spawn_bonus_chest", "Spawn Bonus Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_plains_house", "Village Plains House Chest");
+        add("advanced_loot_info/loot_table/chests/underwater_ruin_small", "Underwater Ruin Small Chest");
+        add("advanced_loot_info/loot_table/chests/buried_treasure", "Buried Treasure Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_armorer", "Village Armorer Chest");
+        add("advanced_loot_info/loot_table/chests/bastion_hoglin_stable", "Bastion Hoglin Stable Chest");
+        add("advanced_loot_info/loot_table/chests/desert_pyramid", "Desert Pyramid Chest");
+        add("advanced_loot_info/loot_table/chests/underwater_ruin_big", "Underwater Ruin Big Chest");
+        add("advanced_loot_info/loot_table/chests/igloo_chest", "Igloo Chest");
+        add("advanced_loot_info/loot_table/chests/ancient_city", "Ancient City Chest");
+        add("advanced_loot_info/loot_table/chests/bastion_bridge", "Bastion Bridge Chest");
+        add("advanced_loot_info/loot_table/chests/pillager_outpost", "Pillager Outpost Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_shepherd", "Village Shepherd Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_cartographer", "Village Cartographer Chest");
+        add("advanced_loot_info/loot_table/chests/jungle_temple_dispenser", "Jungle Temple Dispenser Chest");
+        add("advanced_loot_info/loot_table/chests/jungle_temple", "Jungle Temple Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_savanna_house", "Village Savanna House Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_taiga_house", "Village Taiga House Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_butcher", "Village Butcher Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_desert_house", "Village Desert House Chest");
+        add("advanced_loot_info/loot_table/chests/end_city_treasure", "End City Treasure Chest");
+        add("advanced_loot_info/loot_table/chests/stronghold_library", "Stronghold Library Chest");
+        add("advanced_loot_info/loot_table/chests/village/village_weaponsmith", "Village Weaponsmith Chest");
+        add("advanced_loot_info/loot_table/chests/bastion_other", "Bastion Other Chest");
+        add("advanced_loot_info/loot_table/chests/woodland_mansion", "Woodland Mansion Chest");
+
+        add("advanced_loot_info/loot_table/archaeology/trail_ruins_common", "Trail Ruins Common");
+        add("advanced_loot_info/loot_table/archaeology/ocean_ruin_warm", "Ocean Ruins Warm");
+        add("advanced_loot_info/loot_table/archaeology/trail_ruins_rare", "Trail Ruins Rare");
+        add("advanced_loot_info/loot_table/archaeology/ocean_ruin_cold", "Ocean Ruin Cold");
+        add("advanced_loot_info/loot_table/archaeology/desert_well", "Desert Well");
+        add("advanced_loot_info/loot_table/archaeology/desert_pyramid", "Desert Pyramid");
+
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/fisherman_gift", "Fisherman Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/farmer_gift", "Farmer Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/mason_gift", "Mason Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/leatherworker_gift", "Leatherworker Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/armorer_gift", "Armorer Gift");
+        add("advanced_loot_info/loot_table/gameplay/fishing", "Fishing");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/fletcher_gift", "Fletcher Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/toolsmith_gift", "Toolsmith Gift");
+        add("advanced_loot_info/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
+        add("advanced_loot_info/loot_table/gameplay/fishing/junk", "Fishing: Junk");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/cartographer_gift", "Cartographer Gift");
+        add("advanced_loot_info/loot_table/gameplay/fishing/treasure", "Fishing: Treasure");
+        add("advanced_loot_info/loot_table/gameplay/sniffer_digging", "Sniffer Digging");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/butcher_gift", "Butcher Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/shepherd_gift", "Shepherd Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/weaponsmith_gift", "Weaponsmith Gift");
+        add("advanced_loot_info/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
+        add("advanced_loot_info/loot_table/gameplay/fishing/fish", "Fishing: Fish");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/cleric_gift", "Cleric Gift");
     }
 }
