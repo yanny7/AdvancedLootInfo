@@ -16,6 +16,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,8 +45,14 @@ public class EmiCompatibility implements EmiPlugin {
                 LootGroup lootEntry = map.get(location);
 
                 if (lootEntry != null) {
-                    registry.addCategory(EmiBlockLoot.CATEGORY);
-                    registry.addRecipe(new EmiBlockLoot(new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, lootEntry));
+                    if (block instanceof IPlantable) {
+                        registry.addCategory(EmiBlockLoot.PLANT_CATEGORY);
+                        registry.addRecipe(new EmiBlockLoot(EmiBlockLoot.PLANT_CATEGORY, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, lootEntry));
+                    } else {
+                        registry.addCategory(EmiBlockLoot.BLOCK_CATEGORY);
+                        registry.addRecipe(new EmiBlockLoot(EmiBlockLoot.BLOCK_CATEGORY, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, lootEntry));
+                    }
+
                     map.remove(location);
                 }
             }

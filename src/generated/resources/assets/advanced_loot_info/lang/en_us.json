@@ -74,6 +74,7 @@
   "emi.category.advanced_loot_info.fishing_loot": "Fishing Loot",
   "emi.category.advanced_loot_info.gameplay_loot": "Gameplay Loot",
   "emi.category.advanced_loot_info.hero_loot": "Hero of the Village Loot",
+  "emi.category.advanced_loot_info.plant_loot": "Plant Drops",
   "emi.debug.bonus_rolls": "Raw Bonus Rolls: %s",
   "emi.debug.chance": "Raw Chance: %s",
   "emi.debug.limit_count": "Limit Count: [%s .. %s]",

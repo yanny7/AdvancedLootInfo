@@ -12,6 +12,7 @@ class EmiLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("emi.category.advanced_loot_info.block_loot", "Block Drops");
+        add("emi.category.advanced_loot_info.plant_loot", "Plant Drops");
         add("emi.category.advanced_loot_info.entity_loot", "Entity Drops");
         add("emi.category.advanced_loot_info.chest_loot", "Chest Loot");
         add("emi.category.advanced_loot_info.fishing_loot", "Fishing Loot");

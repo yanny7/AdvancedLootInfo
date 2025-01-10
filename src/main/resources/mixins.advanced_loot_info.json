@@ -8,6 +8,7 @@
     "MixinBinomialWithBonusCount",
     "MixinBlockPredicate",
     "MixinBonusLevelTableCondition",
+    "MixinBushBlock",
     "MixinCanToolPerformAction",
     "MixinCompositeEntryBase",
     "MixinCompositeLootItemCondition",
