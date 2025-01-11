@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.network.function;
 
-import com.yanny.advanced_loot_info.EmiLootMod;
+import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.mixin.MixinSetItemCountFunction;
 import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
@@ -41,7 +41,7 @@ public class SetCountFunction extends LootConditionalFunction {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        if (EmiLootMod.CONFIGURATION.isDebug()) {
+        if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
             components.add(pad(pad, translatable("emi.debug.set_count", count, add)));
         }
 

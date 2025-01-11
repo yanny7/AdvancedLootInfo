@@ -1,12 +1,11 @@
 package com.yanny.advanced_loot_info.datagen;
 
-import com.yanny.advanced_loot_info.EmiLootMod;
+import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.LanguageProvider;
 
-class EmiLanguageProvider extends LanguageProvider {
-    public EmiLanguageProvider(PackOutput output, String locale) {
-        super(output, EmiLootMod.MOD_ID, locale);
+class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
+    public LanguageProvider(PackOutput output, String locale) {
+        super(output, AdvancedLootInfoMod.MOD_ID, locale);
     }
 
     @Override

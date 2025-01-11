@@ -1,6 +1,5 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.Utils;
 import com.yanny.advanced_loot_info.network.LootGroup;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -14,18 +13,15 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 
 import java.util.List;
 
 public class EmiEntityLoot extends EmiBaseLoot {
-    public static final EmiRecipeCategory CATEGORY = new EmiRecipeCategory(Utils.modLoc("entity_loot"), EmiStack.of(Items.ZOMBIE_HEAD));
-
     private final Entity entity;
 
-    public EmiEntityLoot(ResourceLocation id, Entity entity, LootGroup message) {
-        super(CATEGORY, id, message);
+    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootGroup message) {
+        super(category, id, message);
         this.entity = entity;
         catalysts = List.of(EmiStack.of(SpawnEggItem.byId(entity.getType())));
     }

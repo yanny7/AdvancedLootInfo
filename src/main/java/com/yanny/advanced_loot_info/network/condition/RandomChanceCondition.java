@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.network.condition;
 
-import com.yanny.advanced_loot_info.EmiLootMod;
+import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.mixin.MixinLootItemRandomChanceCondition;
 import com.yanny.advanced_loot_info.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
@@ -36,7 +36,7 @@ public class RandomChanceCondition extends LootCondition {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        if (EmiLootMod.CONFIGURATION.isDebug()) {
+        if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
             components.add(pad(pad, translatable("emi.debug.random_chance", probability)));
         }
 

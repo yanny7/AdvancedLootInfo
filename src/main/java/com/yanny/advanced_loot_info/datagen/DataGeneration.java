@@ -9,6 +9,7 @@ public class DataGeneration {
         DataGenerator generator = event.getGenerator();
         PackOutput packOutput = generator.getPackOutput();
 
-        generator.addProvider(event.includeClient(), new EmiLanguageProvider(packOutput, "en_us"));
+        generator.addProvider(event.includeClient(), new LanguageProvider(packOutput, "en_us"));
+        generator.addProvider(event.includeClient(), new LootCategoryProvider(packOutput));
     }
 }

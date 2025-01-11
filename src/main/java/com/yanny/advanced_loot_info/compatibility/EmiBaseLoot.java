@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.EmiLootMod;
+import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.network.LootGroup;
 import com.yanny.advanced_loot_info.network.TooltipUtils;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
@@ -53,7 +53,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         for (ItemData itemData : itemDataList) {
             SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1]).setCount(itemData.count);
 
-            if (EmiLootMod.CONFIGURATION.isDebug()) {
+            if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
                 widget.appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
                 widget.appendTooltip(translatable("emi.debug.bonus_rolls", itemData.rawBonusRolls));
                 widget.appendTooltip(translatable("emi.debug.chance", itemData.rawChance));

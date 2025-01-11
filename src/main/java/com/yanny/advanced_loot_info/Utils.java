@@ -33,7 +33,7 @@ public class Utils {
 
     @NotNull
     public static ResourceLocation modLoc(String path) {
-        return  new ResourceLocation(EmiLootMod.MOD_ID, path);
+        return  new ResourceLocation(AdvancedLootInfoMod.MOD_ID, path);
     }
 
     @NotNull
