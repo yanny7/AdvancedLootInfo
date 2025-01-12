@@ -59,6 +59,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 widget.appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
             }
 
+            widget.appendTooltip(getRolls(itemData));
+
             widget.appendTooltip(getChance(itemData));
             getBonusChance(itemData).forEach(widget::appendTooltip);
 
@@ -79,6 +81,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         }
     }
 
+    @NotNull
+    private static Component getRolls(ItemData data) {
+        return translatable("emi.description.advanced_loot_info.rolls", value(data.rolls.toIntString(), "x"));
+    }
 
     @NotNull
     private static Component getCount(ItemData data) {
@@ -87,10 +93,6 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     @NotNull
     private static Component getChance(ItemData data) {
-        if ((!data.rolls.isRange() && data.rolls.min() > 1) || (data.rolls.isRange() && data.rolls.max() > 1)) {
-            return translatable("emi.description.advanced_loot_info.chance_rolls", value(data.rolls.toIntString(), "x"), value(data.chance, "%"));
-        }
-
         return translatable("emi.description.advanced_loot_info.chance", value(data.chance, "%"));
     }
 

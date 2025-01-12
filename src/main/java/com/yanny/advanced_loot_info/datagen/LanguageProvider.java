@@ -19,8 +19,8 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
         add("emi.category.advanced_loot_info.hero_loot", "Hero of the Village Loot");
         add("emi.category.advanced_loot_info.gameplay_loot", "Gameplay Loot");
 
+        add("emi.description.advanced_loot_info.rolls", "Rolls: %s");
         add("emi.description.advanced_loot_info.chance", "Chance: %s");
-        add("emi.description.advanced_loot_info.chance_rolls", "Chance: [%s] %s");
         add("emi.description.advanced_loot_info.chance_bonus", "%s (%s %s)");
         add("emi.description.advanced_loot_info.count", "Count: %s");
         add("emi.description.advanced_loot_info.count_bonus", "%s (%s %s)");
