@@ -281,19 +281,22 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/mason_gift", "Mason Gift");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/leatherworker_gift", "Leatherworker Gift");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/armorer_gift", "Armorer Gift");
-        add("advanced_loot_info/loot_table/gameplay/fishing", "Fishing");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/fletcher_gift", "Fletcher Gift");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/toolsmith_gift", "Toolsmith Gift");
-        add("advanced_loot_info/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
-        add("advanced_loot_info/loot_table/gameplay/fishing/junk", "Fishing: Junk");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/cartographer_gift", "Cartographer Gift");
-        add("advanced_loot_info/loot_table/gameplay/fishing/treasure", "Fishing: Treasure");
-        add("advanced_loot_info/loot_table/gameplay/sniffer_digging", "Sniffer Digging");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/butcher_gift", "Butcher Gift");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/shepherd_gift", "Shepherd Gift");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/weaponsmith_gift", "Weaponsmith Gift");
-        add("advanced_loot_info/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
-        add("advanced_loot_info/loot_table/gameplay/fishing/fish", "Fishing: Fish");
         add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/cleric_gift", "Cleric Gift");
+        add("advanced_loot_info/loot_table/gameplay/hero_of_the_village/librarian_gift", "Librarian Gift");
+
+        add("advanced_loot_info/loot_table/gameplay/fishing", "Fishing");
+        add("advanced_loot_info/loot_table/gameplay/fishing/junk", "Fishing: Junk");
+        add("advanced_loot_info/loot_table/gameplay/fishing/fish", "Fishing: Fish");
+        add("advanced_loot_info/loot_table/gameplay/fishing/treasure", "Fishing: Treasure");
+
+        add("advanced_loot_info/loot_table/gameplay/sniffer_digging", "Sniffer Digging");
+        add("advanced_loot_info/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
+        add("advanced_loot_info/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
     }
 }

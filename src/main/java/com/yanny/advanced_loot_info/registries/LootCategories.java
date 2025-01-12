@@ -1,9 +1,6 @@
 package com.yanny.advanced_loot_info.registries;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -21,7 +18,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import javax.json.JsonException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -55,7 +51,7 @@ public class LootCategories {
                         Item icon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
 
                         if (icon == null) {
-                            throw new JsonException("Item " + GsonHelper.getAsString(jsonObject, "icon") + " not found");
+                            throw new JsonParseException("Item " + GsonHelper.getAsString(jsonObject, "icon") + " not found");
                         }
 
                         switch (type) {

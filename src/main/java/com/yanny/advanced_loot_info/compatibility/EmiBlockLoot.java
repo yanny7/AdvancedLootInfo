@@ -1,6 +1,5 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.Utils;
 import com.yanny.advanced_loot_info.network.LootGroup;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -13,9 +12,6 @@ import net.minecraftforge.common.IPlantable;
 import java.util.List;
 
 public class EmiBlockLoot extends EmiBaseLoot {
-    public static final EmiRecipeCategory PLANT_CATEGORY = new EmiRecipeCategory(Utils.modLoc("plant_loot"), EmiStack.of(Items.DIAMOND_HOE));
-    public static final EmiRecipeCategory BLOCK_CATEGORY = new EmiRecipeCategory(Utils.modLoc("block_loot"), EmiStack.of(Items.DIAMOND_PICKAXE));
-
     private final Block block;
     private final boolean isSpecial;
 

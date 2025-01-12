@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import java.util.List;
 
@@ -23,7 +24,12 @@ public class EmiEntityLoot extends EmiBaseLoot {
     public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootGroup message) {
         super(category, id, message);
         this.entity = entity;
-        catalysts = List.of(EmiStack.of(SpawnEggItem.byId(entity.getType())));
+
+        SpawnEggItem spawnEgg = ForgeSpawnEggItem.fromEntityType(entity.getType());
+
+        if (spawnEgg != null) {
+            catalysts = List.of(EmiStack.of(spawnEgg));
+        }
     }
 
     @Override
