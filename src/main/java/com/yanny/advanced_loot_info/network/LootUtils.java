@@ -136,19 +136,19 @@ public class LootUtils {
     }
 
     @NotNull
-    public static LootGroup parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance) {
+    public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance) {
         MixinLootTable lootTable = (MixinLootTable) table;
-        List<LootEntry> lootInfos = new LinkedList<>();
+        List<LootPoolEntry> lootInfos = new LinkedList<>();
         List<LootPool> pools = lootTable.getPools();
 
         boolean wasSmelting = Arrays.stream(lootTable.getFunctions()).anyMatch((f) -> f.getType() == LootItemFunctions.FURNACE_SMELT);
 
         pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, items, chance, wasSmelting)));
-        return new LootGroup(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()), List.of());
+        return new LootTableEntry(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()));
     }
 
     @NotNull
-    private static LootEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, List<Item> items, float chance, boolean wasSmelting) {
+    private static LootPoolEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, List<Item> items, float chance, boolean wasSmelting) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
         RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
@@ -195,8 +195,12 @@ public class LootUtils {
                 int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 
                 lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, getChance.apply(weight), wasSmelting));
-            } else if (type == LootPoolEntries.ALTERNATIVES || type == LootPoolEntries.SEQUENCE || type == LootPoolEntries.GROUP) {
-                lootInfos.add(new LootGroup(parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
+            } else if (type == LootPoolEntries.GROUP) {
+                lootInfos.add(new LootGroup(GroupType.GROUP, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
+            } else if (type == LootPoolEntries.SEQUENCE) {
+                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
+            } else if (type == LootPoolEntries.ALTERNATIVES) {
+                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
             } else if (type == LootPoolEntries.ITEM) {
                 int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 

@@ -58,7 +58,6 @@ public class NetworkUtils {
         public List<InfoSyncLootTableMessage> lootEntries = new LinkedList<>();
 
         public void onLootInfo(InfoSyncLootTableMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
-            LOGGER.info("Received loot table: {}", msg.location);
             NetworkEvent.Context context = contextSupplier.get();
             context.enqueueWork(() -> lootEntries.add(msg));
             context.setPacketHandled(true);
@@ -90,10 +89,10 @@ public class NetworkUtils {
                         LootParams lootParams = (new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY);
                         LootContext lootContext = new LootContext.Builder(lootParams).create(null);
                         ObjectArrayList<Item> items = new ObjectArrayList<>();
-                        LootGroup lootGroup = LootUtils.parseLoot(table, manager, lootContext, items, 1f);
+                        LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, lootContext, items, 1f);
 
                         if (!items.isEmpty()) {
-                            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootGroup));
+                            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootTableEntry));
                         } else {
                             LOGGER.warn("LootTable {} has no items!", location);
                         }
@@ -122,16 +121,16 @@ public class NetworkUtils {
 
     public static class InfoSyncLootTableMessage {
         public final ResourceLocation location;
-        public final LootGroup value;
+        public final LootTableEntry value;
 
-        public InfoSyncLootTableMessage(ResourceLocation location, LootGroup value) {
+        public InfoSyncLootTableMessage(ResourceLocation location, LootTableEntry value) {
             this.location = location;
             this.value = value;
         }
 
         public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
             location = buf.readResourceLocation();
-            value = new LootGroup(buf);
+            value = new LootTableEntry(buf);
         }
 
         public void encode(FriendlyByteBuf buf) {

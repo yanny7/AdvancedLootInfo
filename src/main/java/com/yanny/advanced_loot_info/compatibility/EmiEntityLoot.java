@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.network.LootGroup;
+import com.yanny.advanced_loot_info.network.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
@@ -21,7 +21,7 @@ import java.util.List;
 public class EmiEntityLoot extends EmiBaseLoot {
     private final Entity entity;
 
-    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootGroup message) {
+    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootTableEntry message) {
         super(category, id, message);
         this.entity = entity;
 
@@ -66,6 +66,6 @@ public class EmiEntityLoot extends EmiBaseLoot {
 
     @Override
     public int getDisplayHeight() {
-        return 72 + (outputs.size() / 9 + 1) * 18;
+        return 72 + getItemsHeight();
     }
 }

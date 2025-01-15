@@ -1,7 +1,7 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
-import com.yanny.advanced_loot_info.network.LootGroup;
+import com.yanny.advanced_loot_info.network.LootTableEntry;
 import com.yanny.advanced_loot_info.network.TooltipUtils;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -20,14 +21,15 @@ import java.util.Objects;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
-    protected final LootGroup message;
-    protected final List<ItemData> itemDataList;
+    protected final LootTableEntry message;
+    protected final List<List<ItemData>> itemDataList;
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootGroup message) {
+    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTableEntry message) {
         super(category, id, 9 * 18, 256);
         this.message = message;
         itemDataList = ItemData.parse(message);
         outputs = itemDataList.stream()
+                .flatMap(Collection::stream)
                 .map((d) -> d.item)
                 .filter(Objects::nonNull)
                 .map(EmiStack::of)
@@ -50,35 +52,51 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     public void addWidgets(WidgetHolder widgetHolder, int[] pos) {
-        for (ItemData itemData : itemDataList) {
-            SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1]).setCount(itemData.count);
+        for (List<ItemData> list : itemDataList) {
+            for (ItemData itemData : list) {
+                SlotWidget widget = new LootSlotWidget(EmiStack.of(itemData.item), pos[0], pos[1]).setCount(itemData.count);
 
-            if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
-                widget.appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
-                widget.appendTooltip(translatable("emi.debug.bonus_rolls", itemData.rawBonusRolls));
-                widget.appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
+                if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
+                    widget.appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
+                    widget.appendTooltip(translatable("emi.debug.bonus_rolls", itemData.rawBonusRolls));
+                    widget.appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
+                }
+
+                widget.appendTooltip(getRolls(itemData));
+
+                widget.appendTooltip(getChance(itemData));
+                getBonusChance(itemData).forEach(widget::appendTooltip);
+
+                widget.appendTooltip(getCount(itemData));
+                getBonusCount(itemData).forEach(widget::appendTooltip);
+
+                TooltipUtils.getConditions(itemData.conditions, 0).forEach(widget::appendTooltip);
+                TooltipUtils.getFunctions(itemData.functions, 0).forEach(widget::appendTooltip);
+
+                widget.recipeContext(this);
+                widgetHolder.add(widget);
+
+                if ((pos[0] + 18) / (9 * 18) > 0) {
+                    pos[1] += 18;
+                }
+
+                pos[0] = (pos[0] + 18) % (9 * 18);
             }
 
-            widget.appendTooltip(getRolls(itemData));
-
-            widget.appendTooltip(getChance(itemData));
-            getBonusChance(itemData).forEach(widget::appendTooltip);
-
-            widget.appendTooltip(getCount(itemData));
-            getBonusCount(itemData).forEach(widget::appendTooltip);
-
-            TooltipUtils.getConditions(itemData.conditions, 0).forEach(widget::appendTooltip);
-            TooltipUtils.getFunctions(itemData.functions, 0).forEach(widget::appendTooltip);
-
-            widget.recipeContext(this);
-            widgetHolder.add(widget);
-
-            if ((pos[0] + 18) / (9*18) > 0) {
-                pos[1] += 18;
-            }
-
-            pos[0] = (pos[0] + 18) % (9*18);
+            pos[1] += pos[0] == 0 ? 2 : 20;
+            pos[0] = 0;
         }
+    }
+
+    protected int getItemsHeight() {
+        int height = 0;
+
+        for (List<ItemData> itemData : itemDataList) {
+            height += ((itemData.size() - 1) / 9 + 1) * 18;
+            height += 2;
+        }
+
+        return height - 2;
     }
 
     @NotNull

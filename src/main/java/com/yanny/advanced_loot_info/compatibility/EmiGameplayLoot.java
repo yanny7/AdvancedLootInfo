@@ -1,13 +1,13 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.network.LootGroup;
+import com.yanny.advanced_loot_info.network.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class EmiGameplayLoot extends EmiBaseLoot {
-    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootGroup message) {
+    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTableEntry message) {
         super(category, id, message);
     }
 
@@ -20,6 +20,6 @@ public class EmiGameplayLoot extends EmiBaseLoot {
 
     @Override
     public int getDisplayHeight() {
-        return 12 + (outputs.size() / 9 + 1) * 18;
+        return 12 + getItemsHeight();
     }
 }

@@ -9,7 +9,7 @@ public final class LootPoolEntry extends LootGroup {
     public final RangeValue bonusRolls;
 
     public LootPoolEntry(List<LootEntry> entries, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
-        super(entries, functions, conditions);
+        super(GroupType.RANDOM, entries, functions, conditions);
         this.rolls = rolls;
         this.bonusRolls = bonusRolls;
     }

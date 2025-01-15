@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.Utils;
-import com.yanny.advanced_loot_info.network.LootGroup;
+import com.yanny.advanced_loot_info.network.LootTableEntry;
 import com.yanny.advanced_loot_info.network.NetworkUtils;
 import com.yanny.advanced_loot_info.registries.LootCategories;
 import com.yanny.advanced_loot_info.registries.LootCategory;
@@ -41,7 +41,7 @@ public class EmiCompatibility implements EmiPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, LootGroup> map = new HashMap<>(client.lootEntries.stream().collect(Collectors.toMap((l) -> l.location, l -> l.value)));
+            Map<ResourceLocation, LootTableEntry> map = new HashMap<>(client.lootEntries.stream().collect(Collectors.toMap((l) -> l.location, l -> l.value)));
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategoryMap = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
@@ -71,7 +71,7 @@ public class EmiCompatibility implements EmiPlugin {
 
             for (Block block : ForgeRegistries.BLOCKS) {
                 ResourceLocation location = block.getLootTable();
-                LootGroup lootEntry = map.get(location);
+                LootTableEntry lootEntry = map.get(location);
 
                 if (lootEntry != null) {
                     EmiRecipeCategory category = null;
@@ -121,7 +121,7 @@ public class EmiCompatibility implements EmiPlugin {
                 entityList.forEach((entity) -> {
                     if (entity instanceof Mob mob) {
                         ResourceLocation location = mob.getLootTable();
-                        LootGroup lootEntry = map.get(location);
+                        LootTableEntry lootEntry = map.get(location);
 
                         if (lootEntry != null && entityType.create(level) != null) {
                             EmiRecipeCategory category = null;
@@ -143,7 +143,7 @@ public class EmiCompatibility implements EmiPlugin {
                 });
             }
 
-            for (Map.Entry<ResourceLocation, LootGroup> entry : map.entrySet()) {
+            for (Map.Entry<ResourceLocation, LootTableEntry> entry : map.entrySet()) {
                 ResourceLocation location = entry.getKey();
                 EmiRecipeCategory category = null;
 

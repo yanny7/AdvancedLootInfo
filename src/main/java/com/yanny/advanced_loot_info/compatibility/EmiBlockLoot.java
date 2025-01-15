@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.network.LootGroup;
+import com.yanny.advanced_loot_info.network.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
@@ -15,7 +15,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final Block block;
     private final boolean isSpecial;
 
-    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootGroup message) {
+    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootTableEntry message) {
         super(category, id, message);
         this.block = block;
         isSpecial = block instanceof IPlantable || block.asItem() == Items.AIR;
@@ -35,6 +35,6 @@ public class EmiBlockLoot extends EmiBaseLoot {
 
     @Override
     public int getDisplayHeight() {
-        return (isSpecial ? 30 : 22) + (outputs.size() / 9 + 1) * 18;
+        return (isSpecial ? 30 : 22) + getItemsHeight();
     }
 }

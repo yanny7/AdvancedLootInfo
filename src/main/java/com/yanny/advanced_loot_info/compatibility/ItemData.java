@@ -186,8 +186,22 @@ public final class ItemData {
     }
 
     @NotNull
-    public static List<ItemData> parse(LootGroup message) {
-        return parse(message, new RangeValue(), new RangeValue(), new LinkedList<>(message.functions), new LinkedList<>(message.conditions));
+    public static List<List<ItemData>> parse(LootTableEntry message) {
+        List<List<ItemData>> listLists = new LinkedList<>();
+
+        for (LootEntry entry : message.entries()) {
+            List<ItemData> list = new LinkedList<>();
+            List<LootFunction> allFunctions = Stream.concat(message.functions.stream(), entry.functions.stream()).toList();
+            List<LootCondition> allConditions = Stream.concat(message.conditions.stream(), entry.conditions.stream()).toList();
+
+            if (entry.getType() == EntryType.POOL) {
+                list.addAll(parse((LootPoolEntry) entry, new RangeValue(), new RangeValue(), new LinkedList<>(allFunctions), new LinkedList<>(allConditions)));
+            }
+
+            listLists.add(list);
+        }
+
+        return listLists;
     }
 
     @NotNull
@@ -202,6 +216,7 @@ public final class ItemData {
                 case INFO -> list.add(new ItemData(((LootInfo) entry).item, ((LootInfo) entry).chance, rolls, bonusRolls, allFunctions, allConditions));
                 case GROUP -> list.addAll(parse((LootGroup) entry, rolls, bonusRolls, allFunctions, allConditions));
                 case POOL -> list.addAll(parse((LootPoolEntry) entry, ((LootPoolEntry) entry).rolls, ((LootPoolEntry) entry).bonusRolls, allFunctions, allConditions));
+                case TABLE -> list.addAll(parse((LootTableEntry) entry, rolls, bonusRolls, allFunctions, allConditions));
             }
         }
 
