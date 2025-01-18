@@ -27,12 +27,8 @@ public class LootSlotWidget extends SlotWidget {
         super(EmiStack.of(itemData.item), x, y);
 
         if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
-            appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
-            appendTooltip(translatable("emi.debug.bonus_rolls", itemData.rawBonusRolls));
             appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
         }
-
-        appendTooltip(getRolls(itemData));
 
         appendTooltip(getChance(itemData));
         getBonusChance(itemData).forEach(this::appendTooltip);
@@ -77,11 +73,6 @@ public class LootSlotWidget extends SlotWidget {
         }
 
         super.drawOverlay(draw, mouseX, mouseY, delta);
-    }
-
-    @NotNull
-    private static Component getRolls(ItemData data) {
-        return translatable("emi.description.advanced_loot_info.rolls", value(data.rolls.toIntString(), "x"));
     }
 
     @NotNull

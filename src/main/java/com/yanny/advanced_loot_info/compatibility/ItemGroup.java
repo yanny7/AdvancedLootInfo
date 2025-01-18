@@ -1,7 +1,9 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.network.GroupType;
+import com.yanny.advanced_loot_info.network.RangeValue;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,21 +13,26 @@ public class ItemGroup {
     public final GroupType type;
     public final List<ItemData> items;
     public final List<ItemGroup> groups;
+    @Nullable
+    public final RollsHolder rollsHolder;
 
     public ItemGroup(GroupType type, List<ItemGroup> groups) {
-        this.type = type;
-        this.items = List.of();
-        this.groups = groups;
+        this(type, List.of(), groups, null);
     }
 
     public ItemGroup(GroupType type, List<ItemData> items, List<ItemGroup> groups) {
+        this(type, items, groups, null);
+    }
+
+    public ItemGroup(GroupType type, List<ItemData> items, List<ItemGroup> groups, @Nullable RollsHolder rollsHolder) {
         this.type = type;
         this.items = items;
         this.groups = groups;
+        this.rollsHolder = rollsHolder;
     }
 
     public ItemGroup optimize() {
-        if (items.isEmpty() && groups.size() == 1) {
+        if (items.isEmpty() && groups.size() == 1 && rollsHolder == null) {
             return groups.get(0).optimize();
         }
 
@@ -53,4 +60,6 @@ public class ItemGroup {
 
         return items;
     }
+
+    public record RollsHolder(RangeValue rolls, RangeValue bonusRolls) {}
 }

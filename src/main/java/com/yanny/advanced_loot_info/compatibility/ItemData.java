@@ -25,11 +25,8 @@ import java.util.stream.Stream;
 public final class ItemData {
     public final Item item;
     public final float rawChance;
-    public final RangeValue rawRolls;
-    public final RangeValue rawBonusRolls;
     public final RangeValue count;
     public final RangeValue chance;
-    public final RangeValue rolls;
     public final List<LootFunction> functions;
     public final List<LootCondition> conditions;
     @Nullable
@@ -37,16 +34,13 @@ public final class ItemData {
     @Nullable
     public final Pair<Enchantment, Map<Integer, RangeValue>> bonusChance;
 
-    public ItemData(ResourceLocation item, float chance, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
+    public ItemData(ResourceLocation item, float chance, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
         this.rawChance = chance;
-        this.rawRolls = rolls;
-        this.rawBonusRolls = bonusRolls;
         this.functions = functions;
         this.conditions = conditions;
         this.chance = getChance(conditions, chance);
         this.count = getCount(functions);
-        this.rolls = getRolls(rolls, bonusRolls);
         this.bonusCount = getBonusCount(functions, this.count);
         this.bonusChance = getBonusChance(conditions, chance);
     }
@@ -181,14 +175,6 @@ public final class ItemData {
         return value;
     }
 
-    private static RangeValue getRolls(RangeValue rolls, RangeValue bonusRolls) {
-        if (bonusRolls.min() > 0 || bonusRolls.max() > 0) {
-            return new RangeValue(bonusRolls).add(rolls);
-        } else {
-            return rolls;
-        }
-    }
-
     @NotNull
     public static ItemGroup parse(LootTableEntry message) {
         List<ItemGroup> groups = new LinkedList<>();
@@ -199,7 +185,7 @@ public final class ItemData {
 
             if (entry.getType() == EntryType.POOL) {
                 LootPoolEntry poolEntry = (LootPoolEntry) entry;
-                groups.add(parse(poolEntry, new RangeValue(), new RangeValue(), new LinkedList<>(allFunctions), new LinkedList<>(allConditions)));
+                groups.add(parse(poolEntry, new LinkedList<>(allFunctions), new LinkedList<>(allConditions)));
             }
         }
 
@@ -207,7 +193,7 @@ public final class ItemData {
     }
 
     @NotNull
-    private static ItemGroup parse(LootGroup message, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
+    private static ItemGroup parse(LootGroup message, List<LootFunction> functions, List<LootCondition> conditions) {
         List<ItemData> items = new LinkedList<>();
         List<ItemGroup> groups = new LinkedList<>();
 
@@ -216,13 +202,17 @@ public final class ItemData {
             List<LootCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
 
             switch (entry.getType()) {
-                case INFO -> items.add(new ItemData(((LootInfo) entry).item, ((LootInfo) entry).chance, rolls, bonusRolls, allFunctions, allConditions));
-                case GROUP -> groups.add(parse((LootGroup) entry, rolls, bonusRolls, allFunctions, allConditions));
-                case POOL -> groups.add(parse((LootPoolEntry) entry, ((LootPoolEntry) entry).rolls, ((LootPoolEntry) entry).bonusRolls, allFunctions, allConditions));
-                case TABLE -> groups.add(parse((LootTableEntry) entry, rolls, bonusRolls, allFunctions, allConditions));
+                case INFO -> items.add(new ItemData(((LootInfo) entry).item, ((LootInfo) entry).chance, allFunctions, allConditions));
+                case GROUP -> groups.add(parse((LootGroup) entry, allFunctions, allConditions));
+                case POOL -> groups.add(parse((LootPoolEntry) entry, allFunctions, allConditions));
+                case TABLE -> groups.add(parse((LootTableEntry) entry, allFunctions, allConditions));
             }
         }
 
-        return new ItemGroup(message.getGroupType(), items, groups);
+        if (message instanceof LootPoolEntry poolEntry) {
+            return new ItemGroup(message.getGroupType(), items, groups, new ItemGroup.RollsHolder(poolEntry.rolls, poolEntry.bonusRolls));
+        } else {
+            return new ItemGroup(message.getGroupType(), items, groups);
+        }
     }
 }

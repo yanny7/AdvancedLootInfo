@@ -2,18 +2,22 @@ package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.Utils;
-import com.yanny.advanced_loot_info.network.GroupType;
+import com.yanny.advanced_loot_info.network.RangeValue;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
+import static com.yanny.advanced_loot_info.compatibility.EmiUtils.value;
 
 public class GroupWidget extends Widget {
     private final List<Widget> widgets;
@@ -21,7 +25,7 @@ public class GroupWidget extends Widget {
     private final boolean hasGroups;
     private static final int MAX_IN_ROW = 9;
     private static final int HORIZONTAL_OFFSET = 5;
-    private static final int VERTICAL_OFFSET = 1;
+    private static final int VERTICAL_OFFSET = 2;
     private static final ResourceLocation TEXTURE_LOC = Utils.modLoc("textures/gui/gui.png");
 
     public GroupWidget(List<Widget> widgets, Bounds bounds, boolean hasGroups) {
@@ -79,8 +83,8 @@ public class GroupWidget extends Widget {
         Bounds bounds = new Bounds(posX, posY, 0, 0);
         int x = posX, y = posY;
 
-        if (itemGroup.items.size() > 1 || !itemGroup.groups.isEmpty()) {
-            Widget widget = getGroupTypeWidget(itemGroup.type, x, y);
+        if (itemGroup.items.size() > 1 || !itemGroup.groups.isEmpty() || itemGroup.rollsHolder != null) {
+            Widget widget = getGroupTypeWidget(itemGroup, x, y);
             posX = x = x + HORIZONTAL_OFFSET;
             bounds = extend(bounds, widget.getBounds());
             widgets.add(widget);
@@ -94,7 +98,7 @@ public class GroupWidget extends Widget {
                 widgets.add(widget);
                 x += 18;
 
-                if (x / (MAX_IN_ROW * 18) > 0) {
+                if (x / ((MAX_IN_ROW - 1) * 18) > 0) {
                     x = posX;
                     y += 18;
                 }
@@ -117,15 +121,22 @@ public class GroupWidget extends Widget {
     }
 
     @NotNull
-    private static TextureWidget getGroupTypeWidget(GroupType type, int x, int y) {
-        TextureWidget widget = switch (type) {
+    private static TextureWidget getGroupTypeWidget(ItemGroup group, int x, int y) {
+        List<Component> components = new LinkedList<>();
+        TextureWidget widget = switch (group.type) {
             case ALL -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 0, 18);
             case RANDOM -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 5, 18);
             case ALTERNATIVES -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 10, 18);
             case SEQUENCE -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 15, 18);
         };
 
-        widget.tooltipText(List.of(EmiUtils.translatableType("emi.enum.group_type", type)));
+        components.add(EmiUtils.translatableType("emi.enum.group_type", group.type));
+
+        if (group.rollsHolder != null) {
+            components.add(getRolls(group.rollsHolder));
+        }
+
+        widget.tooltipText(components);
         return widget;
     }
 
@@ -137,5 +148,18 @@ public class GroupWidget extends Widget {
                 Math.max(b2.right() - b1.left(), b1.width()),
                 Math.max(b2.bottom() - b1.top(), b1.height())
         );
+    }
+
+    @NotNull
+    private static Component getRolls(ItemGroup.RollsHolder holder) {
+        return translatable("emi.description.advanced_loot_info.rolls", value(getRolls(holder.rolls(), holder.bonusRolls()).toIntString(), "x"));
+    }
+
+    private static RangeValue getRolls(RangeValue rolls, RangeValue bonusRolls) {
+        if (bonusRolls.min() > 0 || bonusRolls.max() > 0) {
+            return new RangeValue(bonusRolls).add(rolls);
+        } else {
+            return rolls;
+        }
     }
 }
