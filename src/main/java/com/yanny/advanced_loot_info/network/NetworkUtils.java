@@ -89,7 +89,7 @@ public class NetworkUtils {
                         LootParams lootParams = (new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY);
                         LootContext lootContext = new LootContext.Builder(lootParams).create(null);
                         ObjectArrayList<Item> items = new ObjectArrayList<>();
-                        LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, lootContext, items, 1f);
+                        LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, lootContext, items, 1f, 0, 0);
 
                         if (!items.isEmpty()) {
                             channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootTableEntry));

@@ -24,6 +24,8 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
         add("emi.description.advanced_loot_info.chance_bonus", "%s (%s %s)");
         add("emi.description.advanced_loot_info.count", "Count: %s");
         add("emi.description.advanced_loot_info.count_bonus", "%s (%s %s)");
+        add("emi.description.advanced_loot_info.weight", "Weight: %s");
+        add("emi.description.advanced_loot_info.quality", "Quality: %s");
 
         add("emi.type.advanced_loot_info.condition.all_of", "All must pass:");
         add("emi.type.advanced_loot_info.condition.any_of", "Any of:");

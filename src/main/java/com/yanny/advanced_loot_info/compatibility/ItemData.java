@@ -210,9 +210,9 @@ public final class ItemData {
         }
 
         if (message instanceof LootPoolEntry poolEntry) {
-            return new ItemGroup(message.getGroupType(), items, groups, new ItemGroup.RollsHolder(poolEntry.rolls, poolEntry.bonusRolls));
+            return new ItemGroup(message.getGroupType(), items, groups, new ItemGroup.RollsHolder(poolEntry.rolls, poolEntry.bonusRolls), null);
         } else {
-            return new ItemGroup(message.getGroupType(), items, groups);
+            return new ItemGroup(message.getGroupType(), items, groups, null, new ItemGroup.WeightHolder(message.getWeight(), message.getQuality()));
         }
     }
 }

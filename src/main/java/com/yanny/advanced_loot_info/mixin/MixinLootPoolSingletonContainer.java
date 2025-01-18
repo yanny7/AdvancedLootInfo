@@ -11,5 +11,8 @@ public interface MixinLootPoolSingletonContainer {
     int getWeight();
 
     @Accessor
+    int getQuality();
+
+    @Accessor
     LootItemFunction[] getFunctions();
 }

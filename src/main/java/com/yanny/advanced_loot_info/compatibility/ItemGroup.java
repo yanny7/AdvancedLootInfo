@@ -15,24 +15,23 @@ public class ItemGroup {
     public final List<ItemGroup> groups;
     @Nullable
     public final RollsHolder rollsHolder;
+    @Nullable
+    public final WeightHolder weightHolder;
 
     public ItemGroup(GroupType type, List<ItemGroup> groups) {
-        this(type, List.of(), groups, null);
+        this(type, List.of(), groups, null, null);
     }
 
-    public ItemGroup(GroupType type, List<ItemData> items, List<ItemGroup> groups) {
-        this(type, items, groups, null);
-    }
-
-    public ItemGroup(GroupType type, List<ItemData> items, List<ItemGroup> groups, @Nullable RollsHolder rollsHolder) {
+    public ItemGroup(GroupType type, List<ItemData> items, List<ItemGroup> groups, @Nullable RollsHolder rollsHolder, @Nullable WeightHolder weightHolder) {
         this.type = type;
         this.items = items;
         this.groups = groups;
         this.rollsHolder = rollsHolder;
+        this.weightHolder = weightHolder;
     }
 
     public ItemGroup optimize() {
-        if (items.isEmpty() && groups.size() == 1 && rollsHolder == null) {
+        if (items.isEmpty() && groups.size() == 1 && rollsHolder == null && (weightHolder == null || weightHolder.isEmpty())) {
             return groups.get(0).optimize();
         }
 
@@ -62,4 +61,10 @@ public class ItemGroup {
     }
 
     public record RollsHolder(RangeValue rolls, RangeValue bonusRolls) {}
+
+    public record WeightHolder(int weight, int quality) {
+        public boolean isEmpty() {
+            return weight == 0 && quality == 0;
+        }
+    }
 }

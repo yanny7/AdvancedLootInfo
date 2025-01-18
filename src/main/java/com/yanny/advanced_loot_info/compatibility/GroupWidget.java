@@ -136,6 +136,10 @@ public class GroupWidget extends Widget {
             components.add(getRolls(group.rollsHolder));
         }
 
+        if (group.weightHolder != null) {
+            components.addAll(getWeight(group.weightHolder));
+        }
+
         widget.tooltipText(components);
         return widget;
     }
@@ -161,5 +165,19 @@ public class GroupWidget extends Widget {
         } else {
             return rolls;
         }
+    }
+
+    @NotNull
+    private static List<Component> getWeight(ItemGroup.WeightHolder holder) {
+        List<Component> components = new LinkedList<>();
+
+        if (holder.weight() != 0) {
+            components.add(translatable("emi.description.advanced_loot_info.weight", value(holder.weight())));
+        }
+        if (holder.quality() != 0) {
+            components.add(translatable("emi.description.advanced_loot_info.quality", value(holder.quality())));
+        }
+
+        return components;
     }
 }
