@@ -6,7 +6,7 @@ import java.util.List;
 
 public class LootTableEntry extends LootGroup {
     public LootTableEntry(List<LootPoolEntry> entries, List<LootFunction> functions) {
-        super(GroupType.GROUP, entries, functions, List.of());
+        super(GroupType.ALL, entries, functions, List.of());
     }
 
     public LootTableEntry(FriendlyByteBuf buf) {

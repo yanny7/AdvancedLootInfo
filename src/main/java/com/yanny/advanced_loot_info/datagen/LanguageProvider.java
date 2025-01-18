@@ -75,6 +75,11 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
         add("emi.enum.name_source.killer_player", "Last damaged by player");
         add("emi.enum.name_source.block_entity", "Block Entity");
 
+        add("emi.enum.group_type.all", "Selects all entries");
+        add("emi.enum.group_type.random", "Selects random entry");
+        add("emi.enum.group_type.alternatives", "Selects only first successful entry");
+        add("emi.enum.group_type.sequence", "Selects entries sequentially until first failed");
+
         add("emi.property.condition.unknown", "Unknown Condition: %s");
         add("emi.property.condition.predicate.target", "Target: %s");
         add("emi.property.condition.predicate.entity_type", "Entity Type:");

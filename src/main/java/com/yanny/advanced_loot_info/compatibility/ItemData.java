@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
+import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.network.*;
 import com.yanny.advanced_loot_info.network.condition.ConditionType;
 import com.yanny.advanced_loot_info.network.condition.RandomChanceCondition;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,9 +33,9 @@ public final class ItemData {
     public final List<LootFunction> functions;
     public final List<LootCondition> conditions;
     @Nullable
-    public final Map.Entry<Enchantment, Map<Integer, RangeValue>> bonusCount;
+    public final Pair<Enchantment, Map<Integer, RangeValue>> bonusCount;
     @Nullable
-    public final Map.Entry<Enchantment, Map<Integer, RangeValue>> bonusChance;
+    public final Pair<Enchantment, Map<Integer, RangeValue>> bonusChance;
 
     public ItemData(ResourceLocation item, float chance, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
@@ -50,7 +52,8 @@ public final class ItemData {
     }
 
     @Nullable
-    private static Map.Entry<Enchantment, Map<Integer, RangeValue>> getBonusChance(List<LootCondition> conditions, float chance) {
+    @Unmodifiable
+    private static Pair<Enchantment, Map<Integer, RangeValue>> getBonusChance(List<LootCondition> conditions, float chance) {
         Map<Integer, RangeValue> bonusChance = new HashMap<>();
 
         List<LootCondition> list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE_WITH_LOOTING).toList();
@@ -63,7 +66,7 @@ public final class ItemData {
                 bonusChance.put(level, value.multiply(100));
             }
 
-            return Map.entry(Enchantments.MOB_LOOTING, bonusChance);
+            return new Pair<>(Enchantments.MOB_LOOTING, bonusChance);
         }
 
         list = conditions.stream().filter((f) -> f.type == ConditionType.TABLE_BONUS).toList();
@@ -78,7 +81,7 @@ public final class ItemData {
                     bonusChance.put(level, value.multiply(100));
                 }
 
-                return Map.entry(enchantment, bonusChance);
+                return new Pair<>(enchantment, bonusChance);
             }
         }
 
@@ -112,7 +115,8 @@ public final class ItemData {
     }
 
     @Nullable
-    private static Map.Entry<Enchantment, Map<Integer, RangeValue>> getBonusCount(List<LootFunction> functions, RangeValue count) {
+    @Unmodifiable
+    private static Pair<Enchantment, Map<Integer, RangeValue>> getBonusCount(List<LootFunction> functions, RangeValue count) {
         Map<Integer, RangeValue> bonusCount = new HashMap<>();
 
         List<LootFunction> list = functions.stream().filter((f) -> f.type == FunctionType.APPLY_BONUS).toList();
@@ -128,7 +132,7 @@ public final class ItemData {
                     bonusCount.put(level, value);
                 }
 
-                return Map.entry(enchantment, bonusCount);
+                return new Pair<>(enchantment, bonusCount);
             }
         }
 
@@ -143,7 +147,7 @@ public final class ItemData {
                 bonusCount.put(level, value);
             }
 
-            return Map.entry(Enchantments.MOB_LOOTING, bonusCount);
+            return new Pair<>(Enchantments.MOB_LOOTING, bonusCount);
         }
 
         return null;
@@ -186,40 +190,39 @@ public final class ItemData {
     }
 
     @NotNull
-    public static List<List<ItemData>> parse(LootTableEntry message) {
-        List<List<ItemData>> listLists = new LinkedList<>();
+    public static ItemGroup parse(LootTableEntry message) {
+        List<ItemGroup> groups = new LinkedList<>();
 
         for (LootEntry entry : message.entries()) {
-            List<ItemData> list = new LinkedList<>();
             List<LootFunction> allFunctions = Stream.concat(message.functions.stream(), entry.functions.stream()).toList();
             List<LootCondition> allConditions = Stream.concat(message.conditions.stream(), entry.conditions.stream()).toList();
 
             if (entry.getType() == EntryType.POOL) {
-                list.addAll(parse((LootPoolEntry) entry, new RangeValue(), new RangeValue(), new LinkedList<>(allFunctions), new LinkedList<>(allConditions)));
+                LootPoolEntry poolEntry = (LootPoolEntry) entry;
+                groups.add(parse(poolEntry, new RangeValue(), new RangeValue(), new LinkedList<>(allFunctions), new LinkedList<>(allConditions)));
             }
-
-            listLists.add(list);
         }
 
-        return listLists;
+        return new ItemGroup(GroupType.ALL, groups);
     }
 
     @NotNull
-    private static List<ItemData> parse(LootGroup message, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
-        List<ItemData> list = new LinkedList<>();
+    private static ItemGroup parse(LootGroup message, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
+        List<ItemData> items = new LinkedList<>();
+        List<ItemGroup> groups = new LinkedList<>();
 
         for (LootEntry entry : message.entries()) {
             List<LootFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
             List<LootCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
 
             switch (entry.getType()) {
-                case INFO -> list.add(new ItemData(((LootInfo) entry).item, ((LootInfo) entry).chance, rolls, bonusRolls, allFunctions, allConditions));
-                case GROUP -> list.addAll(parse((LootGroup) entry, rolls, bonusRolls, allFunctions, allConditions));
-                case POOL -> list.addAll(parse((LootPoolEntry) entry, ((LootPoolEntry) entry).rolls, ((LootPoolEntry) entry).bonusRolls, allFunctions, allConditions));
-                case TABLE -> list.addAll(parse((LootTableEntry) entry, rolls, bonusRolls, allFunctions, allConditions));
+                case INFO -> items.add(new ItemData(((LootInfo) entry).item, ((LootInfo) entry).chance, rolls, bonusRolls, allFunctions, allConditions));
+                case GROUP -> groups.add(parse((LootGroup) entry, rolls, bonusRolls, allFunctions, allConditions));
+                case POOL -> groups.add(parse((LootPoolEntry) entry, ((LootPoolEntry) entry).rolls, ((LootPoolEntry) entry).bonusRolls, allFunctions, allConditions));
+                case TABLE -> groups.add(parse((LootTableEntry) entry, rolls, bonusRolls, allFunctions, allConditions));
             }
         }
 
-        return list;
+        return new ItemGroup(message.getGroupType(), items, groups);
     }
 }

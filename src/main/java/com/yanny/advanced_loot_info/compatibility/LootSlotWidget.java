@@ -1,25 +1,50 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.network.RangeValue;
-import dev.emi.emi.api.stack.EmiIngredient;
+import com.yanny.advanced_loot_info.network.TooltipUtils;
+import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
 
 public class LootSlotWidget extends SlotWidget {
     @Nullable
     private Component count;
     boolean isRange = false;
 
-    public LootSlotWidget(EmiIngredient stack, int x, int y) {
-        super(stack, x, y);
+    public LootSlotWidget(ItemData itemData, int x, int y) {
+        super(EmiStack.of(itemData.item), x, y);
+
+        if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
+            appendTooltip(translatable("emi.debug.rolls", itemData.rawRolls));
+            appendTooltip(translatable("emi.debug.bonus_rolls", itemData.rawBonusRolls));
+            appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
+        }
+
+        appendTooltip(getRolls(itemData));
+
+        appendTooltip(getChance(itemData));
+        getBonusChance(itemData).forEach(this::appendTooltip);
+
+        appendTooltip(getCount(itemData));
+        getBonusCount(itemData).forEach(this::appendTooltip);
+
+        TooltipUtils.getConditions(itemData.conditions, 0).forEach(this::appendTooltip);
+        TooltipUtils.getFunctions(itemData.functions, 0).forEach(this::appendTooltip);
     }
 
-    LootSlotWidget setCount(RangeValue count) {
+    public LootSlotWidget setCount(RangeValue count) {
         if (count.isRange() || count.min() > 1) {
             this.count = Component.literal(count.toIntString());
             isRange = count.isRange();
@@ -52,5 +77,52 @@ public class LootSlotWidget extends SlotWidget {
         }
 
         super.drawOverlay(draw, mouseX, mouseY, delta);
+    }
+
+    @NotNull
+    private static Component getRolls(ItemData data) {
+        return translatable("emi.description.advanced_loot_info.rolls", value(data.rolls.toIntString(), "x"));
+    }
+
+    @NotNull
+    private static Component getCount(ItemData data) {
+        return translatable("emi.description.advanced_loot_info.count", data.count);
+    }
+
+    @NotNull
+    private static Component getChance(ItemData data) {
+        return translatable("emi.description.advanced_loot_info.chance", value(data.chance, "%"));
+    }
+
+    @NotNull
+    private static List<Component> getBonusChance(ItemData data) {
+        List<Component> components = new LinkedList<>();
+
+        if (data.bonusChance != null) {
+            data.bonusChance.getSecond().forEach((level, value) -> components.add(pad(1, translatable(
+                    "emi.description.advanced_loot_info.chance_bonus",
+                    value(value, "%"),
+                    Component.translatable(data.bonusChance.getFirst().getDescriptionId()),
+                    Component.translatable("enchantment.level." + level)
+            ))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getBonusCount(ItemData data) {
+        List<Component> components = new LinkedList<>();
+
+        if (data.bonusCount != null) {
+            data.bonusCount.getSecond().forEach((level, value) -> components.add(pad(1, translatable(
+                    "emi.description.advanced_loot_info.count_bonus",
+                    value,
+                    Component.translatable(data.bonusCount.getFirst().getDescriptionId()),
+                    Component.translatable("enchantment.level." + level)
+            ))));
+        }
+
+        return components;
     }
 }

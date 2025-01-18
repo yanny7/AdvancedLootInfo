@@ -196,7 +196,7 @@ public class LootUtils {
 
                 lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, getChance.apply(weight), wasSmelting));
             } else if (type == LootPoolEntries.GROUP) {
-                lootInfos.add(new LootGroup(GroupType.GROUP, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
+                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
             } else if (type == LootPoolEntries.SEQUENCE) {
                 lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), List.of(), List.of()));
             } else if (type == LootPoolEntries.ALTERNATIVES) {

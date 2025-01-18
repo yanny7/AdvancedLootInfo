@@ -41,6 +41,10 @@ public class LootGroup extends LootEntry {
         return entries;
     }
 
+    public GroupType getGroupType() {
+        return groupType;
+    }
+
     @Override
     public void encode(FriendlyByteBuf buf) {
         super.encode(buf);

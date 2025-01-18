@@ -33,14 +33,14 @@ public class EmiEntityLoot extends EmiBaseLoot {
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgets) {
+    public void addWidgets(WidgetHolder widgetHolder) {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level != null) {
-            widgets.add(new Widget() {
+            widgetHolder.add(new Widget() {
                 @Override
                 public Bounds getBounds() {
-                    return new Bounds(0, 0, widgets.getWidth(), 48);
+                    return new Bounds(0, 0, widgetHolder.getWidth(), 48);
                 }
 
                 @Override
@@ -49,18 +49,18 @@ public class EmiEntityLoot extends EmiBaseLoot {
                         //draw.enableScissor(draw.guiWidth() / 2 - 64, 64, draw.guiWidth() / 2 + 64, 256);
                         int length = Minecraft.getInstance().font.width(livingEntity.getName());
 
-                        draw.drawString(Minecraft.getInstance().font, livingEntity.getName(), (widgets.getWidth() - length) / 2, 0, 0, false);
+                        draw.drawString(Minecraft.getInstance().font, livingEntity.getName(), (widgetHolder.getWidth() - length) / 2, 0, 0, false);
                         InventoryScreen.renderEntityInInventoryFollowsMouse(draw, (int) (4.5 * 18), 48, (int) (30 / EmiEntityLoot.this.entity.getType().getDimensions().height),
-                                -mouseX + ((float) widgets.getWidth() / 2), -mouseY + 32 , livingEntity);
+                                -mouseX + ((float) widgetHolder.getWidth() / 2), -mouseY + 32 , livingEntity);
                         //draw.disableScissor();
                     }
                 }
             });
-            addWidgets(widgets, new int[]{0, 72});
+            addWidgets(widgetHolder, new int[]{0, 72});
         }
 
         catalysts.forEach((catalyst) -> {
-            widgets.addSlot(catalyst, 0, 0);
+            widgetHolder.addSlot(catalyst, 0, 0);
         });
     }
 
