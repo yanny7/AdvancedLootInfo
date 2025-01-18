@@ -24,8 +24,8 @@ public class GroupWidget extends Widget {
     private final Bounds bounds;
     private final boolean hasGroups;
     private static final int MAX_IN_ROW = 9;
-    private static final int HORIZONTAL_OFFSET = 5;
     private static final int VERTICAL_OFFSET = 2;
+    private static final int GROUP_WIDGET_WIDTH = 7;
     private static final ResourceLocation TEXTURE_LOC = Utils.modLoc("textures/gui/gui.png");
 
     public GroupWidget(List<Widget> widgets, Bounds bounds, boolean hasGroups) {
@@ -52,11 +52,11 @@ public class GroupWidget extends Widget {
             int top = bounds.y() + 18;
             int height = lastY - bounds.y() - 9;
 
-            guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 2, top, 2, height, 0, 0, 2, 18);
+            guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
 
             for (Widget widget : widgets) {
                 if (!(widget instanceof LootSlotWidget) && widget.getBounds().y() > bounds.y() + 18) {
-                    guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, widget.getBounds().y() + 8, 2, 2, 2, 0, 18, 2);
+                    guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
                 }
             }
         }
@@ -85,7 +85,7 @@ public class GroupWidget extends Widget {
 
         if (itemGroup.items.size() > 1 || !itemGroup.groups.isEmpty() || itemGroup.rollsHolder != null) {
             Widget widget = getGroupTypeWidget(itemGroup, x, y);
-            posX = x = x + HORIZONTAL_OFFSET;
+            posX = x = x + GROUP_WIDGET_WIDTH;
             bounds = extend(bounds, widget.getBounds());
             widgets.add(widget);
         }
@@ -124,10 +124,10 @@ public class GroupWidget extends Widget {
     private static TextureWidget getGroupTypeWidget(ItemGroup group, int x, int y) {
         List<Component> components = new LinkedList<>();
         TextureWidget widget = switch (group.type) {
-            case ALL -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 0, 18);
-            case RANDOM -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 5, 18);
-            case ALTERNATIVES -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 10, 18);
-            case SEQUENCE -> new TextureWidget(TEXTURE_LOC, x, y, 5, 18, 15, 18);
+            case ALL -> new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, 18, 0, 18);
+            case RANDOM -> new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, 18, GROUP_WIDGET_WIDTH, 18);
+            case ALTERNATIVES -> new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, 18, 2 * GROUP_WIDGET_WIDTH, 18);
+            case SEQUENCE -> new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, 18, 3 * GROUP_WIDGET_WIDTH, 18);
         };
 
         components.add(EmiUtils.translatableType("emi.enum.group_type", group.type));
