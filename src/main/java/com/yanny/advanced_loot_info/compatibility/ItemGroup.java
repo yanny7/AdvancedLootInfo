@@ -62,9 +62,9 @@ public class ItemGroup {
 
     public record RollsHolder(RangeValue rolls, RangeValue bonusRolls) {}
 
-    public record WeightHolder(int weight, int quality) {
+    public record WeightHolder(float chance, int quality) {
         public boolean isEmpty() {
-            return weight == 0 && quality == 0;
+            return Float.isNaN(chance) && quality == 0;
         }
     }
 }

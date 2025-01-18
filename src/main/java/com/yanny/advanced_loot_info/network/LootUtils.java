@@ -136,19 +136,19 @@ public class LootUtils {
     }
 
     @NotNull
-    public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance, int weight, int quality) {
+    public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance, int quality) {
         MixinLootTable lootTable = (MixinLootTable) table;
         List<LootPoolEntry> lootInfos = new LinkedList<>();
         List<LootPool> pools = lootTable.getPools();
 
         boolean wasSmelting = Arrays.stream(lootTable.getFunctions()).anyMatch((f) -> f.getType() == LootItemFunctions.FURNACE_SMELT);
 
-        pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, items, chance, wasSmelting)));
-        return new LootTableEntry(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()), weight, quality);
+        pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, items, wasSmelting)));
+        return new LootTableEntry(lootInfos, LootFunction.of(lootContext, lootTable.getFunctions()), chance, quality);
     }
 
     @NotNull
-    private static LootPoolEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, List<Item> items, float chance, boolean wasSmelting) {
+    private static LootPoolEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, List<Item> items, boolean wasSmelting) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
         RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
@@ -157,21 +157,15 @@ public class LootUtils {
 
         wasSmelting |= functions.stream().anyMatch((f) -> f.type == FunctionType.FURNACE_SMELT);
 
-        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, items, chance, true, wasSmelting), rolls, bonusRolls, functions, conditions);
+        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, items, wasSmelting), rolls, bonusRolls, functions, conditions);
     }
 
     @NotNull
-    private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, List<Item> items, float chance, boolean weighted, boolean wasSmelting) {
+    private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, List<Item> items, boolean wasSmelting) {
         List<LootEntry> lootInfos = new LinkedList<>();
         int sumWeight = Arrays.stream(entries).filter(entry -> entry instanceof LootPoolSingletonContainer).mapToInt(entry -> ((MixinLootPoolSingletonContainer) entry).getWeight()).sum();
 
-        Function<Integer, Float> getChance = (weight) -> {
-            if (weighted) {
-                return chance * (weight / (float) sumWeight);
-            } else {
-                return chance;
-            }
-        };
+        Function<Integer, Float> getChance = (weight) -> (weight / (float) sumWeight);
 
         for (LootPoolEntryContainer entry : entries) {
             MixinLootPoolEntryContainer mixinLootPool = (MixinLootPoolEntryContainer) entry;
@@ -194,25 +188,32 @@ public class LootUtils {
             } else if (type == LootPoolEntries.REFERENCE) {
                 ResourceLocation location = ((MixinLootTableReference) entry).getName();
                 LootTable table = manager.getElement(LootDataType.TABLE, location);
-                int weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
 
                 if (table != null) {
-                    lootInfos.add(parseLoot(table, manager, lootContext, items, getChance.apply(weight), poolWeight, poolQuality));
+                    lootInfos.add(parseLoot(table, manager, lootContext, items, getChance.apply(poolWeight), poolQuality));
                 } else {
                     LOGGER.warn("Invalid LootTable reference {}", location);
                 }
             } else if (type == LootPoolEntries.DYNAMIC) {
                 LOGGER.warn("Unimplemented dynamic loot entry, skipping");
             } else if (type == LootPoolEntries.TAG) {
-                lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                if (entry instanceof TagEntry) {
+                    lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                } else {
+                    LOGGER.warn("Invalid entry type, expecting TagEntry, found {}", entry.getClass().getName());
+                }
             } else if (type == LootPoolEntries.GROUP) {
-                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), functions, conditions, poolWeight, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
             } else if (type == LootPoolEntries.SEQUENCE) {
-                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), functions, conditions, poolWeight, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
             } else if (type == LootPoolEntries.ALTERNATIVES) {
-                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, chance, false, wasSmelting), functions, conditions, poolWeight, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
             } else if (type == LootPoolEntries.ITEM) {
-                lootInfos.addAll(parseLootItem((LootItem) entry, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                if (entry instanceof LootItem) {
+                    lootInfos.addAll(parseLootItem((LootItem) entry, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                } else {
+                    LOGGER.warn("Invalid entry type, expecting LootItem, found {}", entry.getClass().getName());
+                }
             } else {
                 LOGGER.warn("Unknown LootPool entry type {}", type);
             }

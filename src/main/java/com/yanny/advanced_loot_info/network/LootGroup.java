@@ -8,14 +8,14 @@ import java.util.List;
 public class LootGroup extends LootEntry {
     private final List<? extends LootEntry> entries;
     private final GroupType groupType;
-    private final int weight;
+    private final float chance;
     private final int quality;
 
-    public LootGroup(GroupType groupType, List<? extends LootEntry> entries, List<LootFunction> functions, List<LootCondition> conditions, int weight, int quality) {
+    public LootGroup(GroupType groupType, List<? extends LootEntry> entries, List<LootFunction> functions, List<LootCondition> conditions, float chance, int quality) {
         super(functions, conditions);
         this.groupType = groupType;
         this.entries = entries;
-        this.weight = weight;
+        this.chance = chance;
         this.quality = quality;
     }
 
@@ -23,7 +23,7 @@ public class LootGroup extends LootEntry {
         super(buf);
 
         groupType = buf.readEnum(GroupType.class);
-        weight = buf.readInt();
+        chance = buf.readFloat();
         quality = buf.readInt();
 
         int count = buf.readInt();
@@ -51,8 +51,8 @@ public class LootGroup extends LootEntry {
         return groupType;
     }
 
-    public int getWeight() {
-        return weight;
+    public float getChance() {
+        return chance;
     }
 
     public int getQuality() {
@@ -63,7 +63,7 @@ public class LootGroup extends LootEntry {
     public void encode(FriendlyByteBuf buf) {
         super.encode(buf);
         buf.writeEnum(groupType);
-        buf.writeInt(weight);
+        buf.writeFloat(chance);
         buf.writeInt(quality);
         buf.writeInt(entries.size());
 

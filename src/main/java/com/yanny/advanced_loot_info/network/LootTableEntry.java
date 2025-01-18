@@ -5,8 +5,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import java.util.List;
 
 public class LootTableEntry extends LootGroup {
-    public LootTableEntry(List<LootPoolEntry> entries, List<LootFunction> functions, int weight, int quality) {
-            super(GroupType.ALL, entries, functions, List.of(), weight, quality);
+    public LootTableEntry(List<LootPoolEntry> entries, List<LootFunction> functions, float chance, int quality) {
+            super(GroupType.ALL, entries, functions, List.of(), chance, quality);
     }
 
     public LootTableEntry(FriendlyByteBuf buf) {

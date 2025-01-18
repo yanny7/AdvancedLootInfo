@@ -171,8 +171,8 @@ public class GroupWidget extends Widget {
     private static List<Component> getWeight(ItemGroup.WeightHolder holder) {
         List<Component> components = new LinkedList<>();
 
-        if (holder.weight() != 0) {
-            components.add(translatable("emi.description.advanced_loot_info.weight", value(holder.weight())));
+        if (!Float.isNaN(holder.chance())) {
+            components.add(translatable("emi.description.advanced_loot_info.chance", value(holder.chance() * 100, "%")));
         }
         if (holder.quality() != 0) {
             components.add(translatable("emi.description.advanced_loot_info.quality", value(holder.quality())));
