@@ -30,7 +30,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
     private static final ResourceLocation TEXTURE_LOC = Utils.modLoc("textures/gui/gui.png");
 
     public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootTableEntry message) {
-        super(category, id, message);
+        super(category, id, message, 0, 48);
         this.entity = entity;
 
         SpawnEggItem spawnEgg = ForgeSpawnEggItem.fromEntityType(entity.getType());
@@ -115,8 +115,8 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     }
                 }
             });
-            addWidgets(widgetHolder, new int[]{0, 48});
             widgetHolder.addText(entity.getDisplayName(), (widgetHolder.getWidth() - length) / 2, 0, 0, false);
+            super.addWidgets(widgetHolder);
         }
 
         catalysts.forEach((catalyst) -> widgetHolder.addSlot(catalyst, 0, 0));

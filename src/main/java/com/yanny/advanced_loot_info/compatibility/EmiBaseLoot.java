@@ -10,17 +10,15 @@ import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     protected final LootTableEntry message;
     protected final ItemGroup itemGroup;
-    @Nullable
-    private Bounds bounds = null;
+    protected final Pair<GroupWidget, Bounds> widget;
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTableEntry message) {
+    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTableEntry message, int widgetX, int widgetY) {
         super(category, id, 9 * 18, 1024);
         this.message = message;
         itemGroup = ItemData.parse(message).optimize();
@@ -34,11 +32,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 .filter(Objects::nonNull)
                 .map(EmiIngredient::of)
                 .toList();
+        widget = GroupWidget.createWidget(this, itemGroup, widgetX, widgetY);
     }
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        addWidgets(widgetHolder, new int[]{0, 0});
+        widgetHolder.add(widget.getFirst());
     }
 
     @Override
@@ -51,13 +50,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         return false;
     }
 
-    public void addWidgets(WidgetHolder widgetHolder, int[] pos) {
-        Pair<GroupWidget, Bounds> widget = GroupWidget.createWidget(this, itemGroup, pos[0], pos[1]);
-        widgetHolder.add(widget.getFirst());
-        bounds = widget.getSecond();
-    }
-
     protected int getItemsHeight() {
-        return bounds != null ? bounds.height() : 1024;
+        return widget.getSecond().height();
     }
 }

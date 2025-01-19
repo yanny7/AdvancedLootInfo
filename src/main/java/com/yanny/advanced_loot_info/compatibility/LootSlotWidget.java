@@ -1,7 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.network.RangeValue;
 import com.yanny.advanced_loot_info.network.TooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -26,10 +25,6 @@ public class LootSlotWidget extends SlotWidget {
 
     public LootSlotWidget(ItemData itemData, int x, int y) {
         super(itemData.item != null ? EmiStack.of(itemData.item) : (itemData.tag != null ? EmiIngredient.of(itemData.tag) : EmiStack.EMPTY), x, y);
-
-        if (AdvancedLootInfoMod.CONFIGURATION.isDebug()) {
-            appendTooltip(translatable("emi.debug.chance", itemData.rawChance));
-        }
 
         appendTooltip(getChance(itemData));
         getBonusChance(itemData).forEach(this::appendTooltip);

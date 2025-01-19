@@ -224,7 +224,6 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
         add("emi.util.advanced_loot_info.pad.8", "                ->");
         add("emi.util.advanced_loot_info.key_value", "%s: %s");
 
-        add("emi.debug.chance", "Raw Chance: %s");
         add("emi.debug.random_chance", "Random Chance: %s");
         add("emi.debug.set_count", "Set Count: %s (Add: %s)");
         add("emi.debug.limit_count", "Limit Count: [%s .. %s]");

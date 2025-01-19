@@ -28,7 +28,6 @@ public final class ItemData {
     public final Item item;
     @Nullable
     public final TagKey<Item> tag;
-    public final float rawChance;
     public final RangeValue count;
     public final RangeValue chance;
     public final List<LootFunction> functions;
@@ -41,7 +40,6 @@ public final class ItemData {
     public ItemData(ResourceLocation item, float chance, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
         this.tag = null;
-        this.rawChance = chance;
         this.functions = functions;
         this.conditions = conditions;
         this.chance = getChance(conditions, chance);
@@ -53,7 +51,6 @@ public final class ItemData {
     public ItemData(TagKey<Item> tag, float chance, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = null;
         this.tag = tag;
-        this.rawChance = chance;
         this.functions = functions;
         this.conditions = conditions;
         this.chance = getChance(conditions, chance);

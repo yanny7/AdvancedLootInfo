@@ -8,14 +8,13 @@ import net.minecraft.resources.ResourceLocation;
 
 public class EmiGameplayLoot extends EmiBaseLoot {
     public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTableEntry message) {
-        super(category, id, message);
+        super(category, id, message, 0, 10);
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgetHolder, int[] pos) {
+    public void addWidgets(WidgetHolder widgetHolder) {
         widgetHolder.addText(Component.translatableWithFallback("advanced_loot_info/loot_table/" + id.getPath().substring(1), id.getPath()), 0, 0, 0, false);
-
-        super.addWidgets(widgetHolder, new int[]{0, 10});
+        super.addWidgets(widgetHolder);
     }
 
     @Override

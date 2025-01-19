@@ -16,7 +16,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final boolean isSpecial;
 
     public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootTableEntry message) {
-        super(category, id, message);
+        super(category, id, message, 0, (block instanceof IPlantable || block.asItem() == Items.AIR) ? 30 : 22);
         this.block = block;
         isSpecial = block instanceof IPlantable || block.asItem() == Items.AIR;
         inputs = List.of(EmiStack.of(block));
@@ -30,7 +30,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
             widgetHolder.addSlot(inputs.get(0), 4 * 18, 0);
         }
 
-        addWidgets(widgetHolder, new int[]{0, isSpecial ? 30 : 22});
+        super.addWidgets(widgetHolder);
     }
 
     @Override

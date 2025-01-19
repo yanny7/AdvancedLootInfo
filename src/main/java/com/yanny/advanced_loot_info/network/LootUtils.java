@@ -165,7 +165,13 @@ public class LootUtils {
         List<LootEntry> lootInfos = new LinkedList<>();
         int sumWeight = Arrays.stream(entries).filter(entry -> entry instanceof LootPoolSingletonContainer).mapToInt(entry -> ((MixinLootPoolSingletonContainer) entry).getWeight()).sum();
 
-        Function<Integer, Float> getChance = (weight) -> (weight / (float) sumWeight);
+        Function<Integer, Float> getChance = (weight) -> {
+            if (weight > 0) {
+                return weight / (float) sumWeight;
+            } else {
+                return Float.NaN;
+            }
+        };
 
         for (LootPoolEntryContainer entry : entries) {
             MixinLootPoolEntryContainer mixinLootPool = (MixinLootPoolEntryContainer) entry;
@@ -182,6 +188,8 @@ public class LootUtils {
                 poolQuality = poolEntry.getQuality();
             }
 
+            float chance = getChance.apply(poolWeight);
+
             //noinspection StatementWithEmptyBody
             if (type == LootPoolEntries.EMPTY) {
                 // Skip empty entry
@@ -190,7 +198,7 @@ public class LootUtils {
                 LootTable table = manager.getElement(LootDataType.TABLE, location);
 
                 if (table != null) {
-                    lootInfos.add(parseLoot(table, manager, lootContext, items, getChance.apply(poolWeight), poolQuality));
+                    lootInfos.add(parseLoot(table, manager, lootContext, items, chance, poolQuality));
                 } else {
                     LOGGER.warn("Invalid LootTable reference {}", location);
                 }
@@ -198,19 +206,19 @@ public class LootUtils {
                 LOGGER.warn("Unimplemented dynamic loot entry, skipping");
             } else if (type == LootPoolEntries.TAG) {
                 if (entry instanceof TagEntry) {
-                    lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                    lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, chance, wasSmelting));
                 } else {
                     LOGGER.warn("Invalid entry type, expecting TagEntry, found {}", entry.getClass().getName());
                 }
             } else if (type == LootPoolEntries.GROUP) {
-                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, chance, poolQuality));
             } else if (type == LootPoolEntries.SEQUENCE) {
-                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, chance, poolQuality));
             } else if (type == LootPoolEntries.ALTERNATIVES) {
-                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, chance, poolQuality));
             } else if (type == LootPoolEntries.ITEM) {
                 if (entry instanceof net.minecraft.world.level.storage.loot.entries.LootItem lootItem) {
-                    lootInfos.addAll(parseLootItem(lootItem, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                    lootInfos.addAll(parseLootItem(lootItem, lootContext, items, chance, wasSmelting));
                 } else {
                     LOGGER.warn("Invalid entry type, expecting LootItem, found {}", entry.getClass().getName());
                 }
