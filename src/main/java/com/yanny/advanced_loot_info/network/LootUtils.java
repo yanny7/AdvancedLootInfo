@@ -209,8 +209,8 @@ public class LootUtils {
             } else if (type == LootPoolEntries.ALTERNATIVES) {
                 lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, poolWeight, poolQuality));
             } else if (type == LootPoolEntries.ITEM) {
-                if (entry instanceof LootItem) {
-                    lootInfos.addAll(parseLootItem((LootItem) entry, lootContext, items, getChance.apply(poolWeight), wasSmelting));
+                if (entry instanceof net.minecraft.world.level.storage.loot.entries.LootItem lootItem) {
+                    lootInfos.addAll(parseLootItem(lootItem, lootContext, items, getChance.apply(poolWeight), wasSmelting));
                 } else {
                     LOGGER.warn("Invalid entry type, expecting LootItem, found {}", entry.getClass().getName());
                 }
@@ -223,14 +223,14 @@ public class LootUtils {
     }
 
     @NotNull
-    private static List<LootEntry> parseLootItem(LootItem lootItem, LootContext lootContext, List<Item> items, float chance, boolean wasSmelting) {
+    private static List<LootEntry> parseLootItem(net.minecraft.world.level.storage.loot.entries.LootItem lootItem, LootContext lootContext, List<Item> items, float chance, boolean wasSmelting) {
         List<LootEntry> lootInfos = new LinkedList<>();
         Item item = ((MixinLootItem) lootItem).getItem();
         Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(lootItem, lootContext, items, lootInfos, item, chance, wasSmelting);
 
         if (!wasSmelting) {
             items.add(item);
-            lootInfos.add(new LootInfo(
+            lootInfos.add(new LootItem(
                     ForgeRegistries.ITEMS.getKey(item),
                     LootFunction.of(lootContext, tuple.getA()),
                     LootCondition.of(lootContext, tuple.getB()),
@@ -246,20 +246,27 @@ public class LootUtils {
         List<LootEntry> lootInfos = new LinkedList<>();
         ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
 
-        if (tags != null) {
-            for (Item item : tags.getTag(((MixinTagEntry) entry).getTag())) {
-                Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(entry, lootContext, items, lootInfos, item, chance, wasSmelting);
+        if (wasSmelting) {
+            if (tags != null) {
+                for (Item item : tags.getTag(((MixinTagEntry) entry).getTag())) {
+                    Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(entry, lootContext, items, lootInfos, item, chance, wasSmelting);
 
-                if (!wasSmelting) {
-                    items.add(item);
-                    lootInfos.add(new LootInfo(
-                            ForgeRegistries.ITEMS.getKey(item),
-                            LootFunction.of(lootContext, tuple.getA()),
-                            LootCondition.of(lootContext, tuple.getB()),
-                            chance
-                    ));
+                    if (!wasSmelting) {
+                        items.add(item);
+                        lootInfos.add(new LootItem(
+                                ForgeRegistries.ITEMS.getKey(item),
+                                LootFunction.of(lootContext, tuple.getA()),
+                                LootCondition.of(lootContext, tuple.getB()),
+                                chance
+                        ));
+                    }
                 }
             }
+        } else {
+            MixinTagEntry tagEntry = (MixinTagEntry) entry;
+            LootItemFunction[] functions = ((MixinLootPoolSingletonContainer) entry).getFunctions();
+            LootItemCondition[] conditions = ((MixinLootPoolEntryContainer) entry).getConditions();
+            lootInfos.add(new LootTag(tagEntry.getTag(), LootFunction.of(lootContext, functions), LootCondition.of(lootContext, conditions), chance));
         }
 
         return lootInfos;
@@ -285,7 +292,7 @@ public class LootUtils {
                     LootItemCondition[] smeltConditions = ((MixinLootItemConditionalFunction) optional.get()).getPredicates();
 
                     functions = Arrays.stream(functions).filter((f) -> f.getType() != LootItemFunctions.FURNACE_SMELT).toArray(LootItemFunction[]::new);
-                    lootInfos.add(new LootInfo(
+                    lootInfos.add(new LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
                             LootFunction.of(lootContext, functions),
                             LootCondition.of(lootContext, Stream.concat(Arrays.stream(conditions), Arrays.stream(smeltConditions)).toArray(LootItemCondition[]::new)),
@@ -295,7 +302,7 @@ public class LootUtils {
                             new LootItemCondition[]{new InvertedLootItemCondition(new net.minecraft.world.level.storage.loot.predicates.AllOfCondition(smeltConditions))}
                     )).toArray(LootItemCondition[]::new);
                 } else {
-                    lootInfos.add(new LootInfo(
+                    lootInfos.add(new LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
                             LootFunction.of(lootContext, functions),
                             LootCondition.of(lootContext, conditions),

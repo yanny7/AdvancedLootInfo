@@ -5,17 +5,17 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
-public final class LootInfo extends LootEntry {
+public final class LootItem extends LootEntry {
     public final ResourceLocation item;
     public final float chance;
 
-    public LootInfo(FriendlyByteBuf buf) {
+    public LootItem(FriendlyByteBuf buf) {
         super(buf);
         item = buf.readResourceLocation();
         chance = buf.readFloat();
     }
 
-    public LootInfo(ResourceLocation item, List<LootFunction> functions, List<LootCondition> conditions, float chance) {
+    public LootItem(ResourceLocation item, List<LootFunction> functions, List<LootCondition> conditions, float chance) {
         super(functions, conditions);
         this.item = item;
         this.chance = chance;
@@ -30,7 +30,7 @@ public final class LootInfo extends LootEntry {
 
     @Override
     public EntryType getType() {
-        return EntryType.INFO;
+        return EntryType.ITEM;
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.yanny.advanced_loot_info.network.condition.RandomChanceWithLootingCon
 import com.yanny.advanced_loot_info.network.condition.TableBonusCondition;
 import com.yanny.advanced_loot_info.network.function.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -23,7 +24,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public final class ItemData {
+    @Nullable
     public final Item item;
+    @Nullable
+    public final TagKey<Item> tag;
     public final float rawChance;
     public final RangeValue count;
     public final RangeValue chance;
@@ -36,6 +40,19 @@ public final class ItemData {
 
     public ItemData(ResourceLocation item, float chance, List<LootFunction> functions, List<LootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
+        this.tag = null;
+        this.rawChance = chance;
+        this.functions = functions;
+        this.conditions = conditions;
+        this.chance = getChance(conditions, chance);
+        this.count = getCount(functions);
+        this.bonusCount = getBonusCount(functions, this.count);
+        this.bonusChance = getBonusChance(conditions, chance);
+    }
+
+    public ItemData(TagKey<Item> tag, float chance, List<LootFunction> functions, List<LootCondition> conditions) {
+        this.item = null;
+        this.tag = tag;
         this.rawChance = chance;
         this.functions = functions;
         this.conditions = conditions;
@@ -202,7 +219,8 @@ public final class ItemData {
             List<LootCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
 
             switch (entry.getType()) {
-                case INFO -> items.add(new ItemData(((LootInfo) entry).item, ((LootInfo) entry).chance, allFunctions, allConditions));
+                case ITEM -> items.add(new ItemData(((LootItem) entry).item, ((LootItem) entry).chance, allFunctions, allConditions));
+                case TAG -> items.add(new ItemData(((LootTag) entry).tag, ((LootTag) entry).chance, allFunctions, allConditions));
                 case GROUP -> groups.add(parse((LootGroup) entry, allFunctions, allConditions));
                 case POOL -> groups.add(parse((LootPoolEntry) entry, allFunctions, allConditions));
                 case TABLE -> groups.add(parse((LootTableEntry) entry, allFunctions, allConditions));

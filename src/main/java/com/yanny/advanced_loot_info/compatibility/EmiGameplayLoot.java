@@ -20,6 +20,6 @@ public class EmiGameplayLoot extends EmiBaseLoot {
 
     @Override
     public int getDisplayHeight() {
-        return 12 + getItemsHeight();
+        return 10 + getItemsHeight();
     }
 }

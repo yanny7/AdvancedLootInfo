@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.network.LootTableEntry;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.WidgetHolder;
@@ -27,6 +28,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 .map((d) -> d.item)
                 .filter(Objects::nonNull)
                 .map(EmiStack::of)
+                .toList();
+        catalysts = ItemGroup.getItems(itemGroup).stream()
+                .map((d) -> d.tag)
+                .filter(Objects::nonNull)
+                .map(EmiIngredient::of)
                 .toList();
     }
 

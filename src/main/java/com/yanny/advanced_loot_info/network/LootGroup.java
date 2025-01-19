@@ -34,7 +34,8 @@ public class LootGroup extends LootEntry {
 
             switch (entryType) {
                 case GROUP -> entries.add(new LootGroup(buf));
-                case INFO -> entries.add(new LootInfo(buf));
+                case ITEM -> entries.add(new LootItem(buf));
+                case TAG -> entries.add(new LootTag(buf));
                 case POOL -> entries.add(new LootPoolEntry(buf));
                 case TABLE -> entries.add(new LootTableEntry(buf));
             }

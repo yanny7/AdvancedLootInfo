@@ -119,13 +119,11 @@ public class EmiEntityLoot extends EmiBaseLoot {
             widgetHolder.addText(entity.getDisplayName(), (widgetHolder.getWidth() - length) / 2, 0, 0, false);
         }
 
-        catalysts.forEach((catalyst) -> {
-            widgetHolder.addSlot(catalyst, 0, 0);
-        });
+        catalysts.forEach((catalyst) -> widgetHolder.addSlot(catalyst, 0, 0));
     }
 
     @Override
     public int getDisplayHeight() {
-        return 72 + getItemsHeight();
+        return 48 + getItemsHeight();
     }
 }

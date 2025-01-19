@@ -77,6 +77,28 @@ public class GroupWidget extends Widget {
         return components;
     }
 
+    @Override
+    public boolean mouseClicked(int mouseX, int mouseY, int button) {
+        for (Widget widget : widgets) {
+            Bounds b = widget.getBounds();
+
+            if (b.contains(mouseX, mouseY)) {
+                widget.mouseClicked(mouseX, mouseY, button);
+            }
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        for (Widget widget : widgets) {
+            widget.keyPressed(keyCode, scanCode, modifiers);
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
     @NotNull
     public static Pair<GroupWidget, Bounds> createWidget(EmiRecipe recipe, ItemGroup itemGroup, int posX, int posY) {
         List<Widget> widgets = new LinkedList<>();
