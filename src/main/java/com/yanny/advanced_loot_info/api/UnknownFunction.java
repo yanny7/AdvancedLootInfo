@@ -1,6 +1,5 @@
-package com.yanny.advanced_loot_info.plugin.function;
+package com.yanny.advanced_loot_info.api;
 
-import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

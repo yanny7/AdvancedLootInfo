@@ -1,6 +1,7 @@
 package com.yanny.advanced_loot_info.network;
 
 import com.google.gson.JsonObject;
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.mixin.*;
 import com.yanny.advanced_loot_info.plugin.function.LootConditionalFunction;
@@ -19,7 +20,7 @@ public class TooltipUtils {
     private TooltipUtils() {}
 
     @NotNull
-    public static List<Component> getConditions(List<LootCondition> conditions, int pad) {
+    public static List<Component> getConditions(List<ILootCondition> conditions, int pad) {
         List<Component> components = new LinkedList<>();
 
         conditions.forEach((condition) -> components.addAll(condition.getTooltip(pad)));

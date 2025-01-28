@@ -1,7 +1,7 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinMatchTool;
-import com.yanny.advanced_loot_info.network.LootCondition;
 import com.yanny.advanced_loot_info.network.TooltipUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.FriendlyByteBuf;
@@ -13,18 +13,16 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatableType;
+import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
-public class MatchToolCondition extends LootCondition {
+public class MatchToolCondition implements ILootCondition {
     public ItemPredicate predicate;
 
     public MatchToolCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         predicate = ((MixinMatchTool) condition).getPredicate();
     }
 
-    public MatchToolCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public MatchToolCondition(FriendlyByteBuf buf) {
         predicate = ItemPredicate.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
     }
 
@@ -37,7 +35,7 @@ public class MatchToolCondition extends LootCondition {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        TooltipUtils.addItemPredicate(components, pad + 1, translatableType("emi.type.advanced_loot_info.condition", type), predicate);
+        TooltipUtils.addItemPredicate(components, pad + 1, translatable("emi.type.advanced_loot_info.condition.match_tool"), predicate);
 
         return components;
     }

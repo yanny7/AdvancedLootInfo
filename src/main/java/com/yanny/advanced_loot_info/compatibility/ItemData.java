@@ -1,12 +1,12 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.network.*;
-import com.yanny.advanced_loot_info.network.condition.ConditionType;
-import com.yanny.advanced_loot_info.network.condition.RandomChanceCondition;
-import com.yanny.advanced_loot_info.network.condition.RandomChanceWithLootingCondition;
-import com.yanny.advanced_loot_info.network.condition.TableBonusCondition;
+import com.yanny.advanced_loot_info.plugin.condition.RandomChanceCondition;
+import com.yanny.advanced_loot_info.plugin.condition.RandomChanceWithLootingCondition;
+import com.yanny.advanced_loot_info.plugin.condition.TableBonusCondition;
 import com.yanny.advanced_loot_info.plugin.function.ApplyBonusFunction;
 import com.yanny.advanced_loot_info.plugin.function.LimitCountFunction;
 import com.yanny.advanced_loot_info.plugin.function.LootingEnchantFunction;
@@ -35,13 +35,13 @@ public final class ItemData {
     public final RangeValue count;
     public final RangeValue chance;
     public final List<ILootFunction> functions;
-    public final List<LootCondition> conditions;
+    public final List<ILootCondition> conditions;
     @Nullable
     public final Pair<Enchantment, Map<Integer, RangeValue>> bonusCount;
     @Nullable
     public final Pair<Enchantment, Map<Integer, RangeValue>> bonusChance;
 
-    public ItemData(ResourceLocation item, float chance, List<ILootFunction> functions, List<LootCondition> conditions) {
+    public ItemData(ResourceLocation item, float chance, List<ILootFunction> functions, List<ILootCondition> conditions) {
         this.item = ForgeRegistries.ITEMS.getValue(item);
         this.tag = null;
         this.functions = functions;
@@ -52,7 +52,7 @@ public final class ItemData {
         this.bonusChance = getBonusChance(conditions, chance);
     }
 
-    public ItemData(TagKey<Item> tag, float chance, List<ILootFunction> functions, List<LootCondition> conditions) {
+    public ItemData(TagKey<Item> tag, float chance, List<ILootFunction> functions, List<ILootCondition> conditions) {
         this.item = null;
         this.tag = tag;
         this.functions = functions;
@@ -65,12 +65,12 @@ public final class ItemData {
 
     @Nullable
     @Unmodifiable
-    private static Pair<Enchantment, Map<Integer, RangeValue>> getBonusChance(List<LootCondition> conditions, float chance) {
+    private static Pair<Enchantment, Map<Integer, RangeValue>> getBonusChance(List<ILootCondition> conditions, float chance) {
         Map<Integer, RangeValue> bonusChance = new HashMap<>();
 
-        List<LootCondition> list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE_WITH_LOOTING).toList();
+        List<ILootCondition> list = conditions.stream().filter((f) -> f instanceof RandomChanceWithLootingCondition).toList();
 
-        for (LootCondition c : list) {
+        for (ILootCondition c : list) {
             RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
 
             for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
@@ -81,9 +81,9 @@ public final class ItemData {
             return new Pair<>(Enchantments.MOB_LOOTING, bonusChance);
         }
 
-        list = conditions.stream().filter((f) -> f.type == ConditionType.TABLE_BONUS).toList();
+        list = conditions.stream().filter((f) -> f instanceof TableBonusCondition).toList();
 
-        for (LootCondition c : list) {
+        for (ILootCondition c : list) {
             TableBonusCondition condition = (TableBonusCondition) c;
             Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(condition.location);
 
@@ -100,25 +100,25 @@ public final class ItemData {
         return null;
     }
 
-    private static RangeValue getChance(List<LootCondition> conditions, float chance) {
+    private static RangeValue getChance(List<ILootCondition> conditions, float chance) {
         RangeValue value = new RangeValue(chance);
-        List<LootCondition> list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE_WITH_LOOTING).toList();
+        List<ILootCondition> list = conditions.stream().filter((f) -> f instanceof RandomChanceWithLootingCondition).toList();
 
-        for (LootCondition c : list) {
+        for (ILootCondition c : list) {
             RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
             value.multiply(condition.percent);
         }
 
-        list = conditions.stream().filter((f) -> f.type == ConditionType.RANDOM_CHANCE).toList();
+        list = conditions.stream().filter((f) -> f instanceof RandomChanceCondition).toList();
 
-        for (LootCondition c : list) {
+        for (ILootCondition c : list) {
             RandomChanceCondition condition = (RandomChanceCondition) c;
             value.multiply(condition.probability);
         }
 
-        list = conditions.stream().filter((f) -> f.type == ConditionType.TABLE_BONUS).toList();
+        list = conditions.stream().filter((f) -> f instanceof TableBonusCondition).toList();
 
-        for (LootCondition c : list) {
+        for (ILootCondition c : list) {
             TableBonusCondition condition = (TableBonusCondition) c;
             value.set(new RangeValue(condition.values[0]));
         }
@@ -199,7 +199,7 @@ public final class ItemData {
 
         for (LootEntry entry : message.entries()) {
             List<ILootFunction> allFunctions = Stream.concat(message.functions.stream(), entry.functions.stream()).toList();
-            List<LootCondition> allConditions = Stream.concat(message.conditions.stream(), entry.conditions.stream()).toList();
+            List<ILootCondition> allConditions = Stream.concat(message.conditions.stream(), entry.conditions.stream()).toList();
 
             if (entry.getType() == EntryType.POOL) {
                 LootPoolEntry poolEntry = (LootPoolEntry) entry;
@@ -211,13 +211,13 @@ public final class ItemData {
     }
 
     @NotNull
-    private static ItemGroup parse(LootGroup message, List<ILootFunction> functions, List<LootCondition> conditions) {
+    private static ItemGroup parse(LootGroup message, List<ILootFunction> functions, List<ILootCondition> conditions) {
         List<ItemData> items = new LinkedList<>();
         List<ItemGroup> groups = new LinkedList<>();
 
         for (LootEntry entry : message.entries()) {
             List<ILootFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
-            List<LootCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
+            List<ILootCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
 
             switch (entry.getType()) {
                 case ITEM -> items.add(new ItemData(((LootItem) entry).item, ((LootItem) entry).chance, allFunctions, allConditions));

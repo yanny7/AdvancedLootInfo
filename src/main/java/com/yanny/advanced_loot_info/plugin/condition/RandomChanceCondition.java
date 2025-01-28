@@ -1,8 +1,8 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.plugin.condition;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinLootItemRandomChanceCondition;
-import com.yanny.advanced_loot_info.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -14,16 +14,14 @@ import java.util.List;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
-public class RandomChanceCondition extends LootCondition {
+public class RandomChanceCondition implements ILootCondition {
     public final float probability;
 
     public RandomChanceCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         probability = ((MixinLootItemRandomChanceCondition) condition).getProbability();
     }
 
-    public RandomChanceCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public RandomChanceCondition(FriendlyByteBuf buf) {
         probability = buf.readFloat();
     }
 

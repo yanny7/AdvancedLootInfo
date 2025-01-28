@@ -1,7 +1,7 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinBonusLevelTableCondition;
-import com.yanny.advanced_loot_info.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -11,18 +11,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-public class TableBonusCondition extends LootCondition {
+public class TableBonusCondition implements ILootCondition {
     public final ResourceLocation location;
     public final float[] values;
 
     public TableBonusCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         location = ForgeRegistries.ENCHANTMENTS.getKey(((MixinBonusLevelTableCondition) condition).getEnchantment());
         values = ((MixinBonusLevelTableCondition) condition).getValues();
     }
 
-    public TableBonusCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public TableBonusCondition(FriendlyByteBuf buf) {
         location = buf.readResourceLocation();
 
         int count = buf.readInt();

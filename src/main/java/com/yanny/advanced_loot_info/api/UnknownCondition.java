@@ -1,6 +1,5 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.api;
 
-import com.yanny.advanced_loot_info.network.LootCondition;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,16 +13,14 @@ import java.util.List;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
-public class UnknownCondition extends LootCondition {
+public class UnknownCondition implements ILootCondition {
     public final ResourceLocation conditionType;
 
     public UnknownCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         conditionType = BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType());
     }
 
-    public UnknownCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public UnknownCondition(FriendlyByteBuf buf) {
         conditionType = buf.readResourceLocation();
     }
 

@@ -1,33 +1,32 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinWeatherCheck;
-import com.yanny.advanced_loot_info.network.LootCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
-public class WeatherCheckCondition extends LootCondition {
+public class WeatherCheckCondition implements ILootCondition {
     @Nullable
     public final Boolean isRaining;
     @Nullable
     public final Boolean isThundering;
 
     public WeatherCheckCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         isRaining = ((MixinWeatherCheck) condition).isIsRaining();
         isThundering = ((MixinWeatherCheck) condition).isIsThundering();
     }
 
-    public WeatherCheckCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public WeatherCheckCondition(FriendlyByteBuf buf) {
         isRaining = buf.readOptional(FriendlyByteBuf::readBoolean).orElse(null);
         isThundering = buf.readOptional(FriendlyByteBuf::readBoolean).orElse(null);
     }
@@ -40,7 +39,9 @@ public class WeatherCheckCondition extends LootCondition {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.condition.weather_check")));
 
         if (isRaining != null) {
             components.add(pad(pad + 1, translatable("emi.property.condition.weather_check.is_raining", isRaining)));

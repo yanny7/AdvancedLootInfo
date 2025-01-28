@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.network;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -12,7 +13,7 @@ public class LootGroup extends LootEntry {
     private final float chance;
     private final int quality;
 
-    public LootGroup(GroupType groupType, List<? extends LootEntry> entries, List<ILootFunction> functions, List<LootCondition> conditions, float chance, int quality) {
+    public LootGroup(GroupType groupType, List<? extends LootEntry> entries, List<ILootFunction> functions, List<ILootCondition> conditions, float chance, int quality) {
         super(functions, conditions);
         this.groupType = groupType;
         this.entries = entries;

@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.network;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,7 +20,7 @@ public final class LootTag extends LootEntry {
         chance = buf.readFloat();
     }
 
-    public LootTag(TagKey<Item> tag, List<ILootFunction> functions, List<LootCondition> conditions, float chance) {
+    public LootTag(TagKey<Item> tag, List<ILootFunction> functions, List<ILootCondition> conditions, float chance) {
         super(functions, conditions);
         this.tag = tag;
         this.chance = chance;

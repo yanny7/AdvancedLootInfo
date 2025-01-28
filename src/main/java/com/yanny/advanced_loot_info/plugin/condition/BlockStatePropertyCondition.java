@@ -1,7 +1,7 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinLootItemBlockStatePropertyCondition;
-import com.yanny.advanced_loot_info.network.LootCondition;
 import com.yanny.advanced_loot_info.network.TooltipUtils;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,20 +15,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatableType;
+import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
-public class BlockStatePropertyCondition extends LootCondition {
+public class BlockStatePropertyCondition implements ILootCondition {
     public final ResourceLocation block;
     public final StatePropertiesPredicate properties;
 
     public BlockStatePropertyCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         block = ForgeRegistries.BLOCKS.getKey(((MixinLootItemBlockStatePropertyCondition) condition).getBlock());
         properties = ((MixinLootItemBlockStatePropertyCondition) condition).getProperties();
     }
 
-    public BlockStatePropertyCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public BlockStatePropertyCondition(FriendlyByteBuf buf) {
         block = buf.readResourceLocation();
         properties = StatePropertiesPredicate.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
     }
@@ -43,7 +41,7 @@ public class BlockStatePropertyCondition extends LootCondition {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        TooltipUtils.addStateProperties(components, pad, translatableType("emi.type.advanced_loot_info.condition", type), properties);
+        TooltipUtils.addStateProperties(components, pad, translatable("emi.type.advanced_loot_info.condition.block_state_property"), properties);
 
         return components;
     }

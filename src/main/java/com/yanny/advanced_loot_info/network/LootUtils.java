@@ -1,14 +1,11 @@
 package com.yanny.advanced_loot_info.network;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.manager.PluginManager;
 import com.yanny.advanced_loot_info.mixin.*;
-import com.yanny.advanced_loot_info.network.condition.*;
 import com.yanny.advanced_loot_info.plugin.function.FurnaceSmeltFunction;
-import com.yanny.advanced_loot_info.plugin.function.UnknownFunction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -28,61 +25,16 @@ import net.minecraftforge.registries.tags.ITagManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.*;
-import java.util.function.BiFunction;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class LootUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
-
-    public static final Map<ConditionType, BiFunction<LootContext, LootItemCondition, LootCondition>> CONDITION_MAP = new HashMap<>();
-    public static final Map<ConditionType, BiFunction<ConditionType, FriendlyByteBuf, LootCondition>> CONDITION_DECODE_MAP = new HashMap<>();
-
-    static {
-        CONDITION_MAP.put(ConditionType.INVERTED, InvertedCondition::new);
-        CONDITION_MAP.put(ConditionType.ANY_OF, AnyOfCondition::new);
-        CONDITION_MAP.put(ConditionType.ALL_OF, AllOfCondition::new);
-        CONDITION_MAP.put(ConditionType.RANDOM_CHANCE, RandomChanceCondition::new);
-        CONDITION_MAP.put(ConditionType.RANDOM_CHANCE_WITH_LOOTING, RandomChanceWithLootingCondition::new);
-        CONDITION_MAP.put(ConditionType.ENTITY_PROPERTIES, EntityPropertiesCondition::new);
-        CONDITION_MAP.put(ConditionType.KILLED_BY_PLAYER, KilledByPlayerCondition::new);
-        CONDITION_MAP.put(ConditionType.ENTITY_SCORES, EntityScoresCondition::new);
-        CONDITION_MAP.put(ConditionType.BLOCK_STATE_PROPERTY, BlockStatePropertyCondition::new);
-        CONDITION_MAP.put(ConditionType.MATCH_TOOL, MatchToolCondition::new);
-        CONDITION_MAP.put(ConditionType.TABLE_BONUS, TableBonusCondition::new);
-        CONDITION_MAP.put(ConditionType.SURVIVES_EXPLOSION, SurvivesExplosionCondition::new);
-        CONDITION_MAP.put(ConditionType.DAMAGE_SOURCE_PROPERTIES, DamageSourcePropertiesCondition::new);
-        CONDITION_MAP.put(ConditionType.LOCATION_CHECK, LocationCheckCondition::new);
-        CONDITION_MAP.put(ConditionType.WEATHER_CHECK, WeatherCheckCondition::new);
-        CONDITION_MAP.put(ConditionType.REFERENCE, ReferenceCondition::new);
-        CONDITION_MAP.put(ConditionType.TIME_CHECK, TimeCheckCondition::new);
-        CONDITION_MAP.put(ConditionType.VALUE_CHECK, ValueCheckCondition::new);
-        CONDITION_MAP.put(ConditionType.LOOT_CONDITION_TYPE, CanToolPerformActionCondition::new);
-        CONDITION_MAP.put(ConditionType.UNKNOWN, UnknownCondition::new);
-
-        CONDITION_DECODE_MAP.put(ConditionType.INVERTED, InvertedCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.ANY_OF, AnyOfCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.ALL_OF, AllOfCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.RANDOM_CHANCE, RandomChanceCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.RANDOM_CHANCE_WITH_LOOTING, RandomChanceWithLootingCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.ENTITY_PROPERTIES, EntityPropertiesCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.KILLED_BY_PLAYER, KilledByPlayerCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.ENTITY_SCORES, EntityScoresCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.BLOCK_STATE_PROPERTY, BlockStatePropertyCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.MATCH_TOOL, MatchToolCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.TABLE_BONUS, TableBonusCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.SURVIVES_EXPLOSION, SurvivesExplosionCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.DAMAGE_SOURCE_PROPERTIES, DamageSourcePropertiesCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.LOCATION_CHECK, LocationCheckCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.WEATHER_CHECK, WeatherCheckCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.REFERENCE, ReferenceCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.TIME_CHECK, TimeCheckCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.VALUE_CHECK, ValueCheckCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.LOOT_CONDITION_TYPE, CanToolPerformActionCondition::new);
-        CONDITION_DECODE_MAP.put(ConditionType.UNKNOWN, UnknownCondition::new);
-    }
 
     @NotNull
     public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance, int quality) {
@@ -93,7 +45,7 @@ public class LootUtils {
         boolean wasSmelting = Arrays.stream(lootTable.getFunctions()).anyMatch((f) -> f.getType() == LootItemFunctions.FURNACE_SMELT);
 
         pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, items, wasSmelting)));
-        return new LootTableEntry(lootInfos, of(lootContext, lootTable.getFunctions()), chance, quality);
+        return new LootTableEntry(lootInfos, ofFunction(lootContext, lootTable.getFunctions()), chance, quality);
     }
 
     @NotNull
@@ -101,8 +53,8 @@ public class LootUtils {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
         RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
-        List<ILootFunction> functions = of(context, mixinLootPool.getFunctions());
-        List<LootCondition> conditions = LootCondition.of(context, mixinLootPool.getConditions());
+        List<ILootFunction> functions = ofFunction(context, mixinLootPool.getFunctions());
+        List<ILootCondition> conditions = ofCondition(context, mixinLootPool.getConditions());
 
         wasSmelting |= functions.stream().anyMatch((f) -> f instanceof FurnaceSmeltFunction);
 
@@ -126,13 +78,13 @@ public class LootUtils {
             MixinLootPoolEntryContainer mixinLootPool = (MixinLootPoolEntryContainer) entry;
             LootPoolEntryType type = entry.getType();
             List<ILootFunction> functions = List.of();
-            List<LootCondition> conditions = LootCondition.of(lootContext, mixinLootPool.getConditions());
+            List<ILootCondition> conditions = ofCondition(lootContext, mixinLootPool.getConditions());
             int poolWeight = 0;
             int poolQuality = 0;
 
             if (entry instanceof LootPoolSingletonContainer singletonContainer) {
                 MixinLootPoolSingletonContainer poolEntry = (MixinLootPoolSingletonContainer) singletonContainer;
-                functions = of(lootContext, poolEntry.getFunctions());
+                functions = ofFunction(lootContext, poolEntry.getFunctions());
                 poolWeight = poolEntry.getWeight();
                 poolQuality = poolEntry.getQuality();
             }
@@ -189,8 +141,8 @@ public class LootUtils {
             items.add(item);
             lootInfos.add(new LootItem(
                     ForgeRegistries.ITEMS.getKey(item),
-                    of(lootContext, tuple.getA()),
-                    LootCondition.of(lootContext, tuple.getB()),
+                    ofFunction(lootContext, tuple.getA()),
+                    ofCondition(lootContext, tuple.getB()),
                     chance
             ));
         }
@@ -212,8 +164,8 @@ public class LootUtils {
                         items.add(item);
                         lootInfos.add(new LootItem(
                                 ForgeRegistries.ITEMS.getKey(item),
-                                of(lootContext, tuple.getA()),
-                                LootCondition.of(lootContext, tuple.getB()),
+                                ofFunction(lootContext, tuple.getA()),
+                                ofCondition(lootContext, tuple.getB()),
                                 chance
                         ));
                     }
@@ -223,7 +175,7 @@ public class LootUtils {
             MixinTagEntry tagEntry = (MixinTagEntry) entry;
             LootItemFunction[] functions = ((MixinLootPoolSingletonContainer) entry).getFunctions();
             LootItemCondition[] conditions = ((MixinLootPoolEntryContainer) entry).getConditions();
-            lootInfos.add(new LootTag(tagEntry.getTag(), of(lootContext, functions), LootCondition.of(lootContext, conditions), chance));
+            lootInfos.add(new LootTag(tagEntry.getTag(), ofFunction(lootContext, functions), ofCondition(lootContext, conditions), chance));
         }
 
         return lootInfos;
@@ -251,8 +203,8 @@ public class LootUtils {
                     functions = Arrays.stream(functions).filter((f) -> f.getType() != LootItemFunctions.FURNACE_SMELT).toArray(LootItemFunction[]::new);
                     lootInfos.add(new LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
-                            of(lootContext, functions),
-                            LootCondition.of(lootContext, Stream.concat(Arrays.stream(conditions), Arrays.stream(smeltConditions)).toArray(LootItemCondition[]::new)),
+                            ofFunction(lootContext, functions),
+                            ofCondition(lootContext, Stream.concat(Arrays.stream(conditions), Arrays.stream(smeltConditions)).toArray(LootItemCondition[]::new)),
                             chance
                     ));
                     conditions = Stream.concat(Arrays.stream(conditions), Arrays.stream(
@@ -261,8 +213,8 @@ public class LootUtils {
                 } else {
                     lootInfos.add(new LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
-                            of(lootContext, functions),
-                            LootCondition.of(lootContext, conditions),
+                            ofFunction(lootContext, functions),
+                            ofCondition(lootContext, conditions),
                             chance
                     ));
                 }
@@ -273,56 +225,66 @@ public class LootUtils {
     }
 
     @NotNull
-    private static List<ILootFunction> of(LootContext lootContext, LootItemFunction[] functions) {
+    private static List<ILootFunction> ofFunction(LootContext lootContext, LootItemFunction[] functions) {
         List<ILootFunction> list = new LinkedList<>();
 
         for (LootItemFunction function : functions) {
-            ResourceLocation key = BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType());
-
-            if (key != null) {
-                Pair<BiFunction<LootContext, LootItemFunction, ILootFunction>, Function<FriendlyByteBuf, ILootFunction>> pair = PluginManager.REGISTRY.functionMap.get(key);
-
-                if (pair != null) {
-                    list.add(pair.getFirst().apply(lootContext, function));
-                } else {
-                    LOGGER.warn("Encode function {} was not registered", key);
-                }
-            } else {
-                list.add(new UnknownFunction(lootContext, function));
-            }
+            list.add(PluginManager.REGISTRY.getFunction(lootContext, function));
         }
 
         return list;
     }
 
     @NotNull
-    public static List<ILootFunction> decode(FriendlyByteBuf buf) {
+    public static List<ILootFunction> decodeFunction(FriendlyByteBuf buf) {
         int count = buf.readInt();
         List<ILootFunction> list = new LinkedList<>();
 
         for (int i = 0; i < count; i++) {
             ResourceLocation key = buf.readResourceLocation();
-
-            if (key != UNKNOWN) {
-                Pair<BiFunction<LootContext, LootItemFunction, ILootFunction>, Function<FriendlyByteBuf, ILootFunction>> pair = PluginManager.REGISTRY.functionMap.get(key);
-
-                if (pair != null) {
-                    list.add(pair.getSecond().apply(buf));
-                } else {
-                    LOGGER.warn("Decode function {} was not registered", key);
-                }
-            } else {
-                list.add(new UnknownFunction(buf));
-            }
+            list.add(PluginManager.REGISTRY.getFunction(key, buf));
         }
 
         return list;
     }
 
-    public static void encode(FriendlyByteBuf buf, List<ILootFunction> list) {
+    public static void encodeFunction(FriendlyByteBuf buf, List<ILootFunction> list) {
         buf.writeInt(list.size());
         list.forEach((f) -> {
-            ResourceLocation key = PluginManager.REGISTRY.typeMap.getOrDefault(f.getClass(), UNKNOWN);
+            ResourceLocation key = PluginManager.REGISTRY.functionClassMap.getOrDefault(f.getClass(), UNKNOWN);
+            buf.writeResourceLocation(key);
+            f.encode(buf);
+        });
+    }
+
+    @NotNull
+    public static List<ILootCondition> ofCondition(LootContext lootContext, LootItemCondition[] conditions) {
+        List<ILootCondition> list = new LinkedList<>();
+
+        for (LootItemCondition condition : conditions) {
+            list.add(PluginManager.REGISTRY.getCondition(lootContext, condition));
+        }
+
+        return list;
+    }
+
+    @NotNull
+    public static List<ILootCondition> decodeCondition(FriendlyByteBuf buf) {
+        int count = buf.readInt();
+        List<ILootCondition> list = new LinkedList<>();
+
+        for (int i = 0; i < count; i++) {
+            ResourceLocation key = buf.readResourceLocation();
+            list.add(PluginManager.REGISTRY.getCondition(key, buf));
+        }
+
+        return list;
+    }
+
+    public static void encodeCondition(FriendlyByteBuf buf, List<ILootCondition> list) {
+        buf.writeInt(list.size());
+        list.forEach((f) -> {
+            ResourceLocation key = PluginManager.REGISTRY.conditionClassMap.getOrDefault(f.getClass(), UNKNOWN);
             buf.writeResourceLocation(key);
             f.encode(buf);
         });

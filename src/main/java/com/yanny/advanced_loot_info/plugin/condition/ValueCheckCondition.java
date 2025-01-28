@@ -1,33 +1,32 @@
-package com.yanny.advanced_loot_info.network.condition;
+package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinIntRange;
 import com.yanny.advanced_loot_info.mixin.MixinValueCheckCondition;
-import com.yanny.advanced_loot_info.network.LootCondition;
 import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
-public class ValueCheckCondition extends LootCondition {
+public class ValueCheckCondition implements ILootCondition {
     public final RangeValue provider;
     public final RangeValue min;
     public final RangeValue max;
 
     public ValueCheckCondition(LootContext lootContext, LootItemCondition condition) {
-        super(ConditionType.of(condition.getType()));
         provider = RangeValue.of(lootContext, ((MixinValueCheckCondition) condition).getProvider());
         min = RangeValue.of(lootContext, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMin());
         max = RangeValue.of(lootContext, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMax());
     }
 
-    public ValueCheckCondition(ConditionType type, FriendlyByteBuf buf) {
-        super(type);
+    public ValueCheckCondition(FriendlyByteBuf buf) {
         provider = new RangeValue(buf);
         min = new RangeValue(buf);
         max = new RangeValue(buf);
@@ -42,8 +41,9 @@ public class ValueCheckCondition extends LootCondition {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.condition.value_check")));
         components.add(pad(pad + 1, translatable("emi.property.condition.value_check.provider", provider)));
         components.add(pad(pad + 1, translatable("emi.property.condition.value_check.range", RangeValue.rangeToString(min, max))));
 
