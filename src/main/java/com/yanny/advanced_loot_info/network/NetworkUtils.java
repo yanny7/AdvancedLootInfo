@@ -92,7 +92,7 @@ public class NetworkUtils {
                     if (!items.isEmpty()) {
                         messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
                     } else {
-                        LOGGER.warn("LootTable {} has no items!", location);
+                        LOGGER.info("LootTable {} has no items", location);
                     }
                 } else {
                     LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);

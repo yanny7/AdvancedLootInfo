@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinEnchantWithLevelsFunction;
 import com.yanny.advanced_loot_info.network.RangeValue;
@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
@@ -22,8 +23,8 @@ public class EnchantWithLevelsFunction extends LootConditionalFunction {
         treasure = ((MixinEnchantWithLevelsFunction) function).getTreasure();
     }
 
-    public EnchantWithLevelsFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public EnchantWithLevelsFunction(FriendlyByteBuf buf) {
+        super(buf);
         levels = new RangeValue(buf);
         treasure = buf.readBoolean();
     }
@@ -37,8 +38,9 @@ public class EnchantWithLevelsFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.enchant_with_levels")));
         components.add(pad(pad + 1, translatable("emi.property.function.enchant_with_levels.levels", levels)));
         components.add(pad(pad + 1, translatable("emi.property.function.enchant_with_levels.treasure", treasure)));
 

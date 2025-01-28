@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinExplorationMapFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
@@ -29,8 +30,8 @@ public class ExplorationMapFunction extends LootConditionalFunction {
         skipKnownStructures = ((MixinExplorationMapFunction) function).getSkipKnownStructures();
     }
 
-    public ExplorationMapFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public ExplorationMapFunction(FriendlyByteBuf buf) {
+        super(buf);
         structure = buf.readResourceLocation();
         mapDecoration = buf.readByte();
         zoom = buf.readByte();
@@ -50,8 +51,9 @@ public class ExplorationMapFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.exploration_map")));
         components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.destination", structure)));
         components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.map_decoration", MapDecoration.Type.byIcon(mapDecoration))));
         components.add(pad(pad + 1, translatable("emi.property.function.exploration_map.zoom", zoom)));

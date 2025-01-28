@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.mixin.MixinIntRange;
@@ -27,8 +27,8 @@ public class LimitCountFunction extends LootConditionalFunction {
         max = RangeValue.of(lootContext, ((MixinIntRange) range).getMax());
     }
 
-    public LimitCountFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public LimitCountFunction(FriendlyByteBuf buf) {
+        super(buf);
         min = new RangeValue(buf);
         max = new RangeValue(buf);
     }

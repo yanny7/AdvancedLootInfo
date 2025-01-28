@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetContainerLootTable;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
@@ -25,8 +26,8 @@ public class SetLootTableFunction extends LootConditionalFunction {
         blockEntityType = ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(((MixinSetContainerLootTable) function).getType());
     }
 
-    public SetLootTableFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetLootTableFunction(FriendlyByteBuf buf) {
+        super(buf);
         name = buf.readResourceLocation();
         seed = buf.readLong();
         blockEntityType = buf.readResourceLocation();
@@ -42,8 +43,9 @@ public class SetLootTableFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_loot_table")));
         components.add(pad(pad + 1, translatable("emi.property.function.set_loot_table.name", name)));
         components.add(pad(pad + 1, translatable("emi.property.function.set_loot_table.seed", seed)));
         components.add(pad(pad + 1, translatable("emi.property.function.set_loot_table.type", blockEntityType)));

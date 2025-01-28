@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetLoreFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -27,8 +27,8 @@ public class SetLoreFunction extends LootConditionalFunction {
         resolutionContext = ((MixinSetLoreFunction) function).getResolutionContext();
     }
 
-    public SetLoreFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetLoreFunction(FriendlyByteBuf buf) {
+        super(buf);
         replace = buf.readBoolean();
         lore = new LinkedList<>();
 
@@ -53,8 +53,9 @@ public class SetLoreFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_lore")));
         components.add(pad(pad + 1, translatable("emi.property.function.set_lore.replace", replace)));
 
         if (resolutionContext != null) {

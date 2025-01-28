@@ -1,8 +1,9 @@
 package com.yanny.advanced_loot_info.network;
 
 import com.google.gson.JsonObject;
+import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.mixin.*;
-import com.yanny.advanced_loot_info.network.function.LootConditionalFunction;
+import com.yanny.advanced_loot_info.plugin.function.LootConditionalFunction;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -27,7 +28,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getFunctions(List<LootFunction> functions, int pad) {
+    public static List<Component> getFunctions(List<ILootFunction> functions, int pad) {
         List<Component> components = new LinkedList<>();
 
         functions.forEach((function) -> {

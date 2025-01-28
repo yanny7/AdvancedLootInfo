@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.mixin.MixinSetItemCountFunction;
@@ -24,8 +24,8 @@ public class SetCountFunction extends LootConditionalFunction {
         add = ((MixinSetItemCountFunction) function).getAdd();
     }
 
-    public SetCountFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetCountFunction(FriendlyByteBuf buf) {
+        super(buf);
         count = new RangeValue(buf);
         add = buf.readBoolean();
     }

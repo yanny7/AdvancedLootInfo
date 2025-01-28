@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -12,8 +12,8 @@ public class FurnaceSmeltFunction extends LootConditionalFunction {
         super(lootContext, function);
     }
 
-    public FurnaceSmeltFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public FurnaceSmeltFunction(FriendlyByteBuf buf) {
+        super(buf);
     }
 
     @Override

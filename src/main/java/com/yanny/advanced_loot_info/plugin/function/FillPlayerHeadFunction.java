@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinFillPlayerHead;
 import net.minecraft.network.FriendlyByteBuf;
@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
@@ -19,8 +20,8 @@ public class FillPlayerHeadFunction extends LootConditionalFunction {
         entityTarget = ((MixinFillPlayerHead) function).getEntityTarget();
     }
 
-    public FillPlayerHeadFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public FillPlayerHeadFunction(FriendlyByteBuf buf) {
+        super(buf);
         entityTarget = LootContext.EntityTarget.getByName(buf.readUtf());
     }
 
@@ -32,8 +33,9 @@ public class FillPlayerHeadFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.fill_player_head")));
         components.add(pad(pad + 1, translatable("emi.property.function.fill_player_head.target", entityTarget)));
 
         return components;

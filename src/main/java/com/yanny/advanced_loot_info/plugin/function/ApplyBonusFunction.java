@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinApplyBonusCount;
 import com.yanny.advanced_loot_info.mixin.MixinBinomialWithBonusCount;
@@ -28,8 +28,8 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         formula = Formula.of(((MixinApplyBonusCount) function).getFormula());
     }
 
-    public ApplyBonusFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public ApplyBonusFunction(FriendlyByteBuf buf) {
+        super(buf);
         enchantment = buf.readResourceLocation();
         formula = Formula.decode(buf);
     }

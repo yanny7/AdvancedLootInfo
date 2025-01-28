@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetStewEffectFunction;
 import com.yanny.advanced_loot_info.network.RangeValue;
@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public class SetStewEffectFunction extends LootConditionalFunction {
         ));
     }
 
-    public SetStewEffectFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetStewEffectFunction(FriendlyByteBuf buf) {
+        super(buf);
         int count = buf.readInt();
 
         effectMap = new HashMap<>();
@@ -51,7 +52,9 @@ public class SetStewEffectFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_stew_effect")));
 
         effectMap.forEach((effect, duration) -> {
             components.add(pad(pad + 1, translatable("emi.property.function.set_stew_effect.effect", translatable(ForgeRegistries.MOB_EFFECTS.getValue(effect).getDescriptionId()), duration)));

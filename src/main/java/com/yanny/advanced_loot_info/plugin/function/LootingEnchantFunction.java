@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinLootingEnchantFunction;
 import com.yanny.advanced_loot_info.network.RangeValue;
@@ -19,8 +19,8 @@ public class LootingEnchantFunction extends LootConditionalFunction {
         limit = ((MixinLootingEnchantFunction) function).getLimit();
     }
 
-    public LootingEnchantFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public LootingEnchantFunction(FriendlyByteBuf buf) {
+        super(buf);
         value = new RangeValue(buf);
         limit = buf.readInt();
     }

@@ -1,11 +1,12 @@
 package com.yanny.advanced_loot_info.network;
 
+import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
 
 public class LootTableEntry extends LootGroup {
-    public LootTableEntry(List<LootPoolEntry> entries, List<LootFunction> functions, float chance, int quality) {
+    public LootTableEntry(List<LootPoolEntry> entries, List<ILootFunction> functions, float chance, int quality) {
             super(GroupType.ALL, entries, functions, List.of(), chance, quality);
     }
 

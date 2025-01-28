@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinEnchantRandomlyFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -23,8 +23,8 @@ public class EnchantRandomlyFunction extends LootConditionalFunction {
         enchantments = ((MixinEnchantRandomlyFunction) function).getEnchantments().stream().map(ForgeRegistries.ENCHANTMENTS::getKey).collect(Collectors.toList());
     }
 
-    public EnchantRandomlyFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public EnchantRandomlyFunction(FriendlyByteBuf buf) {
+        super(buf);
         int count = buf.readInt();
         enchantments = new LinkedList<>();
 
@@ -42,7 +42,9 @@ public class EnchantRandomlyFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.enchant_randomly")));
 
         if (!enchantments.isEmpty()) {
             components.add(pad(pad + 1, translatable("emi.property.function.enchant_randomly.enchantments")));

@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.mixin.MixinSetBannerPatternFunction;
@@ -28,8 +28,8 @@ public class SetBannerPatternFunction extends LootConditionalFunction {
         patterns = ((MixinSetBannerPatternFunction) function).getPatterns();
     }
 
-    public SetBannerPatternFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetBannerPatternFunction(FriendlyByteBuf buf) {
+        super(buf);
         append = buf.readBoolean();
         int count = buf.readInt();
         patterns = new LinkedList<>();
@@ -55,8 +55,9 @@ public class SetBannerPatternFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_banner_pattern")));
         components.add(pad(pad + 1, translatable("emi.property.function.set_banner_pattern.append", append)));
 
         if (!patterns.isEmpty()) {

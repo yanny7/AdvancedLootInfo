@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinCopyBlockState;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,6 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -27,8 +28,8 @@ public class CopyStateFunction extends LootConditionalFunction {
         properties = ((MixinCopyBlockState) function).getProperties();
     }
 
-    public CopyStateFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public CopyStateFunction(FriendlyByteBuf buf) {
+        super(buf);
         block = ForgeRegistries.BLOCKS.getValue(buf.readResourceLocation());
 
         int count = buf.readInt();
@@ -51,8 +52,9 @@ public class CopyStateFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.copy_state")));
         components.add(pad(pad + 1, translatable("emi.property.function.copy_state.block", value(translatable(block.getDescriptionId())))));
 
         if (!properties.isEmpty()) {

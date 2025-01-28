@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.network;
 
+import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.List;
@@ -8,7 +9,7 @@ public final class LootPoolEntry extends LootGroup {
     public final RangeValue rolls;
     public final RangeValue bonusRolls;
 
-    public LootPoolEntry(List<LootEntry> entries, RangeValue rolls, RangeValue bonusRolls, List<LootFunction> functions, List<LootCondition> conditions) {
+    public LootPoolEntry(List<LootEntry> entries, RangeValue rolls, RangeValue bonusRolls, List<ILootFunction> functions, List<LootCondition> conditions) {
         super(GroupType.RANDOM, entries, functions, conditions, Float.NaN, 0);
         this.rolls = rolls;
         this.bonusRolls = bonusRolls;

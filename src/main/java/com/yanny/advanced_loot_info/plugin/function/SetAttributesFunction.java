@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetAttributesFunction;
 import com.yanny.advanced_loot_info.network.RangeValue;
@@ -12,10 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
 
@@ -37,8 +34,8 @@ public class SetAttributesFunction extends LootConditionalFunction {
         }).toList();
     }
 
-    public SetAttributesFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetAttributesFunction(FriendlyByteBuf buf) {
+        super(buf);
         int count = buf.readInt();
 
         modifiers = new ArrayList<>(count);
@@ -90,7 +87,9 @@ public class SetAttributesFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_attributes")));
 
         modifiers.forEach((modifier) -> {
             components.add(pad(pad + 1, translatable("emi.property.function.set_attributes.name", modifier.name())));

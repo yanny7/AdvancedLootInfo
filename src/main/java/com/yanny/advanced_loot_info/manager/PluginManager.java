@@ -69,7 +69,7 @@ public class PluginManager {
             }
         }
 
-        LOGGER.info("Found {} plugin(s)", plugins.size());
+        LOGGER.info("Found {} plugin(s", plugins.size());
         return plugins;
     }
 }

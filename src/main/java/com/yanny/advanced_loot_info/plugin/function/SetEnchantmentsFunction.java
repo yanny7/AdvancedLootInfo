@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetEnchantmentsFunction;
 import com.yanny.advanced_loot_info.network.RangeValue;
@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,8 +31,8 @@ public class SetEnchantmentsFunction extends LootConditionalFunction {
         add = ((MixinSetEnchantmentsFunction) function).getAdd();
     }
 
-    public SetEnchantmentsFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetEnchantmentsFunction(FriendlyByteBuf buf) {
+        super(buf);
         int count = buf.readInt();
 
         enchantments = new HashMap<>();
@@ -56,8 +57,9 @@ public class SetEnchantmentsFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_enchantments")));
         components.add(pad(pad + 1, translatable("emi.property.function.set_enchantments.enchantments")));
         enchantments.forEach((enchantment, level) -> components.add(pad(pad + 2, translatable(
                 "emi.property.function.set_enchantments.enchantment",

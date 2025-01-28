@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetNameFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +25,8 @@ public class SetNameFunction extends LootConditionalFunction {
         resolutionContext = ((MixinSetNameFunction) function).getResolutionContext();
     }
 
-    public SetNameFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetNameFunction(FriendlyByteBuf buf) {
+        super(buf);
         name = Component.Serializer.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
         String target = buf.readOptional(FriendlyByteBuf::readUtf).orElse(null);
         resolutionContext = target != null ? LootContext.EntityTarget.getByName(target) : null;
@@ -40,8 +41,9 @@ public class SetNameFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_name")));
         components.add(pad(pad + 1, translatable("emi.property.function.set_name.name", name)));
 
         if (resolutionContext != null) {

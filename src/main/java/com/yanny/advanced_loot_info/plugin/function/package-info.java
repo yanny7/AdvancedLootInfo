@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import javax.annotation.ParametersAreNonnullByDefault;

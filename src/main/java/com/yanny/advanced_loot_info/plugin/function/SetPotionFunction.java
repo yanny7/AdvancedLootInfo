@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network.function;
+package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.mixin.MixinSetPotionFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
@@ -20,8 +21,8 @@ public class SetPotionFunction extends LootConditionalFunction {
         potion = ((MixinSetPotionFunction) function).getPotion();
     }
 
-    public SetPotionFunction(FunctionType type, FriendlyByteBuf buf) {
-        super(type, buf);
+    public SetPotionFunction(FriendlyByteBuf buf) {
+        super(buf);
         potion = ForgeRegistries.POTIONS.getValue(buf.readResourceLocation());;
     }
 
@@ -33,8 +34,9 @@ public class SetPotionFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        List<Component> components = super.getTooltip(pad);
+        List<Component> components = new LinkedList<>();
 
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.set_potion")));
         components.add(pad(pad + 1, translatable("emi.property.function.set_potion.name", potion.getName(""))));
 
         if (!potion.getEffects().isEmpty()) {
