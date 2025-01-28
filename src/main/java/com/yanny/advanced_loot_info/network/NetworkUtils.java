@@ -73,38 +73,43 @@ public class NetworkUtils {
 
     public static class Server {
         private final SimpleChannel channel;
-        private LootDataManager manager;
+        private final List<InfoSyncLootTableMessage> messages = new LinkedList<>();
 
         public Server(SimpleChannel channel) {
             this.channel = channel;
         }
 
+        public void readLootTables(LootDataManager manager, ServerLevel level) {
+            manager.getKeys(LootDataType.TABLE).forEach((location) -> {
+                LootTable table = manager.getElement(LootDataType.TABLE, location);
+
+                if (table != null && table != LootTable.EMPTY) {
+                    LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
+                    LootContext lootContext = new LootContext.Builder(lootParams).create(null);
+                    ObjectArrayList<Item> items = new ObjectArrayList<>();
+                    LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, lootContext, items, 0, 0);
+
+                    if (!items.isEmpty()) {
+                        messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
+                    } else {
+                        LOGGER.warn("LootTable {} has no items!", location);
+                    }
+                } else {
+                    LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
+                }
+            });
+
+            LOGGER.info("Prepared {} loot tables", messages.size());
+        }
+
         public void syncLootTables(Player player) {
             if (player instanceof ServerPlayer serverPlayer) {
                 channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClearMessage());
-                manager.getKeys(LootDataType.TABLE).forEach((location) -> {
-                    LootTable table = manager.getElement(LootDataType.TABLE, location);
 
-                    if (table != null && table != LootTable.EMPTY && (player.level() instanceof ServerLevel serverLevel)) {
-                        LootParams lootParams = (new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY);
-                        LootContext lootContext = new LootContext.Builder(lootParams).create(null);
-                        ObjectArrayList<Item> items = new ObjectArrayList<>();
-                        LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, lootContext, items, 0, 0);
-
-                        if (!items.isEmpty()) {
-                            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new InfoSyncLootTableMessage(location, lootTableEntry));
-                        } else {
-                            LOGGER.warn("LootTable {} has no items!", location);
-                        }
-                    } else {
-                        LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
-                    }
-                });
+                for (InfoSyncLootTableMessage message : messages) {
+                    channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), message);
+                }
             }
-        }
-
-        public void setLootDataManager(LootDataManager manager) {
-            this.manager = manager;
         }
     }
 
