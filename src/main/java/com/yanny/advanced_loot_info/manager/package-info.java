@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package com.yanny.advanced_loot_info.manager;
+
+import javax.annotation.ParametersAreNonnullByDefault;

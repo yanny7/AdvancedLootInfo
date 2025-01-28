@@ -2,6 +2,7 @@ package com.yanny.advanced_loot_info;
 
 import com.yanny.advanced_loot_info.configuration.Config;
 import com.yanny.advanced_loot_info.datagen.DataGeneration;
+import com.yanny.advanced_loot_info.manager.PluginManager;
 import com.yanny.advanced_loot_info.network.NetworkUtils;
 import com.yanny.advanced_loot_info.registries.LootCategories;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -10,7 +11,6 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import org.apache.commons.lang3.tuple.Pair;
@@ -38,11 +38,11 @@ public class AdvancedLootInfoMod {
         INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator(channel);
     }
 
-    public AdvancedLootInfoMod() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public AdvancedLootInfoMod(IEventBus modEventBus) {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CONFIGURATION_SPEC);
 
         modEventBus.addListener(DataGeneration::generate);
+        modEventBus.addListener(PluginManager::registerPlugins);
         MinecraftForge.EVENT_BUS.addListener(LootCategories::onResourceReload);
     }
 }

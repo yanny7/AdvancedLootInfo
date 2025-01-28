@@ -10,6 +10,7 @@ public class ForgeBusSubscriber {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
         AdvancedLootInfoMod.INFO_PROPAGATOR.server().setLootDataManager(event.getServer().getLootData());
+        //TODO do loot parsing there!
     }
 
     @SubscribeEvent
