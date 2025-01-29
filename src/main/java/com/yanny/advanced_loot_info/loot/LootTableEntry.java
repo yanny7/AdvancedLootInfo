@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network;
+package com.yanny.advanced_loot_info.loot;
 
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;

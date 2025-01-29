@@ -12,6 +12,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -44,7 +46,7 @@ public class AliRegistry implements IRegistry {
     }
 
     @Override
-    public ILootCondition getCondition(LootContext lootContext, LootItemCondition condition) {
+    public ILootCondition convertCondition(LootContext lootContext, LootItemCondition condition) {
         ResourceLocation key = BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType());
 
         if (key != null) {
@@ -61,7 +63,20 @@ public class AliRegistry implements IRegistry {
     }
 
     @Override
-    public ILootCondition getCondition(ResourceLocation key, FriendlyByteBuf buf) {
+    public List<ILootCondition> convertConditions(LootContext lootContext, LootItemCondition[] conditions) {
+        List<ILootCondition> list = new LinkedList<>();
+
+        for (LootItemCondition condition : conditions) {
+            list.add(convertCondition(lootContext, condition));
+        }
+
+        return list;
+    }
+
+    @Override
+    public ILootCondition decodeCondition(FriendlyByteBuf buf) {
+        ResourceLocation key = buf.readResourceLocation();
+
         if (key != UNKNOWN) {
             Pair<BiFunction<LootContext, LootItemCondition, ILootCondition>, Function<FriendlyByteBuf, ILootCondition>> pair = conditionMap.get(key);
 
@@ -76,7 +91,35 @@ public class AliRegistry implements IRegistry {
     }
 
     @Override
-    public ILootFunction getFunction(LootContext lootContext, LootItemFunction function) {
+    public List<ILootCondition> decodeConditions(FriendlyByteBuf buf) {
+        int count = buf.readInt();
+        List<ILootCondition> list = new LinkedList<>();
+
+        for (int i = 0; i < count; i++) {
+            list.add(decodeCondition(buf));
+        }
+
+        return list;
+    }
+
+    @Override
+    public void encodeCondition(FriendlyByteBuf buf, ILootCondition condition) {
+        ResourceLocation key = conditionClassMap.getOrDefault(condition.getClass(), UNKNOWN);
+        buf.writeResourceLocation(key);
+        condition.encode(buf);
+    }
+
+    @Override
+    public void encodeConditions(FriendlyByteBuf buf, List<ILootCondition> conditions) {
+        buf.writeInt(conditions.size());
+
+        for (ILootCondition condition : conditions) {
+            encodeCondition(buf, condition);
+        }
+    }
+
+    @Override
+    public ILootFunction convertFunction(LootContext lootContext, LootItemFunction function) {
         ResourceLocation key = BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType());
 
         if (key != null) {
@@ -93,7 +136,20 @@ public class AliRegistry implements IRegistry {
     }
 
     @Override
-    public ILootFunction getFunction(ResourceLocation key, FriendlyByteBuf buf) {
+    public List<ILootFunction> convertFunctions(LootContext lootContext, LootItemFunction[] functions) {
+        List<ILootFunction> list = new LinkedList<>();
+
+        for (LootItemFunction function : functions) {
+            list.add(convertFunction(lootContext, function));
+        }
+
+        return list;
+    }
+
+    @Override
+    public ILootFunction decodeFunction(FriendlyByteBuf buf) {
+        ResourceLocation key = buf.readResourceLocation();
+
         if (key != UNKNOWN) {
             Pair<BiFunction<LootContext, LootItemFunction, ILootFunction>, Function<FriendlyByteBuf, ILootFunction>> pair = functionMap.get(key);
 
@@ -105,5 +161,33 @@ public class AliRegistry implements IRegistry {
         }
         
         return new UnknownFunction(buf);
+    }
+
+    @Override
+    public List<ILootFunction> decodeFunctions(FriendlyByteBuf buf) {
+        int count = buf.readInt();
+        List<ILootFunction> list = new LinkedList<>();
+
+        for (int i = 0; i < count; i++) {
+            list.add(decodeFunction(buf));
+        }
+
+        return list;
+    }
+
+    @Override
+    public void encodeFunction(FriendlyByteBuf buf, ILootFunction function) {
+        ResourceLocation key = functionClassMap.getOrDefault(function.getClass(), UNKNOWN);
+        buf.writeResourceLocation(key);
+        function.encode(buf);
+    }
+
+    @Override
+    public void encodeFunctions(FriendlyByteBuf buf, List<ILootFunction> functions) {
+        buf.writeInt(functions.size());
+
+        for (ILootFunction function : functions) {
+            encodeFunction(buf, function);
+        }
     }
 }

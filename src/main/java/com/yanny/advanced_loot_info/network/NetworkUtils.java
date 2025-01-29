@@ -1,6 +1,8 @@
 package com.yanny.advanced_loot_info.network;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.advanced_loot_info.loot.LootTableEntry;
+import com.yanny.advanced_loot_info.loot.LootUtils;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

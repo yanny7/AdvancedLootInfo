@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.Utils;
-import com.yanny.advanced_loot_info.network.LootTableEntry;
+import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.network.NetworkUtils;
 import com.yanny.advanced_loot_info.registries.LootCategories;
 import com.yanny.advanced_loot_info.registries.LootCategory;

@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network;
+package com.yanny.advanced_loot_info.loot;
 
 public enum GroupType {
     ALTERNATIVES,

@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.network.GroupType;
+import com.yanny.advanced_loot_info.loot.GroupType;
 import com.yanny.advanced_loot_info.network.RangeValue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
