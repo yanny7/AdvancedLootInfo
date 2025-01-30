@@ -2,10 +2,7 @@ package com.yanny.advanced_loot_info.manager;
 
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import com.yanny.advanced_loot_info.api.IContext;
-import com.yanny.advanced_loot_info.api.ILootCondition;
-import com.yanny.advanced_loot_info.api.ILootFunction;
-import com.yanny.advanced_loot_info.api.IRegistry;
+import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.plugin.condition.UnknownCondition;
 import com.yanny.advanced_loot_info.plugin.function.UnknownFunction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -13,6 +10,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -26,6 +25,7 @@ public class AliRegistry implements IRegistry {
     public final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>>> conditionMap = new HashMap<>();
     public final Map<Class<?>, ResourceLocation> functionClassMap = new HashMap<>();
     public final Map<Class<?>, ResourceLocation> conditionClassMap = new HashMap<>();
+    public final Map<ResourceLocation, BiFunction<IContext, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
@@ -46,6 +46,11 @@ public class AliRegistry implements IRegistry {
                                                              BiFunction<IContext, FriendlyByteBuf, ILootCondition> conditionDecoder) {
         conditionMap.put(key, new Pair<>(conditionEncoder, conditionDecoder));
         conditionClassMap.put(clazz, key);
+    }
+
+    @Override
+    public void registerNumberProvider(ResourceLocation key, BiFunction<IContext, NumberProvider, RangeValue> converter) {
+        numberConverterMap.put(key, converter);
     }
 
     @Override
@@ -191,6 +196,31 @@ public class AliRegistry implements IRegistry {
 
         for (ILootFunction function : functions) {
             encodeFunction(context, buf, function);
+        }
+    }
+
+    @Override
+    public RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider) {
+        try {
+            if (numberProvider != null) {
+                ResourceLocation key = BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType());
+
+                if (key != null) {
+                    BiFunction<IContext, NumberProvider, RangeValue> function = numberConverterMap.get(key);
+
+                    if (function != null) {
+                        return function.apply(context, numberProvider);
+                    } else {
+                        LOGGER.warn("Number converter {} was not registered", key);
+                    }
+                }
+
+            }
+
+            return new RangeValue(false, true);
+        } catch (Exception e) {
+            LOGGER.error("Failed to convert number: {}", e.getMessage());
+            return new RangeValue();
         }
     }
 }

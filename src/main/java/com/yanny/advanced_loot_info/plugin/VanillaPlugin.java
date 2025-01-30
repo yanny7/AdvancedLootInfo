@@ -1,17 +1,21 @@
 package com.yanny.advanced_loot_info.plugin;
 
-import com.yanny.advanced_loot_info.api.AliEntrypoint;
-import com.yanny.advanced_loot_info.api.IPlugin;
-import com.yanny.advanced_loot_info.api.IRegistry;
+import com.yanny.advanced_loot_info.api.*;
+import com.yanny.advanced_loot_info.mixin.MixinBinomialDistributionGenerator;
+import com.yanny.advanced_loot_info.mixin.MixinUniformGenerator;
 import com.yanny.advanced_loot_info.plugin.condition.*;
 import com.yanny.advanced_loot_info.plugin.function.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.minecraftforge.common.loot.CanToolPerformAction;
 import org.jetbrains.annotations.NotNull;
 
@@ -71,6 +75,52 @@ public class VanillaPlugin implements IPlugin {
         registry.registerCondition(ValueCheckCondition.class, getKey(LootItemConditions.VALUE_CHECK), ValueCheckCondition::new, ValueCheckCondition::new);
         registry.registerCondition(WeatherCheckCondition.class, getKey(LootItemConditions.WEATHER_CHECK), WeatherCheckCondition::new, WeatherCheckCondition::new);
         registry.registerCondition(UnknownCondition.class, UNKNOWN, UnknownCondition::new, UnknownCondition::new);
+
+        registry.registerNumberProvider(getKey(NumberProviders.CONSTANT), VanillaPlugin::convertConstant);
+        registry.registerNumberProvider(getKey(NumberProviders.UNIFORM), VanillaPlugin::convertUniform);
+        registry.registerNumberProvider(getKey(NumberProviders.BINOMIAL), VanillaPlugin::convertBinomial);
+        registry.registerNumberProvider(getKey(NumberProviders.SCORE), VanillaPlugin::convertScore);
+        registry.registerNumberProvider(UNKNOWN, VanillaPlugin::convertUnknown);
+    }
+
+    @NotNull
+    private static RangeValue convertConstant(IContext context, NumberProvider numberProvider) {
+        LootContext lootContext = context.lootContext();
+
+        if (lootContext != null) {
+            return new RangeValue(numberProvider.getFloat(lootContext));
+        } else {
+            throw new IllegalStateException("LootContext is null!");
+        }
+    }
+
+    @NotNull
+    private static RangeValue convertUniform(IContext context, NumberProvider numberProvider) {
+        MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
+        return new RangeValue(context.registry().convertNumber(context, uniformGenerator.getMin()).min(),
+                context.registry().convertNumber(context, uniformGenerator.getMax()).max());
+    }
+
+    @NotNull
+    private static RangeValue convertBinomial(IContext context, NumberProvider numberProvider) {
+        MixinBinomialDistributionGenerator binomialGenerator = (MixinBinomialDistributionGenerator) numberProvider;
+        LootContext lootContext = context.lootContext();
+
+        if (lootContext != null) {
+            return new RangeValue(0, binomialGenerator.getN().getFloat(lootContext));
+        } else {
+            throw new IllegalStateException("LootContext is null!");
+        }
+    }
+
+    @NotNull
+    private static RangeValue convertScore(IContext context, NumberProvider numberProvider) {
+        return new RangeValue(true, false);
+    }
+
+    @NotNull
+    private static RangeValue convertUnknown(IContext context, NumberProvider numberProvider) {
+        return new RangeValue(false, true);
     }
 
     @NotNull
@@ -81,6 +131,11 @@ public class VanillaPlugin implements IPlugin {
     @NotNull
     private static ResourceLocation getKey(LootItemConditionType key) {
         return getKey(BuiltInRegistries.LOOT_CONDITION_TYPE, key);
+    }
+
+    @NotNull
+    private static ResourceLocation getKey(LootNumberProviderType key) {
+        return getKey(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, key);
     }
     
     @NotNull

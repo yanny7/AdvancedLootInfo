@@ -15,7 +15,7 @@ public class LootingEnchantFunction extends LootConditionalFunction {
 
     public LootingEnchantFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        value = RangeValue.convertNumber(context, ((MixinLootingEnchantFunction) function).getValue());
+        value = context.registry().convertNumber(context, ((MixinLootingEnchantFunction) function).getValue());
         limit = ((MixinLootingEnchantFunction) function).getLimit();
     }
 

@@ -19,7 +19,7 @@ public class SetDamageFunction extends LootConditionalFunction {
 
     public SetDamageFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        damage = RangeValue.convertNumber(context, ((MixinSetItemDamageFunction) function).getDamage());
+        damage = context.registry().convertNumber(context, ((MixinSetItemDamageFunction) function).getDamage());
         add = ((MixinSetItemDamageFunction) function).getAdd();
     }
 

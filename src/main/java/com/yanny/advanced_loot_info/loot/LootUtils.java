@@ -54,8 +54,8 @@ public class LootUtils {
     @NotNull
     private static com.yanny.advanced_loot_info.loot.LootPoolEntry parsePool(LootPool pool, LootDataManager manager, IContext context, List<Item> items, boolean wasSmelting) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
-        RangeValue rolls = RangeValue.convertNumber(context, mixinLootPool.getRolls());
-        RangeValue bonusRolls = RangeValue.convertNumber(context, mixinLootPool.getBonusRolls());
+        RangeValue rolls = context.registry().convertNumber(context, mixinLootPool.getRolls());
+        RangeValue bonusRolls = context.registry().convertNumber(context, mixinLootPool.getBonusRolls());
         List<ILootFunction> functions = context.registry().convertFunctions(context, mixinLootPool.getFunctions());
         List<ILootCondition> conditions = context.registry().convertConditions(context, mixinLootPool.getConditions());
 

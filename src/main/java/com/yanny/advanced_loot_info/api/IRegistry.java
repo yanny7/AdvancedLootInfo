@@ -4,6 +4,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -17,6 +19,8 @@ public interface IRegistry {
                                                       ResourceLocation key,
                                                       BiFunction<IContext, LootItemCondition, ILootCondition> conditionEncoder,
                                                       BiFunction<IContext, FriendlyByteBuf, ILootCondition> conditionDecoder);
+    void registerNumberProvider(ResourceLocation key,
+                                                           BiFunction<IContext, NumberProvider, RangeValue> converter);
 
     ILootCondition convertCondition(IContext context, LootItemCondition condition);
     List<ILootCondition> convertConditions(IContext context, LootItemCondition[] conditions);
@@ -31,4 +35,6 @@ public interface IRegistry {
     List<ILootFunction> decodeFunctions(IContext context, FriendlyByteBuf buf);
     void encodeFunction(IContext context, FriendlyByteBuf buf, ILootFunction condition);
     void encodeFunctions(IContext context, FriendlyByteBuf buf, List<ILootFunction> functions);
+
+    RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider);
 }

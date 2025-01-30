@@ -21,9 +21,9 @@ public class ValueCheckCondition implements ILootCondition {
     public final RangeValue max;
 
     public ValueCheckCondition(IContext context, LootItemCondition condition) {
-        provider = RangeValue.convertNumber(context, ((MixinValueCheckCondition) condition).getProvider());
-        min = RangeValue.convertNumber(context, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMin());
-        max = RangeValue.convertNumber(context, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMax());
+        provider = context.registry().convertNumber(context, ((MixinValueCheckCondition) condition).getProvider());
+        min = context.registry().convertNumber(context, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMin());
+        max = context.registry().convertNumber(context, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMax());
     }
 
     public ValueCheckCondition(IContext context, FriendlyByteBuf buf) {

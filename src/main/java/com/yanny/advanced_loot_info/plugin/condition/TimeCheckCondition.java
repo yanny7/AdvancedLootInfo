@@ -25,8 +25,8 @@ public class TimeCheckCondition implements ILootCondition {
 
     public TimeCheckCondition(IContext context, LootItemCondition condition) {
         period = ((MixinTimeCheck) condition).getPeriod();
-        min = RangeValue.convertNumber(context, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMin());
-        max = RangeValue.convertNumber(context, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMax());
+        min = context.registry().convertNumber(context, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMin());
+        max = context.registry().convertNumber(context, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMax());
     }
 
     public TimeCheckCondition(IContext context, FriendlyByteBuf buf) {

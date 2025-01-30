@@ -19,7 +19,7 @@ public class EnchantWithLevelsFunction extends LootConditionalFunction {
 
     public EnchantWithLevelsFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        levels = RangeValue.convertNumber(context, ((MixinEnchantWithLevelsFunction) function).getLevels());
+        levels = context.registry().convertNumber(context, ((MixinEnchantWithLevelsFunction) function).getLevels());
         treasure = ((MixinEnchantWithLevelsFunction) function).getTreasure();
     }
 

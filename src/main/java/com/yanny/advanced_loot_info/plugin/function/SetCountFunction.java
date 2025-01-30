@@ -20,7 +20,7 @@ public class SetCountFunction extends LootConditionalFunction {
 
     public SetCountFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        count = RangeValue.convertNumber(context, ((MixinSetItemCountFunction) function).getValue());
+        count = context.registry().convertNumber(context, ((MixinSetItemCountFunction) function).getValue());
         add = ((MixinSetItemCountFunction) function).getAdd();
     }
 
