@@ -1,10 +1,10 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinFunctionReference;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -16,19 +16,19 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 public class ReferenceFunction extends LootConditionalFunction {
     public final ResourceLocation name;
 
-    public ReferenceFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public ReferenceFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         name = ((MixinFunctionReference) function).getName();
     }
 
-    public ReferenceFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public ReferenceFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         name = buf.readResourceLocation();
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(name);
     }
 

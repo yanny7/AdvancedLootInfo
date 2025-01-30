@@ -1,13 +1,13 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinSetAttributesFunction;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -19,23 +19,23 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
 public class SetAttributesFunction extends LootConditionalFunction {
     public final List<Modifier> modifiers;
 
-    public SetAttributesFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetAttributesFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         modifiers = ((MixinSetAttributesFunction) function).getModifiers().stream().map((f) -> {
             MixinSetAttributesFunction.Modifier m = (MixinSetAttributesFunction.Modifier) f;
             return new Modifier(
                     m.getName(),
                     ForgeRegistries.ATTRIBUTES.getKey(m.getAttribute()),
                     m.getOperation().toValue(),
-                    RangeValue.of(lootContext, m.getAmount()),
+                    RangeValue.convertNumber(context, m.getAmount()),
                     m.getId() != null ? m.getId().toString() : null,
                     Arrays.stream(m.getSlots()).map(EquipmentSlot::getName).toList()
             );
         }).toList();
     }
 
-    public SetAttributesFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetAttributesFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         int count = buf.readInt();
 
         modifiers = new ArrayList<>(count);
@@ -67,8 +67,8 @@ public class SetAttributesFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeInt(modifiers.size());
 
         for (Modifier modifier : modifiers) {

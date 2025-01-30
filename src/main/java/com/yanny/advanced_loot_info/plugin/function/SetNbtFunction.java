@@ -1,9 +1,9 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinSetNbtFunction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -14,19 +14,19 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
 public class SetNbtFunction extends LootConditionalFunction {
     public final String tag;
 
-    public SetNbtFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetNbtFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         tag = ((MixinSetNbtFunction) function).getTag().toString();
     }
 
-    public SetNbtFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetNbtFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         tag = buf.readUtf();
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeUtf(tag);
     }
 

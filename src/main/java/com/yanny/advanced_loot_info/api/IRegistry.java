@@ -2,35 +2,33 @@ package com.yanny.advanced_loot_info.api;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public interface IRegistry {
     <T extends ILootFunction> void registerFunction(Class<T> clazz,
                                                     ResourceLocation key,
-                                                    BiFunction<LootContext, LootItemFunction, ILootFunction> functionEncoder,
-                                                    Function<FriendlyByteBuf, ILootFunction> functionDecoder);
+                                                    BiFunction<IContext, LootItemFunction, ILootFunction> functionEncoder,
+                                                    BiFunction<IContext, FriendlyByteBuf, ILootFunction> functionDecoder);
     <T extends ILootCondition> void registerCondition(Class<T> clazz,
                                                       ResourceLocation key,
-                                                      BiFunction<LootContext, LootItemCondition, ILootCondition> conditionEncoder,
-                                                      Function<FriendlyByteBuf, ILootCondition> conditionDecoder);
+                                                      BiFunction<IContext, LootItemCondition, ILootCondition> conditionEncoder,
+                                                      BiFunction<IContext, FriendlyByteBuf, ILootCondition> conditionDecoder);
 
-    ILootCondition convertCondition(LootContext lootContext, LootItemCondition condition);
-    List<ILootCondition> convertConditions(LootContext lootContext, LootItemCondition[] conditions);
-    ILootCondition decodeCondition(FriendlyByteBuf buf);
-    List<ILootCondition> decodeConditions(FriendlyByteBuf buf);
-    void encodeCondition(FriendlyByteBuf buf, ILootCondition condition);
-    void encodeConditions(FriendlyByteBuf buf, List<ILootCondition> conditions);
+    ILootCondition convertCondition(IContext context, LootItemCondition condition);
+    List<ILootCondition> convertConditions(IContext context, LootItemCondition[] conditions);
+    ILootCondition decodeCondition(IContext context, FriendlyByteBuf buf);
+    List<ILootCondition> decodeConditions(IContext context, FriendlyByteBuf buf);
+    void encodeCondition(IContext context, FriendlyByteBuf buf, ILootCondition condition);
+    void encodeConditions(IContext context, FriendlyByteBuf buf, List<ILootCondition> conditions);
 
-    ILootFunction convertFunction(LootContext lootContext, LootItemFunction function);
-    List<ILootFunction> convertFunctions(LootContext lootContext, LootItemFunction[] functions);
-    ILootFunction decodeFunction(FriendlyByteBuf buf);
-    List<ILootFunction> decodeFunctions(FriendlyByteBuf buf);
-    void encodeFunction(FriendlyByteBuf buf, ILootFunction condition);
-    void encodeFunctions(FriendlyByteBuf buf, List<ILootFunction> functions);
+    ILootFunction convertFunction(IContext context, LootItemFunction function);
+    List<ILootFunction> convertFunctions(IContext context, LootItemFunction[] functions);
+    ILootFunction decodeFunction(IContext context, FriendlyByteBuf buf);
+    List<ILootFunction> decodeFunctions(IContext context, FriendlyByteBuf buf);
+    void encodeFunction(IContext context, FriendlyByteBuf buf, ILootFunction condition);
+    void encodeFunctions(IContext context, FriendlyByteBuf buf, List<ILootFunction> functions);
 }

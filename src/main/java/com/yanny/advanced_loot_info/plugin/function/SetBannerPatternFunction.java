@@ -1,6 +1,7 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinSetBannerPatternFunction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -10,7 +11,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -22,14 +22,14 @@ public class SetBannerPatternFunction extends LootConditionalFunction {
     public final boolean append;
     public final List<Pair<Holder<BannerPattern>, DyeColor>> patterns;
 
-    public SetBannerPatternFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetBannerPatternFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         append = ((MixinSetBannerPatternFunction) function).getAppend();
         patterns = ((MixinSetBannerPatternFunction) function).getPatterns();
     }
 
-    public SetBannerPatternFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetBannerPatternFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         append = buf.readBoolean();
         int count = buf.readInt();
         patterns = new LinkedList<>();
@@ -43,8 +43,8 @@ public class SetBannerPatternFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeBoolean(append);
         buf.writeInt(patterns.size());
         patterns.forEach((pair) -> {

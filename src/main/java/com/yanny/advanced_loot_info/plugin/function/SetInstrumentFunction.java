@@ -1,12 +1,12 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinSetInstrumentFunction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Instrument;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -18,19 +18,19 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 public class SetInstrumentFunction extends LootConditionalFunction {
     public final TagKey<Instrument> options;
 
-    public SetInstrumentFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetInstrumentFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         options = ((MixinSetInstrumentFunction) function).getOptions();
     }
 
-    public SetInstrumentFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetInstrumentFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         options = TagKey.create(BuiltInRegistries.INSTRUMENT.key(), buf.readResourceLocation());
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(options.location());
     }
 

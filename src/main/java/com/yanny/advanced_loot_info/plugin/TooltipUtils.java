@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network;
+package com.yanny.advanced_loot_info.plugin;
 
 import com.google.gson.JsonObject;
 import com.yanny.advanced_loot_info.api.ILootCondition;

@@ -1,12 +1,12 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinIntRange;
 import com.yanny.advanced_loot_info.mixin.MixinTimeCheck;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import javax.annotation.Nullable;
@@ -23,20 +23,20 @@ public class TimeCheckCondition implements ILootCondition {
     public final RangeValue min;
     public final RangeValue max;
 
-    public TimeCheckCondition(LootContext lootContext, LootItemCondition condition) {
+    public TimeCheckCondition(IContext context, LootItemCondition condition) {
         period = ((MixinTimeCheck) condition).getPeriod();
-        min = RangeValue.of(lootContext, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMin());
-        max = RangeValue.of(lootContext, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMax());
+        min = RangeValue.convertNumber(context, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMin());
+        max = RangeValue.convertNumber(context, ((MixinIntRange) ((MixinTimeCheck) condition).getValue()).getMax());
     }
 
-    public TimeCheckCondition(FriendlyByteBuf buf) {
+    public TimeCheckCondition(IContext context, FriendlyByteBuf buf) {
         period = buf.readOptional(FriendlyByteBuf::readLong).orElse(null);
         min = new RangeValue(buf);
         max = new RangeValue(buf);
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeOptional(Optional.ofNullable(period), FriendlyByteBuf::writeLong);
         min.encode(buf);
         max.encode(buf);

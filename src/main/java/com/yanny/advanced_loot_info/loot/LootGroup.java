@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.loot;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,8 +22,8 @@ public class LootGroup extends LootEntry {
         this.quality = quality;
     }
 
-    public LootGroup(FriendlyByteBuf buf) {
-        super(buf);
+    public LootGroup(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
 
         groupType = buf.readEnum(GroupType.class);
         chance = buf.readFloat();
@@ -35,11 +36,11 @@ public class LootGroup extends LootEntry {
             EntryType entryType = buf.readEnum(EntryType.class);
 
             switch (entryType) {
-                case GROUP -> entries.add(new LootGroup(buf));
-                case ITEM -> entries.add(new LootItem(buf));
-                case TAG -> entries.add(new LootTag(buf));
-                case POOL -> entries.add(new LootPoolEntry(buf));
-                case TABLE -> entries.add(new LootTableEntry(buf));
+                case GROUP -> entries.add(new LootGroup(context, buf));
+                case ITEM -> entries.add(new LootItem(context, buf));
+                case TAG -> entries.add(new LootTag(context, buf));
+                case POOL -> entries.add(new LootPoolEntry(context, buf));
+                case TABLE -> entries.add(new LootTableEntry(context, buf));
             }
         }
 
@@ -63,8 +64,8 @@ public class LootGroup extends LootEntry {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeEnum(groupType);
         buf.writeFloat(chance);
         buf.writeInt(quality);
@@ -72,7 +73,7 @@ public class LootGroup extends LootEntry {
 
         for (LootEntry entry : entries) {
             buf.writeEnum(entry.getType());
-            entry.encode(buf);
+            entry.encode(context, buf);
         }
     }
 

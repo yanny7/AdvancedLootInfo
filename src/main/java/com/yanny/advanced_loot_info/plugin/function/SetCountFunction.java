@@ -1,11 +1,11 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinSetItemCountFunction;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -18,21 +18,21 @@ public class SetCountFunction extends LootConditionalFunction {
     public final RangeValue count;
     public final boolean add;
 
-    public SetCountFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
-        count = RangeValue.of(lootContext, ((MixinSetItemCountFunction) function).getValue());
+    public SetCountFunction(IContext context, LootItemFunction function) {
+        super(context, function);
+        count = RangeValue.convertNumber(context, ((MixinSetItemCountFunction) function).getValue());
         add = ((MixinSetItemCountFunction) function).getAdd();
     }
 
-    public SetCountFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetCountFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         count = new RangeValue(buf);
         add = buf.readBoolean();
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         count.encode(buf);
         buf.writeBoolean(add);
     }

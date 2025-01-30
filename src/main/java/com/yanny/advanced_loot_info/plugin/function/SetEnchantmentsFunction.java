@@ -1,11 +1,11 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinSetEnchantmentsFunction;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -22,17 +22,17 @@ public class SetEnchantmentsFunction extends LootConditionalFunction {
     public final Map<ResourceLocation, RangeValue> enchantments;
     public final boolean add;
 
-    public SetEnchantmentsFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetEnchantmentsFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         enchantments = ((MixinSetEnchantmentsFunction) function).getEnchantments().entrySet().stream().collect(Collectors.toMap(
                 (e) -> ForgeRegistries.ENCHANTMENTS.getKey(e.getKey()),
-                (e) -> RangeValue.of(lootContext, e.getValue())
+                (e) -> RangeValue.convertNumber(context, e.getValue())
         ));
         add = ((MixinSetEnchantmentsFunction) function).getAdd();
     }
 
-    public SetEnchantmentsFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetEnchantmentsFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         int count = buf.readInt();
 
         enchantments = new HashMap<>();
@@ -45,8 +45,8 @@ public class SetEnchantmentsFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeInt(enchantments.size());
         enchantments.forEach((location, levels) -> {
             buf.writeResourceLocation(location);

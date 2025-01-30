@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinCopyBlockState;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -7,7 +8,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -22,14 +22,14 @@ public class CopyStateFunction extends LootConditionalFunction {
     public final Block block;
     public final Set<Property<?>> properties;
 
-    public CopyStateFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public CopyStateFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         block = ((MixinCopyBlockState) function).getBlock();
         properties = ((MixinCopyBlockState) function).getProperties();
     }
 
-    public CopyStateFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public CopyStateFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         block = ForgeRegistries.BLOCKS.getValue(buf.readResourceLocation());
 
         int count = buf.readInt();
@@ -43,8 +43,8 @@ public class CopyStateFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(ForgeRegistries.BLOCKS.getKey(block));
         buf.writeInt(properties.size());
         properties.forEach((property) -> buf.writeUtf(property.getName()));

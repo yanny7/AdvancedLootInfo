@@ -1,11 +1,11 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinBonusLevelTableCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -15,12 +15,12 @@ public class TableBonusCondition implements ILootCondition {
     public final ResourceLocation location;
     public final float[] values;
 
-    public TableBonusCondition(LootContext lootContext, LootItemCondition condition) {
+    public TableBonusCondition(IContext context, LootItemCondition condition) {
         location = ForgeRegistries.ENCHANTMENTS.getKey(((MixinBonusLevelTableCondition) condition).getEnchantment());
         values = ((MixinBonusLevelTableCondition) condition).getValues();
     }
 
-    public TableBonusCondition(FriendlyByteBuf buf) {
+    public TableBonusCondition(IContext context, FriendlyByteBuf buf) {
         location = buf.readResourceLocation();
 
         int count = buf.readInt();
@@ -33,7 +33,7 @@ public class TableBonusCondition implements ILootCondition {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeResourceLocation(location);
         buf.writeInt(values.length);
         for (float value : values) {

@@ -1,9 +1,9 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
-import com.yanny.advanced_loot_info.network.TooltipUtils;
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.CompositeLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
@@ -14,12 +14,12 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
 import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 
 public class AllOfCondition extends CompositeCondition {
-    public AllOfCondition(LootContext lootContext, LootItemCondition condition) {
-        super(lootContext, (CompositeLootItemCondition) condition);
+    public AllOfCondition(IContext context, LootItemCondition condition) {
+        super(context, (CompositeLootItemCondition) condition);
     }
 
-    public AllOfCondition(FriendlyByteBuf buf) {
-        super(buf);
+    public AllOfCondition(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
     }
 
     @Override

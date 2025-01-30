@@ -1,8 +1,10 @@
 package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.advanced_loot_info.network.RangeValue;
-import com.yanny.advanced_loot_info.network.TooltipUtils;
+import com.yanny.advanced_loot_info.api.ILootCondition;
+import com.yanny.advanced_loot_info.api.ILootFunction;
+import com.yanny.advanced_loot_info.api.RangeValue;
+import com.yanny.advanced_loot_info.plugin.function.LootConditionalFunction;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
@@ -32,8 +34,8 @@ public class LootSlotWidget extends SlotWidget {
         appendTooltip(getCount(itemData));
         getBonusCount(itemData).forEach(this::appendTooltip);
 
-        TooltipUtils.getConditions(itemData.conditions, 0).forEach(this::appendTooltip);
-        TooltipUtils.getFunctions(itemData.functions, 0).forEach(this::appendTooltip);
+        getConditions(itemData.conditions, 0).forEach(this::appendTooltip);
+        getFunctions(itemData.functions, 0).forEach(this::appendTooltip);
     }
 
     public LootSlotWidget setCount(RangeValue count) {
@@ -108,6 +110,42 @@ public class LootSlotWidget extends SlotWidget {
                     Component.translatable(data.bonusCount.getFirst().getDescriptionId()),
                     Component.translatable("enchantment.level." + level)
             ))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getConditions(List<ILootCondition> conditions, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        conditions.forEach((condition) -> components.addAll(condition.getTooltip(pad)));
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getFunctions(List<ILootFunction> functions, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        functions.forEach((function) -> {
+            components.addAll(function.getTooltip(pad));
+
+            if (function instanceof LootConditionalFunction conditionalFunction) {
+                components.addAll(getConditionalFunction(conditionalFunction, pad + 1));
+            }
+        });
+
+        return components;
+    }
+
+    @NotNull
+    private static List<Component> getConditionalFunction(LootConditionalFunction function, int pad) {
+        List<Component> components = new LinkedList<>();
+
+        if (!function.conditions.isEmpty()) {
+            components.add(pad(pad, translatable("emi.property.function.conditions")));
+            components.addAll(getConditions(function.conditions, pad + 1));
         }
 
         return components;

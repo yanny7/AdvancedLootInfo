@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.Utils;
-import com.yanny.advanced_loot_info.network.RangeValue;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.TextureWidget;

@@ -1,10 +1,10 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinSetPotionFunction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -16,19 +16,19 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
 public class SetPotionFunction extends LootConditionalFunction {
     public final Potion potion;
 
-    public SetPotionFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetPotionFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         potion = ((MixinSetPotionFunction) function).getPotion();
     }
 
-    public SetPotionFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetPotionFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         potion = ForgeRegistries.POTIONS.getValue(buf.readResourceLocation());;
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(ForgeRegistries.POTIONS.getKey(potion));
     }
 

@@ -1,9 +1,10 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinEntityHasScoreCondition;
 import com.yanny.advanced_loot_info.mixin.MixinIntRange;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Tuple;
@@ -22,16 +23,16 @@ public class EntityScoresCondition implements ILootCondition {
     public final Map<String, Tuple<RangeValue, RangeValue>> scores;
     public final LootContext.EntityTarget target;
 
-    public EntityScoresCondition(LootContext lootContext, LootItemCondition condition) {
+    public EntityScoresCondition(IContext context, LootItemCondition condition) {
         target = ((MixinEntityHasScoreCondition) condition).getEntityTarget();
         scores = ((MixinEntityHasScoreCondition) condition).getScores().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, (e) -> new Tuple<>(
-                        RangeValue.of(lootContext, ((MixinIntRange)e.getValue()).getMin()),
-                        RangeValue.of(lootContext, ((MixinIntRange)e.getValue()).getMax())
+                        RangeValue.convertNumber(context, ((MixinIntRange)e.getValue()).getMin()),
+                        RangeValue.convertNumber(context, ((MixinIntRange)e.getValue()).getMax())
                 )));
     }
 
-    public EntityScoresCondition(FriendlyByteBuf buf) {
+    public EntityScoresCondition(IContext context, FriendlyByteBuf buf) {
         target = buf.readEnum(LootContext.EntityTarget.class);
 
         int size = buf.readInt();
@@ -44,7 +45,7 @@ public class EntityScoresCondition implements ILootCondition {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeEnum(target);
         buf.writeInt(scores.size());
 

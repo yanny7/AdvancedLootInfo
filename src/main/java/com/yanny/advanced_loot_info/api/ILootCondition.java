@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public interface ILootCondition {
-    void encode(FriendlyByteBuf buf);
+    void encode(IContext context, FriendlyByteBuf buf);
 
     List<Component> getTooltip(int pad);
 }

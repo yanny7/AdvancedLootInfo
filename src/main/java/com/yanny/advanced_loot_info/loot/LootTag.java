@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.loot;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.core.registries.Registries;
@@ -14,8 +15,8 @@ public final class LootTag extends LootEntry {
     public final TagKey<Item> tag;
     public final float chance;
 
-    public LootTag(FriendlyByteBuf buf) {
-        super(buf);
+    public LootTag(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
         chance = buf.readFloat();
     }
@@ -27,8 +28,8 @@ public final class LootTag extends LootEntry {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(tag.location());
         buf.writeFloat(chance);
     }

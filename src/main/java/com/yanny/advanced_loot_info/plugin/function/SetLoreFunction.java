@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinSetLoreFunction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -20,15 +21,15 @@ public class SetLoreFunction extends LootConditionalFunction {
     @Nullable
     public final LootContext.EntityTarget resolutionContext;
 
-    public SetLoreFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetLoreFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         replace = ((MixinSetLoreFunction) function).getReplace();
         lore = ((MixinSetLoreFunction) function).getLore();
         resolutionContext = ((MixinSetLoreFunction) function).getResolutionContext();
     }
 
-    public SetLoreFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetLoreFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         replace = buf.readBoolean();
         lore = new LinkedList<>();
 
@@ -43,8 +44,8 @@ public class SetLoreFunction extends LootConditionalFunction {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeBoolean(replace);
         buf.writeInt(lore.size());
         lore.forEach((l) -> buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(l)));

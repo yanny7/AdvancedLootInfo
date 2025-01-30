@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.loot;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -10,13 +11,13 @@ public class LootTableEntry extends LootGroup {
             super(GroupType.ALL, entries, functions, List.of(), chance, quality);
     }
 
-    public LootTableEntry(FriendlyByteBuf buf) {
-        super(buf);
+    public LootTableEntry(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
     }
 
     @Override

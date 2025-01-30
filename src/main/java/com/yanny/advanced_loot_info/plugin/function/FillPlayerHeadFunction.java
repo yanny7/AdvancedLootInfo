@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinFillPlayerHead;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -15,19 +16,19 @@ import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
 public class FillPlayerHeadFunction extends LootConditionalFunction {
     public final LootContext.EntityTarget entityTarget;
 
-    public FillPlayerHeadFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public FillPlayerHeadFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         entityTarget = ((MixinFillPlayerHead) function).getEntityTarget();
     }
 
-    public FillPlayerHeadFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public FillPlayerHeadFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         entityTarget = LootContext.EntityTarget.getByName(buf.readUtf());
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeUtf(entityTarget.getName());
     }
 

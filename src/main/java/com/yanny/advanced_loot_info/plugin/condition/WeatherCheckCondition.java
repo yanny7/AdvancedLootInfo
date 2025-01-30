@@ -1,10 +1,10 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinWeatherCheck;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import javax.annotation.Nullable;
@@ -21,18 +21,18 @@ public class WeatherCheckCondition implements ILootCondition {
     @Nullable
     public final Boolean isThundering;
 
-    public WeatherCheckCondition(LootContext lootContext, LootItemCondition condition) {
+    public WeatherCheckCondition(IContext context, LootItemCondition condition) {
         isRaining = ((MixinWeatherCheck) condition).isIsRaining();
         isThundering = ((MixinWeatherCheck) condition).isIsThundering();
     }
 
-    public WeatherCheckCondition(FriendlyByteBuf buf) {
+    public WeatherCheckCondition(IContext context, FriendlyByteBuf buf) {
         isRaining = buf.readOptional(FriendlyByteBuf::readBoolean).orElse(null);
         isThundering = buf.readOptional(FriendlyByteBuf::readBoolean).orElse(null);
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeOptional(Optional.ofNullable(isRaining), FriendlyByteBuf::writeBoolean);
         buf.writeOptional(Optional.ofNullable(isThundering), FriendlyByteBuf::writeBoolean);
     }

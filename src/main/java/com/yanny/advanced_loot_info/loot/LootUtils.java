@@ -1,20 +1,24 @@
 package com.yanny.advanced_loot_info.loot;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
-import com.yanny.advanced_loot_info.manager.PluginManager;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.*;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import com.yanny.advanced_loot_info.plugin.function.FurnaceSmeltFunction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
@@ -36,24 +40,24 @@ public class LootUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, LootContext lootContext, List<Item> items, float chance, int quality) {
+    public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, IContext context, List<Item> items, float chance, int quality) {
         MixinLootTable lootTable = (MixinLootTable) table;
         List<com.yanny.advanced_loot_info.loot.LootPoolEntry> lootInfos = new LinkedList<>();
         List<LootPool> pools = lootTable.getPools();
 
         boolean wasSmelting = Arrays.stream(lootTable.getFunctions()).anyMatch((f) -> f.getType() == LootItemFunctions.FURNACE_SMELT);
 
-        pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, lootContext, items, wasSmelting)));
-        return new LootTableEntry(lootInfos, PluginManager.REGISTRY.convertFunctions(lootContext, lootTable.getFunctions()), chance, quality);
+        pools.forEach((pool) -> lootInfos.add(parsePool(pool, manager, context, items, wasSmelting)));
+        return new LootTableEntry(lootInfos, context.registry().convertFunctions(context, lootTable.getFunctions()), chance, quality);
     }
 
     @NotNull
-    private static com.yanny.advanced_loot_info.loot.LootPoolEntry parsePool(LootPool pool, LootDataManager manager, LootContext context, List<Item> items, boolean wasSmelting) {
+    private static com.yanny.advanced_loot_info.loot.LootPoolEntry parsePool(LootPool pool, LootDataManager manager, IContext context, List<Item> items, boolean wasSmelting) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
-        RangeValue rolls = RangeValue.of(context, mixinLootPool.getRolls());
-        RangeValue bonusRolls = RangeValue.of(context, mixinLootPool.getBonusRolls());
-        List<ILootFunction> functions = PluginManager.REGISTRY.convertFunctions(context, mixinLootPool.getFunctions());
-        List<ILootCondition> conditions = PluginManager.REGISTRY.convertConditions(context, mixinLootPool.getConditions());
+        RangeValue rolls = RangeValue.convertNumber(context, mixinLootPool.getRolls());
+        RangeValue bonusRolls = RangeValue.convertNumber(context, mixinLootPool.getBonusRolls());
+        List<ILootFunction> functions = context.registry().convertFunctions(context, mixinLootPool.getFunctions());
+        List<ILootCondition> conditions = context.registry().convertConditions(context, mixinLootPool.getConditions());
 
         wasSmelting |= functions.stream().anyMatch((f) -> f instanceof FurnaceSmeltFunction);
 
@@ -61,7 +65,7 @@ public class LootUtils {
     }
 
     @NotNull
-    private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, LootContext lootContext, List<Item> items, boolean wasSmelting) {
+    private static List<LootEntry> parseEntries(LootPoolEntryContainer[] entries, LootDataManager manager, IContext context, List<Item> items, boolean wasSmelting) {
         List<LootEntry> lootInfos = new LinkedList<>();
         int sumWeight = Arrays.stream(entries).filter(entry -> entry instanceof LootPoolSingletonContainer).mapToInt(entry -> ((MixinLootPoolSingletonContainer) entry).getWeight()).sum();
 
@@ -77,13 +81,13 @@ public class LootUtils {
             MixinLootPoolEntryContainer mixinLootPool = (MixinLootPoolEntryContainer) entry;
             LootPoolEntryType type = entry.getType();
             List<ILootFunction> functions = List.of();
-            List<ILootCondition> conditions = PluginManager.REGISTRY.convertConditions(lootContext, mixinLootPool.getConditions());
+            List<ILootCondition> conditions = context.registry().convertConditions(context, mixinLootPool.getConditions());
             int poolWeight = 0;
             int poolQuality = 0;
 
             if (entry instanceof LootPoolSingletonContainer singletonContainer) {
                 MixinLootPoolSingletonContainer poolEntry = (MixinLootPoolSingletonContainer) singletonContainer;
-                functions = PluginManager.REGISTRY.convertFunctions(lootContext, poolEntry.getFunctions());
+                functions = context.registry().convertFunctions(context, poolEntry.getFunctions());
                 poolWeight = poolEntry.getWeight();
                 poolQuality = poolEntry.getQuality();
             }
@@ -98,7 +102,7 @@ public class LootUtils {
                 LootTable table = manager.getElement(LootDataType.TABLE, location);
 
                 if (table != null) {
-                    lootInfos.add(parseLoot(table, manager, lootContext, items, chance, poolQuality));
+                    lootInfos.add(parseLoot(table, manager, context, items, chance, poolQuality));
                 } else {
                     LOGGER.warn("Invalid LootTable reference {}", location);
                 }
@@ -106,19 +110,19 @@ public class LootUtils {
                 LOGGER.warn("Unimplemented dynamic loot entry, skipping");
             } else if (type == LootPoolEntries.TAG) {
                 if (entry instanceof TagEntry) {
-                    lootInfos.addAll(parseTagEntry((TagEntry) entry, lootContext, items, chance, wasSmelting));
+                    lootInfos.addAll(parseTagEntry((TagEntry) entry, context, items, chance, wasSmelting));
                 } else {
                     LOGGER.warn("Invalid entry type, expecting TagEntry, found {}", entry.getClass().getName());
                 }
             } else if (type == LootPoolEntries.GROUP) {
-                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, chance, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.ALL, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, context, items, wasSmelting), functions, conditions, chance, poolQuality));
             } else if (type == LootPoolEntries.SEQUENCE) {
-                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, chance, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.SEQUENCE, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, context, items, wasSmelting), functions, conditions, chance, poolQuality));
             } else if (type == LootPoolEntries.ALTERNATIVES) {
-                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, lootContext, items, wasSmelting), functions, conditions, chance, poolQuality));
+                lootInfos.add(new LootGroup(GroupType.ALTERNATIVES, parseEntries(((MixinCompositeEntryBase) entry).getChildren(), manager, context, items, wasSmelting), functions, conditions, chance, poolQuality));
             } else if (type == LootPoolEntries.ITEM) {
                 if (entry instanceof net.minecraft.world.level.storage.loot.entries.LootItem lootItem) {
-                    lootInfos.addAll(parseLootItem(lootItem, lootContext, items, chance, wasSmelting));
+                    lootInfos.addAll(parseLootItem(lootItem, context, items, chance, wasSmelting));
                 } else {
                     LOGGER.warn("Invalid entry type, expecting LootItem, found {}", entry.getClass().getName());
                 }
@@ -131,17 +135,17 @@ public class LootUtils {
     }
 
     @NotNull
-    private static List<LootEntry> parseLootItem(net.minecraft.world.level.storage.loot.entries.LootItem lootItem, LootContext lootContext, List<Item> items, float chance, boolean wasSmelting) {
+    private static List<LootEntry> parseLootItem(net.minecraft.world.level.storage.loot.entries.LootItem lootItem, IContext context, List<Item> items, float chance, boolean wasSmelting) {
         List<LootEntry> lootInfos = new LinkedList<>();
         Item item = ((MixinLootItem) lootItem).getItem();
-        Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(lootItem, lootContext, items, lootInfos, item, chance, wasSmelting);
+        Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(lootItem, context, items, lootInfos, item, chance, wasSmelting);
 
         if (!wasSmelting) {
             items.add(item);
             lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
                     ForgeRegistries.ITEMS.getKey(item),
-                    PluginManager.REGISTRY.convertFunctions(lootContext, tuple.getA()),
-                    PluginManager.REGISTRY.convertConditions(lootContext, tuple.getB()),
+                    context.registry().convertFunctions(context, tuple.getA()),
+                    context.registry().convertConditions(context, tuple.getB()),
                     chance
             ));
         }
@@ -150,21 +154,21 @@ public class LootUtils {
     }
 
     @NotNull
-    private static List<LootEntry> parseTagEntry(TagEntry entry, LootContext lootContext, List<Item> items, float chance, boolean wasSmelting) {
+    private static List<LootEntry> parseTagEntry(TagEntry entry, IContext context, List<Item> items, float chance, boolean wasSmelting) {
         List<LootEntry> lootInfos = new LinkedList<>();
         ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
 
         if (wasSmelting) {
             if (tags != null) {
                 for (Item item : tags.getTag(((MixinTagEntry) entry).getTag())) {
-                    Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(entry, lootContext, items, lootInfos, item, chance, wasSmelting);
+                    Tuple<LootItemFunction[], LootItemCondition[]> tuple = handleSmeltingFunction(entry, context, items, lootInfos, item, chance, wasSmelting);
 
                     if (!wasSmelting) {
                         items.add(item);
                         lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
                                 ForgeRegistries.ITEMS.getKey(item),
-                                PluginManager.REGISTRY.convertFunctions(lootContext, tuple.getA()),
-                                PluginManager.REGISTRY.convertConditions(lootContext, tuple.getB()),
+                                context.registry().convertFunctions(context, tuple.getA()),
+                                context.registry().convertConditions(context, tuple.getB()),
                                 chance
                         ));
                     }
@@ -174,21 +178,22 @@ public class LootUtils {
             MixinTagEntry tagEntry = (MixinTagEntry) entry;
             LootItemFunction[] functions = ((MixinLootPoolSingletonContainer) entry).getFunctions();
             LootItemCondition[] conditions = ((MixinLootPoolEntryContainer) entry).getConditions();
-            lootInfos.add(new LootTag(tagEntry.getTag(), PluginManager.REGISTRY.convertFunctions(lootContext, functions), PluginManager.REGISTRY.convertConditions(lootContext, conditions), chance));
+            lootInfos.add(new LootTag(tagEntry.getTag(), context.registry().convertFunctions(context, functions), context.registry().convertConditions(context, conditions), chance));
         }
 
         return lootInfos;
     }
 
     @NotNull
-    private static Tuple<LootItemFunction[], LootItemCondition[]> handleSmeltingFunction(LootPoolSingletonContainer container, LootContext lootContext, List<Item> items,
+    private static Tuple<LootItemFunction[], LootItemCondition[]> handleSmeltingFunction(LootPoolSingletonContainer container, IContext context, List<Item> items,
                                                                                          List<LootEntry> lootInfos, Item item, float chance, boolean wasSmelting) {
         LootItemFunction[] functions = ((MixinLootPoolSingletonContainer) container).getFunctions();
         LootItemCondition[] conditions = ((MixinLootPoolEntryContainer) container).getConditions();
         Optional<LootItemFunction> optional = Arrays.stream(functions).filter((f) -> f.getType() == LootItemFunctions.FURNACE_SMELT).findAny();
 
         if (optional.isPresent() || wasSmelting) {
-            Optional<SmeltingRecipe> optionalSmeltingRecipe = lootContext.getLevel().getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(new ItemStack(item)), lootContext.getLevel());
+            ServerLevel level = context.lootContext().getLevel();
+            Optional<SmeltingRecipe> optionalSmeltingRecipe = level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, new SimpleContainer(new ItemStack(item)), level);
 
             if (optionalSmeltingRecipe.isPresent()) {
                 SmeltingRecipe recipe = optionalSmeltingRecipe.get();
@@ -202,8 +207,8 @@ public class LootUtils {
                     functions = Arrays.stream(functions).filter((f) -> f.getType() != LootItemFunctions.FURNACE_SMELT).toArray(LootItemFunction[]::new);
                     lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
-                            PluginManager.REGISTRY.convertFunctions(lootContext, functions),
-                            PluginManager.REGISTRY.convertConditions(lootContext, Stream.concat(Arrays.stream(conditions), Arrays.stream(smeltConditions)).toArray(LootItemCondition[]::new)),
+                            context.registry().convertFunctions(context, functions),
+                            context.registry().convertConditions(context, Stream.concat(Arrays.stream(conditions), Arrays.stream(smeltConditions)).toArray(LootItemCondition[]::new)),
                             chance
                     ));
                     conditions = Stream.concat(Arrays.stream(conditions), Arrays.stream(
@@ -212,8 +217,8 @@ public class LootUtils {
                 } else {
                     lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
-                            PluginManager.REGISTRY.convertFunctions(lootContext, functions),
-                            PluginManager.REGISTRY.convertConditions(lootContext, conditions),
+                            context.registry().convertFunctions(context, functions),
+                            context.registry().convertConditions(context, conditions),
                             chance
                     ));
                 }

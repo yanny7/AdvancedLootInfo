@@ -3,7 +3,6 @@ package com.yanny.advanced_loot_info.plugin;
 import com.yanny.advanced_loot_info.api.AliEntrypoint;
 import com.yanny.advanced_loot_info.api.IPlugin;
 import com.yanny.advanced_loot_info.api.IRegistry;
-import com.yanny.advanced_loot_info.api.UnknownFunction;
 import com.yanny.advanced_loot_info.plugin.condition.*;
 import com.yanny.advanced_loot_info.plugin.function.*;
 import net.minecraft.core.Registry;
@@ -71,6 +70,7 @@ public class VanillaPlugin implements IPlugin {
         registry.registerCondition(TimeCheckCondition.class, getKey(LootItemConditions.TIME_CHECK), TimeCheckCondition::new, TimeCheckCondition::new);
         registry.registerCondition(ValueCheckCondition.class, getKey(LootItemConditions.VALUE_CHECK), ValueCheckCondition::new, ValueCheckCondition::new);
         registry.registerCondition(WeatherCheckCondition.class, getKey(LootItemConditions.WEATHER_CHECK), WeatherCheckCondition::new, WeatherCheckCondition::new);
+        registry.registerCondition(UnknownCondition.class, UNKNOWN, UnknownCondition::new, UnknownCondition::new);
     }
 
     @NotNull

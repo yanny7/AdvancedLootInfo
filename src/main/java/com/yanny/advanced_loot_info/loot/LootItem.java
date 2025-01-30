@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.loot;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,8 +12,8 @@ public final class LootItem extends LootEntry {
     public final ResourceLocation item;
     public final float chance;
 
-    public LootItem(FriendlyByteBuf buf) {
-        super(buf);
+    public LootItem(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         item = buf.readResourceLocation();
         chance = buf.readFloat();
     }
@@ -24,8 +25,8 @@ public final class LootItem extends LootEntry {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(item);
         buf.writeFloat(chance);
     }

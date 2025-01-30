@@ -1,10 +1,10 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinEnchantWithLevelsFunction;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -17,21 +17,21 @@ public class EnchantWithLevelsFunction extends LootConditionalFunction {
     public final RangeValue levels;
     public final boolean treasure;
 
-    public EnchantWithLevelsFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
-        levels = RangeValue.of(lootContext, ((MixinEnchantWithLevelsFunction) function).getLevels());
+    public EnchantWithLevelsFunction(IContext context, LootItemFunction function) {
+        super(context, function);
+        levels = RangeValue.convertNumber(context, ((MixinEnchantWithLevelsFunction) function).getLevels());
         treasure = ((MixinEnchantWithLevelsFunction) function).getTreasure();
     }
 
-    public EnchantWithLevelsFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public EnchantWithLevelsFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         levels = new RangeValue(buf);
         treasure = buf.readBoolean();
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         levels.encode(buf);
         buf.writeBoolean(treasure);
     }

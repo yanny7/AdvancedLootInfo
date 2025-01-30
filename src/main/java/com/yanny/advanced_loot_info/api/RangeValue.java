@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.network;
+package com.yanny.advanced_loot_info.api;
 
 import com.yanny.advanced_loot_info.mixin.MixinBinomialDistributionGenerator;
 import com.yanny.advanced_loot_info.mixin.MixinUniformGenerator;
@@ -53,18 +53,30 @@ public final class RangeValue {
     }
 
     @NotNull
-    public static RangeValue of(LootContext lootContext, @Nullable NumberProvider numberProvider) {
+    public static RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider) {
         try {
             if (numberProvider == null) {
                 return new RangeValue(false, true);
             } else if (numberProvider.getType() == NumberProviders.UNIFORM) {
                 MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
-                return new RangeValue(of(lootContext, uniformGenerator.getMin()).min(), of(lootContext, uniformGenerator.getMax()).max());
+                return new RangeValue(convertNumber(context, uniformGenerator.getMin()).min(), convertNumber(context, uniformGenerator.getMax()).max());
             } else if (numberProvider.getType() == NumberProviders.BINOMIAL) {
                 MixinBinomialDistributionGenerator binomialGenerator = (MixinBinomialDistributionGenerator) numberProvider;
-                return new RangeValue(0, binomialGenerator.getN().getFloat(lootContext));
+                LootContext lootContext = context.lootContext();
+
+                if (lootContext != null) {
+                    return new RangeValue(0, binomialGenerator.getN().getFloat(lootContext));
+                } else {
+                    throw new IllegalStateException("LootContext is null!");
+                }
             } else if (numberProvider.getType() == NumberProviders.CONSTANT) {
-                return new RangeValue(numberProvider.getFloat(lootContext));
+                LootContext lootContext = context.lootContext();
+
+                if (lootContext != null) {
+                    return new RangeValue(numberProvider.getFloat(lootContext));
+                } else {
+                    throw new IllegalStateException("LootContext is null!");
+                }
             } else if (numberProvider.getType() == NumberProviders.SCORE) {
                 return new RangeValue(true, false);
             } else {
@@ -224,6 +236,7 @@ public final class RangeValue {
         }
     }
 
+    @NotNull
     public static String rangeToString(RangeValue min, RangeValue max) {
         if (min.isUnknown()) {
             return "<" + max;

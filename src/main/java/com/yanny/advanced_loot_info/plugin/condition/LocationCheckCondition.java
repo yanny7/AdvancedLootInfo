@@ -1,14 +1,14 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinLocationCheck;
-import com.yanny.advanced_loot_info.network.TooltipUtils;
+import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.LinkedList;
@@ -21,18 +21,18 @@ public class LocationCheckCondition implements ILootCondition {
     public final LocationPredicate predicate;
     public final BlockPos offset;
 
-    public LocationCheckCondition(LootContext lootContext, LootItemCondition condition) {
+    public LocationCheckCondition(IContext context, LootItemCondition condition) {
         predicate = ((MixinLocationCheck) condition).getPredicate();
         offset = ((MixinLocationCheck) condition).getOffset();
     }
 
-    public LocationCheckCondition(FriendlyByteBuf buf) {
+    public LocationCheckCondition(IContext context, FriendlyByteBuf buf) {
         predicate = LocationPredicate.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
         offset = buf.readBlockPos();
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeJsonWithCodec(ExtraCodecs.JSON, predicate.serializeToJson());
         buf.writeBlockPos(offset);
     }

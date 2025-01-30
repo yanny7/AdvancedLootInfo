@@ -1,8 +1,9 @@
 package com.yanny.advanced_loot_info.plugin.condition;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.mixin.MixinItemEntityPropertyCondition;
-import com.yanny.advanced_loot_info.network.TooltipUtils;
+import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -19,18 +20,18 @@ public class EntityPropertiesCondition implements ILootCondition {
     public final LootContext.EntityTarget target;
     public final EntityPredicate predicate;
 
-    public EntityPropertiesCondition(LootContext lootContext, LootItemCondition condition) {
+    public EntityPropertiesCondition(IContext context, LootItemCondition condition) {
         target = ((MixinItemEntityPropertyCondition) condition).getEntityTarget();
         predicate = ((MixinItemEntityPropertyCondition) condition).getPredicate();
     }
 
-    public EntityPropertiesCondition(FriendlyByteBuf buf) {
+    public EntityPropertiesCondition(IContext context, FriendlyByteBuf buf) {
         target = buf.readEnum(LootContext.EntityTarget.class);
         predicate = EntityPredicate.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeEnum(target);
         buf.writeJsonWithCodec(ExtraCodecs.JSON, predicate.serializeToJson());
     }

@@ -1,13 +1,13 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.mixin.MixinApplyBonusCount;
 import com.yanny.advanced_loot_info.mixin.MixinBinomialWithBonusCount;
 import com.yanny.advanced_loot_info.mixin.MixinUniformBonusCount;
-import com.yanny.advanced_loot_info.network.RangeValue;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,21 +22,21 @@ public class ApplyBonusFunction extends LootConditionalFunction {
     public final ResourceLocation enchantment;
     public final Formula formula;
 
-    public ApplyBonusFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public ApplyBonusFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         enchantment = ForgeRegistries.ENCHANTMENTS.getKey(((MixinApplyBonusCount) function).getEnchantment());
         formula = Formula.of(((MixinApplyBonusCount) function).getFormula());
     }
 
-    public ApplyBonusFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public ApplyBonusFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         enchantment = buf.readResourceLocation();
         formula = Formula.decode(buf);
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeResourceLocation(enchantment);
         Formula.encode(buf, formula);
     }

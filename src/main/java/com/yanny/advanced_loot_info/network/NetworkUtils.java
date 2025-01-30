@@ -3,6 +3,7 @@ package com.yanny.advanced_loot_info.network;
 import com.mojang.logging.LogUtils;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.loot.LootUtils;
+import com.yanny.advanced_loot_info.manager.PluginManager;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -87,9 +88,10 @@ public class NetworkUtils {
 
                 if (table != null && table != LootTable.EMPTY) {
                     LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
-                    LootContext lootContext = new LootContext.Builder(lootParams).create(null);
+                    LootContext context = new LootContext.Builder(lootParams).create(null);
                     ObjectArrayList<Item> items = new ObjectArrayList<>();
-                    LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, lootContext, items, 0, 0);
+                    AliContext aliContext = new AliContext(context, PluginManager.REGISTRY);
+                    LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, aliContext, items, 0, 0);
 
                     if (!items.isEmpty()) {
                         messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
@@ -137,12 +139,12 @@ public class NetworkUtils {
 
         public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
             location = buf.readResourceLocation();
-            value = new LootTableEntry(buf);
+            value = new LootTableEntry(new AliContext(null, PluginManager.REGISTRY), buf);
         }
 
         public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(location);
-            value.encode(buf);
+            value.encode(new AliContext(null, PluginManager.REGISTRY), buf);
         }
     }
 

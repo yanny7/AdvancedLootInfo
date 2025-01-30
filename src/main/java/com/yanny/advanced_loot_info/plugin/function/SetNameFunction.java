@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.plugin.function;
 
+import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.mixin.MixinSetNameFunction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -19,22 +20,22 @@ public class SetNameFunction extends LootConditionalFunction {
     @Nullable
     public final LootContext.EntityTarget resolutionContext;
 
-    public SetNameFunction(LootContext lootContext, LootItemFunction function) {
-        super(lootContext, function);
+    public SetNameFunction(IContext context, LootItemFunction function) {
+        super(context, function);
         name = ((MixinSetNameFunction) function).getName();
         resolutionContext = ((MixinSetNameFunction) function).getResolutionContext();
     }
 
-    public SetNameFunction(FriendlyByteBuf buf) {
-        super(buf);
+    public SetNameFunction(IContext context, FriendlyByteBuf buf) {
+        super(context, buf);
         name = Component.Serializer.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
         String target = buf.readOptional(FriendlyByteBuf::readUtf).orElse(null);
         resolutionContext = target != null ? LootContext.EntityTarget.getByName(target) : null;
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
-        super.encode(buf);
+    public void encode(IContext context, FriendlyByteBuf buf) {
+        super.encode(context, buf);
         buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(name));
         buf.writeOptional(Optional.ofNullable(resolutionContext != null ? resolutionContext.getName() : null), FriendlyByteBuf::writeUtf);
     }
