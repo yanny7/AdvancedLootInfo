@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -42,7 +43,7 @@ public class LootUtils {
     @NotNull
     public static LootTableEntry parseLoot(LootTable table, LootDataManager manager, IContext context, List<Item> items, float chance, int quality) {
         MixinLootTable lootTable = (MixinLootTable) table;
-        List<com.yanny.advanced_loot_info.loot.LootPoolEntry> lootInfos = new LinkedList<>();
+        List<LootPoolEntry> lootInfos = new LinkedList<>();
         List<LootPool> pools = lootTable.getPools();
 
         boolean wasSmelting = Arrays.stream(lootTable.getFunctions()).anyMatch((f) -> f.getType() == LootItemFunctions.FURNACE_SMELT);
@@ -52,7 +53,7 @@ public class LootUtils {
     }
 
     @NotNull
-    private static com.yanny.advanced_loot_info.loot.LootPoolEntry parsePool(LootPool pool, LootDataManager manager, IContext context, List<Item> items, boolean wasSmelting) {
+    private static LootPoolEntry parsePool(LootPool pool, LootDataManager manager, IContext context, List<Item> items, boolean wasSmelting) {
         MixinLootPool mixinLootPool = (MixinLootPool) pool;
         RangeValue rolls = context.registry().convertNumber(context, mixinLootPool.getRolls());
         RangeValue bonusRolls = context.registry().convertNumber(context, mixinLootPool.getBonusRolls());
@@ -61,7 +62,7 @@ public class LootUtils {
 
         wasSmelting |= functions.stream().anyMatch((f) -> f instanceof FurnaceSmeltFunction);
 
-        return new com.yanny.advanced_loot_info.loot.LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, items, wasSmelting), rolls, bonusRolls, functions, conditions);
+        return new LootPoolEntry(parseEntries(mixinLootPool.getEntries(), manager, context, items, wasSmelting), rolls, bonusRolls, functions, conditions);
     }
 
     @NotNull
@@ -110,7 +111,7 @@ public class LootUtils {
                 LOGGER.warn("Unimplemented dynamic loot entry, skipping");
             } else if (type == LootPoolEntries.TAG) {
                 if (entry instanceof TagEntry) {
-                    lootInfos.addAll(parseTagEntry((TagEntry) entry, context, items, chance, wasSmelting));
+                    lootInfos.addAll(parseLootTag((TagEntry) entry, context, items, chance, wasSmelting));
                 } else {
                     LOGGER.warn("Invalid entry type, expecting TagEntry, found {}", entry.getClass().getName());
                 }
@@ -142,7 +143,7 @@ public class LootUtils {
 
         if (!wasSmelting) {
             items.add(item);
-            lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
+            lootInfos.add(new LootItem(
                     ForgeRegistries.ITEMS.getKey(item),
                     context.registry().convertFunctions(context, tuple.getA()),
                     context.registry().convertConditions(context, tuple.getB()),
@@ -154,7 +155,7 @@ public class LootUtils {
     }
 
     @NotNull
-    private static List<LootEntry> parseTagEntry(TagEntry entry, IContext context, List<Item> items, float chance, boolean wasSmelting) {
+    private static List<LootEntry> parseLootTag(TagEntry entry, IContext context, List<Item> items, float chance, boolean wasSmelting) {
         List<LootEntry> lootInfos = new LinkedList<>();
         ITagManager<Item> tags = ForgeRegistries.ITEMS.tags();
 
@@ -165,7 +166,7 @@ public class LootUtils {
 
                     if (!wasSmelting) {
                         items.add(item);
-                        lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
+                        lootInfos.add(new LootItem(
                                 ForgeRegistries.ITEMS.getKey(item),
                                 context.registry().convertFunctions(context, tuple.getA()),
                                 context.registry().convertConditions(context, tuple.getB()),
@@ -205,17 +206,17 @@ public class LootUtils {
                     LootItemCondition[] smeltConditions = ((MixinLootItemConditionalFunction) optional.get()).getPredicates();
 
                     functions = Arrays.stream(functions).filter((f) -> f.getType() != LootItemFunctions.FURNACE_SMELT).toArray(LootItemFunction[]::new);
-                    lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
+                    lootInfos.add(new LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
                             context.registry().convertFunctions(context, functions),
                             context.registry().convertConditions(context, Stream.concat(Arrays.stream(conditions), Arrays.stream(smeltConditions)).toArray(LootItemCondition[]::new)),
                             chance
                     ));
                     conditions = Stream.concat(Arrays.stream(conditions), Arrays.stream(
-                            new LootItemCondition[]{new InvertedLootItemCondition(new net.minecraft.world.level.storage.loot.predicates.AllOfCondition(smeltConditions))}
+                            new LootItemCondition[]{new InvertedLootItemCondition(new AllOfCondition(smeltConditions))}
                     )).toArray(LootItemCondition[]::new);
                 } else {
-                    lootInfos.add(new com.yanny.advanced_loot_info.loot.LootItem(
+                    lootInfos.add(new LootItem(
                             ForgeRegistries.ITEMS.getKey(smeltItem),
                             context.registry().convertFunctions(context, functions),
                             context.registry().convertConditions(context, conditions),

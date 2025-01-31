@@ -94,6 +94,13 @@ public class NetworkUtils {
                     LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, aliContext, items, 0, 0);
 
                     if (!items.isEmpty()) {
+//                        LootModifierManager man = ForgeInternalHandler.getLootModifierManager();
+//                        ObjectArrayList<ItemStack> generatedLoot = new ObjectArrayList<>(items.stream().map(Item::getDefaultInstance).toList());
+//
+//                        for (IGlobalLootModifier mod : man.getAllLootMods()) {
+//                            generatedLoot = mod.apply(generatedLoot, context);
+//                        }
+
                         messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
                     } else {
                         LOGGER.info("LootTable {} has no items", location);
