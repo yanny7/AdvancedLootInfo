@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.api.distmarker.Dist;
@@ -87,11 +88,11 @@ public class NetworkUtils {
                 if (table != null && table != LootTable.EMPTY) {
                     LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
                     LootContext context = new LootContext.Builder(lootParams).create(null);
-//                    ObjectArrayList<Item> items = new ObjectArrayList<>();
                     AliContext aliContext = new AliContext(context, PluginManager.REGISTRY, manager);
                     LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
+                    List<Item> items = lootTableEntry.collectItems();
 
-//                    if (!items.isEmpty()) {
+                    if (!items.isEmpty()) {
 //                        LootModifierManager man = ForgeInternalHandler.getLootModifierManager();
 //                        ObjectArrayList<ItemStack> generatedLoot = new ObjectArrayList<>(items.stream().map(Item::getDefaultInstance).toList());
 //
@@ -100,9 +101,9 @@ public class NetworkUtils {
 //                        }
 
                         messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
-//                    } else {
-//                        LOGGER.info("LootTable {} has no items", location);
-//                    }
+                    } else {
+                        LOGGER.info("LootTable {} has no items", location);
+                    }
                 } else {
                     LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
                 }

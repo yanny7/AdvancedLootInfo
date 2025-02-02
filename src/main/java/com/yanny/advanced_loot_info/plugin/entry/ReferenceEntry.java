@@ -5,11 +5,15 @@ import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.mixin.MixinLootTableReference;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ReferenceEntry extends SingletonEntry {
     public final ResourceLocation name;
@@ -53,6 +57,15 @@ public class ReferenceEntry extends SingletonEntry {
 
         if (lootTable != null) {
             lootTable.encode(context, buf);
+        }
+    }
+
+    @Override
+    public @NotNull List<Item> collectItems() {
+        if (lootTable != null) {
+            return lootTable.collectItems();
+        } else {
+            return List.of();
         }
     }
 }
