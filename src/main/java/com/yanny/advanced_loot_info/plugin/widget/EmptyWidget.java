@@ -23,10 +23,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class EmptyWidget extends Widget {
+public class EmptyWidget extends EntryWidget {
     private final List<Supplier<ClientTooltipComponent>> tooltipSuppliers = Lists.newArrayList();
     private final Bounds bounds;
     private final Widget widget;
+    private final LootEntry entry;
 
     public EmptyWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
                        List<ILootFunction> functions, List<ILootCondition> conditions) {
@@ -43,6 +44,7 @@ public class EmptyWidget extends Widget {
 
         bounds = getBounds(registry, entry, x, y);
         widget = new SlotWidget(EmiStack.of(Items.BARRIER), x, y).drawBack(false);
+        this.entry = entry;
         setupTooltip(emptyEntry, chance, bonusChance, allFunctions, allConditions);
     }
 
@@ -64,6 +66,11 @@ public class EmptyWidget extends Widget {
     @Override
     public Bounds getBounds() {
         return bounds;
+    }
+
+    @Override
+    public LootEntry getLootEntry() {
+        return entry;
     }
 
     @Override

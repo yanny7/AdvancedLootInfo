@@ -21,10 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class DynamicWidget extends Widget {
+public class DynamicWidget extends EntryWidget {
     private final List<Supplier<ClientTooltipComponent>> tooltipSuppliers = Lists.newArrayList();
     private final Bounds bounds;
     private final Widget widget;
+    private final LootEntry entry;
 
     public DynamicWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
                          List<ILootFunction> functions, List<ILootCondition> conditions) {
@@ -41,6 +42,7 @@ public class DynamicWidget extends Widget {
 
         widget = WidgetUtils.getDynamicWidget(x, y);
         bounds = widget.getBounds();
+        this.entry = entry;
         setupTooltip(dynamicEntry, chance, bonusChance, allFunctions, allConditions);
     }
 
@@ -62,6 +64,11 @@ public class DynamicWidget extends Widget {
     @Override
     public Bounds getBounds() {
         return bounds;
+    }
+
+    @Override
+    public LootEntry getLootEntry() {
+        return entry;
     }
 
     @Override

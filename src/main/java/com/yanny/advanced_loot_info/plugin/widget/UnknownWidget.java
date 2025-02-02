@@ -1,28 +1,31 @@
 package com.yanny.advanced_loot_info.plugin.widget;
 
-import com.yanny.advanced_loot_info.api.IClientRegistry;
-import com.yanny.advanced_loot_info.api.ILootCondition;
-import com.yanny.advanced_loot_info.api.ILootFunction;
-import com.yanny.advanced_loot_info.api.LootEntry;
+import com.yanny.advanced_loot_info.api.*;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class UnknownWidget extends Widget {
+public class UnknownWidget extends EntryWidget {
     private final Bounds bounds;
+    private final LootEntry entry;
 
     public UnknownWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
                          List<ILootFunction> functions, List<ILootCondition> conditions) {
         bounds = getBounds(registry, entry, x, y);
+        this.entry = entry;
     }
 
     @Override
     public Bounds getBounds() {
         return bounds;
+    }
+
+    @Override
+    public LootEntry getLootEntry() {
+        return entry;
     }
 
     @Override

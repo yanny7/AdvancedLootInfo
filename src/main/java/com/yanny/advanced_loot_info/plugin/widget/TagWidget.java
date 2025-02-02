@@ -16,9 +16,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class TagWidget extends Widget {
+public class TagWidget extends EntryWidget {
     private final Widget widget;
     private final Bounds bounds;
+    private final LootEntry entry;
 
     public TagWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
                      List<ILootFunction> functions, List<ILootCondition> conditions) {
@@ -37,11 +38,17 @@ public class TagWidget extends Widget {
 
         widget = new LootSlotWidget(tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions).recipeContext(recipe);
         bounds = widget.getBounds();
+        this.entry = entry;
     }
 
     @Override
     public Bounds getBounds() {
         return bounds;
+    }
+
+    @Override
+    public LootEntry getLootEntry() {
+        return entry;
     }
 
     @Override

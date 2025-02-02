@@ -9,7 +9,6 @@ import com.yanny.advanced_loot_info.plugin.entry.UnknownEntry;
 import com.yanny.advanced_loot_info.plugin.function.UnknownFunction;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -328,12 +327,12 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
     }
 
     @Override
-    public Pair<List<Widget>, Bounds> createWidgets(EmiRecipe recipe, IClientRegistry registry, List<LootEntry> entries, int x, int y,
+    public Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientRegistry registry, List<LootEntry> entries, int x, int y,
                                                     List<ILootFunction> functions, List<ILootCondition> conditions) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
         int sumWeight = 0;
-        List<Widget> widgets = new LinkedList<>();
+        List<EntryWidget> widgets = new LinkedList<>();
         WidgetDirection lastDirection = null;
 
         for (LootEntry entry : entries) {
@@ -361,7 +360,7 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                     bound = bounds.apply(registry, entry, posX, posY);
                 }
 
-                Widget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
+                EntryWidget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
 
@@ -438,5 +437,11 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
         }
 
         return new Bounds(x, y, width, height);
+    }
+
+    @Nullable
+    @Override
+    public WidgetDirection getWidgetDirection(LootEntry entry) {
+        return widgetDirectionMap.get(entry.getClass());
     }
 }

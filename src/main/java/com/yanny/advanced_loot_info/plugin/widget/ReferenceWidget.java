@@ -1,9 +1,6 @@
 package com.yanny.advanced_loot_info.plugin.widget;
 
-import com.yanny.advanced_loot_info.api.IClientRegistry;
-import com.yanny.advanced_loot_info.api.ILootCondition;
-import com.yanny.advanced_loot_info.api.ILootFunction;
-import com.yanny.advanced_loot_info.api.LootEntry;
+import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.compatibility.LootTableWidget;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.plugin.entry.ReferenceEntry;
@@ -16,9 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ReferenceWidget extends Widget {
+public class ReferenceWidget extends EntryWidget {
     private final Bounds bounds;
     private final Widget widget;
+    private final LootEntry entry;
 
     public ReferenceWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
@@ -41,11 +39,17 @@ public class ReferenceWidget extends Widget {
         }
 
         bounds = widget.getBounds();
+        this.entry = entry;
     }
 
     @Override
     public Bounds getBounds() {
         return bounds;
+    }
+
+    @Override
+    public LootEntry getLootEntry() {
+        return entry;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.yanny.advanced_loot_info.compatibility;
 import com.yanny.advanced_loot_info.api.IClientRegistry;
 import com.yanny.advanced_loot_info.loot.LootPoolEntry;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
-import com.yanny.advanced_loot_info.plugin.widget.LootSlotWidget;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
@@ -60,7 +59,7 @@ public class LootTableWidget extends Widget {
         guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
 
         for (Widget widget : widgets) {
-            if (!(widget instanceof LootSlotWidget) && widget.getBounds().y() > bounds.y() + 18) {
+            if (widget.getBounds().y() > bounds.y() + 18) {
                 guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
             }
         }

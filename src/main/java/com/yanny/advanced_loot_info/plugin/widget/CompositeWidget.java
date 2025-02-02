@@ -1,10 +1,7 @@
 package com.yanny.advanced_loot_info.plugin.widget;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.advanced_loot_info.api.IClientRegistry;
-import com.yanny.advanced_loot_info.api.ILootCondition;
-import com.yanny.advanced_loot_info.api.ILootFunction;
-import com.yanny.advanced_loot_info.api.LootEntry;
+import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.plugin.entry.CompositeEntry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
@@ -18,20 +15,24 @@ import java.util.List;
 
 import static com.yanny.advanced_loot_info.plugin.WidgetUtils.TEXTURE_LOC;
 
-public class CompositeWidget extends Widget {
+public class CompositeWidget extends EntryWidget {
     private final Bounds bounds;
     protected final List<Widget> widgets;
+    private final LootEntry entry;
+    private final IClientRegistry registry;
 
-    public CompositeWidget(EmiRecipe recipe, IClientRegistry registry, CompositeEntry entry, int x, int y, int sumWeight,
+    public CompositeWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
         List<ILootCondition> allConditions = new LinkedList<>(conditions);
 
         allConditions.addAll(entry.conditions);
 
-        Pair<List<Widget>, Bounds> pair = registry.createWidgets(recipe, registry, entry.children, x, y, List.copyOf(functions), allConditions);
+        Pair<List<EntryWidget>, Bounds> pair = registry.createWidgets(recipe, registry, ((CompositeEntry) entry).children, x, y, List.copyOf(functions), allConditions);
 
-        widgets = pair.getFirst();
+        widgets = new LinkedList<>(pair.getFirst());
         bounds = pair.getSecond();
+        this.entry = entry;
+        this.registry = registry;
     }
 
     @Override
@@ -40,14 +41,26 @@ public class CompositeWidget extends Widget {
     }
 
     @Override
+    public LootEntry getLootEntry() {
+        return entry;
+    }
+
+    @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         int lastY = 0;
+        WidgetDirection lastDirection = null;
 
         for (Widget widget : widgets) {
             widget.render(guiGraphics, mouseX, mouseY, delta);
 
-            if (widget instanceof CompositeWidget || widget instanceof ReferenceWidget) {
-                lastY = Math.max(lastY, widget.getBounds().y());
+            if (widget instanceof EntryWidget entryWidget) {
+                WidgetDirection direction = registry.getWidgetDirection(entryWidget.getLootEntry());
+
+                if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
+                    lastY = Math.max(lastY, widget.getBounds().y());
+                }
+
+                lastDirection = direction;
             }
         }
 
@@ -55,10 +68,17 @@ public class CompositeWidget extends Widget {
         int height = lastY - bounds.y() - 9;
 
         guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
+        lastDirection = null;
 
         for (Widget widget : widgets) {
-            if (!(widget instanceof ItemWidget) && widget.getBounds().y() > bounds.y() + 18) {
-                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
+            if (widget instanceof EntryWidget entryWidget) {
+                WidgetDirection direction = registry.getWidgetDirection(entryWidget.getLootEntry());
+
+                if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getBounds().y() > bounds.y() + 18) {
+                    guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
+                }
+
+                lastDirection = direction;
             }
         }
     }
