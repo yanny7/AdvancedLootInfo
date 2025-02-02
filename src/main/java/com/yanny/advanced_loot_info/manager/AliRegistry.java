@@ -334,29 +334,25 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
         int width = 0, height = 0;
         int sumWeight = 0;
         List<Widget> widgets = new LinkedList<>();
-        List<LootEntry> horizontal = new LinkedList<>();
-        List<LootEntry> vertical = new LinkedList<>();
+        WidgetDirection lastDirection = null;
 
         for (LootEntry entry : entries) {
-            WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
-
             if (entry instanceof SingletonEntry singletonEntry) {
                 sumWeight += singletonEntry.weight;
             }
-
-            if (direction != null) {
-                switch (direction) {
-                    case HORIZONTAL -> horizontal.add(entry);
-                    case VERTICAL -> vertical.add(entry);
-                }
-            }
         }
 
-        for (LootEntry entry : horizontal) {
+        for (LootEntry entry : entries) {
+            WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
             IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
             IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
 
-            if (widgetFactory != null && bounds != null) {
+            if (direction != null && widgetFactory != null && bounds != null) {
+                if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
+                    posX = x + GROUP_WIDGET_WIDTH;
+                    posY = y + height + VERTICAL_OFFSET;
+                }
+
                 Bounds bound = bounds.apply(registry, entry, posX, posY);
 
                 if (bound.right() > 9 * 18) {
@@ -368,58 +364,48 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                 Widget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
-                posX += bound.width();
+
+                if (lastDirection != null) {
+                    if (lastDirection != direction) {
+                        posX = x + GROUP_WIDGET_WIDTH;
+                        posY += bound.height() + VERTICAL_OFFSET;
+                    } else if (direction == WidgetDirection.HORIZONTAL) {
+                        posX += bound.width();
+                    } else if (direction == WidgetDirection.VERTICAL) {
+                        posY += bound.height() + VERTICAL_OFFSET;
+                    }
+                } else {
+                    switch (direction) {
+                        case HORIZONTAL -> posX += bound.width();
+                        case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
+                    }
+                }
+
                 widgets.add(widget);
+                lastDirection = direction;
             }
         }
 
-        if (posX != x + GROUP_WIDGET_WIDTH) {
-            posY = y + height + VERTICAL_OFFSET;
-        }
-
-        posX = x + GROUP_WIDGET_WIDTH;
-
-        for (LootEntry entry : vertical) {
-            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
-            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
-
-            if (widgetFactory != null && bounds != null) {
-                Bounds bound = bounds.apply(registry, entry, posX, posY);
-
-                Widget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
-                width = Math.max(width, bound.right() - x);
-                height = Math.max(height, bound.bottom() - y);
-                posY += bound.height() + VERTICAL_OFFSET;
-                widgets.add(widget);
-            }
-        }
-
-        return new Pair<>(widgets, new Bounds(x, y, width + GROUP_WIDGET_WIDTH, height));
+        return new Pair<>(widgets, new Bounds(x, y, width, height));
     }
 
     @Override
     public Bounds getBounds(IClientRegistry registry, List<LootEntry> entries, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
-        List<LootEntry> horizontal = new LinkedList<>();
-        List<LootEntry> vertical = new LinkedList<>();
+        WidgetDirection lastDirection = null;
 
         for (LootEntry entry : entries) {
             WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
-
-            if (direction != null) {
-                switch (direction) {
-                    case HORIZONTAL -> horizontal.add(entry);
-                    case VERTICAL -> vertical.add(entry);
-                }
-            }
-        }
-
-        for (LootEntry entry : horizontal) {
             IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
             IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
 
-            if (widgetFactory != null && bounds != null) {
+            if (direction != null && widgetFactory != null && bounds != null) {
+                if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
+                    posX = x + GROUP_WIDGET_WIDTH;
+                    posY = y + height + VERTICAL_OFFSET;
+                }
+
                 Bounds bound = bounds.apply(registry, entry, posX, posY);
 
                 if (bound.right() > 9 * 18) {
@@ -430,29 +416,27 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
 
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
-                posX += bound.width();
+
+                if (lastDirection != null) {
+                    if (lastDirection != direction) {
+                        posX = x + GROUP_WIDGET_WIDTH;
+                        posY += bound.height() + VERTICAL_OFFSET;
+                    } else if (direction == WidgetDirection.HORIZONTAL) {
+                        posX += bound.width();
+                    } else if (direction == WidgetDirection.VERTICAL) {
+                        posY += bound.height() + VERTICAL_OFFSET;
+                    }
+                } else {
+                    switch (direction) {
+                        case HORIZONTAL -> posX += bound.width();
+                        case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
+                    }
+                }
+
+                lastDirection = direction;
             }
         }
 
-        if (posX != x + GROUP_WIDGET_WIDTH) {
-            posY = y + height + VERTICAL_OFFSET;
-        }
-
-        posX = x + GROUP_WIDGET_WIDTH;
-
-        for (LootEntry entry : vertical) {
-            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
-            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
-
-            if (widgetFactory != null && bounds != null) {
-                Bounds bound = bounds.apply(registry, entry, posX, posY);
-
-                width = Math.max(width, bound.right() - x);
-                height = Math.max(height, bound.bottom() - y);
-                posY += bound.height() + VERTICAL_OFFSET;
-            }
-        }
-
-        return new Bounds(x, y, width + GROUP_WIDGET_WIDTH, height);
+        return new Bounds(x, y, width, height);
     }
 }
