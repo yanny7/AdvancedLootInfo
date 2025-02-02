@@ -1,5 +1,11 @@
 package com.yanny.advanced_loot_info.api;
 
 public interface IPlugin {
-    void register(IRegistry registry);
+    default void registerCommon(ICommonRegistry registry) {
+
+    }
+
+    default void registerClient(IClientRegistry registry) {
+
+    }
 }

@@ -24,7 +24,7 @@ public class ExplosionDecayFunction extends LootConditionalFunction {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.exploration_map")));
+        components.add(pad(pad, translatable("emi.type.advanced_loot_info.function.explosion_decay")));
 
         return components;
     }

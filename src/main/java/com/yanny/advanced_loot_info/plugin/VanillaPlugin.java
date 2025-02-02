@@ -4,11 +4,14 @@ import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.mixin.MixinBinomialDistributionGenerator;
 import com.yanny.advanced_loot_info.mixin.MixinUniformGenerator;
 import com.yanny.advanced_loot_info.plugin.condition.*;
+import com.yanny.advanced_loot_info.plugin.entry.*;
 import com.yanny.advanced_loot_info.plugin.function.*;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
@@ -26,7 +29,7 @@ public class VanillaPlugin implements IPlugin {
     public static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
 
     @Override
-    public void register(IRegistry registry) {
+    public void registerCommon(ICommonRegistry registry) {
         registry.registerFunction(ApplyBonusFunction.class, getKey(LootItemFunctions.APPLY_BONUS), ApplyBonusFunction::new, ApplyBonusFunction::new);
         registry.registerFunction(CopyNameFunction.class, getKey(LootItemFunctions.COPY_NAME), CopyNameFunction::new, CopyNameFunction::new);
         registry.registerFunction(CopyNbtFunction.class, getKey(LootItemFunctions.COPY_NBT), CopyNbtFunction::new, CopyNbtFunction::new);
@@ -76,11 +79,26 @@ public class VanillaPlugin implements IPlugin {
         registry.registerCondition(WeatherCheckCondition.class, getKey(LootItemConditions.WEATHER_CHECK), WeatherCheckCondition::new, WeatherCheckCondition::new);
         registry.registerCondition(UnknownCondition.class, UNKNOWN, UnknownCondition::new, UnknownCondition::new);
 
+        registry.registerEntry(EmptyEntry.class, getKey(LootPoolEntries.EMPTY), EmptyEntry::new, EmptyEntry::new);
+        registry.registerEntry(ItemEntry.class, getKey(LootPoolEntries.ITEM), ItemEntry::new, ItemEntry::new);
+        registry.registerEntry(ReferenceEntry.class, getKey(LootPoolEntries.REFERENCE), ReferenceEntry::new, ReferenceEntry::new);
+        registry.registerEntry(DynamicEntry.class, getKey(LootPoolEntries.DYNAMIC), DynamicEntry::new, DynamicEntry::new);
+        registry.registerEntry(TagEntry.class, getKey(LootPoolEntries.TAG), TagEntry::new, TagEntry::new);
+        registry.registerEntry(AlternativesEntry.class, getKey(LootPoolEntries.ALTERNATIVES), AlternativesEntry::new, AlternativesEntry::new);
+        registry.registerEntry(SequentialEntry.class, getKey(LootPoolEntries.SEQUENCE), SequentialEntry::new, SequentialEntry::new);
+        registry.registerEntry(GroupEntry.class, getKey(LootPoolEntries.GROUP), GroupEntry::new, GroupEntry::new);
+        registry.registerEntry(UnknownEntry.class, UNKNOWN, UnknownEntry::new, UnknownEntry::new);
+
         registry.registerNumberProvider(getKey(NumberProviders.CONSTANT), VanillaPlugin::convertConstant);
         registry.registerNumberProvider(getKey(NumberProviders.UNIFORM), VanillaPlugin::convertUniform);
         registry.registerNumberProvider(getKey(NumberProviders.BINOMIAL), VanillaPlugin::convertBinomial);
         registry.registerNumberProvider(getKey(NumberProviders.SCORE), VanillaPlugin::convertScore);
         registry.registerNumberProvider(UNKNOWN, VanillaPlugin::convertUnknown);
+    }
+
+    @Override
+    public void registerClient(IClientRegistry registry) {
+        WidgetPlugin.initialize(registry);
     }
 
     @NotNull
@@ -131,6 +149,11 @@ public class VanillaPlugin implements IPlugin {
     @NotNull
     private static ResourceLocation getKey(LootItemConditionType key) {
         return getKey(BuiltInRegistries.LOOT_CONDITION_TYPE, key);
+    }
+
+    @NotNull
+    private static ResourceLocation getKey(LootPoolEntryType key) {
+        return getKey(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, key);
     }
 
     @NotNull

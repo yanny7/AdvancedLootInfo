@@ -42,7 +42,8 @@ public class AdvancedLootInfoMod {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CONFIGURATION_SPEC);
 
         modEventBus.addListener(DataGeneration::generate);
-        modEventBus.addListener(PluginManager::registerPlugins);
+        modEventBus.addListener(PluginManager::registerCommonEvent);
+        modEventBus.addListener(PluginManager::registerClientEvent);
         MinecraftForge.EVENT_BUS.addListener(LootCategories::onResourceReload);
     }
 }

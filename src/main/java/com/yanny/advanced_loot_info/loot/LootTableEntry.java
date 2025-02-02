@@ -1,32 +1,57 @@
 package com.yanny.advanced_loot_info.loot;
 
 import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.ILootEntry;
 import com.yanny.advanced_loot_info.api.ILootFunction;
+import com.yanny.advanced_loot_info.mixin.MixinLootTable;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.storage.loot.LootTable;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
 import java.util.List;
 
-public class LootTableEntry extends LootGroup {
-    public LootTableEntry(List<LootPoolEntry> entries, List<ILootFunction> functions, float chance, int quality) {
-            super(GroupType.ALL, entries, functions, List.of(), chance, quality);
+public class LootTableEntry implements ILootEntry {
+    public final List<LootPoolEntry> pools;
+    public final List<ILootFunction> functions;
+
+    public LootTableEntry(IContext context, LootTable table) {
+        pools = ((MixinLootTable) table).getPools().stream().map((pool) -> new LootPoolEntry(context, pool)).toList();
+        functions = context.registry().convertFunctions(context, ((MixinLootTable) table).getFunctions());
     }
 
     public LootTableEntry(IContext context, FriendlyByteBuf buf) {
-        super(context, buf);
+        int count = buf.readInt();
+
+        pools = new LinkedList<>();
+
+        for (int i = 0; i < count; i++) {
+            pools.add(new LootPoolEntry(context, buf));
+        }
+
+        functions = context.registry().decodeFunctions(context, buf);
     }
 
-    @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        super.encode(context, buf);
+        buf.writeInt(pools.size());
+
+        for (LootPoolEntry pool : pools) {
+            pool.encode(context, buf);
+        }
+
+        context.registry().encodeFunctions(context, buf, functions);
     }
 
+    @NotNull
     @Override
-    public List<? extends LootEntry> entries() {
-        return super.entries();
-    }
+    public List<Item> collectItems() {
+        List<Item> items = new LinkedList<>();
 
-    @Override
-    public EntryType getType() {
-        return EntryType.TABLE;
+        for (LootPoolEntry pool : pools) {
+            items.addAll(pool.collectItems());
+        }
+
+        return items;
     }
 }

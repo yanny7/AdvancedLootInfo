@@ -2,15 +2,12 @@ package com.yanny.advanced_loot_info.network;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
-import com.yanny.advanced_loot_info.loot.LootUtils;
 import com.yanny.advanced_loot_info.manager.PluginManager;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.api.distmarker.Dist;
@@ -83,17 +80,18 @@ public class NetworkUtils {
         }
 
         public void readLootTables(LootDataManager manager, ServerLevel level) {
+            messages.clear();
             manager.getKeys(LootDataType.TABLE).forEach((location) -> {
                 LootTable table = manager.getElement(LootDataType.TABLE, location);
 
                 if (table != null && table != LootTable.EMPTY) {
                     LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
                     LootContext context = new LootContext.Builder(lootParams).create(null);
-                    ObjectArrayList<Item> items = new ObjectArrayList<>();
-                    AliContext aliContext = new AliContext(context, PluginManager.REGISTRY);
-                    LootTableEntry lootTableEntry = LootUtils.parseLoot(table, manager, aliContext, items, 0, 0);
+//                    ObjectArrayList<Item> items = new ObjectArrayList<>();
+                    AliContext aliContext = new AliContext(context, PluginManager.REGISTRY, manager);
+                    LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
 
-                    if (!items.isEmpty()) {
+//                    if (!items.isEmpty()) {
 //                        LootModifierManager man = ForgeInternalHandler.getLootModifierManager();
 //                        ObjectArrayList<ItemStack> generatedLoot = new ObjectArrayList<>(items.stream().map(Item::getDefaultInstance).toList());
 //
@@ -102,9 +100,9 @@ public class NetworkUtils {
 //                        }
 
                         messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
-                    } else {
-                        LOGGER.info("LootTable {} has no items", location);
-                    }
+//                    } else {
+//                        LOGGER.info("LootTable {} has no items", location);
+//                    }
                 } else {
                     LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
                 }
@@ -146,12 +144,12 @@ public class NetworkUtils {
 
         public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
             location = buf.readResourceLocation();
-            value = new LootTableEntry(new AliContext(null, PluginManager.REGISTRY), buf);
+            value = new LootTableEntry(new AliContext(null, PluginManager.REGISTRY, null), buf);
         }
 
         public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(location);
-            value.encode(new AliContext(null, PluginManager.REGISTRY), buf);
+            value.encode(new AliContext(null, PluginManager.REGISTRY, null), buf);
         }
     }
 

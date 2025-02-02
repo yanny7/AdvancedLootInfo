@@ -2,6 +2,7 @@ package com.yanny.advanced_loot_info.api;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public interface IRegistry {
+public interface ICommonRegistry {
     <T extends ILootFunction> void registerFunction(Class<T> clazz,
                                                     ResourceLocation key,
                                                     BiFunction<IContext, LootItemFunction, ILootFunction> functionEncoder,
@@ -19,6 +20,11 @@ public interface IRegistry {
                                                       ResourceLocation key,
                                                       BiFunction<IContext, LootItemCondition, ILootCondition> conditionEncoder,
                                                       BiFunction<IContext, FriendlyByteBuf, ILootCondition> conditionDecoder);
+    <T extends LootEntry> void registerEntry(Class<T> clazz,
+                                             ResourceLocation key,
+                                             BiFunction<IContext, LootPoolEntryContainer, LootEntry> entryEncoder,
+                                             BiFunction<IContext, FriendlyByteBuf, LootEntry> entryDecoder);
+
     void registerNumberProvider(ResourceLocation key,
                                                            BiFunction<IContext, NumberProvider, RangeValue> converter);
 
@@ -35,6 +41,13 @@ public interface IRegistry {
     List<ILootFunction> decodeFunctions(IContext context, FriendlyByteBuf buf);
     void encodeFunction(IContext context, FriendlyByteBuf buf, ILootFunction condition);
     void encodeFunctions(IContext context, FriendlyByteBuf buf, List<ILootFunction> functions);
+
+    LootEntry convertEntry(IContext context, LootPoolEntryContainer entry);
+    List<LootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries);
+    LootEntry decodeEntry(IContext context, FriendlyByteBuf buf);
+    List<LootEntry> decodeEntries(IContext context, FriendlyByteBuf buf);
+    void encodeEntry(IContext context, FriendlyByteBuf buf, LootEntry entry);
+    void encodeEntries(IContext context, FriendlyByteBuf buf, List<LootEntry> entries);
 
     RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider);
 }

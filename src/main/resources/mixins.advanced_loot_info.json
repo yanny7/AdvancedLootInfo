@@ -18,6 +18,7 @@
     "MixinDamageSourceCondition",
     "MixinDamageSourcePredicate",
     "MixinDistancePredicate",
+    "MixinDynamicLoot",
     "MixinEnchantmentPredicate",
     "MixinEnchantRandomlyFunction",
     "MixinEnchantWithLevelsFunction",

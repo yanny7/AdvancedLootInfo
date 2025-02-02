@@ -4,10 +4,16 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.plugin.condition.UnknownCondition;
+import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;
+import com.yanny.advanced_loot_info.plugin.entry.UnknownEntry;
 import com.yanny.advanced_loot_info.plugin.function.UnknownFunction;
+import dev.emi.emi.api.recipe.EmiRecipe;
+import dev.emi.emi.api.widget.Bounds;
+import dev.emi.emi.api.widget.Widget;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -20,11 +26,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class AliRegistry implements IRegistry {
+import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.GROUP_WIDGET_WIDTH;
+import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.VERTICAL_OFFSET;
+
+public class AliRegistry implements ICommonRegistry, IClientRegistry {
     public final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>>> functionMap = new HashMap<>();
     public final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>>> conditionMap = new HashMap<>();
+    public final Map<ResourceLocation, Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>>> entryMap = new HashMap<>();
     public final Map<Class<?>, ResourceLocation> functionClassMap = new HashMap<>();
     public final Map<Class<?>, ResourceLocation> conditionClassMap = new HashMap<>();
+    public final Map<Class<?>, ResourceLocation> entryClassMap = new HashMap<>();
+    public final Map<Class<?>, IWidgetFactory> widgetMap = new HashMap<>();
+    public final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
+    public final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
     public final Map<ResourceLocation, BiFunction<IContext, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
 
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -46,6 +60,22 @@ public class AliRegistry implements IRegistry {
                                                              BiFunction<IContext, FriendlyByteBuf, ILootCondition> conditionDecoder) {
         conditionMap.put(key, new Pair<>(conditionEncoder, conditionDecoder));
         conditionClassMap.put(clazz, key);
+    }
+
+    @Override
+    public <T extends LootEntry> void registerEntry(Class<T> clazz,
+                                                    ResourceLocation key,
+                                                    BiFunction<IContext, LootPoolEntryContainer, LootEntry> entryEncoder,
+                                                    BiFunction<IContext, FriendlyByteBuf, LootEntry> entryDecoder) {
+        entryMap.put(key, new Pair<>(entryEncoder, entryDecoder));
+        entryClassMap.put(clazz, key);
+    }
+
+    @Override
+    public <T extends LootEntry> void registerWidget(Class<T> clazz, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter) {
+        widgetMap.put(clazz, factory);
+        widgetDirectionMap.put(clazz, direction);
+        widgetBoundsMap.put(clazz, boundsGetter);
     }
 
     @Override
@@ -200,6 +230,79 @@ public class AliRegistry implements IRegistry {
     }
 
     @Override
+    public LootEntry convertEntry(IContext context, LootPoolEntryContainer entry) {
+        ResourceLocation key = BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType());
+
+        if (key != null) {
+            Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>> pair = entryMap.get(key);
+
+            if (pair != null) {
+                return pair.getFirst().apply(context, entry);
+            } else {
+                LOGGER.warn("Encode entry {} was not registered", key);
+            }
+        }
+
+        return new UnknownEntry(context, entry);
+    }
+
+    @Override
+    public List<LootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries) {
+        List<LootEntry> list = new LinkedList<>();
+
+        for (LootPoolEntryContainer entry : entries) {
+            list.add(convertEntry(context, entry));
+        }
+
+        return list;
+    }
+
+    @Override
+    public LootEntry decodeEntry(IContext context, FriendlyByteBuf buf) {
+        ResourceLocation key = buf.readResourceLocation();
+
+        if (key != UNKNOWN) {
+            Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>> pair = entryMap.get(key);
+
+            if (pair != null) {
+                return pair.getSecond().apply(context, buf);
+            } else {
+                LOGGER.warn("Decode entry {} was not registered", key);
+            }
+        }
+
+        return new UnknownEntry(context, buf);
+    }
+
+    @Override
+    public List<LootEntry> decodeEntries(IContext context, FriendlyByteBuf buf) {
+        int count = buf.readInt();
+        List<LootEntry> list = new LinkedList<>();
+
+        for (int i = 0; i < count; i++) {
+            list.add(decodeEntry(context, buf));
+        }
+
+        return list;
+    }
+
+    @Override
+    public void encodeEntry(IContext context, FriendlyByteBuf buf, LootEntry entry) {
+        ResourceLocation key = entryClassMap.getOrDefault(entry.getClass(), UNKNOWN);
+        buf.writeResourceLocation(key);
+        entry.encode(context, buf);
+    }
+
+    @Override
+    public void encodeEntries(IContext context, FriendlyByteBuf buf, List<LootEntry> entries) {
+        buf.writeInt(entries.size());
+
+        for (LootEntry entry : entries) {
+            encodeEntry(context, buf, entry);
+        }
+    }
+
+    @Override
     public RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider) {
         try {
             if (numberProvider != null) {
@@ -222,5 +325,146 @@ public class AliRegistry implements IRegistry {
             LOGGER.error("Failed to convert number: {}", e.getMessage());
             return new RangeValue();
         }
+    }
+
+    @Override
+    public Pair<List<Widget>, Bounds> createWidgets(EmiRecipe recipe, IClientRegistry registry, List<LootEntry> entries, int x, int y,
+                                                    List<ILootFunction> functions, List<ILootCondition> conditions) {
+        int posX = x + GROUP_WIDGET_WIDTH, posY = y;
+        int width = 0, height = 0;
+        int sumWeight = 0;
+        List<Widget> widgets = new LinkedList<>();
+        List<LootEntry> horizontal = new LinkedList<>();
+        List<LootEntry> vertical = new LinkedList<>();
+
+        for (LootEntry entry : entries) {
+            WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
+
+            if (entry instanceof SingletonEntry singletonEntry) {
+                sumWeight += singletonEntry.weight;
+            }
+
+            if (direction != null) {
+                switch (direction) {
+                    case HORIZONTAL -> horizontal.add(entry);
+                    case VERTICAL -> vertical.add(entry);
+                }
+            } else {
+                LOGGER.error("Unregistered direction for entry {}", entry.getClass().getCanonicalName());
+            }
+        }
+
+        for (LootEntry entry : horizontal) {
+            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
+            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
+
+            if (widgetFactory != null && bounds != null) {
+                Bounds bound = bounds.apply(registry, entry, posX, posY);
+
+                if (bound.right() > 9 * 18) {
+                    posX = x + GROUP_WIDGET_WIDTH;
+                    posY += bound.height();
+                    bound = bounds.apply(registry, entry, posX, posY);
+                }
+
+                Widget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
+                width = Math.max(width, bound.right() - x);
+                height = Math.max(height, bound.bottom() - y);
+                posX += bound.width();
+                widgets.add(widget);
+            } else {
+                //TODO placeholder
+            }
+        }
+
+        if (posX != x + GROUP_WIDGET_WIDTH) {
+            posY = y + height + VERTICAL_OFFSET;
+        }
+
+        posX = x + GROUP_WIDGET_WIDTH;
+
+        for (LootEntry entry : vertical) {
+            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
+            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
+
+            if (widgetFactory != null && bounds != null) {
+                Bounds bound = bounds.apply(registry, entry, posX, posY);
+
+                Widget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
+                width = Math.max(width, bound.right() - x);
+                height = Math.max(height, bound.bottom() - y);
+                posY += bound.height() + VERTICAL_OFFSET;
+                widgets.add(widget);
+            } else {
+                //TODO placeholder
+            }
+        }
+
+        return new Pair<>(widgets, new Bounds(x, y, width + GROUP_WIDGET_WIDTH, height));
+    }
+
+    @Override
+    public Bounds getBounds(IClientRegistry registry, List<LootEntry> entries, int x, int y) {
+        int posX = x + GROUP_WIDGET_WIDTH, posY = y;
+        int width = 0, height = 0;
+        List<LootEntry> horizontal = new LinkedList<>();
+        List<LootEntry> vertical = new LinkedList<>();
+
+        for (LootEntry entry : entries) {
+            WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
+
+            if (direction != null) {
+                switch (direction) {
+                    case HORIZONTAL -> horizontal.add(entry);
+                    case VERTICAL -> vertical.add(entry);
+                }
+            } else {
+                LOGGER.error("Unregistered direction for entry {}", entry.getClass().getCanonicalName());
+            }
+        }
+
+        for (LootEntry entry : horizontal) {
+            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
+            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
+
+            if (widgetFactory != null && bounds != null) {
+                Bounds bound = bounds.apply(registry, entry, posX, posY);
+
+                if (bound.right() > 9 * 18) {
+                    posX = x + GROUP_WIDGET_WIDTH;
+                    posY += bound.height();
+                    bound = bounds.apply(registry, entry, posX, posY);
+                }
+
+                width = Math.max(width, bound.right() - x);
+                height = Math.max(height, bound.bottom() - y);
+                posX += bound.width();
+            } else {
+                //TODO placeholder
+            }
+        }
+
+        if (posX != x + GROUP_WIDGET_WIDTH) {
+            posY = y + height + VERTICAL_OFFSET;
+        }
+
+        posX = x + GROUP_WIDGET_WIDTH;
+
+        for (LootEntry entry : vertical) {
+            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
+            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
+
+            if (widgetFactory != null && bounds != null) {
+                Bounds bound = bounds.apply(registry, entry, posX, posY);
+
+                width = Math.max(width, bound.right() - x);
+                height = Math.max(height, bound.bottom() - y);
+                posY += bound.height() + VERTICAL_OFFSET;
+            } else {
+                //TODO placeholder
+            }
+        }
+
+        return new Bounds(x, y, width + GROUP_WIDGET_WIDTH, height);
     }
 }

@@ -5,6 +5,7 @@ import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.api.AliEntrypoint;
 import com.yanny.advanced_loot_info.api.IPlugin;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.jetbrains.annotations.NotNull;
@@ -20,22 +21,36 @@ public class PluginManager {
     public static AliRegistry REGISTRY;
     private static List<PluginHolder> PLUGINS;
 
-    public static void registerPlugins(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
+    public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
         PLUGINS = getPlugins();
         clear();
-        initialize();
+        initializeCommon();
     }
 
-    private static void initialize() {
+    public static void registerClientEvent(@SuppressWarnings("unused") FMLClientSetupEvent event) {
+        initializeClient();
+    }
+
+    private static void initializeCommon() {
         REGISTRY = new AliRegistry();
 
-        LOGGER.info("Registering plugin data...");
+        LOGGER.info("Registering common plugin data...");
 
         for (PluginHolder plugin : PLUGINS) {
-            plugin.plugin().register(REGISTRY);
+            plugin.plugin().registerCommon(REGISTRY);
         }
 
-        LOGGER.info("Registering plugin data finished");
+        LOGGER.info("Registering common plugin data finished");
+    }
+
+    private static void initializeClient() {
+        LOGGER.info("Registering client plugin data...");
+
+        for (PluginHolder plugin : PLUGINS) {
+            plugin.plugin().registerClient(REGISTRY);
+        }
+
+        LOGGER.info("Registering client plugin data finished");
     }
 
     private static void clear() {

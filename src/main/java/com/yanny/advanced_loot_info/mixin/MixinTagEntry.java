@@ -10,4 +10,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface MixinTagEntry {
     @Accessor
     TagKey<Item> getTag();
+
+    @Accessor
+    boolean getExpand();
 }

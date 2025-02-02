@@ -85,6 +85,7 @@
   "emi.description.advanced_loot_info.count_bonus": "%s (%s %s)",
   "emi.description.advanced_loot_info.quality": "Quality: %s",
   "emi.description.advanced_loot_info.rolls": "Rolls: %s",
+  "emi.description.advanced_loot_info.weight": "Weight: %s",
   "emi.enum.group_type.all": "Selects all entries",
   "emi.enum.group_type.alternatives": "Selects only first successful entry",
   "emi.enum.group_type.random": "Selects random entry",
