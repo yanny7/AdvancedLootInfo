@@ -2,6 +2,7 @@ package com.yanny.advanced_loot_info.plugin.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;
+import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.entry.TagEntry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.widget.Bounds;
@@ -29,10 +30,10 @@ public class TagWidget extends Widget {
         allConditions.addAll(tagEntry.conditions);
 
         float rawChance = (float) tagEntry.weight / sumWeight;
-        RangeValue chance = WidgetUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = WidgetUtils.getBonusChance(allConditions, rawChance);
-        RangeValue count = WidgetUtils.getCount(allFunctions);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = WidgetUtils.getBonusCount(allFunctions, count);
+        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
+        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        RangeValue count = TooltipUtils.getCount(allFunctions);
+        Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
 
         widget = new LootSlotWidget(tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions).recipeContext(recipe);
         bounds = widget.getBounds();

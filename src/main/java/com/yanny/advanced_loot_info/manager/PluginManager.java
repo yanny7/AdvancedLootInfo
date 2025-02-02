@@ -23,7 +23,6 @@ public class PluginManager {
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
         PLUGINS = getPlugins();
-        clear();
         initializeCommon();
     }
 
@@ -51,10 +50,6 @@ public class PluginManager {
         }
 
         LOGGER.info("Registering client plugin data finished");
-    }
-
-    private static void clear() {
-        //TODO clear
     }
 
     @NotNull

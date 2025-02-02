@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.IClientRegistry;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.loot.LootPoolEntry;
+import com.yanny.advanced_loot_info.plugin.WidgetUtils;
 import com.yanny.advanced_loot_info.plugin.widget.CompositeWidget;
 import com.yanny.advanced_loot_info.plugin.widget.ItemWidget;
 import com.yanny.advanced_loot_info.plugin.widget.ReferenceWidget;
@@ -17,8 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.TEXTURE_LOC;
-import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.getLootPoolTypeWidget;
+import static com.yanny.advanced_loot_info.plugin.WidgetUtils.TEXTURE_LOC;
 
 public class LootPoolWidget extends Widget {
     private final List<Widget> widgets;
@@ -32,7 +32,7 @@ public class LootPoolWidget extends Widget {
         Pair<List<Widget>, Bounds> info = registry.createWidgets(recipe, registry, entry.entries, x, y, allFunctions, List.copyOf(entry.conditions));
 
         widgets = info.getFirst();
-        widgets.add(getLootPoolTypeWidget(x, y, entry.rolls, entry.bonusRolls));
+        widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, entry.rolls, entry.bonusRolls));
         bounds = info.getSecond();
     }
 

@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.GROUP_WIDGET_WIDTH;
-import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.VERTICAL_OFFSET;
+import static com.yanny.advanced_loot_info.plugin.WidgetUtils.GROUP_WIDGET_WIDTH;
+import static com.yanny.advanced_loot_info.plugin.WidgetUtils.VERTICAL_OFFSET;
 
 public class AliRegistry implements ICommonRegistry, IClientRegistry {
     public final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>>> functionMap = new HashMap<>();
@@ -349,8 +349,6 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                     case HORIZONTAL -> horizontal.add(entry);
                     case VERTICAL -> vertical.add(entry);
                 }
-            } else {
-                LOGGER.error("Unregistered direction for entry {}", entry.getClass().getCanonicalName());
             }
         }
 
@@ -372,8 +370,6 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                 height = Math.max(height, bound.bottom() - y);
                 posX += bound.width();
                 widgets.add(widget);
-            } else {
-                //TODO placeholder
             }
         }
 
@@ -395,8 +391,6 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                 height = Math.max(height, bound.bottom() - y);
                 posY += bound.height() + VERTICAL_OFFSET;
                 widgets.add(widget);
-            } else {
-                //TODO placeholder
             }
         }
 
@@ -418,8 +412,6 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                     case HORIZONTAL -> horizontal.add(entry);
                     case VERTICAL -> vertical.add(entry);
                 }
-            } else {
-                LOGGER.error("Unregistered direction for entry {}", entry.getClass().getCanonicalName());
             }
         }
 
@@ -439,8 +431,6 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
                 posX += bound.width();
-            } else {
-                //TODO placeholder
             }
         }
 
@@ -460,8 +450,6 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
                 posY += bound.height() + VERTICAL_OFFSET;
-            } else {
-                //TODO placeholder
             }
         }
 

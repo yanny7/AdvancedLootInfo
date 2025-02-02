@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.api.RangeValue;
+import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.entry.ItemEntry;
 import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;
 import com.yanny.advanced_loot_info.plugin.entry.TagEntry;
@@ -69,16 +70,16 @@ public class LootSlotWidget extends SlotWidget {
     private void setupTooltip(SingletonEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                               RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
                               List<ILootCondition> conditions) {
-        WidgetUtils.getQuality(entry).forEach(this::appendTooltip);
+        TooltipUtils.getQuality(entry).forEach(this::appendTooltip);
 
-        appendTooltip(WidgetUtils.getChance(chance));
-        WidgetUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
+        appendTooltip(TooltipUtils.getChance(chance));
+        TooltipUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
 
-        appendTooltip(WidgetUtils.getCount(count));
-        WidgetUtils.getBonusCount(bonusCount).forEach(this::appendTooltip);
+        appendTooltip(TooltipUtils.getCount(count));
+        TooltipUtils.getBonusCount(bonusCount).forEach(this::appendTooltip);
 
-        WidgetUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
-        WidgetUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
+        TooltipUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
+        TooltipUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
 
         setCount(count);
     }

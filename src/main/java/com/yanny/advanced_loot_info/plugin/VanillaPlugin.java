@@ -98,7 +98,7 @@ public class VanillaPlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        WidgetPlugin.initialize(registry);
+        ClientPlugin.initialize(registry);
     }
 
     @NotNull

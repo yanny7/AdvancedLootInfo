@@ -4,7 +4,7 @@ import com.yanny.advanced_loot_info.api.IClientRegistry;
 import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.api.LootEntry;
-import com.yanny.advanced_loot_info.compatibility.WidgetUtils;
+import com.yanny.advanced_loot_info.plugin.WidgetUtils;
 import com.yanny.advanced_loot_info.plugin.entry.CompositeEntry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 

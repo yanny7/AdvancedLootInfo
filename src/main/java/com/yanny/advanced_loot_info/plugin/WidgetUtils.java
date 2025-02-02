@@ -1,7 +1,8 @@
-package com.yanny.advanced_loot_info.compatibility;
+package com.yanny.advanced_loot_info.plugin;
 
 import com.yanny.advanced_loot_info.Utils;
 import com.yanny.advanced_loot_info.api.RangeValue;
+import com.yanny.advanced_loot_info.compatibility.EmiUtils;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.network.chat.Component;

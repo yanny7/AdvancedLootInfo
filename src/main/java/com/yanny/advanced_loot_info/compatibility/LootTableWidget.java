@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.*;
+import static com.yanny.advanced_loot_info.plugin.WidgetUtils.*;
 
 public class LootTableWidget extends Widget {
     private final List<Widget> widgets;

@@ -5,7 +5,7 @@ import com.yanny.advanced_loot_info.api.WidgetDirection;
 import com.yanny.advanced_loot_info.plugin.entry.*;
 import com.yanny.advanced_loot_info.plugin.widget.*;
 
-public class WidgetPlugin {
+public class ClientPlugin {
     public static void initialize(IClientRegistry registry) {
         registry.registerWidget(ItemEntry.class, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
         registry.registerWidget(EmptyEntry.class, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);

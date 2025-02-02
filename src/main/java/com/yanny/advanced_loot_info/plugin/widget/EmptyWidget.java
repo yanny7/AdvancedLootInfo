@@ -3,6 +3,7 @@ package com.yanny.advanced_loot_info.plugin.widget;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;
+import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.entry.EmptyEntry;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.stack.EmiStack;
@@ -37,8 +38,8 @@ public class EmptyWidget extends Widget {
         allConditions.addAll(emptyEntry.conditions);
 
         float rawChance = (float) emptyEntry.weight / sumWeight;
-        RangeValue chance = WidgetUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = WidgetUtils.getBonusChance(allConditions, rawChance);
+        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
+        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         bounds = getBounds(registry, entry, x, y);
         widget = new SlotWidget(EmiStack.of(Items.BARRIER), x, y).drawBack(false);
@@ -47,13 +48,13 @@ public class EmptyWidget extends Widget {
 
     private void setupTooltip(EmptyEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                               List<ILootFunction> functions, List<ILootCondition> conditions) {
-        WidgetUtils.getQuality(entry).forEach(this::appendTooltip);
+        TooltipUtils.getQuality(entry).forEach(this::appendTooltip);
 
-        appendTooltip(WidgetUtils.getChance(chance));
-        WidgetUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
+        appendTooltip(TooltipUtils.getChance(chance));
+        TooltipUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
 
-        WidgetUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
-        WidgetUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
+        TooltipUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
+        TooltipUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
     }
 
     public void appendTooltip(Component text) {

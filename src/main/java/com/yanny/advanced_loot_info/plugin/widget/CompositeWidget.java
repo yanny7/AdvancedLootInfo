@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.WidgetUtils.TEXTURE_LOC;
+import static com.yanny.advanced_loot_info.plugin.WidgetUtils.TEXTURE_LOC;
 
 public class CompositeWidget extends Widget {
     private final Bounds bounds;
