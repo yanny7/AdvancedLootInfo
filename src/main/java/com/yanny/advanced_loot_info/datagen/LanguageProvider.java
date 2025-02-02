@@ -81,6 +81,7 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
         add("emi.enum.group_type.random", "Selects random entry");
         add("emi.enum.group_type.alternatives", "Selects only first successful entry");
         add("emi.enum.group_type.sequence", "Selects entries sequentially until first failed");
+        add("emi.enum.group_type.dynamic", "Dynamic block-specific drops");
 
         add("emi.property.condition.unknown", "Unknown Condition: %s");
         add("emi.property.condition.predicate.target", "Target: %s");

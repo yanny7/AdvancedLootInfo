@@ -88,6 +88,7 @@
   "emi.description.advanced_loot_info.weight": "Weight: %s",
   "emi.enum.group_type.all": "Selects all entries",
   "emi.enum.group_type.alternatives": "Selects only first successful entry",
+  "emi.enum.group_type.dynamic": "Dynamic block-specific drops",
   "emi.enum.group_type.random": "Selects random entry",
   "emi.enum.group_type.sequence": "Selects entries sequentially until first failed",
   "emi.enum.name_source.block_entity": "Block Entity",

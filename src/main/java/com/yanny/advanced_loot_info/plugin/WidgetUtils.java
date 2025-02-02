@@ -44,7 +44,7 @@ public class WidgetUtils {
 
     @NotNull
     public static Widget getAlternativesWidget(int x, int y) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, 18, 2 * GROUP_WIDGET_WIDTH, 18);
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
         components.add(EmiUtils.translatable("emi.enum.group_type.alternatives"));
@@ -54,7 +54,7 @@ public class WidgetUtils {
 
     @NotNull
     public static Widget getSequentialWidget(int x, int y) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, 18, 3 * GROUP_WIDGET_WIDTH, 18);
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
         components.add(EmiUtils.translatable("emi.enum.group_type.sequence"));
@@ -68,6 +68,16 @@ public class WidgetUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(EmiUtils.translatable("emi.enum.group_type.all"));
+        widget.tooltipText(components);
+        return widget;
+    }
+
+    @NotNull
+    public static Widget getDynamicWidget(int x, int y) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+        List<Component> components = new LinkedList<>();
+
+        components.add(EmiUtils.translatable("emi.enum.group_type.dynamic"));
         widget.tooltipText(components);
         return widget;
     }
