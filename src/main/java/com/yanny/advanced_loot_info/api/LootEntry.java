@@ -10,14 +10,14 @@ public abstract class LootEntry implements ILootEntry {
     public final List<ILootCondition> conditions;
 
     public LootEntry(IContext context, LootPoolEntryContainer entry) {
-        conditions = context.registry().convertConditions(context, ((MixinLootPoolEntryContainer) entry).getConditions());
+        conditions = context.utils().convertConditions(context, ((MixinLootPoolEntryContainer) entry).getConditions());
     }
 
     public LootEntry(IContext context, FriendlyByteBuf buf) {
-        conditions = context.registry().decodeConditions(context, buf);
+        conditions = context.utils().decodeConditions(context, buf);
     }
 
     public void encode(IContext context, FriendlyByteBuf buf) {
-        context.registry().encodeConditions(context, buf, conditions);
+        context.utils().encodeConditions(context, buf, conditions);
     }
 }

@@ -25,7 +25,7 @@ public class SetStewEffectFunction extends LootConditionalFunction {
         super(context, function);
         effectMap = ((MixinSetStewEffectFunction) function).getEffectDurationMap().entrySet().stream().collect(Collectors.toMap(
                 (e) -> ForgeRegistries.MOB_EFFECTS.getKey(e.getKey()),
-                (e) -> context.registry().convertNumber(context, e.getValue())
+                (e) -> context.utils().convertNumber(context, e.getValue())
         ));
     }
 

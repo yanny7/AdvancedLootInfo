@@ -12,15 +12,15 @@ public abstract class CompositeCondition implements ILootCondition {
     public final List<ILootCondition> terms;
 
     public CompositeCondition(IContext context, CompositeLootItemCondition condition) {
-        terms = context.registry().convertConditions(context, ((MixinCompositeLootItemCondition) condition).getTerms());
+        terms = context.utils().convertConditions(context, ((MixinCompositeLootItemCondition) condition).getTerms());
     }
 
     public CompositeCondition(IContext context, FriendlyByteBuf buf) {
-        terms = context.registry().decodeConditions(context, buf);
+        terms = context.utils().decodeConditions(context, buf);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        context.registry().encodeConditions(context, buf, terms);
+        context.utils().encodeConditions(context, buf, terms);
     }
 }

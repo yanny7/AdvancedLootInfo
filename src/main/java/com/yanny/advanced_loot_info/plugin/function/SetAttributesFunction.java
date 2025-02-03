@@ -27,7 +27,7 @@ public class SetAttributesFunction extends LootConditionalFunction {
                     m.getName(),
                     ForgeRegistries.ATTRIBUTES.getKey(m.getAttribute()),
                     m.getOperation().toValue(),
-                    context.registry().convertNumber(context, m.getAmount()),
+                    context.utils().convertNumber(context, m.getAmount()),
                     m.getId() != null ? m.getId().toString() : null,
                     Arrays.stream(m.getSlots()).map(EquipmentSlot::getName).toList()
             );

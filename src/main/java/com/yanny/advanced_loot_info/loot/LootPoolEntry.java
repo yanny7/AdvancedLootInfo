@@ -18,25 +18,25 @@ public final class LootPoolEntry implements ILootEntry {
     public final RangeValue bonusRolls;
 
     public LootPoolEntry(IContext context, LootPool lootPool) {
-        entries = context.registry().convertEntries(context, ((MixinLootPool) lootPool).getEntries());
-        conditions = context.registry().convertConditions(context, ((MixinLootPool) lootPool).getConditions());
-        functions = context.registry().convertFunctions(context, ((MixinLootPool) lootPool).getFunctions());
-        rolls = context.registry().convertNumber(context, ((MixinLootPool) lootPool).getRolls());
-        bonusRolls = context.registry().convertNumber(context, ((MixinLootPool) lootPool).getBonusRolls());
+        entries = context.utils().convertEntries(context, ((MixinLootPool) lootPool).getEntries());
+        conditions = context.utils().convertConditions(context, ((MixinLootPool) lootPool).getConditions());
+        functions = context.utils().convertFunctions(context, ((MixinLootPool) lootPool).getFunctions());
+        rolls = context.utils().convertNumber(context, ((MixinLootPool) lootPool).getRolls());
+        bonusRolls = context.utils().convertNumber(context, ((MixinLootPool) lootPool).getBonusRolls());
     }
 
     public LootPoolEntry(IContext context, FriendlyByteBuf buf) {
-        entries = context.registry().decodeEntries(context, buf);
-        conditions = context.registry().decodeConditions(context, buf);
-        functions = context.registry().decodeFunctions(context, buf);
+        entries = context.utils().decodeEntries(context, buf);
+        conditions = context.utils().decodeConditions(context, buf);
+        functions = context.utils().decodeFunctions(context, buf);
         rolls = new RangeValue(buf);
         bonusRolls = new RangeValue(buf);
     }
 
     public void encode(IContext context, FriendlyByteBuf buf) {
-        context.registry().encodeEntries(context, buf, entries);
-        context.registry().encodeConditions(context, buf, conditions);
-        context.registry().encodeFunctions(context, buf, functions);
+        context.utils().encodeEntries(context, buf, entries);
+        context.utils().encodeConditions(context, buf, conditions);
+        context.utils().encodeFunctions(context, buf, functions);
         rolls.encode(buf);
         bonusRolls.encode(buf);
     }

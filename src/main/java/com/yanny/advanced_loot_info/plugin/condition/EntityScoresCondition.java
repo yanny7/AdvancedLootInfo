@@ -27,8 +27,8 @@ public class EntityScoresCondition implements ILootCondition {
         target = ((MixinEntityHasScoreCondition) condition).getEntityTarget();
         scores = ((MixinEntityHasScoreCondition) condition).getScores().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, (e) -> new Tuple<>(
-                        context.registry().convertNumber(context, ((MixinIntRange)e.getValue()).getMin()),
-                        context.registry().convertNumber(context, ((MixinIntRange)e.getValue()).getMax())
+                        context.utils().convertNumber(context, ((MixinIntRange)e.getValue()).getMin()),
+                        context.utils().convertNumber(context, ((MixinIntRange)e.getValue()).getMax())
                 )));
     }
 

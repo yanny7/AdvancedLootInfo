@@ -21,7 +21,7 @@ public class ItemWidget extends EntryWidget {
     private final Bounds bounds;
     private final LootEntry entry;
 
-    public ItemWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
+    public ItemWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
                       List<ILootFunction> functions, List<ILootCondition> conditions) {
         ItemEntry itemEntry = (ItemEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -72,7 +72,7 @@ public class ItemWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
         return new Bounds(x, y, 18, 18);
     }
 }

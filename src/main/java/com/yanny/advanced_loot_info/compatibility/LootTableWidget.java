@@ -1,6 +1,6 @@
 package com.yanny.advanced_loot_info.compatibility;
 
-import com.yanny.advanced_loot_info.api.IClientRegistry;
+import com.yanny.advanced_loot_info.api.IClientUtils;
 import com.yanny.advanced_loot_info.loot.LootPoolEntry;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -19,7 +19,7 @@ public class LootTableWidget extends Widget {
     private final List<Widget> widgets;
     private final Bounds bounds;
 
-    public LootTableWidget(EmiRecipe recipe, IClientRegistry registry, LootTableEntry entry, int x, int y) {
+    public LootTableWidget(EmiRecipe recipe, IClientUtils utils, LootTableEntry entry, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
@@ -27,7 +27,7 @@ public class LootTableWidget extends Widget {
         widgets.add(getLootTableTypeWidget(x, y));
 
         for (LootPoolEntry pool : entry.pools) {
-            Widget widget = new LootPoolWidget(recipe, registry, pool, posX, posY, List.copyOf(entry.functions));
+            Widget widget = new LootPoolWidget(recipe, utils, pool, posX, posY, List.copyOf(entry.functions));
             Bounds bound = widget.getBounds();
 
             width = Math.max(width, bound.width());
@@ -107,12 +107,12 @@ public class LootTableWidget extends Widget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootTableEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, LootTableEntry entry, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
         for (LootPoolEntry pool : entry.pools) {
-            Bounds bound = LootPoolWidget.getBounds(registry, pool, posX, posY);
+            Bounds bound = LootPoolWidget.getBounds(utils, pool, posX, posY);
 
             width = Math.max(width, bound.width());
             height += bound.height() + VERTICAL_OFFSET;

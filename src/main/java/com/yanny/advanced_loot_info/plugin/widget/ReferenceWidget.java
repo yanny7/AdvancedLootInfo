@@ -18,12 +18,12 @@ public class ReferenceWidget extends EntryWidget {
     private final Widget widget;
     private final LootEntry entry;
 
-    public ReferenceWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
+    public ReferenceWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
         LootTableEntry tableEntry = ((ReferenceEntry) entry).lootTable;
 
         if (tableEntry != null) {
-            widget = new LootTableWidget(recipe, registry, tableEntry, x, y);
+            widget = new LootTableWidget(recipe, utils, tableEntry, x, y);
         } else {
             widget = new Widget() {
                 @Override
@@ -73,11 +73,11 @@ public class ReferenceWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
         LootTableEntry lootTableEntry = ((ReferenceEntry) entry).lootTable;
 
         if (lootTableEntry != null) {
-            return LootTableWidget.getBounds(registry, lootTableEntry, x, y);
+            return LootTableWidget.getBounds(utils, lootTableEntry, x, y);
         } else {
             return new Bounds(x, y, 0, 18);
         }

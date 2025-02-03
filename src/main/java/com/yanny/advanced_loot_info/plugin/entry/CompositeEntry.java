@@ -16,18 +16,18 @@ public abstract class CompositeEntry extends LootEntry {
 
     public CompositeEntry(IContext context, LootPoolEntryContainer entry) {
         super(context, entry);
-        children = context.registry().convertEntries(context, ((MixinCompositeEntryBase) entry).getChildren());
+        children = context.utils().convertEntries(context, ((MixinCompositeEntryBase) entry).getChildren());
     }
 
     public CompositeEntry(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        children = context.registry().decodeEntries(context, buf);
+        children = context.utils().decodeEntries(context, buf);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        context.registry().encodeEntries(context, buf, children);
+        context.utils().encodeEntries(context, buf, children);
     }
 
     @NotNull

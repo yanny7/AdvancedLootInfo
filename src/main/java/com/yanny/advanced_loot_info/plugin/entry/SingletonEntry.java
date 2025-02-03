@@ -16,14 +16,14 @@ public abstract class SingletonEntry extends LootEntry {
 
     public SingletonEntry(IContext context, LootPoolEntryContainer entry) {
         super(context, entry);
-        functions = context.registry().convertFunctions(context, ((MixinLootPoolSingletonContainer) entry).getFunctions());
+        functions = context.utils().convertFunctions(context, ((MixinLootPoolSingletonContainer) entry).getFunctions());
         weight = ((MixinLootPoolSingletonContainer) entry).getWeight();
         quality = ((MixinLootPoolSingletonContainer) entry).getQuality();
     }
 
     public SingletonEntry(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        functions = context.registry().decodeFunctions(context, buf);
+        functions = context.utils().decodeFunctions(context, buf);
         weight = buf.readInt();
         quality = buf.readInt();
     }
@@ -31,7 +31,7 @@ public abstract class SingletonEntry extends LootEntry {
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        context.registry().encodeFunctions(context, buf, functions);
+        context.utils().encodeFunctions(context, buf, functions);
         buf.writeInt(weight);
         buf.writeInt(quality);
     }

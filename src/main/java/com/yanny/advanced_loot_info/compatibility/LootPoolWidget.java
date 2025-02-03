@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.compatibility;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.EntryWidget;
-import com.yanny.advanced_loot_info.api.IClientRegistry;
+import com.yanny.advanced_loot_info.api.IClientUtils;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.api.WidgetDirection;
 import com.yanny.advanced_loot_info.loot.LootPoolEntry;
@@ -22,19 +22,19 @@ import static com.yanny.advanced_loot_info.plugin.WidgetUtils.TEXTURE_LOC;
 public class LootPoolWidget extends Widget {
     private final List<Widget> widgets;
     private final Bounds bounds;
-    private final IClientRegistry registry;
+    private final IClientUtils utils;
 
-    public LootPoolWidget(EmiRecipe recipe, IClientRegistry registry, LootPoolEntry entry, int x, int y, List<ILootFunction> functions) {
+    public LootPoolWidget(EmiRecipe recipe, IClientUtils utils, LootPoolEntry entry, int x, int y, List<ILootFunction> functions) {
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
 
         allFunctions.addAll(entry.functions);
 
-        Pair<List<EntryWidget>, Bounds> info = registry.createWidgets(recipe, registry, entry.entries, x, y, allFunctions, List.copyOf(entry.conditions));
+        Pair<List<EntryWidget>, Bounds> info = utils.createWidgets(recipe, utils, entry.entries, x, y, allFunctions, List.copyOf(entry.conditions));
 
         widgets = new LinkedList<>(info.getFirst());
         widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, entry.rolls, entry.bonusRolls));
         bounds = info.getSecond();
-        this.registry = registry;
+        this.utils = utils;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class LootPoolWidget extends Widget {
             widget.render(guiGraphics, mouseX, mouseY, delta);
 
             if (widget instanceof EntryWidget entryWidget) {
-                WidgetDirection direction = registry.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
 
                 if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
                     lastY = Math.max(lastY, widget.getBounds().y());
@@ -69,7 +69,7 @@ public class LootPoolWidget extends Widget {
 
         for (Widget widget : widgets) {
             if (widget instanceof EntryWidget entryWidget) {
-                WidgetDirection direction = registry.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
 
                 if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getBounds().y() > bounds.y() + 18) {
                     guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
@@ -122,7 +122,7 @@ public class LootPoolWidget extends Widget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootPoolEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils registry, LootPoolEntry entry, int x, int y) {
         return registry.getBounds(registry, entry.entries, x, y);
     }
 }

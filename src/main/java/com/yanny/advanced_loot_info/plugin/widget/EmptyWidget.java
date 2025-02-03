@@ -29,7 +29,7 @@ public class EmptyWidget extends EntryWidget {
     private final Widget widget;
     private final LootEntry entry;
 
-    public EmptyWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
+    public EmptyWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
                        List<ILootFunction> functions, List<ILootCondition> conditions) {
         EmptyEntry emptyEntry = (EmptyEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -42,7 +42,7 @@ public class EmptyWidget extends EntryWidget {
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
         Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
-        bounds = getBounds(registry, entry, x, y);
+        bounds = getBounds(utils, entry, x, y);
         widget = new SlotWidget(EmiStack.of(Items.BARRIER), x, y).drawBack(false);
         this.entry = entry;
         setupTooltip(emptyEntry, chance, bonusChance, allFunctions, allConditions);
@@ -90,7 +90,7 @@ public class EmptyWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
         return new Bounds(x, y, 18, 18);
     }
 }

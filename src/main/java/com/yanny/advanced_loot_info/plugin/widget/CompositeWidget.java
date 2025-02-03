@@ -19,20 +19,20 @@ public class CompositeWidget extends EntryWidget {
     private final Bounds bounds;
     protected final List<Widget> widgets;
     private final LootEntry entry;
-    private final IClientRegistry registry;
+    private final IClientUtils utils;
 
-    public CompositeWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
+    public CompositeWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
         List<ILootCondition> allConditions = new LinkedList<>(conditions);
 
         allConditions.addAll(entry.conditions);
 
-        Pair<List<EntryWidget>, Bounds> pair = registry.createWidgets(recipe, registry, ((CompositeEntry) entry).children, x, y, List.copyOf(functions), allConditions);
+        Pair<List<EntryWidget>, Bounds> pair = utils.createWidgets(recipe, utils, ((CompositeEntry) entry).children, x, y, List.copyOf(functions), allConditions);
 
         widgets = new LinkedList<>(pair.getFirst());
         bounds = pair.getSecond();
         this.entry = entry;
-        this.registry = registry;
+        this.utils = utils;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CompositeWidget extends EntryWidget {
             widget.render(guiGraphics, mouseX, mouseY, delta);
 
             if (widget instanceof EntryWidget entryWidget) {
-                WidgetDirection direction = registry.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
 
                 if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
                     lastY = Math.max(lastY, widget.getBounds().y());
@@ -72,7 +72,7 @@ public class CompositeWidget extends EntryWidget {
 
         for (Widget widget : widgets) {
             if (widget instanceof EntryWidget entryWidget) {
-                WidgetDirection direction = registry.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
 
                 if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getBounds().y() > bounds.y() + 18) {
                     guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
@@ -125,7 +125,7 @@ public class CompositeWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootEntry entry, int x, int y) {
-        return registry.getBounds(registry, ((CompositeEntry) entry).children, x, y);
+    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
+        return utils.getBounds(utils, ((CompositeEntry) entry).children, x, y);
     }
 }

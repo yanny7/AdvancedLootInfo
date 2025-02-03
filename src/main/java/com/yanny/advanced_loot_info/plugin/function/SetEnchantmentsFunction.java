@@ -26,7 +26,7 @@ public class SetEnchantmentsFunction extends LootConditionalFunction {
         super(context, function);
         enchantments = ((MixinSetEnchantmentsFunction) function).getEnchantments().entrySet().stream().collect(Collectors.toMap(
                 (e) -> ForgeRegistries.ENCHANTMENTS.getKey(e.getKey()),
-                (e) -> context.registry().convertNumber(context, e.getValue())
+                (e) -> context.utils().convertNumber(context, e.getValue())
         ));
         add = ((MixinSetEnchantmentsFunction) function).getAdd();
     }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 public interface IContext {
     @Nullable LootContext lootContext();
 
-    ICommonRegistry registry();
+    ICommonUtils utils();
 
     @Nullable LootDataManager lootDataManager();
 }

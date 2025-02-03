@@ -18,7 +18,7 @@ public class LootTableEntry implements ILootEntry {
 
     public LootTableEntry(IContext context, LootTable table) {
         pools = ((MixinLootTable) table).getPools().stream().map((pool) -> new LootPoolEntry(context, pool)).toList();
-        functions = context.registry().convertFunctions(context, ((MixinLootTable) table).getFunctions());
+        functions = context.utils().convertFunctions(context, ((MixinLootTable) table).getFunctions());
     }
 
     public LootTableEntry(IContext context, FriendlyByteBuf buf) {
@@ -30,7 +30,7 @@ public class LootTableEntry implements ILootEntry {
             pools.add(new LootPoolEntry(context, buf));
         }
 
-        functions = context.registry().decodeFunctions(context, buf);
+        functions = context.utils().decodeFunctions(context, buf);
     }
 
     public void encode(IContext context, FriendlyByteBuf buf) {
@@ -40,7 +40,7 @@ public class LootTableEntry implements ILootEntry {
             pool.encode(context, buf);
         }
 
-        context.registry().encodeFunctions(context, buf, functions);
+        context.utils().encodeFunctions(context, buf, functions);
     }
 
     @NotNull

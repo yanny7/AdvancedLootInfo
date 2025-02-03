@@ -19,16 +19,16 @@ public class InvertedCondition implements ILootCondition {
 
     public InvertedCondition(IContext context, LootItemCondition condition) {
         LootItemCondition termCondition = ((MixinInvertedLootItemCondition) condition).getTerm();
-        term = context.registry().convertCondition(context, termCondition);
+        term = context.utils().convertCondition(context, termCondition);
     }
 
     public InvertedCondition(IContext context, FriendlyByteBuf buf) {
-        term = context.registry().decodeCondition(context, buf);
+        term = context.utils().decodeCondition(context, buf);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        context.registry().encodeCondition(context, buf, term);
+        context.utils().encodeCondition(context, buf, term);
     }
 
     @Override

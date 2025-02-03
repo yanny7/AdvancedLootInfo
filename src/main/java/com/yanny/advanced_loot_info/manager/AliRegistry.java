@@ -28,7 +28,7 @@ import java.util.function.BiFunction;
 import static com.yanny.advanced_loot_info.plugin.WidgetUtils.GROUP_WIDGET_WIDTH;
 import static com.yanny.advanced_loot_info.plugin.WidgetUtils.VERTICAL_OFFSET;
 
-public class AliRegistry implements ICommonRegistry, IClientRegistry {
+public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
 
@@ -327,8 +327,8 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
     }
 
     @Override
-    public Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientRegistry registry, List<LootEntry> entries, int x, int y,
-                                                    List<ILootFunction> functions, List<ILootCondition> conditions) {
+    public Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientUtils utils, List<LootEntry> entries, int x, int y,
+                                                         List<ILootFunction> functions, List<ILootCondition> conditions) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
         int sumWeight = 0;
@@ -352,15 +352,15 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                     posY = y + height + VERTICAL_OFFSET;
                 }
 
-                Bounds bound = bounds.apply(registry, entry, posX, posY);
+                Bounds bound = bounds.apply(utils, entry, posX, posY);
 
                 if (bound.right() > 9 * 18) {
                     posX = x + GROUP_WIDGET_WIDTH;
                     posY += bound.height();
-                    bound = bounds.apply(registry, entry, posX, posY);
+                    bound = bounds.apply(utils, entry, posX, posY);
                 }
 
-                EntryWidget widget = widgetFactory.create(recipe, registry, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
+                EntryWidget widget = widgetFactory.create(recipe, utils, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
 
@@ -389,7 +389,7 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
     }
 
     @Override
-    public Bounds getBounds(IClientRegistry registry, List<LootEntry> entries, int x, int y) {
+    public Bounds getBounds(IClientUtils utils, List<LootEntry> entries, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
         WidgetDirection lastDirection = null;
@@ -405,12 +405,12 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
                     posY = y + height + VERTICAL_OFFSET;
                 }
 
-                Bounds bound = bounds.apply(registry, entry, posX, posY);
+                Bounds bound = bounds.apply(utils, entry, posX, posY);
 
                 if (bound.right() > 9 * 18) {
                     posX = x + GROUP_WIDGET_WIDTH;
                     posY += bound.height();
-                    bound = bounds.apply(registry, entry, posX, posY);
+                    bound = bounds.apply(utils, entry, posX, posY);
                 }
 
                 width = Math.max(width, bound.right() - x);

@@ -27,7 +27,7 @@ public class DynamicWidget extends EntryWidget {
     private final Widget widget;
     private final LootEntry entry;
 
-    public DynamicWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
+    public DynamicWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
                          List<ILootFunction> functions, List<ILootCondition> conditions) {
         DynamicEntry dynamicEntry = (DynamicEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -98,7 +98,7 @@ public class DynamicWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
         return new Bounds(x, y, 7, 18);
     }
 }

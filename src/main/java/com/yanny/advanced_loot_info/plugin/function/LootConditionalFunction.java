@@ -13,15 +13,15 @@ public abstract class LootConditionalFunction implements ILootFunction {
     public final List<ILootCondition> conditions;
 
     public LootConditionalFunction(IContext context, LootItemFunction function) {
-        conditions = context.registry().convertConditions(context, ((MixinLootItemConditionalFunction) function).getPredicates());
+        conditions = context.utils().convertConditions(context, ((MixinLootItemConditionalFunction) function).getPredicates());
     }
 
     public LootConditionalFunction(IContext context, FriendlyByteBuf buf) {
-        conditions = context.registry().decodeConditions(context, buf);
+        conditions = context.utils().decodeConditions(context, buf);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        context.registry().encodeConditions(context, buf, conditions);
+        context.utils().encodeConditions(context, buf, conditions);
     }
 }

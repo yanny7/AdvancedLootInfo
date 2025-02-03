@@ -115,8 +115,8 @@ public class VanillaPlugin implements IPlugin {
     @NotNull
     private static RangeValue convertUniform(IContext context, NumberProvider numberProvider) {
         MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
-        return new RangeValue(context.registry().convertNumber(context, uniformGenerator.getMin()).min(),
-                context.registry().convertNumber(context, uniformGenerator.getMax()).max());
+        return new RangeValue(context.utils().convertNumber(context, uniformGenerator.getMin()).min(),
+                context.utils().convertNumber(context, uniformGenerator.getMax()).max());
     }
 
     @NotNull

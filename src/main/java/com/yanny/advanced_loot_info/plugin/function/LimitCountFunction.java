@@ -23,8 +23,8 @@ public class LimitCountFunction extends LootConditionalFunction {
     public LimitCountFunction(IContext context, LootItemFunction function) {
         super(context, function);
         IntRange range = ((MixinLimitCount) function).getLimiter();
-        min = context.registry().convertNumber(context, ((MixinIntRange) range).getMin());
-        max = context.registry().convertNumber(context, ((MixinIntRange) range).getMax());
+        min = context.utils().convertNumber(context, ((MixinIntRange) range).getMin());
+        max = context.utils().convertNumber(context, ((MixinIntRange) range).getMax());
     }
 
     public LimitCountFunction(IContext context, FriendlyByteBuf buf) {

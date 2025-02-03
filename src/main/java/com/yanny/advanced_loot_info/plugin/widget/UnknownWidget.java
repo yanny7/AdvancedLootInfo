@@ -12,9 +12,9 @@ public class UnknownWidget extends EntryWidget {
     private final Bounds bounds;
     private final LootEntry entry;
 
-    public UnknownWidget(EmiRecipe recipe, IClientRegistry registry, LootEntry entry, int x, int y, int sumWeight,
+    public UnknownWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
                          List<ILootFunction> functions, List<ILootCondition> conditions) {
-        bounds = getBounds(registry, entry, x, y);
+        bounds = getBounds(utils, entry, x, y);
         this.entry = entry;
     }
 
@@ -33,7 +33,8 @@ public class UnknownWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientRegistry registry, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
+        //FIXME make actual widget
         return new Bounds(x, y, 0, 18);
     }
 }
