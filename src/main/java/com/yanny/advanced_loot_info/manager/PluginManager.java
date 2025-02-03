@@ -23,30 +23,38 @@ public class PluginManager {
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
         PLUGINS = getPlugins();
-        initializeCommon();
+        registerCommonData();
     }
 
     public static void registerClientEvent(@SuppressWarnings("unused") FMLClientSetupEvent event) {
-        initializeClient();
+        registerClientData();
     }
 
-    private static void initializeCommon() {
+    private static void registerCommonData() {
         REGISTRY = new AliRegistry();
         LOGGER.info("Registering common plugin data...");
 
         for (PluginHolder plugin : PLUGINS) {
-            plugin.plugin().registerCommon(REGISTRY);
+            try {
+                plugin.plugin().registerCommon(REGISTRY);
+            } catch (Throwable throwable) {
+                LOGGER.error("Failed to register {} common part with error: {}", plugin.modId(), throwable.getMessage());
+            }
         }
 
         REGISTRY.printCommonInfo();
         LOGGER.info("Registering common plugin data finished");
     }
 
-    private static void initializeClient() {
+    private static void registerClientData() {
         LOGGER.info("Registering client plugin data...");
 
         for (PluginHolder plugin : PLUGINS) {
-            plugin.plugin().registerClient(REGISTRY);
+            try {
+                plugin.plugin().registerClient(REGISTRY);
+            } catch (Throwable throwable) {
+                LOGGER.error("Failed to register {} client part with error: {}", plugin.modId(), throwable.getMessage());
+            }
         }
 
         REGISTRY.printClientInfo();
