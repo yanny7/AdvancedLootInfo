@@ -32,13 +32,13 @@ public class PluginManager {
 
     private static void initializeCommon() {
         REGISTRY = new AliRegistry();
-
         LOGGER.info("Registering common plugin data...");
 
         for (PluginHolder plugin : PLUGINS) {
             plugin.plugin().registerCommon(REGISTRY);
         }
 
+        REGISTRY.printCommonInfo();
         LOGGER.info("Registering common plugin data finished");
     }
 
@@ -49,6 +49,7 @@ public class PluginManager {
             plugin.plugin().registerClient(REGISTRY);
         }
 
+        REGISTRY.printClientInfo();
         LOGGER.info("Registering client plugin data finished");
     }
 

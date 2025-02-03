@@ -29,19 +29,19 @@ import static com.yanny.advanced_loot_info.plugin.WidgetUtils.GROUP_WIDGET_WIDTH
 import static com.yanny.advanced_loot_info.plugin.WidgetUtils.VERTICAL_OFFSET;
 
 public class AliRegistry implements ICommonRegistry, IClientRegistry {
-    public final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>>> functionMap = new HashMap<>();
-    public final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>>> conditionMap = new HashMap<>();
-    public final Map<ResourceLocation, Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>>> entryMap = new HashMap<>();
-    public final Map<Class<?>, ResourceLocation> functionClassMap = new HashMap<>();
-    public final Map<Class<?>, ResourceLocation> conditionClassMap = new HashMap<>();
-    public final Map<Class<?>, ResourceLocation> entryClassMap = new HashMap<>();
-    public final Map<Class<?>, IWidgetFactory> widgetMap = new HashMap<>();
-    public final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
-    public final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
-    public final Map<ResourceLocation, BiFunction<IContext, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
-
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
+
+    private final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>>> functionMap = new HashMap<>();
+    private final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>>> conditionMap = new HashMap<>();
+    private final Map<ResourceLocation, Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>>> entryMap = new HashMap<>();
+    private final Map<Class<?>, ResourceLocation> functionClassMap = new HashMap<>();
+    private final Map<Class<?>, ResourceLocation> conditionClassMap = new HashMap<>();
+    private final Map<Class<?>, ResourceLocation> entryClassMap = new HashMap<>();
+    private final Map<Class<?>, IWidgetFactory> widgetMap = new HashMap<>();
+    private final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
+    private final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
+    private final Map<ResourceLocation, BiFunction<IContext, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
 
     @Override
     public <T extends ILootFunction> void registerFunction(Class<T> clazz,
@@ -443,5 +443,16 @@ public class AliRegistry implements ICommonRegistry, IClientRegistry {
     @Override
     public WidgetDirection getWidgetDirection(LootEntry entry) {
         return widgetDirectionMap.get(entry.getClass());
+    }
+
+    public void printCommonInfo() {
+        LOGGER.info("Registered {} loot functions", functionMap.size());
+        LOGGER.info("Registered {} loot conditions", conditionMap.size());
+        LOGGER.info("Registered {} loot pool entries", entryMap.size());
+        LOGGER.info("Registered {} number converters", numberConverterMap.size());
+    }
+
+    public void printClientInfo() {
+        LOGGER.info("Registered {} widgets", widgetMap.size());
     }
 }
