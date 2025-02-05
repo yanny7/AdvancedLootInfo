@@ -1,5 +1,6 @@
 package com.yanny.advanced_loot_info.api;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,4 +11,6 @@ public interface ILootEntry {
     default List<Item> collectItems() {
         return List.of();
     }
+
+    void encode(IContext context, FriendlyByteBuf buf);
 }

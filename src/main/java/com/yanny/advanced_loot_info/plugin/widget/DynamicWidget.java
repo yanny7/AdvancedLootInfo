@@ -25,9 +25,9 @@ public class DynamicWidget extends EntryWidget {
     private final List<Supplier<ClientTooltipComponent>> tooltipSuppliers = Lists.newArrayList();
     private final Bounds bounds;
     private final Widget widget;
-    private final LootEntry entry;
+    private final ILootEntry entry;
 
-    public DynamicWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
+    public DynamicWidget(EmiRecipe recipe, IClientUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                          List<ILootFunction> functions, List<ILootCondition> conditions) {
         DynamicEntry dynamicEntry = (DynamicEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -67,7 +67,7 @@ public class DynamicWidget extends EntryWidget {
     }
 
     @Override
-    public LootEntry getLootEntry() {
+    public ILootEntry getLootEntry() {
         return entry;
     }
 
@@ -98,7 +98,7 @@ public class DynamicWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
         return new Bounds(x, y, 7, 18);
     }
 }

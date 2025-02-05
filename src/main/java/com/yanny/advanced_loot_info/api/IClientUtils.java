@@ -8,10 +8,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface IClientUtils {
-    Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientUtils registry, List<LootEntry> entries, int x, int y, List<ILootFunction> functions, List<ILootCondition> conditions);
+    Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientUtils registry, List<ILootEntry> entries, int x, int y, List<ILootFunction> functions, List<ILootCondition> conditions);
 
-    Bounds getBounds(IClientUtils registry, List<LootEntry> entries, int x, int y);
+    Bounds getBounds(IClientUtils registry, List<ILootEntry> entries, int x, int y);
 
     @Nullable
-    WidgetDirection getWidgetDirection(LootEntry entry);
+    WidgetDirection getWidgetDirection(ILootEntry entry);
 }

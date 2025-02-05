@@ -24,12 +24,12 @@ public interface ICommonUtils {
     void encodeFunction(IContext context, FriendlyByteBuf buf, ILootFunction condition);
     void encodeFunctions(IContext context, FriendlyByteBuf buf, List<ILootFunction> functions);
 
-    LootEntry convertEntry(IContext context, LootPoolEntryContainer entry);
-    List<LootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries);
-    LootEntry decodeEntry(IContext context, FriendlyByteBuf buf);
-    List<LootEntry> decodeEntries(IContext context, FriendlyByteBuf buf);
-    void encodeEntry(IContext context, FriendlyByteBuf buf, LootEntry entry);
-    void encodeEntries(IContext context, FriendlyByteBuf buf, List<LootEntry> entries);
+    ILootEntry convertEntry(IContext context, LootPoolEntryContainer entry);
+    List<ILootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries);
+    ILootEntry decodeEntry(IContext context, FriendlyByteBuf buf);
+    List<ILootEntry> decodeEntries(IContext context, FriendlyByteBuf buf);
+    void encodeEntry(IContext context, FriendlyByteBuf buf, ILootEntry entry);
+    void encodeEntries(IContext context, FriendlyByteBuf buf, List<ILootEntry> entries);
 
     RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider);
 }

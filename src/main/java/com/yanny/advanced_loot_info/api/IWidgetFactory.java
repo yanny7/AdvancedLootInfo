@@ -6,6 +6,6 @@ import java.util.List;
 
 @FunctionalInterface
 public interface IWidgetFactory {
-    EntryWidget create(EmiRecipe recipe, IClientUtils registry, LootEntry entry, int x, int y, int totalWeight,
+    EntryWidget create(EmiRecipe recipe, IClientUtils registry, ILootEntry entry, int x, int y, int totalWeight,
                        List<ILootFunction> functions, List<ILootCondition> conditions);
 }

@@ -18,10 +18,10 @@ public interface ICommonRegistry {
                                                       ResourceLocation key,
                                                       BiFunction<IContext, LootItemCondition, ILootCondition> conditionEncoder,
                                                       BiFunction<IContext, FriendlyByteBuf, ILootCondition> conditionDecoder);
-    <T extends LootEntry> void registerEntry(Class<T> clazz,
+    <T extends ILootEntry> void registerEntry(Class<T> clazz,
                                              ResourceLocation key,
-                                             BiFunction<IContext, LootPoolEntryContainer, LootEntry> entryEncoder,
-                                             BiFunction<IContext, FriendlyByteBuf, LootEntry> entryDecoder);
+                                             BiFunction<IContext, LootPoolEntryContainer, ILootEntry> entryEncoder,
+                                             BiFunction<IContext, FriendlyByteBuf, ILootEntry> entryDecoder);
 
     void registerNumberProvider(ResourceLocation key, BiFunction<IContext, NumberProvider, RangeValue> converter);
 }

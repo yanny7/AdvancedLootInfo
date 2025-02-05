@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public final class LootPoolEntry implements ILootEntry {
-    public final List<LootEntry> entries;
+    public final List<ILootEntry> entries;
     public final List<ILootCondition> conditions;
     public final List<ILootFunction> functions;
     public final RangeValue rolls;
@@ -46,7 +46,7 @@ public final class LootPoolEntry implements ILootEntry {
     public List<Item> collectItems() {
         List<Item> items = new LinkedList<>();
 
-        for (LootEntry entry : entries) {
+        for (ILootEntry entry : entries) {
             items.addAll(entry.collectItems());
         }
 

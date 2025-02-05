@@ -34,7 +34,7 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
 
     private final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>>> functionMap = new HashMap<>();
     private final Map<ResourceLocation, Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>>> conditionMap = new HashMap<>();
-    private final Map<ResourceLocation, Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>>> entryMap = new HashMap<>();
+    private final Map<ResourceLocation, Pair<BiFunction<IContext, LootPoolEntryContainer, ILootEntry>, BiFunction<IContext, FriendlyByteBuf, ILootEntry>>> entryMap = new HashMap<>();
     private final Map<Class<?>, ResourceLocation> functionClassMap = new HashMap<>();
     private final Map<Class<?>, ResourceLocation> conditionClassMap = new HashMap<>();
     private final Map<Class<?>, ResourceLocation> entryClassMap = new HashMap<>();
@@ -62,16 +62,16 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public <T extends LootEntry> void registerEntry(Class<T> clazz,
+    public <T extends ILootEntry> void registerEntry(Class<T> clazz,
                                                     ResourceLocation key,
-                                                    BiFunction<IContext, LootPoolEntryContainer, LootEntry> entryEncoder,
-                                                    BiFunction<IContext, FriendlyByteBuf, LootEntry> entryDecoder) {
+                                                    BiFunction<IContext, LootPoolEntryContainer, ILootEntry> entryEncoder,
+                                                    BiFunction<IContext, FriendlyByteBuf, ILootEntry> entryDecoder) {
         entryMap.put(key, new Pair<>(entryEncoder, entryDecoder));
         entryClassMap.put(clazz, key);
     }
 
     @Override
-    public <T extends LootEntry> void registerWidget(Class<T> clazz, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter) {
+    public <T extends ILootEntry> void registerWidget(Class<T> clazz, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter) {
         widgetMap.put(clazz, factory);
         widgetDirectionMap.put(clazz, direction);
         widgetBoundsMap.put(clazz, boundsGetter);
@@ -229,11 +229,11 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public LootEntry convertEntry(IContext context, LootPoolEntryContainer entry) {
+    public ILootEntry convertEntry(IContext context, LootPoolEntryContainer entry) {
         ResourceLocation key = BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType());
 
         if (key != null) {
-            Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>> pair = entryMap.get(key);
+            Pair<BiFunction<IContext, LootPoolEntryContainer, ILootEntry>, BiFunction<IContext, FriendlyByteBuf, ILootEntry>> pair = entryMap.get(key);
 
             if (pair != null) {
                 return pair.getFirst().apply(context, entry);
@@ -246,8 +246,8 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public List<LootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries) {
-        List<LootEntry> list = new LinkedList<>();
+    public List<ILootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries) {
+        List<ILootEntry> list = new LinkedList<>();
 
         for (LootPoolEntryContainer entry : entries) {
             list.add(convertEntry(context, entry));
@@ -257,11 +257,11 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public LootEntry decodeEntry(IContext context, FriendlyByteBuf buf) {
+    public ILootEntry decodeEntry(IContext context, FriendlyByteBuf buf) {
         ResourceLocation key = buf.readResourceLocation();
 
         if (key != UNKNOWN) {
-            Pair<BiFunction<IContext, LootPoolEntryContainer, LootEntry>, BiFunction<IContext, FriendlyByteBuf, LootEntry>> pair = entryMap.get(key);
+            Pair<BiFunction<IContext, LootPoolEntryContainer, ILootEntry>, BiFunction<IContext, FriendlyByteBuf, ILootEntry>> pair = entryMap.get(key);
 
             if (pair != null) {
                 return pair.getSecond().apply(context, buf);
@@ -274,9 +274,9 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public List<LootEntry> decodeEntries(IContext context, FriendlyByteBuf buf) {
+    public List<ILootEntry> decodeEntries(IContext context, FriendlyByteBuf buf) {
         int count = buf.readInt();
-        List<LootEntry> list = new LinkedList<>();
+        List<ILootEntry> list = new LinkedList<>();
 
         for (int i = 0; i < count; i++) {
             list.add(decodeEntry(context, buf));
@@ -286,17 +286,17 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public void encodeEntry(IContext context, FriendlyByteBuf buf, LootEntry entry) {
+    public void encodeEntry(IContext context, FriendlyByteBuf buf, ILootEntry entry) {
         ResourceLocation key = entryClassMap.getOrDefault(entry.getClass(), UNKNOWN);
         buf.writeResourceLocation(key);
         entry.encode(context, buf);
     }
 
     @Override
-    public void encodeEntries(IContext context, FriendlyByteBuf buf, List<LootEntry> entries) {
+    public void encodeEntries(IContext context, FriendlyByteBuf buf, List<ILootEntry> entries) {
         buf.writeInt(entries.size());
 
-        for (LootEntry entry : entries) {
+        for (ILootEntry entry : entries) {
             encodeEntry(context, buf, entry);
         }
     }
@@ -327,7 +327,7 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientUtils utils, List<LootEntry> entries, int x, int y,
+    public Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientUtils utils, List<ILootEntry> entries, int x, int y,
                                                          List<ILootFunction> functions, List<ILootCondition> conditions) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
@@ -335,13 +335,13 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
         List<EntryWidget> widgets = new LinkedList<>();
         WidgetDirection lastDirection = null;
 
-        for (LootEntry entry : entries) {
+        for (ILootEntry entry : entries) {
             if (entry instanceof SingletonEntry singletonEntry) {
                 sumWeight += singletonEntry.weight;
             }
         }
 
-        for (LootEntry entry : entries) {
+        for (ILootEntry entry : entries) {
             WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
             IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
             IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
@@ -389,12 +389,12 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     }
 
     @Override
-    public Bounds getBounds(IClientUtils utils, List<LootEntry> entries, int x, int y) {
+    public Bounds getBounds(IClientUtils utils, List<ILootEntry> entries, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
         WidgetDirection lastDirection = null;
 
-        for (LootEntry entry : entries) {
+        for (ILootEntry entry : entries) {
             WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
             IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
             IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
@@ -441,7 +441,7 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
 
     @Nullable
     @Override
-    public WidgetDirection getWidgetDirection(LootEntry entry) {
+    public WidgetDirection getWidgetDirection(ILootEntry entry) {
         return widgetDirectionMap.get(entry.getClass());
     }
 

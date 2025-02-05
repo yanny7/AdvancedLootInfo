@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.plugin.entry;
 
 import com.yanny.advanced_loot_info.api.IContext;
 import com.yanny.advanced_loot_info.api.ILootFunction;
-import com.yanny.advanced_loot_info.api.LootEntry;
+import com.yanny.advanced_loot_info.api.ILootEntry;
 import com.yanny.advanced_loot_info.mixin.MixinLootPoolSingletonContainer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;

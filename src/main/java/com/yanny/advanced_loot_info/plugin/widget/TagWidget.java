@@ -19,9 +19,9 @@ import java.util.Map;
 public class TagWidget extends EntryWidget {
     private final Widget widget;
     private final Bounds bounds;
-    private final LootEntry entry;
+    private final ILootEntry entry;
 
-    public TagWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
+    public TagWidget(EmiRecipe recipe, IClientUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                      List<ILootFunction> functions, List<ILootCondition> conditions) {
         TagEntry tagEntry = (TagEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -47,7 +47,7 @@ public class TagWidget extends EntryWidget {
     }
 
     @Override
-    public LootEntry getLootEntry() {
+    public ILootEntry getLootEntry() {
         return entry;
     }
 
@@ -72,7 +72,7 @@ public class TagWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
         return new Bounds(x, y, 18, 18);
     }
 }

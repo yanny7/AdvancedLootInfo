@@ -1,5 +1,8 @@
-package com.yanny.advanced_loot_info.api;
+package com.yanny.advanced_loot_info.plugin.entry;
 
+import com.yanny.advanced_loot_info.api.IContext;
+import com.yanny.advanced_loot_info.api.ILootCondition;
+import com.yanny.advanced_loot_info.api.ILootEntry;
 import com.yanny.advanced_loot_info.mixin.MixinLootPoolEntryContainer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -17,6 +20,7 @@ public abstract class LootEntry implements ILootEntry {
         conditions = context.utils().decodeConditions(context, buf);
     }
 
+    @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         context.utils().encodeConditions(context, buf, conditions);
     }

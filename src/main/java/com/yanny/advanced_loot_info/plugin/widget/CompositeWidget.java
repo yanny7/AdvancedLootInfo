@@ -18,16 +18,17 @@ import static com.yanny.advanced_loot_info.plugin.WidgetUtils.TEXTURE_LOC;
 public class CompositeWidget extends EntryWidget {
     private final Bounds bounds;
     protected final List<Widget> widgets;
-    private final LootEntry entry;
+    private final ILootEntry entry;
     private final IClientUtils utils;
 
-    public CompositeWidget(EmiRecipe recipe, IClientUtils utils, LootEntry entry, int x, int y, int sumWeight,
+    public CompositeWidget(EmiRecipe recipe, IClientUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
+        CompositeEntry compositeEntry = (CompositeEntry) entry;
         List<ILootCondition> allConditions = new LinkedList<>(conditions);
 
-        allConditions.addAll(entry.conditions);
+        allConditions.addAll(compositeEntry.conditions);
 
-        Pair<List<EntryWidget>, Bounds> pair = utils.createWidgets(recipe, utils, ((CompositeEntry) entry).children, x, y, List.copyOf(functions), allConditions);
+        Pair<List<EntryWidget>, Bounds> pair = utils.createWidgets(recipe, utils, compositeEntry.children, x, y, List.copyOf(functions), allConditions);
 
         widgets = new LinkedList<>(pair.getFirst());
         bounds = pair.getSecond();
@@ -41,7 +42,7 @@ public class CompositeWidget extends EntryWidget {
     }
 
     @Override
-    public LootEntry getLootEntry() {
+    public ILootEntry getLootEntry() {
         return entry;
     }
 
@@ -125,7 +126,7 @@ public class CompositeWidget extends EntryWidget {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, LootEntry entry, int x, int y) {
+    public static Bounds getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
         return utils.getBounds(utils, ((CompositeEntry) entry).children, x, y);
     }
 }

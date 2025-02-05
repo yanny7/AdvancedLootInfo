@@ -1,7 +1,7 @@
 package com.yanny.advanced_loot_info.plugin.entry;
 
 import com.yanny.advanced_loot_info.api.IContext;
-import com.yanny.advanced_loot_info.api.LootEntry;
+import com.yanny.advanced_loot_info.api.ILootEntry;
 import com.yanny.advanced_loot_info.mixin.MixinCompositeEntryBase;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class CompositeEntry extends LootEntry {
-    public final List<LootEntry> children;
+    public final List<ILootEntry> children;
 
     public CompositeEntry(IContext context, LootPoolEntryContainer entry) {
         super(context, entry);
@@ -35,7 +35,7 @@ public abstract class CompositeEntry extends LootEntry {
     public List<Item> collectItems() {
         List<Item> items = new LinkedList<>();
 
-        for (LootEntry child : children) {
+        for (ILootEntry child : children) {
             items.addAll(child.collectItems());
         }
 
