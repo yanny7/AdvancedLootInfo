@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.*;
 
 public class TooltipUtils {
     private TooltipUtils() {}

@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.compatibility;
+package com.yanny.advanced_loot_info.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.advanced_loot_info.mixin.MixinBushBlock;

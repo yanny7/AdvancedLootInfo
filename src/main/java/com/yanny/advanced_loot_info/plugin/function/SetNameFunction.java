@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.*;
 
 public class SetNameFunction extends LootConditionalFunction {
     public final Component name;

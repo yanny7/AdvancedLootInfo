@@ -60,14 +60,13 @@ public class NetworkUtils {
 
         public void onLootInfo(InfoSyncLootTableMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
             NetworkEvent.Context context = contextSupplier.get();
-            context.enqueueWork(() -> lootEntries.add(msg));
+            lootEntries.add(msg);
             context.setPacketHandled(true);
         }
 
         public void onClear(ClearMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
             lootEntries.clear();
             NetworkEvent.Context context = contextSupplier.get();
-            context.enqueueWork(() -> lootEntries.clear());
             context.setPacketHandled(true);
         }
     }

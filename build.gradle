@@ -171,6 +171,9 @@ repositories {
         name = "TerraformersMC"
         url = "https://maven.terraformersmc.com/"
     }
+    maven { // JEI
+        url "https://maven.blamejared.com"
+    }
     maven {
         url "https://www.cursemaven.com"
         content {
@@ -209,9 +212,15 @@ dependencies {
 
     // Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
     // EMI
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
-    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+    //runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+
+    // JEI
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
 
     // Only for testing

@@ -2,6 +2,9 @@ package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.Utils;
+import com.yanny.advanced_loot_info.compatibility.emi.EmiBlockLoot;
+import com.yanny.advanced_loot_info.compatibility.emi.EmiEntityLoot;
+import com.yanny.advanced_loot_info.compatibility.emi.EmiGameplayLoot;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.network.NetworkUtils;
 import com.yanny.advanced_loot_info.registries.LootCategories;

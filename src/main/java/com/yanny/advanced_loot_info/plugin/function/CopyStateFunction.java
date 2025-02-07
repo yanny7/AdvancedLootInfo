@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.*;
 
 public class CopyStateFunction extends LootConditionalFunction {
     public final Block block;

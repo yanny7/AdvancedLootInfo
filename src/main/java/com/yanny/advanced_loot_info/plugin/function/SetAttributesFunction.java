@@ -14,7 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.*;
 
 public class SetAttributesFunction extends LootConditionalFunction {
     public final List<Modifier> modifiers;

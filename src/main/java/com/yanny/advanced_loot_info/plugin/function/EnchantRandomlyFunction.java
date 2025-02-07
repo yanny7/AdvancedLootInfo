@@ -12,8 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.pad;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.translatable;
 
 public class EnchantRandomlyFunction extends LootConditionalFunction {
     public final List<ResourceLocation> enchantments;

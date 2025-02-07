@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.pad;
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.pad;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.translatable;
 
 public class SetEnchantmentsFunction extends LootConditionalFunction {
     public final Map<ResourceLocation, RangeValue> enchantments;

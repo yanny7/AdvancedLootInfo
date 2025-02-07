@@ -16,7 +16,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.*;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.*;
 
 public class SetBannerPatternFunction extends LootConditionalFunction {
     public final boolean append;

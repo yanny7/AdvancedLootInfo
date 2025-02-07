@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.compatibility;
+package com.yanny.advanced_loot_info.compatibility.emi;
 
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.manager.PluginManager;

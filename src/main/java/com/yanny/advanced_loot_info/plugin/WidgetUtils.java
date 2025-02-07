@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.plugin;
 
 import com.yanny.advanced_loot_info.Utils;
 import com.yanny.advanced_loot_info.api.RangeValue;
-import com.yanny.advanced_loot_info.compatibility.EmiUtils;
+import com.yanny.advanced_loot_info.compatibility.emi.EmiUtils;
 import dev.emi.emi.api.widget.TextureWidget;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.network.chat.Component;
@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.translatable;
-import static com.yanny.advanced_loot_info.compatibility.EmiUtils.value;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.translatable;
+import static com.yanny.advanced_loot_info.compatibility.emi.EmiUtils.value;
 
 public class WidgetUtils {
     public static final ResourceLocation TEXTURE_LOC = Utils.modLoc("textures/gui/gui.png");

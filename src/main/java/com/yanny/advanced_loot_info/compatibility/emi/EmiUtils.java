@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.compatibility;
+package com.yanny.advanced_loot_info.compatibility.emi;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
