@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.plugin.widget;
+package com.yanny.advanced_loot_info.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
@@ -6,11 +6,8 @@ import com.yanny.advanced_loot_info.api.ILootCondition;
 import com.yanny.advanced_loot_info.api.ILootFunction;
 import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.plugin.TooltipUtils;
-import com.yanny.advanced_loot_info.plugin.entry.ItemEntry;
 import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;
-import com.yanny.advanced_loot_info.plugin.entry.TagEntry;
 import dev.emi.emi.api.stack.EmiIngredient;
-import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -25,19 +22,12 @@ import java.util.Map;
 public class LootSlotWidget extends SlotWidget {
     @Nullable
     private Component count;
-    boolean isRange = false;
+    private boolean isRange = false;
 
-    public LootSlotWidget(ItemEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+    public LootSlotWidget(SingletonEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                           RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
                           List<ILootCondition> conditions) {
-        super(EmiStack.of(entry.item), x, y);
-        setupTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions);
-    }
-
-    public LootSlotWidget(TagEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                          RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
-                          List<ILootCondition> conditions) {
-        super(EmiIngredient.of(entry.item), x, y);
+        super(ingredient, x, y);
         setupTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions);
     }
 

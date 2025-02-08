@@ -87,7 +87,7 @@ public class NetworkUtils {
                 if (table != null && table != LootTable.EMPTY) {
                     LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
                     LootContext context = new LootContext.Builder(lootParams).create(null);
-                    AliContext aliContext = new AliContext(context, PluginManager.REGISTRY, manager);
+                    AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
                     LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
                     List<Item> items = lootTableEntry.collectItems();
 
@@ -144,12 +144,12 @@ public class NetworkUtils {
 
         public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
             location = buf.readResourceLocation();
-            value = new LootTableEntry(new AliContext(null, PluginManager.REGISTRY, null), buf);
+            value = new LootTableEntry(new AliContext(null, PluginManager.COMMON_REGISTRY, null), buf);
         }
 
         public void encode(FriendlyByteBuf buf) {
             buf.writeResourceLocation(location);
-            value.encode(new AliContext(null, PluginManager.REGISTRY, null), buf);
+            value.encode(new AliContext(null, PluginManager.COMMON_REGISTRY, null), buf);
         }
     }
 

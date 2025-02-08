@@ -18,7 +18,8 @@ import java.util.List;
 public class PluginManager {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static AliRegistry REGISTRY;
+    public static CommonAliRegistry COMMON_REGISTRY;
+    public static ClientAliRegistry CLIENT_REGISTRY;
     private static List<PluginHolder> PLUGINS;
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
@@ -31,33 +32,34 @@ public class PluginManager {
     }
 
     private static void registerCommonData() {
-        REGISTRY = new AliRegistry();
+        COMMON_REGISTRY = new CommonAliRegistry();
         LOGGER.info("Registering common plugin data...");
 
         for (PluginHolder plugin : PLUGINS) {
             try {
-                plugin.plugin().registerCommon(REGISTRY);
+                plugin.plugin().registerCommon(COMMON_REGISTRY);
             } catch (Throwable throwable) {
                 LOGGER.error("Failed to register {} common part with error: {}", plugin.modId(), throwable.getMessage());
             }
         }
 
-        REGISTRY.printCommonInfo();
+        COMMON_REGISTRY.printCommonInfo();
         LOGGER.info("Registering common plugin data finished");
     }
 
     private static void registerClientData() {
         LOGGER.info("Registering client plugin data...");
+        CLIENT_REGISTRY = new ClientAliRegistry();
 
         for (PluginHolder plugin : PLUGINS) {
             try {
-                plugin.plugin().registerClient(REGISTRY);
+                plugin.plugin().registerClient(CLIENT_REGISTRY);
             } catch (Throwable throwable) {
                 LOGGER.error("Failed to register {} client part with error: {}", plugin.modId(), throwable.getMessage());
             }
         }
 
-        REGISTRY.printClientInfo();
+        CLIENT_REGISTRY.printClientInfo();
         LOGGER.info("Registering client plugin data finished");
     }
 

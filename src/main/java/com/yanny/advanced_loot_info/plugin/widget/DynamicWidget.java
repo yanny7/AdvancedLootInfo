@@ -6,11 +6,7 @@ import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.WidgetUtils;
 import com.yanny.advanced_loot_info.plugin.entry.DynamicEntry;
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class DynamicWidget extends EntryWidget {
-    private final List<Supplier<ClientTooltipComponent>> tooltipSuppliers = Lists.newArrayList();
-    private final Bounds bounds;
-    private final Widget widget;
+public class DynamicWidget implements IEntryWidget {
+    private final List<Component> components = Lists.newArrayList();
+    private final Rect bounds;
+    private final IWidget widget;
     private final ILootEntry entry;
 
-    public DynamicWidget(EmiRecipe recipe, IClientUtils utils, ILootEntry entry, int x, int y, int sumWeight,
+    public DynamicWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                          List<ILootFunction> functions, List<ILootCondition> conditions) {
         DynamicEntry dynamicEntry = (DynamicEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -41,7 +36,7 @@ public class DynamicWidget extends EntryWidget {
         Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         widget = WidgetUtils.getDynamicWidget(x, y);
-        bounds = widget.getBounds();
+        bounds = widget.getRect();
         this.entry = entry;
         setupTooltip(dynamicEntry, chance, bonusChance, allFunctions, allConditions);
     }
@@ -58,11 +53,11 @@ public class DynamicWidget extends EntryWidget {
     }
 
     public void appendTooltip(Component text) {
-        this.tooltipSuppliers.add(() -> ClientTooltipComponent.create(text.getVisualOrderText()));
+        this.components.add(text);
     }
 
     @Override
-    public Bounds getBounds() {
+    public Rect getRect() {
         return bounds;
     }
 
@@ -72,18 +67,15 @@ public class DynamicWidget extends EntryWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        widget.render(guiGraphics, mouseX, mouseY, delta);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        widget.render(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-        List<ClientTooltipComponent> components = new LinkedList<>(widget.getTooltip(mouseX, mouseY));
+    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
+        List<Component> components = new LinkedList<>(widget.getTooltipComponents(mouseX, mouseY));
 
-        for(Supplier<ClientTooltipComponent> supplier : this.tooltipSuppliers) {
-            components.add(supplier.get());
-        }
-
+        components.addAll(this.components);
         return components;
     }
 
@@ -92,13 +84,8 @@ public class DynamicWidget extends EntryWidget {
         return widget.mouseClicked(mouseX, mouseY, button);
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return widget.keyPressed(keyCode, scanCode, modifiers);
-    }
-
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
-        return new Bounds(x, y, 7, 18);
+    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
+        return new Rect(x, y, 7, 18);
     }
 }

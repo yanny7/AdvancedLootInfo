@@ -4,46 +4,43 @@ import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.compatibility.emi.LootTableWidget;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.plugin.entry.ReferenceEntry;
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class ReferenceWidget extends EntryWidget {
-    private final Bounds bounds;
-    private final Widget widget;
+public class ReferenceWidget implements IEntryWidget {
+    private final Rect bounds;
+    private final IWidget widget;
     private final ILootEntry entry;
 
-    public ReferenceWidget(EmiRecipe recipe, IClientUtils utils, ILootEntry entry, int x, int y, int sumWeight,
+    public ReferenceWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
         LootTableEntry tableEntry = ((ReferenceEntry) entry).lootTable;
 
         if (tableEntry != null) {
-            widget = new LootTableWidget(recipe, utils, tableEntry, x, y);
+            widget = new LootTableWidget(utils, tableEntry, x, y);
         } else {
-            widget = new Widget() {
+            widget = new IWidget() {
                 @Override
-                public Bounds getBounds() {
-                    return new Bounds(0, 0, 0, 0);
+                public Rect getRect() {
+                    return new Rect(0, 0, 0, 0);
                 }
 
                 @Override
-                public void render(GuiGraphics guiGraphics, int i, int i1, float v) {
+                public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
 
                 }
             };
         }
 
-        bounds = widget.getBounds();
+        bounds = widget.getRect();
         this.entry = entry;
     }
 
     @Override
-    public Bounds getBounds() {
+    public Rect getRect() {
         return bounds;
     }
 
@@ -53,13 +50,8 @@ public class ReferenceWidget extends EntryWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        widget.render(guiGraphics, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return widget.keyPressed(keyCode, scanCode, modifiers);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        widget.render(guiGraphics, mouseX, mouseY);
     }
 
     @Override
@@ -68,18 +60,18 @@ public class ReferenceWidget extends EntryWidget {
     }
 
     @Override
-    public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-        return widget.getTooltip(mouseX, mouseY);
+    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
+        return widget.getTooltipComponents(mouseX, mouseY);
     }
 
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
         LootTableEntry lootTableEntry = ((ReferenceEntry) entry).lootTable;
 
         if (lootTableEntry != null) {
             return LootTableWidget.getBounds(utils, lootTableEntry, x, y);
         } else {
-            return new Bounds(x, y, 0, 18);
+            return new Rect(x, y, 0, 18);
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.yanny.advanced_loot_info.plugin;
 
 import com.yanny.advanced_loot_info.Utils;
+import com.yanny.advanced_loot_info.api.IWidget;
 import com.yanny.advanced_loot_info.api.RangeValue;
 import com.yanny.advanced_loot_info.compatibility.emi.EmiUtils;
-import dev.emi.emi.api.widget.TextureWidget;
-import dev.emi.emi.api.widget.Widget;
+import com.yanny.advanced_loot_info.plugin.widget.TextureWidget;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +22,7 @@ public class WidgetUtils {
     public static final int GROUP_WIDGET_HEIGHT = 18;
 
     @NotNull
-    public static Widget getLootTableTypeWidget(int x, int y) {
+    public static IWidget getLootTableTypeWidget(int x, int y) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
@@ -32,7 +32,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static Widget getLootPoolTypeWidget(int x, int y, RangeValue rolls, RangeValue bonusRolls) {
+    public static IWidget getLootPoolTypeWidget(int x, int y, RangeValue rolls, RangeValue bonusRolls) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
@@ -43,7 +43,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static Widget getAlternativesWidget(int x, int y) {
+    public static IWidget getAlternativesWidget(int x, int y) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
@@ -53,7 +53,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static Widget getSequentialWidget(int x, int y) {
+    public static IWidget getSequentialWidget(int x, int y) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
@@ -63,7 +63,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static Widget getGroupWidget(int x, int y) {
+    public static IWidget getGroupWidget(int x, int y) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
@@ -73,7 +73,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static Widget getDynamicWidget(int x, int y) {
+    public static IWidget getDynamicWidget(int x, int y) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 

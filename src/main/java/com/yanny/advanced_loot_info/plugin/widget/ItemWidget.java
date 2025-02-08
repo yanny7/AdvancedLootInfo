@@ -4,11 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.entry.ItemEntry;
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,12 +12,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemWidget extends EntryWidget {
-    private final Widget widget;
-    private final Bounds bounds;
+public class ItemWidget implements IEntryWidget {
+    private final Rect bounds;
     private final ILootEntry entry;
 
-    public ItemWidget(EmiRecipe recipe, IClientUtils utils, ILootEntry entry, int x, int y, int sumWeight,
+    public ItemWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                       List<ILootFunction> functions, List<ILootCondition> conditions) {
         ItemEntry itemEntry = (ItemEntry) entry;
         List<ILootFunction> allFunctions = new LinkedList<>(functions);
@@ -36,13 +31,12 @@ public class ItemWidget extends EntryWidget {
         RangeValue count = TooltipUtils.getCount(allFunctions);
         Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
 
-        widget = new LootSlotWidget(itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions).recipeContext(recipe);
-        bounds = widget.getBounds();
+        bounds = utils.addSlotWidget(itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;
     }
 
     @Override
-    public Bounds getBounds() {
+    public Rect getRect() {
         return bounds;
     }
 
@@ -52,27 +46,11 @@ public class ItemWidget extends EntryWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        widget.render(guiGraphics, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-        return widget.getTooltip(mouseX, mouseY);
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return widget.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-    @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return widget.mouseClicked(mouseX, mouseY, button);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     }
 
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
-        return new Bounds(x, y, 18, 18);
+    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
+        return new Rect(x, y, 18, 18);
     }
 }

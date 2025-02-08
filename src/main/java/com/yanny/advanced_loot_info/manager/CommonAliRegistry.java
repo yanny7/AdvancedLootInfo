@@ -4,11 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.plugin.condition.UnknownCondition;
-import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;
 import com.yanny.advanced_loot_info.plugin.entry.UnknownEntry;
 import com.yanny.advanced_loot_info.plugin.function.UnknownFunction;
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.widget.Bounds;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -25,10 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import static com.yanny.advanced_loot_info.plugin.WidgetUtils.GROUP_WIDGET_WIDTH;
-import static com.yanny.advanced_loot_info.plugin.WidgetUtils.VERTICAL_OFFSET;
-
-public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegistry, IClientUtils {
+public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
 
@@ -38,9 +32,6 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
     private final Map<Class<?>, ResourceLocation> functionClassMap = new HashMap<>();
     private final Map<Class<?>, ResourceLocation> conditionClassMap = new HashMap<>();
     private final Map<Class<?>, ResourceLocation> entryClassMap = new HashMap<>();
-    private final Map<Class<?>, IWidgetFactory> widgetMap = new HashMap<>();
-    private final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
-    private final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
     private final Map<ResourceLocation, BiFunction<IContext, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
 
     @Override
@@ -63,18 +54,11 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
 
     @Override
     public <T extends ILootEntry> void registerEntry(Class<T> clazz,
-                                                    ResourceLocation key,
-                                                    BiFunction<IContext, LootPoolEntryContainer, ILootEntry> entryEncoder,
-                                                    BiFunction<IContext, FriendlyByteBuf, ILootEntry> entryDecoder) {
+                                                     ResourceLocation key,
+                                                     BiFunction<IContext, LootPoolEntryContainer, ILootEntry> entryEncoder,
+                                                     BiFunction<IContext, FriendlyByteBuf, ILootEntry> entryDecoder) {
         entryMap.put(key, new Pair<>(entryEncoder, entryDecoder));
         entryClassMap.put(clazz, key);
-    }
-
-    @Override
-    public <T extends ILootEntry> void registerWidget(Class<T> clazz, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter) {
-        widgetMap.put(clazz, factory);
-        widgetDirectionMap.put(clazz, direction);
-        widgetBoundsMap.put(clazz, boundsGetter);
     }
 
     @Override
@@ -196,7 +180,7 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
                 LOGGER.warn("Decode function {} was not registered", key);
             }
         }
-        
+
         return new UnknownFunction(context, buf);
     }
 
@@ -326,133 +310,10 @@ public class AliRegistry implements ICommonRegistry, ICommonUtils, IClientRegist
         }
     }
 
-    @Override
-    public Pair<List<EntryWidget>, Bounds> createWidgets(EmiRecipe recipe, IClientUtils utils, List<ILootEntry> entries, int x, int y,
-                                                         List<ILootFunction> functions, List<ILootCondition> conditions) {
-        int posX = x + GROUP_WIDGET_WIDTH, posY = y;
-        int width = 0, height = 0;
-        int sumWeight = 0;
-        List<EntryWidget> widgets = new LinkedList<>();
-        WidgetDirection lastDirection = null;
-
-        for (ILootEntry entry : entries) {
-            if (entry instanceof SingletonEntry singletonEntry) {
-                sumWeight += singletonEntry.weight;
-            }
-        }
-
-        for (ILootEntry entry : entries) {
-            WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
-            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
-            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
-
-            if (direction != null && widgetFactory != null && bounds != null) {
-                if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY = y + height + VERTICAL_OFFSET;
-                }
-
-                Bounds bound = bounds.apply(utils, entry, posX, posY);
-
-                if (bound.right() > 9 * 18) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY += bound.height();
-                    bound = bounds.apply(utils, entry, posX, posY);
-                }
-
-                EntryWidget widget = widgetFactory.create(recipe, utils, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
-                width = Math.max(width, bound.right() - x);
-                height = Math.max(height, bound.bottom() - y);
-
-                if (lastDirection != null) {
-                    if (lastDirection != direction) {
-                        posX = x + GROUP_WIDGET_WIDTH;
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    } else if (direction == WidgetDirection.HORIZONTAL) {
-                        posX += bound.width();
-                    } else if (direction == WidgetDirection.VERTICAL) {
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                } else {
-                    switch (direction) {
-                        case HORIZONTAL -> posX += bound.width();
-                        case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                }
-
-                widgets.add(widget);
-                lastDirection = direction;
-            }
-        }
-
-        return new Pair<>(widgets, new Bounds(x, y, width, height));
-    }
-
-    @Override
-    public Bounds getBounds(IClientUtils utils, List<ILootEntry> entries, int x, int y) {
-        int posX = x + GROUP_WIDGET_WIDTH, posY = y;
-        int width = 0, height = 0;
-        WidgetDirection lastDirection = null;
-
-        for (ILootEntry entry : entries) {
-            WidgetDirection direction = PluginManager.REGISTRY.widgetDirectionMap.get(entry.getClass());
-            IWidgetFactory widgetFactory = PluginManager.REGISTRY.widgetMap.get(entry.getClass());
-            IBoundsGetter bounds = PluginManager.REGISTRY.widgetBoundsMap.get(entry.getClass());
-
-            if (direction != null && widgetFactory != null && bounds != null) {
-                if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY = y + height + VERTICAL_OFFSET;
-                }
-
-                Bounds bound = bounds.apply(utils, entry, posX, posY);
-
-                if (bound.right() > 9 * 18) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY += bound.height();
-                    bound = bounds.apply(utils, entry, posX, posY);
-                }
-
-                width = Math.max(width, bound.right() - x);
-                height = Math.max(height, bound.bottom() - y);
-
-                if (lastDirection != null) {
-                    if (lastDirection != direction) {
-                        posX = x + GROUP_WIDGET_WIDTH;
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    } else if (direction == WidgetDirection.HORIZONTAL) {
-                        posX += bound.width();
-                    } else if (direction == WidgetDirection.VERTICAL) {
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                } else {
-                    switch (direction) {
-                        case HORIZONTAL -> posX += bound.width();
-                        case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                }
-
-                lastDirection = direction;
-            }
-        }
-
-        return new Bounds(x, y, width, height);
-    }
-
-    @Nullable
-    @Override
-    public WidgetDirection getWidgetDirection(ILootEntry entry) {
-        return widgetDirectionMap.get(entry.getClass());
-    }
-
     public void printCommonInfo() {
         LOGGER.info("Registered {} loot functions", functionMap.size());
         LOGGER.info("Registered {} loot conditions", conditionMap.size());
         LOGGER.info("Registered {} loot pool entries", entryMap.size());
         LOGGER.info("Registered {} number converters", numberConverterMap.size());
-    }
-
-    public void printClientInfo() {
-        LOGGER.info("Registered {} widgets", widgetMap.size());
     }
 }

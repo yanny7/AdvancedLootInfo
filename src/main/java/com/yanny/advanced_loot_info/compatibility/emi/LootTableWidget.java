@@ -1,13 +1,13 @@
 package com.yanny.advanced_loot_info.compatibility.emi;
 
 import com.yanny.advanced_loot_info.api.IClientUtils;
+import com.yanny.advanced_loot_info.api.IWidget;
+import com.yanny.advanced_loot_info.api.IWidgetUtils;
+import com.yanny.advanced_loot_info.api.Rect;
 import com.yanny.advanced_loot_info.loot.LootPoolEntry;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
-import dev.emi.emi.api.recipe.EmiRecipe;
-import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -15,11 +15,11 @@ import java.util.List;
 
 import static com.yanny.advanced_loot_info.plugin.WidgetUtils.*;
 
-public class LootTableWidget extends Widget {
-    private final List<Widget> widgets;
-    private final Bounds bounds;
+public class LootTableWidget implements IWidget {
+    private final List<IWidget> widgets;
+    private final Rect bounds;
 
-    public LootTableWidget(EmiRecipe recipe, IClientUtils utils, LootTableEntry entry, int x, int y) {
+    public LootTableWidget(IWidgetUtils utils, LootTableEntry entry, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
@@ -27,8 +27,8 @@ public class LootTableWidget extends Widget {
         widgets.add(getLootTableTypeWidget(x, y));
 
         for (LootPoolEntry pool : entry.pools) {
-            Widget widget = new LootPoolWidget(recipe, utils, pool, posX, posY, List.copyOf(entry.functions));
-            Bounds bound = widget.getBounds();
+            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(entry.functions));
+            Rect bound = widget.getRect();
 
             width = Math.max(width, bound.width());
             height += bound.height() + VERTICAL_OFFSET;
@@ -36,21 +36,21 @@ public class LootTableWidget extends Widget {
             widgets.add(widget);
         }
 
-        bounds = new Bounds(x, y, width + 7, height);
+        bounds = new Rect(x, y, width + 7, height);
     }
 
     @Override
-    public Bounds getBounds() {
+    public Rect getRect() {
         return bounds;
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         int lastY = 0;
 
-        for (Widget widget : widgets) {
-            widget.render(guiGraphics, mouseX, mouseY, delta);
-            lastY = widget.getBounds().y();
+        for (IWidget widget : widgets) {
+            widget.render(guiGraphics, mouseX, mouseY);
+            lastY = widget.getRect().y();
         }
 
         int top = bounds.y() + 18;
@@ -58,22 +58,22 @@ public class LootTableWidget extends Widget {
 
         guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
 
-        for (Widget widget : widgets) {
-            if (widget.getBounds().y() > bounds.y() + 18) {
-                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getBounds().y() + 8, 3, 2, 2, 0, 18, 2);
+        for (IWidget widget : widgets) {
+            if (widget.getRect().y() > bounds.y() + 18) {
+                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
             }
         }
     }
 
     @Override
-    public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
-        List<ClientTooltipComponent> components = new LinkedList<>();
+    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
+        List<Component> components = new LinkedList<>();
 
-        for (Widget widget : widgets) {
-            Bounds b = widget.getBounds();
+        for (IWidget widget : widgets) {
+            Rect b = widget.getRect();
 
             if (b.contains(mouseX, mouseY)) {
-                components.addAll(widget.getTooltip(mouseX, mouseY));
+                components.addAll(widget.getTooltipComponents(mouseX, mouseY));
             }
         }
 
@@ -84,8 +84,8 @@ public class LootTableWidget extends Widget {
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         boolean clicked = false;
 
-        for (Widget widget : widgets) {
-            Bounds b = widget.getBounds();
+        for (IWidget widget : widgets) {
+            Rect b = widget.getRect();
 
             if (b.contains(mouseX, mouseY)) {
                 clicked |= widget.mouseClicked(mouseX, mouseY, button);
@@ -95,30 +95,19 @@ public class LootTableWidget extends Widget {
         return clicked;
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        boolean pressed = false;
-
-        for (Widget widget : widgets) {
-            pressed |= widget.keyPressed(keyCode, scanCode, modifiers);
-        }
-
-        return pressed;
-    }
-
     @NotNull
-    public static Bounds getBounds(IClientUtils utils, LootTableEntry entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootTableEntry entry, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
         for (LootPoolEntry pool : entry.pools) {
-            Bounds bound = LootPoolWidget.getBounds(utils, pool, posX, posY);
+            Rect bound = LootPoolWidget.getBounds(utils, pool, posX, posY);
 
             width = Math.max(width, bound.width());
             height += bound.height() + VERTICAL_OFFSET;
             posY += bound.height() + VERTICAL_OFFSET;
         }
 
-        return new Bounds(x, y, width + 7, height);
+        return new Rect(x, y, width + 7, height);
     }
 }

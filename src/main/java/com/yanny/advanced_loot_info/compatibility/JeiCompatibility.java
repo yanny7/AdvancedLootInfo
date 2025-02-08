@@ -15,7 +15,6 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
@@ -184,10 +183,6 @@ public class JeiCompatibility implements IModPlugin {
         } else {
             LOGGER.warn("JEI integration was not loaded! Level is null!");
         }
-    }
-
-    @Override
-    public void registerRecipeCatalysts(@NotNull IRecipeCatalystRegistration registration) {
     }
 
     @NotNull
