@@ -4,9 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.manager.PluginManager;
-import com.yanny.advanced_loot_info.plugin.entry.EmptyEntry;
-import com.yanny.advanced_loot_info.plugin.entry.ItemEntry;
-import com.yanny.advanced_loot_info.plugin.entry.TagEntry;
+import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -16,7 +14,8 @@ import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
@@ -78,23 +77,23 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             }
 
             @Override
-            public Rect addSlotWidget(ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                         @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
-                LootSlotWidget widget;
+            public Rect addSlotWidget(Item item, SingletonEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+                LootSlotWidget widget = new LootSlotWidget(entry, EmiStack.of(item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
 
-                if (entry instanceof ItemEntry) {
-                    widget = new LootSlotWidget((ItemEntry) entry, EmiStack.of(((ItemEntry) entry).item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
-                    widget.recipeContext(recipe);
-                } else if (entry instanceof TagEntry) {
-                    widget = new LootSlotWidget((TagEntry) entry, EmiIngredient.of(((TagEntry) entry).item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
-                    widget.recipeContext(recipe);
-                } else if (entry instanceof EmptyEntry) {
-                    widget = new LootSlotWidget((EmptyEntry) entry, EmiStack.of(Items.BARRIER), x, y, new RangeValue(), null, new RangeValue(), null, allFunctions, allConditions);
-                    widget.drawBack(false);
-                } else {
-                    throw new IllegalStateException(); //FIXME
-                }
+                widget.recipeContext(recipe);
+                slotWidgets.add(widget);
 
+                Bounds bounds = widget.getBounds();
+                return new Rect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+            }
+
+            @Override
+            public Rect addSlotWidget(TagKey<Item> item, SingletonEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+                LootSlotWidget widget = new LootSlotWidget(entry, EmiIngredient.of(item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+
+                widget.recipeContext(recipe);
                 slotWidgets.add(widget);
 
                 Bounds bounds = widget.getBounds();

@@ -31,7 +31,7 @@ public class ItemWidget implements IEntryWidget {
         RangeValue count = TooltipUtils.getCount(allFunctions);
         Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
 
-        bounds = utils.addSlotWidget(itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+        bounds = utils.addSlotWidget(itemEntry.item, itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;
     }
 

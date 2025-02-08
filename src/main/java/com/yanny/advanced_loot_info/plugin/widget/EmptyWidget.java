@@ -7,6 +7,8 @@ import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.entry.EmptyEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 public class EmptyWidget implements IEntryWidget {
+    private static final ItemStack STACK = Items.BARRIER.getDefaultInstance();
+
     private final List<Component> components = Lists.newArrayList();
     private final Rect bounds;
     private final ILootEntry entry;
@@ -34,7 +38,6 @@ public class EmptyWidget implements IEntryWidget {
         Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         bounds = getBounds(utils, entry, x, y);
-        utils.addSlotWidget(emptyEntry, x, y, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions);
         this.entry = entry;
         setupTooltip(emptyEntry, chance, bonusChance, allFunctions, allConditions);
     }
@@ -71,6 +74,7 @@ public class EmptyWidget implements IEntryWidget {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.renderItem(STACK, bounds.x() + 1, bounds.y() + 1);
     }
 
     @NotNull

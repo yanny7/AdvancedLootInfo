@@ -31,7 +31,7 @@ public class TagWidget implements IEntryWidget {
         RangeValue count = TooltipUtils.getCount(allFunctions);
         Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
 
-        bounds = utils.addSlotWidget(tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+        bounds = utils.addSlotWidget(tagEntry.item, tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;
     }
 
