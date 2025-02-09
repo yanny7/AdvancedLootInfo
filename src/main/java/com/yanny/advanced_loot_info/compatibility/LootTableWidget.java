@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.compatibility.emi;
+package com.yanny.advanced_loot_info.compatibility;
 
 import com.yanny.advanced_loot_info.api.IClientUtils;
 import com.yanny.advanced_loot_info.api.IWidget;

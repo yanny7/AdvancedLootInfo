@@ -25,7 +25,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
         if (isSpecial) {
-            widgetHolder.add(new BlockSlotWidget(block, 4 * 18 - 4, 0));
+            widgetHolder.add(new EmiBlockSlotWidget(block, 4 * 18 - 4, 0));
         } else {
             widgetHolder.addSlot(inputs.get(0), 4 * 18, 0);
         }

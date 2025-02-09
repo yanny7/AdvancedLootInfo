@@ -19,14 +19,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class LootSlotWidget extends SlotWidget {
+public class EmiLootSlotWidget extends SlotWidget {
     @Nullable
     private Component count;
     private boolean isRange = false;
 
-    public LootSlotWidget(SingletonEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                          RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
-                          List<ILootCondition> conditions) {
+    public EmiLootSlotWidget(SingletonEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
+                             List<ILootCondition> conditions) {
         super(ingredient, x, y);
         setupTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions);
     }

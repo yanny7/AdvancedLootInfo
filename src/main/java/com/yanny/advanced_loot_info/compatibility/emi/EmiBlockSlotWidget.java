@@ -21,12 +21,12 @@ import net.minecraftforge.common.IPlantable;
 
 import java.util.List;
 
-public class BlockSlotWidget extends SlotWidget {
+public class EmiBlockSlotWidget extends SlotWidget {
     private final BlockState blockState;
     private final Block block;
     private final boolean isPlant;
 
-    public BlockSlotWidget(Block block, int x, int y) {
+    public EmiBlockSlotWidget(Block block, int x, int y) {
         super(EmiStack.of(block), x, y);
         this.block = block;
         blockState = block.defaultBlockState();

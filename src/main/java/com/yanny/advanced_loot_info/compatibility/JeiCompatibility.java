@@ -40,9 +40,10 @@ import java.util.stream.Collectors;
 @JeiPlugin
 public class JeiCompatibility implements IModPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final List<JeiBlockLoot> blockCategoryList = new LinkedList<>();
-    private static final List<JeiEntityLoot> entityCategoryList = new LinkedList<>();
-    private static final List<JeiGameplayLoot> gameplayCategoryList = new LinkedList<>();
+
+    private final List<JeiBlockLoot> blockCategoryList = new LinkedList<>();
+    private final List<JeiEntityLoot> entityCategoryList = new LinkedList<>();
+    private final List<JeiGameplayLoot> gameplayCategoryList = new LinkedList<>();
 
     @Override
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
@@ -50,6 +51,10 @@ public class JeiCompatibility implements IModPlugin {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         if (level != null) {
+            blockCategoryList.clear();
+            entityCategoryList.clear();
+            gameplayCategoryList.clear();
+
             blockCategoryList.add(createCategory(guiHelper, LootCategories.PLANT_LOOT, JeiBlockLoot.BlockType.class, JeiBlockLoot::new));
             blockCategoryList.addAll(LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream()
                     .map((e) -> createCategory(guiHelper, e, JeiBlockLoot.BlockType.class, JeiBlockLoot::new))
@@ -165,7 +170,8 @@ public class JeiCompatibility implements IModPlugin {
                 }
 
                 if (recipeType != null) {
-                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new JeiGameplayLoot.GameplayType(entry.getValue()));
+                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new JeiGameplayLoot.GameplayType(entry.getValue(),
+                            new ResourceLocation(location.getNamespace(), "/" + location.getPath())));
                 }
             }
 
@@ -191,21 +197,21 @@ public class JeiCompatibility implements IModPlugin {
         return Utils.modLoc("jei_plugin");
     }
 
-    private static <T, U, V> T createCategory(IGuiHelper helpers, LootCategory<U> e, Class<V> clazz, LootConstructor<T, U, V> constructor) {
+    private static <T, U, V> T createCategory(IGuiHelper guiHelper, LootCategory<U> e, Class<V> clazz, LootConstructor<T, U, V> constructor) {
         RecipeType<V> recipeType = RecipeType.create(AdvancedLootInfoMod.MOD_ID, e.getKey(), clazz);
         Component title = Component.translatable("emi.category." + AdvancedLootInfoMod.MOD_ID + "." + e.getKey().replace('/', '.'));
-        return constructor.construct(recipeType, e, title, helpers.createDrawableItemStack(e.getIcon()));
+        return constructor.construct(guiHelper, recipeType, e, title, guiHelper.createDrawableItemStack(e.getIcon()));
     }
 
-    private static <T, U, V> T createCategory(IGuiHelper helpers, Map.Entry<ResourceLocation, LootCategory<U>> e, Class<V> clazz, LootConstructor<T, U, V> constructor) {
+    private static <T, U, V> T createCategory(IGuiHelper guiHelper, Map.Entry<ResourceLocation, LootCategory<U>> e, Class<V> clazz, LootConstructor<T, U, V> constructor) {
         ResourceLocation id = e.getKey();
         RecipeType<V> recipeType = RecipeType.create(id.getNamespace(), id.getPath(), clazz);
         Component title = Component.translatable("emi.category." + id.getNamespace() + "." + id.getPath().replace('/', '.'));
-        return constructor.construct(recipeType, e.getValue(), title, helpers.createDrawableItemStack(e.getValue().getIcon()));
+        return constructor.construct(guiHelper, recipeType, e.getValue(), title, guiHelper.createDrawableItemStack(e.getValue().getIcon()));
     }
 
     @FunctionalInterface
     private interface LootConstructor<T, U, V> {
-        T construct(RecipeType<V> recipeType, LootCategory<U> lootCategory, Component title, IDrawable icon);
+        T construct(IGuiHelper guiHelper, RecipeType<V> recipeType, LootCategory<U> lootCategory, Component title, IDrawable icon);
     }
 }

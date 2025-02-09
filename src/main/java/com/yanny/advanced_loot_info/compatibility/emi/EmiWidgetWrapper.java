@@ -9,11 +9,11 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 
 import java.util.List;
 
-public class WidgetWrapper extends Widget {
+public class EmiWidgetWrapper extends Widget {
     private final IWidget widget;
     private final Bounds bounds;
 
-    public WidgetWrapper(IWidget widget) {
+    public EmiWidgetWrapper(IWidget widget) {
         Rect rect = widget.getRect();
 
         this.widget = widget;
