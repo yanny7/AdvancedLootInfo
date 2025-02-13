@@ -1,6 +1,7 @@
 package com.yanny.advanced_loot_info.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.yanny.advanced_loot_info.api.Rect;
 import com.yanny.advanced_loot_info.mixin.MixinBushBlock;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -65,8 +66,8 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         if (isPlant) {
             poseStack.translate(14, 8, 100);
             poseStack.scale(9, -9, 9);
-            poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(225f));
+            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
+            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
             blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
 
             BlockState base;
@@ -83,8 +84,8 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         } else {
             poseStack.translate(25.5, 21, 100);
             poseStack.scale(18, -18, 18);
-            poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(225f));
+            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
+            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
             blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
             poseStack.translate(0, -1, 0);
         }

@@ -168,11 +168,16 @@ repositories {
     //     dir 'libs'
     // }
     maven { // EMI
-        name = "TerraformersMC"
+        name = "EMI"
         url = "https://maven.terraformersmc.com/"
     }
-    maven { // JEI
+    maven {
+        name = "JEI"
         url "https://maven.blamejared.com"
+    }
+    maven {
+        name = "REI"
+        url "https://maven.shedaniel.me"
     }
     maven {
         url "https://www.cursemaven.com"
@@ -220,7 +225,14 @@ dependencies {
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+//    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    // REI
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
+    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
+    runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
+    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config}")
+    implementation fg.deobf("dev.architectury:architectury-forge:9.2.14")
 
 
     // Only for testing
@@ -229,7 +241,6 @@ dependencies {
 
     // these two are unfortunately needed since fg.deobf doesn't respect transitive dependencies yet
     runtimeOnly fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.6")
-    runtimeOnly fg.deobf("dev.architectury:architectury-forge:9.2.14")
 
     runtimeOnly fg.deobf("curse.maven:lootjs-570630:5404565")
 }

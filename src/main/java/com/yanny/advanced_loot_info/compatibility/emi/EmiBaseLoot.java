@@ -2,7 +2,7 @@ package com.yanny.advanced_loot_info.compatibility.emi;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;
-import com.yanny.advanced_loot_info.compatibility.LootTableWidget;
+import com.yanny.advanced_loot_info.compatibility.common.LootTableWidget;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.manager.PluginManager;
 import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;

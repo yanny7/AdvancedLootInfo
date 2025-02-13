@@ -3,6 +3,9 @@ package com.yanny.advanced_loot_info.compatibility;
 import com.mojang.logging.LogUtils;
 import com.yanny.advanced_loot_info.AdvancedLootInfoMod;
 import com.yanny.advanced_loot_info.Utils;
+import com.yanny.advanced_loot_info.compatibility.common.BlockLootType;
+import com.yanny.advanced_loot_info.compatibility.common.EntityLootType;
+import com.yanny.advanced_loot_info.compatibility.common.GameplayLootType;
 import com.yanny.advanced_loot_info.compatibility.jei.JeiBlockLoot;
 import com.yanny.advanced_loot_info.compatibility.jei.JeiEntityLoot;
 import com.yanny.advanced_loot_info.compatibility.jei.JeiGameplayLoot;
@@ -47,34 +50,31 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
-        ClientLevel level = Minecraft.getInstance().level;
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
-        if (level != null) {
-            blockCategoryList.clear();
-            entityCategoryList.clear();
-            gameplayCategoryList.clear();
+        blockCategoryList.clear();
+        entityCategoryList.clear();
+        gameplayCategoryList.clear();
 
-            blockCategoryList.add(createCategory(guiHelper, LootCategories.PLANT_LOOT, JeiBlockLoot.BlockType.class, JeiBlockLoot::new));
-            blockCategoryList.addAll(LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream()
-                    .map((e) -> createCategory(guiHelper, e, JeiBlockLoot.BlockType.class, JeiBlockLoot::new))
-                    .collect(Collectors.toSet()));
-            blockCategoryList.add(createCategory(guiHelper, LootCategories.BLOCK_LOOT, JeiBlockLoot.BlockType.class, JeiBlockLoot::new));
+        blockCategoryList.add(createCategory(guiHelper, LootCategories.PLANT_LOOT, BlockLootType.class, JeiBlockLoot::new));
+        blockCategoryList.addAll(LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream()
+                .map((e) -> createCategory(guiHelper, e, BlockLootType.class, JeiBlockLoot::new))
+                .collect(Collectors.toSet()));
+        blockCategoryList.add(createCategory(guiHelper, LootCategories.BLOCK_LOOT, BlockLootType.class, JeiBlockLoot::new));
 
-            entityCategoryList.addAll(LootCategories.ENTITY_LOOT_CATEGORIES.entrySet().stream()
-                    .map((e) -> createCategory(guiHelper, e, JeiEntityLoot.EntityType.class, JeiEntityLoot::new))
-                    .collect(Collectors.toSet()));
-            entityCategoryList.add(createCategory(guiHelper, LootCategories.ENTITY_LOOT, JeiEntityLoot.EntityType.class, JeiEntityLoot::new));
+        entityCategoryList.addAll(LootCategories.ENTITY_LOOT_CATEGORIES.entrySet().stream()
+                .map((e) -> createCategory(guiHelper, e, EntityLootType.class, JeiEntityLoot::new))
+                .collect(Collectors.toSet()));
+        entityCategoryList.add(createCategory(guiHelper, LootCategories.ENTITY_LOOT, EntityLootType.class, JeiEntityLoot::new));
 
-            gameplayCategoryList.addAll(LootCategories.GAMEPLAY_LOOT_CATEGORIES.entrySet().stream()
-                    .map((e) -> createCategory(guiHelper, e, JeiGameplayLoot.GameplayType.class, JeiGameplayLoot::new))
-                    .collect(Collectors.toSet()));
-            gameplayCategoryList.add(createCategory(guiHelper, LootCategories.GAMEPLAY_LOOT, JeiGameplayLoot.GameplayType.class, JeiGameplayLoot::new));
+        gameplayCategoryList.addAll(LootCategories.GAMEPLAY_LOOT_CATEGORIES.entrySet().stream()
+                .map((e) -> createCategory(guiHelper, e, GameplayLootType.class, JeiGameplayLoot::new))
+                .collect(Collectors.toSet()));
+        gameplayCategoryList.add(createCategory(guiHelper, LootCategories.GAMEPLAY_LOOT, GameplayLootType.class, JeiGameplayLoot::new));
 
-            blockCategoryList.forEach(registration::addRecipeCategories);
-            entityCategoryList.forEach(registration::addRecipeCategories);
-            gameplayCategoryList.forEach(registration::addRecipeCategories);
-        }
+        blockCategoryList.forEach(registration::addRecipeCategories);
+        entityCategoryList.forEach(registration::addRecipeCategories);
+        gameplayCategoryList.forEach(registration::addRecipeCategories);
     }
 
     @Override
@@ -84,16 +84,16 @@ public class JeiCompatibility implements IModPlugin {
 
         if (client != null && level != null) {
             Map<ResourceLocation, LootTableEntry> map = new HashMap<>(client.lootEntries.stream().collect(Collectors.toMap((l) -> l.location, l -> l.value)));
-            Map<RecipeType<JeiBlockLoot.BlockType>, List<JeiBlockLoot.BlockType>> blockRecipeTypes = new HashMap<>();
-            Map<RecipeType<JeiEntityLoot.EntityType>, List<JeiEntityLoot.EntityType>> entityRecipeTypes = new HashMap<>();
-            Map<RecipeType<JeiGameplayLoot.GameplayType>, List<JeiGameplayLoot.GameplayType>> gameplayRecipeTypes = new HashMap<>();
+            Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
+            Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
+            Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : ForgeRegistries.BLOCKS) {
                 ResourceLocation location = block.getLootTable();
                 LootTableEntry lootEntry = map.get(location);
 
                 if (lootEntry != null) {
-                    RecipeType<JeiBlockLoot.BlockType> recipeType = null;
+                    RecipeType<BlockLootType> recipeType = null;
 
                     for (JeiBlockLoot recipeCategory : blockCategoryList) {
                         if (recipeCategory.getLootCategory().validate(block)) {
@@ -103,7 +103,7 @@ public class JeiCompatibility implements IModPlugin {
                     }
 
                     if (recipeType != null) {
-                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new JeiBlockLoot.BlockType(block, lootEntry));
+                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry));
                     }
 
                     map.remove(location);
@@ -139,7 +139,7 @@ public class JeiCompatibility implements IModPlugin {
                         LootTableEntry lootEntry = map.get(location);
 
                         if (lootEntry != null && entityType.create(level) != null) {
-                            RecipeType<JeiEntityLoot.EntityType> recipeType = null;
+                            RecipeType<EntityLootType> recipeType = null;
 
                             for (JeiEntityLoot recipeCategory : entityCategoryList) {
                                 if (recipeCategory.getLootCategory().validate(entity)) {
@@ -149,7 +149,7 @@ public class JeiCompatibility implements IModPlugin {
                             }
 
                             if (recipeType != null) {
-                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new JeiEntityLoot.EntityType(entity, lootEntry));
+                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry));
                             }
 
                             map.remove(location);
@@ -160,7 +160,7 @@ public class JeiCompatibility implements IModPlugin {
 
             for (Map.Entry<ResourceLocation, LootTableEntry> entry : map.entrySet()) {
                 ResourceLocation location = entry.getKey();
-                RecipeType<JeiGameplayLoot.GameplayType> recipeType = null;
+                RecipeType<GameplayLootType> recipeType = null;
 
                 for (JeiGameplayLoot recipeCategory : gameplayCategoryList) {
                     if (recipeCategory.getLootCategory().validate(location.getPath())) {
@@ -170,20 +170,19 @@ public class JeiCompatibility implements IModPlugin {
                 }
 
                 if (recipeType != null) {
-                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new JeiGameplayLoot.GameplayType(entry.getValue(),
-                            new ResourceLocation(location.getNamespace(), "/" + location.getPath())));
+                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath()));
                 }
             }
 
-            for (Map.Entry<RecipeType<JeiBlockLoot.BlockType>, List<JeiBlockLoot.BlockType>> entry : blockRecipeTypes.entrySet()) {
+            for (Map.Entry<RecipeType<BlockLootType>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
                 registration.addRecipes(entry.getKey(), entry.getValue());
             }
 
-            for (Map.Entry<RecipeType<JeiEntityLoot.EntityType>, List<JeiEntityLoot.EntityType>> entry : entityRecipeTypes.entrySet()) {
+            for (Map.Entry<RecipeType<EntityLootType>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
                 registration.addRecipes(entry.getKey(), entry.getValue());
             }
 
-            for (Map.Entry<RecipeType<JeiGameplayLoot.GameplayType>, List<JeiGameplayLoot.GameplayType>> entry : gameplayRecipeTypes.entrySet()) {
+            for (Map.Entry<RecipeType<GameplayLootType>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
                 registration.addRecipes(entry.getKey(), entry.getValue());
             }
         } else {

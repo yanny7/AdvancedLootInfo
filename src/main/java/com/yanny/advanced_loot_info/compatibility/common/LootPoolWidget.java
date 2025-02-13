@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.compatibility;
+package com.yanny.advanced_loot_info.compatibility.common;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;

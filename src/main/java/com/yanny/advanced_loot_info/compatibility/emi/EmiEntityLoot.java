@@ -1,7 +1,7 @@
 package com.yanny.advanced_loot_info.compatibility.emi;
 
 import com.yanny.advanced_loot_info.api.Rect;
-import com.yanny.advanced_loot_info.compatibility.GenericUtils;
+import com.yanny.advanced_loot_info.compatibility.common.GenericUtils;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -51,7 +51,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
 
                 @Override
                 public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-                    GenericUtils.render(entity, rect, widgetHolder.getWidth(), guiGraphics, mouseX, mouseY);
+                    GenericUtils.renderEntity(entity, rect, widgetHolder.getWidth(), guiGraphics, mouseX, mouseY);
                 }
             });
             widgetHolder.addText(entity.getDisplayName(), (widgetHolder.getWidth() - length) / 2, 0, 0, false);

@@ -1,4 +1,4 @@
-package com.yanny.advanced_loot_info.compatibility;
+package com.yanny.advanced_loot_info.compatibility.common;
 
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -18,7 +18,7 @@ public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.advanced_loot_info.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
 
-    public static void render(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
         Window window = minecraft.getWindow();
         PoseStack poseStack = guiGraphics.pose();

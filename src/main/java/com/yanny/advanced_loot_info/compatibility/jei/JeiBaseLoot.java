@@ -2,7 +2,8 @@ package com.yanny.advanced_loot_info.compatibility.jei;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.advanced_loot_info.api.*;
-import com.yanny.advanced_loot_info.compatibility.LootTableWidget;
+import com.yanny.advanced_loot_info.compatibility.common.IType;
+import com.yanny.advanced_loot_info.compatibility.common.LootTableWidget;
 import com.yanny.advanced_loot_info.manager.PluginManager;
 import com.yanny.advanced_loot_info.plugin.TooltipUtils;
 import com.yanny.advanced_loot_info.plugin.entry.SingletonEntry;
@@ -144,14 +145,14 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             public Rect addSlotWidget(Item item, SingletonEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
                                       @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 slotParams.add(new ItemSlotParams(item, entry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
-                return new Rect(x, y, x + 18, y + 18);
+                return new Rect(x, y, 18, 18);
             }
 
             @Override
             public Rect addSlotWidget(TagKey<Item> item, SingletonEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
                                       @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 slotParams.add(new TagSlotParams(item, entry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
-                return new Rect(x, y, x + 18, y + 18);
+                return new Rect(x, y, 18, 18);
             }
         };
     }

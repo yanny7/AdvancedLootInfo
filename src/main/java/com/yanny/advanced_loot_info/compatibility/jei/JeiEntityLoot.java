@@ -1,8 +1,8 @@
 package com.yanny.advanced_loot_info.compatibility.jei;
 
 import com.yanny.advanced_loot_info.api.Rect;
-import com.yanny.advanced_loot_info.compatibility.GenericUtils;
-import com.yanny.advanced_loot_info.loot.LootTableEntry;
+import com.yanny.advanced_loot_info.compatibility.common.EntityLootType;
+import com.yanny.advanced_loot_info.compatibility.common.GenericUtils;
 import com.yanny.advanced_loot_info.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -22,16 +22,16 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
-public class JeiEntityLoot extends JeiBaseLoot<JeiEntityLoot.EntityType, Entity> {
-    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<EntityType> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
+public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
+    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<EntityLootType> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
         super(recipeType, lootCategory, title, icon);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, EntityType recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, EntityLootType recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = ForgeSpawnEggItem.fromEntityType(recipe.entity.getType());
+        SpawnEggItem spawnEgg = ForgeSpawnEggItem.fromEntityType(recipe.entity().getType());
 
         if (spawnEgg != null) {
             builder.addSlot(RecipeIngredientRole.CATALYST).setPosition(1, 1).setStandardSlotBackground().addItemLike(spawnEgg);
@@ -39,15 +39,15 @@ public class JeiEntityLoot extends JeiBaseLoot<JeiEntityLoot.EntityType, Entity>
     }
 
     @Override
-    public void createRecipeExtras(IRecipeExtrasBuilder builder, EntityType recipe, IFocusGroup focuses) {
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, EntityLootType recipe, IFocusGroup focuses) {
         super.createRecipeExtras(builder, recipe, focuses);
 
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level != null) {
-            int length = Minecraft.getInstance().font.width(recipe.entity.getDisplayName());
+            int length = Minecraft.getInstance().font.width(recipe.entity().getDisplayName());
 
-            builder.addText(recipe.entity.getDisplayName(), 7 * 18, 10).setPosition((9 * 18 - length) / 2, 0).setColor(0).setShadow(false);
+            builder.addText(recipe.entity().getDisplayName(), 7 * 18, 10).setPosition((9 * 18 - length) / 2, 0).setColor(0).setShadow(false);
             builder.addWidget(new IRecipeWidget() {
                 private static final int WIDGET_SIZE = 36;
                 final Rect rect = new Rect((9 * 18 - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
@@ -55,7 +55,7 @@ public class JeiEntityLoot extends JeiBaseLoot<JeiEntityLoot.EntityType, Entity>
 
                 @Override
                 public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-                    GenericUtils.render(recipe.entity, rect, 9 * 18, guiGraphics, (int) mouseX, (int) mouseY);
+                    GenericUtils.renderEntity(recipe.entity(), rect, 9 * 18, guiGraphics, (int) mouseX, (int) mouseY);
                 }
 
                 @NotNull
@@ -68,9 +68,7 @@ public class JeiEntityLoot extends JeiBaseLoot<JeiEntityLoot.EntityType, Entity>
     }
 
     @Override
-    int getYOffset(EntityType recipe) {
+    int getYOffset(EntityLootType recipe) {
         return 48;
     }
-
-    public record EntityType(Entity entity, LootTableEntry entry) implements IType {}
 }

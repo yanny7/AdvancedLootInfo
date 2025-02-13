@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package com.yanny.advanced_loot_info.compatibility.rei;
+
+import javax.annotation.ParametersAreNonnullByDefault;

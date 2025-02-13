@@ -1,7 +1,7 @@
 package com.yanny.advanced_loot_info.plugin.widget;
 
 import com.yanny.advanced_loot_info.api.*;
-import com.yanny.advanced_loot_info.compatibility.LootTableWidget;
+import com.yanny.advanced_loot_info.compatibility.common.LootTableWidget;
 import com.yanny.advanced_loot_info.loot.LootTableEntry;
 import com.yanny.advanced_loot_info.plugin.entry.ReferenceEntry;
 import net.minecraft.client.gui.GuiGraphics;
