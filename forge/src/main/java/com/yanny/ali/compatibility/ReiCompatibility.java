@@ -1,12 +1,12 @@
 package com.yanny.ali.compatibility;
 
-import com.yanny.ali.AdvancedLootInfoMod;
+import com.yanny.ali.AliMod;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.rei.*;
-import com.yanny.ali.network.NetworkUtils;
+import com.yanny.ali.network.Client;
 import com.yanny.ali.plugin.entry.LootTableEntry;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
@@ -81,7 +81,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        NetworkUtils.Client client = AdvancedLootInfoMod.INFO_PROPAGATOR.client();
+        Client client = AliMod.INFO_PROPAGATOR.client();
         ClientLevel level = Minecraft.getInstance().level;
 
         for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {

@@ -43,17 +43,16 @@ public class GenericUtils {
 
         if (entity instanceof LivingEntity livingEntity) {
             guiGraphics.pose().pushPose();
-            guiGraphics.blitNineSlicedSized(
+            guiGraphics.blit(
                     TEXTURE_LOC,
                     bounds.x(),
                     bounds.y(),
                     bounds.width(),
                     bounds.height(),
-                    4,
-                    16,
-                    16,
-                    2,
-                    2,
+                    0,
+                    36,
+                    36,
+                    36,
                     256,
                     256
             );

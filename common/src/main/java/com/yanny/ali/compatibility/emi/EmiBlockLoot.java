@@ -7,7 +7,7 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.IPlantable;
+import net.minecraft.world.level.block.BushBlock;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final boolean isSpecial;
 
     public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootTableEntry message) {
-        super(category, id, message, 0, (block instanceof IPlantable || block.asItem() == Items.AIR) ? 30 : 22);
+        super(category, id, message, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22);
         this.block = block;
-        isSpecial = block instanceof IPlantable || block.asItem() == Items.AIR;
+        isSpecial = block instanceof BushBlock || block.asItem() == Items.AIR;
         inputs = List.of(EmiStack.of(block));
     }
 

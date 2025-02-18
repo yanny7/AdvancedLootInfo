@@ -53,6 +53,7 @@
     "MixinLootPoolEntryContainer",
     "MixinLootPoolSingletonContainer",
     "MixinLootTable",
+    "MixinLootTableForge",
     "MixinLootTableReference",
     "MixinMatchTool",
     "MixinMinMaxBounds",

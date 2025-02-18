@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "mod_id",
+    "id": "ali",
     "version": "${version}",
     "name": "${mod_name}",
     "description": "${description}",
@@ -12,11 +12,20 @@
         "sources": "https://github.com/FabricMC/fabric-example-mod"
     },
     "license": "${license}",
-    "icon": "assets/modid/${mod_id}.png",
+    "icon": "assets/ali/${mod_id}.png",
     "environment": "*",
     "entrypoints": {
         "main": [
-            "com.example.examplemod.ExampleMod"
+            "com.yanny.ali.CommonAliMod"
+        ],
+        "client": [
+            "com.yanny.ali.ClientAliMod"
+        ],
+        "ali": [
+            "com.yanny.ali.plugin.VanillaPlugin"
+        ],
+        "emi": [
+            "com.yanny.ali.compatibility.EmiCompatibility"
         ]
     },
     "mixins": [

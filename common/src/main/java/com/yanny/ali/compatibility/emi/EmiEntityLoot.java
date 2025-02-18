@@ -14,7 +14,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
         super(category, id, message, 0, 48);
         this.entity = entity;
 
-        SpawnEggItem spawnEgg = ForgeSpawnEggItem.fromEntityType(entity.getType());
+        SpawnEggItem spawnEgg = SpawnEggItem.byId(entity.getType());
 
         if (spawnEgg != null) {
             catalysts = List.of(EmiStack.of(spawnEgg));
