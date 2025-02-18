@@ -26,6 +26,12 @@
         ],
         "emi": [
             "com.yanny.ali.compatibility.EmiCompatibility"
+        ],
+        "jei_mod_plugin": [
+            "com.yanny.ali.compatibility.JeiCompatibility"
+        ],
+        "rei_client": [
+            "com.yanny.ali.compatibility.ReiCompatibility"
         ]
     },
     "mixins": [

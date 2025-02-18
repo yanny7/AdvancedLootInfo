@@ -19,7 +19,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.SpawnEggItem;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import org.jetbrains.annotations.NotNull;
 
 public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
@@ -31,7 +30,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
     public void setRecipe(IRecipeLayoutBuilder builder, EntityLootType recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = ForgeSpawnEggItem.fromEntityType(recipe.entity().getType());
+        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.entity().getType());
 
         if (spawnEgg != null) {
             builder.addSlot(RecipeIngredientRole.CATALYST).setPosition(1, 1).setStandardSlotBackground().addItemLike(spawnEgg);

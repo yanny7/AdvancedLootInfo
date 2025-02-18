@@ -11,16 +11,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.ModelData;
-import net.minecraftforge.common.IPlantable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -37,7 +35,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         this.guiHelper = guiHelper;
         this.block = block;
         blockState = block.defaultBlockState();
-        isPlant = block instanceof IPlantable;
+        isPlant = block instanceof BushBlock;
         position = new ScreenPosition(x, y);
         rect = new Rect(x - 4, y - 4, 24, 24);
     }
@@ -68,7 +66,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
             poseStack.scale(9, -9, 9);
             poseStack.mulPose(Axis.XP.rotationDegrees(30f));
             poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
+            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
 
             BlockState base;
             BlockState farmland = Blocks.FARMLAND.defaultBlockState();
@@ -80,13 +78,13 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
             }
 
             poseStack.translate(0, -1, 0);
-            blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
+            blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
         } else {
             poseStack.translate(25.5, 21, 100);
             poseStack.scale(18, -18, 18);
             poseStack.mulPose(Axis.XP.rotationDegrees(30f));
             poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, ModelData.EMPTY, RenderType.cutout());
+            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
             poseStack.translate(0, -1, 0);
         }
 

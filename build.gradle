@@ -117,7 +117,8 @@ subprojects {
                 "jei_version_range": jei_version_range,
 
                 "rei_version": rei_version,
-                "cloth_config": cloth_config
+                "cloth_config_version": cloth_config_version,
+                "architectury_version": architectury_version
         ]
 
         filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml']) {

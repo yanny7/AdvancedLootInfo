@@ -12,7 +12,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.IPlantable;
+import net.minecraft.world.level.block.BushBlock;
 
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     private final IGuiHelper guiHelper;
@@ -26,7 +26,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     public void setRecipe(IRecipeLayoutBuilder builder, BlockLootType recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        boolean isSpecial = recipe.block() instanceof IPlantable || recipe.block().asItem() == Items.AIR;
+        boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
 
         if (!isSpecial) {
             builder.addInputSlot(4 * 18 + 1, 1).setStandardSlotBackground().addItemLike(recipe.block());
@@ -37,7 +37,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     public void createRecipeExtras(IRecipeExtrasBuilder builder, BlockLootType recipe, IFocusGroup focuses) {
         super.createRecipeExtras(builder, recipe, focuses);
 
-        boolean isSpecial = recipe.block() instanceof IPlantable || recipe.block().asItem() == Items.AIR;
+        boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
 
         if (isSpecial) {
             builder.addSlottedWidget(new JeiBlockSlotWidget(guiHelper, recipe.block(), 4 * 18, 6), builder.getRecipeSlots().getSlots(RecipeIngredientRole.INPUT));
@@ -46,7 +46,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
 
     @Override
     int getYOffset(BlockLootType recipe) {
-        boolean isSpecial = recipe.block() instanceof IPlantable || recipe.block().asItem() == Items.AIR;
+        boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
         return isSpecial ? 30 : 22;
     }
 }
