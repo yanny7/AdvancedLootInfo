@@ -21,6 +21,9 @@
         "client": [
             "com.yanny.ali.ClientAliMod"
         ],
+        "fabric-datagen": [
+            "com.yanny.ali.datagen.DataGeneration"
+        ],
         "ali": [
             "com.yanny.ali.plugin.VanillaPlugin"
         ],

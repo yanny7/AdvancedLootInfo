@@ -9,6 +9,10 @@ base {
     archivesName = "${mod_name}-fabric-${minecraft_version}"
 }
 
+fabricApi {
+    configureDataGeneration()
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()

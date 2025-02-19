@@ -82,27 +82,24 @@ public class ReiCompatibility implements REIClientPlugin {
         Client client = CommonAliMod.INFO_PROPAGATOR.client();
         ClientLevel level = Minecraft.getInstance().level;
 
-        for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
-            registry.registerFiller(blockPredicate(holder.category.getLootCategory()), holder.filler);
-        }
-
-        for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
-            registry.registerFiller(entityPredicate(holder.category.getLootCategory()), holder.filler);
-        }
-
-        for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
-            registry.registerFiller(gameplayPredicate(holder.category.getLootCategory()), holder.filler);
-        }
-
         if (client != null && level != null) {
             Map<ResourceLocation, LootTableEntry> map = new HashMap<>(client.lootEntries.stream().collect(Collectors.toMap((l) -> l.location, l -> l.value)));
+            Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
+            Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
+            Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
                 LootTableEntry lootEntry = map.get(location);
 
                 if (lootEntry != null) {
-                    registry.add(new BlockLootType(block, lootEntry));
+                    for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
+                        if (holder.category.getLootCategory().validate(block)) {
+                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry));
+                            break;
+                        }
+                    }
+
                     map.remove(location);
                 }
             }
@@ -136,17 +133,45 @@ public class ReiCompatibility implements REIClientPlugin {
                         LootTableEntry lootEntry = map.get(location);
 
                         if (lootEntry != null && entityType.create(level) != null) {
-                            registry.add(new EntityLootType(entity, lootEntry));
+                            for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
+                                if (holder.category.getLootCategory().validate(entity)) {
+                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry));
+                                    break;
+                                }
+                            }
+
                             map.remove(location);
                         }
                     }
                 }
             }
 
-            for (Map.Entry<ResourceLocation, LootTableEntry> entry : map.entrySet()) {
+            for (Map.Entry<ResourceLocation, LootTableEntry> entry : new HashMap<>(map).entrySet()) {
                 ResourceLocation location = entry.getKey();
 
-                registry.add(new GameplayLootType(entry.getValue(), "/" + location.getPath()));
+                for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
+                    if (holder.category.getLootCategory().validate(location.getPath())) {
+                        gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath()));
+                        break;
+                    }
+                }
+
+                map.remove(location);
+            }
+
+            for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
+                registry.registerFiller(blockPredicate(entry.getValue()), entry.getKey().filler());
+                entry.getValue().forEach(registry::add);
+            }
+
+            for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
+                registry.registerFiller(entityPredicate(entry.getValue()), entry.getKey().filler());
+                entry.getValue().forEach(registry::add);
+            }
+
+            for (Map.Entry<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
+                registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
+                entry.getValue().forEach(registry::add);
             }
         }
     }
@@ -173,11 +198,11 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> blockPredicate(LootCategory<Block> lootCategory) {
+    private Predicate<Object> blockPredicate(List<BlockLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof BlockLootType type) {
-                    return lootCategory.validate(type.block());
+                    return lootTypes.contains(type);
                 }
             }
 
@@ -186,11 +211,11 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> entityPredicate(LootCategory<Entity> lootCategory) {
+    private Predicate<Object> entityPredicate(List<EntityLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof EntityLootType type) {
-                    return lootCategory.validate(type.entity());
+                    return lootTypes.contains(type);
                 }
             }
 
@@ -199,11 +224,11 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> gameplayPredicate(LootCategory<String> lootCategory) {
+    private Predicate<Object> gameplayPredicate(List<GameplayLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof GameplayLootType type) {
-                    return lootCategory.validate(type.id().substring(1));
+                    return lootTypes.contains(type);
                 }
             }
 

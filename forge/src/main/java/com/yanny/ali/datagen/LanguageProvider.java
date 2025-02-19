@@ -10,14 +10,14 @@ class LanguageProvider extends net.minecraftforge.common.data.LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add("ali.category.block_loot", "Block Drops");
-        add("ali.category.plant_loot", "Plant Drops");
-        add("ali.category.entity_loot", "Entity Drops");
-        add("ali.category.chest_loot", "Chest Loot");
-        add("ali.category.fishing_loot", "Fishing Loot");
-        add("ali.category.archaeology_loot", "Archaeology Loot");
-        add("ali.category.hero_loot", "Hero of the Village Loot");
-        add("ali.category.gameplay_loot", "Gameplay Loot");
+        add("emi.category.ali.block_loot", "Block Drops");
+        add("emi.category.ali.plant_loot", "Plant Drops");
+        add("emi.category.ali.entity_loot", "Entity Drops");
+        add("emi.category.ali.chest_loot", "Chest Loot");
+        add("emi.category.ali.fishing_loot", "Fishing Loot");
+        add("emi.category.ali.archaeology_loot", "Archaeology Loot");
+        add("emi.category.ali.hero_loot", "Hero of the Village Loot");
+        add("emi.category.ali.gameplay_loot", "Gameplay Loot");
 
         add("ali.description.rolls", "Rolls: %s");
         add("ali.description.chance", "Chance: %s");
