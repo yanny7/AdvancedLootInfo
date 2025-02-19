@@ -5,7 +5,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
-import com.yanny.ali.network.Client;
+import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.plugin.entry.LootTableEntry;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
@@ -40,7 +40,7 @@ public class EmiCompatibility implements EmiPlugin {
     }
 
     private void registerLootTable(EmiRegistry registry) {
-        Client client = AliMod.INFO_PROPAGATOR.client();
+        AbstractClient client = AliMod.INFO_PROPAGATOR.client();
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {

@@ -9,7 +9,7 @@ import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.jei.JeiBlockLoot;
 import com.yanny.ali.compatibility.jei.JeiEntityLoot;
 import com.yanny.ali.compatibility.jei.JeiGameplayLoot;
-import com.yanny.ali.network.Client;
+import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.plugin.entry.LootTableEntry;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
@@ -77,7 +77,7 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
-        Client client = CommonAliMod.INFO_PROPAGATOR.client();
+        AbstractClient client = CommonAliMod.INFO_PROPAGATOR.client();
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {

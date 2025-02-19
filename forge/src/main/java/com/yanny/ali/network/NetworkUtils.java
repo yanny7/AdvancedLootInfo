@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class NetworkUtils {
     private static int messageId = 0;
 
-    public static DistHolder<Client, Server> registerLootInfoPropagator(SimpleChannel channel) {
+    public static DistHolder<AbstractClient, AbstractServer> registerLootInfoPropagator(SimpleChannel channel) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             return registerClientLootInfoPropagator(channel);
         } else {
@@ -17,7 +17,7 @@ public class NetworkUtils {
     }
 
     @NotNull
-    private static DistHolder<Client, Server> registerClientLootInfoPropagator(SimpleChannel channel) {
+    private static DistHolder<AbstractClient, AbstractServer> registerClientLootInfoPropagator(SimpleChannel channel) {
         Client client = new Client();
         Server server = new Server(channel);
 
@@ -27,7 +27,7 @@ public class NetworkUtils {
     }
 
     @NotNull
-    private static DistHolder<Client, Server> registerServerLootInfoPropagator(SimpleChannel channel) {
+    private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
         channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, (m, c) -> {});

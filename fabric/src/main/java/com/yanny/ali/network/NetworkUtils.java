@@ -11,7 +11,7 @@ public class NetworkUtils {
     public static final ResourceLocation NEW_LOOT_INFO_ID = Utils.modLoc("new_loot_info");
     public static final ResourceLocation CLEAR_LOOT_INFO_ID = Utils.modLoc("clear_loot_info");
 
-    public static DistHolder<Client, Server> registerLootInfoPropagator() {
+    public static DistHolder<AbstractClient, AbstractServer> registerLootInfoPropagator() {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             return registerClientLootInfoPropagator();
         } else {
@@ -20,7 +20,7 @@ public class NetworkUtils {
     }
 
     @NotNull
-    private static DistHolder<Client, Server> registerClientLootInfoPropagator() {
+    private static DistHolder<AbstractClient, AbstractServer> registerClientLootInfoPropagator() {
         Client client = new Client();
         Server server = new Server();
 
@@ -30,7 +30,7 @@ public class NetworkUtils {
     }
 
     @NotNull
-    private static DistHolder<Client, Server> registerServerLootInfoPropagator() {
+    private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator() {
         Server server = new Server();
         return new DistHolder<>(null, server);
     }

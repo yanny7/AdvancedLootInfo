@@ -2,10 +2,10 @@ package com.yanny.ali;
 
 import com.yanny.ali.datagen.DataGeneration;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.Client;
+import com.yanny.ali.network.AbstractClient;
+import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
-import com.yanny.ali.network.Server;
 import com.yanny.ali.registries.LootCategories;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -18,7 +18,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod(Utils.MOD_ID)
 public class AliMod {
-    public static final DistHolder<Client, Server> INFO_PROPAGATOR;
+    public static final DistHolder<AbstractClient, AbstractServer> INFO_PROPAGATOR;
 
     private static final String PROTOCOL_VERSION = "1";
 
