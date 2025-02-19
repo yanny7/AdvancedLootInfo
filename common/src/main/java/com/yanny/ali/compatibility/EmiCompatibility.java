@@ -1,14 +1,15 @@
 package com.yanny.ali.compatibility;
 
-import com.yanny.ali.CommonAliMod;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
 import com.yanny.ali.network.AbstractClient;
+import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.entry.LootTableEntry;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
+import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
     @Override
     public void register(EmiRegistry emiRegistry) {
@@ -38,7 +40,7 @@ public class EmiCompatibility implements EmiPlugin {
     }
 
     private void registerLootTable(EmiRegistry registry) {
-        AbstractClient client = CommonAliMod.INFO_PROPAGATOR.client();
+        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {

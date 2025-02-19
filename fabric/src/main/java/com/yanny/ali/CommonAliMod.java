@@ -5,7 +5,7 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
-import com.yanny.ali.registries.LootCategories;
+import com.yanny.ali.registries.FabricReloadListener;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.server.packs.PackType;
@@ -19,7 +19,7 @@ public class CommonAliMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(LootCategories.onResourceReload());
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(FabricReloadListener.onResourceReload());
         FabricBusSubscriber.registerEvents();
         NetworkUtils.registerLootInfoPropagator();
         PluginManager.registerCommonEvent();

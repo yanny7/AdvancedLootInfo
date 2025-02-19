@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.AliMod;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
@@ -10,6 +9,7 @@ import com.yanny.ali.compatibility.jei.JeiBlockLoot;
 import com.yanny.ali.compatibility.jei.JeiEntityLoot;
 import com.yanny.ali.compatibility.jei.JeiGameplayLoot;
 import com.yanny.ali.network.AbstractClient;
+import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.entry.LootTableEntry;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
@@ -22,6 +22,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +31,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -79,7 +79,7 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
-        AbstractClient client = AliMod.INFO_PROPAGATOR.client();
+        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
@@ -88,7 +88,7 @@ public class JeiCompatibility implements IModPlugin {
             Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
-            for (Block block : ForgeRegistries.BLOCKS) {
+            for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
                 LootTableEntry lootEntry = map.get(location);
 
@@ -110,7 +110,7 @@ public class JeiCompatibility implements IModPlugin {
                 }
             }
 
-            for (EntityType<?> entityType : ForgeRegistries.ENTITY_TYPES) {
+            for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
                 List<Entity> entityList = new LinkedList<>();
 
                 if (entityType == EntityType.SHEEP) {

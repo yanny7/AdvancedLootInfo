@@ -1,7 +1,11 @@
 package com.yanny.ali.registries;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -12,9 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.world.level.block.BushBlock;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -27,47 +29,12 @@ public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<Entity>> ENTITY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> GAMEPLAY_LOOT_CATEGORIES = new HashMap<>();
 
-    public static final LootCategory<Block> PLANT_LOOT = getBlockCategory("plant_loot", Items.DIAMOND_HOE, (block) -> block instanceof IPlantable);
+    public static final LootCategory<Block> PLANT_LOOT = getBlockCategory("plant_loot", Items.DIAMOND_HOE, (block) -> block instanceof BushBlock);
     public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory("block_loot", Items.DIAMOND_PICKAXE, (block) -> true);
     public static final LootCategory<Entity> ENTITY_LOOT = getEntityCategory("entity_loot", Items.SKELETON_SKULL, (entity) -> true);
     public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory((path) -> true);
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
-    public static void onResourceReload(AddReloadListenerEvent event) {
-        event.addListener(new SimpleJsonResourceReloadListener(GSON, "loot_categories") {
-            @Override
-            protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-                BLOCK_LOOT_CATEGORIES.clear();
-                ENTITY_LOOT_CATEGORIES.clear();
-                GAMEPLAY_LOOT_CATEGORIES.clear();
-
-                map.forEach((location, value) -> {
-                    try {
-                        JsonObject jsonObject = GsonHelper.convertToJsonObject(value, location.toString());
-                        LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
-                        String key = GsonHelper.getAsString(jsonObject, "key");
-                        Item icon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
-
-                        if (icon == null) {
-                            throw new JsonParseException("Item " + GsonHelper.getAsString(jsonObject, "icon") + " not found");
-                        }
-
-                        switch (type) {
-                            case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));
-                            case ENTITY -> ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(key, icon, (entity) -> true));
-                            case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(key, icon, GsonHelper.getAsString(jsonObject, "prefix")));
-                        }
-
-                        LOGGER.info("Loaded LootCategory resource: {}", location);
-                    } catch (Exception e) {
-                        LOGGER.error("Failed to load LootCategory resource: {}", location, e);
-                    }
-                });
-            }
-        });
-    }
 
     @NotNull
     private static LootCategory<Block> getBlockCategory(String key, Item icon, Predicate<Block> validator) {
@@ -87,5 +54,40 @@ public class LootCategories {
     @NotNull
     private static LootCategory<String> getGameplayCategory(String key, Item icon, String prefix) {
         return new GameplayLootCategory(key, new ItemStack(icon), LootCategory.Type.GAMEPLAY, prefix);
+    }
+
+    @NotNull
+    public static SimpleJsonResourceReloadListener getReloadListener(Gson gson, String id) {
+        return new SimpleJsonResourceReloadListener(gson, id) {
+            @Override
+            protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+                BLOCK_LOOT_CATEGORIES.clear();
+                ENTITY_LOOT_CATEGORIES.clear();
+                GAMEPLAY_LOOT_CATEGORIES.clear();
+
+                map.forEach((location, value) -> {
+                    try {
+                        JsonObject jsonObject = GsonHelper.convertToJsonObject(value, location.toString());
+                        LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
+                        String key = GsonHelper.getAsString(jsonObject, "key");
+                        Item icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
+
+                        if (icon == null) {
+                            throw new JsonParseException("Item " + GsonHelper.getAsString(jsonObject, "icon") + " not found");
+                        }
+
+                        switch (type) {
+                            case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));
+                            case ENTITY -> ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(key, icon, (entity) -> true));
+                            case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(key, icon, GsonHelper.getAsString(jsonObject, "prefix")));
+                        }
+
+                        LOGGER.info("Loaded LootCategory resource: {}", location);
+                    } catch (Exception e) {
+                        LOGGER.error("Failed to load LootCategory resource: {}", location, e);
+                    }
+                });
+            }
+        };
     }
 }

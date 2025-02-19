@@ -6,7 +6,7 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
-import com.yanny.ali.registries.LootCategories;
+import com.yanny.ali.registries.ForgeReloadListener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -39,7 +39,7 @@ public class AliMod {
         modEventBus.addListener(DataGeneration::generate);
         modEventBus.addListener(AliMod::registerCommonEvent);
         modEventBus.addListener(AliMod::registerClientEvent);
-        MinecraftForge.EVENT_BUS.addListener(LootCategories::onResourceReload);
+        MinecraftForge.EVENT_BUS.addListener(ForgeReloadListener::onResourceReload);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
