@@ -109,14 +109,19 @@ subprojects {
 
                 "fabric_version": fabric_version,
                 "fabric_loader_version": fabric_loader_version,
+                "fabric_loader_version_range_fabric": fabric_loader_version_range_fabric,
 
                 "emi_version": emi_version,
                 "emi_version_range": emi_version_range,
+                "emi_version_range_fabric": emi_version_range_fabric,
 
                 "jei_version": jei_version,
                 "jei_version_range": jei_version_range,
+                "jei_version_range_fabric": jei_version_range_fabric,
 
                 "rei_version": rei_version,
+                "rei_version_range": rei_version_range,
+                "rei_version_range_fabric": rei_version_range_fabric,
                 "cloth_config_version": cloth_config_version,
                 "architectury_version": architectury_version
         ]
