@@ -40,7 +40,7 @@
         "${mod_id}.fabric.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.14",
+        "fabricloader": "${fabric_loader_version_range_fabric}",
         "fabric": "*",
         "minecraft": "${minecraft_version}",
         "java": ">=17"
