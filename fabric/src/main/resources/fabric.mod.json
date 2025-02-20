@@ -10,7 +10,7 @@
     "contact": {
     },
     "license": "${license}",
-    "icon": "assets/ali/${mod_id}.png",
+    "icon": "logo.png",
     "environment": "*",
     "entrypoints": {
         "main": [
