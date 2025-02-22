@@ -5,7 +5,6 @@
   "mixins": [
     "MixinApplyBonusCount",
     "MixinBinomialDistributionGenerator",
-    "MixinBinomialWithBonusCount",
     "MixinBlockPredicate",
     "MixinBonusLevelTableCondition",
     "MixinBushBlock",
@@ -87,10 +86,11 @@
     "MixinTagEntry",
     "MixinTagPredicate",
     "MixinTimeCheck",
-    "MixinUniformBonusCount",
     "MixinUniformGenerator",
     "MixinValueCheckCondition",
-    "MixinWeatherCheck"
+    "MixinWeatherCheck",
+    "MixinApplyBonusCount.BinomialWithBonusCount",
+    "MixinApplyBonusCount.UniformBonusCount"
   ],
   "refmap": "ali.refmap.json",
   "client": [

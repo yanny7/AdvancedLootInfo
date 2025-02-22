@@ -3,8 +3,10 @@
   "package": "com.yanny.ali.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinApplyBonusCount",
+    "MixinApplyBonusCount$BinomialWithBonusCount",
+    "MixinApplyBonusCount$UniformBonusCount",
     "MixinBinomialDistributionGenerator",
-    "MixinBinomialWithBonusCount",
     "MixinBlockPredicate",
     "MixinBonusLevelTableCondition",
     "MixinBushBlock",
@@ -86,10 +88,11 @@
     "MixinTagEntry",
     "MixinTagPredicate",
     "MixinTimeCheck",
-    "MixinUniformBonusCount",
     "MixinUniformGenerator",
     "MixinValueCheckCondition",
-    "MixinWeatherCheck"
+    "MixinWeatherCheck",
+    "MixinApplyBonusCount.BinomialWithBonusCount",
+    "MixinApplyBonusCount.UniformBonusCount"
   ],
   "refmap": "ali.refmap.json",
   "client": [

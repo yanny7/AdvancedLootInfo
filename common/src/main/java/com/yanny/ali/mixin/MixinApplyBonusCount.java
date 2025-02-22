@@ -12,4 +12,16 @@ public interface MixinApplyBonusCount {
 
     @Accessor
     ApplyBonusCount.Formula getFormula();
+
+    @Mixin(ApplyBonusCount.BinomialWithBonusCount.class)
+    interface BinomialWithBonusCount {
+        @Accessor
+        int getExtraRounds();
+    }
+
+    @Mixin(ApplyBonusCount.UniformBonusCount.class)
+    interface UniformBonusCount {
+        @Accessor
+        int getBonusMultiplier();
+    }
 }

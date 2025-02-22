@@ -3,8 +3,6 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinApplyBonusCount;
-import com.yanny.ali.mixin.MixinBinomialWithBonusCount;
-import com.yanny.ali.mixin.MixinUniformBonusCount;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -133,7 +131,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
         public BinomialFormula(ApplyBonusCount.Formula formula) {
             super(FormulaType.of(formula.getType()));
-            extraRounds = ((MixinBinomialWithBonusCount) formula).getExtraRounds();
+            extraRounds = ((MixinApplyBonusCount.BinomialWithBonusCount) formula).getExtraRounds();
         }
 
         public BinomialFormula(FormulaType type, FriendlyByteBuf buf) {
@@ -157,7 +155,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
         public UniformFormula(ApplyBonusCount.Formula formula) {
             super(FormulaType.of(formula.getType()));
-            bonusMultiplier = ((MixinUniformBonusCount) formula).getBonusMultiplier();
+            bonusMultiplier = ((MixinApplyBonusCount.UniformBonusCount) formula).getBonusMultiplier();
         }
 
         public UniformFormula(FormulaType type, FriendlyByteBuf buf) {
