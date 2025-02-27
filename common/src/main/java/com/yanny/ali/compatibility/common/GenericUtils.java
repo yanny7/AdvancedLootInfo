@@ -62,11 +62,14 @@ public class GenericUtils {
             EntityDimensions dimensions = entity.getType().getDimensions();
             InventoryScreen.renderEntityInInventoryFollowsMouse(
                     guiGraphics,
-                    bounds.x() + bounds.width() / 2,
-                    bounds.y() + WIDGET_SIZE - 5,
+                    -screenX + bounds.x(),
+                    -screenY + bounds.y(),
+                    screenX + bounds.right(),
+                    screenY + bounds.bottom(),
                     (int) (Math.min(20 / dimensions.height, 20 / dimensions.width)),
-                    -mouseX + ((float) fullWidth / 2),
-                    -mouseY + WIDGET_SIZE / 2f,
+                    0.0625F,
+                    mouseX,
+                    mouseY,
                     livingEntity
             );
 

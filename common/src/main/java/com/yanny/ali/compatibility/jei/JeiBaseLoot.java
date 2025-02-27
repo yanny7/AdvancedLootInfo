@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
@@ -9,13 +10,16 @@ import com.yanny.ali.plugin.entry.SingletonEntry;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
-import mezz.jei.api.gui.widgets.IRecipeWidget;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -27,17 +31,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
     private final RecipeType<T> recipeType;
     private final LootCategory<V> lootCategory;
     private final Component title;
     private final IDrawable icon;
+    protected final IGuiHelper guiHelper;
     @Nullable
-    private IRecipeWidget widget;
+    private IWidget widget;
     private List<ISlotParams> slotParams;
 
-    public JeiBaseLoot(RecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
+    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
+        this.guiHelper = guiHelper;
         this.recipeType = recipeType;
         this.lootCategory = lootCategory;
         this.title = title;
@@ -56,6 +63,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         return title;
     }
 
+    @NotNull
     @Override
     public final IDrawable getIcon() {
         return icon;
@@ -67,25 +75,21 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup iFocusGroup) {
-        widget = new JeiWidgetWrapper(new LootTableWidget(getJeiUtils(), recipe.entry(), 0, getYOffset(recipe)));
+        widget = new LootTableWidget(getJeiUtils(), recipe.entry(), 0, getYOffset(recipe));
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);
 
             if (p instanceof ItemSlotParams itemSlotParams) {
-                builder.addOutputSlot()
-                        .setStandardSlotBackground()
+                builder.addSlot(RecipeIngredientRole.OUTPUT, itemSlotParams.x + 1, itemSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
-                        .setPosition(1, 1)
-                        .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> setupTooltip(tooltipBuilder, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
-                        .addItemLike(itemSlotParams.item);
+                        .addTooltipCallback((iRecipeSlotView, components)
+                                -> setupTooltip(components, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
+                        .addItemStack(itemSlotParams.item.getDefaultInstance());
             } else if (p instanceof TagSlotParams tagSlotParams) {
-                builder.addOutputSlot()
-                        .setStandardSlotBackground()
+                builder.addSlot(RecipeIngredientRole.OUTPUT, tagSlotParams.x + 1, tagSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
-                        .setPosition(1, 1)
-                        .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
+                        .addTooltipCallback((iRecipeSlotView, tooltipBuilder)
                                 -> setupTooltip(tooltipBuilder, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
@@ -93,18 +97,42 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @Override
-    public void createRecipeExtras(IRecipeExtrasBuilder builder, T recipe, IFocusGroup focuses) {
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         if (widget != null) {
-            builder.addWidget(widget);
+            widget.render(guiGraphics, (int) mouseX, (int) mouseY);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, widget.getTooltipComponents((int) mouseX, (int) mouseY), Optional.empty(), (int) mouseX, (int) mouseY);
         }
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);
 
-            builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent(slotDrawable -> builder.addSlottedWidget(
-                    new JeiLootSlotWidget(p.entry(), slotDrawable, p.x(), p.y(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()),
-                    List.of(slotDrawable)
-            ));
+            guiHelper.getSlotDrawable().draw(guiGraphics, p.x(), p.y());
+
+            recipeSlotsView.findSlotByName(String.valueOf(i)).ifPresent((slotView) -> {
+                if (p.count().isRange() || p.count().min() > 1) {
+                    Component count = Component.literal(p.count().toIntString());
+                    boolean isRange = p.count().isRange();
+                    Font font = Minecraft.getInstance().font;
+                    PoseStack stack = guiGraphics.pose();
+
+                    stack.pushPose();
+                    stack.translate(p.x(), p.y(), 0);
+
+                    if (isRange) {
+                        stack.translate(17, 13, 200);
+                        stack.pushPose();
+                        stack.scale(0.5f, 0.5f, 0.5f);
+                        //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
+                        guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
+                        stack.popPose();
+                    } else {
+                        stack.translate(18, 10, 200);
+                        guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
+                    }
+
+                    stack.popPose();
+                }
+            });
         }
     }
 
@@ -157,20 +185,20 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         };
     }
 
-    private void setupTooltip(ITooltipBuilder tooltipBuilder, ILootEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+    private void setupTooltip(List<Component> components, ILootEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
                               @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions, List<ILootCondition> conditions) {
         if (entry instanceof SingletonEntry singletonEntry) {
-            tooltipBuilder.addAll(TooltipUtils.getQuality(singletonEntry));
+            components.addAll(TooltipUtils.getQuality(singletonEntry));
         }
 
-        tooltipBuilder.add(TooltipUtils.getChance(chance));
-        tooltipBuilder.addAll(TooltipUtils.getBonusChance(bonusChance));
+        components.add(TooltipUtils.getChance(chance));
+        components.addAll(TooltipUtils.getBonusChance(bonusChance));
 
-        tooltipBuilder.add(TooltipUtils.getCount(count));
-        tooltipBuilder.addAll(TooltipUtils.getBonusCount(bonusCount));
+        components.add(TooltipUtils.getCount(count));
+        components.addAll(TooltipUtils.getBonusCount(bonusCount));
 
-        tooltipBuilder.addAll(TooltipUtils.getConditions(conditions, 0));
-        tooltipBuilder.addAll(TooltipUtils.getFunctions(functions, 0));
+        components.addAll(TooltipUtils.getConditions(conditions, 0));
+        components.addAll(TooltipUtils.getFunctions(functions, 0));
     }
 
     private interface ISlotParams {

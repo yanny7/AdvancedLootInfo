@@ -23,7 +23,7 @@ public class CopyStateFunction extends LootConditionalFunction {
 
     public CopyStateFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        block = ((MixinCopyBlockState) function).getBlock();
+        block = ((MixinCopyBlockState) function).getBlock().value();
         properties = ((MixinCopyBlockState) function).getProperties();
     }
 

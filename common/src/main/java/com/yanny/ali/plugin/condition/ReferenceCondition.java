@@ -2,10 +2,10 @@ package com.yanny.ali.plugin.condition;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.mixin.MixinConditionReference;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.predicates.ConditionReference;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class ReferenceCondition implements ILootCondition {
     public final ResourceLocation name;
 
     public ReferenceCondition(IContext context, LootItemCondition condition) {
-        name = ((MixinConditionReference) condition).getName();
+        name = ((ConditionReference) condition).name();
     }
 
     public ReferenceCondition(IContext context, FriendlyByteBuf buf) {

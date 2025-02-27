@@ -8,10 +8,12 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import java.util.List;
+
 @Mixin(LootPool.class)
 public interface MixinLootPool {
     @Accessor
-    LootPoolEntryContainer[] getEntries();
+    List<LootPoolEntryContainer> getEntries();
 
     @Accessor
     NumberProvider getRolls();
@@ -20,8 +22,8 @@ public interface MixinLootPool {
     NumberProvider getBonusRolls();
 
     @Accessor
-    LootItemCondition[] getConditions();
+    List<LootItemCondition> getConditions();
 
     @Accessor
-    LootItemFunction[] getFunctions();
+    List<LootItemFunction> getFunctions();
 }

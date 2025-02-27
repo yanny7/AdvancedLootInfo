@@ -4,7 +4,6 @@ import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinIntRange;
-import com.yanny.ali.mixin.MixinValueCheckCondition;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -21,9 +20,9 @@ public class ValueCheckCondition implements ILootCondition {
     public final RangeValue max;
 
     public ValueCheckCondition(IContext context, LootItemCondition condition) {
-        provider = context.utils().convertNumber(context, ((MixinValueCheckCondition) condition).getProvider());
-        min = context.utils().convertNumber(context, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMin());
-        max = context.utils().convertNumber(context, ((MixinIntRange) ((MixinValueCheckCondition) condition).getRange()).getMax());
+        provider = context.utils().convertNumber(context, ((net.minecraft.world.level.storage.loot.predicates.ValueCheckCondition) condition).provider());
+        min = context.utils().convertNumber(context, ((MixinIntRange) ((net.minecraft.world.level.storage.loot.predicates.ValueCheckCondition) condition).range()).getMin());
+        max = context.utils().convertNumber(context, ((MixinIntRange) ((net.minecraft.world.level.storage.loot.predicates.ValueCheckCondition) condition).range()).getMax());
     }
 
     public ValueCheckCondition(IContext context, FriendlyByteBuf buf) {

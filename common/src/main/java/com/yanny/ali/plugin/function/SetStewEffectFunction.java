@@ -23,9 +23,9 @@ public class SetStewEffectFunction extends LootConditionalFunction {
 
     public SetStewEffectFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        effectMap = ((MixinSetStewEffectFunction) function).getEffectDurationMap().entrySet().stream().collect(Collectors.toMap(
-                (e) -> BuiltInRegistries.MOB_EFFECT.getKey(e.getKey()),
-                (e) -> context.utils().convertNumber(context, e.getValue())
+        effectMap = ((MixinSetStewEffectFunction) function).getEffects().stream().collect(Collectors.toMap(
+                (e) -> BuiltInRegistries.MOB_EFFECT.getKey(e.effect().value()),
+                (e) -> context.utils().convertNumber(context, e.duration())
         ));
     }
 

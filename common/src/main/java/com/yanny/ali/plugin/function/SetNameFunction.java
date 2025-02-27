@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.function;
 
+import com.google.gson.JsonElement;
 import com.yanny.ali.api.IContext;
-import com.yanny.ali.mixin.MixinLootContext;
 import com.yanny.ali.mixin.MixinSetNameFunction;
 import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,15 +10,15 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 public class SetNameFunction extends LootConditionalFunction {
-    public final Component name;
-    @Nullable
-    public final LootContext.EntityTarget resolutionContext;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final Optional<Component> name;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final Optional<LootContext.EntityTarget> resolutionContext;
 
     public SetNameFunction(IContext context, LootItemFunction function) {
         super(context, function);
@@ -28,16 +28,17 @@ public class SetNameFunction extends LootConditionalFunction {
 
     public SetNameFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        name = Component.Serializer.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
-        String target = buf.readOptional(FriendlyByteBuf::readUtf).orElse(null);
-        resolutionContext = target != null ? LootContext.EntityTarget.getByName(target) : null;
+        Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
+        name = jsonElement.map(Component.Serializer::fromJson);
+        Optional<String> target = buf.readOptional(FriendlyByteBuf::readUtf);
+        resolutionContext = target.map(LootContext.EntityTarget::getByName);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(name));
-        buf.writeOptional(Optional.ofNullable(resolutionContext != null ? ((MixinLootContext.EntityTarget) ((Object) resolutionContext)).getName() : null), FriendlyByteBuf::writeUtf);
+        buf.writeOptional(name.map(Component.Serializer::toJson), FriendlyByteBuf::writeUtf);
+        buf.writeOptional(resolutionContext.map(Enum::name), FriendlyByteBuf::writeUtf);
     }
 
     @Override
@@ -45,11 +46,8 @@ public class SetNameFunction extends LootConditionalFunction {
         List<Component> components = new LinkedList<>();
 
         components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.set_name")));
-        components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_name.name", name)));
-
-        if (resolutionContext != null) {
-            components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_name.resolution_context", TooltipUtils.translatableType("ali.enum.target", resolutionContext))));
-        }
+        name.ifPresent((n) -> components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_name.name", n))));
+        resolutionContext.ifPresent((c) -> components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_name.resolution_context", TooltipUtils.translatableType("ali.enum.target", c)))));
 
         return components;
     }

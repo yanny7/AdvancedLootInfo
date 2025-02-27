@@ -5,6 +5,8 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import java.util.List;
+
 @Mixin(LootPoolSingletonContainer.class)
 public interface MixinLootPoolSingletonContainer {
     @Accessor
@@ -14,5 +16,5 @@ public interface MixinLootPoolSingletonContainer {
     int getQuality();
 
     @Accessor
-    LootItemFunction[] getFunctions();
+    List<LootItemFunction> getFunctions();
 }

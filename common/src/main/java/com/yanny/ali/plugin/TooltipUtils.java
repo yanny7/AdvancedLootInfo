@@ -2,10 +2,10 @@ package com.yanny.ali.plugin;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.ILootFunction;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.condition.RandomChanceCondition;
 import com.yanny.ali.plugin.condition.RandomChanceWithLootingCondition;
 import com.yanny.ali.plugin.condition.TableBonusCondition;
@@ -13,10 +13,12 @@ import com.yanny.ali.plugin.entry.SingletonEntry;
 import com.yanny.ali.plugin.function.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -68,370 +70,274 @@ public class TooltipUtils {
         return components;
     }
 
-    public static void addItemPredicate(List<Component> components, int pad, Component component, ItemPredicate itemPredicate) {
-        if (itemPredicate != ItemPredicate.ANY) {
-            MixinItemPredicate predicate = (MixinItemPredicate) itemPredicate;
+    public static void addItemPredicate(List<Component> components, int pad, Component component, ItemPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
+        predicate.tag().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.item.tag", t.location().toString()))));
+        predicate.items().ifPresent((i) -> {
+            components.add(pad(pad + 1, translatable("ali.property.condition.item.items")));
+            i.forEach((item) -> components.add(pad(pad + 2, value(translatable(item.value().getDescriptionId())))));
+        });
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.item.count", predicate.count());
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.item.durability", predicate.durability());
 
-            if (predicate.getTag() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.item.tag", predicate.getTag().location().toString())));
-            }
-
-            if (predicate.getItems() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.item.items")));
-
-                predicate.getItems().forEach((item) -> components.add(pad(pad + 2, value(translatable(item.getDescriptionId())))));
-            }
-
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.item.count", predicate.getCount());
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.item.durability", predicate.getDurability());
-
-            for (EnchantmentPredicate enchantment : predicate.getEnchantments()) {
-                addEnchantmentPredicate(components, pad + 1, "ali.property.condition.item.enchantment", enchantment);
-            }
-
-            for (EnchantmentPredicate enchantment : predicate.getStoredEnchantments()) {
-                addEnchantmentPredicate(components, pad + 1, "ali.property.condition.item.stored_enchantment", enchantment);
-            }
-
-            if (predicate.getPotion() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.item.potion")));
-
-                predicate.getPotion().getEffects().forEach((effect) -> components.add(pad(pad + 2, value(translatable(effect.getDescriptionId())))));
-            }
-
-            addNbtPredicate(components, pad + 1, "ali.property.condition.item.nbt", predicate.getNbt());
+        for (EnchantmentPredicate enchantment : predicate.enchantments()) {
+            addEnchantmentPredicate(components, pad + 1, "ali.property.condition.item.enchantment", enchantment);
         }
+
+        for (EnchantmentPredicate enchantment : predicate.storedEnchantments()) {
+            addEnchantmentPredicate(components, pad + 1, "ali.property.condition.item.stored_enchantment", enchantment);
+        }
+
+        predicate.potion().ifPresent((p) -> {
+            components.add(pad(pad + 1, translatable("ali.property.condition.item.potion")));
+
+            p.value().getEffects().forEach((effect) -> components.add(pad(pad + 2, value(translatable(effect.getDescriptionId())))));
+        });
+
+        predicate.nbt().ifPresent((n) -> addNbtPredicate(components, pad + 1, "ali.property.condition.item.nbt", n));
     }
 
     public static void addLocationPredicate(List<Component> components, int pad, Component component, LocationPredicate predicate) {
-        if (predicate != LocationPredicate.ANY) {
-            MixinLocationPredicate locationPredicate = (MixinLocationPredicate) predicate;
-
-            addMinMaxBounds(components, pad, "ali.property.condition.location.x", locationPredicate.getX());
-            addMinMaxBounds(components, pad, "ali.property.condition.location.y", locationPredicate.getY());
-            addMinMaxBounds(components, pad, "ali.property.condition.location.z", locationPredicate.getZ());
-            addResourceKey(components, pad, "ali.property.condition.location.biome", locationPredicate.getBiome());
-            addResourceKey(components, pad, "ali.property.condition.location.structure", locationPredicate.getStructure());
-            addResourceKey(components, pad, "ali.property.condition.location.dimension", locationPredicate.getDimension());
-            addBoolean(components, pad, "ali.property.condition.location.smokey", locationPredicate.getSmokey());
-            addLight(components, pad, "ali.property.condition.location.light", locationPredicate.getLight());
-            addBlock(components, pad, translatable("ali.property.condition.location.block"), locationPredicate.getBlock());
-            addFluid(components, pad, translatable("ali.property.condition.location.fluid"), locationPredicate.getFluid());
-        }
+        predicate.position().ifPresent((p) -> {
+            addMinMaxBounds(components, pad, "ali.property.condition.location.x", p.x());
+            addMinMaxBounds(components, pad, "ali.property.condition.location.y", p.y());
+            addMinMaxBounds(components, pad, "ali.property.condition.location.z", p.z());
+        });
+        predicate.biome().ifPresent((b) -> addResourceKey(components, pad, "ali.property.condition.location.biome", b));
+        predicate.structure().ifPresent((s) -> addResourceKey(components, pad, "ali.property.condition.location.structure", s));
+        predicate.dimension().ifPresent((d) -> addResourceKey(components, pad, "ali.property.condition.location.dimension", d));
+        predicate.smokey().ifPresent((s) -> addBoolean(components, pad, "ali.property.condition.location.smokey", s));
+        predicate.light().ifPresent((l) -> addLight(components, pad, "ali.property.condition.location.light", l));
+        predicate.block().ifPresent((b) -> addBlock(components, pad, translatable("ali.property.condition.location.block"), b));
+        predicate.fluid().ifPresent((f) -> addFluid(components, pad, translatable("ali.property.condition.location.fluid"), f));
     }
 
-    public static void addEntityPredicate(List<Component> components, int pad, Component component, EntityPredicate entityPredicate) {
-        if (entityPredicate != EntityPredicate.ANY) {
-            MixinEntityPredicate predicate = (MixinEntityPredicate) entityPredicate;
+    public static void addEntityPredicate(List<Component> components, int pad, Component component, EntityPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
+        predicate.entityType().ifPresent((e) -> addEntityTypePredicate(components, pad + 1, translatable("ali.property.condition.predicate.entity_type"), e));
+        predicate.distanceToPlayer().ifPresent((d) -> addDistancePredicate(components, pad + 1, translatable("ali.property.condition.predicate.dist_to_player"), d));
+        predicate.location().ifPresent((l) -> addLocationPredicate(components, pad + 1, translatable("ali.property.condition.predicate.location"), l));
+        predicate.steppingOnLocation().ifPresent((l) -> addLocationPredicate(components, pad + 1, translatable("ali.property.condition.predicate.stepping_on_location"), l));
+        predicate.effects().ifPresent((e) -> addMobEffectsPredicate(components, pad + 1, translatable("ali.property.condition.predicate.effect"), e));
+        predicate.nbt().ifPresent((n) -> addNbtPredicate(components, pad + 1, "ali.property.condition.predicate.nbt", n));
+        predicate.flags().ifPresent((f) -> addEntityFlagsPredicate(components, pad + 1, translatable("ali.property.condition.predicate.flags"), f));
+        predicate.equipment().ifPresent((e) -> addEntityEquipmentPredicate(components, pad + 1, translatable("ali.property.condition.predicate.equipment"), e));
+        predicate.subPredicate().ifPresent((s) -> addEntitySubPredicate(components, pad + 1, "ali.property.condition.predicate.entity_sub_type", s));
 
-            addEntityTypePredicate(components, pad + 1, translatable("ali.property.condition.predicate.entity_type"), predicate.getEntityType());
-            addDistancePredicate(components, pad + 1, translatable("ali.property.condition.predicate.dist_to_player"), predicate.getDistanceToPlayer());
-            addLocationPredicate(components, pad + 1, translatable("ali.property.condition.predicate.location"), predicate.getLocation());
-            addLocationPredicate(components, pad + 1, translatable("ali.property.condition.predicate.stepping_on_location"), predicate.getSteppingOnLocation());
-            addMobEffectsPredicate(components, pad + 1, translatable("ali.property.condition.predicate.effect"), predicate.getEffects());
-            addNbtPredicate(components, pad + 1, "ali.property.condition.predicate.nbt", predicate.getNbt());
-            addEntityFlagsPredicate(components, pad + 1, translatable("ali.property.condition.predicate.flags"), predicate.getFlags());
-            addEntityEquipmentPredicate(components, pad + 1, translatable("ali.property.condition.predicate.equipment"), predicate.getEquipment());
-            addEntitySubPredicate(components, pad + 1, "ali.property.condition.predicate.entity_sub_type", predicate.getSubPredicate());
-            addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.vehicle"), predicate.getVehicle());
-            addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.passenger"), predicate.getPassenger());
-            addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.targeted_entity"), predicate.getTargetedEntity());
-
-            if (predicate.getTeam() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.predicate.team", predicate.getTeam())));
-            }
-        }
+        predicate.vehicle().ifPresent((v) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.vehicle"), v));
+        predicate.passenger().ifPresent((p) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.passenger"), p));
+        predicate.targetedEntity().ifPresent((t) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.targeted_entity"), t));
+        predicate.team().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.predicate.team", t))));
     }
 
     private static void addMobEffectsPredicate(List<Component> components, int pad, Component component, MobEffectsPredicate predicate) {
-        if (predicate != MobEffectsPredicate.ANY) {
-            MixinMobEffectPredicate locationPredicate = (MixinMobEffectPredicate) predicate;
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
+        predicate.effectMap().forEach((effect, instancePredicate) -> {
+            components.add(pad(pad + 1, value(translatable(effect.value().getDescriptionId()))));
 
-            locationPredicate.getEffects().forEach((effect, instancePredicate) -> {
-                MixinMobEffectPredicate.MobEffectInstancePredicate mobEffectInstancePredicate = (MixinMobEffectPredicate.MobEffectInstancePredicate) instancePredicate;
-
-                components.add(pad(pad + 1, value(translatable(effect.getDescriptionId()))));
-                addMinMaxBounds(components, pad + 2, "ali.property.condition.effect.amplifier", mobEffectInstancePredicate.getAmplifier());
-                addMinMaxBounds(components, pad + 2, "ali.property.condition.effect.duration", mobEffectInstancePredicate.getDuration());
-                addBoolean(components, pad + 2, "ali.property.condition.effect.ambient", mobEffectInstancePredicate.getAmbient());
-                addBoolean(components, pad + 2, "ali.property.condition.effect.visible", mobEffectInstancePredicate.getVisible());
-            });
-        }
+            addMinMaxBounds(components, pad + 2, "ali.property.condition.effect.amplifier", instancePredicate.amplifier());
+            addMinMaxBounds(components, pad + 2, "ali.property.condition.effect.duration", instancePredicate.duration());
+            instancePredicate.ambient().ifPresent((a) -> addBoolean(components, pad + 2, "ali.property.condition.effect.ambient", a));
+            instancePredicate.visible().ifPresent((v) -> addBoolean(components, pad + 2, "ali.property.condition.effect.visible", v));
+        });
     }
 
-    private static void addEntityEquipmentPredicate(List<Component> components, int pad, Component component, EntityEquipmentPredicate entityEquipmentPredicate) {
-        if (entityEquipmentPredicate != EntityEquipmentPredicate.ANY) {
-            MixinEntityEquipmentPredicate predicate = (MixinEntityEquipmentPredicate) entityEquipmentPredicate;
+    private static void addEntityEquipmentPredicate(List<Component> components, int pad, Component component, EntityEquipmentPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
-
-            addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.head"), predicate.getHead());
-            addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.chest"), predicate.getChest());
-            addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.legs"), predicate.getLegs());
-            addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.feet"), predicate.getFeet());
-            addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.mainhand"), predicate.getMainhand());
-            addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.offhand"), predicate.getOffhand());
-        }
+        predicate.head().ifPresent((h) -> addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.head"), h));
+        predicate.chest().ifPresent((c) -> addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.chest"), c));
+        predicate.legs().ifPresent((l) -> addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.legs"), l));
+        predicate.feet().ifPresent((f) -> addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.feet"), f));
+        predicate.mainhand().ifPresent((m) -> addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.mainhand"), m));
+        predicate.offhand().ifPresent((o) -> addItemPredicate(components, pad + 1, translatable("ali.property.condition.equipment.offhand"), o));
     }
 
-    private static void addEntityFlagsPredicate(List<Component> components, int pad, Component component, EntityFlagsPredicate entityFlagsPredicate) {
-        if (entityFlagsPredicate != EntityFlagsPredicate.ANY) {
-            MixinEntityFlagsPredicate predicate = (MixinEntityFlagsPredicate) entityFlagsPredicate;
+    private static void addEntityFlagsPredicate(List<Component> components, int pad, Component component, EntityFlagsPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
-
-            addBoolean(components, pad + 1, "ali.property.condition.flags.on_fire", predicate.getIsOnFire());
-            addBoolean(components, pad + 1, "ali.property.condition.flags.is_baby", predicate.getIsBaby());
-            addBoolean(components, pad + 1, "ali.property.condition.flags.is_crouching", predicate.getIsCrouching());
-            addBoolean(components, pad + 1, "ali.property.condition.flags.is_sprinting", predicate.getIsSprinting());
-            addBoolean(components, pad + 1, "ali.property.condition.flags.is_swimming", predicate.getIsSwimming());
-        }
+        predicate.isOnFire().ifPresent((i) -> addBoolean(components, pad + 1, "ali.property.condition.flags.on_fire", i));
+        predicate.isBaby().ifPresent((i) -> addBoolean(components, pad + 1, "ali.property.condition.flags.is_baby", i));
+        predicate.isCrouching().ifPresent((i) -> addBoolean(components, pad + 1, "ali.property.condition.flags.is_crouching", i));
+        predicate.isSprinting().ifPresent((i) -> addBoolean(components, pad + 1, "ali.property.condition.flags.is_sprinting", i));
+        predicate.isSwimming().ifPresent((i) -> addBoolean(components, pad + 1, "ali.property.condition.flags.is_swimming", i));
     }
 
     private static void addEntitySubPredicate(List<Component> components, int pad, String key, EntitySubPredicate entitySubPredicate) {
-        if (entitySubPredicate != EntitySubPredicate.ANY) {
-            Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
+        Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
 
-            optional.ifPresent((entry) -> {
-                components.add(pad(pad, translatable(key, entry.getKey())));
+        optional.ifPresent((entry) -> {
+            components.add(pad(pad, translatable(key, entry.getKey())));
 
-                if (entitySubPredicate instanceof LighthingBoltPredicate predicate) {
-                    MixinLighthingBoltPredicate boltPredicate = (MixinLighthingBoltPredicate) predicate;
+            if (entitySubPredicate instanceof LightningBoltPredicate predicate) {
+                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.blocks_on_fire", predicate.blocksSetOnFire());
+                predicate.entityStruck().ifPresent((e) -> addEntityPredicate(components, pad + 2, translatable("ali.property.condition.sub_entity.stuck_entity"), e));
+            } else if (entitySubPredicate instanceof FishingHookPredicate predicate) {
+                predicate.inOpenWater().ifPresent((o) -> components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.in_open_water", o))));
+            } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
+                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.level", predicate.level());
 
-                    addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.blocks_on_fire", boltPredicate.getBlocksSetOnFire());
-                    addEntityPredicate(components, pad + 2, translatable("ali.property.condition.sub_entity.stuck_entity"), boltPredicate.getEntityStruck());
-                } else if (entitySubPredicate instanceof FishingHookPredicate predicate) {
-                    MixinFishingHookPredicate fishingHookPredicate = (MixinFishingHookPredicate) predicate;
+                predicate.gameType().ifPresent((g) -> components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.game_type", value(g.getShortDisplayName())))));
 
-                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.in_open_water", fishingHookPredicate.isInOpenWater())));
-                } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
-                    MixinPlayerPredicate playerPredicate = (MixinPlayerPredicate) predicate;
-
-                    addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.level", playerPredicate.getLevel());
-
-                    if (playerPredicate.getGameType() != null) {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.game_type", value(playerPredicate.getGameType().getShortDisplayName()))));
-                    }
-
-                    if (!playerPredicate.getStats().isEmpty()) {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.stats")));
-                        playerPredicate.getStats().forEach((stat, ints) -> {
-                            Object value = stat.getValue();
-                            components.add(pad(pad + 2, value instanceof Item ? translatable(((Item) value).getDescriptionId()) : value));
-                            components.add(pad(pad + 3, keyValue(stat.getType().getDisplayName(), toString((MixinMinMaxBounds.Ints) ints))));
-                        });
-                    }
-
-                    if (!playerPredicate.getRecipes().isEmpty()) {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.recipes")));
-                        playerPredicate.getRecipes().forEach((recipe, required) -> components.add(pad(pad + 2, keyValue(recipe.toString(), required))));
-                    }
-
-                    if (!playerPredicate.getAdvancements().isEmpty()) {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.advancements")));
-                        playerPredicate.getAdvancements().forEach((advancement, advancementPredicate) -> {
-                            components.add(pad(pad + 2, advancement.toString()));
-
-                            if (advancementPredicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
-                                components.add(pad(pad + 3, translatable("ali.property.condition.sub_entity.advancement.done", ((MixinPlayerPredicate.AdvancementDonePredicate) donePredicate).getState())));
-                            } else if (advancementPredicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
-                                MixinPlayerPredicate.AdvancementCriterionsPredicate mixPredicate = (MixinPlayerPredicate.AdvancementCriterionsPredicate) criterionsPredicate;
-
-                                mixPredicate.getCriterions().forEach((criterion, state) -> components.add(pad(pad + 3, keyValue(criterion, state))));
-                            }
-                        });
-                    }
-                } if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
-                    MixinSlimePredicate predicate = (MixinSlimePredicate) slimePredicate;
-
-                    addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.size", predicate.getSize());
-                } else {
-                    JsonObject jsonObject = entitySubPredicate.serializeCustomData();
-
-                    if (jsonObject.has("variant")) {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
-                    } else {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.toString())));
-                    }
+                if (!predicate.stats().isEmpty()) {
+                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.stats")));
+                    predicate.stats().forEach((stat) -> {
+                        Object value = stat.value();
+                        components.add(pad(pad + 2, value instanceof Item ? translatable(((Item) value).getDescriptionId()) : value));
+                        components.add(pad(pad + 3, keyValue(stat.type().getDisplayName(), toString(stat.range()))));
+                    });
                 }
-            });
-        }
-    }
 
-    private static void addDistancePredicate(List<Component> components, int pad, Component component, DistancePredicate distancePredicate) {
-        if (distancePredicate != DistancePredicate.ANY) {
-            MixinDistancePredicate predicate = (MixinDistancePredicate) distancePredicate;
+                if (!predicate.recipes().isEmpty()) {
+                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.recipes")));
+                    predicate.recipes().forEach((recipe, required) -> components.add(pad(pad + 2, keyValue(recipe.toString(), required))));
+                }
 
-            components.add(pad(pad, component));
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.x", predicate.getX());
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.y", predicate.getY());
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.z", predicate.getZ());
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.horizontal", predicate.getHorizontal());
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.absolute", predicate.getAbsolute());
-        }
-    }
+                if (!predicate.advancements().isEmpty()) {
+                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.advancements")));
+                    predicate.advancements().forEach((advancement, advancementPredicate) -> {
+                        components.add(pad(pad + 2, advancement.toString()));
 
-    private static void addEntityTypePredicate(List<Component> components, int pad, Component component, EntityTypePredicate entityTypePredicate) {
-        if (entityTypePredicate != EntityTypePredicate.ANY) {
-            MixinEntityTypePredicate predicate = (MixinEntityTypePredicate) entityTypePredicate;
+                        if (advancementPredicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
+                            components.add(pad(pad + 3, translatable("ali.property.condition.sub_entity.advancement.done", donePredicate.state())));
+                        } else if (advancementPredicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
+                            criterionsPredicate.criterions().forEach((criterion, state) -> components.add(pad(pad + 3, keyValue(criterion, state))));
+                        }
+                    });
+                }
+            } if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
+                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.size", slimePredicate.size());
+            } else {
+                JsonObject jsonObject = EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, entitySubPredicate).result().get().getAsJsonObject();
 
-            components.add(pad(pad, component));
-
-            if (predicate instanceof MixinEntityTypePredicate.TypePredicate typePredicate) {
-                components.add(pad(pad + 1, value(typePredicate.getType().getDescription())));
+                if (jsonObject.has("variant")) {
+                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
+                } else {
+                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.toString())));
+                }
             }
-            if (predicate instanceof MixinEntityTypePredicate.TagPredicate tagPredicate) {
-                components.add(pad(pad + 1, value(tagPredicate.getTag().location()))); //TODO to list
-            }
+        });
+    }
+
+    private static void addDistancePredicate(List<Component> components, int pad, Component component, DistancePredicate predicate) {
+        components.add(pad(pad, component));
+
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.x", predicate.x());
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.y", predicate.y());
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.z", predicate.z());
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.horizontal", predicate.horizontal());
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.dist_predicate.absolute", predicate.absolute());
+    }
+
+    private static void addEntityTypePredicate(List<Component> components, int pad, Component component, EntityTypePredicate predicate) {
+        components.add(pad(pad, component));
+
+        for (Holder<EntityType<?>> holder : predicate.types()) {
+            components.add(pad(pad + 1, value(holder.value().getDescription())));
         }
     }
 
-    private static void addEnchantmentPredicate(List<Component> components, int pad, String key, EnchantmentPredicate enchantmentPredicate) {
-        if (enchantmentPredicate != EnchantmentPredicate.ANY) {
-            MixinEnchantmentPredicate predicate = (MixinEnchantmentPredicate) enchantmentPredicate;
+    private static void addEnchantmentPredicate(List<Component> components, int pad, String key, EnchantmentPredicate predicate) {
+        components.add(pad(pad, translatable(key)));
 
-            components.add(pad(pad, translatable(key)));
-
-            if (predicate.getEnchantment() != null) {
-                components.add(pad(pad + 1, value(translatable(predicate.getEnchantment().getDescriptionId()))));
-            }
-            addMinMaxBounds(components, pad + 1, "ali.property.condition.enchantment.level", predicate.getLevel());
-        }
+        predicate.enchantment().ifPresent((e) -> components.add(pad(pad + 1, value(translatable(e.value().getDescriptionId())))));
+        addMinMaxBounds(components, pad + 1, "ali.property.condition.enchantment.level", predicate.level());
     }
 
-    private static void addResourceKey(List<Component> components, int pad, String key, @Nullable ResourceKey<?> resourceKey) {
-        if (resourceKey != null) {
-            components.add(pad(pad, translatable(key, value(resourceKey.location().toString()))));
-        }
+    private static void addResourceKey(List<Component> components, int pad, String key, ResourceKey<?> resourceKey) {
+        components.add(pad(pad, translatable(key, value(resourceKey.location().toString()))));
     }
 
-    private static void addBoolean(List<Component> components, int pad, String key, @Nullable Boolean aBoolean) {
-        if (aBoolean != null) {
-            components.add(pad(pad, translatable(key, value(aBoolean.toString()))));
-        }
+    private static void addBoolean(List<Component> components, int pad, String key, boolean aBoolean) {
+        components.add(pad(pad, translatable(key, value(aBoolean))));
     }
 
     private static void addLight(List<Component> components, int pad, String key, LightPredicate lightPredicate) {
-        if (lightPredicate != LightPredicate.ANY) {
-            addMinMaxBounds(components, pad, key, ((MixinLightPredicate) lightPredicate).getComposite());
-        }
+        addMinMaxBounds(components, pad, key, lightPredicate.composite());
     }
 
-    private static void addBlock(List<Component> components, int pad, Component component, BlockPredicate blockPredicate) {
-        if (blockPredicate != BlockPredicate.ANY) {
-            MixinBlockPredicate predicate = (MixinBlockPredicate) blockPredicate;
+    private static void addBlock(List<Component> components, int pad, Component component, BlockPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
-
-            if (predicate.getTag() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.block.tag", predicate.getTag().location().toString())));
-            }
-            if (predicate.getBlocks() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.block.blocks")));
-
-                predicate.getBlocks().forEach((block) -> components.add(pad(pad + 2, value(translatable(block.getDescriptionId())))));
-            }
-            addStateProperties(components, pad + 1, translatable("ali.property.condition.block.state"), predicate.getProperties());
-            addNbtPredicate(components, pad + 1, "ali.property.condition.block.nbt", predicate.getNbt());
-        }
+        predicate.tag().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.block.tag", t.location().toString()))));
+        predicate.blocks().ifPresent((b) -> {
+            components.add(pad(pad + 1, translatable("ali.property.condition.block.blocks")));
+            b.forEach((block) -> components.add(pad(pad + 2, value(translatable(block.value().getDescriptionId())))));
+        });
+        predicate.properties().ifPresent((p) -> addStateProperties(components, pad + 1, translatable("ali.property.condition.block.state"), p));
+        predicate.nbt().ifPresent((n) -> addNbtPredicate(components, pad + 1, "ali.property.condition.block.nbt", n));
     }
 
-    private static void addFluid(List<Component> components, int pad, Component component, FluidPredicate fluidPredicate) {
-        if (fluidPredicate != FluidPredicate.ANY) {
-            MixinFluidPredicate predicate = (MixinFluidPredicate) fluidPredicate;
+    private static void addFluid(List<Component> components, int pad, Component component, FluidPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
-
-            if (predicate.getTag() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.fluid.tag", predicate.getTag().location().toString())));
-            }
-            if (predicate.getFluid() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.fluid.fluid", value(translatable(BuiltInRegistries.FLUID.getKey(predicate.getFluid()).toString())))));
-            }
-            addStateProperties(components, pad + 1, translatable("ali.property.condition.fluid.state"), predicate.getProperties());
-        }
+        predicate.tag().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.fluid.tag", t.location().toString()))));
+        predicate.fluid().ifPresent((f) -> components.add(pad(pad + 1, translatable("ali.property.condition.fluid.fluid", value(translatable(BuiltInRegistries.FLUID.getKey(f.value()).toString()))))));
+        predicate.properties().ifPresent((p) -> addStateProperties(components, pad + 1, translatable("ali.property.condition.fluid.state"), p));
     }
 
-    public static void addStateProperties(List<Component> components, int pad, Component component, StatePropertiesPredicate propertiesPredicate) {
-        if (propertiesPredicate != StatePropertiesPredicate.ANY) {
-            MixinStatePropertiesPredicate predicate = (MixinStatePropertiesPredicate) propertiesPredicate;
+    public static void addStateProperties(List<Component> components, int pad, Component component, StatePropertiesPredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
-
-            predicate.getProperties().forEach((propertyMatcher) -> addPropertyMatcher(components, pad + 1, propertyMatcher));
-        }
+        predicate.properties().forEach((propertyMatcher) -> addPropertyMatcher(components, pad + 1, propertyMatcher));
     }
 
-    public static void addDamageSourcePredicate(List<Component> components, int pad, Component component, DamageSourcePredicate damageSourcePredicate) {
-        if (damageSourcePredicate != DamageSourcePredicate.ANY) {
-            MixinDamageSourcePredicate predicate = (MixinDamageSourcePredicate) damageSourcePredicate;
+    public static void addDamageSourcePredicate(List<Component> components, int pad, Component component, DamageSourcePredicate predicate) {
+        components.add(pad(pad, component));
 
-            components.add(pad(pad, component));
-
-            if (!predicate.getTags().isEmpty()) {
-                components.add(pad(pad + 1, translatable("ali.property.condition.damage_source.tags")));
-                predicate.getTags().forEach((tagPredicate) -> {
-                    MixinTagPredicate<?> p = (MixinTagPredicate<?>) tagPredicate;
-
-                    components.add(pad(pad + 2, keyValue(p.getTag().location().toString(), p.getExpected())));
-                });
-            }
-
-            addEntityPredicate(components, pad + 1, translatable("ali.property.condition.damage_source.direct_entity"), predicate.getDirectEntity());
-            addEntityPredicate(components, pad + 1, translatable("ali.property.condition.damage_source.source_entity"), predicate.getSourceEntity());
+        if (!predicate.tags().isEmpty()) {
+            components.add(pad(pad + 1, translatable("ali.property.condition.damage_source.tags")));
+            predicate.tags().forEach((t) -> components.add(pad(pad + 2, keyValue(t.tag().location().toString(), t.expected()))));
         }
+
+        predicate.directEntity().ifPresent((d) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.damage_source.direct_entity"), d));
+        predicate.sourceEntity().ifPresent((s) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.damage_source.source_entity"), s));
     }
 
     private static void addPropertyMatcher(List<Component> components, int pad, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
-        if (propertyMatcher instanceof MixinStatePropertiesPredicate.ExactPropertyMatcher matcher) {
-            components.add(pad(pad, keyValue(matcher.getName(), matcher.getValue())));
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
+            components.add(pad(pad, keyValue(propertyMatcher.name(), matcher.value())));
         }
-        if (propertyMatcher instanceof MixinStatePropertiesPredicate.RangedPropertyMatcher matcher) {
-            components.add(pad(pad, value(matcher.getName() + "=[" + matcher.getMinValue() + "-" + matcher.getMaxValue() + "]")));
+
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
+            components.add(pad(pad, value(propertyMatcher.name() + "=[" + matcher.minValue() + "-" + matcher.maxValue() + "]")));
         }
     }
 
-    private static void addNbtPredicate(List<Component> components, int pad, String key, NbtPredicate nbtPredicate) {
-        if (nbtPredicate != NbtPredicate.ANY) {
-            components.add(pad(pad, translatable(key, value(((MixinNbtPredicate) nbtPredicate).getTag().toString()))));
-        }
+    private static void addNbtPredicate(List<Component> components, int pad, String key, NbtPredicate predicate) {
+        components.add(pad(pad, translatable(key, value(predicate.tag().toString()))));
     }
 
     private static void addMinMaxBounds(List<Component> components, int pad, String key, MinMaxBounds.Doubles doubles) {
-        if (doubles != MinMaxBounds.Doubles.ANY) {
-            MixinMinMaxBounds.Doubles absolute = (MixinMinMaxBounds.Doubles) doubles;
-            components.add(pad(pad, translatable(key, value(toString(absolute)))));
+        if (doubles.min().isPresent() || doubles.max().isPresent()) {
+            components.add(pad(pad, translatable(key, value(toString(doubles)))));
         }
     }
 
     private static void addMinMaxBounds(List<Component> components, int pad, String key, MinMaxBounds.Ints ints) {
-        if (ints != MinMaxBounds.Ints.ANY) {
-            MixinMinMaxBounds.Ints absolute = (MixinMinMaxBounds.Ints) ints;
-            components.add(pad(pad, translatable(key, value(toString(absolute)))));
+        if (ints.min().isPresent() || ints.max().isPresent()) {
+            components.add(pad(pad, translatable(key, value(toString(ints)))));
         }
     }
 
     @NotNull
-    private static String toString(MixinMinMaxBounds.Doubles doubles) {
-        if (doubles.getMin() != null) {
-            if (doubles.getMax() != null) {
-                if (!Objects.equals(doubles.getMin(), doubles.getMax())) {
-                    return String.format("%.1f-%.1f", doubles.getMin(), doubles.getMax());
+    private static String toString(MinMaxBounds.Doubles doubles) {
+        if (doubles.min().isPresent()) {
+            if (doubles.max().isPresent()) {
+                if (!Objects.equals(doubles.min(), doubles.max())) {
+                    return String.format("%.1f-%.1f", doubles.min().get(), doubles.max().get());
                 } else {
-                    return String.format("=%.1f", doubles.getMin());
+                    return String.format("=%.1f", doubles.min().get());
                 }
             } else {
-                return String.format("≥%.1f", doubles.getMin());
+                return String.format("≥%.1f", doubles.min().get());
             }
         } else {
-            if (doubles.getMax() != null) {
-                return String.format("<%.1f", doubles.getMax());
+            if (doubles.max().isPresent()) {
+                return String.format("<%.1f", doubles.max().get());
             }
 
             return "???";
@@ -439,20 +345,20 @@ public class TooltipUtils {
     }
 
     @NotNull
-    private static String toString(MixinMinMaxBounds.Ints ints) {
-        if (ints.getMin() != null) {
-            if (ints.getMax() != null) {
-                if (!Objects.equals(ints.getMin(), ints.getMax())) {
-                    return String.format("%d-%d", ints.getMin(), ints.getMax());
+    private static String toString(MinMaxBounds.Ints ints) {
+        if (ints.min().isPresent()) {
+            if (ints.max().isPresent()) {
+                if (!Objects.equals(ints.min(), ints.max())) {
+                    return String.format("%d-%d", ints.min().get(), ints.max().get());
                 } else {
-                    return String.format("=%d", ints.getMin());
+                    return String.format("=%d", ints.min().get());
                 }
             } else {
-                return String.format("≥%d", ints.getMin());
+                return String.format("≥%d", ints.min().get());
             }
         } else {
-            if (ints.getMax() != null) {
-                return String.format("<%d", ints.getMax());
+            if (ints.max().isPresent()) {
+                return String.format("<%d", ints.max().get());
             }
 
             return "???";
@@ -531,7 +437,7 @@ public class TooltipUtils {
 
         for (ILootCondition c : list) {
             TableBonusCondition condition = (TableBonusCondition) c;
-            value.set(new RangeValue(condition.values[0]));
+            value.set(new RangeValue(condition.values.get(0)));
         }
 
         return value.multiply(100);
@@ -562,8 +468,8 @@ public class TooltipUtils {
             Enchantment enchantment = BuiltInRegistries.ENCHANTMENT.get(condition.location);
 
             if (enchantment != null) {
-                for (int level = 1; level < condition.values.length; level++) {
-                    RangeValue value = new RangeValue(condition.values[level]);
+                for (int level = 1; level < condition.values.size(); level++) {
+                    RangeValue value = new RangeValue(condition.values.get(level));
                     bonusChance.put(level, value.multiply(100));
                 }
 
@@ -611,17 +517,15 @@ public class TooltipUtils {
 
         for (ILootFunction f : list) {
             ApplyBonusFunction function = (ApplyBonusFunction) f;
-            Enchantment enchantment = BuiltInRegistries.ENCHANTMENT.get(function.enchantment);
+            Enchantment enchantment = function.enchantment.value();
 
-            if (enchantment != null) {
-                for (int level = 1; level < enchantment.getMaxLevel() + 1; level++) {
-                    RangeValue value = new RangeValue(count);
-                    function.formula.calculateCount(value, level);
-                    bonusCount.put(level, value);
-                }
-
-                return new Pair<>(enchantment, bonusCount);
+            for (int level = 1; level < enchantment.getMaxLevel() + 1; level++) {
+                RangeValue value = new RangeValue(count);
+                function.formula.calculateCount(value, level);
+                bonusCount.put(level, value);
             }
+
+            return new Pair<>(enchantment, bonusCount);
         }
 
         list = functions.stream().filter((f) -> f instanceof LootingEnchantFunction).toList();
@@ -644,6 +548,11 @@ public class TooltipUtils {
     @NotNull
     public static MutableComponent translatableType(String prefix, Enum<?> type, Object... args) {
         return translatable(prefix + "." + type.name().toLowerCase(), args);
+    }
+
+    @NotNull
+    public static MutableComponent translatableType(String prefix, String type, Object... args) {
+        return translatable(prefix + "." + type.toLowerCase(), args);
     }
 
     @NotNull

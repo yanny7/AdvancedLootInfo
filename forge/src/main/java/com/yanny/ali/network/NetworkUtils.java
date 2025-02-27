@@ -1,9 +1,12 @@
 package com.yanny.ali.network;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.SimpleChannel;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.BiConsumer;
 
 public class NetworkUtils {
     private static int messageId = 0;
@@ -21,8 +24,16 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, client::onLootInfo);
-        channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, client::onClear);
+        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
+                .encoder(InfoSyncLootTableMessage::encode)
+                .decoder(InfoSyncLootTableMessage::new)
+                .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+                .add();
+        channel.messageBuilder(ClearMessage.class, getMessageId())
+                .encoder(ClearMessage::encode)
+                .decoder(ClearMessage::new)
+                .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
+                .add();
         return new DistHolder<>(client, server);
     }
 
@@ -30,8 +41,14 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, (m, c) -> {});
-        channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, (m, c) -> {});
+        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
+                .encoder(InfoSyncLootTableMessage::encode)
+                .decoder(InfoSyncLootTableMessage::new)
+                .add();
+        channel.messageBuilder(ClearMessage.class, getMessageId())
+                .encoder(ClearMessage::encode)
+                .decoder(ClearMessage::new)
+                .add();
         return new DistHolder<>(null, server);
     }
 

@@ -6,11 +6,13 @@ import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import java.util.Optional;
+
 @Mixin(SetNameFunction.class)
 public interface MixinSetNameFunction {
     @Accessor
-    Component getName();
+    Optional<Component> getName();
 
     @Accessor
-    LootContext.EntityTarget getResolutionContext();
+    Optional<LootContext.EntityTarget> getResolutionContext();
 }

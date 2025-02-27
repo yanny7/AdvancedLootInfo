@@ -16,7 +16,7 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,7 +45,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     }
 
     @Override
-    public Recipe<?> getBackingRecipe() {
+    public RecipeHolder<?> getBackingRecipe() {
         return null;
     }
 

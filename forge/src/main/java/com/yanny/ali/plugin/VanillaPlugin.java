@@ -61,7 +61,7 @@ public class VanillaPlugin implements IPlugin {
         registry.registerCondition(AllOfCondition.class, getKey(LootItemConditions.ALL_OF), AllOfCondition::new, AllOfCondition::new);
         registry.registerCondition(AnyOfCondition.class, getKey(LootItemConditions.ANY_OF), AnyOfCondition::new, AnyOfCondition::new);
         registry.registerCondition(BlockStatePropertyCondition.class, getKey(LootItemConditions.BLOCK_STATE_PROPERTY), BlockStatePropertyCondition::new, BlockStatePropertyCondition::new);
-        registry.registerCondition(CanToolPerformActionCondition.class, getKey(CanToolPerformAction.LOOT_CONDITION_TYPE), CanToolPerformActionCondition::new, CanToolPerformActionCondition::new);
+        registry.registerCondition(CanToolPerformActionCondition.class, getKey(CanToolPerformAction.TYPE), CanToolPerformActionCondition::new, CanToolPerformActionCondition::new);
         registry.registerCondition(DamageSourcePropertiesCondition.class, getKey(LootItemConditions.DAMAGE_SOURCE_PROPERTIES), DamageSourcePropertiesCondition::new, DamageSourcePropertiesCondition::new);
         registry.registerCondition(EntityPropertiesCondition.class, getKey(LootItemConditions.ENTITY_PROPERTIES), EntityPropertiesCondition::new, EntityPropertiesCondition::new);
         registry.registerCondition(EntityScoresCondition.class, getKey(LootItemConditions.ENTITY_SCORES), EntityScoresCondition::new, EntityScoresCondition::new);

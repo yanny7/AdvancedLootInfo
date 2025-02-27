@@ -5,13 +5,10 @@ import com.yanny.ali.AliMod;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.manager.PluginHolder;
-import com.yanny.ali.mixin.MixinLootTableForge;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.platform.services.IPlatformHelper;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
@@ -22,11 +19,6 @@ import java.util.List;
 
 public class ForgePlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    @Override
-    public List<LootPool> getLootPools(LootTable table) {
-        return ((MixinLootTableForge) table).getPools();
-    }
 
     @Override
     public List<PluginHolder> getPlugins() {

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class AbstractServer {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -26,7 +27,7 @@ public abstract class AbstractServer {
 
             if (table != null && table != LootTable.EMPTY) {
                 LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
-                LootContext context = new LootContext.Builder(lootParams).create(null);
+                LootContext context = new LootContext.Builder(lootParams).create(Optional.empty());
                 AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
                 LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
                 List<Item> items = lootTableEntry.collectItems();

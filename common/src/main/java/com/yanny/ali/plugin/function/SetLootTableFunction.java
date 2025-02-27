@@ -23,7 +23,7 @@ public class SetLootTableFunction extends LootConditionalFunction {
         super(context, function);
         name = ((MixinSetContainerLootTable) function).getName();
         seed = ((MixinSetContainerLootTable) function).getSeed();
-        blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(((MixinSetContainerLootTable) function).getType());
+        blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(((MixinSetContainerLootTable) function).getType().value());
     }
 
     public SetLootTableFunction(IContext context, FriendlyByteBuf buf) {

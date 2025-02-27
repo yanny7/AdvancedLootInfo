@@ -15,7 +15,7 @@ public class CopyNameFunction extends LootConditionalFunction {
 
     public CopyNameFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        source = ((MixinCopyNameFunction) function).getSource().name;
+        source = ((MixinCopyNameFunction) function).getSource().getSerializedName();
     }
 
     public CopyNameFunction(IContext context, FriendlyByteBuf buf) {
@@ -34,8 +34,7 @@ public class CopyNameFunction extends LootConditionalFunction {
         List<Component> components = new LinkedList<>();
 
         components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.copy_name")));
-        components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.copy_name.source", TooltipUtils.value(TooltipUtils.translatableType("ali.enum.name_source",
-                net.minecraft.world.level.storage.loot.functions.CopyNameFunction.NameSource.getByName(source))))));
+        components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.copy_name.source", TooltipUtils.value(TooltipUtils.translatableType("ali.enum.name_source", source)))));
 
         return components;
     }

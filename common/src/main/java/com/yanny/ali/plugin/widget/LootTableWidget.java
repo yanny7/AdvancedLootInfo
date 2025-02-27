@@ -4,6 +4,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.plugin.WidgetUtils;
 import com.yanny.ali.plugin.entry.LootPoolEntry;
 import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.client.gui.GuiGraphics;
@@ -56,11 +57,11 @@ public class LootTableWidget implements IWidget {
         int top = bounds.y() + 18;
         int height = lastY - bounds.y() - 9;
 
-        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
+        WidgetUtils.blitRepeating(guiGraphics, TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
 
         for (IWidget widget : widgets) {
             if (widget.getRect().y() > bounds.y() + 18) {
-                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
+                WidgetUtils.blitRepeating(guiGraphics, TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
             }
         }
     }

@@ -2,10 +2,10 @@ package com.yanny.ali.plugin.condition;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.mixin.MixinInvertedLootItemCondition;
 import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.LinkedList;
@@ -18,7 +18,7 @@ public class InvertedCondition implements ILootCondition {
     public final ILootCondition term;
 
     public InvertedCondition(IContext context, LootItemCondition condition) {
-        LootItemCondition termCondition = ((MixinInvertedLootItemCondition) condition).getTerm();
+        LootItemCondition termCondition = ((InvertedLootItemCondition) condition).term();
         term = context.utils().convertCondition(context, termCondition);
     }
 

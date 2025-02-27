@@ -1,45 +1,50 @@
 package com.yanny.ali.plugin.condition;
 
+import com.google.gson.JsonElement;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.mixin.MixinItemEntityPropertyCondition;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+
+import static com.yanny.ali.plugin.TooltipUtils.*;
 
 public class EntityPropertiesCondition implements ILootCondition {
     public final LootContext.EntityTarget target;
-    public final EntityPredicate predicate;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final Optional<EntityPredicate> predicate;
 
     public EntityPropertiesCondition(IContext context, LootItemCondition condition) {
-        target = ((MixinItemEntityPropertyCondition) condition).getEntityTarget();
-        predicate = ((MixinItemEntityPropertyCondition) condition).getPredicate();
+        target = ((LootItemEntityPropertyCondition) condition).entityTarget();
+        predicate = ((LootItemEntityPropertyCondition) condition).predicate();
     }
 
     public EntityPropertiesCondition(IContext context, FriendlyByteBuf buf) {
         target = buf.readEnum(LootContext.EntityTarget.class);
-        predicate = EntityPredicate.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON));
+        Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
+        predicate = jsonElement.flatMap(EntityPredicate::fromJson);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeEnum(target);
-        buf.writeJsonWithCodec(ExtraCodecs.JSON, predicate.serializeToJson());
+        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v.serializeToJson()));
     }
 
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.condition.entity_properties")));
-        TooltipUtils.addEntityPredicate(components, pad + 1, TooltipUtils.translatable("ali.property.condition.predicate.target", TooltipUtils.value(TooltipUtils.translatableType("ali.enum.target", target))), predicate);
+        components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
+        predicate.ifPresent((e) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.target", value(translatableType("ali.enum.target", target))), e));
 
         return components;
     }

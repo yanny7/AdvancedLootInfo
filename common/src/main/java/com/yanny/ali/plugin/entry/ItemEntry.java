@@ -15,7 +15,7 @@ public class ItemEntry extends SingletonEntry {
 
     public ItemEntry(IContext context, LootPoolEntryContainer entry) {
         super(context, entry);
-        item = ((MixinLootItem) entry).getItem();
+        item = ((MixinLootItem) entry).getItem().value();
     }
 
     public ItemEntry(IContext context, FriendlyByteBuf buf) {

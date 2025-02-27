@@ -84,7 +84,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
     }
 
     @Override
-    public List<ILootCondition> convertConditions(IContext context, LootItemCondition[] conditions) {
+    public List<ILootCondition> convertConditions(IContext context, List<LootItemCondition> conditions) {
         List<ILootCondition> list = new LinkedList<>();
 
         for (LootItemCondition condition : conditions) {
@@ -157,7 +157,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
     }
 
     @Override
-    public List<ILootFunction> convertFunctions(IContext context, LootItemFunction[] functions) {
+    public List<ILootFunction> convertFunctions(IContext context, List<LootItemFunction> functions) {
         List<ILootFunction> list = new LinkedList<>();
 
         for (LootItemFunction function : functions) {
@@ -230,7 +230,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
     }
 
     @Override
-    public List<ILootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries) {
+    public List<ILootEntry> convertEntries(IContext context, List<LootPoolEntryContainer> entries) {
         List<ILootEntry> list = new LinkedList<>();
 
         for (LootPoolEntryContainer entry : entries) {

@@ -58,7 +58,7 @@ public class LootPoolWidget implements IWidget {
         int top = bounds.y() + 18;
         int height = lastY - bounds.y() - 9;
 
-        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
+        WidgetUtils.blitRepeating(guiGraphics, TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
         lastDirection = null;
 
         for (IWidget widget : widgets) {
@@ -66,7 +66,7 @@ public class LootPoolWidget implements IWidget {
                 WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
 
                 if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().y() > bounds.y() + 18) {
-                    guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
+                    WidgetUtils.blitRepeating(guiGraphics, TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
                 }
 
                 lastDirection = direction;

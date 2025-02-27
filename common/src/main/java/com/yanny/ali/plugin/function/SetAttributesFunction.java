@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class SetAttributesFunction extends LootConditionalFunction {
@@ -21,14 +20,13 @@ public class SetAttributesFunction extends LootConditionalFunction {
     public SetAttributesFunction(IContext context, LootItemFunction function) {
         super(context, function);
         modifiers = ((MixinSetAttributesFunction) function).getModifiers().stream().map((f) -> {
-            MixinSetAttributesFunction.Modifier m = (MixinSetAttributesFunction.Modifier) f;
             return new Modifier(
-                    m.getName(),
-                    BuiltInRegistries.ATTRIBUTE.getKey(m.getAttribute()),
-                    m.getOperation().toValue(),
-                    context.utils().convertNumber(context, m.getAmount()),
-                    m.getId() != null ? m.getId().toString() : null,
-                    Arrays.stream(m.getSlots()).map(EquipmentSlot::getName).toList()
+                    f.name(),
+                    BuiltInRegistries.ATTRIBUTE.getKey(f.attribute().value()),
+                    f.operation().toValue(),
+                    context.utils().convertNumber(context, f.amount()),
+                    f.id().map(UUID::toString),
+                    f.slots().stream().map(EquipmentSlot::getName).toList()
             );
         }).toList();
     }
@@ -44,7 +42,7 @@ public class SetAttributesFunction extends LootConditionalFunction {
             ResourceLocation attribute = buf.readResourceLocation();
             int operation = buf.readInt();
             RangeValue amount = new RangeValue(buf);
-            String id = buf.readOptional(FriendlyByteBuf::readUtf).orElse(null);
+            Optional<String> id = buf.readOptional(FriendlyByteBuf::readUtf);
 
             int slotCount = buf.readInt();
 
@@ -75,7 +73,7 @@ public class SetAttributesFunction extends LootConditionalFunction {
             buf.writeResourceLocation(modifier.attribute);
             buf.writeInt(modifier.operation);
             modifier.amount.encode(buf);
-            buf.writeOptional(Optional.ofNullable(modifier.id), FriendlyByteBuf::writeUtf);
+            buf.writeOptional(modifier.id, FriendlyByteBuf::writeUtf);
             buf.writeInt(modifier.slots.size());
 
             for (String slot : modifier.slots) {
@@ -96,9 +94,7 @@ public class SetAttributesFunction extends LootConditionalFunction {
             components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.operation", AttributeModifier.Operation.fromValue(modifier.operation()))));
             components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.amount", modifier.amount())));
 
-            if (modifier.id() != null) {
-                components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.id", modifier.id())));
-            }
+            modifier.id.ifPresent((i) -> components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.id", i))));
 
             if (!modifier.slots().isEmpty()) {
                 components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.slots")));
@@ -114,7 +110,7 @@ public class SetAttributesFunction extends LootConditionalFunction {
         ResourceLocation attribute,
         int operation,
         RangeValue amount,
-        @Nullable String id,
+        Optional<String> id,
         List<String> slots
     ) {}
 }

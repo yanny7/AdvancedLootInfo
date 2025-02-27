@@ -19,7 +19,7 @@ public class SetContentsFunction extends LootConditionalFunction {
 
     public SetContentsFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(((MixinSetContainerContents) function).getType());
+        blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(((MixinSetContainerContents) function).getType().value());
     }
 
     public SetContentsFunction(IContext context, FriendlyByteBuf buf) {

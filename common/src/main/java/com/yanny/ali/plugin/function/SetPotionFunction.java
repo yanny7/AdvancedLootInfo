@@ -17,7 +17,7 @@ public class SetPotionFunction extends LootConditionalFunction {
 
     public SetPotionFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        potion = ((MixinSetPotionFunction) function).getPotion();
+        potion = ((MixinSetPotionFunction) function).getPotion().value();
     }
 
     public SetPotionFunction(IContext context, FriendlyByteBuf buf) {

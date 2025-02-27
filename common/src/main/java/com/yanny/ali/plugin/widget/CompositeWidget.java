@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.WidgetUtils;
 import com.yanny.ali.plugin.entry.CompositeEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -65,7 +66,7 @@ public class CompositeWidget implements IEntryWidget {
         int top = bounds.y() + 18;
         int height = lastY - bounds.y() - 9;
 
-        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
+        WidgetUtils.blitRepeating(guiGraphics, TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
         lastDirection = null;
 
         for (IWidget widget : widgets) {
@@ -73,7 +74,7 @@ public class CompositeWidget implements IEntryWidget {
                 WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
 
                 if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().y() > bounds.y() + 18) {
-                    guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
+                    WidgetUtils.blitRepeating(guiGraphics, TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
                 }
 
                 lastDirection = direction;

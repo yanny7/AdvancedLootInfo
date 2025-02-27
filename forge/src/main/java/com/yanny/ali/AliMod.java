@@ -13,22 +13,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.ChannelBuilder;
+import net.minecraftforge.network.SimpleChannel;
 
 @Mod(Utils.MOD_ID)
 public class AliMod {
     public static final DistHolder<AbstractClient, AbstractServer> INFO_PROPAGATOR;
 
-    private static final String PROTOCOL_VERSION = "1";
-
     static {
-        SimpleChannel channel = NetworkRegistry.newSimpleChannel(
-                Utils.modLoc("network"),
-                () -> PROTOCOL_VERSION,
-                PROTOCOL_VERSION::equals,
-                PROTOCOL_VERSION::equals
-        );
+        SimpleChannel channel = ChannelBuilder.named(Utils.modLoc("network")).networkProtocolVersion(1).simpleChannel();
 
         INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator(channel);
     }

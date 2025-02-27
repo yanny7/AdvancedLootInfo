@@ -8,11 +8,11 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class FabricBusSubscriber {
     public static void registerEvents() {
-        ServerLifecycleEvents.SERVER_STARTED.register(FabricBusSubscriber::onServerStarting);
+        ServerLifecycleEvents.SERVER_STARTED.register(FabricBusSubscriber::onServerStarted);
         ServerPlayConnectionEvents.JOIN.register(FabricBusSubscriber::onPlayerLogIn);
     }
 
-    private static void onServerStarting(MinecraftServer server) {
+    private static void onServerStarted(MinecraftServer server) {
         CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.getLootData(), server.overworld());
     }
 

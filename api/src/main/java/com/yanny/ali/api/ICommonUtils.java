@@ -11,21 +11,21 @@ import java.util.List;
 
 public interface ICommonUtils {
     ILootCondition convertCondition(IContext context, LootItemCondition condition);
-    List<ILootCondition> convertConditions(IContext context, LootItemCondition[] conditions);
+    List<ILootCondition> convertConditions(IContext context, List<LootItemCondition> conditions);
     ILootCondition decodeCondition(IContext context, FriendlyByteBuf buf);
     List<ILootCondition> decodeConditions(IContext context, FriendlyByteBuf buf);
     void encodeCondition(IContext context, FriendlyByteBuf buf, ILootCondition condition);
     void encodeConditions(IContext context, FriendlyByteBuf buf, List<ILootCondition> conditions);
 
     ILootFunction convertFunction(IContext context, LootItemFunction function);
-    List<ILootFunction> convertFunctions(IContext context, LootItemFunction[] functions);
+    List<ILootFunction> convertFunctions(IContext context, List<LootItemFunction> functions);
     ILootFunction decodeFunction(IContext context, FriendlyByteBuf buf);
     List<ILootFunction> decodeFunctions(IContext context, FriendlyByteBuf buf);
     void encodeFunction(IContext context, FriendlyByteBuf buf, ILootFunction condition);
     void encodeFunctions(IContext context, FriendlyByteBuf buf, List<ILootFunction> functions);
 
     ILootEntry convertEntry(IContext context, LootPoolEntryContainer entry);
-    List<ILootEntry> convertEntries(IContext context, LootPoolEntryContainer[] entries);
+    List<ILootEntry> convertEntries(IContext context, List<LootPoolEntryContainer> entries);
     ILootEntry decodeEntry(IContext context, FriendlyByteBuf buf);
     List<ILootEntry> decodeEntries(IContext context, FriendlyByteBuf buf);
     void encodeEntry(IContext context, FriendlyByteBuf buf, ILootEntry entry);

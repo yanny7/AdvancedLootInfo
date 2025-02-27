@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin.function;
 
 import com.yanny.ali.api.IContext;
-import com.yanny.ali.mixin.MixinLootContext;
 import com.yanny.ali.mixin.MixinSetLoreFunction;
 import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,7 +9,6 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
-import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +16,8 @@ import java.util.Optional;
 public class SetLoreFunction extends LootConditionalFunction {
     public final boolean replace;
     public final List<Component> lore;
-    @Nullable
-    public final LootContext.EntityTarget resolutionContext;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final Optional<LootContext.EntityTarget> resolutionContext;
 
     public SetLoreFunction(IContext context, LootItemFunction function) {
         super(context, function);
@@ -39,8 +37,8 @@ public class SetLoreFunction extends LootConditionalFunction {
             lore.add(Component.Serializer.fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON)));
         }
 
-        String target = buf.readOptional(FriendlyByteBuf::readUtf).orElse(null);
-        resolutionContext = target != null ? LootContext.EntityTarget.getByName(target) : null;
+        Optional<String> target = buf.readOptional(FriendlyByteBuf::readUtf);
+        resolutionContext = target.map(LootContext.EntityTarget::getByName);
     }
 
     @Override
@@ -49,7 +47,7 @@ public class SetLoreFunction extends LootConditionalFunction {
         buf.writeBoolean(replace);
         buf.writeInt(lore.size());
         lore.forEach((l) -> buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(l)));
-        buf.writeOptional(Optional.ofNullable(resolutionContext != null ? ((MixinLootContext.EntityTarget) ((Object) resolutionContext)).getName() : null), FriendlyByteBuf::writeUtf);
+        buf.writeOptional(resolutionContext.map(Enum::name), FriendlyByteBuf::writeUtf);
     }
 
     @Override
@@ -58,11 +56,7 @@ public class SetLoreFunction extends LootConditionalFunction {
 
         components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.set_lore")));
         components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.replace", replace)));
-
-        if (resolutionContext != null) {
-            components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.resolution_context", TooltipUtils.value(TooltipUtils.translatableType("ali.enum.target", resolutionContext)))));
-        }
-
+        resolutionContext.ifPresent((c) -> components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.resolution_context", TooltipUtils.value(TooltipUtils.translatableType("ali.enum.target", c))))));
         components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.lore")));
         lore.forEach((l) -> components.add(TooltipUtils.pad(pad + 2, l)));
 

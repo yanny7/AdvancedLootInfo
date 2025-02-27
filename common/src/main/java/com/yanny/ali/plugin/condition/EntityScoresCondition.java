@@ -3,13 +3,13 @@ package com.yanny.ali.plugin.condition;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.mixin.MixinEntityHasScoreCondition;
 import com.yanny.ali.mixin.MixinIntRange;
 import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.EntityHasScoreCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.HashMap;
@@ -23,8 +23,8 @@ public class EntityScoresCondition implements ILootCondition {
     public final LootContext.EntityTarget target;
 
     public EntityScoresCondition(IContext context, LootItemCondition condition) {
-        target = ((MixinEntityHasScoreCondition) condition).getEntityTarget();
-        scores = ((MixinEntityHasScoreCondition) condition).getScores().entrySet().stream()
+        target = ((EntityHasScoreCondition) condition).entityTarget();
+        scores = ((EntityHasScoreCondition) condition).scores().entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, (e) -> new Tuple<>(
                         context.utils().convertNumber(context, ((MixinIntRange)e.getValue()).getMin()),
                         context.utils().convertNumber(context, ((MixinIntRange)e.getValue()).getMax())

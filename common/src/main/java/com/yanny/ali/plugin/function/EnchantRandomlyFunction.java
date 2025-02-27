@@ -20,7 +20,7 @@ public class EnchantRandomlyFunction extends LootConditionalFunction {
 
     public EnchantRandomlyFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        enchantments = ((MixinEnchantRandomlyFunction) function).getEnchantments().stream().map(BuiltInRegistries.ENCHANTMENT::getKey).collect(Collectors.toList());
+        enchantments = ((MixinEnchantRandomlyFunction) function).getEnchantments().stream().flatMap((t) -> t.stream().map((e) -> BuiltInRegistries.ENCHANTMENT.getKey(e.value()))).collect(Collectors.toList());
     }
 
     public EnchantRandomlyFunction(IContext context, FriendlyByteBuf buf) {

@@ -3,10 +3,12 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinApplyBonusCount;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
@@ -17,25 +19,25 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class ApplyBonusFunction extends LootConditionalFunction {
-    public final ResourceLocation enchantment;
+    public final Holder<Enchantment> enchantment;
     public final Formula formula;
 
     public ApplyBonusFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        enchantment = BuiltInRegistries.ENCHANTMENT.getKey(((MixinApplyBonusCount) function).getEnchantment());
+        enchantment = ((MixinApplyBonusCount) function).getEnchantment();
         formula = Formula.of(((MixinApplyBonusCount) function).getFormula());
     }
 
     public ApplyBonusFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        enchantment = buf.readResourceLocation();
+        enchantment = BuiltInRegistries.ENCHANTMENT.asLookup().get(buf.readResourceKey(BuiltInRegistries.ENCHANTMENT.key())).get();
         formula = Formula.decode(buf);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeResourceLocation(enchantment);
+        buf.writeResourceLocation(BuiltInRegistries.ENCHANTMENT.getKey(enchantment.value()));
         Formula.encode(buf, formula);
     }
 
@@ -52,11 +54,11 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         ;
 
         public static FormulaType of(ResourceLocation type) {
-            if (type.equals(ApplyBonusCount.OreDrops.TYPE)) {
+            if (type.equals(ApplyBonusCount.OreDrops.TYPE.id())) {
                 return ORE;
-            } else if (type.equals(ApplyBonusCount.BinomialWithBonusCount.TYPE)) {
+            } else if (type.equals(ApplyBonusCount.BinomialWithBonusCount.TYPE.id())) {
                 return BINOMIAL;
-            } else if (type.equals(ApplyBonusCount.UniformBonusCount.TYPE)) {
+            } else if (type.equals(ApplyBonusCount.UniformBonusCount.TYPE.id())) {
                 return UNIFORM;
             } else {
                 return UNKNOWN;
@@ -91,7 +93,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         public abstract void encode(FriendlyByteBuf buf);
 
         public static Formula of(ApplyBonusCount.Formula formula) {
-            return FORMULA_MAP.get(FormulaType.of(formula.getType())).apply(formula);
+            return FORMULA_MAP.get(FormulaType.of(formula.getType().id())).apply(formula);
         }
 
         public static Formula decode(FriendlyByteBuf buf) {
@@ -107,7 +109,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
     public static class OreGenFormula extends Formula {
         public OreGenFormula(ApplyBonusCount.Formula formula) {
-            super(FormulaType.of(formula.getType()));
+            super(FormulaType.of(formula.getType().id()));
         }
 
         public OreGenFormula(FormulaType type, FriendlyByteBuf buf) {
@@ -130,7 +132,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         private final int extraRounds;
 
         public BinomialFormula(ApplyBonusCount.Formula formula) {
-            super(FormulaType.of(formula.getType()));
+            super(FormulaType.of(formula.getType().id()));
             extraRounds = ((MixinApplyBonusCount.BinomialWithBonusCount) formula).getExtraRounds();
         }
 
@@ -154,7 +156,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
         private final int bonusMultiplier;
 
         public UniformFormula(ApplyBonusCount.Formula formula) {
-            super(FormulaType.of(formula.getType()));
+            super(FormulaType.of(formula.getType().id()));
             bonusMultiplier = ((MixinApplyBonusCount.UniformBonusCount) formula).getBonusMultiplier();
         }
 
@@ -178,7 +180,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
     public static class UnknownFormula extends Formula {
         public UnknownFormula(ApplyBonusCount.Formula formula) {
-            super(FormulaType.of(formula.getType()));
+            super(FormulaType.of(formula.getType().id()));
         }
 
         public UnknownFormula(FormulaType type, FriendlyByteBuf buf) {

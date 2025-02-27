@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(SetLoreFunction.class)
 public interface MixinSetLoreFunction {
@@ -17,5 +18,5 @@ public interface MixinSetLoreFunction {
     List<Component> getLore();
 
     @Accessor
-    LootContext.EntityTarget getResolutionContext();
+    Optional<LootContext.EntityTarget> getResolutionContext();
 }

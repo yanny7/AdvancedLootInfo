@@ -1,17 +1,15 @@
 package com.yanny.ali.network;
 
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(InfoSyncLootTableMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    public void onLootInfo(InfoSyncLootTableMessage msg, CustomPayloadEvent.Context contextSupplier) {
         super.onLootInfo(msg);
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 
-    public void onClear(ClearMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    public void onClear(ClearMessage msg, CustomPayloadEvent.Context contextSupplier) {
         super.onClear(msg);
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 }
