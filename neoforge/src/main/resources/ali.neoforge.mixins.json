@@ -10,6 +10,7 @@
     "MixinApplyBonusCount$UniformBonusCount",
     "MixinBinomialDistributionGenerator",
     "MixinBushBlock",
+    "MixinCanToolPerformAction",
     "MixinCompositeEntryBase",
     "MixinCompositeLootItemCondition",
     "MixinCopyBlockState",
@@ -50,4 +51,3 @@
     "defaultRequire": 1
   }
 }
-  
