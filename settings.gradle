@@ -28,6 +28,8 @@ plugins {
 rootProject.name = 'MultiLoader-AdvancedLootInfo'
 include("api")
 include("common")
+include("common-emi")
+include("common-jei")
 include("fabric")
 include("forge")
 include("neoforge")

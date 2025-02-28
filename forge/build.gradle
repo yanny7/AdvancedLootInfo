@@ -114,16 +114,22 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
+    source(project(":common-emi").sourceSets.main.allSource)
+    source(project(":common-jei").sourceSets.main.allSource)
 }
 
 tasks.withType(Javadoc).configureEach {
     source(project(":api").sourceSets.main.allJava)
     source(project(":common").sourceSets.main.allJava)
+    source(project(":common-emi").sourceSets.main.allJava)
+    source(project(":common-jei").sourceSets.main.allJava)
 }
 
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
+    from(project(":common-emi").sourceSets.main.allSource)
+    from(project(":common-jei").sourceSets.main.allSource)
 }
 
 tasks.named('compileTestJava') {
@@ -133,6 +139,8 @@ tasks.named('compileTestJava') {
 processResources {
     from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources
+    from project(":common-emi").sourceSets.main.resources
+    from project(":common-jei").sourceSets.main.resources
 }
 
 jar.finalizedBy('reobfJar')
