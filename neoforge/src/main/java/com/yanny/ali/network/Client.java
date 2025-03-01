@@ -1,16 +1,14 @@
 package com.yanny.ali.network;
 
 
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(InfoSyncLootTableMessage msg, NetworkEvent.Context contextSupplier) {
+    public void onLootInfo(InfoSyncLootTableMessage msg, PlayPayloadContext contextSupplier) {
         super.onLootInfo(msg);
-        contextSupplier.setPacketHandled(true);
     }
 
-    public void onClear(ClearMessage msg, NetworkEvent.Context contextSupplier) {
+    public void onClear(ClearMessage msg, PlayPayloadContext contextSupplier) {
         super.onClear(msg);
-        contextSupplier.setPacketHandled(true);
     }
 }

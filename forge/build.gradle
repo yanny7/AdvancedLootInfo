@@ -84,10 +84,6 @@ dependencies {
     compileOnly project(":api")
     compileOnly project(":common")
 
-    // EMI
-    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
-//    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
-
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
@@ -114,21 +110,18 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
-    source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
 }
 
 tasks.withType(Javadoc).configureEach {
     source(project(":api").sourceSets.main.allJava)
     source(project(":common").sourceSets.main.allJava)
-    source(project(":common-emi").sourceSets.main.allJava)
     source(project(":common-jei").sourceSets.main.allJava)
 }
 
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
-    from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
 }
 
@@ -139,7 +132,6 @@ tasks.named('compileTestJava') {
 processResources {
     from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources
-    from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
 }
 

@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -30,13 +31,14 @@ public class EntityPropertiesCondition implements ILootCondition {
     public EntityPropertiesCondition(IContext context, FriendlyByteBuf buf) {
         target = buf.readEnum(LootContext.EntityTarget.class);
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
-        predicate = jsonElement.flatMap(EntityPredicate::fromJson);
+//        predicate = jsonElement.flatMap(EntityPredicate::fromJson);
+        predicate = Optional.empty();
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeEnum(target);
-        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v.serializeToJson()));
+        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, EntityPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
     }
 
     @Override

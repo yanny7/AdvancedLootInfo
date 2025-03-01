@@ -25,12 +25,12 @@ public class NetworkUtils {
         Server server = new Server(channel);
 
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::encode)
+                .encoder(InfoSyncLootTableMessage::write)
                 .decoder(InfoSyncLootTableMessage::new)
                 .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::encode)
+                .encoder(ClearMessage::write)
                 .decoder(ClearMessage::new)
                 .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
                 .add();
@@ -42,11 +42,11 @@ public class NetworkUtils {
         Server server = new Server(channel);
 
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::encode)
+                .encoder(InfoSyncLootTableMessage::write)
                 .decoder(InfoSyncLootTableMessage::new)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::encode)
+                .encoder(ClearMessage::write)
                 .decoder(ClearMessage::new)
                 .add();
         return new DistHolder<>(null, server);

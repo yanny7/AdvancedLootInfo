@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import net.minecraft.advancements.critereon.LocationPredicate;
@@ -30,13 +31,14 @@ public class LocationCheckCondition implements ILootCondition {
     public LocationCheckCondition(IContext context, FriendlyByteBuf buf) {
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
 
-        predicate = jsonElement.flatMap(LocationPredicate::fromJson);
+//        predicate = jsonElement.flatMap(LocationPredicate::fromJson);
+        predicate = Optional.empty();
         offset = buf.readBlockPos();
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v.serializeToJson()));
+        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, LocationPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
         buf.writeBlockPos(offset);
     }
 

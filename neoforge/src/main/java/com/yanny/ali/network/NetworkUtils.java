@@ -2,51 +2,54 @@ package com.yanny.ali.network;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.simple.MessageFunctions;
-import net.neoforged.neoforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 import org.jetbrains.annotations.NotNull;
 
 public class NetworkUtils {
     private static int messageId = 0;
 
-    public static DistHolder<AbstractClient, AbstractServer> registerLootInfoPropagator(SimpleChannel channel) {
+    public static DistHolder<AbstractClient, AbstractServer> registerLootInfoPropagator(IPayloadRegistrar registrar) {
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            return registerClientLootInfoPropagator(channel);
+            return registerClientLootInfoPropagator(registrar);
         } else {
-            return registerServerLootInfoPropagator(channel);
+            return registerServerLootInfoPropagator(registrar);
         }
     }
 
     @NotNull
-    private static DistHolder<AbstractClient, AbstractServer> registerClientLootInfoPropagator(SimpleChannel channel) {
+    private static DistHolder<AbstractClient, AbstractServer> registerClientLootInfoPropagator(IPayloadRegistrar registrar) {
         Client client = new Client();
-        Server server = new Server(channel);
+        Server server = new Server();
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::encode)
-                .decoder(InfoSyncLootTableMessage::new)
-                .consumerNetworkThread((MessageFunctions.MessageConsumer<InfoSyncLootTableMessage>) client::onLootInfo)
-                .add();
-        channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::encode)
-                .decoder(ClearMessage::new)
-                .consumerNetworkThread((MessageFunctions.MessageConsumer<ClearMessage>) client::onClear)
-                .add();
+        registrar.play(
+                InfoSyncLootTableMessage.ID,
+                InfoSyncLootTableMessage::new,
+                (handler) ->
+                        handler.client(client::onLootInfo).server((msg, ctx) -> {})
+        );
+        registrar.play(
+                ClearMessage.ID,
+                ClearMessage::new,
+                (handler) ->
+                        handler.client(client::onClear).server((msg, ctx) -> {})
+        );
         return new DistHolder<>(client, server);
     }
 
     @NotNull
-    private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
-        Server server = new Server(channel);
+    private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(IPayloadRegistrar registrar) {
+        Server server = new Server();
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::encode)
-                .decoder(InfoSyncLootTableMessage::new)
-                .add();
-        channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::encode)
-                .decoder(ClearMessage::new)
-                .add();
+        registrar.play(
+                InfoSyncLootTableMessage.ID,
+                InfoSyncLootTableMessage::new,
+                (handler) -> {}
+        );
+        registrar.play(
+                ClearMessage.ID,
+                ClearMessage::new,
+                (handler) -> {}
+        );
         return new DistHolder<>(null, server);
     }
 

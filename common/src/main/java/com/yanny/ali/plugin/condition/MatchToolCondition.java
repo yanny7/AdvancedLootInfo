@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.plugin.TooltipUtils;
@@ -27,12 +28,13 @@ public class MatchToolCondition implements ILootCondition {
 
     public MatchToolCondition(IContext context, FriendlyByteBuf buf) {
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
-        predicate = jsonElement.flatMap(ItemPredicate::fromJson);
+//        predicate = jsonElement.flatMap(ItemPredicate::fromJson); FIXME
+        predicate = Optional.empty();
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v.serializeToJson()));
+        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, ItemPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
     }
 
     @Override
