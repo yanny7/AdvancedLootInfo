@@ -45,18 +45,18 @@ dependencies {
     compileOnly project(":common")
 
     // EMI
-//    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
 //    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
 
     // JEI
-//    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-//    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-//    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     // REI
     compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
     compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
-    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
+//    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     implementation "dev.architectury:architectury-neoforge:${architectury_version}"
 }
@@ -67,21 +67,29 @@ Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
+    source(project(":common-emi").sourceSets.main.allSource)
+    source(project(":common-jei").sourceSets.main.allSource)
 }
 
 tasks.withType(Javadoc).matching(notNeoTask).configureEach {
     source(project(":api").sourceSets.main.allJava)
     source(project(":common").sourceSets.main.allJava)
+    source(project(":common-emi").sourceSets.main.allJava)
+    source(project(":common-jei").sourceSets.main.allJava)
 }
 
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
+    from(project(":common-emi").sourceSets.main.allSource)
+    from(project(":common-jei").sourceSets.main.allSource)
 }
 
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources
+    from project(":common-emi").sourceSets.main.resources
+    from project(":common-jei").sourceSets.main.resources
 }
 
 tasks.named('compileTestJava') {

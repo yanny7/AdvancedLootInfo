@@ -10,7 +10,7 @@ public class Server extends AbstractServer {
     protected void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message) {
         FriendlyByteBuf buf = PacketByteBufs.create();
 
-        message.encode(buf);
+        message.write(buf);
         ServerPlayNetworking.send(serverPlayer, NetworkUtils.CLEAR_LOOT_INFO_ID, buf);
     }
 
@@ -18,7 +18,7 @@ public class Server extends AbstractServer {
     protected void sendSyncMessage(ServerPlayer serverPlayer, InfoSyncLootTableMessage message) {
         FriendlyByteBuf buf = PacketByteBufs.create();
 
-        message.encode(buf);
+        message.write(buf);
         ServerPlayNetworking.send(serverPlayer, NetworkUtils.NEW_LOOT_INFO_ID, buf);
     }
 }
