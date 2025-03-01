@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ public class SetPotionFunction extends LootConditionalFunction {
 
     public SetPotionFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        potion = BuiltInRegistries.POTION.get(buf.readResourceLocation());;
+        potion = BuiltInRegistries.POTION.getOptional(buf.readResourceLocation()).orElse(Potions.EMPTY);
     }
 
     @Override

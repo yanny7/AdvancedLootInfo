@@ -9,6 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
@@ -24,7 +25,7 @@ public class SetAttributesFunction extends LootConditionalFunction {
             MixinSetAttributesFunction.Modifier m = (MixinSetAttributesFunction.Modifier) f;
             return new Modifier(
                     m.getName(),
-                    BuiltInRegistries.ATTRIBUTE.getKey(m.getAttribute()),
+                    Objects.requireNonNull(BuiltInRegistries.ATTRIBUTE.getKey(m.getAttribute()), "Attribute is not registered!"),
                     m.getOperation().toValue(),
                     context.utils().convertNumber(context, m.getAmount()),
                     m.getId() != null ? m.getId().toString() : null,
@@ -91,8 +92,10 @@ public class SetAttributesFunction extends LootConditionalFunction {
         components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.set_attributes")));
 
         modifiers.forEach((modifier) -> {
+            String attribute = BuiltInRegistries.ATTRIBUTE.getOptional(modifier.attribute()).map(Attribute::getDescriptionId).orElse("???");
+
             components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_attributes.name", modifier.name())));
-            components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.attribute", TooltipUtils.value(TooltipUtils.translatable(BuiltInRegistries.ATTRIBUTE.get(modifier.attribute()).getDescriptionId())))));
+            components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.attribute", TooltipUtils.value(TooltipUtils.translatable(attribute)))));
             components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.operation", AttributeModifier.Operation.fromValue(modifier.operation()))));
             components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.amount", modifier.amount())));
 

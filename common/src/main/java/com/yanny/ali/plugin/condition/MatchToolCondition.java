@@ -16,7 +16,7 @@ import java.util.List;
 import static com.yanny.ali.plugin.TooltipUtils.translatable;
 
 public class MatchToolCondition implements ILootCondition {
-    public ItemPredicate predicate;
+    public final ItemPredicate predicate;
 
     public MatchToolCondition(IContext context, LootItemCondition condition) {
         predicate = ((MixinMatchTool) condition).getPredicate();

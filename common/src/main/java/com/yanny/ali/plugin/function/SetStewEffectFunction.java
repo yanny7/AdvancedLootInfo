@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.HashMap;
@@ -57,7 +58,8 @@ public class SetStewEffectFunction extends LootConditionalFunction {
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
 
         effectMap.forEach((effect, duration) -> {
-            components.add(pad(pad + 1, translatable("ali.property.function.set_stew_effect.effect", translatable(BuiltInRegistries.MOB_EFFECT.get(effect).getDescriptionId()), duration)));
+            String mobEffect = BuiltInRegistries.MOB_EFFECT.getOptional(effect).map(MobEffect::getDescriptionId).orElse("???");
+            components.add(pad(pad + 1, translatable("ali.property.function.set_stew_effect.effect", translatable(mobEffect), duration)));
         });
 
         return components;

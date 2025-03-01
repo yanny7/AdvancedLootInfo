@@ -49,7 +49,7 @@ public class SetLoreFunction extends LootConditionalFunction {
         buf.writeBoolean(replace);
         buf.writeInt(lore.size());
         lore.forEach((l) -> buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(l)));
-        buf.writeOptional(Optional.ofNullable(resolutionContext != null ? ((MixinLootContext.EntityTarget) ((Object) resolutionContext)).getName() : null), FriendlyByteBuf::writeUtf);
+        buf.writeOptional(Optional.ofNullable(resolutionContext != null ? (((MixinLootContext.EntityTarget) ((Object) resolutionContext)).getName()) : null), FriendlyByteBuf::writeUtf);
     }
 
     @Override

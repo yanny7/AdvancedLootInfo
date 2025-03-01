@@ -11,6 +11,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -30,6 +31,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
     private final ScreenPosition position;
     private final Rect rect;
     private final IGuiHelper guiHelper;
+    private final ClientLevel level;
 
     public JeiBlockSlotWidget(IGuiHelper guiHelper, Block block, int x, int y) {
         this.guiHelper = guiHelper;
@@ -38,6 +40,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         isPlant = block instanceof BushBlock;
         position = new ScreenPosition(x, y);
         rect = new Rect(x - 4, y - 4, 24, 24);
+        level = Minecraft.getInstance().level;
     }
 
     @NotNull
@@ -71,7 +74,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
             BlockState base;
             BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-            if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, Minecraft.getInstance().level, BlockPos.ZERO)) {
+            if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                 base = farmland;
             } else {
                 base = Blocks.GRASS_BLOCK.defaultBlockState();

@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.LinkedList;
@@ -50,7 +51,8 @@ public class EnchantRandomlyFunction extends LootConditionalFunction {
             components.add(pad(pad + 1, translatable("ali.property.function.enchant_randomly.enchantments")));
 
             enchantments.forEach((enchantment) -> {
-                components.add(pad(pad + 2, translatable(BuiltInRegistries.ENCHANTMENT.get(enchantment).getDescriptionId())));
+                String enchantmentStr = BuiltInRegistries.ENCHANTMENT.getOptional(enchantment).map(Enchantment::getDescriptionId).orElse("???");
+                components.add(pad(pad + 2, translatable(enchantmentStr)));
             });
         }
 

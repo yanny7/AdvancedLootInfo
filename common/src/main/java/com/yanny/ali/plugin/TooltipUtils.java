@@ -589,9 +589,8 @@ public class TooltipUtils {
 
         });
 
-        functions.stream().filter((f) -> f instanceof ApplyBonusFunction).forEach((f) -> {
-            ((ApplyBonusFunction) f).formula.calculateCount(value, 0);
-        });
+        functions.stream().filter((f) -> f instanceof ApplyBonusFunction).forEach((f) ->
+                ((ApplyBonusFunction) f).formula.calculateCount(value, 0));
 
         functions.stream().filter((f) -> f instanceof LimitCountFunction).forEach((f) -> {
             LimitCountFunction function = (LimitCountFunction) f;

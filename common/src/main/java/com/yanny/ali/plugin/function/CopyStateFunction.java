@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -29,7 +30,7 @@ public class CopyStateFunction extends LootConditionalFunction {
 
     public CopyStateFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        block = BuiltInRegistries.BLOCK.get(buf.readResourceLocation());
+        block = BuiltInRegistries.BLOCK.getOptional(buf.readResourceLocation()).orElse(Blocks.BARRIER);
 
         int count = buf.readInt();
         StateDefinition<Block, BlockState> stateDefinition = block.getStateDefinition();

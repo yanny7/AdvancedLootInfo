@@ -80,7 +80,7 @@ public class ApplyBonusFunction extends LootConditionalFunction {
     }
 
     public static abstract class Formula {
-        public FormulaType type;
+        public final FormulaType type;
 
         public Formula(FormulaType type) {
             this.type = type;
