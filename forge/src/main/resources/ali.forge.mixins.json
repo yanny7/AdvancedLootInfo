@@ -4,6 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "MixinApplyBonusCount",
+    "MixinApplyBonusCount$BinomialWithBonusCount",
+    "MixinApplyBonusCount$UniformBonusCount",
     "MixinBinomialDistributionGenerator",
     "MixinBlockPredicate",
     "MixinBonusLevelTableCondition",
@@ -88,9 +90,7 @@
     "MixinTimeCheck",
     "MixinUniformGenerator",
     "MixinValueCheckCondition",
-    "MixinWeatherCheck",
-    "MixinApplyBonusCount.BinomialWithBonusCount",
-    "MixinApplyBonusCount.UniformBonusCount"
+    "MixinWeatherCheck"
   ],
   "refmap": "ali.refmap.json",
   "client": [
