@@ -1,4 +1,4 @@
-## []
+## [1.0.2]
 
 - Fixed crash with mixins in ApplyBonusCount
 
