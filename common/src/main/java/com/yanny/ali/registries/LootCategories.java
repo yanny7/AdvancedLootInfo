@@ -3,7 +3,6 @@ package com.yanny.ali.registries;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -71,10 +70,6 @@ public class LootCategories {
                         LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
                         String key = GsonHelper.getAsString(jsonObject, "key");
                         Item icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
-
-                        if (icon == null) {
-                            throw new JsonParseException("Item " + GsonHelper.getAsString(jsonObject, "icon") + " not found");
-                        }
 
                         switch (type) {
                             case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));

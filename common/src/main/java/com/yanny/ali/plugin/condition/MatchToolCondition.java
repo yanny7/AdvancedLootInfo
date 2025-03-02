@@ -20,7 +20,7 @@ import static com.yanny.ali.plugin.TooltipUtils.translatable;
 
 public class MatchToolCondition implements ILootCondition {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    public Optional<ItemPredicate> predicate;
+    public final Optional<ItemPredicate> predicate;
 
     public MatchToolCondition(IContext context, LootItemCondition condition) {
         predicate = ((MatchTool) condition).predicate();

@@ -8,6 +8,7 @@ import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 
 public class EmiBlockSlotWidget extends SlotWidget {
+    private final ClientLevel level;
     private final BlockState blockState;
     private final Block block;
     private final boolean isPlant;
@@ -30,6 +32,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
         this.block = block;
         blockState = block.defaultBlockState();
         isPlant = block instanceof BushBlock;
+        level = Minecraft.getInstance().level;
         large(true);
     }
 
@@ -53,7 +56,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
             BlockState base;
             BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-            if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, Minecraft.getInstance().level, BlockPos.ZERO)) {
+            if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                 base = farmland;
             } else {
                 base = Blocks.GRASS_BLOCK.defaultBlockState();
