@@ -13,6 +13,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -79,11 +80,13 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         private final BlockState blockState;
         private final Block block;
         private final boolean isPlant;
+        private final ClientLevel level;
 
         public BlockSlotRenderer(Block block) {
             this.block = block;
             blockState = block.defaultBlockState();
             isPlant = block instanceof IPlantable;
+            level = Minecraft.getInstance().level;
         }
 
         @Override
@@ -104,7 +107,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, Minecraft.getInstance().level, BlockPos.ZERO)) {
+                if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();

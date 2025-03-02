@@ -39,6 +39,6 @@ public class TagEntry extends SingletonEntry {
     @NotNull
     @Override
     public List<Item> collectItems() {
-            return BuiltInRegistries.ITEM.getTag(item).get().stream().map(Holder::value).toList();
+        return BuiltInRegistries.ITEM.getTag(item).map((tag) -> tag.stream().map(Holder::value).toList()).orElse(List.of());
     }
 }

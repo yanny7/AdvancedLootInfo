@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.HashMap;
@@ -61,11 +62,10 @@ public class SetEnchantmentsFunction extends LootConditionalFunction {
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
         components.add(pad(pad + 1, translatable("ali.property.function.set_enchantments.enchantments")));
-        enchantments.forEach((enchantment, level) -> components.add(pad(pad + 2, translatable(
-                "ali.property.function.set_enchantments.enchantment",
-                translatable(BuiltInRegistries.ENCHANTMENT.get(enchantment).getDescriptionId()),
-                level
-        ))));
+        enchantments.forEach((enchantment, level) -> {
+            String enchantmentStr = BuiltInRegistries.ENCHANTMENT.getOptional(enchantment).map(Enchantment::getDescriptionId).orElse("???");
+            components.add(pad(pad + 2, translatable("ali.property.function.set_enchantments.enchantment", translatable(enchantmentStr), level)));
+        });
         components.add(pad(pad + 1, translatable("ali.property.function.set_enchantments.add", add)));
 
         return components;
