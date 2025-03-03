@@ -12,6 +12,7 @@
     "license": "${license}",
     "icon": "logo.png",
     "environment": "*",
+    "accessWidener": "${mod_id}.accesswidener",
     "entrypoints": {
         "main": [
             "com.yanny.ali.CommonAliMod"

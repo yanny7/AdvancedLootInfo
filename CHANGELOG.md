@@ -1,3 +1,7 @@
+## [1.0.3]
+
+- Fixed crash on Fabric
+
 ## [1.0.2]
 
 - Fixed crash with mixins in ApplyBonusCount
