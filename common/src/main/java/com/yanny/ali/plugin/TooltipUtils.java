@@ -211,13 +211,15 @@ public class TooltipUtils {
             } if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
                 addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.size", slimePredicate.size());
             } else {
-                JsonObject jsonObject = EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, entitySubPredicate).result().get().getAsJsonObject();
+                EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, entitySubPredicate).result().ifPresent((element) -> {
+                    JsonObject jsonObject = element.getAsJsonObject();
 
-                if (jsonObject.has("variant")) {
-                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
-                } else {
-                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.toString())));
-                }
+                    if (jsonObject.has("variant")) {
+                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
+                    } else {
+                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.toString())));
+                    }
+                });
             }
         });
     }

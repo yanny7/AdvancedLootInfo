@@ -20,16 +20,14 @@ public class SetAttributesFunction extends LootConditionalFunction {
 
     public SetAttributesFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        modifiers = ((MixinSetAttributesFunction) function).getModifiers().stream().map((f) -> {
-            return new Modifier(
-                    f.name(),
-                    Objects.requireNonNull(BuiltInRegistries.ATTRIBUTE.getKey(f.attribute().value())),
-                    f.operation().toValue(),
-                    context.utils().convertNumber(context, f.amount()),
-                    f.id().map(UUID::toString),
-                    f.slots().stream().map(EquipmentSlot::getName).toList()
-            );
-        }).toList();
+        modifiers = ((MixinSetAttributesFunction) function).getModifiers().stream().map((f) -> new Modifier(
+                f.name(),
+                Objects.requireNonNull(BuiltInRegistries.ATTRIBUTE.getKey(f.attribute().value())),
+                f.operation().toValue(),
+                context.utils().convertNumber(context, f.amount()),
+                f.id().map(UUID::toString),
+                f.slots().stream().map(EquipmentSlot::getName).toList()
+        )).toList();
     }
 
     public SetAttributesFunction(IContext context, FriendlyByteBuf buf) {

@@ -15,6 +15,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -27,8 +28,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
+    private final ClientLevel level;
+
     public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
+        level = Minecraft.getInstance().level;
     }
 
     @Override
@@ -75,7 +79,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (recipe.block() instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, Minecraft.getInstance().level, BlockPos.ZERO)) {
+                if (recipe.block() instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();

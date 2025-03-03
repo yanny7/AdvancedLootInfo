@@ -5,6 +5,7 @@ import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinApplyBonusCount;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -30,14 +32,14 @@ public class ApplyBonusFunction extends LootConditionalFunction {
 
     public ApplyBonusFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        enchantment = BuiltInRegistries.ENCHANTMENT.asLookup().get(buf.readResourceKey(BuiltInRegistries.ENCHANTMENT.key())).get();
+        enchantment = BuiltInRegistries.ENCHANTMENT.getHolderOrThrow(buf.readResourceKey(Registries.ENCHANTMENT));
         formula = Formula.decode(buf);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeResourceLocation(BuiltInRegistries.ENCHANTMENT.getKey(enchantment.value()));
+        buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.ENCHANTMENT.getKey(enchantment.value())));
         Formula.encode(buf, formula);
     }
 
