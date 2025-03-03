@@ -2,7 +2,6 @@ package com.yanny.ali.network;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.network.simple.MessageFunctions;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,12 +24,12 @@ public class NetworkUtils {
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
                 .encoder(InfoSyncLootTableMessage::encode)
                 .decoder(InfoSyncLootTableMessage::new)
-                .consumerNetworkThread((MessageFunctions.MessageConsumer<InfoSyncLootTableMessage>) client::onLootInfo)
+                .consumerNetworkThread(client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)
                 .decoder(ClearMessage::new)
-                .consumerNetworkThread((MessageFunctions.MessageConsumer<ClearMessage>) client::onClear)
+                .consumerNetworkThread(client::onClear)
                 .add();
         return new DistHolder<>(client, server);
     }
