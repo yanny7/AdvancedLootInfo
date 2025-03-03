@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
@@ -33,14 +34,14 @@ public class BlockStatePropertyCondition implements ILootCondition {
     public BlockStatePropertyCondition(IContext context, FriendlyByteBuf buf) {
         block = buf.readResourceLocation();
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
-//        properties = jsonElement.flatMap(StatePropertiesPredicate::fromJson); FIXME
-        properties = Optional.empty();
+        properties = jsonElement.flatMap((e) -> StatePropertiesPredicate.CODEC.decode(JsonOps.INSTANCE, e).result()).map(Pair::getFirst);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeResourceLocation(block);
-        buf.writeOptional(properties, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, StatePropertiesPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
+        buf.writeOptional(properties.flatMap((v) -> StatePropertiesPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result()),
+                (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v));
     }
 
     @Override

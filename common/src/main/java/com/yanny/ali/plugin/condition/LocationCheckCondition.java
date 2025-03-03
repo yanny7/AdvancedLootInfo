@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
@@ -31,14 +32,14 @@ public class LocationCheckCondition implements ILootCondition {
     public LocationCheckCondition(IContext context, FriendlyByteBuf buf) {
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
 
-//        predicate = jsonElement.flatMap(LocationPredicate::fromJson);
-        predicate = Optional.empty();
+        predicate = jsonElement.flatMap((e) -> LocationPredicate.CODEC.decode(JsonOps.INSTANCE, e).result()).map(Pair::getFirst);
         offset = buf.readBlockPos();
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, LocationPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
+        buf.writeOptional(predicate.flatMap((v) -> LocationPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result()),
+                (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v));
         buf.writeBlockPos(offset);
     }
 

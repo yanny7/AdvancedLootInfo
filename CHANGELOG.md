@@ -1,6 +1,7 @@
 ## [1.0.3]
 
 - Fixed crash on Fabric
+- Fixed missing conditions
 
 ## [1.0.2]
 

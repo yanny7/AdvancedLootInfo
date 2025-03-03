@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
@@ -31,22 +32,25 @@ public class EntityPropertiesCondition implements ILootCondition {
     public EntityPropertiesCondition(IContext context, FriendlyByteBuf buf) {
         target = buf.readEnum(LootContext.EntityTarget.class);
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
-//        predicate = jsonElement.flatMap(EntityPredicate::fromJson);
-        predicate = Optional.empty();
+        predicate = jsonElement.flatMap((e) -> EntityPredicate.CODEC.decode(JsonOps.INSTANCE, e).result()).map(Pair::getFirst);
+
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeEnum(target);
-        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, EntityPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
+        buf.writeOptional(predicate.flatMap((v) -> EntityPredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result()),
+                (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v));
     }
 
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
-        predicate.ifPresent((e) -> addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.target", value(translatableType("ali.enum.target", target))), e));
+        predicate.ifPresent((e) -> {
+            components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
+            addEntityPredicate(components, pad + 1, translatable("ali.property.condition.predicate.target", value(translatableType("ali.enum.target", target))), e);
+        });
 
         return components;
     }

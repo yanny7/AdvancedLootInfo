@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.condition;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
@@ -28,13 +29,13 @@ public class DamageSourcePropertiesCondition implements ILootCondition {
 
     public DamageSourcePropertiesCondition(IContext context, FriendlyByteBuf buf) {
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
-//        predicate = jsonElement.flatMap(DamageSourcePredicate::fromJson); FIXME
-        predicate = Optional.empty();
+        predicate = jsonElement.flatMap((e) -> DamageSourcePredicate.CODEC.decode(JsonOps.INSTANCE, e).result()).map(Pair::getFirst);
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        buf.writeOptional(predicate, (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, DamageSourcePredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result().get()));
+        buf.writeOptional(predicate.flatMap((v) -> DamageSourcePredicate.CODEC.encodeStart(JsonOps.INSTANCE, v).result()),
+                (b, v) -> b.writeJsonWithCodec(ExtraCodecs.JSON, v));
     }
 
     @Override
