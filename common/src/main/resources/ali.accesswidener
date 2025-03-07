@@ -3,6 +3,7 @@ accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
+accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaDeserializer
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactPropertyMatcher

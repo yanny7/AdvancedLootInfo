@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinLootContext;
 import com.yanny.ali.mixin.MixinSetLoreFunction;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
@@ -14,6 +13,8 @@ import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.yanny.ali.plugin.TooltipUtils.*;
 
 public class SetLoreFunction extends LootConditionalFunction {
     public final boolean replace;
@@ -56,15 +57,15 @@ public class SetLoreFunction extends LootConditionalFunction {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.set_lore")));
-        components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.replace", replace)));
+        components.add(pad(pad, translatable("ali.type.function.set_lore")));
+        components.add(pad(pad + 1, translatable("ali.property.function.set_lore.replace", replace)));
 
         if (resolutionContext != null) {
-            components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.resolution_context", TooltipUtils.value(TooltipUtils.translatableType("ali.enum.target", resolutionContext)))));
+            components.add(pad(pad + 1, translatable("ali.property.function.set_lore.resolution_context", value(translatableType("ali.enum.target", resolutionContext)))));
         }
 
-        components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_lore.lore")));
-        lore.forEach((l) -> components.add(TooltipUtils.pad(pad + 2, l)));
+        components.add(pad(pad + 1, translatable("ali.property.function.set_lore.lore")));
+        lore.forEach((l) -> components.add(pad(pad + 2, l)));
 
         return components;
     }

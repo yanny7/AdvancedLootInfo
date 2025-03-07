@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.function;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinCopyBlockState;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -17,6 +16,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import static com.yanny.ali.plugin.TooltipUtils.*;
 
 public class CopyStateFunction extends LootConditionalFunction {
     public final Block block;
@@ -54,12 +55,12 @@ public class CopyStateFunction extends LootConditionalFunction {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.copy_state")));
-        components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.copy_state.block", TooltipUtils.value(TooltipUtils.translatable(block.getDescriptionId())))));
+        components.add(pad(pad, translatable("ali.type.function.copy_state")));
+        components.add(pad(pad + 1, translatable("ali.property.function.copy_state.block", value(translatable(block.getDescriptionId())))));
 
         if (!properties.isEmpty()) {
-            components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.copy_state.properties", properties)));
-            properties.forEach((property) -> components.add(TooltipUtils.pad(pad + 2, TooltipUtils.value(property.getName()))));
+            components.add(pad(pad + 1, translatable("ali.property.function.copy_state.properties", properties)));
+            properties.forEach((property) -> components.add(pad(pad + 2, value(property.getName()))));
         }
 
         return components;

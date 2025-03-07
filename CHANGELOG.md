@@ -1,6 +1,8 @@
 ## []
 
 - Fixed crash when creating entity
+- Added missing tooltips
+- Added delimiters to tooltips
 
 ## [1.0.3]
 

@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.condition;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.mixin.MixinInvertedLootItemCondition;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -36,7 +35,7 @@ public class InvertedCondition implements ILootCondition {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.inverted")));
-        components.addAll(TooltipUtils.getConditions(List.of(term), pad + 1));
+        components.addAll(term.getTooltip( pad + 1));
 
         return components;
     }

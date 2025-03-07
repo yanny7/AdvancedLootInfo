@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin.condition;
 
 import com.yanny.ali.api.IContext;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.CompositeLootItemCondition;
@@ -27,7 +26,7 @@ public class AnyOfCondition extends CompositeCondition {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.any_of")));
-        components.addAll(TooltipUtils.getConditions(terms, pad + 1));
+        terms.forEach((condition) -> components.addAll(condition.getTooltip(pad + 1)));
 
         return components;
     }

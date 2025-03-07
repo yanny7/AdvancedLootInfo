@@ -7,7 +7,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import static com.yanny.ali.plugin.TooltipUtils.pad;
+import static com.yanny.ali.plugin.TooltipUtils.translatable;
 
 public class RandomChanceWithLootingCondition implements ILootCondition {
     public final float percent;
@@ -31,6 +35,12 @@ public class RandomChanceWithLootingCondition implements ILootCondition {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return List.of();
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.condition.random_chance_with_looting")));
+        components.add(pad(pad + 1, translatable("ali.property.condition.random_chance_with_looting.percent", percent)));
+        components.add(pad(pad + 1, translatable("ali.property.condition.random_chance_with_looting.multiplier", multiplier)));
+
+        return components;
     }
 }
