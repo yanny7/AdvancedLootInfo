@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility;
 
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -40,6 +42,8 @@ import java.util.stream.Collectors;
 
 @REIPluginClient
 public class ReiCompatibility implements REIClientPlugin {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     private final List<Holder<ReiBlockDisplay, BlockLootType, Block>> blockCategoryList = new LinkedList<>();
     private final List<Holder<ReiEntityDisplay, EntityLootType, Entity>> entityCategoryList = new LinkedList<>();
     private final List<Holder<ReiGameplayDisplay, GameplayLootType, String>> gameplayCategoryList = new LinkedList<>();
@@ -111,7 +115,14 @@ public class ReiCompatibility implements REIClientPlugin {
 
                 if (entityType == EntityType.SHEEP) {
                     for (DyeColor color : DyeColor.values()) {
-                        Sheep sheep = (Sheep) entityType.create(level);
+                        Sheep sheep;
+
+                        try {
+                            sheep = (Sheep) entityType.create(level);
+                        } catch (Throwable e) {
+                            LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
+                            continue;
+                        }
 
                         if (sheep != null) {
                             sheep.setColor(color);
@@ -119,14 +130,30 @@ public class ReiCompatibility implements REIClientPlugin {
                         }
                     }
 
-                    Sheep sheep = (Sheep) entityType.create(level);
+                    Sheep sheep;
+
+                    try {
+                        sheep = (Sheep) entityType.create(level);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to create sheep: {}", e.getMessage());
+                        continue;
+                    }
 
                     if (sheep != null) {
                         sheep.setSheared(true);
                         entityList.add(sheep);
                     }
                 } else {
-                    entityList.add(entityType.create(level));
+                    Entity entity;
+
+                    try {
+                        entity = entityType.create(level);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
+                        continue;
+                    }
+
+                    entityList.add(entity);
                 }
 
                 for (Entity entity : entityList) {

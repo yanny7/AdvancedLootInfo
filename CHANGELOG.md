@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash when creating entity
+
 ## [1.0.3]
 
 - Fixed crash on Fabric
