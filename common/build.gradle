@@ -1,7 +1,6 @@
 plugins {
     id 'idea'
     id 'java'
-    id 'maven-publish'
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
 }
 
@@ -25,18 +24,4 @@ dependencies {
     compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}:api"
 
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
 }
