@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class VanillaPlugin implements IPlugin {
+public class CommonPlugin implements IPlugin {
     public static final ResourceLocation UNKNOWN = new ResourceLocation("unknown");
 
     @Override
@@ -86,11 +86,11 @@ public class VanillaPlugin implements IPlugin {
         registry.registerEntry(GroupEntry.class, getKey(LootPoolEntries.GROUP), GroupEntry::new, GroupEntry::new);
         registry.registerEntry(UnknownEntry.class, UNKNOWN, UnknownEntry::new, UnknownEntry::new);
 
-        registry.registerNumberProvider(getKey(NumberProviders.CONSTANT), VanillaPlugin::convertConstant);
-        registry.registerNumberProvider(getKey(NumberProviders.UNIFORM), VanillaPlugin::convertUniform);
-        registry.registerNumberProvider(getKey(NumberProviders.BINOMIAL), VanillaPlugin::convertBinomial);
-        registry.registerNumberProvider(getKey(NumberProviders.SCORE), VanillaPlugin::convertScore);
-        registry.registerNumberProvider(UNKNOWN, VanillaPlugin::convertUnknown);
+        registry.registerNumberProvider(getKey(NumberProviders.CONSTANT), CommonPlugin::convertConstant);
+        registry.registerNumberProvider(getKey(NumberProviders.UNIFORM), CommonPlugin::convertUniform);
+        registry.registerNumberProvider(getKey(NumberProviders.BINOMIAL), CommonPlugin::convertBinomial);
+        registry.registerNumberProvider(getKey(NumberProviders.SCORE), CommonPlugin::convertScore);
+        registry.registerNumberProvider(UNKNOWN, CommonPlugin::convertUnknown);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class VanillaPlugin implements IPlugin {
     }
 
     @NotNull
-    private static RangeValue convertConstant(IContext context, NumberProvider numberProvider) {
+    static RangeValue convertConstant(IContext context, NumberProvider numberProvider) {
         LootContext lootContext = context.lootContext();
 
         if (lootContext != null) {
@@ -110,14 +110,14 @@ public class VanillaPlugin implements IPlugin {
     }
 
     @NotNull
-    private static RangeValue convertUniform(IContext context, NumberProvider numberProvider) {
+    static RangeValue convertUniform(IContext context, NumberProvider numberProvider) {
         MixinUniformGenerator uniformGenerator = (MixinUniformGenerator) numberProvider;
         return new RangeValue(context.utils().convertNumber(context, uniformGenerator.getMin()).min(),
                 context.utils().convertNumber(context, uniformGenerator.getMax()).max());
     }
 
     @NotNull
-    private static RangeValue convertBinomial(IContext context, NumberProvider numberProvider) {
+    static RangeValue convertBinomial(IContext context, NumberProvider numberProvider) {
         MixinBinomialDistributionGenerator binomialGenerator = (MixinBinomialDistributionGenerator) numberProvider;
         LootContext lootContext = context.lootContext();
 
@@ -129,37 +129,37 @@ public class VanillaPlugin implements IPlugin {
     }
 
     @NotNull
-    private static RangeValue convertScore(IContext context, NumberProvider numberProvider) {
+    static RangeValue convertScore(IContext context, NumberProvider numberProvider) {
         return new RangeValue(true, false);
     }
 
     @NotNull
-    private static RangeValue convertUnknown(IContext context, NumberProvider numberProvider) {
+    static RangeValue convertUnknown(IContext context, NumberProvider numberProvider) {
         return new RangeValue(false, true);
     }
 
     @NotNull
-    private static ResourceLocation getKey(LootItemFunctionType key) {
+    static ResourceLocation getKey(LootItemFunctionType key) {
         return getKey(BuiltInRegistries.LOOT_FUNCTION_TYPE, key);
     }
 
     @NotNull
-    private static ResourceLocation getKey(LootItemConditionType key) {
+    static ResourceLocation getKey(LootItemConditionType key) {
         return getKey(BuiltInRegistries.LOOT_CONDITION_TYPE, key);
     }
 
     @NotNull
-    private static ResourceLocation getKey(LootPoolEntryType key) {
+    static ResourceLocation getKey(LootPoolEntryType key) {
         return getKey(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, key);
     }
 
     @NotNull
-    private static ResourceLocation getKey(LootNumberProviderType key) {
+    static ResourceLocation getKey(LootNumberProviderType key) {
         return getKey(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, key);
     }
-    
+
     @NotNull
-    private static <T> ResourceLocation getKey(Registry<T> registry, T key) {
+    static <T> ResourceLocation getKey(Registry<T> registry, T key) {
         ResourceLocation location = registry.getKey(key);
         return Objects.requireNonNull(location);
     }
