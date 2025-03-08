@@ -1,4 +1,4 @@
-## []
+## [1.0.4]
 
 - Fixed crash when creating entity
 - Added missing tooltips
