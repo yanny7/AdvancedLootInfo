@@ -1,324 +1,327 @@
 package com.yanny.ali.datagen;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP = Map.ofEntries(
-            Map.entry("emi.category.ali.block_loot", "Block Drops"),
-            Map.entry("emi.category.ali.plant_loot", "Plant Drops"),
-            Map.entry("emi.category.ali.entity_loot", "Entity Drops"),
-            Map.entry("emi.category.ali.chest_loot", "Chest Loot"),
-            Map.entry("emi.category.ali.fishing_loot", "Fishing Loot"),
-            Map.entry("emi.category.ali.archaeology_loot", "Archaeology Loot"),
-            Map.entry("emi.category.ali.hero_loot", "Hero of the Village Loot"),
-            Map.entry("emi.category.ali.gameplay_loot", "Gameplay Loot"),
+    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
 
-            Map.entry("ali.description.rolls", "Rolls: %s"),
-            Map.entry("ali.description.chance", "Chance: %s"),
-            Map.entry("ali.description.chance_bonus", "%s (%s %s)"),
-            Map.entry("ali.description.count", "Count: %s"),
-            Map.entry("ali.description.count_bonus", "%s (%s %s)"),
-            Map.entry("ali.description.quality", "Quality: %s"),
-            Map.entry("ali.description.weight", "Weight: %s"),
+    static {
+        TRANSLATION_MAP.put("emi.category.ali.block_loot", "Block Drops");
+        TRANSLATION_MAP.put("emi.category.ali.plant_loot", "Plant Drops");
+        TRANSLATION_MAP.put("emi.category.ali.entity_loot", "Entity Drops");
+        TRANSLATION_MAP.put("emi.category.ali.chest_loot", "Chest Loot");
+        TRANSLATION_MAP.put("emi.category.ali.fishing_loot", "Fishing Loot");
+        TRANSLATION_MAP.put("emi.category.ali.archaeology_loot", "Archaeology Loot");
+        TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
+        TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
 
-            Map.entry("ali.type.condition.all_of", "All must pass:"),
-            Map.entry("ali.type.condition.any_of", "Any of:"),
-            Map.entry("ali.type.condition.inverted", "Inverted:"),
-            Map.entry("ali.type.condition.survives_explosion", "Must survive explosion"),
-            Map.entry("ali.type.condition.random_chance", "Random Chance:"),
-            Map.entry("ali.type.condition.random_chance_with_looting", "Random Chance With Looting:"),
-            Map.entry("ali.type.condition.table_bonus", "Table Bonus:"),
-            Map.entry("ali.type.condition.killed_by_player", "Must be killed by player"),
-            Map.entry("ali.type.condition.explosion_decay", "Explosion decreases amount"),
-            Map.entry("ali.type.condition.entity_properties", "Entity Properties:"),
-            Map.entry("ali.type.condition.entity_scores", "Entity Scores:"),
-            Map.entry("ali.type.condition.block_state_property", "Block State Property:"),
-            Map.entry("ali.type.condition.match_tool", "Match Tool:"),
-            Map.entry("ali.type.condition.damage_source_properties", "Damage Source Properties:"),
-            Map.entry("ali.type.condition.location_check", "Location Check:"),
-            Map.entry("ali.type.condition.weather_check", "Weather Check:"),
-            Map.entry("ali.type.condition.reference", "Reference: %s"),
-            Map.entry("ali.type.condition.time_check", "Time Check:"),
-            Map.entry("ali.type.condition.value_check", "Value Check:"),
-            Map.entry("ali.type.condition.loot_condition_type", "Can Tool Perform Action: %s"),
+        TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s");
+        TRANSLATION_MAP.put("ali.description.chance", "Chance: %s");
+        TRANSLATION_MAP.put("ali.description.chance_bonus", "%s (%s %s)");
+        TRANSLATION_MAP.put("ali.description.count", "Count: %s");
+        TRANSLATION_MAP.put("ali.description.count_bonus", "%s (%s %s)");
+        TRANSLATION_MAP.put("ali.description.quality", "Quality: %s");
+        TRANSLATION_MAP.put("ali.description.weight", "Weight: %s");
 
-            Map.entry("ali.type.function.conditional", "Conditions:"),
-            Map.entry("ali.type.function.limit_count", "Limit Count:"),
-            Map.entry("ali.type.function.furnace_smelt", "Use Smelting Recipe On Item"),
-            Map.entry("ali.type.function.apply_bonus", "Apply Bonus:"),
-            Map.entry("ali.type.function.looting_enchant", "Looting Enchant:"),
-            Map.entry("ali.type.function.set_count", "Set Count:"),
-            Map.entry("ali.type.function.enchant_with_levels", "Enchanted With Levels:"),
-            Map.entry("ali.type.function.enchant_randomly", "Enchanted Randomly"),
-            Map.entry("ali.type.function.set_enchantments", "Set Enchantments:"),
-            Map.entry("ali.type.function.set_nbt", "Set Nbt:"),
-            Map.entry("ali.type.function.set_damage", "Set Damage:"),
-            Map.entry("ali.type.function.set_attributes", "Set Attributes:"),
-            Map.entry("ali.type.function.set_name", "Set Name:"),
-            Map.entry("ali.type.function.exploration_map", "Exploration Map:"),
-            Map.entry("ali.type.function.set_stew_effect", "Set Stew Effect:"),
-            Map.entry("ali.type.function.copy_name", "Copies Name:"),
-            Map.entry("ali.type.function.set_contents", "Set Contents:"),
-            Map.entry("ali.type.function.set_loot_table", "Set Loot Table:"),
-            Map.entry("ali.type.function.explosion_decay", "Explosion Decay"),
-            Map.entry("ali.type.function.set_lore", "Set Lore:"),
-            Map.entry("ali.type.function.fill_player_head", "Fill Player Head:"),
-            Map.entry("ali.type.function.copy_nbt", "Copies Nbt"),
-            Map.entry("ali.type.function.copy_state", "Copy State:"),
-            Map.entry("ali.type.function.set_banner_pattern", "Set Banner Pattern:"),
-            Map.entry("ali.type.function.set_potion", "Set Potion:"),
-            Map.entry("ali.type.function.set_instrument", "Set Instrument:"),
-            Map.entry("ali.type.function.reference", "Reference:"),
+        TRANSLATION_MAP.put("ali.type.condition.all_of", "All must pass:");
+        TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
+        TRANSLATION_MAP.put("ali.type.condition.inverted", "Inverted:");
+        TRANSLATION_MAP.put("ali.type.condition.survives_explosion", "Must survive explosion");
+        TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
+        TRANSLATION_MAP.put("ali.type.condition.random_chance_with_looting", "Random Chance With Looting:");
+        TRANSLATION_MAP.put("ali.type.condition.table_bonus", "Table Bonus:");
+        TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Must be killed by player");
+        TRANSLATION_MAP.put("ali.type.condition.explosion_decay", "Explosion decreases amount");
+        TRANSLATION_MAP.put("ali.type.condition.entity_properties", "Entity Properties:");
+        TRANSLATION_MAP.put("ali.type.condition.entity_scores", "Entity Scores:");
+        TRANSLATION_MAP.put("ali.type.condition.block_state_property", "Block State Property:");
+        TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
+        TRANSLATION_MAP.put("ali.type.condition.damage_source_properties", "Damage Source Properties:");
+        TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
+        TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
+        TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
+        TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
+        TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
+        TRANSLATION_MAP.put("ali.type.condition.loot_condition_type", "Can Tool Perform Action: %s");
 
-            Map.entry("ali.enum.target.this", "This entity"),
-            Map.entry("ali.enum.target.killer", "Killer"),
-            Map.entry("ali.enum.target.direct_killer", "Directly killed by"),
-            Map.entry("ali.enum.target.killer_player", "Last damaged by player"),
+        TRANSLATION_MAP.put("ali.type.function.conditional", "Conditions:");
+        TRANSLATION_MAP.put("ali.type.function.limit_count", "Limit Count:");
+        TRANSLATION_MAP.put("ali.type.function.furnace_smelt", "Use Smelting Recipe On Item");
+        TRANSLATION_MAP.put("ali.type.function.apply_bonus", "Apply Bonus:");
+        TRANSLATION_MAP.put("ali.type.function.looting_enchant", "Looting Enchant:");
+        TRANSLATION_MAP.put("ali.type.function.set_count", "Set Count:");
+        TRANSLATION_MAP.put("ali.type.function.enchant_with_levels", "Enchanted With Levels:");
+        TRANSLATION_MAP.put("ali.type.function.enchant_randomly", "Enchanted Randomly");
+        TRANSLATION_MAP.put("ali.type.function.set_enchantments", "Set Enchantments:");
+        TRANSLATION_MAP.put("ali.type.function.set_nbt", "Set Nbt:");
+        TRANSLATION_MAP.put("ali.type.function.set_damage", "Set Damage:");
+        TRANSLATION_MAP.put("ali.type.function.set_attributes", "Set Attributes:");
+        TRANSLATION_MAP.put("ali.type.function.set_name", "Set Name:");
+        TRANSLATION_MAP.put("ali.type.function.exploration_map", "Exploration Map:");
+        TRANSLATION_MAP.put("ali.type.function.set_stew_effect", "Set Stew Effect:");
+        TRANSLATION_MAP.put("ali.type.function.copy_name", "Copies Name:");
+        TRANSLATION_MAP.put("ali.type.function.set_contents", "Set Contents:");
+        TRANSLATION_MAP.put("ali.type.function.set_loot_table", "Set Loot Table:");
+        TRANSLATION_MAP.put("ali.type.function.explosion_decay", "Explosion Decay");
+        TRANSLATION_MAP.put("ali.type.function.set_lore", "Set Lore:");
+        TRANSLATION_MAP.put("ali.type.function.fill_player_head", "Fill Player Head:");
+        TRANSLATION_MAP.put("ali.type.function.copy_nbt", "Copies Nbt");
+        TRANSLATION_MAP.put("ali.type.function.copy_state", "Copy State:");
+        TRANSLATION_MAP.put("ali.type.function.set_banner_pattern", "Set Banner Pattern:");
+        TRANSLATION_MAP.put("ali.type.function.set_potion", "Set Potion:");
+        TRANSLATION_MAP.put("ali.type.function.set_instrument", "Set Instrument:");
+        TRANSLATION_MAP.put("ali.type.function.reference", "Reference:");
 
-            Map.entry("ali.enum.name_source.this", "This entity"),
-            Map.entry("ali.enum.name_source.killer", "Killer"),
-            Map.entry("ali.enum.name_source.killer_player", "Last damaged by player"),
-            Map.entry("ali.enum.name_source.block_entity", "Block Entity"),
+        TRANSLATION_MAP.put("ali.enum.target.this", "This entity");
+        TRANSLATION_MAP.put("ali.enum.target.killer", "Killer");
+        TRANSLATION_MAP.put("ali.enum.target.direct_killer", "Directly killed by");
+        TRANSLATION_MAP.put("ali.enum.target.killer_player", "Last damaged by player");
 
-            Map.entry("ali.enum.group_type.all", "Selects all entries"),
-            Map.entry("ali.enum.group_type.random", "Selects random entry"),
-            Map.entry("ali.enum.group_type.alternatives", "Selects only first successful entry"),
-            Map.entry("ali.enum.group_type.sequence", "Selects entries sequentially until first failed"),
-            Map.entry("ali.enum.group_type.dynamic", "Dynamic block-specific drops"),
+        TRANSLATION_MAP.put("ali.enum.name_source.this", "This entity");
+        TRANSLATION_MAP.put("ali.enum.name_source.killer", "Killer");
+        TRANSLATION_MAP.put("ali.enum.name_source.killer_player", "Last damaged by player");
+        TRANSLATION_MAP.put("ali.enum.name_source.block_entity", "Block Entity");
 
-            Map.entry("ali.property.condition.unknown", "Unknown Condition: %s"),
-            Map.entry("ali.property.condition.predicate.target", "Target: %s"),
-            Map.entry("ali.property.condition.predicate.entity_type", "Entity Type:"),
-            Map.entry("ali.property.condition.predicate.dist_to_player", "Distance:"),
-            Map.entry("ali.property.condition.predicate.location", "Location:"),
-            Map.entry("ali.property.condition.predicate.stepping_on_location", "Stepping on Location:"),
-            Map.entry("ali.property.condition.predicate.effect", "Effects:"),
-            Map.entry("ali.property.condition.predicate.nbt", "NBT: %s"),
-            Map.entry("ali.property.condition.predicate.flags", "Flags:"),
-            Map.entry("ali.property.condition.predicate.equipment", "Equipment:"),
-            Map.entry("ali.property.condition.predicate.entity_sub_type", "Entity Subtype: %s"),
-            Map.entry("ali.property.condition.predicate.vehicle", "Vehicle:"),
-            Map.entry("ali.property.condition.predicate.passenger", "Passenger:"),
-            Map.entry("ali.property.condition.predicate.targeted_entity", "Targeted Entity:"),
-            Map.entry("ali.property.condition.predicate.team", "Team: %s"),
-            Map.entry("ali.property.condition.random_chance.probability", "Probability: %s"),
-            Map.entry("ali.property.condition.random_chance_with_looting.percent", "Percent: %s"),
-            Map.entry("ali.property.condition.random_chance_with_looting.multiplier", "Multiplier: %s"),
-            Map.entry("ali.property.condition.table_bonus.location", "Location: %s"),
-            Map.entry("ali.property.condition.table_bonus.values", "Values: %s"),
-            Map.entry("ali.property.condition.dist_predicate.horizontal", "Hor.: %s"),
-            Map.entry("ali.property.condition.dist_predicate.absolute", "Abs.: %s"),
-            Map.entry("ali.property.condition.dist_predicate.x", "X: %s"),
-            Map.entry("ali.property.condition.dist_predicate.y", "Y: %s"),
-            Map.entry("ali.property.condition.dist_predicate.z", "Z: %s"),
-            Map.entry("ali.property.condition.location.x", "X: %s"),
-            Map.entry("ali.property.condition.location.y", "Y: %s"),
-            Map.entry("ali.property.condition.location.z", "Z: %s"),
-            Map.entry("ali.property.condition.location.biome", "Biome: %s"),
-            Map.entry("ali.property.condition.location.structure", "Structure: %s"),
-            Map.entry("ali.property.condition.location.dimension", "Dimension: %s"),
-            Map.entry("ali.property.condition.location.smokey", "Above Campfire: %s"),
-            Map.entry("ali.property.condition.location.light", "Light Level: %s"),
-            Map.entry("ali.property.condition.location.block", "Block:"),
-            Map.entry("ali.property.condition.location.fluid", "Fluid:"),
-            Map.entry("ali.property.condition.block.tag", "Tag: %s"),
-            Map.entry("ali.property.condition.block.blocks", "Blocks:"),
-            Map.entry("ali.property.condition.block.state", "Block States:"),
-            Map.entry("ali.property.condition.block.nbt", "NBT: %s"),
-            Map.entry("ali.property.condition.fluid.tag", "Tag: %s"),
-            Map.entry("ali.property.condition.fluid.fluid", "Fluid: %s"),
-            Map.entry("ali.property.condition.fluid.state", "Fluid States:"),
-            Map.entry("ali.property.condition.effect.amplifier", "Amplifier: %s"),
-            Map.entry("ali.property.condition.effect.duration", "Duration: %s"),
-            Map.entry("ali.property.condition.effect.ambient", "Ambient: %s"),
-            Map.entry("ali.property.condition.effect.visible", "Visible: %s"),
-            Map.entry("ali.property.condition.flags.on_fire", "On Fire: %s"),
-            Map.entry("ali.property.condition.flags.is_baby", "Is Baby: %s"),
-            Map.entry("ali.property.condition.flags.is_crouching", "Is Crouching: %s"),
-            Map.entry("ali.property.condition.flags.is_sprinting", "Is Sprinting: %s"),
-            Map.entry("ali.property.condition.flags.is_swimming", "Is Swimming: %s"),
-            Map.entry("ali.property.condition.equipment.head", "Head:"),
-            Map.entry("ali.property.condition.equipment.chest", "Chest:"),
-            Map.entry("ali.property.condition.equipment.legs", "Legs:"),
-            Map.entry("ali.property.condition.equipment.feet", "Feet:"),
-            Map.entry("ali.property.condition.equipment.mainhand", "Mainhand:"),
-            Map.entry("ali.property.condition.equipment.offhand", "Offhand:"),
-            Map.entry("ali.property.condition.item.tag", "Tag: %s"),
-            Map.entry("ali.property.condition.item.items", "Items:"),
-            Map.entry("ali.property.condition.item.count", "Count: %s"),
-            Map.entry("ali.property.condition.item.durability", "Durability: %s"),
-            Map.entry("ali.property.condition.item.enchantment", "Enchantment:"),
-            Map.entry("ali.property.condition.item.stored_enchantment", "Stored Enchantment:"),
-            Map.entry("ali.property.condition.item.potion", "Potion:"),
-            Map.entry("ali.property.condition.item.nbt", "NBT: %s"),
-            Map.entry("ali.property.condition.enchantment.level", "Level: %s"),
-            Map.entry("ali.property.condition.sub_entity.variant", "Variant: %s"),
-            Map.entry("ali.property.condition.sub_entity.blocks_on_fire", "Blocks on Fire: %s"),
-            Map.entry("ali.property.condition.sub_entity.stuck_entity", "Stuck Entity:"),
-            Map.entry("ali.property.condition.sub_entity.in_open_water", "In Open Water: %s"),
-            Map.entry("ali.property.condition.sub_entity.level", "Level: %s"),
-            Map.entry("ali.property.condition.sub_entity.game_type", "Game Type: %s"),
-            Map.entry("ali.property.condition.sub_entity.stats", "Stats:"),
-            Map.entry("ali.property.condition.sub_entity.recipes", "Recipes:"),
-            Map.entry("ali.property.condition.sub_entity.advancements", "Advancements:"),
-            Map.entry("ali.property.condition.sub_entity.advancement.done", "Done: %s"),
-            Map.entry("ali.property.condition.sub_entity.size", "Size: %s"),
-            Map.entry("ali.property.condition.scores.score", "Score:"),
-            Map.entry("ali.property.condition.damage_source.direct_entity", "Direct Entity:"),
-            Map.entry("ali.property.condition.damage_source.source_entity", "Source Entity:"),
-            Map.entry("ali.property.condition.damage_source.tags", "Tags:"),
-            Map.entry("ali.property.condition.location_check.location", "Location:"),
-            Map.entry("ali.property.condition.location_check.offset", "Offset:"),
-            Map.entry("ali.property.condition.location_check.x", "X: %s"),
-            Map.entry("ali.property.condition.location_check.y", "Y: %s"),
-            Map.entry("ali.property.condition.location_check.z", "Z: %s"),
-            Map.entry("ali.property.condition.weather_check.is_raining", "Is Raining: %s"),
-            Map.entry("ali.property.condition.weather_check.is_thundering", "Is Thundering: %s"),
-            Map.entry("ali.property.condition.time_check.period", "Period: %s"),
-            Map.entry("ali.property.condition.time_check.value", "Value: %s"),
-            Map.entry("ali.property.condition.value_check.provider", "Provider: %s"),
-            Map.entry("ali.property.condition.value_check.range", "Range: %s"),
-            Map.entry("ali.property.function.conditions", "Conditions:"),
+        TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
+        TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");
+        TRANSLATION_MAP.put("ali.enum.group_type.alternatives", "Selects only first successful entry");
+        TRANSLATION_MAP.put("ali.enum.group_type.sequence", "Selects entries sequentially until first failed");
+        TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
 
-            Map.entry("ali.property.function.unknown", "Unknown Function: %s"),
-            Map.entry("ali.property.function.apply_bonus.enchantment", "Enchantment: %s"),
-            Map.entry("ali.property.function.apply_bonus.formula", "Formula: %s"),
-            Map.entry("ali.property.function.apply_bonus.formula.binomial.extra_rounds", "Extra Rounds: %s"),
-            Map.entry("ali.property.function.apply_bonus.formula.binomial.probability", "Probability: %s"),
-            Map.entry("ali.property.function.apply_bonus.formula.uniform.bonus_multiplier", "Bonus Multiplier: %s"),
-            Map.entry("ali.property.function.limit_count.min", "Min: %s"),
-            Map.entry("ali.property.function.limit_count.max", "Max: %s"),
-            Map.entry("ali.property.function.looting_enchant.value", "Value: %s"),
-            Map.entry("ali.property.function.looting_enchant.limit", "Limit: %s"),
-            Map.entry("ali.property.function.set_count.count", "Count: %s"),
-            Map.entry("ali.property.function.set_count.add", "Add: %s"),
-            Map.entry("ali.property.function.enchant_with_levels.levels", "Levels: %s"),
-            Map.entry("ali.property.function.enchant_with_levels.treasure", "Treasure: %s"),
-            Map.entry("ali.property.function.enchant_randomly.enchantments", "Available Enchantments:"),
-            Map.entry("ali.property.function.set_enchantments.enchantments", "Available Enchantments:"),
-            Map.entry("ali.property.function.set_enchantments.enchantment", "%s [%s]"),
-            Map.entry("ali.property.function.set_enchantments.add", "Add: %s"),
-            Map.entry("ali.property.function.set_damage.damage", "Damage: %s"),
-            Map.entry("ali.property.function.set_damage.add", "Add: %s"),
-            Map.entry("ali.property.function.set_attributes.name", "Name: %s"),
-            Map.entry("ali.property.function.set_attributes.attribute", "Attribute: %s"),
-            Map.entry("ali.property.function.set_attributes.operation", "Operation: %s"),
-            Map.entry("ali.property.function.set_attributes.amount", "Amount: %s"),
-            Map.entry("ali.property.function.set_attributes.id", "Id: %s"),
-            Map.entry("ali.property.function.set_attributes.slots", "Slots:"),
-            Map.entry("ali.property.function.set_name.name", "Name: %s"),
-            Map.entry("ali.property.function.set_name.resolution_context", "Entity: %s"),
-            Map.entry("ali.property.function.exploration_map.destination", "Destination: %s"),
-            Map.entry("ali.property.function.exploration_map.map_decoration", "Map Decoration: %s"),
-            Map.entry("ali.property.function.exploration_map.zoom", "Zoom: %s"),
-            Map.entry("ali.property.function.exploration_map.search_radius", "Search Radius: %s"),
-            Map.entry("ali.property.function.exploration_map.skip_known_structures", "Skip Known Structures: %s"),
-            Map.entry("ali.property.function.set_stew_effect.effect", "%s: %s"),
-            Map.entry("ali.property.function.copy_name.source", "Source: %s"),
-            Map.entry("ali.property.function.set_contents.type", "Type: %s"),
-            Map.entry("ali.property.function.set_loot_table.name", "Name: %s"),
-            Map.entry("ali.property.function.set_loot_table.seed", "Seed: %s"),
-            Map.entry("ali.property.function.set_loot_table.type", "Type: %s"),
-            Map.entry("ali.property.function.set_lore.replace", "Replace: %s"),
-            Map.entry("ali.property.function.set_lore.resolution_context", "Entity: %s"),
-            Map.entry("ali.property.function.set_lore.lore", "Lore:"),
-            Map.entry("ali.property.function.fill_player_head.target", "Target: %s"),
-            Map.entry("ali.property.function.copy_state.block", "Block: %s"),
-            Map.entry("ali.property.function.copy_state.properties", "Properties:"),
-            Map.entry("ali.property.function.set_banner_pattern.append", "Append: %s"),
-            Map.entry("ali.property.function.set_banner_pattern.patterns", "Patterns:"),
-            Map.entry("ali.property.function.set_banner_pattern.color", "Color: %s"),
-            Map.entry("ali.property.function.set_potion.name", "Name: %s"),
-            Map.entry("ali.property.function.set_potion.effects", "Effects:"),
-            Map.entry("ali.property.function.set_instrument.options", "Options: %s"),
-            Map.entry("ali.property.function.reference.name", "Name: %s"),
+        TRANSLATION_MAP.put("ali.property.condition.unknown", "Unknown Condition: %s");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.target", "Target: %s");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.entity_type", "Entity Type:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.dist_to_player", "Distance:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.location", "Location:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.stepping_on_location", "Stepping on Location:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.effect", "Effects:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.nbt", "NBT: %s");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.flags", "Flags:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.equipment", "Equipment:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.entity_sub_type", "Entity Subtype: %s");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.vehicle", "Vehicle:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.passenger", "Passenger:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.targeted_entity", "Targeted Entity:");
+        TRANSLATION_MAP.put("ali.property.condition.predicate.team", "Team: %s");
+        TRANSLATION_MAP.put("ali.property.condition.random_chance.probability", "Probability: %s");
+        TRANSLATION_MAP.put("ali.property.condition.random_chance_with_looting.percent", "Percent: %s");
+        TRANSLATION_MAP.put("ali.property.condition.random_chance_with_looting.multiplier", "Multiplier: %s");
+        TRANSLATION_MAP.put("ali.property.condition.table_bonus.location", "Location: %s");
+        TRANSLATION_MAP.put("ali.property.condition.table_bonus.values", "Values: %s");
+        TRANSLATION_MAP.put("ali.property.condition.dist_predicate.horizontal", "Hor.: %s");
+        TRANSLATION_MAP.put("ali.property.condition.dist_predicate.absolute", "Abs.: %s");
+        TRANSLATION_MAP.put("ali.property.condition.dist_predicate.x", "X: %s");
+        TRANSLATION_MAP.put("ali.property.condition.dist_predicate.y", "Y: %s");
+        TRANSLATION_MAP.put("ali.property.condition.dist_predicate.z", "Z: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.x", "X: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.y", "Y: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.z", "Z: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.biome", "Biome: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.structure", "Structure: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.dimension", "Dimension: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.smokey", "Above Campfire: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.light", "Light Level: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location.block", "Block:");
+        TRANSLATION_MAP.put("ali.property.condition.location.fluid", "Fluid:");
+        TRANSLATION_MAP.put("ali.property.condition.block.tag", "Tag: %s");
+        TRANSLATION_MAP.put("ali.property.condition.block.blocks", "Blocks:");
+        TRANSLATION_MAP.put("ali.property.condition.block.state", "Block States:");
+        TRANSLATION_MAP.put("ali.property.condition.block.nbt", "NBT: %s");
+        TRANSLATION_MAP.put("ali.property.condition.fluid.tag", "Tag: %s");
+        TRANSLATION_MAP.put("ali.property.condition.fluid.fluid", "Fluid: %s");
+        TRANSLATION_MAP.put("ali.property.condition.fluid.state", "Fluid States:");
+        TRANSLATION_MAP.put("ali.property.condition.effect.amplifier", "Amplifier: %s");
+        TRANSLATION_MAP.put("ali.property.condition.effect.duration", "Duration: %s");
+        TRANSLATION_MAP.put("ali.property.condition.effect.ambient", "Ambient: %s");
+        TRANSLATION_MAP.put("ali.property.condition.effect.visible", "Visible: %s");
+        TRANSLATION_MAP.put("ali.property.condition.flags.on_fire", "On Fire: %s");
+        TRANSLATION_MAP.put("ali.property.condition.flags.is_baby", "Is Baby: %s");
+        TRANSLATION_MAP.put("ali.property.condition.flags.is_crouching", "Is Crouching: %s");
+        TRANSLATION_MAP.put("ali.property.condition.flags.is_sprinting", "Is Sprinting: %s");
+        TRANSLATION_MAP.put("ali.property.condition.flags.is_swimming", "Is Swimming: %s");
+        TRANSLATION_MAP.put("ali.property.condition.equipment.head", "Head:");
+        TRANSLATION_MAP.put("ali.property.condition.equipment.chest", "Chest:");
+        TRANSLATION_MAP.put("ali.property.condition.equipment.legs", "Legs:");
+        TRANSLATION_MAP.put("ali.property.condition.equipment.feet", "Feet:");
+        TRANSLATION_MAP.put("ali.property.condition.equipment.mainhand", "Mainhand:");
+        TRANSLATION_MAP.put("ali.property.condition.equipment.offhand", "Offhand:");
+        TRANSLATION_MAP.put("ali.property.condition.item.tag", "Tag: %s");
+        TRANSLATION_MAP.put("ali.property.condition.item.items", "Items:");
+        TRANSLATION_MAP.put("ali.property.condition.item.count", "Count: %s");
+        TRANSLATION_MAP.put("ali.property.condition.item.durability", "Durability: %s");
+        TRANSLATION_MAP.put("ali.property.condition.item.enchantment", "Enchantment:");
+        TRANSLATION_MAP.put("ali.property.condition.item.stored_enchantment", "Stored Enchantment:");
+        TRANSLATION_MAP.put("ali.property.condition.item.potion", "Potion:");
+        TRANSLATION_MAP.put("ali.property.condition.item.nbt", "NBT: %s");
+        TRANSLATION_MAP.put("ali.property.condition.enchantment.level", "Level: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.variant", "Variant: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.blocks_on_fire", "Blocks on Fire: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.stuck_entity", "Stuck Entity:");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.in_open_water", "In Open Water: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.level", "Level: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.game_type", "Game Type: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.stats", "Stats:");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.recipes", "Recipes:");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.advancements", "Advancements:");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.advancement.done", "Done: %s");
+        TRANSLATION_MAP.put("ali.property.condition.sub_entity.size", "Size: %s");
+        TRANSLATION_MAP.put("ali.property.condition.scores.score", "Score:");
+        TRANSLATION_MAP.put("ali.property.condition.damage_source.direct_entity", "Direct Entity:");
+        TRANSLATION_MAP.put("ali.property.condition.damage_source.source_entity", "Source Entity:");
+        TRANSLATION_MAP.put("ali.property.condition.damage_source.tags", "Tags:");
+        TRANSLATION_MAP.put("ali.property.condition.location_check.location", "Location:");
+        TRANSLATION_MAP.put("ali.property.condition.location_check.offset", "Offset:");
+        TRANSLATION_MAP.put("ali.property.condition.location_check.x", "X: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location_check.y", "Y: %s");
+        TRANSLATION_MAP.put("ali.property.condition.location_check.z", "Z: %s");
+        TRANSLATION_MAP.put("ali.property.condition.weather_check.is_raining", "Is Raining: %s");
+        TRANSLATION_MAP.put("ali.property.condition.weather_check.is_thundering", "Is Thundering: %s");
+        TRANSLATION_MAP.put("ali.property.condition.time_check.period", "Period: %s");
+        TRANSLATION_MAP.put("ali.property.condition.time_check.value", "Value: %s");
+        TRANSLATION_MAP.put("ali.property.condition.value_check.provider", "Provider: %s");
+        TRANSLATION_MAP.put("ali.property.condition.value_check.range", "Range: %s");
+        TRANSLATION_MAP.put("ali.property.function.conditions", "Conditions:");
 
-            Map.entry("ali.util.advanced_loot_info.two_values", "%s%s"),
-            Map.entry("ali.util.advanced_loot_info.two_values_with_space", "%s %s"),
-            Map.entry("ali.util.advanced_loot_info.pad.1", "  ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.2", "    ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.3", "      ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.4", "        ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.5", "          ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.6", "            ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.7", "              ->"),
-            Map.entry("ali.util.advanced_loot_info.pad.8", "                ->"),
-            Map.entry("ali.util.advanced_loot_info.key_value", "%s: %s"),
-            Map.entry("ali.util.advanced_loot_info.delimiter.functions", "----- Functions -----"),
-            Map.entry("ali.util.advanced_loot_info.delimiter.conditions", "----- Conditions -----"),
+        TRANSLATION_MAP.put("ali.property.function.unknown", "Unknown Function: %s");
+        TRANSLATION_MAP.put("ali.property.function.apply_bonus.enchantment", "Enchantment: %s");
+        TRANSLATION_MAP.put("ali.property.function.apply_bonus.formula", "Formula: %s");
+        TRANSLATION_MAP.put("ali.property.function.apply_bonus.formula.binomial.extra_rounds", "Extra Rounds: %s");
+        TRANSLATION_MAP.put("ali.property.function.apply_bonus.formula.binomial.probability", "Probability: %s");
+        TRANSLATION_MAP.put("ali.property.function.apply_bonus.formula.uniform.bonus_multiplier", "Bonus Multiplier: %s");
+        TRANSLATION_MAP.put("ali.property.function.limit_count.min", "Min: %s");
+        TRANSLATION_MAP.put("ali.property.function.limit_count.max", "Max: %s");
+        TRANSLATION_MAP.put("ali.property.function.looting_enchant.value", "Value: %s");
+        TRANSLATION_MAP.put("ali.property.function.looting_enchant.limit", "Limit: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_count.count", "Count: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_count.add", "Add: %s");
+        TRANSLATION_MAP.put("ali.property.function.enchant_with_levels.levels", "Levels: %s");
+        TRANSLATION_MAP.put("ali.property.function.enchant_with_levels.treasure", "Treasure: %s");
+        TRANSLATION_MAP.put("ali.property.function.enchant_randomly.enchantments", "Available Enchantments:");
+        TRANSLATION_MAP.put("ali.property.function.set_enchantments.enchantments", "Available Enchantments:");
+        TRANSLATION_MAP.put("ali.property.function.set_enchantments.enchantment", "%s [%s]");
+        TRANSLATION_MAP.put("ali.property.function.set_enchantments.add", "Add: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_damage.damage", "Damage: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_damage.add", "Add: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_attributes.name", "Name: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_attributes.attribute", "Attribute: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_attributes.operation", "Operation: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_attributes.amount", "Amount: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_attributes.id", "Id: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_attributes.slots", "Slots:");
+        TRANSLATION_MAP.put("ali.property.function.set_name.name", "Name: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_name.resolution_context", "Entity: %s");
+        TRANSLATION_MAP.put("ali.property.function.exploration_map.destination", "Destination: %s");
+        TRANSLATION_MAP.put("ali.property.function.exploration_map.map_decoration", "Map Decoration: %s");
+        TRANSLATION_MAP.put("ali.property.function.exploration_map.zoom", "Zoom: %s");
+        TRANSLATION_MAP.put("ali.property.function.exploration_map.search_radius", "Search Radius: %s");
+        TRANSLATION_MAP.put("ali.property.function.exploration_map.skip_known_structures", "Skip Known Structures: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_stew_effect.effect", "%s: %s");
+        TRANSLATION_MAP.put("ali.property.function.copy_name.source", "Source: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_contents.type", "Type: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_loot_table.name", "Name: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_loot_table.seed", "Seed: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_loot_table.type", "Type: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_lore.replace", "Replace: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_lore.resolution_context", "Entity: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_lore.lore", "Lore:");
+        TRANSLATION_MAP.put("ali.property.function.fill_player_head.target", "Target: %s");
+        TRANSLATION_MAP.put("ali.property.function.copy_state.block", "Block: %s");
+        TRANSLATION_MAP.put("ali.property.function.copy_state.properties", "Properties:");
+        TRANSLATION_MAP.put("ali.property.function.set_banner_pattern.append", "Append: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_banner_pattern.patterns", "Patterns:");
+        TRANSLATION_MAP.put("ali.property.function.set_banner_pattern.color", "Color: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_potion.name", "Name: %s");
+        TRANSLATION_MAP.put("ali.property.function.set_potion.effects", "Effects:");
+        TRANSLATION_MAP.put("ali.property.function.set_instrument.options", "Options: %s");
+        TRANSLATION_MAP.put("ali.property.function.reference.name", "Name: %s");
 
-            Map.entry("ali/loot_table/chests/ancient_city_ice_box", "Ancient City Ice Box Chest"),
-            Map.entry("ali/loot_table/chests/simple_dungeon", "Simple Dungeon Chest"),
-            Map.entry("ali/loot_table/chests/village/village_mason", "Village Mason Chest"),
-            Map.entry("ali/loot_table/chests/village/village_temple", "Village Temple Chest"),
-            Map.entry("ali/loot_table/chests/bastion_treasure", "Bastion Treasure Chest"),
-            Map.entry("ali/loot_table/chests/ruined_portal", "Ruined Portal Chest"),
-            Map.entry("ali/loot_table/chests/village/village_fisher", "Village Fisher Chest"),
-            Map.entry("ali/loot_table/chests/village/village_toolsmith", "Village Toolsmith Chest"),
-            Map.entry("ali/loot_table/chests/shipwreck_map", "Shipwreck Map Chest"),
-            Map.entry("ali/loot_table/chests/shipwreck_supply", "Shipwreck Supply Chest"),
-            Map.entry("ali/loot_table/chests/village/village_snowy_house", "Village Snowy House Chest"),
-            Map.entry("ali/loot_table/chests/stronghold_crossing", "Stronghold Crossing Chest"),
-            Map.entry("ali/loot_table/chests/nether_bridge", "Nether Bridge Chest"),
-            Map.entry("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest"),
-            Map.entry("ali/loot_table/chests/shipwreck_treasure", "Shipwreck Treasure Chest"),
-            Map.entry("ali/loot_table/chests/stronghold_corridor", "Stronghold Corridor Chest"),
-            Map.entry("ali/loot_table/chests/village/village_fletcher", "Village Fletcher Chest"),
-            Map.entry("ali/loot_table/chests/village/village_tannery", "Village Tannery Chest"),
-            Map.entry("ali/loot_table/chests/spawn_bonus_chest", "Spawn Bonus Chest"),
-            Map.entry("ali/loot_table/chests/village/village_plains_house", "Village Plains House Chest"),
-            Map.entry("ali/loot_table/chests/underwater_ruin_small", "Underwater Ruin Small Chest"),
-            Map.entry("ali/loot_table/chests/buried_treasure", "Buried Treasure Chest"),
-            Map.entry("ali/loot_table/chests/village/village_armorer", "Village Armorer Chest"),
-            Map.entry("ali/loot_table/chests/bastion_hoglin_stable", "Bastion Hoglin Stable Chest"),
-            Map.entry("ali/loot_table/chests/desert_pyramid", "Desert Pyramid Chest"),
-            Map.entry("ali/loot_table/chests/underwater_ruin_big", "Underwater Ruin Big Chest"),
-            Map.entry("ali/loot_table/chests/igloo_chest", "Igloo Chest"),
-            Map.entry("ali/loot_table/chests/ancient_city", "Ancient City Chest"),
-            Map.entry("ali/loot_table/chests/bastion_bridge", "Bastion Bridge Chest"),
-            Map.entry("ali/loot_table/chests/pillager_outpost", "Pillager Outpost Chest"),
-            Map.entry("ali/loot_table/chests/village/village_shepherd", "Village Shepherd Chest"),
-            Map.entry("ali/loot_table/chests/village/village_cartographer", "Village Cartographer Chest"),
-            Map.entry("ali/loot_table/chests/jungle_temple_dispenser", "Jungle Temple Dispenser Chest"),
-            Map.entry("ali/loot_table/chests/jungle_temple", "Jungle Temple Chest"),
-            Map.entry("ali/loot_table/chests/village/village_savanna_house", "Village Savanna House Chest"),
-            Map.entry("ali/loot_table/chests/village/village_taiga_house", "Village Taiga House Chest"),
-            Map.entry("ali/loot_table/chests/village/village_butcher", "Village Butcher Chest"),
-            Map.entry("ali/loot_table/chests/village/village_desert_house", "Village Desert House Chest"),
-            Map.entry("ali/loot_table/chests/end_city_treasure", "End City Treasure Chest"),
-            Map.entry("ali/loot_table/chests/stronghold_library", "Stronghold Library Chest"),
-            Map.entry("ali/loot_table/chests/village/village_weaponsmith", "Village Weaponsmith Chest"),
-            Map.entry("ali/loot_table/chests/bastion_other", "Bastion Other Chest"),
-            Map.entry("ali/loot_table/chests/woodland_mansion", "Woodland Mansion Chest"),
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values", "%s%s");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values_with_space", "%s %s");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.1", "  ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.2", "    ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.3", "      ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.4", "        ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.5", "          ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.6", "            ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.7", "              ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.8", "                ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Functions -----");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Conditions -----");
 
-            Map.entry("ali/loot_table/archaeology/trail_ruins_common", "Trail Ruins Common"),
-            Map.entry("ali/loot_table/archaeology/ocean_ruin_warm", "Ocean Ruins Warm"),
-            Map.entry("ali/loot_table/archaeology/trail_ruins_rare", "Trail Ruins Rare"),
-            Map.entry("ali/loot_table/archaeology/ocean_ruin_cold", "Ocean Ruin Cold"),
-            Map.entry("ali/loot_table/archaeology/desert_well", "Desert Well"),
-            Map.entry("ali/loot_table/archaeology/desert_pyramid", "Desert Pyramid"),
+        TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city_ice_box", "Ancient City Ice Box Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/simple_dungeon", "Simple Dungeon Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_mason", "Village Mason Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_temple", "Village Temple Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/bastion_treasure", "Bastion Treasure Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/ruined_portal", "Ruined Portal Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_fisher", "Village Fisher Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_toolsmith", "Village Toolsmith Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/shipwreck_map", "Shipwreck Map Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/shipwreck_supply", "Shipwreck Supply Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_snowy_house", "Village Snowy House Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/stronghold_crossing", "Stronghold Crossing Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/nether_bridge", "Nether Bridge Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/shipwreck_treasure", "Shipwreck Treasure Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/stronghold_corridor", "Stronghold Corridor Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_fletcher", "Village Fletcher Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_tannery", "Village Tannery Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/spawn_bonus_chest", "Spawn Bonus Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_plains_house", "Village Plains House Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/underwater_ruin_small", "Underwater Ruin Small Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/buried_treasure", "Buried Treasure Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_armorer", "Village Armorer Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/bastion_hoglin_stable", "Bastion Hoglin Stable Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/desert_pyramid", "Desert Pyramid Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/underwater_ruin_big", "Underwater Ruin Big Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/igloo_chest", "Igloo Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city", "Ancient City Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/bastion_bridge", "Bastion Bridge Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/pillager_outpost", "Pillager Outpost Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_shepherd", "Village Shepherd Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_cartographer", "Village Cartographer Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/jungle_temple_dispenser", "Jungle Temple Dispenser Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/jungle_temple", "Jungle Temple Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_savanna_house", "Village Savanna House Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_taiga_house", "Village Taiga House Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_butcher", "Village Butcher Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_desert_house", "Village Desert House Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/end_city_treasure", "End City Treasure Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/stronghold_library", "Stronghold Library Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/village/village_weaponsmith", "Village Weaponsmith Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/bastion_other", "Bastion Other Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/woodland_mansion", "Woodland Mansion Chest");
 
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/fisherman_gift", "Fisherman Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/farmer_gift", "Farmer Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/mason_gift", "Mason Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/leatherworker_gift", "Leatherworker Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/armorer_gift", "Armorer Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/fletcher_gift", "Fletcher Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/toolsmith_gift", "Toolsmith Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/cartographer_gift", "Cartographer Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/butcher_gift", "Butcher Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/shepherd_gift", "Shepherd Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/weaponsmith_gift", "Weaponsmith Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/cleric_gift", "Cleric Gift"),
-            Map.entry("ali/loot_table/gameplay/hero_of_the_village/librarian_gift", "Librarian Gift"),
+        TRANSLATION_MAP.put("ali/loot_table/archaeology/trail_ruins_common", "Trail Ruins Common");
+        TRANSLATION_MAP.put("ali/loot_table/archaeology/ocean_ruin_warm", "Ocean Ruins Warm");
+        TRANSLATION_MAP.put("ali/loot_table/archaeology/trail_ruins_rare", "Trail Ruins Rare");
+        TRANSLATION_MAP.put("ali/loot_table/archaeology/ocean_ruin_cold", "Ocean Ruin Cold");
+        TRANSLATION_MAP.put("ali/loot_table/archaeology/desert_well", "Desert Well");
+        TRANSLATION_MAP.put("ali/loot_table/archaeology/desert_pyramid", "Desert Pyramid");
 
-            Map.entry("ali/loot_table/gameplay/fishing", "Fishing"),
-            Map.entry("ali/loot_table/gameplay/fishing/junk", "Fishing: Junk"),
-            Map.entry("ali/loot_table/gameplay/fishing/fish", "Fishing: Fish"),
-            Map.entry("ali/loot_table/gameplay/fishing/treasure", "Fishing: Treasure"),
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/fisherman_gift", "Fisherman Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/farmer_gift", "Farmer Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/mason_gift", "Mason Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/leatherworker_gift", "Leatherworker Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/armorer_gift", "Armorer Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/fletcher_gift", "Fletcher Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/toolsmith_gift", "Toolsmith Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/cartographer_gift", "Cartographer Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/butcher_gift", "Butcher Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/shepherd_gift", "Shepherd Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/weaponsmith_gift", "Weaponsmith Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/cleric_gift", "Cleric Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/librarian_gift", "Librarian Gift");
 
-            Map.entry("ali/loot_table/gameplay/sniffer_digging", "Sniffer Digging"),
-            Map.entry("ali/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift"),
-            Map.entry("ali/loot_table/gameplay/piglin_bartering", "Piglin Bartering")
-    );
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/fishing", "Fishing");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/fishing/junk", "Fishing: Junk");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/fishing/fish", "Fishing: Fish");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/fishing/treasure", "Fishing: Treasure");
+
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/sniffer_digging", "Sniffer Digging");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
+    }
 }
