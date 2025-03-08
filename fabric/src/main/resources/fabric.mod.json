@@ -24,7 +24,7 @@
             "com.yanny.ali.datagen.DataGeneration"
         ],
         "ali": [
-            "com.yanny.ali.plugin.VanillaPlugin"
+            "com.yanny.ali.plugin.CommonPlugin"
         ],
         "emi": [
             "com.yanny.ali.compatibility.EmiCompatibility"

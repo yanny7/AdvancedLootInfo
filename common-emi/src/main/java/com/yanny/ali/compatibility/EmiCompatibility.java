@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility;
 
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
@@ -25,6 +26,7 @@ import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -34,6 +36,8 @@ import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     @Override
     public void register(EmiRegistry emiRegistry) {
         registerLootTable(emiRegistry);
@@ -103,7 +107,14 @@ public class EmiCompatibility implements EmiPlugin {
 
                 if (entityType == EntityType.SHEEP) {
                     for (DyeColor color : DyeColor.values()) {
-                        Sheep sheep = (Sheep) entityType.create(level);
+                        Sheep sheep;
+
+                        try {
+                            sheep = (Sheep) entityType.create(level);
+                        } catch (Throwable e) {
+                            LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
+                            continue;
+                        }
 
                         if (sheep != null) {
                             sheep.setColor(color);
@@ -111,14 +122,30 @@ public class EmiCompatibility implements EmiPlugin {
                         }
                     }
 
-                    Sheep sheep = (Sheep) entityType.create(level);
+                    Sheep sheep;
+
+                    try {
+                        sheep = (Sheep) entityType.create(level);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to create sheep: {}", e.getMessage());
+                        continue;
+                    }
 
                     if (sheep != null) {
                         sheep.setSheared(true);
                         entityList.add(sheep);
                     }
                 } else {
-                    entityList.add(entityType.create(level));
+                    Entity entity;
+
+                    try {
+                        entity = entityType.create(level);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
+                        continue;
+                    }
+
+                    entityList.add(entity);
                 }
 
                 entityList.forEach((entity) -> {

@@ -7,7 +7,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import static com.yanny.ali.plugin.TooltipUtils.pad;
+import static com.yanny.ali.plugin.TooltipUtils.translatable;
 
 public class LootingEnchantFunction extends LootConditionalFunction {
     public final RangeValue value;
@@ -34,6 +38,12 @@ public class LootingEnchantFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return List.of();
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.function.looting_enchant")));
+        components.add(pad(pad + 1, translatable("ali.property.function.looting_enchant.value", value)));
+        components.add(pad(pad + 1, translatable("ali.property.function.looting_enchant.limit", limit)));
+
+        return components;
     }
 }

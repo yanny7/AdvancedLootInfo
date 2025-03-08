@@ -1,12 +1,13 @@
 plugins {
     id 'idea'
-    id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
 }
+
 base {
     archivesName = "${mod_name}-forge-${minecraft_version}"
 }
+
 mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
@@ -118,22 +119,11 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-jei").sourceSets.main.allSource)
 }
 
-tasks.withType(Javadoc).configureEach {
-    source(project(":api").sourceSets.main.allJava)
-    source(project(":common").sourceSets.main.allJava)
-    source(project(":common-emi").sourceSets.main.allJava)
-    source(project(":common-jei").sourceSets.main.allJava)
-}
-
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
-}
-
-tasks.named('compileTestJava') {
-    it.enabled = false
 }
 
 processResources {
@@ -144,18 +134,3 @@ processResources {
 }
 
 jar.finalizedBy('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-            fg.component(it)
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
-}

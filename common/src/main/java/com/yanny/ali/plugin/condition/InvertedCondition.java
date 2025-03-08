@@ -36,7 +36,7 @@ public class InvertedCondition implements ILootCondition {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.inverted")));
-        components.addAll(TooltipUtils.getConditions(List.of(term), pad + 1));
+        components.addAll(term.getTooltip( pad + 1));
 
         return components;
     }
