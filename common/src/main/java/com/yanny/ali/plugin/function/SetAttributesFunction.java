@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinSetAttributesFunction;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,6 +13,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.*;
+
+import static com.yanny.ali.plugin.TooltipUtils.*;
 
 public class SetAttributesFunction extends LootConditionalFunction {
     public final List<Modifier> modifiers;
@@ -85,21 +86,21 @@ public class SetAttributesFunction extends LootConditionalFunction {
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.pad(pad, TooltipUtils.translatable("ali.type.function.set_attributes")));
+        components.add(pad(pad, translatable("ali.type.function.set_attributes")));
 
         modifiers.forEach((modifier) -> {
             String attribute = BuiltInRegistries.ATTRIBUTE.getOptional(modifier.attribute()).map(Attribute::getDescriptionId).orElse("???");
 
-            components.add(TooltipUtils.pad(pad + 1, TooltipUtils.translatable("ali.property.function.set_attributes.name", modifier.name())));
-            components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.attribute", TooltipUtils.value(TooltipUtils.translatable(attribute)))));
-            components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.operation", AttributeModifier.Operation.fromValue(modifier.operation()))));
-            components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.amount", modifier.amount())));
+            components.add(pad(pad + 1, translatable("ali.property.function.set_attributes.name", modifier.name())));
+            components.add(pad(pad + 2, translatable("ali.property.function.set_attributes.attribute", value(translatable(attribute)))));
+            components.add(pad(pad + 2, translatable("ali.property.function.set_attributes.operation", AttributeModifier.Operation.fromValue(modifier.operation()))));
+            components.add(pad(pad + 2, translatable("ali.property.function.set_attributes.amount", modifier.amount())));
 
-            modifier.id.ifPresent((i) -> components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.id", i))));
+            modifier.id.ifPresent((i) -> components.add(pad(pad + 2, translatable("ali.property.function.set_attributes.id", i))));
 
             if (!modifier.slots().isEmpty()) {
-                components.add(TooltipUtils.pad(pad + 2, TooltipUtils.translatable("ali.property.function.set_attributes.slots")));
-                modifier.slots().forEach((slot) -> components.add(TooltipUtils.pad(pad + 3, TooltipUtils.value(slot))));
+                components.add(pad(pad + 2, translatable("ali.property.function.set_attributes.slots")));
+                modifier.slots().forEach((slot) -> components.add(pad(pad + 3, value(slot))));
             }
         });
 

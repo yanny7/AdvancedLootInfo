@@ -12,6 +12,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.yanny.ali.plugin.TooltipUtils.pad;
+import static com.yanny.ali.plugin.TooltipUtils.translatable;
+
 public class TableBonusCondition implements ILootCondition {
     public final ResourceLocation location;
     public final List<Float> values;
@@ -45,6 +48,12 @@ public class TableBonusCondition implements ILootCondition {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return List.of();
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
+        components.add(pad(pad + 1, translatable("ali.property.condition.table_bonus.location", location)));
+        components.add(pad(pad + 1, translatable("ali.property.condition.table_bonus.values", values.toString())));
+
+        return components;
     }
 }

@@ -1,3 +1,9 @@
+## [1.0.4]
+
+- Fixed crash when creating entity
+- Added missing tooltips
+- Added delimiters to tooltips
+
 ## [1.0.3]
 
 - Fixed crash on Fabric

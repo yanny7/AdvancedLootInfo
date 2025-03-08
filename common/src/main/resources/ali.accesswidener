@@ -1,6 +1,5 @@
 accessWidener v2 named
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
-accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount

@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'maven-publish'
     id 'fabric-loom' version '1.10-SNAPSHOT'
 }
 
@@ -40,9 +39,11 @@ loom {
     if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
         accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
     }
+
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
     }
+
     runs {
         client {
             client()
@@ -50,6 +51,7 @@ loom {
             ideConfigGenerated(true)
             runDir("run")
         }
+
         server {
             server()
             setConfigName("Fabric Server")
@@ -65,20 +67,12 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
 }
-tasks.withType(Javadoc).configureEach {
-    source(project(":api").sourceSets.main.allJava)
-    source(project(":common").sourceSets.main.allJava)
-    source(project(":common-emi").sourceSets.main.allJava)
-    source(project(":common-jei").sourceSets.main.allJava)
-}
+
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
-}
-tasks.named('compileTestJava') {
-    it.enabled = false
 }
 
 processResources {
@@ -86,18 +80,4 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifactId base.archivesName.get()
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
-        }
-    }
 }

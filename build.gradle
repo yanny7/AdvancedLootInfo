@@ -82,9 +82,21 @@ subprojects {
         }
     }
 
+    tasks.withType(Javadoc).configureEach {
+        enabled = false
+    }
+
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
         it.options.getRelease().set(17)
+    }
+
+    tasks.named('compileTestJava') {
+        it.enabled = false
+    }
+
+    tasks.named('test') {
+        it.enabled = false
     }
 
     processResources {

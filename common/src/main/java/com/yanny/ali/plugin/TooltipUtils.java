@@ -38,7 +38,10 @@ public class TooltipUtils {
     public static List<Component> getConditions(List<ILootCondition> conditions, int pad) {
         List<Component> components = new LinkedList<>();
 
-        conditions.forEach((condition) -> components.addAll(condition.getTooltip(pad)));
+        if (!conditions.isEmpty()) {
+            components.add(translatable("ali.util.advanced_loot_info.delimiter.conditions"));
+            conditions.forEach((condition) -> components.addAll(condition.getTooltip(pad)));
+        }
 
         return components;
     }
@@ -47,13 +50,16 @@ public class TooltipUtils {
     public static List<Component> getFunctions(List<ILootFunction> functions, int pad) {
         List<Component> components = new LinkedList<>();
 
-        functions.forEach((function) -> {
-            components.addAll(function.getTooltip(pad));
+        if (!functions.isEmpty()) {
+            components.add(translatable("ali.util.advanced_loot_info.delimiter.functions"));
+            functions.forEach((function) -> {
+                components.addAll(function.getTooltip(pad));
 
-            if (function instanceof LootConditionalFunction conditionalFunction) {
-                components.addAll(getConditionalFunction(conditionalFunction, pad + 1));
-            }
-        });
+                if (function instanceof LootConditionalFunction conditionalFunction) {
+                    components.addAll(getConditionalFunction(conditionalFunction, pad + 1));
+                }
+            });
+        }
 
         return components;
     }
@@ -64,7 +70,7 @@ public class TooltipUtils {
 
         if (!function.conditions.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.function.conditions")));
-            components.addAll(TooltipUtils.getConditions(function.conditions, pad + 1));
+            function.conditions.forEach((condition) -> components.addAll(condition.getTooltip(pad + 1)));
         }
 
         return components;
@@ -498,7 +504,7 @@ public class TooltipUtils {
         });
 
         functions.stream().filter((f) -> f instanceof ApplyBonusFunction).forEach((f) ->
-                ((ApplyBonusFunction) f).formula.calculateCount(value, 0));
+                ((ApplyBonusFunction) f).calculateCount(value, 0));
 
         functions.stream().filter((f) -> f instanceof LimitCountFunction).forEach((f) -> {
             LimitCountFunction function = (LimitCountFunction) f;
@@ -522,7 +528,7 @@ public class TooltipUtils {
 
             for (int level = 1; level < enchantment.getMaxLevel() + 1; level++) {
                 RangeValue value = new RangeValue(count);
-                function.formula.calculateCount(value, level);
+                function.calculateCount(value, level);
                 bonusCount.put(level, value);
             }
 

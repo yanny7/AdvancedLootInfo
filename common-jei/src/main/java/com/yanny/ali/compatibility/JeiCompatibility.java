@@ -115,7 +115,14 @@ public class JeiCompatibility implements IModPlugin {
 
                 if (entityType == EntityType.SHEEP) {
                     for (DyeColor color : DyeColor.values()) {
-                        Sheep sheep = (Sheep) entityType.create(level);
+                        Sheep sheep;
+
+                        try {
+                            sheep = (Sheep) entityType.create(level);
+                        } catch (Throwable e) {
+                            LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
+                            continue;
+                        }
 
                         if (sheep != null) {
                             sheep.setColor(color);
@@ -123,14 +130,30 @@ public class JeiCompatibility implements IModPlugin {
                         }
                     }
 
-                    Sheep sheep = (Sheep) entityType.create(level);
+                    Sheep sheep;
+
+                    try {
+                        sheep = (Sheep) entityType.create(level);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to create sheep: {}", e.getMessage());
+                        continue;
+                    }
 
                     if (sheep != null) {
                         sheep.setSheared(true);
                         entityList.add(sheep);
                     }
                 } else {
-                    entityList.add(entityType.create(level));
+                    Entity entity;
+
+                    try {
+                        entity = entityType.create(level);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
+                        continue;
+                    }
+
+                    entityList.add(entity);
                 }
 
                 for (Entity entity : entityList) {
