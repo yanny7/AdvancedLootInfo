@@ -15,22 +15,22 @@ import static com.yanny.ali.plugin.TooltipUtils.pad;
 import static com.yanny.ali.plugin.TooltipUtils.translatable;
 
 public class SetContentsFunction extends LootConditionalFunction {
-    public final ResourceLocation blockEntityType;
+    public final ResourceLocation location;
 
     public SetContentsFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(((MixinSetContainerContents) function).getType().value());
+        location = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(((MixinSetContainerContents) function).getComponent().type());
     }
 
     public SetContentsFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        blockEntityType = buf.readResourceLocation();
+        location = buf.readResourceLocation();
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeResourceLocation(blockEntityType);
+        buf.writeResourceLocation(location);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SetContentsFunction extends LootConditionalFunction {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
-        components.add(pad(pad + 1, translatable("ali.property.function.set_contents.type", blockEntityType)));
+        components.add(pad(pad + 1, translatable("ali.property.function.set_contents.type", location)));
 
         return components;
     }

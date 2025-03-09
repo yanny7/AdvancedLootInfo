@@ -6,11 +6,11 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class Server extends AbstractServer {
     @Override
     protected void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message) {
-        PacketDistributor.PLAYER.with(serverPlayer).send(message);
+        PacketDistributor.sendToPlayer(serverPlayer, message);
     }
 
     @Override
     protected void sendSyncMessage(ServerPlayer serverPlayer, InfoSyncLootTableMessage message) {
-        PacketDistributor.PLAYER.with(serverPlayer).send(message);
+        PacketDistributor.sendToPlayer(serverPlayer, message);
     }
 }

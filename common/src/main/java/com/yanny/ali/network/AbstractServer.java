@@ -3,11 +3,16 @@ package com.yanny.ali.network;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.entry.LootTableEntry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.slf4j.Logger;
 
@@ -20,19 +25,21 @@ public abstract class AbstractServer {
 
     private final List<InfoSyncLootTableMessage> messages = new LinkedList<>();
 
-    public final void readLootTables(LootDataManager manager, ServerLevel level) {
+    public final void readLootTables(ReloadableServerRegistries.Holder manager, ServerLevel level) {
         messages.clear();
-        manager.getKeys(LootDataType.TABLE).forEach((location) -> {
-            LootTable table = manager.getElement(LootDataType.TABLE, location);
+        manager.get().lookup(Registries.LOOT_TABLE).ifPresent((lookup) -> {
+            lookup.listElements().forEach((reference) -> {
+                ResourceLocation location = reference.key().location();
+                LootTable table = reference.value();
 
-            if (table != null && table != LootTable.EMPTY) {
-                LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
-                LootContext context = new LootContext.Builder(lootParams).create(Optional.empty());
-                AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
-                LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
-                List<Item> items = lootTableEntry.collectItems();
+                if (table != LootTable.EMPTY) {
+                    LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
+                    LootContext context = new LootContext.Builder(lootParams).create(Optional.empty());
+                    AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
+                    LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
+                    List<Item> items = lootTableEntry.collectItems();
 
-                if (!items.isEmpty()) {
+                    if (!items.isEmpty()) {
 //                        LootModifierManager man = ForgeInternalHandler.getLootModifierManager();
 //                        ObjectArrayList<ItemStack> generatedLoot = new ObjectArrayList<>(items.stream().map(Item::getDefaultInstance).toList());
 //
@@ -40,18 +47,18 @@ public abstract class AbstractServer {
 //                            generatedLoot = mod.apply(generatedLoot, context);
 //                        }
 
-                    messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
+                        messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
+                    } else {
+                        LOGGER.info("LootTable {} has no items", location);
+                    }
                 } else {
-                    LOGGER.info("LootTable {} has no items", location);
+                    LOGGER.warn("Ignoring {} LootTable, because it's empty", location);
                 }
-            } else {
-                LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
-            }
+            });
         });
 
         LOGGER.info("Prepared {} loot tables", messages.size());
     }
-
 
     public final void syncLootTables(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {

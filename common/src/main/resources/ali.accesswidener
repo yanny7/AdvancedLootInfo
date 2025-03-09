@@ -5,6 +5,8 @@ accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
+accessible class net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction$CopyOperation
+accessible class net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher

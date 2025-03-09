@@ -9,6 +9,6 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         FabricDataGenerator.Pack pack = generator.createPack();
 
         pack.addProvider((FabricDataGenerator.Pack.Factory<LootCategoryProvider>) LootCategoryProvider::new);
-        pack.addProvider((FabricDataGenerator.Pack.Factory<LanguageProvider>) (p) -> new LanguageProvider(p, "en_us"));
+        pack.addProvider((p, l) -> new LanguageProvider(p, l, "en_us"));
     }
 }

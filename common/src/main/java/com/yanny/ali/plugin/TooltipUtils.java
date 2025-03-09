@@ -1,11 +1,10 @@
 package com.yanny.ali.plugin;
 
-import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.ILootFunction;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.mixin.MixinDataComponentPredicate;
 import com.yanny.ali.plugin.condition.RandomChanceCondition;
 import com.yanny.ali.plugin.condition.RandomChanceWithLootingCondition;
 import com.yanny.ali.plugin.condition.TableBonusCondition;
@@ -14,12 +13,12 @@ import com.yanny.ali.plugin.function.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
@@ -79,29 +78,32 @@ public class TooltipUtils {
     public static void addItemPredicate(List<Component> components, int pad, Component component, ItemPredicate predicate) {
         components.add(pad(pad, component));
 
-        predicate.tag().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.item.tag", t.location().toString()))));
         predicate.items().ifPresent((i) -> {
             components.add(pad(pad + 1, translatable("ali.property.condition.item.items")));
             i.forEach((item) -> components.add(pad(pad + 2, value(translatable(item.value().getDescriptionId())))));
         });
         addMinMaxBounds(components, pad + 1, "ali.property.condition.item.count", predicate.count());
-        addMinMaxBounds(components, pad + 1, "ali.property.condition.item.durability", predicate.durability());
+        addDataComponentPredicate(components, pad + 1, translatable("ali.property.condition.item.components"), predicate.components());
 
-        for (EnchantmentPredicate enchantment : predicate.enchantments()) {
-            addEnchantmentPredicate(components, pad + 1, "ali.property.condition.item.enchantment", enchantment);
+        if (!predicate.subPredicates().isEmpty()) {
+            components.add(pad(pad + 1, translatable("ali.property.condition.item.sub_predicates")));
+            predicate.subPredicates().forEach((type, subPredicate) ->
+                    addItemSubPredicate(components, pad + 2, translatable("ali.property.condition.item.sub_predicate"), subPredicate));
         }
+    }
 
-        for (EnchantmentPredicate enchantment : predicate.storedEnchantments()) {
-            addEnchantmentPredicate(components, pad + 1, "ali.property.condition.item.stored_enchantment", enchantment);
-        }
+    public static void addDataComponentPredicate(List<Component> components, int pad, Component component, DataComponentPredicate predicate) {
+        components.add(pad(pad, component));
 
-        predicate.potion().ifPresent((p) -> {
-            components.add(pad(pad + 1, translatable("ali.property.condition.item.potion")));
-
-            p.value().getEffects().forEach((effect) -> components.add(pad(pad + 2, value(translatable(effect.getDescriptionId())))));
+        ((MixinDataComponentPredicate) ((Object) predicate)).getExpectedComponents().forEach((c) -> {
+            components.add(pad(pad + 1, c.type().toString()));
         });
+    }
 
-        predicate.nbt().ifPresent((n) -> addNbtPredicate(components, pad + 1, "ali.property.condition.item.nbt", n));
+    public static void addItemSubPredicate(List<Component> components, int pad, Component component, ItemSubPredicate predicate) {
+        components.add(pad(pad, component));
+
+        //FIXME
     }
 
     public static void addLocationPredicate(List<Component> components, int pad, Component component, LocationPredicate predicate) {
@@ -110,8 +112,8 @@ public class TooltipUtils {
             addMinMaxBounds(components, pad, "ali.property.condition.location.y", p.y());
             addMinMaxBounds(components, pad, "ali.property.condition.location.z", p.z());
         });
-        predicate.biome().ifPresent((b) -> addResourceKey(components, pad, "ali.property.condition.location.biome", b));
-        predicate.structure().ifPresent((s) -> addResourceKey(components, pad, "ali.property.condition.location.structure", s));
+        predicate.biomes().ifPresent((b) -> components.add(pad(pad, translatable("ali.property.condition.location.biome", b.unwrapKey().orElseThrow().location()))));
+        predicate.structures().ifPresent((s) -> components.add(pad(pad, translatable("ali.property.condition.location.structure", s.unwrapKey().orElseThrow().location()))));
         predicate.dimension().ifPresent((d) -> addResourceKey(components, pad, "ali.property.condition.location.dimension", d));
         predicate.smokey().ifPresent((s) -> addBoolean(components, pad, "ali.property.condition.location.smokey", s));
         predicate.light().ifPresent((l) -> addLight(components, pad, "ali.property.condition.location.light", l));
@@ -173,61 +175,62 @@ public class TooltipUtils {
     }
 
     private static void addEntitySubPredicate(List<Component> components, int pad, String key, EntitySubPredicate entitySubPredicate) {
-        Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
-
-        optional.ifPresent((entry) -> {
-            components.add(pad(pad, translatable(key, entry.getKey())));
-
-            if (entitySubPredicate instanceof LightningBoltPredicate predicate) {
-                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.blocks_on_fire", predicate.blocksSetOnFire());
-                predicate.entityStruck().ifPresent((e) -> addEntityPredicate(components, pad + 2, translatable("ali.property.condition.sub_entity.stuck_entity"), e));
-            } else if (entitySubPredicate instanceof FishingHookPredicate predicate) {
-                predicate.inOpenWater().ifPresent((o) -> components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.in_open_water", o))));
-            } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
-                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.level", predicate.level());
-
-                predicate.gameType().ifPresent((g) -> components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.game_type", value(g.getShortDisplayName())))));
-
-                if (!predicate.stats().isEmpty()) {
-                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.stats")));
-                    predicate.stats().forEach((stat) -> {
-                        Object value = stat.value();
-                        components.add(pad(pad + 2, value instanceof Item ? translatable(((Item) value).getDescriptionId()) : value));
-                        components.add(pad(pad + 3, keyValue(stat.type().getDisplayName(), toString(stat.range()))));
-                    });
-                }
-
-                if (!predicate.recipes().isEmpty()) {
-                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.recipes")));
-                    predicate.recipes().forEach((recipe, required) -> components.add(pad(pad + 2, keyValue(recipe.toString(), required))));
-                }
-
-                if (!predicate.advancements().isEmpty()) {
-                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.advancements")));
-                    predicate.advancements().forEach((advancement, advancementPredicate) -> {
-                        components.add(pad(pad + 2, advancement.toString()));
-
-                        if (advancementPredicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
-                            components.add(pad(pad + 3, translatable("ali.property.condition.sub_entity.advancement.done", donePredicate.state())));
-                        } else if (advancementPredicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
-                            criterionsPredicate.criterions().forEach((criterion, state) -> components.add(pad(pad + 3, keyValue(criterion, state))));
-                        }
-                    });
-                }
-            } if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
-                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.size", slimePredicate.size());
-            } else {
-                EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, entitySubPredicate).result().ifPresent((element) -> {
-                    JsonObject jsonObject = element.getAsJsonObject();
-
-                    if (jsonObject.has("variant")) {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
-                    } else {
-                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.toString())));
-                    }
-                });
-            }
-        });
+// FIXME
+//        Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
+//
+//        optional.ifPresent((entry) -> {
+//            components.add(pad(pad, translatable(key, entry.getKey())));
+//
+//            if (entitySubPredicate instanceof LightningBoltPredicate predicate) {
+//                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.blocks_on_fire", predicate.blocksSetOnFire());
+//                predicate.entityStruck().ifPresent((e) -> addEntityPredicate(components, pad + 2, translatable("ali.property.condition.sub_entity.stuck_entity"), e));
+//            } else if (entitySubPredicate instanceof FishingHookPredicate predicate) {
+//                predicate.inOpenWater().ifPresent((o) -> components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.in_open_water", o))));
+//            } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
+//                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.level", predicate.level());
+//
+//                predicate.gameType().ifPresent((g) -> components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.game_type", value(g.getShortDisplayName())))));
+//
+//                if (!predicate.stats().isEmpty()) {
+//                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.stats")));
+//                    predicate.stats().forEach((stat) -> {
+//                        Object value = stat.value();
+//                        components.add(pad(pad + 2, value instanceof Item ? translatable(((Item) value).getDescriptionId()) : value));
+//                        components.add(pad(pad + 3, keyValue(stat.type().getDisplayName(), toString(stat.range()))));
+//                    });
+//                }
+//
+//                if (!predicate.recipes().isEmpty()) {
+//                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.recipes")));
+//                    predicate.recipes().forEach((recipe, required) -> components.add(pad(pad + 2, keyValue(recipe.toString(), required))));
+//                }
+//
+//                if (!predicate.advancements().isEmpty()) {
+//                    components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.advancements")));
+//                    predicate.advancements().forEach((advancement, advancementPredicate) -> {
+//                        components.add(pad(pad + 2, advancement.toString()));
+//
+//                        if (advancementPredicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
+//                            components.add(pad(pad + 3, translatable("ali.property.condition.sub_entity.advancement.done", donePredicate.state())));
+//                        } else if (advancementPredicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
+//                            criterionsPredicate.criterions().forEach((criterion, state) -> components.add(pad(pad + 3, keyValue(criterion, state))));
+//                        }
+//                    });
+//                }
+//            } if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
+//                addMinMaxBounds(components, pad + 1, "ali.property.condition.sub_entity.size", slimePredicate.size());
+//            } else {
+//                EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, entitySubPredicate).result().ifPresent((element) -> {
+//                    JsonObject jsonObject = element.getAsJsonObject();
+//
+//                    if (jsonObject.has("variant")) {
+//                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
+//                    } else {
+//                        components.add(pad(pad + 1, translatable("ali.property.condition.sub_entity.variant", jsonObject.toString())));
+//                    }
+//                });
+//            }
+//        });
     }
 
     private static void addDistancePredicate(List<Component> components, int pad, Component component, DistancePredicate predicate) {
@@ -270,7 +273,6 @@ public class TooltipUtils {
     private static void addBlock(List<Component> components, int pad, Component component, BlockPredicate predicate) {
         components.add(pad(pad, component));
 
-        predicate.tag().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.block.tag", t.location().toString()))));
         predicate.blocks().ifPresent((b) -> {
             components.add(pad(pad + 1, translatable("ali.property.condition.block.blocks")));
             b.forEach((block) -> components.add(pad(pad + 2, value(translatable(block.value().getDescriptionId())))));
@@ -282,8 +284,7 @@ public class TooltipUtils {
     private static void addFluid(List<Component> components, int pad, Component component, FluidPredicate predicate) {
         components.add(pad(pad, component));
 
-        predicate.tag().ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.condition.fluid.tag", t.location().toString()))));
-        predicate.fluid().ifPresent((f) -> components.add(pad(pad + 1, translatable("ali.property.condition.fluid.fluid", value(translatable(BuiltInRegistries.FLUID.getKey(f.value()).toString()))))));
+        predicate.fluids().ifPresent((f) -> components.add(pad(pad + 1, translatable("ali.property.condition.fluid.fluid", value(f.unwrapKey().orElseThrow().location())))));
         predicate.properties().ifPresent((p) -> addStateProperties(components, pad + 1, translatable("ali.property.condition.fluid.state"), p));
     }
 
@@ -306,12 +307,12 @@ public class TooltipUtils {
     }
 
     private static void addPropertyMatcher(List<Component> components, int pad, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
-        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
-            components.add(pad(pad, keyValue(propertyMatcher.name(), matcher.value())));
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher(String value)) {
+            components.add(pad(pad, keyValue(propertyMatcher.name(), value)));
         }
 
-        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
-            components.add(pad(pad, value(propertyMatcher.name() + "=[" + matcher.minValue() + "-" + matcher.maxValue() + "]")));
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> minValue, Optional<String> maxValue)) {
+            components.add(pad(pad, value(propertyMatcher.name() + "=[" + minValue + "-" + maxValue + "]")));
         }
     }
 
@@ -445,7 +446,7 @@ public class TooltipUtils {
 
         for (ILootCondition c : list) {
             TableBonusCondition condition = (TableBonusCondition) c;
-            value.set(new RangeValue(condition.values.get(0)));
+            value.set(new RangeValue(condition.values.getFirst()));
         }
 
         return value.multiply(100);
@@ -461,12 +462,12 @@ public class TooltipUtils {
         for (ILootCondition c : list) {
             RandomChanceWithLootingCondition condition = (RandomChanceWithLootingCondition) c;
 
-            for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
+            for (int level = 1; level < Enchantments.LOOTING.getMaxLevel() + 1; level++) {
                 RangeValue value = new RangeValue(chance * (condition.percent + level * condition.multiplier));
                 bonusChance.put(level, value.multiply(100));
             }
 
-            return new Pair<>(Enchantments.MOB_LOOTING, bonusChance);
+            return new Pair<>(Enchantments.LOOTING, bonusChance);
         }
 
         list = conditions.stream().filter((f) -> f instanceof TableBonusCondition).toList();
@@ -540,13 +541,13 @@ public class TooltipUtils {
         for (ILootFunction f : list) {
             LootingEnchantFunction function = (LootingEnchantFunction) f;
 
-            for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
+            for (int level = 1; level < Enchantments.LOOTING.getMaxLevel() + 1; level++) {
                 RangeValue value = new RangeValue(count);
                 value.addMax(new RangeValue(function.value).multiply(level));
                 bonusCount.put(level, value);
             }
 
-            return new Pair<>(Enchantments.MOB_LOOTING, bonusCount);
+            return new Pair<>(Enchantments.LOOTING, bonusCount);
         }
 
         return null;
@@ -584,7 +585,7 @@ public class TooltipUtils {
 
     @NotNull
     public static MutableComponent value(Object value, String unit) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values", value, unit).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
+        return Component.translatable("ali.util.advanced_loot_info.two_values", value.toString(), unit).withStyle(PARAM_STYLE).withStyle(ChatFormatting.BOLD);
     }
 
     @NotNull

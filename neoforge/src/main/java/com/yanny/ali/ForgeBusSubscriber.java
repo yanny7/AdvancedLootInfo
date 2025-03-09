@@ -1,15 +1,15 @@
 package com.yanny.ali;
 
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
-@Mod.EventBusSubscriber(modid = Utils.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Utils.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class ForgeBusSubscriber {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
-        AliMod.INFO_PROPAGATOR.server().readLootTables(event.getServer().getLootData(), event.getServer().overworld());
+        AliMod.INFO_PROPAGATOR.server().readLootTables(event.getServer().reloadableRegistries(), event.getServer().overworld());
     }
 
     @SubscribeEvent

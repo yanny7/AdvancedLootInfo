@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin.widget;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import com.yanny.ali.plugin.entry.ReferenceEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -16,23 +15,15 @@ public class ReferenceWidget implements IEntryWidget {
 
     public ReferenceWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
                            List<ILootFunction> functions, List<ILootCondition> conditions) {
-        LootTableEntry tableEntry = ((ReferenceEntry) entry).lootTable;
+        widget = ((ReferenceEntry) entry).lootTable.map((l) -> (IWidget) new LootTableWidget(utils, l, x, y)).orElse(new IWidget() {
+            @Override
+            public Rect getRect() {
+                return new Rect(0, 0, 0, 0);
+            }
 
-        if (tableEntry != null) {
-            widget = new LootTableWidget(utils, tableEntry, x, y);
-        } else {
-            widget = new IWidget() {
-                @Override
-                public Rect getRect() {
-                    return new Rect(0, 0, 0, 0);
-                }
-
-                @Override
-                public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-
-                }
-            };
-        }
+            @Override
+            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
+        });
 
         bounds = widget.getRect();
         this.entry = entry;
@@ -65,12 +56,6 @@ public class ReferenceWidget implements IEntryWidget {
 
     @NotNull
     public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
-        LootTableEntry lootTableEntry = ((ReferenceEntry) entry).lootTable;
-
-        if (lootTableEntry != null) {
-            return LootTableWidget.getBounds(utils, lootTableEntry, x, y);
-        } else {
-            return new Rect(x, y, 0, 18);
-        }
+        return ((ReferenceEntry) entry).lootTable.map((l) -> LootTableWidget.getBounds(utils, l, x, y)).orElse(new Rect(x, y, 0, 18));
     }
 }

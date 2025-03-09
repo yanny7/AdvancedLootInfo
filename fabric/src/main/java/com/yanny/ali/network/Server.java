@@ -8,10 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 public class Server extends AbstractServer {
     @Override
     protected void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-
-        message.write(buf);
-        ServerPlayNetworking.send(serverPlayer, NetworkUtils.CLEAR_LOOT_INFO_ID, buf);
+        ServerPlayNetworking.send(serverPlayer, message);
     }
 
     @Override
@@ -19,6 +16,6 @@ public class Server extends AbstractServer {
         FriendlyByteBuf buf = PacketByteBufs.create();
 
         message.write(buf);
-        ServerPlayNetworking.send(serverPlayer, NetworkUtils.NEW_LOOT_INFO_ID, buf);
+        ServerPlayNetworking.send(serverPlayer, message);
     }
 }

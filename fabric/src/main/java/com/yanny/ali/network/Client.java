@@ -1,16 +1,13 @@
 package com.yanny.ali.network;
 
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.network.FriendlyByteBuf;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        super.onLootInfo(new InfoSyncLootTableMessage(buf));
+    public void onLootInfo(InfoSyncLootTableMessage message, ClientPlayNetworking.Context context) {
+        super.onLootInfo(message);
     }
 
-    public void onClear(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        super.onClear(new ClearMessage(buf));
+    public void onClear(ClearMessage message, ClientPlayNetworking.Context context) {
+        super.onClear(message);
     }
 }

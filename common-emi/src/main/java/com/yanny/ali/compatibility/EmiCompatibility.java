@@ -77,7 +77,7 @@ public class EmiCompatibility implements EmiPlugin {
             registry.addCategory(gameplayCategory);
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceLocation location = block.getLootTable();
+                ResourceLocation location = block.getLootTable().location();
                 LootTableEntry lootEntry = map.get(location);
 
                 if (lootEntry != null) {
@@ -150,7 +150,7 @@ public class EmiCompatibility implements EmiPlugin {
 
                 entityList.forEach((entity) -> {
                     if (entity instanceof Mob mob) {
-                        ResourceLocation location = mob.getLootTable();
+                        ResourceLocation location = mob.getLootTable().location();
                         LootTableEntry lootEntry = map.get(location);
 
                         if (lootEntry != null && entityType.create(level) != null) {

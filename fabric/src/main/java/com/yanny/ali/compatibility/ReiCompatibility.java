@@ -93,7 +93,7 @@ public class ReiCompatibility implements REIClientPlugin {
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceLocation location = block.getLootTable();
+                ResourceLocation location = block.getLootTable().location();
                 LootTableEntry lootEntry = map.get(location);
 
                 if (lootEntry != null) {
@@ -156,7 +156,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
-                        ResourceLocation location = mob.getLootTable();
+                        ResourceLocation location = mob.getLootTable().location();
                         LootTableEntry lootEntry = map.get(location);
 
                         if (lootEntry != null && entityType.create(level) != null) {

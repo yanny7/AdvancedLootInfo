@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeBusSubscriber {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
-        AliMod.INFO_PROPAGATOR.server().readLootTables(event.getServer().getLootData(), event.getServer().overworld());
+        AliMod.INFO_PROPAGATOR.server().readLootTables(event.getServer().reloadableRegistries(), event.getServer().overworld());
     }
 
     @SubscribeEvent

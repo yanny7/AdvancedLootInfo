@@ -21,7 +21,7 @@ public class SetLootTableFunction extends LootConditionalFunction {
 
     public SetLootTableFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        name = ((MixinSetContainerLootTable) function).getName();
+        name = ((MixinSetContainerLootTable) function).getName().location();
         seed = ((MixinSetContainerLootTable) function).getSeed();
         blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(((MixinSetContainerLootTable) function).getType().value());
     }

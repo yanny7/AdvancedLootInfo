@@ -1,70 +1,64 @@
 package com.yanny.ali.plugin.entry;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.IContext;
-import com.yanny.ali.mixin.MixinLootTableReference;
+import com.yanny.ali.mixin.MixinNestedLootTable;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootDataManager;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ReferenceEntry extends SingletonEntry {
-    public final ResourceLocation name;
-    @Nullable public final LootTableEntry lootTable;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final Optional<ResourceKey<LootTable>> name;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public final Optional<LootTableEntry> lootTable;
 
     public ReferenceEntry(IContext context, LootPoolEntryContainer entry) {
         super(context, entry);
-        name = ((MixinLootTableReference) entry).getName();
+        Either<ResourceKey<LootTable>, LootTable> contents = ((MixinNestedLootTable) entry).getContents();
 
-        LootDataManager manager = context.lootDataManager();
+        if (contents.right().isPresent()) {
+            lootTable = Optional.of(new LootTableEntry(context, contents.right().get()));
+            name = Optional.empty();
+        } else if (contents.left().isPresent()) {
+            name = Optional.of(contents.left().get());
 
-        if (manager != null) {
-            LootTable table = manager.getElement(LootDataType.TABLE, name);
+            ReloadableServerRegistries.Holder manager = context.lootDataManager();
 
-            if (table != null) {
-                lootTable = new LootTableEntry(context, table);
+            if (manager != null) {
+                lootTable = Optional.of(new LootTableEntry(context, manager.getLootTable(contents.left().get())));
             } else {
-                lootTable = null;
+                lootTable = Optional.empty();
             }
         } else {
-            lootTable = null;
+            name = Optional.empty();
+            lootTable = Optional.empty();
         }
     }
 
     public ReferenceEntry(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        name = buf.readResourceLocation();
-
-        if (buf.readBoolean()) {
-            lootTable = new LootTableEntry(context, buf);
-        } else {
-            lootTable = null;
-        }
+        name = buf.readOptional((b) -> b.readResourceKey(Registries.LOOT_TABLE));
+        lootTable = buf.readOptional((b) -> new LootTableEntry(context, b));
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeResourceLocation(name);
-        buf.writeBoolean(lootTable != null);
-
-        if (lootTable != null) {
-            lootTable.encode(context, buf);
-        }
+        buf.writeOptional(name, FriendlyByteBuf::writeResourceKey);
+        buf.writeOptional(lootTable, (f, l) -> l.encode(context, f));
     }
 
     @Override
     public @NotNull List<Item> collectItems() {
-        if (lootTable != null) {
-            return lootTable.collectItems();
-        } else {
-            return List.of();
-        }
+        return lootTable.map(LootTableEntry::collectItems).orElse(List.of());
     }
 }

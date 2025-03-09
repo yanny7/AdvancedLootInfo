@@ -29,31 +29,45 @@ public class CommonPlugin implements IPlugin {
     @Override
     public void registerCommon(ICommonRegistry registry) {
         registry.registerFunction(ApplyBonusFunction.class, getKey(LootItemFunctions.APPLY_BONUS), ApplyBonusFunction::new, ApplyBonusFunction::new);
+        registry.registerFunction(CopyComponentsFunction.class, getKey(LootItemFunctions.COPY_COMPONENTS), CopyComponentsFunction::new, CopyComponentsFunction::new);
+        registry.registerFunction(CopyCustomDataFunction.class, getKey(LootItemFunctions.COPY_CUSTOM_DATA), CopyCustomDataFunction::new, CopyCustomDataFunction::new);
         registry.registerFunction(CopyNameFunction.class, getKey(LootItemFunctions.COPY_NAME), CopyNameFunction::new, CopyNameFunction::new);
-        registry.registerFunction(CopyNbtFunction.class, getKey(LootItemFunctions.COPY_NBT), CopyNbtFunction::new, CopyNbtFunction::new);
         registry.registerFunction(CopyStateFunction.class, getKey(LootItemFunctions.COPY_STATE), CopyStateFunction::new, CopyStateFunction::new);
         registry.registerFunction(EnchantRandomlyFunction.class, getKey(LootItemFunctions.ENCHANT_RANDOMLY), EnchantRandomlyFunction::new, EnchantRandomlyFunction::new);
         registry.registerFunction(EnchantWithLevelsFunction.class, getKey(LootItemFunctions.ENCHANT_WITH_LEVELS), EnchantWithLevelsFunction::new, EnchantWithLevelsFunction::new);
         registry.registerFunction(ExplorationMapFunction.class, getKey(LootItemFunctions.EXPLORATION_MAP), ExplorationMapFunction::new, ExplorationMapFunction::new);
         registry.registerFunction(ExplosionDecayFunction.class, getKey(LootItemFunctions.EXPLOSION_DECAY), ExplosionDecayFunction::new, ExplosionDecayFunction::new);
         registry.registerFunction(FillPlayerHeadFunction.class, getKey(LootItemFunctions.FILL_PLAYER_HEAD), FillPlayerHeadFunction::new, FillPlayerHeadFunction::new);
+        registry.registerFunction(FilteredFunction.class, getKey(LootItemFunctions.FILTERED), FilteredFunction::new, FilteredFunction::new);
         registry.registerFunction(FurnaceSmeltFunction.class, getKey(LootItemFunctions.FURNACE_SMELT), FurnaceSmeltFunction::new, FurnaceSmeltFunction::new);
         registry.registerFunction(LimitCountFunction.class, getKey(LootItemFunctions.LIMIT_COUNT), LimitCountFunction::new, LimitCountFunction::new);
         registry.registerFunction(LootingEnchantFunction.class, getKey(LootItemFunctions.LOOTING_ENCHANT), LootingEnchantFunction::new, LootingEnchantFunction::new);
+        registry.registerFunction(ModifyContentsFunction.class, getKey(LootItemFunctions.MODIFY_CONTENTS), ModifyContentsFunction::new, ModifyContentsFunction::new);
         registry.registerFunction(ReferenceFunction.class, getKey(LootItemFunctions.REFERENCE), ReferenceFunction::new, ReferenceFunction::new);
+        registry.registerFunction(SequenceFunction.class, getKey(LootItemFunctions.SEQUENCE), SequenceFunction::new, SequenceFunction::new);
         registry.registerFunction(SetAttributesFunction.class, getKey(LootItemFunctions.SET_ATTRIBUTES), SetAttributesFunction::new, SetAttributesFunction::new);
         registry.registerFunction(SetBannerPatternFunction.class, getKey(LootItemFunctions.SET_BANNER_PATTERN), SetBannerPatternFunction::new, SetBannerPatternFunction::new);
+        registry.registerFunction(SetBookCoverFunction.class, getKey(LootItemFunctions.SET_BOOK_COVER), SetBookCoverFunction::new, SetBookCoverFunction::new);
+        registry.registerFunction(SetComponentsFunction.class, getKey(LootItemFunctions.SET_COMPONENTS), SetComponentsFunction::new, SetComponentsFunction::new);
         registry.registerFunction(SetContentsFunction.class, getKey(LootItemFunctions.SET_CONTENTS), SetContentsFunction::new, SetContentsFunction::new);
         registry.registerFunction(SetCountFunction.class, getKey(LootItemFunctions.SET_COUNT), SetCountFunction::new, SetCountFunction::new);
+        registry.registerFunction(SetCustomDataFunction.class, getKey(LootItemFunctions.SET_CUSTOM_DATA), SetCustomDataFunction::new, SetCustomDataFunction::new);
+        registry.registerFunction(SetCustomModelDataFunction.class, getKey(LootItemFunctions.SET_CUSTOM_MODEL_DATA), SetCustomModelDataFunction::new, SetCustomModelDataFunction::new);
         registry.registerFunction(SetDamageFunction.class, getKey(LootItemFunctions.SET_DAMAGE), SetDamageFunction::new, SetDamageFunction::new);
         registry.registerFunction(SetEnchantmentsFunction.class, getKey(LootItemFunctions.SET_ENCHANTMENTS), SetEnchantmentsFunction::new, SetEnchantmentsFunction::new);
+        registry.registerFunction(SetFireworkExplosionFunction.class, getKey(LootItemFunctions.SET_FIREWORK_EXPLOSION), SetFireworkExplosionFunction::new, SetFireworkExplosionFunction::new);
+        registry.registerFunction(SetFireworksFunction.class, getKey(LootItemFunctions.SET_FIREWORKS), SetFireworksFunction::new, SetFireworksFunction::new);
         registry.registerFunction(SetInstrumentFunction.class, getKey(LootItemFunctions.SET_INSTRUMENT), SetInstrumentFunction::new, SetInstrumentFunction::new);
+        registry.registerFunction(SetItemFunction.class, getKey(LootItemFunctions.SET_ITEM), SetItemFunction::new, SetItemFunction::new);
         registry.registerFunction(SetLootTableFunction.class, getKey(LootItemFunctions.SET_LOOT_TABLE), SetLootTableFunction::new, SetLootTableFunction::new);
         registry.registerFunction(SetLoreFunction.class, getKey(LootItemFunctions.SET_LORE), SetLoreFunction::new, SetLoreFunction::new);
         registry.registerFunction(SetNameFunction.class, getKey(LootItemFunctions.SET_NAME), SetNameFunction::new, SetNameFunction::new);
-        registry.registerFunction(SetNbtFunction.class, getKey(LootItemFunctions.SET_NBT), SetNbtFunction::new, SetNbtFunction::new);
+        registry.registerFunction(SetOminousBottleAmplifierFunction.class, getKey(LootItemFunctions.SET_OMINOUS_BOTTLE_AMPLIFIER), SetOminousBottleAmplifierFunction::new, SetOminousBottleAmplifierFunction::new);
         registry.registerFunction(SetPotionFunction.class, getKey(LootItemFunctions.SET_POTION), SetPotionFunction::new, SetPotionFunction::new);
         registry.registerFunction(SetStewEffectFunction.class, getKey(LootItemFunctions.SET_STEW_EFFECT), SetStewEffectFunction::new, SetStewEffectFunction::new);
+        registry.registerFunction(SetWritableBookPagesFunction.class, getKey(LootItemFunctions.SET_WRITABLE_BOOK_PAGES), SetWritableBookPagesFunction::new, SetWritableBookPagesFunction::new);
+        registry.registerFunction(SetWrittenBookPagesFunction.class, getKey(LootItemFunctions.SET_WRITTEN_BOOK_PAGES), SetWrittenBookPagesFunction::new, SetWrittenBookPagesFunction::new);
+        registry.registerFunction(ToggleTooltipsFunction.class, getKey(LootItemFunctions.TOGGLE_TOOLTIPS), ToggleTooltipsFunction::new, ToggleTooltipsFunction::new);
         registry.registerFunction(UnknownFunction.class, UNKNOWN, UnknownFunction::new, UnknownFunction::new);
 
         registry.registerCondition(AllOfCondition.class, getKey(LootItemConditions.ALL_OF), AllOfCondition::new, AllOfCondition::new);
@@ -78,7 +92,7 @@ public class CommonPlugin implements IPlugin {
 
         registry.registerEntry(EmptyEntry.class, getKey(LootPoolEntries.EMPTY), EmptyEntry::new, EmptyEntry::new);
         registry.registerEntry(ItemEntry.class, getKey(LootPoolEntries.ITEM), ItemEntry::new, ItemEntry::new);
-        registry.registerEntry(ReferenceEntry.class, getKey(LootPoolEntries.REFERENCE), ReferenceEntry::new, ReferenceEntry::new);
+        registry.registerEntry(ReferenceEntry.class, getKey(LootPoolEntries.LOOT_TABLE), ReferenceEntry::new, ReferenceEntry::new);
         registry.registerEntry(DynamicEntry.class, getKey(LootPoolEntries.DYNAMIC), DynamicEntry::new, DynamicEntry::new);
         registry.registerEntry(TagEntry.class, getKey(LootPoolEntries.TAG), TagEntry::new, TagEntry::new);
         registry.registerEntry(AlternativesEntry.class, getKey(LootPoolEntries.ALTERNATIVES), AlternativesEntry::new, AlternativesEntry::new);
@@ -139,7 +153,7 @@ public class CommonPlugin implements IPlugin {
     }
 
     @NotNull
-    static ResourceLocation getKey(LootItemFunctionType key) {
+    static ResourceLocation getKey(LootItemFunctionType<?> key) {
         return getKey(BuiltInRegistries.LOOT_FUNCTION_TYPE, key);
     }
 

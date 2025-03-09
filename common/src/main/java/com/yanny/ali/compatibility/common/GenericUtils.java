@@ -66,7 +66,7 @@ public class GenericUtils {
                     -screenY + bounds.y(),
                     screenX + bounds.right(),
                     screenY + bounds.bottom(),
-                    (int) (Math.min(20 / dimensions.height, 20 / dimensions.width)),
+                    (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
                     0.0625F,
                     mouseX,
                     mouseY,

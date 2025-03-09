@@ -1,8 +1,9 @@
 package com.yanny.ali.mixin;
 
+import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
@@ -13,7 +14,7 @@ public interface MixinExplorationMapFunction {
     TagKey<Structure> getDestination();
 
     @Accessor
-    MapDecoration.Type getMapDecoration();
+    Holder<MapDecorationType> getMapDecoration();
 
     @Accessor
     byte getZoom();

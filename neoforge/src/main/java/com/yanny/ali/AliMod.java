@@ -12,7 +12,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
 public class AliMod {
@@ -35,7 +35,7 @@ public class AliMod {
         PluginManager.registerClientEvent();
     }
 
-    public static void registerPayloadHandler(final RegisterPayloadHandlerEvent event) {
+    public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
         INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator(event.registrar(Utils.MOD_ID).versioned(PROTOCOL_VERSION));
     }
 }

@@ -1,7 +1,7 @@
 package com.yanny.ali.api;
 
+import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataManager;
 import org.jetbrains.annotations.Nullable;
 
 public interface IContext {
@@ -9,5 +9,5 @@ public interface IContext {
 
     ICommonUtils utils();
 
-    @Nullable LootDataManager lootDataManager();
+    @Nullable ReloadableServerRegistries.Holder lootDataManager();
 }

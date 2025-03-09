@@ -13,7 +13,7 @@ public class FabricBusSubscriber {
     }
 
     private static void onServerStarted(MinecraftServer server) {
-        CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.getLootData(), server.overworld());
+        CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
     }
 
     private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
