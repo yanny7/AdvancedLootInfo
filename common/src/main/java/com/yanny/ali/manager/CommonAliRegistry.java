@@ -74,7 +74,11 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>> pair = conditionMap.get(key);
 
             if (pair != null) {
-                return pair.getFirst().apply(context, condition);
+                try {
+                    return pair.getFirst().apply(context, condition);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to convert condition with error {}", throwable.getMessage());
+                }
             } else {
                 LOGGER.warn("Encode condition {} was not registered", key);
             }
@@ -102,7 +106,11 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             Pair<BiFunction<IContext, LootItemCondition, ILootCondition>, BiFunction<IContext, FriendlyByteBuf, ILootCondition>> pair = conditionMap.get(key);
 
             if (pair != null) {
-                return pair.getSecond().apply(context, buf);
+                try {
+                    return pair.getSecond().apply(context, buf);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to decode condition with error {}", throwable.getMessage());
+                }
             } else {
                 LOGGER.warn("Decode condition {} was not registered", key);
             }
@@ -147,7 +155,11 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>> pair = functionMap.get(key);
 
             if (pair != null) {
-                return pair.getFirst().apply(context, function);
+                try {
+                    return pair.getFirst().apply(context, function);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to convert function with error {}", throwable.getMessage());
+                }
             } else {
                 LOGGER.warn("Encode function {} was not registered", key);
             }
@@ -175,7 +187,11 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             Pair<BiFunction<IContext, LootItemFunction, ILootFunction>, BiFunction<IContext, FriendlyByteBuf, ILootFunction>> pair = functionMap.get(key);
 
             if (pair != null) {
-                return pair.getSecond().apply(context, buf);
+                try {
+                    return pair.getSecond().apply(context, buf);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to decode function with error {}", throwable.getMessage());
+                }
             } else {
                 LOGGER.warn("Decode function {} was not registered", key);
             }
@@ -220,7 +236,11 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             Pair<BiFunction<IContext, LootPoolEntryContainer, ILootEntry>, BiFunction<IContext, FriendlyByteBuf, ILootEntry>> pair = entryMap.get(key);
 
             if (pair != null) {
-                return pair.getFirst().apply(context, entry);
+                try {
+                    return pair.getFirst().apply(context, entry);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to convert entry with error {}", throwable.getMessage());
+                }
             } else {
                 LOGGER.warn("Encode entry {} was not registered", key);
             }
@@ -248,7 +268,11 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             Pair<BiFunction<IContext, LootPoolEntryContainer, ILootEntry>, BiFunction<IContext, FriendlyByteBuf, ILootEntry>> pair = entryMap.get(key);
 
             if (pair != null) {
-                return pair.getSecond().apply(context, buf);
+                try {
+                    return pair.getSecond().apply(context, buf);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to decode entry with error {}", throwable.getMessage());
+                }
             } else {
                 LOGGER.warn("Decode entry {} was not registered", key);
             }
@@ -287,27 +311,26 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
 
     @Override
     public RangeValue convertNumber(IContext context, @Nullable NumberProvider numberProvider) {
-        try {
-            if (numberProvider != null) {
-                ResourceLocation key = BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType());
+        if (numberProvider != null) {
+            ResourceLocation key = BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType());
 
-                if (key != null) {
-                    BiFunction<IContext, NumberProvider, RangeValue> function = numberConverterMap.get(key);
+            if (key != null) {
+                BiFunction<IContext, NumberProvider, RangeValue> function = numberConverterMap.get(key);
 
-                    if (function != null) {
+                if (function != null) {
+                    try {
                         return function.apply(context, numberProvider);
-                    } else {
-                        LOGGER.warn("Number converter {} was not registered", key);
+                    } catch (Throwable throwable) {
+                        LOGGER.warn("Failed to convert number with error {}", throwable.getMessage());
                     }
+                } else {
+                    LOGGER.warn("Number converter {} was not registered", key);
                 }
-
             }
 
-            return new RangeValue(false, true);
-        } catch (Exception e) {
-            LOGGER.error("Failed to convert number: {}", e.getMessage());
-            return new RangeValue();
         }
+
+        return new RangeValue(false, true);
     }
 
     public void printCommonInfo() {
