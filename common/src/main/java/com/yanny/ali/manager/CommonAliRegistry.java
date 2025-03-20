@@ -3,9 +3,9 @@ package com.yanny.ali.manager;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.condition.UnknownCondition;
+import com.yanny.ali.plugin.condition.UnknownAliCondition;
 import com.yanny.ali.plugin.entry.UnknownEntry;
-import com.yanny.ali.plugin.function.UnknownFunction;
+import com.yanny.ali.plugin.function.UnknownAliFunction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -80,7 +80,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             }
         }
 
-        return new UnknownCondition(context, condition);
+        return new UnknownAliCondition(context, condition);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             }
         }
 
-        return new UnknownCondition(context, buf);
+        return new UnknownAliCondition(context, buf);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             }
         }
 
-        return new UnknownFunction(context, function);
+        return new UnknownAliFunction(context, function);
     }
 
     @Override
@@ -181,7 +181,7 @@ public class CommonAliRegistry implements ICommonRegistry, ICommonUtils {
             }
         }
 
-        return new UnknownFunction(context, buf);
+        return new UnknownAliFunction(context, buf);
     }
 
     @Override

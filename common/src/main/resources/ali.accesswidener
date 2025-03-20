@@ -1,10 +1,13 @@
 accessWidener v2 named
+accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
-accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
-accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
+extendable class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
+extendable class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaDeserializer
+accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
+accessible method net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier <init> (Ljava/lang/String;Lnet/minecraft/world/entity/ai/attributes/Attribute;Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;[Lnet/minecraft/world/entity/EquipmentSlot;Ljava/util/UUID;)V
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactPropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedPropertyMatcher

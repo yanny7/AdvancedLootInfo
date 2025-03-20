@@ -1,3 +1,7 @@
+## []
+
+- Changed displaying of tooltips
+
 ## [1.0.4]
 
 - Fixed crash when creating entity
