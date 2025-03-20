@@ -1,3 +1,8 @@
+## [1.0.5]
+
+- Changed displaying of tooltips
+- Fixed crash while converting loot function
+
 ## [1.0.4]
 
 - Fixed crash when creating entity

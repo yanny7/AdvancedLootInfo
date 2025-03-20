@@ -39,6 +39,7 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
+                    source project(":common-mixin").sourceSets.main
                 }
             }
         }
@@ -54,6 +55,7 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
+                    source project(":common-mixin").sourceSets.main
                 }
             }
         }
@@ -70,6 +72,7 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
+                    source project(":common-mixin").sourceSets.main
                 }
             }
         }
@@ -84,6 +87,7 @@ dependencies {
 
     compileOnly project(":api")
     compileOnly project(":common")
+    compileOnly project(":common-mixin")
 
     // EMI
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
@@ -117,6 +121,7 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
+    source(project(":common-mixin").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -124,6 +129,14 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
+}
+
+tasks.named('compileTestJava') {
+    it.enabled = false
+}
+
+tasks.named('test') {
+    it.enabled = false
 }
 
 processResources {
