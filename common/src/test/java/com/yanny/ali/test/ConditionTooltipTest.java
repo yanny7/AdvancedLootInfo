@@ -8,13 +8,11 @@ import com.yanny.ali.plugin.condition.WeatherCheckAliCondition;
 import io.netty.buffer.Unpooled;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.Item;
@@ -158,9 +156,9 @@ public class ConditionTooltipTest {
         when(sourcePredicate.getTargetedEntity()).thenReturn(EntityPredicate.ANY);
         when(sourcePredicate.getTeam()).thenReturn("Blue");
 
-        when(mixinTagPredicate1.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.ARROW.location()));
+        when(mixinTagPredicate1.getTag()).thenReturn(DamageTypeTags.BYPASSES_ARMOR);
         when(mixinTagPredicate1.getExpected()).thenReturn(true);
-        when(mixinTagPredicate2.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.EXPLOSION.location()));
+        when(mixinTagPredicate2.getTag()).thenReturn(DamageTypeTags.IS_EXPLOSION);
         when(mixinTagPredicate2.getExpected()).thenReturn(false);
 
         when(damageSourcePredicate.getTags()).thenReturn(List.of(tagPredicate1, tagPredicate2));
@@ -171,8 +169,8 @@ public class ConditionTooltipTest {
                 "Damage Source Properties:",
                 "  -> Damage Source:",
                 "    -> Tags:",
-                "      -> minecraft:arrow: true",
-                "      -> minecraft:explosion: false",
+                "      -> minecraft:bypasses_armor: true",
+                "      -> minecraft:is_explosion: false",
                 "    -> Direct Entity:",
                 "      -> Entity Type: Warden",
                 "    -> Source Entity:",

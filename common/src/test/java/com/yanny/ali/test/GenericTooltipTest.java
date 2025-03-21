@@ -12,15 +12,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.*;
 import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -37,11 +34,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
@@ -363,9 +363,9 @@ public class GenericTooltipTest {
         when(directPredicate.getPassenger()).thenReturn(EntityPredicate.ANY);
         when(directPredicate.getTargetedEntity()).thenReturn(EntityPredicate.ANY);
 
-        when(mixinTagPredicate1.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.ARROW.location()));
+        when(mixinTagPredicate1.getTag()).thenReturn(DamageTypeTags.BYPASSES_ARMOR);
         when(mixinTagPredicate1.getExpected()).thenReturn(true);
-        when(mixinTagPredicate2.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.EXPLOSION.location()));
+        when(mixinTagPredicate2.getTag()).thenReturn(DamageTypeTags.IS_EXPLOSION);
         when(mixinTagPredicate2.getExpected()).thenReturn(false);
         when(damageSourcePredicate.getTags()).thenReturn(List.of(tagPredicate1, tagPredicate2));
         when(damageSourcePredicate.getSourceEntity()).thenReturn((EntityPredicate) sourcePredicate);
@@ -374,8 +374,8 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(0, (DamageSourcePredicate) damageSourcePredicate), List.of(
                 "Damage Source:",
                 "  -> Tags:",
-                "    -> minecraft:arrow: true",
-                "    -> minecraft:explosion: false"
+                "    -> minecraft:bypasses_armor: true",
+                "    -> minecraft:is_explosion: false"
         ));
     }
 
@@ -388,15 +388,15 @@ public class GenericTooltipTest {
         MixinTagPredicate<DamageType> mixinTagPredicate1 = (MixinTagPredicate<DamageType>) tagPredicate1;
         MixinTagPredicate<DamageType> mixinTagPredicate2 = (MixinTagPredicate<DamageType>) tagPredicate2;
 
-        when(mixinTagPredicate1.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.ARROW.location()));
+        when(mixinTagPredicate1.getTag()).thenReturn(DamageTypeTags.BYPASSES_ARMOR);
         when(mixinTagPredicate1.getExpected()).thenReturn(true);
-        when(mixinTagPredicate2.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.EXPLOSION.location()));
+        when(mixinTagPredicate2.getTag()).thenReturn(DamageTypeTags.IS_EXPLOSION);
         when(mixinTagPredicate2.getExpected()).thenReturn(false);
 
         assertTooltip(GenericTooltipUtils.getTagPredicatesTooltip(0, List.of(tagPredicate1, tagPredicate2)), List.of(
                 "Tags:",
-                "  -> minecraft:arrow: true",
-                "  -> minecraft:explosion: false"
+                "  -> minecraft:bypasses_armor: true",
+                "  -> minecraft:is_explosion: false"
         ));
     }
 
@@ -596,9 +596,9 @@ public class GenericTooltipTest {
         when(locationPredicate.getBlock()).thenReturn((BlockPredicate) blockPredicate);
         when(locationPredicate.getFluid()).thenReturn((FluidPredicate) fluidPredicate);
         when(locationPredicate.getSmokey()).thenReturn(true);
-        when(locationPredicate.getStructure()).thenReturn(ResourceKey.create(Registries.STRUCTURE, new ResourceLocation("mineshaft")));
-        when(locationPredicate.getDimension()).thenReturn(ResourceKey.create(Registries.DIMENSION, new ResourceLocation("overworld")));
-        when(locationPredicate.getBiome()).thenReturn(ResourceKey.create(Registries.BIOME, new ResourceLocation("plains")));
+        when(locationPredicate.getStructure()).thenReturn(BuiltinStructures.MINESHAFT);
+        when(locationPredicate.getDimension()).thenReturn(Level.OVERWORLD);
+        when(locationPredicate.getBiome()).thenReturn(Biomes.PLAINS);
 
         assertTooltip(GenericTooltipUtils.getLocationPredicateTooltip(0, (LocationPredicate) locationPredicate), List.of(
                 "X: =10.0",

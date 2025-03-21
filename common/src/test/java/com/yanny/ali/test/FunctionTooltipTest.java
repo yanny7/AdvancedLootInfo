@@ -6,17 +6,16 @@ import com.yanny.ali.plugin.FunctionTooltipUtils;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.InstrumentTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -95,10 +94,10 @@ public class FunctionTooltipTest {
     
     @Test
     public void testExplorationMapTooltip() {
-        assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(0, TagKey.create(Registries.STRUCTURE, new ResourceLocation("home")),
+        assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(0, StructureTags.RUINED_PORTAL,
                 MapDecoration.Type.MONUMENT, 2, 50, true), List.of(
                 "Exploration Map:",
-                "  -> Destination: minecraft:home",
+                "  -> Destination: minecraft:ruined_portal",
                 "  -> Map Decoration: MONUMENT",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
@@ -242,9 +241,9 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetInstrumentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(0, TagKey.create(Registries.INSTRUMENT, Instruments.ADMIRE_GOAT_HORN.location())), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(0, InstrumentTags.SCREAMING_GOAT_HORNS), List.of(
                 "Set Instrument:",
-                "  -> Options: minecraft:admire_goat_horn"
+                "  -> Options: minecraft:screaming_goat_horns"
         ));
     }
 
