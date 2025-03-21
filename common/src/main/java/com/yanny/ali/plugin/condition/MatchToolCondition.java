@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.condition;
 import com.google.gson.JsonElement;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.mixin.MixinMatchTool;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.network.FriendlyByteBuf;

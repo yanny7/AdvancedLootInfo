@@ -42,7 +42,7 @@ public class ApplyBonusAliFunction extends LootConditionalAliFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getApplyBonusTooltip(pad, BuiltInRegistries.ENCHANTMENT.getOptional(enchantment).orElseThrow(), formula);
+        return FunctionTooltipUtils.getApplyBonusTooltip(pad, enchantment, formula);
     }
 
     public void calculateCount(RangeValue count, int level) {

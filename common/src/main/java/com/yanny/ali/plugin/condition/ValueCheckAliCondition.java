@@ -4,7 +4,6 @@ import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinIntRange;
-import com.yanny.ali.mixin.MixinValueCheckCondition;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

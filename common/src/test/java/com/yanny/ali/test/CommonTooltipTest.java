@@ -3,6 +3,7 @@ package com.yanny.ali.test;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.TooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class CommonTooltipTest {
         List<Component> components = new LinkedList<>();
 
         components.add(TooltipUtils.getCount(new RangeValue(7, 12)));
-        components.addAll(TooltipUtils.getBonusCount(new Pair<>(Enchantments.BLOCK_FORTUNE, Map.of(
+        components.addAll(TooltipUtils.getBonusCount(new Pair<>(Holder.direct(Enchantments.BLOCK_FORTUNE), Map.of(
                 1, new RangeValue(0.25F),
                 2, new RangeValue(0.5F),
                 3, new RangeValue(0.75F)
@@ -51,7 +52,7 @@ public class CommonTooltipTest {
         List<Component> components = new LinkedList<>();
 
         components.add(TooltipUtils.getChance(new RangeValue(5.2F, 9.3F)));
-        components.addAll(TooltipUtils.getBonusChance(Pair.of(Enchantments.MOB_LOOTING, Map.of(
+        components.addAll(TooltipUtils.getBonusChance(Pair.of(Holder.direct(Enchantments.MOB_LOOTING), Map.of(
                 1, new RangeValue(0.25F),
                 2, new RangeValue(0.5F),
                 3, new RangeValue(0.75F)

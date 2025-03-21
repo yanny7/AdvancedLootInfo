@@ -36,7 +36,7 @@ public class SetBannerPatternAliFunction extends LootConditionalAliFunction {
 
         for (int i = 0; i < count; i++) {
             patterns.add(new Pair<>(
-                    BuiltInRegistries.BANNER_PATTERN.getHolder(ResourceKey.create(Registries.BANNER_PATTERN, buf.readResourceLocation())).orElseThrow(),
+                    BuiltInRegistries.BANNER_PATTERN.getHolderOrThrow(ResourceKey.create(Registries.BANNER_PATTERN, buf.readResourceLocation())),
                     DyeColor.byId(buf.readInt())
             ));
         }

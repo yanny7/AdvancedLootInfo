@@ -131,14 +131,6 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-jei").sourceSets.main.allSource)
 }
 
-tasks.named('compileTestJava') {
-    it.enabled = false
-}
-
-tasks.named('test') {
-    it.enabled = false
-}
-
 processResources {
     from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources

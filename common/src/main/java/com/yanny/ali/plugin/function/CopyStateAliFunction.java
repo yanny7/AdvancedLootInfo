@@ -3,7 +3,9 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinCopyBlockState;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
@@ -17,21 +19,21 @@ import java.util.List;
 import java.util.Set;
 
 public class CopyStateAliFunction extends LootConditionalAliFunction {
-    public final Block block;
+    public final Holder<Block> block;
     public final Set<Property<?>> properties;
 
     public CopyStateAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        block = ((MixinCopyBlockState) function).getBlock().value();
+        block = ((MixinCopyBlockState) function).getBlock();
         properties = ((MixinCopyBlockState) function).getProperties();
     }
 
     public CopyStateAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        block = BuiltInRegistries.BLOCK.getOptional(buf.readResourceLocation()).orElseThrow();
+        block = BuiltInRegistries.BLOCK.getHolderOrThrow(buf.readResourceKey(Registries.BLOCK));
 
         int count = buf.readInt();
-        StateDefinition<Block, BlockState> stateDefinition = block.getStateDefinition();
+        StateDefinition<Block, BlockState> stateDefinition = block.value().getStateDefinition();
 
         properties = new HashSet<>();
 
@@ -43,7 +45,7 @@ public class CopyStateAliFunction extends LootConditionalAliFunction {
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(block));
+        buf.writeResourceKey(block.unwrap().orThrow());
         buf.writeInt(properties.size());
         properties.forEach((property) -> buf.writeUtf(property.getName()));
     }

@@ -2,42 +2,44 @@ package com.yanny.ali.plugin.condition;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.mixin.MixinBonusLevelTableCondition;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public class TableBonusAliCondition implements ILootCondition {
-    public final Enchantment enchantment;
-    public final float[] values;
+    public final Holder<Enchantment> enchantment;
+    public final List<Float> values;
 
     public TableBonusAliCondition(IContext context, LootItemCondition condition) {
-        enchantment = ((MixinBonusLevelTableCondition) condition).getEnchantment();
-        values = ((MixinBonusLevelTableCondition) condition).getValues();
+        enchantment = ((BonusLevelTableCondition) condition).enchantment();
+        values = ((BonusLevelTableCondition) condition).values();
     }
 
     public TableBonusAliCondition(IContext context, FriendlyByteBuf buf) {
-        enchantment = BuiltInRegistries.ENCHANTMENT.get(buf.readResourceLocation());
+        enchantment = BuiltInRegistries.ENCHANTMENT.getHolderOrThrow(buf.readResourceKey(Registries.ENCHANTMENT));
 
         int count = buf.readInt();
 
-        values = new float[count];
+        values = new LinkedList<>();
 
         for (int i = 0; i < count; i++) {
-            values[i] = buf.readFloat();
+            values.add(buf.readFloat());
         }
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
-        buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.ENCHANTMENT.getKey(enchantment)));
-        buf.writeInt(values.length);
+        buf.writeResourceKey(enchantment.unwrap().orThrow());
+        buf.writeInt(values.size());
 
         for (float value : values) {
             buf.writeFloat(value);

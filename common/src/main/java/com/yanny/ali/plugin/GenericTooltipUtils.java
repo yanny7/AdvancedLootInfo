@@ -2,24 +2,26 @@ package com.yanny.ali.plugin;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.ILootFunction;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.mixin.*;
+import com.yanny.ali.mixin.MixinApplyBonusCount;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.stats.Stat;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -36,13 +38,13 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
 import static com.yanny.ali.plugin.TooltipUtils.*;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getConditionsTooltip(int pad, List<ILootCondition> conditions) {
@@ -58,11 +60,11 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static List<Component> getFormulaTooltip(int pad, ApplyBonusCount.Formula formula) {
-        List<Component> components = new LinkedList<>(getResourceLocationTooltip(pad, "ali.property.common.formula", formula.getType()));
+        List<Component> components = new LinkedList<>(getResourceLocationTooltip(pad, "ali.property.common.formula", formula.getType().id()));
 
         if (formula.getType() == ApplyBonusCount.BinomialWithBonusCount.TYPE) {
             components.addAll(getIntegerTooltip(pad + 1, "ali.property.common.extra_rounds", ((MixinApplyBonusCount.BinomialWithBonusCount) formula).getExtraRounds()));
-            components.addAll(getFloatTooltip(pad + 1, "ali.property.common.probability", ((MixinApplyBonusCount.BinomialWithBonusCount) formula).getProbability()));
+            components.addAll(getFloatTooltip(pad + 1, "ali.property.common.probability", Optional.of(((MixinApplyBonusCount.BinomialWithBonusCount) formula).getProbability())));
         } else if (formula.getType() == ApplyBonusCount.UniformBonusCount.TYPE) {
             components.addAll(getIntegerTooltip(pad + 1, "ali.property.common.bonus_multiplier", ((MixinApplyBonusCount.UniformBonusCount) formula).getBonusMultiplier()));
         }
@@ -73,13 +75,13 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getNameSourceTooltip(int pad, CopyNameFunction.NameSource source) {
-        return getEnumTooltip(pad, "ali.property.common.name_source", "name_source", source);
+        return getEnumTooltip(pad, "ali.property.common.name_source", "name_source", Optional.of(source));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getBlockTooltip(int pad, Block block) {
-        return List.of(pad(pad, translatable("ali.property.common.block", value(translatable(block.getDescriptionId())))));
+    public static List<Component> getBlockTooltip(int pad, Holder<Block> block) {
+        return List.of(pad(pad, translatable("ali.property.common.block", value(translatable(block.value().getDescriptionId())))));
     }
 
     @NotNull
@@ -101,25 +103,23 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantmentsTooltip(int pad, List<Enchantment> enchantments) {
+    public static List<Component> getEnchantmentsTooltip(int pad, Optional<HolderSet<Enchantment>> enchantments) {
         List<Component> components = new LinkedList<>();
 
-        if (!enchantments.isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.common.enchantments")));
-            enchantments.forEach((enchantment) -> components.addAll(getEnchantmentTooltip(pad + 1, enchantment)));
-        }
+        enchantments.ifPresent((e) -> {
+            if (e.size() > 0) {
+                components.add(pad(pad, translatable("ali.property.common.enchantments")));
+                e.forEach((enchantment) -> components.addAll(getEnchantmentTooltip(pad + 1, Optional.of(enchantment))));
+            }
+        });
 
         return components;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getEnchantmentTooltip(int pad, @Nullable Enchantment enchantment) {
-        if (enchantment != null) {
-            return List.of(pad(pad, translatable("ali.property.common.enchantment", value(translatable(enchantment.getDescriptionId())))));
-        } else {
-            return List.of();
-        }
+    public static List<Component> getEnchantmentTooltip(int pad, Optional<Holder<Enchantment>> enchantment) {
+        return enchantment.map((e) -> List.of(pad(pad, translatable("ali.property.common.enchantment", value(translatable(e.value().getDescriptionId())))))).orElse(List.of());
     }
 
     @NotNull
@@ -140,24 +140,21 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable("ali.property.common.modifier")));
 
-        components.addAll(getStringTooltip(pad + 1, "ali.property.common.name", modifier.name()));
+        components.addAll(getStringTooltip(pad + 1, "ali.property.common.name", Optional.ofNullable(modifier.name())));
         components.addAll(getAttributeTooltip(pad + 1, modifier.attribute()));
         components.addAll(getOperationTooltip(pad + 1, modifier.operation()));
         components.addAll(getRangeValueTooltip(pad + 1, "ali.property.common.amount", modifier.amount()));
+        components.addAll(getUUIDTooltip(pad + 1, modifier.id()));
 
-        if (modifier.id() != null) {
-            components.addAll(getUUIDTooltip(pad + 1, modifier.id()));
-        }
-
-        components.addAll(getEquipmentSlotsTooltip(pad + 1, Arrays.asList(modifier.slots())));
+        components.addAll(getEquipmentSlotsTooltip(pad + 1, modifier.slots()));
 
         return components;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getAttributeTooltip(int pad, Attribute attribute) {
-        return List.of(pad(pad, translatable("ali.property.common.attribute", value(translatable(attribute.getDescriptionId())))));
+    public static List<Component> getAttributeTooltip(int pad, Holder<Attribute> attribute) {
+        return List.of(pad(pad, translatable("ali.property.common.attribute", value(translatable(attribute.value().getDescriptionId())))));
     }
 
     @Unmodifiable
@@ -168,8 +165,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getUUIDTooltip(int pad, UUID uuid) {
-        return List.of(pad(pad, translatable("ali.property.common.uuid", value(uuid))));
+    public static List<Component> getUUIDTooltip(int pad, Optional<UUID> uuid) {
+        return uuid.map((u) -> List.of(pad(pad, translatable("ali.property.common.uuid", value(u))))).orElse(List.of());
     }
 
     @NotNull
@@ -207,18 +204,19 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getBlockEntityTypeTooltip(int pad, BlockEntityType<?> blockEntityType) {
-        return List.of(pad(pad, translatable("ali.property.common.block_entity_type", value(Objects.requireNonNull(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityType))))));
+    public static List<Component> getBlockEntityTypeTooltip(int pad, Holder<BlockEntityType<?>> blockEntityType) {
+        ResourceLocation location = Objects.requireNonNull(blockEntityType.value().builtInRegistryHolder()).unwrapKey().orElseThrow().location();
+        return List.of(pad(pad, translatable("ali.property.common.block_entity_type", value(location))));
     }
 
     @NotNull
-    public static List<Component> getPotionTooltip(int pad, @Nullable Potion potion) {
+    public static List<Component> getPotionTooltip(int pad, Optional<Holder<Potion>> potion) {
         List<Component> components = new LinkedList<>();
 
-        if (potion != null) {
+        potion.ifPresent((p) -> {
             components.add(pad(pad, translatable("ali.property.common.potion")));
-            components.addAll(getMobEffectInstancesTooltip(pad + 1, potion.getEffects()));
-        }
+            components.addAll(getMobEffectInstancesTooltip(pad + 1, p.value().getEffects()));
+        });
 
         return components;
     }
@@ -230,12 +228,12 @@ public class GenericTooltipUtils {
         if (!mobEffectInstances.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.common.mob_effects")));
             mobEffectInstances.forEach((effectInstance) -> {
-                components.addAll(getMobEffectTooltip(pad + 1, effectInstance.getEffect()));
+                components.addAll(getMobEffectTooltip(pad + 1, Holder.direct(effectInstance.getEffect())));
                 components.addAll(getIntegerTooltip(pad + 2, "ali.property.common.amplifier", effectInstance.getAmplifier()));
                 components.addAll(getIntegerTooltip(pad + 2, "ali.property.common.duration", effectInstance.getDuration()));
-                components.addAll(getBooleanTooltip(pad + 2, "ali.property.common.is_ambient", effectInstance.isAmbient()));
-                components.addAll(getBooleanTooltip(pad + 2, "ali.property.common.is_visible", effectInstance.isVisible()));
-                components.addAll(getBooleanTooltip(pad + 2, "ali.property.common.show_icon", effectInstance.showIcon()));
+                components.addAll(getBooleanTooltip(pad + 2, "ali.property.common.is_ambient", Optional.of(effectInstance.isAmbient())));
+                components.addAll(getBooleanTooltip(pad + 2, "ali.property.common.is_visible", Optional.of(effectInstance.isVisible())));
+                components.addAll(getBooleanTooltip(pad + 2, "ali.property.common.show_icon", Optional.of(effectInstance.showIcon())));
             });
         }
 
@@ -244,23 +242,22 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getMobEffectTooltip(int pad, MobEffect mobEffect) {
-        return List.of(pad(pad, translatable("ali.property.common.mob_effect", value(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect))))));
+    public static List<Component> getMobEffectTooltip(int pad, Holder<MobEffect> mobEffect) {
+        return List.of(pad(pad, translatable("ali.property.common.mob_effect", value(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect.value()))))));
     }
 
     @NotNull
-    public static List<Component> getStatePropertiesPredicateTooltip(int pad, StatePropertiesPredicate propertiesPredicate) {
+    public static List<Component> getStatePropertiesPredicateTooltip(int pad, Optional<StatePropertiesPredicate> propertiesPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (propertiesPredicate != StatePropertiesPredicate.ANY) {
-            MixinStatePropertiesPredicate predicate = (MixinStatePropertiesPredicate) propertiesPredicate;
-            List<StatePropertiesPredicate.PropertyMatcher> matchers = predicate.getProperties();
+        propertiesPredicate.ifPresent((predicate) -> {
+            List<StatePropertiesPredicate.PropertyMatcher> matchers = predicate.properties();
 
             if (!matchers.isEmpty()) {
                 components.add(pad(pad, translatable("ali.property.common.state_properties_predicate")));
                 matchers.forEach((propertyMatcher) -> components.addAll(getPropertyMatcherTooltip(pad + 1, propertyMatcher)));
             }
-        }
+        });
 
         return components;
     }
@@ -268,25 +265,26 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getPropertyMatcherTooltip(int pad, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
         List<Component> components = new LinkedList<>();
+        String name = propertyMatcher.name();
 
-        if (propertyMatcher instanceof MixinStatePropertiesPredicate.ExactPropertyMatcher matcher) {
-            components.add(pad(pad, keyValue(matcher.getName(), matcher.getValue())));
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
+            components.add(pad(pad, keyValue(name, matcher.value())));
         }
-        if (propertyMatcher instanceof MixinStatePropertiesPredicate.RangedPropertyMatcher matcher) {
-            String min = matcher.getMinValue();
-            String max = matcher.getMaxValue();
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
+            Optional<String> min = matcher.minValue();
+            Optional<String> max = matcher.maxValue();
 
-            if (min != null) {
-                if (max != null) {
-                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_both", matcher.getName(), min, max))));
+            if (min.isPresent()) {
+                if (max.isPresent()) {
+                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_both", name, min.get(), max.get()))));
                 } else {
-                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_gte", matcher.getName(), min))));
+                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_gte", name, min.get()))));
                 }
             } else {
-                if (max != null) {
-                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_lte", matcher.getName(), max))));
+                if (max.isPresent()) {
+                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_lte", name, max.get()))));
                 } else {
-                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_any", matcher.getName()))));
+                    components.add(pad(pad, value(translatable("ali.property.common.ranged_property_any", name))));
                 }
             }
         }
@@ -295,18 +293,17 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getDamageSourcePredicateTooltip(int pad, DamageSourcePredicate damagePredicate) {
+    public static List<Component> getDamageSourcePredicateTooltip(int pad, Optional<DamageSourcePredicate> damagePredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (damagePredicate != DamageSourcePredicate.ANY) {
-            MixinDamageSourcePredicate predicate = (MixinDamageSourcePredicate) damagePredicate;
-            List<TagPredicate<DamageType>> tagPredicates = predicate.getTags();
+        damagePredicate.ifPresent((predicate) -> {
+            List<TagPredicate<DamageType>> tagPredicates = predicate.tags();
 
             components.add(pad(pad, translatable("ali.property.common.damage_source_predicate")));
             components.addAll(getTagPredicatesTooltip(pad + 1, tagPredicates));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.direct_entity", getEntityPredicateTooltip(pad + 2, predicate.getDirectEntity())));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.source_entity", getEntityPredicateTooltip(pad + 2, predicate.getSourceEntity())));
-        }
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.direct_entity", getEntityPredicateTooltip(pad + 2, predicate.directEntity())));
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.source_entity", getEntityPredicateTooltip(pad + 2, predicate.sourceEntity())));
+        });
 
         return components;
     }
@@ -318,9 +315,7 @@ public class GenericTooltipUtils {
         if (!tagPredicates.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.common.tag_predicates")));
             tagPredicates.forEach((tagPredicate) -> {
-                MixinTagPredicate<?> predicate = (MixinTagPredicate<?>) tagPredicate;
-
-                components.add(pad(pad + 1, keyValue(predicate.getTag().location().toString(), predicate.getExpected())));
+                components.add(pad(pad + 1, keyValue(tagPredicate.tag().location().toString(), tagPredicate.expected())));
             });
         }
 
@@ -328,363 +323,332 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEntityPredicateTooltip(int pad, EntityPredicate entityPredicate) {
+    public static List<Component> getEntityPredicateTooltip(int pad, Optional<EntityPredicate> entityPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (entityPredicate != EntityPredicate.ANY) {
-            MixinEntityPredicate predicate = (MixinEntityPredicate) entityPredicate;
-
-            components.addAll(getEntityTypePredicateTooltip(pad, predicate.getEntityType()));
-            components.addAll(getComponentsTooltip(pad, "ali.property.common.distance_to_player", getDistancePredicateTooltip(pad + 1, predicate.getDistanceToPlayer())));
-            components.addAll(getComponentsTooltip(pad, "ali.property.common.location", getLocationPredicateTooltip(pad + 1, predicate.getLocation())));
-            components.addAll(getComponentsTooltip(pad, "ali.property.common.stepping_on_location", getLocationPredicateTooltip(pad + 1, predicate.getSteppingOnLocation())));
-            components.addAll(getMobEffectPredicateTooltip(pad, predicate.getEffects()));
-            components.addAll(getNbtPredicateTooltip(pad, predicate.getNbt()));
-            components.addAll(getEntityFlagsPredicateTooltip(pad, predicate.getFlags()));
-            components.addAll(getEntityEquipmentPredicateTooltip(pad, predicate.getEquipment()));
-            components.addAll(getEntitySubPredicateTooltip(pad, predicate.getSubPredicate()));
-            components.addAll(getComponentsTooltip(pad, "ali.property.common.vehicle", getEntityPredicateTooltip(pad + 1, predicate.getVehicle())));
-            components.addAll(getComponentsTooltip(pad, "ali.property.common.passenger", getEntityPredicateTooltip(pad + 1, predicate.getPassenger())));
-            components.addAll(getComponentsTooltip(pad, "ali.property.common.targeted_entity", getEntityPredicateTooltip(pad + 1, predicate.getTargetedEntity())));
-            components.addAll(getStringTooltip(pad, "ali.property.common.team", predicate.getTeam()));
-        }
+        entityPredicate.ifPresent((predicate) -> {
+            components.addAll(getEntityTypePredicateTooltip(pad, predicate.entityType()));
+            components.addAll(getComponentsTooltip(pad, "ali.property.common.distance_to_player", getDistancePredicateTooltip(pad + 1, predicate.distanceToPlayer())));
+            components.addAll(getComponentsTooltip(pad, "ali.property.common.location", getLocationPredicateTooltip(pad + 1, predicate.location())));
+            components.addAll(getComponentsTooltip(pad, "ali.property.common.stepping_on_location", getLocationPredicateTooltip(pad + 1, predicate.steppingOnLocation())));
+            components.addAll(getMobEffectPredicateTooltip(pad, predicate.effects()));
+            components.addAll(getNbtPredicateTooltip(pad, predicate.nbt()));
+            components.addAll(getEntityFlagsPredicateTooltip(pad, predicate.flags()));
+            components.addAll(getEntityEquipmentPredicateTooltip(pad, predicate.equipment()));
+            components.addAll(getEntitySubPredicateTooltip(pad, predicate.subPredicate()));
+            components.addAll(getComponentsTooltip(pad, "ali.property.common.vehicle", getEntityPredicateTooltip(pad + 1, predicate.vehicle())));
+            components.addAll(getComponentsTooltip(pad, "ali.property.common.passenger", getEntityPredicateTooltip(pad + 1, predicate.passenger())));
+            components.addAll(getComponentsTooltip(pad, "ali.property.common.targeted_entity", getEntityPredicateTooltip(pad + 1, predicate.targetedEntity())));
+            components.addAll(getStringTooltip(pad, "ali.property.common.team", predicate.team()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEntityTypePredicateTooltip(int pad, EntityTypePredicate entityTypePredicate) {
+    public static List<Component> getEntityTypePredicateTooltip(int pad, Optional<EntityTypePredicate> entityTypePredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (entityTypePredicate != EntityTypePredicate.ANY) {
-            if (entityTypePredicate instanceof MixinEntityTypePredicate.TypePredicate typePredicate) {
-                components.addAll(getComponentTooltip(pad, "ali.property.common.entity_type", value(typePredicate.getType().getDescription())));
+        entityTypePredicate.ifPresent((predicate) -> {
+            HolderSet<EntityType<?>> holderSet = predicate.types();
+            Optional<TagKey<EntityType<?>>> tagKey = holderSet.unwrapKey();
+
+            if (holderSet.size() > 0 || tagKey.isPresent()) {
+                components.add(pad(pad, translatable("ali.property.common.entity_types")));
+                holderSet.forEach((type) -> {
+                    components.addAll(getComponentTooltip(pad + 1, "ali.property.common.entity_type", Optional.of(value(translatable(type.value().getDescriptionId())))));
+                });
+                components.addAll(getTagKeyTooltip(pad + 1, "ali.property.common.entity_type", tagKey));
             }
-            if (entityTypePredicate instanceof MixinEntityTypePredicate.TagPredicate tagPredicate) {
-                components.addAll(getComponentTooltip(pad, "ali.property.common.entity_type", value(tagPredicate.getTag().location())));
-            }
-        }
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getDistancePredicateTooltip(int pad, DistancePredicate distancePredicate) {
+    public static List<Component> getDistancePredicateTooltip(int pad, Optional<DistancePredicate> distancePredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (distancePredicate != DistancePredicate.ANY) {
-            MixinDistancePredicate predicate = (MixinDistancePredicate) distancePredicate;
-
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.x", predicate.getX()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.y", predicate.getY()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.z", predicate.getZ()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.horizontal", predicate.getHorizontal()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.absolute", predicate.getAbsolute()));
-        }
+        distancePredicate.ifPresent((predicate) -> {
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.x", predicate.x()));
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.y", predicate.y()));
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.z", predicate.z()));
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.horizontal", predicate.horizontal()));
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.absolute", predicate.absolute()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getLocationPredicateTooltip(int pad, LocationPredicate locationPredicate) {
+    public static List<Component> getLocationPredicateTooltip(int pad, Optional<LocationPredicate> locationPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (locationPredicate != LocationPredicate.ANY) {
-            MixinLocationPredicate predicate = (MixinLocationPredicate) locationPredicate;
-
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.x", predicate.getX()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.y", predicate.getY()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.z", predicate.getZ()));
-            components.addAll(getResourceKeyTooltip(pad, "ali.property.common.biome", predicate.getBiome()));
-            components.addAll(getResourceKeyTooltip(pad, "ali.property.common.structure", predicate.getStructure()));
-            components.addAll(getResourceKeyTooltip(pad, "ali.property.common.dimension", predicate.getDimension()));
-            components.addAll(getBooleanTooltip(pad, "ali.property.common.smokey", predicate.getSmokey()));
-            components.addAll(getLightPredicateTooltip(pad, predicate.getLight()));
-            components.addAll(getBlockPredicateTooltip(pad, predicate.getBlock()));
-            components.addAll(getFluidPredicateTooltip(pad, predicate.getFluid()));
-        }
+        locationPredicate.ifPresent((predicate) -> {
+            components.addAll(getPositionPredicateTooltip(pad, predicate.position()));
+            components.addAll(getResourceKeyTooltip(pad, "ali.property.common.biome", predicate.biome()));
+            components.addAll(getResourceKeyTooltip(pad, "ali.property.common.structure", predicate.structure()));
+            components.addAll(getResourceKeyTooltip(pad, "ali.property.common.dimension", predicate.dimension()));
+            components.addAll(getBooleanTooltip(pad, "ali.property.common.smokey", predicate.smokey()));
+            components.addAll(getLightPredicateTooltip(pad, predicate.light()));
+            components.addAll(getBlockPredicateTooltip(pad, predicate.block()));
+            components.addAll(getFluidPredicateTooltip(pad, predicate.fluid()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getLightPredicateTooltip(int pad, LightPredicate lightPredicate) {
+    public static List<Component> getPositionPredicateTooltip(int pad, Optional<LocationPredicate.PositionPredicate> positionPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (lightPredicate != LightPredicate.ANY) {
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.light", ((MixinLightPredicate) lightPredicate).getComposite()));
-        }
+        positionPredicate.ifPresent((predicate) -> {
+            components.add(pad(pad, translatable("ali.property.common.position")));
+            components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.x", predicate.x()));
+            components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.y", predicate.y()));
+            components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.z", predicate.z()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getBlockPredicateTooltip(int pad, BlockPredicate blockPredicate) {
+    public static List<Component> getLightPredicateTooltip(int pad, Optional<LightPredicate> lightPredicate) {
+        return lightPredicate.map((predicate) -> getMinMaxBoundsTooltip(pad, "ali.property.common.light", predicate.composite())).orElse(List.of());
+    }
+
+    @NotNull
+    public static List<Component> getBlockPredicateTooltip(int pad, Optional<BlockPredicate> blockPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (blockPredicate != BlockPredicate.ANY) {
-            MixinBlockPredicate predicate = (MixinBlockPredicate) blockPredicate;
-
+        blockPredicate.ifPresent((predicate) -> {
             components.add(pad(pad, translatable("ali.property.common.block_predicate")));
-            components.addAll(getTagKeyTooltip(pad + 1, "ali.property.common.tag", predicate.getTag()));
+            components.addAll(getTagKeyTooltip(pad + 1, "ali.property.common.tag", predicate.tag()));
+            predicate.blocks().ifPresent((blocks) -> {
+                if (blocks.size() > 0) {
+                    components.add(pad(pad + 1, translatable("ali.property.common.blocks")));
+                    blocks.forEach((block) -> components.addAll(getBlockTooltip(pad + 2, block)));
+                }
+            });
 
-            if (predicate.getBlocks() != null) {
-                components.add(pad(pad + 1, translatable("ali.property.common.blocks")));
-
-                predicate.getBlocks().forEach((block) -> components.addAll(getBlockTooltip(pad + 2, block)));
-            }
-
-            components.addAll(getStatePropertiesPredicateTooltip(pad, predicate.getProperties()));
-            components.addAll(getNbtPredicateTooltip(pad, predicate.getNbt()));
-        }
-
-        return components;
-    }
-
-    @NotNull
-    public static List<Component> getNbtPredicateTooltip(int pad, NbtPredicate nbtPredicate) {
-        List<Component> components = new LinkedList<>();
-
-        if (nbtPredicate != NbtPredicate.ANY) {
-            components.add(pad(pad, translatable("ali.property.common.nbt", value(((MixinNbtPredicate) nbtPredicate).getTag()))));
-        }
+            components.addAll(getStatePropertiesPredicateTooltip(pad, predicate.properties()));
+            components.addAll(getNbtPredicateTooltip(pad, predicate.nbt()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getFluidPredicateTooltip(int pad, FluidPredicate fluidPredicate) {
+    public static List<Component> getNbtPredicateTooltip(int pad, Optional<NbtPredicate> nbtPredicate) {
+        return nbtPredicate.map((predicate) -> List.of(pad(pad, translatable("ali.property.common.nbt", value(predicate.tag()))))).orElse(List.of());
+    }
+
+    @NotNull
+    public static List<Component> getFluidPredicateTooltip(int pad, Optional<FluidPredicate> fluidPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (fluidPredicate != FluidPredicate.ANY) {
-            MixinFluidPredicate predicate = (MixinFluidPredicate) fluidPredicate;
-
+        fluidPredicate.ifPresent((predicate) -> {
             components.add(pad(pad, translatable("ali.property.common.fluid_predicate")));
-            components.addAll(getTagKeyTooltip(pad + 1, "ali.property.common.tag", predicate.getTag()));
-            components.addAll(getFluidTooltip(pad + 1, predicate.getFluid()));
-            components.addAll(getStatePropertiesPredicateTooltip(pad + 1, predicate.getProperties()));
-        }
+            components.addAll(getTagKeyTooltip(pad + 1, "ali.property.common.tag", predicate.tag()));
+            components.addAll(getFluidTooltip(pad + 1, predicate.fluid()));
+            components.addAll(getStatePropertiesPredicateTooltip(pad + 1, predicate.properties()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getFluidTooltip(int pad, @Nullable Fluid fluid) {
-        List<Component> components = new LinkedList<>();
-
-        if (fluid != null) {
-            components.add(pad(pad, translatable("ali.property.common.fluid", value(translatable(BuiltInRegistries.FLUID.getKey(fluid).toString())))));
-        }
-
-        return components;
+    public static List<Component> getFluidTooltip(int pad, Optional<Holder<Fluid>> fluid) {
+        return fluid.map((f) -> List.of(pad(pad, translatable("ali.property.common.fluid", value(translatable(BuiltInRegistries.FLUID.getKey(f.value()).toString())))))).orElse(List.of());
     }
 
     @NotNull
-    public static List<Component> getMobEffectPredicateTooltip(int pad, MobEffectsPredicate mobEffectsPredicate) {
+    public static List<Component> getMobEffectPredicateTooltip(int pad, Optional<MobEffectsPredicate> mobEffectsPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (mobEffectsPredicate != MobEffectsPredicate.ANY) {
-            MixinMobEffectPredicate predicate = (MixinMobEffectPredicate) mobEffectsPredicate;
-
+        mobEffectsPredicate.ifPresent((predicate) -> {
             components.add(pad(pad, translatable("ali.property.common.mob_effects")));
 
-            predicate.getEffects().forEach((effect, instancePredicate) -> {
+            predicate.effectMap().forEach((effect, instancePredicate) -> {
                 components.addAll(getMobEffectTooltip(pad + 1, effect));
                 components.addAll(getMobEffectInstancePredicateTooltip(pad + 2, instancePredicate));
             });
-        }
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getMobEffectInstancePredicateTooltip(int pad, MobEffectsPredicate.MobEffectInstancePredicate mobEffectInstancePredicate) {
+    public static List<Component> getMobEffectInstancePredicateTooltip(int pad, MobEffectsPredicate.MobEffectInstancePredicate predicate) {
         List<Component> components = new LinkedList<>();
-        MixinMobEffectPredicate.MobEffectInstancePredicate predicate = (MixinMobEffectPredicate.MobEffectInstancePredicate) mobEffectInstancePredicate;
 
-        components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.amplifier", predicate.getAmplifier()));
-        components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.duration", predicate.getDuration()));
-        components.addAll(getBooleanTooltip(pad, "ali.property.common.is_ambient", predicate.getAmbient()));
-        components.addAll(getBooleanTooltip(pad, "ali.property.common.is_visible", predicate.getVisible()));
+        components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.amplifier", predicate.amplifier()));
+        components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.duration", predicate.duration()));
+        components.addAll(getBooleanTooltip(pad, "ali.property.common.is_ambient", predicate.ambient()));
+        components.addAll(getBooleanTooltip(pad, "ali.property.common.is_visible", predicate.visible()));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEntityFlagsPredicateTooltip(int pad, EntityFlagsPredicate entityFlagsPredicate) {
+    public static List<Component> getEntityFlagsPredicateTooltip(int pad, Optional<EntityFlagsPredicate> entityFlagsPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (entityFlagsPredicate != EntityFlagsPredicate.ANY) {
-            MixinEntityFlagsPredicate predicate = (MixinEntityFlagsPredicate) entityFlagsPredicate;
-
+        entityFlagsPredicate.ifPresent((predicate) -> {
             components.add(pad(pad, translatable("ali.property.common.entity_flags")));
-            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_on_fire", predicate.getIsOnFire()));
-            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_baby", predicate.getIsBaby()));
-            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_crouching", predicate.getIsCrouching()));
-            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_sprinting", predicate.getIsSprinting()));
-            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_swimming", predicate.getIsSwimming()));
-        }
+            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_on_fire", predicate.isOnFire()));
+            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_baby", predicate.isBaby()));
+            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_crouching", predicate.isCrouching()));
+            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_sprinting", predicate.isSprinting()));
+            components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.is_swimming", predicate.isSwimming()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEntityEquipmentPredicateTooltip(int pad, EntityEquipmentPredicate entityEquipmentPredicate) {
+    public static List<Component> getEntityEquipmentPredicateTooltip(int pad, Optional<EntityEquipmentPredicate> entityEquipmentPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (entityEquipmentPredicate != EntityEquipmentPredicate.ANY) {
-            MixinEntityEquipmentPredicate predicate = (MixinEntityEquipmentPredicate) entityEquipmentPredicate;
-
+        entityEquipmentPredicate.ifPresent((predicate) -> {
             components.add(pad(pad, translatable("ali.property.common.entity_equipment")));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.head", getItemPredicateTooltip(pad + 2, predicate.getHead())));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.chest", getItemPredicateTooltip(pad + 2, predicate.getChest())));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.legs", getItemPredicateTooltip(pad + 2, predicate.getLegs())));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.feet", getItemPredicateTooltip(pad + 2, predicate.getFeet())));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.mainhand", getItemPredicateTooltip(pad + 2, predicate.getMainhand())));
-            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.offhand", getItemPredicateTooltip(pad + 2, predicate.getOffhand())));
-        }
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.head", getItemPredicateTooltip(pad + 2, predicate.head())));
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.chest", getItemPredicateTooltip(pad + 2, predicate.chest())));
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.legs", getItemPredicateTooltip(pad + 2, predicate.legs())));
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.feet", getItemPredicateTooltip(pad + 2, predicate.feet())));
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.mainhand", getItemPredicateTooltip(pad + 2, predicate.mainhand())));
+            components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.offhand", getItemPredicateTooltip(pad + 2, predicate.offhand())));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getItemPredicateTooltip(int pad, ItemPredicate itemPredicate) {
+    public static List<Component> getItemPredicateTooltip(int pad, Optional<ItemPredicate> itemPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (itemPredicate != ItemPredicate.ANY) {
-            MixinItemPredicate predicate = (MixinItemPredicate) itemPredicate;
-            Set<Item> items = predicate.getItems();
-            EnchantmentPredicate[] enchantments = predicate.getEnchantments();
-            EnchantmentPredicate[] storedDnchantments = predicate.getEnchantments();
+        itemPredicate.ifPresent((predicate) -> {
+            Optional<HolderSet<Item>> items = predicate.items();
+            List<EnchantmentPredicate> enchantments = predicate.enchantments();
+            List<EnchantmentPredicate> storedEnchantments = predicate.storedEnchantments();
 
-            components.addAll(getTagKeyTooltip(pad, "ali.property.common.tag", predicate.getTag()));
+            components.addAll(getTagKeyTooltip(pad, "ali.property.common.tag", predicate.tag()));
 
-            if (items != null && !items.isEmpty()) {
-                components.add(pad(pad, translatable("ali.property.common.items")));
+            items.ifPresent((i) -> {
+                if (i.size() > 0) {
+                    components.add(pad(pad, translatable("ali.property.common.items")));
+                    i.forEach((item) -> components.addAll(getItemTooltip(pad + 1, item)));
+                }
+            });
 
-                items.forEach((item) -> components.addAll(getItemTooltip(pad + 1, item)));
-            }
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.count", predicate.count()));
+            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.durability", predicate.durability()));
 
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.count", predicate.getCount()));
-            components.addAll(getMinMaxBoundsTooltip(pad, "ali.property.common.durability", predicate.getDurability()));
-
-            if (enchantments.length > 0) {
+            if (!enchantments.isEmpty()) {
                 components.add(pad(pad, translatable("ali.property.common.enchantments")));
 
                 for (EnchantmentPredicate enchantment : enchantments) {
-                    components.addAll(getEnchantmentPredicateTooltip(pad + 1, enchantment));
+                    components.addAll(getEnchantmentPredicateTooltip(pad + 1, Optional.ofNullable(enchantment)));
                 }
             }
 
-            if (storedDnchantments.length > 0) {
+            if (!storedEnchantments.isEmpty()) {
                 components.add(pad(pad, translatable("ali.property.common.stored_enchantments")));
 
-                for (EnchantmentPredicate enchantment : storedDnchantments) {
-                    components.addAll(getEnchantmentPredicateTooltip(pad + 1, enchantment));
+                for (EnchantmentPredicate enchantment : storedEnchantments) {
+                    components.addAll(getEnchantmentPredicateTooltip(pad + 1, Optional.ofNullable(enchantment)));
                 }
             }
 
-            components.addAll(getPotionTooltip(pad, predicate.getPotion()));
-            components.addAll(getNbtPredicateTooltip(pad, predicate.getNbt()));
-        }
+            components.addAll(getPotionTooltip(pad, predicate.potion()));
+            components.addAll(getNbtPredicateTooltip(pad, predicate.nbt()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEnchantmentPredicateTooltip(int pad, EnchantmentPredicate enchantmentPredicate) {
+    public static List<Component> getEnchantmentPredicateTooltip(int pad, Optional<EnchantmentPredicate> enchantmentPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (enchantmentPredicate != EnchantmentPredicate.ANY) {
-            MixinEnchantmentPredicate predicate = (MixinEnchantmentPredicate) enchantmentPredicate;
-
-            components.addAll(getEnchantmentTooltip(pad, predicate.getEnchantment()));
-            components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.level", predicate.getLevel()));
-        }
+        enchantmentPredicate.ifPresent((predicate) -> {
+            components.addAll(getEnchantmentTooltip(pad, predicate.enchantment()));
+            components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.level", predicate.level()));
+        });
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEntitySubPredicateTooltip(int pad, EntitySubPredicate entitySubPredicate) {
+    public static List<Component> getEntitySubPredicateTooltip(int pad, Optional<EntitySubPredicate> entitySubPredicate) {
         List<Component> components = new LinkedList<>();
 
-        if (entitySubPredicate != EntitySubPredicate.ANY) {
-            Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
+        entitySubPredicate.ifPresent((subPredicate) -> {
+            Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == subPredicate.type()).findFirst();
 
             optional.ifPresent((entry) -> {
                 components.add(pad(pad, translatable("ali.property.common.entity_sub_predicate", entry.getKey())));
 
-                if (entitySubPredicate instanceof LighthingBoltPredicate predicate) {
-                    MixinLighthingBoltPredicate boltPredicate = (MixinLighthingBoltPredicate) predicate;
-
-                    components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.blocks_on_fire", boltPredicate.getBlocksSetOnFire()));
-                    components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.stuck_entity", getEntityPredicateTooltip(pad + 2, boltPredicate.getEntityStruck())));
-                } else if (entitySubPredicate instanceof FishingHookPredicate predicate) {
-                    MixinFishingHookPredicate fishingHookPredicate = (MixinFishingHookPredicate) predicate;
-
-                    components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.in_open_water", fishingHookPredicate.isInOpenWater()));
-                } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
-                    MixinPlayerPredicate playerPredicate = (MixinPlayerPredicate) predicate;
-
-                    components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.level", playerPredicate.getLevel()));
-                    components.addAll(getGameTypeTooltip(pad + 1, playerPredicate.getGameType()));
-                    components.addAll(getStatsTooltip(pad + 1, playerPredicate.getStats()));
-                    components.addAll(getRecipesTooltip(pad + 1, playerPredicate.getRecipes()));
-                    components.addAll(getAdvancementsTooltip(pad + 1, playerPredicate.getAdvancements()));
-                } else if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
-                    MixinSlimePredicate predicate = (MixinSlimePredicate) slimePredicate;
-
-                    components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.size", predicate.getSize()));
+                if (subPredicate instanceof LightningBoltPredicate predicate) {
+                    components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.blocks_on_fire", predicate.blocksSetOnFire()));
+                    components.addAll(getComponentsTooltip(pad + 1, "ali.property.common.stuck_entity", getEntityPredicateTooltip(pad + 2, predicate.entityStruck())));
+                } else if (subPredicate instanceof FishingHookPredicate predicate) {
+                    components.addAll(getBooleanTooltip(pad + 1, "ali.property.common.in_open_water", predicate.inOpenWater()));
+                } else if (subPredicate instanceof PlayerPredicate predicate) {
+                    components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.level", predicate.level()));
+                    components.addAll(getGameTypeTooltip(pad + 1, predicate.gameType()));
+                    components.addAll(getStatsTooltip(pad + 1, predicate.stats()));
+                    components.addAll(getRecipesTooltip(pad + 1, predicate.recipes()));
+                    components.addAll(getAdvancementsTooltip(pad + 1, predicate.advancements()));
+                } else if (subPredicate instanceof SlimePredicate predicate) {
+                    components.addAll(getMinMaxBoundsTooltip(pad + 1, "ali.property.common.size", predicate.size()));
                 } else {
-                    JsonObject jsonObject = entitySubPredicate.serializeCustomData();
+                    EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, subPredicate).result().ifPresent((element) -> {
+                        JsonObject jsonObject = element.getAsJsonObject();
 
-                    if (jsonObject.has("variant")) {
-                        components.addAll(getStringTooltip(pad + 1, "ali.property.common.variant", jsonObject.getAsJsonPrimitive("variant").getAsString()));
-                    } else {
-                        components.addAll(getStringTooltip(pad + 1, "ali.property.common.variant", jsonObject.getAsString()));
-                    }
+                        if (jsonObject.has("variant")) {
+                            components.add(pad(pad + 1, translatable("ali.property.common.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
+                        } else {
+                            components.add(pad(pad + 1, translatable("ali.property.common.variant", jsonObject.toString())));
+                        }
+                    });
                 }
             });
-        }
+        });
 
         return components;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getItemTooltip(int pad, Item item) {
-        return List.of(pad(pad, translatable("ali.property.common.item", value(translatable(item.getDescriptionId())))));
+    public static List<Component> getItemTooltip(int pad, Holder<Item> item) {
+        return List.of(pad(pad, translatable("ali.property.common.item", value(translatable(item.value().getDescriptionId())))));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getGameTypeTooltip(int pad, @Nullable GameType gameType) {
-        if (gameType != null) {
-            return List.of(pad(pad, value(translatable("ali.property.common.game_type", gameType.getShortDisplayName()))));
-        } else {
-            return List.of();
-        }
+    public static List<Component> getGameTypeTooltip(int pad, Optional<GameType> gameType) {
+        return gameType.map((g) -> List.of(pad(pad, value(translatable("ali.property.common.game_type", g.getShortDisplayName()))))).orElse(List.of());
     }
 
     @NotNull
-    public static List<Component> getStatsTooltip(int pad, Map<Stat<?>, MinMaxBounds.Ints> statIntsMap) {
+    public static List<Component> getStatsTooltip(int pad, List<PlayerPredicate.StatMatcher<?>> statMatchers) {
         List<Component> components = new LinkedList<>();
 
-        if (!statIntsMap.isEmpty()) {
+        if (!statMatchers.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.common.stats")));
-            statIntsMap.forEach((stat, ints) -> {
-                Object value = stat.getValue();
+            statMatchers.forEach((stat) -> {
+                Holder<?> value = stat.value();
 
-                if (value instanceof Item item) {
-                    components.addAll(getItemTooltip(pad + 1, item));
-                } else if (value instanceof Block block) {
-                    components.addAll(getBlockTooltip(pad + 1, block));
+                if (value.value() instanceof Item) {
+                    components.addAll(getItemTooltip(pad + 1, (Holder<Item>) value));
+                } else if (value.value() instanceof Block) {
+                    components.addAll(getBlockTooltip(pad + 1, (Holder<Block>) value));
                 } else {
-                    components.add(pad(pad + 1, value));
+                    components.add(pad(pad + 1, value.value().toString()));
                 }
 
-                components.add(pad(pad + 2, keyValue(stat.getType().getDisplayName(), toString((MixinMinMaxBounds.Ints) ints))));
+                components.add(pad(pad + 2, keyValue(stat.type().getDisplayName(), toString(stat.range()))));
             });
         }
 
@@ -713,11 +677,9 @@ public class GenericTooltipUtils {
                 components.add(pad(pad + 1, advancement.toString()));
 
                 if (predicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
-                    components.add(pad(pad + 2, translatable("ali.property.common.done", ((MixinPlayerPredicate.AdvancementDonePredicate) donePredicate).getState())));
+                    components.add(pad(pad + 2, translatable("ali.property.common.done", donePredicate.state())));
                 } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
-                    MixinPlayerPredicate.AdvancementCriterionsPredicate mixPredicate = (MixinPlayerPredicate.AdvancementCriterionsPredicate) criterionsPredicate;
-
-                    mixPredicate.getCriterions().forEach((criterion, state) -> components.add(pad(pad + 2, keyValue(criterion, state))));
+                    criterionsPredicate.criterions().forEach((criterion, state) -> components.add(pad(pad + 2, keyValue(criterion, state))));
                 }
             });
         }
@@ -748,12 +710,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getBooleanTooltip(int pad, String key, @Nullable Boolean value) {
-        if (value != null) {
-            return List.of(pad(pad, translatable(key, value(value))));
-        } else {
-            return List.of();
-        }
+    public static List<Component> getBooleanTooltip(int pad, String key, Optional<Boolean> value) {
+        return value.map((v) -> List.of(pad(pad, translatable(key, value(v))))).orElse(List.of());
     }
 
     @Unmodifiable
@@ -764,38 +722,26 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getLongTooltip(int pad, String key, @Nullable Long value) {
-        if (value != null) {
-            return List.of(pad(pad, translatable(key, value(value))));
-        } else {
-            return List.of();
-        }
+    public static List<Component> getLongTooltip(int pad, String key, Optional<Long> value) {
+        return value.map((v) -> List.of(pad(pad, translatable(key, value(v))))).orElse(List.of());
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getStringTooltip(int pad, String key, @Nullable String value) {
-        if (value != null) {
-            return List.of(pad(pad, translatable(key, value(value))));
-        } else {
-            return List.of();
-        }
+    public static List<Component> getStringTooltip(int pad, String key, Optional<String> value) {
+        return value.map((v) -> List.of(pad(pad, translatable(key, value(v))))).orElse(List.of());
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getFloatTooltip(int pad, String key, @Nullable Float value) {
-        if (value != null) {
-            return List.of(pad(pad, translatable(key, value(value))));
-        } else {
-            return List.of();
-        }
+    public static List<Component> getFloatTooltip(int pad, String key, Optional<Float> value) {
+        return value.map((v) -> List.of(pad(pad, translatable(key, value(v))))).orElse(List.of());
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getEnumTooltip(int pad, String key, String enumName, Enum<?> value) {
-        return List.of(pad(pad, translatable(key, value(translatableType("ali.enum." + enumName, value)))));
+    public static <T extends Enum<T>> List<Component> getEnumTooltip(int pad, String key, String enumName, Optional<T> value) {
+        return value.map((v) -> List.of(pad(pad, translatable(key, value(translatableType("ali.enum." + enumName, v)))))).orElse(List.of());
     }
 
     @Unmodifiable
@@ -818,28 +764,20 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static <T> List<Component> getResourceKeyTooltip(int pad, String key, @Nullable ResourceKey<T> value) {
-        if (value != null) {
-            return List.of(pad(pad, translatable(key, value(value.location()))));
-        } else {
-            return List.of();
-        }
+    public static <T> List<Component> getResourceKeyTooltip(int pad, String key, Optional<ResourceKey<T>> value) {
+        return value.map((v) -> List.of(pad(pad, translatable(key, value(v.location()))))).orElse(List.of());
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getTagKeyTooltip(int pad, String key, @Nullable TagKey<?> value) {
-        if (value != null) {
-            return getResourceLocationTooltip(pad, key, value.location());
-        } else {
-            return List.of();
-        }
+    public static <T> List<Component> getTagKeyTooltip(int pad, String key, Optional<TagKey<T>> value) {
+        return value.map((v) -> getResourceLocationTooltip(pad, key, v.location())).orElse(List.of());
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getComponentTooltip(int pad, String key, Component component) {
-        return List.of(pad(pad, translatable(key, value(component))));
+    public static List<Component> getComponentTooltip(int pad, String key, Optional<Component> component) {
+        return component.map((c) -> List.of(pad(pad, translatable(key, value(c))))).orElse(List.of());
     }
 
     @NotNull
@@ -859,20 +797,18 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         if (ints != MinMaxBounds.Ints.ANY) {
-            MixinMinMaxBounds.Ints absolute = (MixinMinMaxBounds.Ints) ints;
-            components.add(pad(pad, translatable(key, value(toString(absolute)))));
+            components.add(pad(pad, translatable(key, value(toString(ints)))));
         }
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getMinMaxBoundsTooltip(int pad, String key, MinMaxBounds.Doubles ints) {
+    public static List<Component> getMinMaxBoundsTooltip(int pad, String key, MinMaxBounds.Doubles doubles) {
         List<Component> components = new LinkedList<>();
 
-        if (ints != MinMaxBounds.Doubles.ANY) {
-            MixinMinMaxBounds.Doubles absolute = (MixinMinMaxBounds.Doubles) ints;
-            components.add(pad(pad, translatable(key, value(toString(absolute)))));
+        if (doubles != MinMaxBounds.Doubles.ANY) {
+            components.add(pad(pad, translatable(key, value(toString(doubles)))));
         }
 
         return components;
@@ -881,50 +817,43 @@ public class GenericTooltipUtils {
     // PRIVATE
 
     @NotNull
-    private static String toString(MixinMinMaxBounds.Doubles doubles) {
-        Double min = doubles.getMin();
-        Double max = doubles.getMax();
+    private static String toString(MinMaxBounds.Doubles doubles) {
+        Optional<Double> min = doubles.min();
+        Optional<Double> max = doubles.max();
 
-        if (min != null) {
-            if (max != null) {
+        if (min.isPresent()) {
+            if (max.isPresent()) {
                 if (!Objects.equals(min, max)) {
-                    return String.format("%.1f-%.1f", min, max);
+                    return String.format("%.1f-%.1f", min.get(), max.get());
                 } else {
-                    return String.format("=%.1f", min);
+                    return String.format("=%.1f", min.get());
                 }
             } else {
-                return String.format("≥%.1f", min);
+                return String.format("≥%.1f", min.get());
             }
         } else {
-            if (max != null) {
-                return String.format("<%.1f", max);
-            }
-
-            return "???";
+            return max.map(aDouble -> String.format("<%.1f", aDouble)).orElse("???");
         }
     }
 
     @NotNull
-    private static String toString(MixinMinMaxBounds.Ints ints) {
-        Integer min = ints.getMin();
-        Integer max = ints.getMax();
+    private static String toString(MinMaxBounds.Ints ints) {
+        Optional<Integer> min = ints.min();
+        Optional<Integer> max = ints.max();
 
-        if (min != null) {
-            if (max != null) {
+        if (min.isPresent()) {
+            if (max.isPresent()) {
                 if (!Objects.equals(min, max)) {
-                    return String.format("%d-%d", min, max);
+                    return String.format("%d-%d", min.get(), max.get());
                 } else {
-                    return String.format("=%d", min);
+                    return String.format("=%d", min.get());
                 }
             } else {
-                return String.format("≥%d", min);
+                return String.format("≥%d", min.get());
             }
         } else {
-            if (max != null) {
-                return String.format("<%d", max);
-            }
+            return max.map(integer -> String.format("<%d", integer)).orElse("???");
 
-            return "???";
         }
     }
 }

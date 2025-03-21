@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.condition;
 import com.google.gson.JsonElement;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.mixin.MixinItemEntityPropertyCondition;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,8 +14,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.yanny.ali.plugin.TooltipUtils.*;
 
 public class EntityPropertiesAliCondition implements ILootCondition {
     public final LootContext.EntityTarget target;

@@ -4,7 +4,9 @@ import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinSetAttributesFunction;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,7 +14,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class SetAttributesAliFunction extends LootConditionalAliFunction {
@@ -21,14 +22,13 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
     public SetAttributesAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         modifiers = ((MixinSetAttributesFunction) function).getModifiers().stream().map((f) -> {
-            MixinSetAttributesFunction.Modifier m = (MixinSetAttributesFunction.Modifier) f;
             return new Modifier(
-                    m.getName(),
-                    m.getAttribute(),
-                    m.getOperation(),
-                    context.utils().convertNumber(context, m.getAmount()),
-                    m.getId(),
-                    m.getSlots()
+                    f.name(),
+                    f.attribute(),
+                    f.operation(),
+                    context.utils().convertNumber(context, f.amount()),
+                    f.id(),
+                    f.slots()
             );
         }).toList();
     }
@@ -41,17 +41,17 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
 
         for (int i = 0; i < count; i++) {
             String name = buf.readUtf();
-            Attribute attribute = BuiltInRegistries.ATTRIBUTE.getOptional(buf.readResourceLocation()).orElseThrow();
+            Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(buf.readResourceKey(Registries.ATTRIBUTE));
             AttributeModifier.Operation operation = AttributeModifier.Operation.fromValue(buf.readInt());
             RangeValue amount = new RangeValue(buf);
-            UUID id = buf.readOptional(FriendlyByteBuf::readUtf).map(UUID::fromString).orElse(null);
+            Optional<UUID> id = buf.readOptional(FriendlyByteBuf::readUtf).map(UUID::fromString);
 
             int slotCount = buf.readInt();
 
-            EquipmentSlot[] slots = new EquipmentSlot[slotCount];
+            List<EquipmentSlot> slots = new LinkedList<>();
 
             for (int j = 0; j < slotCount; j++) {
-                slots[j] = EquipmentSlot.byName(buf.readUtf());
+                slots.add(EquipmentSlot.byName(buf.readUtf()));
             }
 
             modifiers.add(new Modifier(
@@ -72,11 +72,11 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
 
         for (Modifier modifier : modifiers) {
             buf.writeUtf(modifier.name);
-            buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.ATTRIBUTE.getKey(modifier.attribute)));
+            buf.writeResourceKey(modifier.attribute.unwrap().orThrow());
             buf.writeInt(modifier.operation.toValue());
             modifier.amount.encode(buf);
-            buf.writeOptional(Optional.ofNullable(modifier.id != null ? modifier.id.toString() : null), FriendlyByteBuf::writeUtf);
-            buf.writeInt(modifier.slots.length);
+            buf.writeOptional(modifier.id.map(UUID::toString), FriendlyByteBuf::writeUtf);
+            buf.writeInt(modifier.slots.size());
 
             for (EquipmentSlot slot : modifier.slots) {
                 buf.writeUtf(slot.getName());
@@ -90,11 +90,11 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
     }
 
     public record Modifier(
-        String name,
-        Attribute attribute,
-        AttributeModifier.Operation operation,
-        RangeValue amount,
-        @Nullable UUID id,
-        EquipmentSlot[] slots
+            String name,
+            Holder<Attribute> attribute,
+            AttributeModifier.Operation operation,
+            RangeValue amount,
+            Optional<UUID> id,
+            List<EquipmentSlot> slots
     ) {}
 }

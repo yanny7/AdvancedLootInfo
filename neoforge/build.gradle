@@ -44,6 +44,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":api")
     compileOnly project(":common")
+    compileOnly project(":common-mixin")
 
     // EMI
 //    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
@@ -68,6 +69,7 @@ Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
+    source(project(":common-mixin").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {

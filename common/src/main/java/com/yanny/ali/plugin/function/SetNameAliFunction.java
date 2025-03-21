@@ -10,12 +10,10 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
-import javax.annotation.Nullable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class SetNameAliFunction extends LootConditionalFunction {
+public class SetNameAliFunction extends LootConditionalAliFunction {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public final Optional<Component> name;
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")

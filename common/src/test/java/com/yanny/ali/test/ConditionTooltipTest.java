@@ -1,38 +1,34 @@
 package com.yanny.ali.test;
 
+import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
 import com.yanny.ali.plugin.condition.TimeCheckAliCondition;
 import com.yanny.ali.plugin.condition.WeatherCheckAliCondition;
 import io.netty.buffer.Unpooled;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.monster.warden.Warden;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootContext;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.*;
 
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 public class ConditionTooltipTest {
     @Test
     public void testAllOfTooltip() {
+        IContext context = mock(IContext.class);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeOptional(Optional.of(10L), FriendlyByteBuf::writeLong);
@@ -42,8 +38,8 @@ public class ConditionTooltipTest {
         buf.writeOptional(Optional.empty(), FriendlyByteBuf::writeBoolean);
 
         assertTooltip(ConditionTooltipUtils.getAllOfTooltip(0, List.of(
-                new TimeCheckAliCondition(null, new FriendlyByteBuf(buf)),
-                new WeatherCheckAliCondition(null, new FriendlyByteBuf(buf))
+                new TimeCheckAliCondition(context, new FriendlyByteBuf(buf)),
+                new WeatherCheckAliCondition(context, new FriendlyByteBuf(buf))
         )), List.of(
                 "All must pass:",
                 "  -> Time Check:",
@@ -56,6 +52,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testAnyOfTooltip() {
+        IContext context = mock(IContext.class);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeOptional(Optional.of(10L), FriendlyByteBuf::writeLong);
@@ -65,8 +62,8 @@ public class ConditionTooltipTest {
         buf.writeOptional(Optional.empty(), FriendlyByteBuf::writeBoolean);
 
         assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(0, List.of(
-                new TimeCheckAliCondition(null, new FriendlyByteBuf(buf)),
-                new WeatherCheckAliCondition(null, new FriendlyByteBuf(buf))
+                new TimeCheckAliCondition(context, new FriendlyByteBuf(buf)),
+                new WeatherCheckAliCondition(context, new FriendlyByteBuf(buf))
         )), List.of(
                 "Any of:",
                 "  -> Time Check:",
@@ -79,32 +76,21 @@ public class ConditionTooltipTest {
 
     @Test
     public void testBlockStatePropertyTooltip() {
-        StatePropertiesPredicate propertiesPredicate = mock(StatePropertiesPredicate.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
-        StatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = mock(StatePropertiesPredicate.ExactPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
-        StatePropertiesPredicate.RangedPropertyMatcher rangedPropertyMatcher = mock(StatePropertiesPredicate.RangedPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.RangedPropertyMatcher.class));
-        MixinStatePropertiesPredicate mixinPropertiesPredicate = ((MixinStatePropertiesPredicate) propertiesPredicate);
-        MixinStatePropertiesPredicate.ExactPropertyMatcher mixinExactPropertyMatcher = ((MixinStatePropertiesPredicate.ExactPropertyMatcher) exactPropertyMatcher);
-        MixinStatePropertiesPredicate.RangedPropertyMatcher mixinRangedPropertyMatcher = ((MixinStatePropertiesPredicate.RangedPropertyMatcher) rangedPropertyMatcher);
-
-        when(mixinPropertiesPredicate.getProperties()).thenReturn(List.of());
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(0, Blocks.FURNACE, propertiesPredicate), List.of(
+        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(0, Holder.direct(Blocks.FURNACE), Optional.of(new StatePropertiesPredicate(List.of()))), List.of(
                 "Block State Property:",
                 "  -> Block: Furnace"
         ));
 
-        when(mixinPropertiesPredicate.getProperties()).thenReturn(List.of(
-                exactPropertyMatcher,
-                rangedPropertyMatcher,
-                rangedPropertyMatcher,
-                rangedPropertyMatcher,
-                rangedPropertyMatcher
-        ));
-        when(mixinExactPropertyMatcher.getName()).thenReturn("facing");
-        when(mixinExactPropertyMatcher.getValue()).thenReturn("east");
-        when(mixinRangedPropertyMatcher.getName()).thenReturn("level", "level", "level", "level");
-        when(mixinRangedPropertyMatcher.getMinValue()).thenReturn("1", null, "1", null);
-        when(mixinRangedPropertyMatcher.getMaxValue()).thenReturn("5", "5", null, null);
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(0, Blocks.BAMBOO, propertiesPredicate), List.of(
+        List<StatePropertiesPredicate.PropertyMatcher> properties = new LinkedList<>();
+        Optional<StatePropertiesPredicate> predicate = Optional.of(new StatePropertiesPredicate(properties));
+
+        properties.add(new StatePropertiesPredicate.PropertyMatcher("facing", new StatePropertiesPredicate.ExactMatcher("east")));
+        properties.add(new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.of("1"), Optional.of("5"))));
+        properties.add(new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.empty(), Optional.of("5"))));
+        properties.add(new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.of("1"), Optional.empty())));
+        properties.add(new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.empty(), Optional.empty())));
+
+        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(0, Holder.direct(Blocks.BAMBOO), predicate), List.of(
                 "Block State Property:",
                 "  -> Block: Bamboo",
                 "  -> State Properties:",
@@ -116,65 +102,24 @@ public class ConditionTooltipTest {
         ));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testDamageSourceProperties() {
-        MixinDamageSourcePredicate damageSourcePredicate = (MixinDamageSourcePredicate) mock(DamageSourcePredicate.class, withSettings().extraInterfaces(MixinDamageSourcePredicate.class));
-        TagPredicate<DamageType> tagPredicate1 = mock(TagPredicate.class, withSettings().extraInterfaces(MixinTagPredicate.class));
-        TagPredicate<DamageType> tagPredicate2 = mock(TagPredicate.class, withSettings().extraInterfaces(MixinTagPredicate.class));
-        MixinEntityPredicate sourcePredicate = (MixinEntityPredicate) mock(EntityPredicate.class, withSettings().extraInterfaces(MixinEntityPredicate.class));
-        MixinEntityPredicate directPredicate = (MixinEntityPredicate) mock(EntityPredicate.class, withSettings().extraInterfaces(MixinEntityPredicate.class));
-        MixinEntityTypePredicate.TypePredicate typePredicate = (MixinEntityTypePredicate.TypePredicate) mock(EntityTypePredicate.TypePredicate.class, withSettings().extraInterfaces(MixinEntityTypePredicate.TypePredicate.class));
+        Optional<DamageSourcePredicate> predicate = Optional.of(DamageSourcePredicate.Builder.damageType()
+                .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
+                .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
+                .source(EntityPredicate.Builder.entity().team("Blue"))
+                .build());
 
-        MixinTagPredicate<DamageType> mixinTagPredicate1 = (MixinTagPredicate<DamageType>) tagPredicate1;
-        MixinTagPredicate<DamageType> mixinTagPredicate2 = (MixinTagPredicate<DamageType>) tagPredicate2;
-
-        when((EntityType<Warden>)typePredicate.getType()).thenReturn(EntityType.WARDEN);
-
-        when(directPredicate.getEntityType()).thenReturn((EntityTypePredicate.TypePredicate) typePredicate);
-        when(directPredicate.getDistanceToPlayer()).thenReturn(DistancePredicate.ANY);
-        when(directPredicate.getLocation()).thenReturn(LocationPredicate.ANY);
-        when(directPredicate.getSteppingOnLocation()).thenReturn(LocationPredicate.ANY);
-        when(directPredicate.getEffects()).thenReturn(MobEffectsPredicate.ANY);
-        when(directPredicate.getNbt()).thenReturn(NbtPredicate.ANY);
-        when(directPredicate.getFlags()).thenReturn(EntityFlagsPredicate.ANY);
-        when(directPredicate.getEquipment()).thenReturn(EntityEquipmentPredicate.ANY);
-        when(directPredicate.getSubPredicate()).thenReturn(EntitySubPredicate.ANY);
-        when(directPredicate.getVehicle()).thenReturn(EntityPredicate.ANY);
-        when(directPredicate.getPassenger()).thenReturn(EntityPredicate.ANY);
-        when(directPredicate.getTargetedEntity()).thenReturn(EntityPredicate.ANY);
-
-        when(sourcePredicate.getEntityType()).thenReturn(EntityTypePredicate.ANY);
-        when(sourcePredicate.getDistanceToPlayer()).thenReturn(DistancePredicate.ANY);
-        when(sourcePredicate.getLocation()).thenReturn(LocationPredicate.ANY);
-        when(sourcePredicate.getSteppingOnLocation()).thenReturn(LocationPredicate.ANY);
-        when(sourcePredicate.getEffects()).thenReturn(MobEffectsPredicate.ANY);
-        when(sourcePredicate.getNbt()).thenReturn(NbtPredicate.ANY);
-        when(sourcePredicate.getFlags()).thenReturn(EntityFlagsPredicate.ANY);
-        when(sourcePredicate.getEquipment()).thenReturn(EntityEquipmentPredicate.ANY);
-        when(sourcePredicate.getSubPredicate()).thenReturn(EntitySubPredicate.ANY);
-        when(sourcePredicate.getVehicle()).thenReturn(EntityPredicate.ANY);
-        when(sourcePredicate.getPassenger()).thenReturn(EntityPredicate.ANY);
-        when(sourcePredicate.getTargetedEntity()).thenReturn(EntityPredicate.ANY);
-        when(sourcePredicate.getTeam()).thenReturn("Blue");
-
-        when(mixinTagPredicate1.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.ARROW.location()));
-        when(mixinTagPredicate1.getExpected()).thenReturn(true);
-        when(mixinTagPredicate2.getTag()).thenReturn(TagKey.create(Registries.DAMAGE_TYPE, DamageTypes.EXPLOSION.location()));
-        when(mixinTagPredicate2.getExpected()).thenReturn(false);
-
-        when(damageSourcePredicate.getTags()).thenReturn(List.of(tagPredicate1, tagPredicate2));
-        when(damageSourcePredicate.getSourceEntity()).thenReturn((EntityPredicate) sourcePredicate);
-        when(damageSourcePredicate.getDirectEntity()).thenReturn((EntityPredicate) directPredicate);
-
-        assertTooltip(ConditionTooltipUtils.getDamageSourcePropertiesTooltip(0, (DamageSourcePredicate) damageSourcePredicate), List.of(
+        assertTooltip(ConditionTooltipUtils.getDamageSourcePropertiesTooltip(0, predicate), List.of(
                 "Damage Source Properties:",
                 "  -> Damage Source:",
                 "    -> Tags:",
-                "      -> minecraft:arrow: true",
-                "      -> minecraft:explosion: false",
+                "      -> minecraft:bypasses_armor: true",
+                "      -> minecraft:is_explosion: false",
                 "    -> Direct Entity:",
-                "      -> Entity Type: Warden",
+                "      -> Entity Types:",
+                "        -> Entity Type: Warden",
                 "    -> Source Entity:",
                 "      -> Team: Blue"
         ));
@@ -182,23 +127,9 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEntityPropertiesTooltip() {
-        MixinEntityPredicate entityPredicate = (MixinEntityPredicate) mock(EntityPredicate.class, withSettings().extraInterfaces(MixinEntityPredicate.class));
+        Optional<EntityPredicate> entityPredicate = Optional.of(EntityPredicate.Builder.entity().team("blue").build());
 
-        when(entityPredicate.getEntityType()).thenReturn(EntityTypePredicate.ANY);
-        when(entityPredicate.getDistanceToPlayer()).thenReturn(DistancePredicate.ANY);
-        when(entityPredicate.getLocation()).thenReturn(LocationPredicate.ANY);
-        when(entityPredicate.getSteppingOnLocation()).thenReturn(LocationPredicate.ANY);
-        when(entityPredicate.getEffects()).thenReturn(MobEffectsPredicate.ANY);
-        when(entityPredicate.getNbt()).thenReturn(NbtPredicate.ANY);
-        when(entityPredicate.getFlags()).thenReturn(EntityFlagsPredicate.ANY);
-        when(entityPredicate.getEquipment()).thenReturn(EntityEquipmentPredicate.ANY);
-        when(entityPredicate.getSubPredicate()).thenReturn(EntitySubPredicate.ANY);
-        when(entityPredicate.getVehicle()).thenReturn(EntityPredicate.ANY);
-        when(entityPredicate.getPassenger()).thenReturn(EntityPredicate.ANY);
-        when(entityPredicate.getTargetedEntity()).thenReturn(EntityPredicate.ANY);
-        when(entityPredicate.getTeam()).thenReturn("blue");
-
-        assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(0, LootContext.EntityTarget.KILLER, (EntityPredicate) entityPredicate), List.of(
+        assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(0, LootContext.EntityTarget.KILLER, entityPredicate), List.of(
             "Entity Properties:",
             "  -> Target: Killer Entity",
             "  -> Predicate:",
@@ -224,13 +155,14 @@ public class ConditionTooltipTest {
 
     @Test
     public void testInvertedTooltip() {
+        IContext context = mock(IContext.class);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeOptional(Optional.of(10L), FriendlyByteBuf::writeLong);
         new RangeValue(1).encode(buf);
         new RangeValue(8).encode(buf);
 
-        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(0, new TimeCheckAliCondition(null, buf)), List.of(
+        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(0, new TimeCheckAliCondition(context, buf)), List.of(
                 "Inverted:",
                 "  -> Time Check:",
                 "    -> Period: 10",
@@ -245,17 +177,9 @@ public class ConditionTooltipTest {
 
     @Test
     public void testLocationCheckTooltip() {
-        MixinLocationPredicate locationPredicate = (MixinLocationPredicate) mock(LocationPredicate.class, withSettings().extraInterfaces(MixinLocationPredicate.class));
+        Optional<LocationPredicate> locationPredicate = Optional.of(LocationPredicate.Builder.location().setSmokey(true).build());
 
-        when(locationPredicate.getX()).thenReturn(MinMaxBounds.Doubles.ANY);
-        when(locationPredicate.getY()).thenReturn(MinMaxBounds.Doubles.ANY);
-        when(locationPredicate.getZ()).thenReturn(MinMaxBounds.Doubles.ANY);
-        when(locationPredicate.getLight()).thenReturn(LightPredicate.ANY);
-        when(locationPredicate.getBlock()).thenReturn(BlockPredicate.ANY);
-        when(locationPredicate.getFluid()).thenReturn(FluidPredicate.ANY);
-        when(locationPredicate.getSmokey()).thenReturn(true);
-
-        assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(0, new BlockPos(2, 4, 6), (LocationPredicate) locationPredicate), List.of(
+        assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(0, new BlockPos(2, 4, 6), locationPredicate), List.of(
                 "Location Check:",
                 "  -> Location:",
                 "    -> Smokey: true",
@@ -268,21 +192,9 @@ public class ConditionTooltipTest {
 
     @Test
     public void testItemMatchTooltip() {
-        MixinItemPredicate itemPredicate = (MixinItemPredicate) mock(ItemPredicate.class, withSettings().extraInterfaces(MixinItemPredicate.class));
+        Optional<ItemPredicate> itemPredicate = Optional.of(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE).build());
 
-        Set<Item> items = new LinkedHashSet<>();
-
-        items.add(Items.ANDESITE);
-        items.add(Items.DIORITE);
-
-        when(itemPredicate.getItems()).thenReturn(items);
-        when(itemPredicate.getCount()).thenReturn(MinMaxBounds.Ints.ANY);
-        when(itemPredicate.getDurability()).thenReturn(MinMaxBounds.Ints.ANY);
-        when(itemPredicate.getEnchantments()).thenReturn(new EnchantmentPredicate[0]);
-        when(itemPredicate.getStoredEnchantments()).thenReturn(new EnchantmentPredicate[0]);
-        when(itemPredicate.getNbt()).thenReturn(NbtPredicate.ANY);
-
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(0, (ItemPredicate) itemPredicate), List.of(
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(0, itemPredicate), List.of(
                 "Match Tool:",
                 "  -> Items:",
                 "    -> Item: Andesite",
@@ -319,7 +231,13 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTableBonusTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(0, Enchantments.MOB_LOOTING, new float[]{0.25F, 0.5555F, 0.99F}), List.of(
+        List<Float> values = new LinkedList<>();
+
+        values.add(0.25F);
+        values.add(0.5555F);
+        values.add(0.99F);
+
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(0, Holder.direct(Enchantments.MOB_LOOTING), values), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Values: [0.25, 0.5555, 0.99]" //FIXME to 2 decimal places
@@ -328,7 +246,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTimeCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(0, 24000L, new RangeValue(5), new RangeValue(10)), List.of(
+        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(0, Optional.of(24000L), new RangeValue(5), new RangeValue(10)), List.of(
                 "Time Check:",
                 "  -> Period: 24000",
                 "  -> Value: 5 - 10"
@@ -346,19 +264,19 @@ public class ConditionTooltipTest {
 
     @Test
     public void testWeatherCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, true, false), List.of(
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, Optional.of(true), Optional.of(false)), List.of(
                 "Weather Check:",
                 "  -> Is Raining: true",
                 "  -> Is Thundering: false"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, true, null), List.of(
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, Optional.of(true), Optional.empty()), List.of(
                 "Weather Check:",
                 "  -> Is Raining: true"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, null, false), List.of(
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, Optional.empty(), Optional.of(false)), List.of(
                 "Weather Check:",
                 "  -> Is Thundering: false"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, null, null), List.of("Weather Check:"));
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(0, Optional.empty(), Optional.empty()), List.of("Weather Check:"));
     }
 }

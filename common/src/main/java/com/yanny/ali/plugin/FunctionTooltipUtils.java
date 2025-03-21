@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -22,24 +23,21 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.yanny.ali.plugin.TooltipUtils.pad;
 import static com.yanny.ali.plugin.TooltipUtils.translatable;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class FunctionTooltipUtils {
     @NotNull
-    public static List<Component> getApplyBonusTooltip(int pad, Enchantment enchantment, ApplyBonusCount.Formula formula) {
+    public static List<Component> getApplyBonusTooltip(int pad, Holder<Enchantment> enchantment, ApplyBonusCount.Formula formula) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.apply_bonus")));
-        components.addAll(GenericTooltipUtils.getEnchantmentTooltip(pad + 1, enchantment));
+        components.addAll(GenericTooltipUtils.getEnchantmentTooltip(pad + 1, Optional.of(enchantment)));
         components.addAll(GenericTooltipUtils.getFormulaTooltip(pad + 1, formula));
 
         return components;
@@ -62,7 +60,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getCopyStateTooltip(int pad, Block block, Set<Property<?>> properties) {
+    public static List<Component> getCopyStateTooltip(int pad, Holder<Block> block, Set<Property<?>> properties) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_state")));
@@ -73,7 +71,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantRandomlyTooltip(int pad, List<Enchantment> enchantments) {
+    public static List<Component> getEnchantRandomlyTooltip(int pad, Optional<HolderSet<Enchantment>> enchantments) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
@@ -88,7 +86,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.enchant_with_levels")));
         components.addAll(GenericTooltipUtils.getRangeValueTooltip(pad + 1, "ali.property.common.levels", levels));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.treasure", treasure));
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.treasure", Optional.of(treasure)));
 
         return components;
     }
@@ -98,11 +96,11 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
-        components.addAll(GenericTooltipUtils.getTagKeyTooltip(pad + 1, "ali.property.common.destination", structure));
+        components.addAll(GenericTooltipUtils.getTagKeyTooltip(pad + 1, "ali.property.common.destination", Optional.of(structure)));
         components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.map_decoration", mapDecoration));
         components.addAll(GenericTooltipUtils.getIntegerTooltip(pad + 1, "ali.property.common.zoom", zoom));
         components.addAll(GenericTooltipUtils.getIntegerTooltip(pad + 1, "ali.property.common.search_radius", searchRadius));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.skip_known_structures", skipKnownStructures));
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.skip_known_structures", Optional.of(skipKnownStructures)));
 
         return components;
     }
@@ -118,7 +116,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.fill_player_head")));
-        components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.target", "target", target));
+        components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.target", "target", Optional.of(target)));
 
         return components;
     }
@@ -176,14 +174,14 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_banner_pattern")));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.append", append));
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.append", Optional.of(append)));
         components.addAll(GenericTooltipUtils.getBannerPatternsTooltip(pad + 1, patterns));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetContentsTooltip(int pad, BlockEntityType<?> blockEntityType) {
+    public static List<Component> getSetContentsTooltip(int pad, Holder<BlockEntityType<?>> blockEntityType) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
@@ -198,7 +196,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_count")));
         components.addAll(GenericTooltipUtils.getRangeValueTooltip(pad + 1, "ali.property.common.count", count));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.add", add));
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.add", Optional.of(add)));
 
         return components;
     }
@@ -209,13 +207,13 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_damage")));
         components.addAll(GenericTooltipUtils.getRangeValueTooltip(pad + 1, "ali.property.common.damage", damage));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.add", add));
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.add", Optional.of(add)));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetEnchantmentsTooltip(int pad, Map<Enchantment, RangeValue> enchantments, boolean add) {
+    public static List<Component> getSetEnchantmentsTooltip(int pad, Map<Holder<Enchantment>, RangeValue> enchantments, boolean add) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
@@ -223,12 +221,12 @@ public class FunctionTooltipUtils {
         if (!enchantments.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.common.enchantments")));
             enchantments.forEach((enchantment, value) -> {
-                components.addAll(GenericTooltipUtils.getEnchantmentTooltip(pad + 2, enchantment));
+                components.addAll(GenericTooltipUtils.getEnchantmentTooltip(pad + 2, Optional.ofNullable(enchantment)));
                 components.addAll(GenericTooltipUtils.getRangeValueTooltip(pad + 3, "ali.property.common.levels", value));
             });
         }
 
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.add", add));
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.add", Optional.of(add)));
 
         return components;
     }
@@ -238,48 +236,42 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_instrument")));
-        components.addAll(GenericTooltipUtils.getTagKeyTooltip(pad + 1, "ali.property.common.options", options));
+        components.addAll(GenericTooltipUtils.getTagKeyTooltip(pad + 1, "ali.property.common.options", Optional.of(options)));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetLootTableTooltip(int pad, ResourceLocation name, long seed, BlockEntityType<?> blockEntityType) {
+    public static List<Component> getSetLootTableTooltip(int pad, ResourceLocation name, long seed, Holder<BlockEntityType<?>> blockEntityType) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_loot_table")));
         components.addAll(GenericTooltipUtils.getResourceLocationTooltip(pad + 1, "ali.property.common.name", name));
-        components.addAll(GenericTooltipUtils.getLongTooltip(pad + 1, "ali.property.common.seed", seed));
+        components.addAll(GenericTooltipUtils.getLongTooltip(pad + 1, "ali.property.common.seed", Optional.of(seed)));
         components.addAll(GenericTooltipUtils.getBlockEntityTypeTooltip(pad + 1, blockEntityType));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetLoreTooltip(int pad, boolean replace, List<Component> lore, @Nullable LootContext.EntityTarget resolutionContext) {
+    public static List<Component> getSetLoreTooltip(int pad, boolean replace, List<Component> lore, Optional<LootContext.EntityTarget> resolutionContext) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.replace", replace));
-        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.common.lore", lore.stream().map((c) -> (Component)pad(pad + 2, c)).toList()));
-
-        if (resolutionContext != null) {
-            components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.resolution_context", "target", resolutionContext));
-        }
+        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.common.replace", Optional.of(replace)));
+        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.common.lore", lore.stream().map((c) -> pad(pad + 2, c)).toList()));
+        components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.resolution_context", "target", resolutionContext));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetNameTooltip(int pad, Component name, @Nullable LootContext.EntityTarget resolutionContext) {
+    public static List<Component> getSetNameTooltip(int pad, Optional<Component> name, Optional<LootContext.EntityTarget> resolutionContext) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_name")));
         components.addAll(GenericTooltipUtils.getComponentTooltip(pad + 1, "ali.property.common.name", name));
-
-        if (resolutionContext != null) {
-            components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.resolution_context", "target", resolutionContext));
-        }
+        components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.common.resolution_context", "target", resolutionContext));
 
         return components;
     }
@@ -289,23 +281,23 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_nbt")));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.common.tag", tag));
+        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.common.tag", Optional.of(tag)));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetPotionTooltip(int pad, Potion potion) {
+    public static List<Component> getSetPotionTooltip(int pad, Holder<Potion> potion) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_potion")));
-        components.addAll(GenericTooltipUtils.getPotionTooltip(pad + 1, potion));
+        components.addAll(GenericTooltipUtils.getPotionTooltip(pad + 1, Optional.of(potion)));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetStewEffectTooltip(int pad, Map<MobEffect, RangeValue> effectMap) {
+    public static List<Component> getSetStewEffectTooltip(int pad, Map<Holder<MobEffect>, RangeValue> effectMap) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));

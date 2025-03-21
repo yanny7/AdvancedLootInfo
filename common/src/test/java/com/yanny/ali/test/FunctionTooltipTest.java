@@ -5,18 +5,18 @@ import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.InstrumentTags;
+import net.minecraft.tags.StructureTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -38,7 +38,7 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class FunctionTooltipTest {
     @Test
     public void testApplyBonusCountTooltip() {
-        assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(0, Enchantments.MOB_LOOTING, new ApplyBonusCount.OreDrops()), List.of(
+        assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(0, Holder.direct(Enchantments.MOB_LOOTING), new ApplyBonusCount.OreDrops()), List.of(
                 "Apply Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Formula: minecraft:ore_drops"
@@ -65,7 +65,7 @@ public class FunctionTooltipTest {
         properties.add(FurnaceBlock.LIT);
         properties.add(FurnaceBlock.FACING);
 
-        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(0, Blocks.FURNACE, properties), List.of(
+        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(0, Holder.direct(Blocks.FURNACE), properties), List.of(
                 "Copy State:",
                 "  -> Block: Furnace",
                 "  -> Properties:",
@@ -76,7 +76,9 @@ public class FunctionTooltipTest {
 
     @Test
     public void testEnchantRandomlyTooltip() {
-        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(0, List.of(Enchantments.CHANNELING, Enchantments.IMPALING)), List.of(
+        Optional<HolderSet< Enchantment>> enchantments = Optional.of(HolderSet.direct(Holder.direct(Enchantments.CHANNELING), Holder.direct(Enchantments.IMPALING)));
+
+        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(0, enchantments), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantments:",
                 "    -> Enchantment: Channeling",
@@ -95,10 +97,10 @@ public class FunctionTooltipTest {
     
     @Test
     public void testExplorationMapTooltip() {
-        assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(0, TagKey.create(Registries.STRUCTURE, new ResourceLocation("home")),
+        assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(0, StructureTags.RUINED_PORTAL,
                 MapDecoration.Type.MONUMENT, 2, 50, true), List.of(
                 "Exploration Map:",
-                "  -> Destination: minecraft:home",
+                "  -> Destination: minecraft:ruined_portal",
                 "  -> Map Decoration: MONUMENT",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
@@ -152,14 +154,21 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetAttributesTooltip() {
+        List<EquipmentSlot> equipmentSlots = new LinkedList<>();
+
+        equipmentSlots.add(EquipmentSlot.HEAD);
+        equipmentSlots.add(EquipmentSlot.CHEST);
+        equipmentSlots.add(EquipmentSlot.LEGS);
+        equipmentSlots.add(EquipmentSlot.FEET);
+
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(0, List.of(
                 new SetAttributesAliFunction.Modifier(
                         "armor",
-                        Attributes.ARMOR,
+                        Holder.direct(Attributes.ARMOR),
                         AttributeModifier.Operation.MULTIPLY_TOTAL,
                         new RangeValue(1, 5),
-                        null,
-                        new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}
+                        Optional.empty(),
+                        equipmentSlots
                 )
         )), List.of(
                 "Set Attributes:",
@@ -195,7 +204,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(0, BlockEntityType.BREWING_STAND), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(0, Holder.direct(BlockEntityType.BREWING_STAND)), List.of(
                 "Set Contents:",
                 "  -> Block Entity Type: minecraft:brewing_stand"
         ));
@@ -221,11 +230,11 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetEnchantmentsTooltip() {
-        Map<Enchantment, RangeValue> enchantmentRangeValueMap = new LinkedHashMap<>();
+        Map<Holder<Enchantment>, RangeValue> enchantmentRangeValueMap = new LinkedHashMap<>();
 
-        enchantmentRangeValueMap.put(Enchantments.CHANNELING, new RangeValue(1));
-        enchantmentRangeValueMap.put(Enchantments.BINDING_CURSE, new RangeValue(1));
-        enchantmentRangeValueMap.put(Enchantments.MOB_LOOTING, new RangeValue(1, 3));
+        enchantmentRangeValueMap.put(Holder.direct(Enchantments.CHANNELING), new RangeValue(1));
+        enchantmentRangeValueMap.put(Holder.direct(Enchantments.BINDING_CURSE), new RangeValue(1));
+        enchantmentRangeValueMap.put(Holder.direct(Enchantments.MOB_LOOTING), new RangeValue(1, 3));
 
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(0, enchantmentRangeValueMap, false), List.of(
                 "Set Enchantments:",
@@ -242,15 +251,15 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetInstrumentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(0, TagKey.create(Registries.INSTRUMENT, Instruments.ADMIRE_GOAT_HORN.location())), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(0, InstrumentTags.SCREAMING_GOAT_HORNS), List.of(
                 "Set Instrument:",
-                "  -> Options: minecraft:admire_goat_horn"
+                "  -> Options: minecraft:screaming_goat_horns"
         ));
     }
 
     @Test
     public void testSetLootTableTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(0, new ResourceLocation("gameplay/mesh"), 42L, BlockEntityType.BELL), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(0, new ResourceLocation("gameplay/mesh"), 42L, Holder.direct(BlockEntityType.BELL)), List.of(
                 "Set Loot Table:",
                 "  -> Name: minecraft:gameplay/mesh",
                 "  -> Seed: 42",
@@ -260,14 +269,14 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetLoreTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(0, true, List.of(Component.literal("Hello"), Component.literal("World")), null), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(0, true, List.of(Component.literal("Hello"), Component.literal("World")), Optional.empty()), List.of(
                 "Set Lore:",
                 "  -> Replace: true",
                 "  -> Lore:",
                 "    -> Hello",
                 "    -> World"
         ));
-        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(0, true, List.of(Component.translatable("emi.category.ali.block_loot")), LootContext.EntityTarget.KILLER), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(0, true, List.of(Component.translatable("emi.category.ali.block_loot")), Optional.of(LootContext.EntityTarget.KILLER)), List.of(
                 "Set Lore:",
                 "  -> Replace: true",
                 "  -> Lore:",
@@ -278,11 +287,11 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetNameTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(0, Component.literal("Epic Item"), null), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(0, Optional.of(Component.literal("Epic Item")), Optional.empty()), List.of(
                 "Set Name:",
                 "  -> Name: Epic Item"
         ));
-        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(0, Component.translatable("emi.category.ali.block_loot"), LootContext.EntityTarget.KILLER), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(0, Optional.of(Component.translatable("emi.category.ali.block_loot")), Optional.of(LootContext.EntityTarget.KILLER)), List.of(
                 "Set Name:",
                 "  -> Name: Block Drops",
                 "  -> Resolution Context: Killer Entity"
@@ -299,7 +308,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetPotionTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetPotionTooltip(0, Potions.TURTLE_MASTER), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetPotionTooltip(0, Holder.direct(Potions.TURTLE_MASTER)), List.of(
                 "Set Potion:",
                 "  -> Potion:",
                 "    -> Mob Effects:",
@@ -320,10 +329,10 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetStewEffectTooltip() {
-        Map<MobEffect, RangeValue> effectRangeValueMap = new LinkedHashMap<>();
+        Map<Holder<MobEffect>, RangeValue> effectRangeValueMap = new LinkedHashMap<>();
 
-        effectRangeValueMap.put(MobEffects.LUCK, new RangeValue(1, 5));
-        effectRangeValueMap.put(MobEffects.UNLUCK, new RangeValue(3, 4));
+        effectRangeValueMap.put(Holder.direct(MobEffects.LUCK), new RangeValue(1, 5));
+        effectRangeValueMap.put(Holder.direct(MobEffects.UNLUCK), new RangeValue(3, 4));
 
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(0, effectRangeValueMap), List.of(
                 "Set Stew Effect:",
