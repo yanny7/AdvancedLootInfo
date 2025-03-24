@@ -7,6 +7,7 @@ import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.WidgetUtils;
 import com.yanny.ali.plugin.entry.DynamicEntry;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +34,7 @@ public class DynamicWidget implements IEntryWidget {
 
         float rawChance = (float) dynamicEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         widget = WidgetUtils.getDynamicWidget(x, y);
         bounds = widget.getRect();
@@ -41,7 +42,7 @@ public class DynamicWidget implements IEntryWidget {
         setupTooltip(dynamicEntry, chance, bonusChance, allFunctions, allConditions);
     }
 
-    private void setupTooltip(DynamicEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+    private void setupTooltip(DynamicEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
                               List<ILootFunction> functions, List<ILootCondition> conditions) {
         TooltipUtils.getQuality(entry).forEach(this::appendTooltip);
 

@@ -6,6 +6,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.entry.EmptyEntry;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -35,14 +36,14 @@ public class EmptyWidget implements IEntryWidget {
 
         float rawChance = (float) emptyEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         bounds = getBounds(utils, entry, x, y);
         this.entry = entry;
         setupTooltip(emptyEntry, chance, bonusChance, allFunctions, allConditions);
     }
 
-    private void setupTooltip(EmptyEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+    private void setupTooltip(EmptyEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
                               List<ILootFunction> functions, List<ILootCondition> conditions) {
         TooltipUtils.getQuality(entry).forEach(this::appendTooltip);
 

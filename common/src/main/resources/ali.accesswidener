@@ -1,15 +1,23 @@
 accessWidener v2 named
+accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
-accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
-accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
+extendable class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
+extendable class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
+accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType
+accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher <init> (Ljava/lang/String;Lnet/minecraft/advancements/critereon/StatePropertiesPredicate$ValueMatcher;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher <init> (Ljava/lang/String;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher <init> (Ljava/util/Optional;Ljava/util/Optional;)V
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementPredicate
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate
+accessible method net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate <init> (Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;)V
+accessible method net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate <init> (Z)V
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$StatMatcher
 accessible class net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate

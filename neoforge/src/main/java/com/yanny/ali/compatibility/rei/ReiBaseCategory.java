@@ -21,6 +21,7 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -87,8 +88,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 EntryStack<ItemStack> stack = EntryStacks.of(item);
 
                 stack.tooltip(setupTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
@@ -98,8 +99,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(item);
 
                 ingredient.map((stack) -> stack.tooltip(setupTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));
@@ -111,8 +112,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     }
 
     @NotNull
-    private List<Component> setupTooltip(ILootEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                       @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions, List<ILootCondition> conditions) {
+    private List<Component> setupTooltip(ILootEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                       @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions, List<ILootCondition> conditions) {
         List<Component> components = new LinkedList<>();
 
         if (entry instanceof SingletonEntry singletonEntry) {

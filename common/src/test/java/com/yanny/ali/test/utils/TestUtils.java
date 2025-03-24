@@ -1,0 +1,151 @@
+package com.yanny.ali.test.utils;
+
+import com.google.common.collect.ImmutableMap;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
+import com.yanny.ali.datagen.LanguageHolder;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.util.StringDecomposer;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.function.Executable;
+import org.slf4j.Logger;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.function.BiFunction;
+
+public class TestUtils {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
+    public static void assertTooltip(List<Component> components, List<String> expected) {
+        Assertions.assertEquals(expected.size(), components.size());
+        List<Executable> executables = new LinkedList<>();
+
+        for (int i = 0; i < components.size(); i++) {
+            int index = i;
+            executables.add(() -> assertTooltip(components.get(index), expected.get(index), String.format("Index: %d", index)));
+        }
+
+        Assertions.assertAll(executables);
+    }
+
+    public static void assertTooltip(Component component, String expected, String message) {
+        String translated = componentToPlainString(component);
+
+        Assertions.assertEquals(expected, translated, message);
+    }
+
+    public static void assertTooltip(Component component, String expected) {
+        String translated = componentToPlainString(component);
+
+        Assertions.assertEquals(expected, translated);
+    }
+
+    @NotNull
+    public static String componentToPlainString(Component component) {
+        return componentToString(component, (style, text) -> text);
+    }
+
+    @NotNull
+    public static String componentToStyleString(Component component) {
+        return componentToString(component, (style, text) -> {
+            StringBuilder sb = new StringBuilder();
+            StringBuilder pre = new StringBuilder();
+            StringBuilder post = new StringBuilder();
+
+            if (style.getColor() != null) {
+                switch (style.getColor().toString()) {
+                    case "gold":
+                        pre.append("[");
+                        post.append("]");
+                        break;
+                    case "aqua":
+                        pre.append("<");
+                        post.append(">");
+                        break;
+                }
+            }
+
+            if (style.isBold()) {
+                pre.append("*");
+                post.append("*");
+            }
+
+            return sb.append(pre).append(text).append(post.reverse()).toString();
+        });
+    }
+
+    @NotNull
+    public static Pair<Language, Set<String>> loadDefaultLanguage(ResourceManager resourceManager) {
+        ImmutableMap.Builder<String, String> stringBuilder = ImmutableMap.builder();
+        LanguageHolder.TRANSLATION_MAP.forEach(stringBuilder::put);
+        Set<String> notUsed = new HashSet<>(LanguageHolder.TRANSLATION_MAP.keySet());
+        String lang = String.format(Locale.ROOT, "lang/%s.json", "en_us");
+
+        for(String namespace : resourceManager.getNamespaces()) {
+            try {
+                ResourceLocation langLocation = new ResourceLocation(namespace, lang);
+
+                for(Resource resource : resourceManager.getResourceStack(langLocation)) {
+                    try (InputStream inputStream = resource.open()) {
+                        Language.loadFromJson(inputStream, stringBuilder::put);
+                    } catch (IOException $$5) {
+                        LOGGER.warn("Failed to load translations for {} from pack {}", "en_us", resource.sourcePackId(), $$5);
+                    }
+                }
+            } catch (Exception $$8) {
+                LOGGER.warn("Skipped language file: {}:{} ({})", namespace, lang, $$8.toString());
+            }
+        }
+
+        final Map<String, String> languageMap = stringBuilder.build();
+
+        Language language = new Language() {
+            @NotNull
+            public String getOrDefault(String key, String value) {
+                notUsed.remove(key);
+                return Objects.requireNonNull(languageMap.getOrDefault(key, value));
+            }
+
+            public boolean has(String key) {
+                return languageMap.containsKey(key);
+            }
+
+            public boolean isDefaultRightToLeft() {
+                return false;
+            }
+
+            @NotNull
+            public FormattedCharSequence getVisualOrder(FormattedText formattedText) {
+                return (charSink) ->
+                        formattedText.visit((style, text) ->
+                                StringDecomposer.iterateFormatted(text, style, charSink) ? Optional.empty() : FormattedText.STOP_ITERATION, Style.EMPTY).isPresent();
+            }
+        };
+
+        return new Pair<>(language, notUsed);
+    }
+    @NotNull
+    private static String componentToString(Component component, BiFunction<Style, String, String> formatter) {
+        StringBuilder builder = new StringBuilder();
+
+        component.visit((style, text) -> {
+            if (style.isEmpty()) {
+                builder.append(text);
+            } else {
+                builder.append(formatter.apply(style, text));
+            }
+            return Optional.empty();
+        }, Style.EMPTY);
+        return builder.toString();
+    }
+}
