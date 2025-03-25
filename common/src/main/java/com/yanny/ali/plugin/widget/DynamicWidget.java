@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.widget;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.WidgetUtils;
 import com.yanny.ali.plugin.entry.DynamicEntry;
@@ -11,11 +12,11 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class DynamicWidget implements IEntryWidget {
     private final List<Component> components = Lists.newArrayList();
@@ -34,23 +35,12 @@ public class DynamicWidget implements IEntryWidget {
 
         float rawChance = (float) dynamicEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         widget = WidgetUtils.getDynamicWidget(x, y);
         bounds = widget.getRect();
         this.entry = entry;
-        setupTooltip(dynamicEntry, chance, bonusChance, allFunctions, allConditions);
-    }
-
-    private void setupTooltip(DynamicEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
-                              List<ILootFunction> functions, List<ILootCondition> conditions) {
-        TooltipUtils.getQuality(entry).forEach(this::appendTooltip);
-
-        appendTooltip(TooltipUtils.getChance(chance));
-        TooltipUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
-
-        TooltipUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
-        TooltipUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
+        GenericTooltipUtils.getTooltip(dynamicEntry, chance, bonusChance, new RangeValue(), Optional.empty(), allFunctions, allConditions).forEach(this::appendTooltip);
     }
 
     public void appendTooltip(Component text) {

@@ -10,8 +10,8 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
+import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
+import static com.yanny.ali.plugin.GenericTooltipUtils.translatable;
 
 public class UnknownAliFunction implements ILootFunction {
     public final ResourceLocation functionType;

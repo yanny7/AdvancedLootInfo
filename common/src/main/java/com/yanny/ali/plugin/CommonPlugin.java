@@ -41,6 +41,7 @@ public class CommonPlugin implements IPlugin {
         registry.registerFunction(LimitCountAliFunction.class, getKey(LootItemFunctions.LIMIT_COUNT), LimitCountAliFunction::new, LimitCountAliFunction::new);
         registry.registerFunction(LootingEnchantAliFunction.class, getKey(LootItemFunctions.LOOTING_ENCHANT), LootingEnchantAliFunction::new, LootingEnchantAliFunction::new);
         registry.registerFunction(ReferenceAliFunction.class, getKey(LootItemFunctions.REFERENCE), ReferenceAliFunction::new, ReferenceAliFunction::new);
+        registry.registerFunction(SequenceAliFunction.class, getKey(LootItemFunctions.SEQUENCE), SequenceAliFunction::new, SequenceAliFunction::new);
         registry.registerFunction(SetAttributesAliFunction.class, getKey(LootItemFunctions.SET_ATTRIBUTES), SetAttributesAliFunction::new, SetAttributesAliFunction::new);
         registry.registerFunction(SetBannerPatternAliFunction.class, getKey(LootItemFunctions.SET_BANNER_PATTERN), SetBannerPatternAliFunction::new, SetBannerPatternAliFunction::new);
         registry.registerFunction(SetContentsAliFunction.class, getKey(LootItemFunctions.SET_CONTENTS), SetContentsAliFunction::new, SetContentsAliFunction::new);

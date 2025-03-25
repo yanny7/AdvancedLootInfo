@@ -29,6 +29,7 @@
     "MixinLootPoolSingletonContainer",
     "MixinLootTable",
     "MixinLootTableReference",
+    "MixinSequenceFunction",
     "MixinSetAttributesFunction",
     "MixinSetBannerPatternFunction",
     "MixinSetContainerContents",

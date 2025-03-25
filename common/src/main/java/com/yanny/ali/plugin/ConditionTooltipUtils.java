@@ -16,9 +16,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.getComponentsTooltip;
-import static com.yanny.ali.plugin.GenericTooltipUtils.getEnumTooltip;
-import static com.yanny.ali.plugin.TooltipUtils.*;
+import static com.yanny.ali.plugin.GenericTooltipUtils.*;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class ConditionTooltipUtils {

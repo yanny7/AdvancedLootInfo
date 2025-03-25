@@ -15,8 +15,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-import static com.yanny.ali.plugin.TooltipUtils.value;
+import static com.yanny.ali.plugin.GenericTooltipUtils.translatable;
+import static com.yanny.ali.plugin.GenericTooltipUtils.value;
 
 public class WidgetUtils {
     public static final ResourceLocation TEXTURE_LOC = Utils.modLoc("textures/gui/gui.png");
@@ -29,7 +29,7 @@ public class WidgetUtils {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.translatable("ali.enum.group_type.all"));
+        components.add(translatable("ali.enum.group_type.all"));
         widget.tooltipText(components);
         return widget;
     }
@@ -39,7 +39,7 @@ public class WidgetUtils {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.translatable("ali.enum.group_type.random"));
+        components.add(translatable("ali.enum.group_type.random"));
         components.add(getRolls(rolls, bonusRolls));
         widget.tooltipText(components);
         return widget;
@@ -50,7 +50,7 @@ public class WidgetUtils {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.translatable("ali.enum.group_type.alternatives"));
+        components.add(translatable("ali.enum.group_type.alternatives"));
         widget.tooltipText(components);
         return widget;
     }
@@ -60,7 +60,7 @@ public class WidgetUtils {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.translatable("ali.enum.group_type.sequence"));
+        components.add(translatable("ali.enum.group_type.sequence"));
         widget.tooltipText(components);
         return widget;
     }
@@ -70,7 +70,7 @@ public class WidgetUtils {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.translatable("ali.enum.group_type.all"));
+        components.add(translatable("ali.enum.group_type.all"));
         widget.tooltipText(components);
         return widget;
     }
@@ -80,7 +80,7 @@ public class WidgetUtils {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         List<Component> components = new LinkedList<>();
 
-        components.add(TooltipUtils.translatable("ali.enum.group_type.dynamic"));
+        components.add(translatable("ali.enum.group_type.dynamic"));
         widget.tooltipText(components);
         return widget;
     }

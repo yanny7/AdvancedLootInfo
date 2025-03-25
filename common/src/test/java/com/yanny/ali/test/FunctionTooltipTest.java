@@ -1,12 +1,19 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.ICommonUtils;
+import com.yanny.ali.api.IContext;
+import com.yanny.ali.api.ILootFunction;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
+import com.yanny.ali.plugin.function.ExplosionDecayAliFunction;
+import com.yanny.ali.plugin.function.FurnaceSmeltAliFunction;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.InstrumentTags;
@@ -34,6 +41,9 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FunctionTooltipTest {
     @Test
@@ -153,6 +163,23 @@ public class FunctionTooltipTest {
     }
 
     @Test
+    public void testSequenceTooltip() {
+        IContext context = mock(IContext.class);
+        ICommonUtils utils = mock(ICommonUtils.class);
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+
+        when(context.utils()).thenReturn(utils);
+        when(utils.decodeFunctions(any(), any())).thenReturn(List.of());
+        List<ILootFunction> functions = List.of(new FurnaceSmeltAliFunction(context, buf), new ExplosionDecayAliFunction(context, buf));
+
+        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(0, functions), List.of(
+                "Sequence:",
+                "  -> Use Smelting Recipe On Item",
+                "  -> Explosion Decay"
+        ));
+    }
+
+    @Test
     public void testSetAttributesTooltip() {
         List<EquipmentSlot> equipmentSlots = new LinkedList<>();
 
@@ -236,6 +263,10 @@ public class FunctionTooltipTest {
         enchantmentRangeValueMap.put(Holder.direct(Enchantments.BINDING_CURSE), new RangeValue(1));
         enchantmentRangeValueMap.put(Holder.direct(Enchantments.MOB_LOOTING), new RangeValue(1, 3));
 
+        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(0, Map.of(), true), List.of(
+                "Set Enchantments:",
+                "  -> Add: true"
+        ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(0, enchantmentRangeValueMap, false), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
@@ -334,6 +365,9 @@ public class FunctionTooltipTest {
         effectRangeValueMap.put(Holder.direct(MobEffects.LUCK), new RangeValue(1, 5));
         effectRangeValueMap.put(Holder.direct(MobEffects.UNLUCK), new RangeValue(3, 4));
 
+        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(0, Map.of()), List.of(
+                "Set Stew Effect:"
+        ));
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(0, effectRangeValueMap), List.of(
                 "Set Stew Effect:",
                 "  -> Mob Effects:",
