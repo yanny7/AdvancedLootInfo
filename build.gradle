@@ -91,14 +91,6 @@ subprojects {
         it.options.getRelease().set(21)
     }
 
-    tasks.named('compileTestJava') {
-        it.enabled = false
-    }
-
-    tasks.named('test') {
-        it.enabled = false
-    }
-
     processResources {
         def expandProps = [
                 "version": minecraft_version + "-" + version,

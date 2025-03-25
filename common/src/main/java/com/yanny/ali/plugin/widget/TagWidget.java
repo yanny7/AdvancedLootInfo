@@ -5,12 +5,14 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.entry.TagEntry;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TagWidget implements IEntryWidget {
     private final Rect bounds;
@@ -27,9 +29,9 @@ public class TagWidget implements IEntryWidget {
 
         float rawChance = (float) tagEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
         RangeValue count = TooltipUtils.getCount(allFunctions);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
 
         bounds = utils.addSlotWidget(tagEntry.item, tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;
