@@ -19,14 +19,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class EmiLootSlotWidget extends SlotWidget {
     @Nullable
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(ILootEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
-                             RangeValue count, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
+    public EmiLootSlotWidget(ILootEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
+                             RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> functions,
                              List<ILootCondition> conditions) {
         super(ingredient, x, y);
         GenericTooltipUtils.getTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);

@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.ILootFunction;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
 import net.minecraft.core.Holder;
@@ -155,6 +156,16 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.reference")));
         components.addAll(GenericTooltipUtils.getResourceLocationTooltip(pad + 1, "ali.property.common.name", name));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getSequenceTooltip(int pad, List<ILootFunction> functions) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.function.sequence")));
+        components.addAll(GenericTooltipUtils.getFunctionsTooltip(pad + 1, functions));
 
         return components;
     }

@@ -58,6 +58,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.limit_count", "Limit Count:");
         TRANSLATION_MAP.put("ali.type.function.looting_enchant", "Looting Enchant:");
         TRANSLATION_MAP.put("ali.type.function.reference", "Reference:");
+        TRANSLATION_MAP.put("ali.type.function.sequence", "Sequence:");
         TRANSLATION_MAP.put("ali.type.function.set_attributes", "Set Attributes:");
         TRANSLATION_MAP.put("ali.type.function.set_banner_pattern", "Set Banner Pattern:");
         TRANSLATION_MAP.put("ali.type.function.set_contents", "Set Contents:");

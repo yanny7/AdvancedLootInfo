@@ -190,11 +190,9 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         int x();
         int y();
         RangeValue chance();
-        @Nullable
-        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance();
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance();
         RangeValue count();
-        @Nullable
-        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount();
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount();
         List<ILootFunction> allFunctions();
         List<ILootCondition> allConditions();
     }
@@ -205,9 +203,9 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             int x,
             int y,
             RangeValue chance,
-            @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
+            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
             RangeValue count,
-            @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount,
+            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount,
             List<ILootFunction> allFunctions,
             List<ILootCondition> allConditions
     ) implements ISlotParams {}
@@ -218,9 +216,9 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             int x,
             int y,
             RangeValue chance,
-            @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
+            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
             RangeValue count,
-            @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount,
+            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount,
             List<ILootFunction> allFunctions,
             List<ILootCondition> allConditions
     ) implements ISlotParams {}

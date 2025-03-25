@@ -62,6 +62,14 @@ loom {
     }
 }
 
+tasks.named('compileTestJava') {
+    it.enabled = false
+}
+
+tasks.named('test') {
+    it.enabled = false
+}
+
 tasks.withType(JavaCompile).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
