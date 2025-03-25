@@ -2,9 +2,7 @@ package com.yanny.ali.test;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.authlib.GameProfile;
-import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.datagen.LanguageHolder;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.SystemReport;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -15,10 +13,8 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringDecomposer;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -101,16 +97,6 @@ public class TestTest {
 //            }
 //        });
 //    }
-
-    @Test
-    public void TestSetup() {
-        List<Component> components = List.of(TooltipUtils.getCount(new RangeValue(1, 2)));
-
-
-        Language language = loadDefault();
-        Language.inject(language);
-        components.forEach(component -> System.out.println(componentToPlainString(component)));
-    }
 
     @NotNull
     public static String componentToString(Component component, Style baseStyle, BiFunction<Style, String, String> formatter) {

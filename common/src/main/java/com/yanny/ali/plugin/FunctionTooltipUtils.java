@@ -27,8 +27,8 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
+import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
+import static com.yanny.ali.plugin.GenericTooltipUtils.translatable;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class FunctionTooltipUtils {

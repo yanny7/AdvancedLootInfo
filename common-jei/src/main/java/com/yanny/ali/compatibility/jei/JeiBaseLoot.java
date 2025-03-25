@@ -5,8 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.TooltipUtils;
-import com.yanny.ali.plugin.entry.SingletonEntry;
+import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -85,13 +84,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                 builder.addSlot(RecipeIngredientRole.OUTPUT, itemSlotParams.x + 1, itemSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
                         .addTooltipCallback((iRecipeSlotView, components)
-                                -> setupTooltip(components, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
+                                -> components.addAll(GenericTooltipUtils.getTooltip(p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addItemStack(itemSlotParams.item.getDefaultInstance());
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, tagSlotParams.x + 1, tagSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
-                        .addTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> setupTooltip(tooltipBuilder, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
+                        .addTooltipCallback((iRecipeSlotView, components)
+                                -> components.addAll(GenericTooltipUtils.getTooltip(p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
         }
@@ -171,35 +170,19 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             }
 
             @Override
-            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
+                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 slotParams.add(new ItemSlotParams(item, entry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
                 return new Rect(x, y, 18, 18);
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
+                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 slotParams.add(new TagSlotParams(item, entry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
                 return new Rect(x, y, 18, 18);
             }
         };
-    }
-
-    private void setupTooltip(List<Component> components, ILootEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                              @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions, List<ILootCondition> conditions) {
-        if (entry instanceof SingletonEntry singletonEntry) {
-            components.addAll(TooltipUtils.getQuality(singletonEntry));
-        }
-
-        components.add(TooltipUtils.getChance(chance));
-        components.addAll(TooltipUtils.getBonusChance(bonusChance));
-
-        components.add(TooltipUtils.getCount(count));
-        components.addAll(TooltipUtils.getBonusCount(bonusCount));
-
-        components.addAll(TooltipUtils.getConditions(conditions, 0));
-        components.addAll(TooltipUtils.getFunctions(functions, 0));
     }
 
     private interface ISlotParams {

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TagWidget implements IEntryWidget {
     private final Rect bounds;
@@ -28,9 +29,9 @@ public class TagWidget implements IEntryWidget {
 
         float rawChance = (float) tagEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
         RangeValue count = TooltipUtils.getCount(allFunctions);
-        Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
 
         bounds = utils.addSlotWidget(tagEntry.item, tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;

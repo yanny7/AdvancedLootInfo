@@ -4,8 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.TooltipUtils;
-import com.yanny.ali.plugin.entry.SingletonEntry;
+import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
@@ -33,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements DisplayCategory<T> {
     private final LootCategory<U> lootCategory;
@@ -88,47 +88,27 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
+                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 EntryStack<ItemStack> stack = EntryStacks.of(item);
 
-                stack.tooltip(setupTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
+                stack.tooltip(GenericTooltipUtils.getTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entry(stack).markOutput());
                 widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(count)));
                 return new Rect(x, y, 18, 18);
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
+                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(item);
 
-                ingredient.map((stack) -> stack.tooltip(setupTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));
+                ingredient.map((stack) -> stack.tooltip(GenericTooltipUtils.getTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entries(ingredient).markOutput());
                 widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(count)));
                 return new Rect(x, y, 18, 18);
             }
         };
-    }
-
-    @NotNull
-    private List<Component> setupTooltip(ILootEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                       @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions, List<ILootCondition> conditions) {
-        List<Component> components = new LinkedList<>();
-
-        if (entry instanceof SingletonEntry singletonEntry) {
-            components.addAll(TooltipUtils.getQuality(singletonEntry));
-        }
-
-        components.add(TooltipUtils.getChance(chance));
-        components.addAll(TooltipUtils.getBonusChance(bonusChance));
-
-        components.add(TooltipUtils.getCount(count));
-        components.addAll(TooltipUtils.getBonusCount(bonusCount));
-
-        components.addAll(TooltipUtils.getConditions(conditions, 0));
-        components.addAll(TooltipUtils.getFunctions(functions, 0));
-        return components;
     }
 
     private static class SlotCountRenderer implements Renderer {

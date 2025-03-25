@@ -144,6 +144,10 @@ public class ConditionTooltipTest {
         scores.put("single", new Tuple<>(new RangeValue(2), new RangeValue(5)));
         scores.put("double", new Tuple<>(new RangeValue(1), new RangeValue(7)));
 
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(0, LootContext.EntityTarget.DIRECT_KILLER, Map.of()), List.of(
+                "Entity Scores:",
+                "  -> Target: Directly Killed By"
+        ));
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(0, LootContext.EntityTarget.DIRECT_KILLER, scores), List.of(
                 "Entity Scores:",
                 "  -> Target: Directly Killed By",

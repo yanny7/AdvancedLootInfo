@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements DisplayCategory<T> {
     private final LootCategory<U> lootCategory;
@@ -88,8 +89,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
+                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 EntryStack<ItemStack> stack = EntryStacks.of(item);
 
                 stack.tooltip(setupTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
@@ -99,8 +100,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
+                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(item);
 
                 ingredient.map((stack) -> stack.tooltip(setupTooltip(entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));

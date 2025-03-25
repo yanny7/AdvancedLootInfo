@@ -6,8 +6,7 @@ import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.ILootEntry;
 import com.yanny.ali.api.ILootFunction;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.TooltipUtils;
-import com.yanny.ali.plugin.entry.SingletonEntry;
+import com.yanny.ali.plugin.GenericTooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
@@ -30,7 +29,8 @@ public class EmiLootSlotWidget extends SlotWidget {
                              RangeValue count, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
                              List<ILootCondition> conditions) {
         super(ingredient, x, y);
-        setupTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions);
+        GenericTooltipUtils.getTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);
+        setCount(count);
     }
 
     @Override
@@ -57,25 +57,6 @@ public class EmiLootSlotWidget extends SlotWidget {
         }
 
         super.drawOverlay(draw, mouseX, mouseY, delta);
-    }
-
-    private void setupTooltip(ILootEntry entry, RangeValue chance, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusChance,
-                              RangeValue count, @Nullable Pair<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
-                              List<ILootCondition> conditions) {
-        if (entry instanceof SingletonEntry singletonEntry) {
-            TooltipUtils.getQuality(singletonEntry).forEach(this::appendTooltip);
-        }
-
-        appendTooltip(TooltipUtils.getChance(chance));
-        TooltipUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
-
-        appendTooltip(TooltipUtils.getCount(count));
-        TooltipUtils.getBonusCount(bonusCount).forEach(this::appendTooltip);
-
-        TooltipUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
-        TooltipUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
-
-        setCount(count);
     }
 
     private void setCount(RangeValue count) {
