@@ -1,10 +1,19 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.ICommonUtils;
+import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.condition.KilledByPlayerAliCondition;
+import com.yanny.ali.plugin.condition.SurvivesExplosionAliCondition;
+import com.yanny.ali.plugin.entry.AlternativesEntry;
+import com.yanny.ali.plugin.entry.EmptyEntry;
+import com.yanny.ali.plugin.function.ExplosionDecayAliFunction;
+import com.yanny.ali.plugin.function.FurnaceSmeltAliFunction;
 import com.yanny.ali.plugin.function.SetAttributesAliFunction;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
@@ -13,6 +22,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
@@ -43,23 +54,114 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.*;
 
+import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 import static org.mockito.Mockito.*;
 
 public class GenericTooltipTest {
     @Test
+    public void testRangeValue() {
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(123))), "123");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(1, 5))), "1-5");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(-1, 3))), "-1-3");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(456, 789))), "456-789");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(2.5F))), "2.50");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(2.5F, 3.6F))), "2.50-3.60");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(true, false))), "1[+Score]");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(false, true))), "1[+???]");
+        assertTooltip(Component.translatable(String.valueOf(new RangeValue(true, true))), "1[+Score][+???]");
+    }
+
+    @Test
+    public void testPad() {
+        assertTooltip(pad(0, 123), "123");
+        assertTooltip(pad(1, 123), "  -> 123");
+        assertTooltip(pad(2, 123), "    -> 123");
+        assertTooltip(pad(3, 123), "      -> 123");
+
+        assertTooltip(pad(1, Component.literal("Hello")), "  -> Hello");
+    }
+
+    @Test
+    public void testTooltip() {
+        Map<Integer, RangeValue> bonusChanceMap = new LinkedHashMap<>();
+        Map<Integer, RangeValue> bonusCountMap = new LinkedHashMap<>();
+        IContext context = mock(IContext.class);
+        ICommonUtils utils = mock(ICommonUtils.class);
+        LootPoolEntryContainer container = mock(LootPoolEntryContainer.class, withSettings().extraInterfaces(MixinLootPoolSingletonContainer.class, MixinLootPoolEntryContainer.class));
+        FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+
+        bonusChanceMap.put(1, new RangeValue(1.5F));
+        bonusChanceMap.put(2, new RangeValue(3F));
+        bonusChanceMap.put(3, new RangeValue(4.5F));
+        bonusCountMap.put(1, new RangeValue(1, 2));
+        bonusCountMap.put(2, new RangeValue(2, 4));
+        bonusCountMap.put(3, new RangeValue(4, 8));
+
+        when(((MixinLootPoolSingletonContainer) container).getQuality()).thenReturn(5);
+        when(((MixinLootPoolSingletonContainer) container).getFunctions()).thenReturn(new LootItemFunction[0]);
+        when(((MixinLootPoolEntryContainer) container).getConditions()).thenReturn(new LootItemCondition[0]);
+        when(context.utils()).thenReturn(utils);
+        when(utils.convertConditions(any(), any())).thenReturn(List.of());
+        when(utils.convertFunctions(any(), any())).thenReturn(List.of());
+        //noinspection unchecked
+        when(utils.decodeConditions(any(), any())).thenReturn(List.of(new SurvivesExplosionAliCondition(context, buf)), List.of());
+
+        assertTooltip(GenericTooltipUtils.getTooltip(
+                mock(AlternativesEntry.class),
+                new RangeValue(2.5F),
+                null,
+                new RangeValue(2, 10),
+                null,
+                List.of(),
+                List.of()
+        ), List.of(
+                "Chance: 2.50%",
+                "Count: 2-10"
+        ));
+        assertTooltip(GenericTooltipUtils.getTooltip(
+                new EmptyEntry(context, container),
+                new RangeValue(2.5F),
+                Pair.of(Enchantments.MOB_LOOTING, bonusChanceMap),
+                new RangeValue(2, 10),
+                Pair.of(Enchantments.BLOCK_FORTUNE, bonusCountMap),
+                List.of(new ExplosionDecayAliFunction(context, buf), new FurnaceSmeltAliFunction(context, buf)),
+                List.of(new KilledByPlayerAliCondition(context, buf))
+        ), List.of(
+                "Quality: 5",
+                "Chance: 2.50%",
+                "  -> 1.50% (Looting I)",
+                "  -> 3% (Looting II)",
+                "  -> 4.50% (Looting III)",
+                "Count: 2-10",
+                "  -> 1-2 (Fortune I)",
+                "  -> 2-4 (Fortune II)",
+                "  -> 4-8 (Fortune III)",
+                "----- Conditions -----",
+                "  -> Must be killed by player",
+                "----- Functions -----",
+                "  -> Explosion Decay",
+                "    -> Conditions:",
+                "      -> Must survive explosion",
+                "  -> Use Smelting Recipe On Item"
+        ));
+    }
+
+    @Test
     public void testFormulaTooltip() {
         ApplyBonusCount.UniformBonusCount uniformBonusCountOriginal = new ApplyBonusCount.UniformBonusCount(2);
         ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCountOriginal = new ApplyBonusCount.BinomialWithBonusCount(3, 0.51F);
-        ApplyBonusCount.UniformBonusCount uniformBonusCountMocked = mock(ApplyBonusCount.UniformBonusCount.class, Mockito.withSettings().extraInterfaces(MixinApplyBonusCount.UniformBonusCount.class));
-        ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCountMocked = mock(ApplyBonusCount.BinomialWithBonusCount.class, Mockito.withSettings().extraInterfaces(MixinApplyBonusCount.BinomialWithBonusCount.class));
+        ApplyBonusCount.UniformBonusCount uniformBonusCountMocked = mock(ApplyBonusCount.UniformBonusCount.class, withSettings().extraInterfaces(MixinApplyBonusCount.UniformBonusCount.class));
+        ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCountMocked = mock(ApplyBonusCount.BinomialWithBonusCount.class, withSettings().extraInterfaces(MixinApplyBonusCount.BinomialWithBonusCount.class));
 
         when(uniformBonusCountMocked.getType()).thenReturn(uniformBonusCountOriginal.getType());
         when(binomialWithBonusCountMocked.getType()).thenReturn(binomialWithBonusCountOriginal.getType());
@@ -98,6 +200,8 @@ public class GenericTooltipTest {
     public void testPropertiesTooltip() {
         Set<Property<?>> properties = new LinkedHashSet<>();
 
+        assertTooltip(GenericTooltipUtils.getPropertiesTooltip(0, properties), List.of());
+
         properties.add(BooleanProperty.create("bool"));
         properties.add(IntegerProperty.create("int", 0, 3));
         properties.add(DirectionProperty.create("direction", Direction.UP, Direction.DOWN));
@@ -117,6 +221,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentsTooltip() {
+        assertTooltip(GenericTooltipUtils.getEnchantmentsTooltip(0, List.of()), List.of());
         assertTooltip(GenericTooltipUtils.getEnchantmentsTooltip(0, List.of(Enchantments.RIPTIDE, Enchantments.SMITE)), List.of(
                 "Enchantments:",
                 "  -> Enchantment: Riptide",
@@ -126,12 +231,14 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentTooltip() {
+        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(0, null), List.of());
         assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(0, Enchantments.AQUA_AFFINITY), List.of("Enchantment: Aqua Affinity"));
         assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(1, Enchantments.FIRE_ASPECT), List.of("  -> Enchantment: Fire Aspect"));
     }
 
     @Test
     public void testModifiersTooltip() {
+        assertTooltip(GenericTooltipUtils.getModifiersTooltip(0, List.of()), List.of());
         assertTooltip(GenericTooltipUtils.getModifiersTooltip(0, List.of(
                 new SetAttributesAliFunction.Modifier(
                         "armor_toughness",
@@ -213,6 +320,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEquipmentSlotsTooltip() {
+        assertTooltip(GenericTooltipUtils.getEquipmentSlotsTooltip(0, List.of()), List.of());
         assertTooltip(GenericTooltipUtils.getEquipmentSlotsTooltip(0, List.of(
                 EquipmentSlot.HEAD,
                 EquipmentSlot.CHEST,
@@ -229,6 +337,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBannerPatternsSlotsTooltip() {
+        assertTooltip(GenericTooltipUtils.getBannerPatternsTooltip(0, List.of()), List.of());
         assertTooltip(GenericTooltipUtils.getBannerPatternsTooltip(0, List.of(
                 Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE),
                 Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.CREEPER))), DyeColor.GREEN)
@@ -267,6 +376,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testMobEffectInstancesTooltip() {
+        assertTooltip(GenericTooltipUtils.getMobEffectInstancesTooltip(0, List.of()), List.of());
         assertTooltip(GenericTooltipUtils.getMobEffectInstancesTooltip(0, List.of(
                 new MobEffectInstance(MobEffects.ABSORPTION, 1, 5),
                 new MobEffectInstance(MobEffects.BLINDNESS, 1, 2)
@@ -294,8 +404,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testStatePropertiesPredicateTooltip() {
-        MixinStatePropertiesPredicate propertiesPredicate = (MixinStatePropertiesPredicate) mock(StatePropertiesPredicate.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
-        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
+        MixinStatePropertiesPredicate propertiesPredicate = (MixinStatePropertiesPredicate) mock(StatePropertiesPredicate.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
+        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
 
         when(propertiesPredicate.getProperties()).thenReturn(List.of(
                 (StatePropertiesPredicate.PropertyMatcher) exactPropertyMatcher
@@ -310,8 +420,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testPropertyMatcherTooltip() {
-        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
-        MixinStatePropertiesPredicate.RangedPropertyMatcher rangedPropertyMatcher = (MixinStatePropertiesPredicate.RangedPropertyMatcher) mock(StatePropertiesPredicate.RangedPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.RangedPropertyMatcher.class));
+        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
+        MixinStatePropertiesPredicate.RangedPropertyMatcher rangedPropertyMatcher = (MixinStatePropertiesPredicate.RangedPropertyMatcher) mock(StatePropertiesPredicate.RangedPropertyMatcher.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.RangedPropertyMatcher.class));
 
         when(exactPropertyMatcher.getName()).thenReturn("facing");
         when(exactPropertyMatcher.getValue()).thenReturn("east");
@@ -371,6 +481,7 @@ public class GenericTooltipTest {
         when(damageSourcePredicate.getSourceEntity()).thenReturn((EntityPredicate) sourcePredicate);
         when(damageSourcePredicate.getDirectEntity()).thenReturn((EntityPredicate) directPredicate);
 
+        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(0, DamageSourcePredicate.ANY), List.of());
         assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(0, (DamageSourcePredicate) damageSourcePredicate), List.of(
                 "Damage Source:",
                 "  -> Tags:",
@@ -393,6 +504,7 @@ public class GenericTooltipTest {
         when(mixinTagPredicate2.getTag()).thenReturn(DamageTypeTags.IS_EXPLOSION);
         when(mixinTagPredicate2.getExpected()).thenReturn(false);
 
+        assertTooltip(GenericTooltipUtils.getTagPredicatesTooltip(0, List.of()), List.of());
         assertTooltip(GenericTooltipUtils.getTagPredicatesTooltip(0, List.of(tagPredicate1, tagPredicate2)), List.of(
                 "Tags:",
                 "  -> minecraft:bypasses_armor: true",
@@ -631,12 +743,13 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getLightPredicateTooltip(0, (LightPredicate) lightPredicate), List.of("Light: 10-15"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testBlockPredicateTooltip() {
         MixinBlockPredicate blockPredicate = (MixinBlockPredicate) mock(BlockPredicate.class, withSettings().extraInterfaces(MixinBlockPredicate.class));
         MixinNbtPredicate nbtPredicate = (MixinNbtPredicate) mock(NbtPredicate.class, withSettings().extraInterfaces(MixinNbtPredicate.class));
-        MixinStatePropertiesPredicate propertiesPredicate = (MixinStatePropertiesPredicate) mock(StatePropertiesPredicate.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
-        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
+        MixinStatePropertiesPredicate propertiesPredicate = (MixinStatePropertiesPredicate) mock(StatePropertiesPredicate.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
+        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
 
         CompoundTag compoundTag = new CompoundTag();
         Set<Block> blockSet = new LinkedHashSet<>();
@@ -654,11 +767,19 @@ public class GenericTooltipTest {
         when(exactPropertyMatcher.getName()).thenReturn("facing");
         when(exactPropertyMatcher.getValue()).thenReturn("east");
 
-        when(blockPredicate.getBlocks()).thenReturn(blockSet);
-        when(blockPredicate.getNbt()).thenReturn((NbtPredicate) nbtPredicate);
-        when(blockPredicate.getProperties()).thenReturn((StatePropertiesPredicate) propertiesPredicate);
-        when(blockPredicate.getTag()).thenReturn(BlockTags.BASE_STONE_OVERWORLD);
+        when(blockPredicate.getBlocks()).thenReturn(null, Set.of(), blockSet);
+        when(blockPredicate.getNbt()).thenReturn(NbtPredicate.ANY, NbtPredicate.ANY, (NbtPredicate) nbtPredicate);
+        when(blockPredicate.getProperties()).thenReturn(StatePropertiesPredicate.ANY, StatePropertiesPredicate.ANY, (StatePropertiesPredicate) propertiesPredicate);
+        when(blockPredicate.getTag()).thenReturn(BlockTags.DIRT, BlockTags.BEDS, BlockTags.BASE_STONE_OVERWORLD);
 
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(0, (BlockPredicate) blockPredicate), List.of(
+                "Block Predicate:",
+                "  -> Tag: minecraft:dirt"
+        ));
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(0, (BlockPredicate) blockPredicate), List.of(
+                "Block Predicate:",
+                "  -> Tag: minecraft:beds"
+        ));
         assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(0, (BlockPredicate) blockPredicate), List.of(
                 "Block Predicate:",
                 "  -> Tag: minecraft:base_stone_overworld",
@@ -677,15 +798,16 @@ public class GenericTooltipTest {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putFloat("test", 3F);
-        when(nbtPredicate.getTag()).thenReturn(compoundTag);
+        when(nbtPredicate.getTag()).thenReturn(null, compoundTag);
+        assertTooltip(GenericTooltipUtils.getNbtPredicateTooltip(0, (NbtPredicate) nbtPredicate), List.of());
         assertTooltip(GenericTooltipUtils.getNbtPredicateTooltip(0, (NbtPredicate) nbtPredicate), List.of("Nbt: {test:3.0f}"));
     }
 
     @Test
     public void testFluidPredicateTooltip() {
         MixinFluidPredicate fluidPredicate = (MixinFluidPredicate) mock(FluidPredicate.class, withSettings().extraInterfaces(MixinFluidPredicate.class));
-        MixinStatePropertiesPredicate propertiesPredicate = (MixinStatePropertiesPredicate) mock(StatePropertiesPredicate.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
-        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, Mockito.withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
+        MixinStatePropertiesPredicate propertiesPredicate = (MixinStatePropertiesPredicate) mock(StatePropertiesPredicate.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.class));
+        MixinStatePropertiesPredicate.ExactPropertyMatcher exactPropertyMatcher = (MixinStatePropertiesPredicate.ExactPropertyMatcher) mock(StatePropertiesPredicate.ExactPropertyMatcher.class, withSettings().extraInterfaces(MixinStatePropertiesPredicate.ExactPropertyMatcher.class));
 
         List<StatePropertiesPredicate.PropertyMatcher> propertyMatcherList = new LinkedList<>();
 
@@ -711,6 +833,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testFluidTooltip() {
+        assertTooltip(GenericTooltipUtils.getFluidTooltip(0, null), List.of());
         assertTooltip(GenericTooltipUtils.getFluidTooltip(0, Fluids.WATER), List.of("Fluid: minecraft:water"));
     }
 
@@ -828,6 +951,7 @@ public class GenericTooltipTest {
         ));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testItemPredicateTooltip() {
         MixinItemPredicate itemPredicate = (MixinItemPredicate) mock(ItemPredicate.class, withSettings().extraInterfaces(MixinItemPredicate.class));
@@ -847,18 +971,21 @@ public class GenericTooltipTest {
 
         when(nbtPredicate.getTag()).thenReturn(compoundTag);
 
-        when(itemPredicate.getNbt()).thenReturn((NbtPredicate) nbtPredicate);
-        when(itemPredicate.getCount()).thenReturn((MinMaxBounds.Ints) ints);
-        when(itemPredicate.getDurability()).thenReturn((MinMaxBounds.Ints) ints);
-        when(itemPredicate.getEnchantments()).thenReturn(new EnchantmentPredicate[]{(EnchantmentPredicate) enchantmentPredicate, (EnchantmentPredicate) enchantmentPredicate});
-        when(itemPredicate.getStoredEnchantments()).thenReturn(new EnchantmentPredicate[]{(EnchantmentPredicate) enchantmentPredicate, (EnchantmentPredicate) enchantmentPredicate});
-        when(itemPredicate.getPotion()).thenReturn(Potions.HEALING);
-        when(itemPredicate.getItems()).thenReturn(itemSet);
-        when(itemPredicate.getTag()).thenReturn(ItemTags.BANNERS);
+        when(itemPredicate.getNbt()).thenReturn(NbtPredicate.ANY, (NbtPredicate) nbtPredicate);
+        when(itemPredicate.getCount()).thenReturn(MinMaxBounds.Ints.ANY, (MinMaxBounds.Ints) ints);
+        when(itemPredicate.getDurability()).thenReturn(MinMaxBounds.Ints.ANY, (MinMaxBounds.Ints) ints);
+        when(itemPredicate.getEnchantments()).thenReturn(new EnchantmentPredicate[0], new EnchantmentPredicate[]{(EnchantmentPredicate) enchantmentPredicate, (EnchantmentPredicate) enchantmentPredicate});
+        when(itemPredicate.getStoredEnchantments()).thenReturn(new EnchantmentPredicate[0], new EnchantmentPredicate[]{(EnchantmentPredicate) enchantmentPredicate, (EnchantmentPredicate) enchantmentPredicate});
+        when(itemPredicate.getPotion()).thenReturn(null, Potions.HEALING);
+        when(itemPredicate.getItems()).thenReturn(null, itemSet);
+        when(itemPredicate.getTag()).thenReturn(ItemTags.AXES, ItemTags.BANNERS);
 
         when(enchantmentPredicate.getEnchantment()).thenReturn(Enchantments.SMITE, Enchantments.MENDING, Enchantments.DEPTH_STRIDER, Enchantments.FISHING_SPEED);
         when(enchantmentPredicate.getLevel()).thenReturn((MinMaxBounds.Ints) ints, (MinMaxBounds.Ints) ints, (MinMaxBounds.Ints) ints, (MinMaxBounds.Ints) ints);
 
+        assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(0, (ItemPredicate) itemPredicate), List.of(
+                "Tag: minecraft:axes"
+        ));
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(0, (ItemPredicate) itemPredicate), List.of(
                 "Tag: minecraft:banners",
                 "Items:",
@@ -898,6 +1025,7 @@ public class GenericTooltipTest {
         when(enchantmentPredicate.getEnchantment()).thenReturn(Enchantments.FALL_PROTECTION);
         when(enchantmentPredicate.getLevel()).thenReturn((MinMaxBounds.Ints) ints);
 
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(0, EnchantmentPredicate.ANY), List.of());
         assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(0, (EnchantmentPredicate) enchantmentPredicate), List.of(
                 "Enchantment: Feather Falling",
                 "  -> Level: <2"
@@ -1016,6 +1144,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testGameTypeTooltip() {
+        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(0, null), List.of());
         assertTooltip(GenericTooltipUtils.getGameTypeTooltip(0, GameType.SPECTATOR), List.of(
                 "Game Type: Spectator"
         ));
@@ -1033,6 +1162,7 @@ public class GenericTooltipTest {
 
         when(ints.getMin()).thenReturn(2, 3, 5);
 
+        assertTooltip(GenericTooltipUtils.getStatsTooltip(0, Map.of()), List.of());
         assertTooltip(GenericTooltipUtils.getStatsTooltip(0, statMap), List.of(
                 "Stats:",
                 "  -> Block: Cobblestone",
@@ -1051,6 +1181,7 @@ public class GenericTooltipTest {
         recipeList.put(new ResourceLocation("furnace_recipe"), true);
         recipeList.put(new ResourceLocation("apple_recipe"), false);
 
+        assertTooltip(GenericTooltipUtils.getRecipesTooltip(0, new Object2BooleanArrayMap<>()), List.of());
         assertTooltip(GenericTooltipUtils.getRecipesTooltip(0, recipeList), List.of(
                 "Recipes:",
                 "  -> minecraft:furnace_recipe: true",
@@ -1073,6 +1204,7 @@ public class GenericTooltipTest {
         when(advancementDonePredicate.getState()).thenReturn(true);
         when(advancementCriterionsPredicate.getCriterions()).thenReturn(criterions);
 
+        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(0, Map.of()), List.of());
         assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(0, predicateMap), List.of(
                 "Advancements:",
                 "  -> minecraft:first",

@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.*;
 public class ConditionTooltipTest {
     @Test
     public void testAllOfTooltip() {
+        IContext context = mock(IContext.class);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeOptional(Optional.of(10L), FriendlyByteBuf::writeLong);
@@ -40,8 +42,8 @@ public class ConditionTooltipTest {
         buf.writeOptional(Optional.empty(), FriendlyByteBuf::writeBoolean);
 
         assertTooltip(ConditionTooltipUtils.getAllOfTooltip(0, List.of(
-                new TimeCheckAliCondition(null, new FriendlyByteBuf(buf)),
-                new WeatherCheckAliCondition(null, new FriendlyByteBuf(buf))
+                new TimeCheckAliCondition(context, new FriendlyByteBuf(buf)),
+                new WeatherCheckAliCondition(context, new FriendlyByteBuf(buf))
         )), List.of(
                 "All must pass:",
                 "  -> Time Check:",
@@ -54,6 +56,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testAnyOfTooltip() {
+        IContext context = mock(IContext.class);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeOptional(Optional.of(10L), FriendlyByteBuf::writeLong);
@@ -63,8 +66,8 @@ public class ConditionTooltipTest {
         buf.writeOptional(Optional.empty(), FriendlyByteBuf::writeBoolean);
 
         assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(0, List.of(
-                new TimeCheckAliCondition(null, new FriendlyByteBuf(buf)),
-                new WeatherCheckAliCondition(null, new FriendlyByteBuf(buf))
+                new TimeCheckAliCondition(context, new FriendlyByteBuf(buf)),
+                new WeatherCheckAliCondition(context, new FriendlyByteBuf(buf))
         )), List.of(
                 "Any of:",
                 "  -> Time Check:",
@@ -211,6 +214,10 @@ public class ConditionTooltipTest {
         scores.put("single", new Tuple<>(new RangeValue(2), new RangeValue(5)));
         scores.put("double", new Tuple<>(new RangeValue(1), new RangeValue(7)));
 
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(0, LootContext.EntityTarget.DIRECT_KILLER, Map.of()), List.of(
+                "Entity Scores:",
+                "  -> Target: Directly Killed By"
+        ));
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(0, LootContext.EntityTarget.DIRECT_KILLER, scores), List.of(
                 "Entity Scores:",
                 "  -> Target: Directly Killed By",
@@ -222,13 +229,14 @@ public class ConditionTooltipTest {
 
     @Test
     public void testInvertedTooltip() {
+        IContext context = mock(IContext.class);
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
         buf.writeOptional(Optional.of(10L), FriendlyByteBuf::writeLong);
         new RangeValue(1).encode(buf);
         new RangeValue(8).encode(buf);
 
-        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(0, new TimeCheckAliCondition(null, buf)), List.of(
+        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(0, new TimeCheckAliCondition(context, buf)), List.of(
                 "Inverted:",
                 "  -> Time Check:",
                 "    -> Period: 10",

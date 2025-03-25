@@ -31,7 +31,6 @@ import java.util.concurrent.ExecutionException;
 
 @Suite
 @SelectClasses({
-        CommonTooltipTest.class,
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
         GenericTooltipTest.class,

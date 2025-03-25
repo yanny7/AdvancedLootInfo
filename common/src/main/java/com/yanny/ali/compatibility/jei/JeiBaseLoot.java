@@ -4,12 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.TooltipUtils;
-import com.yanny.ali.plugin.entry.SingletonEntry;
+import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
@@ -78,7 +76,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setSlotName(String.valueOf(i))
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> setupTooltip(tooltipBuilder, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
+                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addItemLike(itemSlotParams.item);
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addOutputSlot()
@@ -86,7 +84,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setSlotName(String.valueOf(i))
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> setupTooltip(tooltipBuilder, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions()))
+                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
         }
@@ -155,22 +153,6 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                 return new Rect(x, y, 18, 18);
             }
         };
-    }
-
-    private void setupTooltip(ITooltipBuilder tooltipBuilder, ILootEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                              @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions, List<ILootCondition> conditions) {
-        if (entry instanceof SingletonEntry singletonEntry) {
-            tooltipBuilder.addAll(TooltipUtils.getQuality(singletonEntry));
-        }
-
-        tooltipBuilder.add(TooltipUtils.getChance(chance));
-        tooltipBuilder.addAll(TooltipUtils.getBonusChance(bonusChance));
-
-        tooltipBuilder.add(TooltipUtils.getCount(count));
-        tooltipBuilder.addAll(TooltipUtils.getBonusCount(bonusCount));
-
-        tooltipBuilder.addAll(TooltipUtils.getConditions(conditions, 0));
-        tooltipBuilder.addAll(TooltipUtils.getFunctions(functions, 0));
     }
 
     private interface ISlotParams {

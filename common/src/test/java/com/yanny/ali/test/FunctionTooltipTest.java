@@ -226,6 +226,10 @@ public class FunctionTooltipTest {
         enchantmentRangeValueMap.put(Enchantments.BINDING_CURSE, new RangeValue(1));
         enchantmentRangeValueMap.put(Enchantments.MOB_LOOTING, new RangeValue(1, 3));
 
+        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(0, Map.of(), true), List.of(
+                "Set Enchantments:",
+                "  -> Add: true"
+        ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(0, enchantmentRangeValueMap, false), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
@@ -324,6 +328,9 @@ public class FunctionTooltipTest {
         effectRangeValueMap.put(MobEffects.LUCK, new RangeValue(1, 5));
         effectRangeValueMap.put(MobEffects.UNLUCK, new RangeValue(3, 4));
 
+        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(0, Map.of()), List.of(
+                "Set Stew Effect:"
+        ));
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(0, effectRangeValueMap), List.of(
                 "Set Stew Effect:",
                 "  -> Mob Effects:",

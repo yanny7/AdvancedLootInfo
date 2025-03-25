@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
+import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
+import static com.yanny.ali.plugin.GenericTooltipUtils.translatable;
 
 public class FunctionTooltipUtils {
     @NotNull

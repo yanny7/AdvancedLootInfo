@@ -42,11 +42,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
         TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
         TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
-        TRANSLATION_MAP.put("ali.type.condition.loot_condition_type", "Can Tool Perform Action: %s");
+        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
         TRANSLATION_MAP.put("ali.type.condition.unknown", "Unknown Predicate: %s");
 
         TRANSLATION_MAP.put("ali.type.function.apply_bonus", "Apply Bonus:");
-        TRANSLATION_MAP.put("ali.type.function.conditional", "Conditions:");
         TRANSLATION_MAP.put("ali.type.function.copy_name", "Copy Name:");
         TRANSLATION_MAP.put("ali.type.function.copy_nbt", "Copy Nbt");
         TRANSLATION_MAP.put("ali.type.function.copy_state", "Copy State:");
@@ -108,7 +107,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.common.bonus_multiplier", "Bonus Multiplier: %s");
         TRANSLATION_MAP.put("ali.property.common.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.common.color", "Color: %s");
-        TRANSLATION_MAP.put("ali.property.common.condition", "Condition:");
+        TRANSLATION_MAP.put("ali.property.common.conditions", "Conditions:");
         TRANSLATION_MAP.put("ali.property.common.count", "Count: %s");
         TRANSLATION_MAP.put("ali.property.common.damage", "Damage: %s");
         TRANSLATION_MAP.put("ali.property.common.damage_source_predicate", "Damage Source:");

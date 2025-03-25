@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.widget;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.WidgetUtils;
 import com.yanny.ali.plugin.entry.DynamicEntry;
@@ -10,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,18 +38,7 @@ public class DynamicWidget implements IEntryWidget {
         widget = WidgetUtils.getDynamicWidget(x, y);
         bounds = widget.getRect();
         this.entry = entry;
-        setupTooltip(dynamicEntry, chance, bonusChance, allFunctions, allConditions);
-    }
-
-    private void setupTooltip(DynamicEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                              List<ILootFunction> functions, List<ILootCondition> conditions) {
-        TooltipUtils.getQuality(entry).forEach(this::appendTooltip);
-
-        appendTooltip(TooltipUtils.getChance(chance));
-        TooltipUtils.getBonusChance(bonusChance).forEach(this::appendTooltip);
-
-        TooltipUtils.getConditions(conditions, 0).forEach(this::appendTooltip);
-        TooltipUtils.getFunctions(functions, 0).forEach(this::appendTooltip);
+        GenericTooltipUtils.getTooltip(dynamicEntry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions).forEach(this::appendTooltip);
     }
 
     public void appendTooltip(Component text) {

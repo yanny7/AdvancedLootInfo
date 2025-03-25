@@ -19,9 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.getComponentsTooltip;
-import static com.yanny.ali.plugin.GenericTooltipUtils.getEnumTooltip;
-import static com.yanny.ali.plugin.TooltipUtils.*;
+import static com.yanny.ali.plugin.GenericTooltipUtils.*;
 
 public class ConditionTooltipUtils {
     @NotNull
