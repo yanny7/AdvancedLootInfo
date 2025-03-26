@@ -46,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 public class GenericTooltipUtils {
     private static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
@@ -288,12 +289,17 @@ public class GenericTooltipUtils {
         if (!patterns.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.branch.banner_patterns")));
             patterns.forEach((pair) -> {
-                components.addAll(getBannerPatternTooltip(pad + 1, pair.getFirst().value()));
+                components.addAll(getHolderTooltip(pad + 1, pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
                 components.addAll(getEnumTooltip(pad + 2, "ali.property.value.color", pair.getSecond()));
             });
         }
 
         return components;
+    }
+
+    @NotNull
+    public static <T> List<Component> getHolderTooltip(int pad, Holder<T> holder, BiFunction<Integer, T, List<Component>> mapper) {
+        return mapper.apply(pad, holder.value());
     }
 
     @Unmodifiable
