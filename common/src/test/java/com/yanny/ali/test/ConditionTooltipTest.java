@@ -96,7 +96,7 @@ public class ConditionTooltipTest {
                 "  -> State Properties:",
                 "    -> facing: east",
                 "    -> level: 1-5",
-                "    -> level: 5≥",
+                "    -> level: ≤5",
                 "    -> level: ≥1",
                 "    -> level: any"
         ));

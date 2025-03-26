@@ -143,12 +143,12 @@ public class GenericTooltipTest {
                 "  -> 2-4 (Fortune II)",
                 "  -> 4-8 (Fortune III)",
                 "----- Conditions -----",
-                "  -> Must be killed by player",
+                "Must be killed by player",
                 "----- Functions -----",
-                "  -> Explosion Decay",
-                "    -> Conditions:",
-                "      -> Must survive explosion",
-                "  -> Use Smelting Recipe On Item"
+                "Explosion Decay",
+                "  -> Conditions:",
+                "    -> Must survive explosion",
+                "Use Smelting Recipe On Item"
         ));
     }
 
@@ -416,7 +416,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, exactMatcher), List.of("facing: east"));
         assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, rangedMatcher1), List.of("level: 1-7"));
         assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, rangedMatcher2), List.of("level: ≥2"));
-        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, rangedMatcher3), List.of("level: 6≥"));
+        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, rangedMatcher3), List.of("level: ≤6"));
     }
 
     @Test
@@ -479,7 +479,7 @@ public class GenericTooltipTest {
                 "    -> X: ≥20.0",
                 "Stepping on Location:",
                 "  -> Position:",
-                "    -> X: <30.0",
+                "    -> X: ≤30.0",
                 "Mob Effects:",
                 "  -> Mob Effect: minecraft:absorption",
                 "    -> Is Ambient: true",
@@ -531,7 +531,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getDistancePredicateTooltip(0, distancePredicate), List.of(
                 "X: =10.0",
                 "Y: ≥20.0",
-                "Z: <30.0",
+                "Z: ≤30.0",
                 "Horizontal: ≥15.0",
                 "Absolute: 2.0-5.5"
         ));
@@ -556,7 +556,7 @@ public class GenericTooltipTest {
                 "Position:",
                 "  -> X: =10.0",
                 "  -> Y: ≥20.0",
-                "  -> Z: <30.0",
+                "  -> Z: ≤30.0",
                 "Biome: minecraft:plains",
                 "Structure: minecraft:mineshaft",
                 "Dimension: minecraft:overworld",
@@ -664,7 +664,7 @@ public class GenericTooltipTest {
                 "Mob Effects:",
                 "  -> Mob Effect: minecraft:absorption",
                 "    -> Amplifier: 10-15",
-                "    -> Duration: <5",
+                "    -> Duration: ≤5",
                 "    -> Is Ambient: true",
                 "    -> Is Visible: false",
                 "  -> Mob Effect: minecraft:blindness",
@@ -684,7 +684,7 @@ public class GenericTooltipTest {
 
         assertTooltip(GenericTooltipUtils.getMobEffectInstancePredicateTooltip(0, mobEffectInstancePredicate), List.of(
                 "Amplifier: 10-15",
-                "Duration: <5",
+                "Duration: ≤5",
                 "Is Ambient: true",
                 "Is Visible: false"
         ));
@@ -726,7 +726,7 @@ public class GenericTooltipTest {
             "  -> Head:",
             "    -> Count: 10-15",
             "  -> Chest:",
-            "    -> Count: <5",
+            "    -> Count: ≤5",
             "  -> Legs:",
             "    -> Durability: ≥5",
             "  -> Feet:",
@@ -765,7 +765,7 @@ public class GenericTooltipTest {
                 "  -> Item: Cake",
                 "  -> Item: Netherite Axe",
                 "Count: 10-15",
-                "Durability: <5",
+                "Durability: ≤5",
                 "Enchantments:",
                 "  -> Enchantment: Smite",
                 "    -> Level: ≥1",
@@ -773,7 +773,7 @@ public class GenericTooltipTest {
                 "    -> Level: 2-4",
                 "Stored Enchantments:",
                 "  -> Enchantment: Depth Strider",
-                "    -> Level: <5",
+                "    -> Level: ≤5",
                 "  -> Enchantment: Lure",
                 "    -> Level: ≥4",
                 "Potion:",
@@ -795,7 +795,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(0, Optional.empty()), List.of());
         assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(0, enchantmentPredicate), List.of(
                 "Enchantment: Feather Falling",
-                "  -> Level: <2"
+                "  -> Level: ≤2"
         ));
     }
 
