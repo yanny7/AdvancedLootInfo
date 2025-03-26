@@ -432,7 +432,7 @@ public class GenericTooltipTest {
         when(rangedPropertyMatcher.getMaxValue()).thenReturn("7", null, "6");
         assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, (StatePropertiesPredicate.PropertyMatcher) rangedPropertyMatcher), List.of("level: 1-7"));
         assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, (StatePropertiesPredicate.PropertyMatcher) rangedPropertyMatcher), List.of("level: ≥2"));
-        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, (StatePropertiesPredicate.PropertyMatcher) rangedPropertyMatcher), List.of("level: 6≥"));
+        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(0, (StatePropertiesPredicate.PropertyMatcher) rangedPropertyMatcher), List.of("level: ≤6"));
     }
 
     @SuppressWarnings("unchecked")
@@ -608,7 +608,7 @@ public class GenericTooltipTest {
                 "Location:",
                 "  -> X: ≥20.0",
                 "Stepping on Location:",
-                "  -> X: <30.0",
+                "  -> X: ≤30.0",
                 "Mob Effects:",
                 "  -> Mob Effect: minecraft:absorption",
                 "    -> Is Ambient: true",
@@ -664,7 +664,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getDistancePredicateTooltip(0, (DistancePredicate) distancePredicate), List.of(
                 "X: =10.0",
                 "Y: ≥20.0",
-                "Z: <30.0",
+                "Z: ≤30.0",
                 "Horizontal: ≥15.0",
                 "Absolute: 2.0-5.5"
         ));
@@ -715,7 +715,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getLocationPredicateTooltip(0, (LocationPredicate) locationPredicate), List.of(
                 "X: =10.0",
                 "Y: ≥20.0",
-                "Z: <30.0",
+                "Z: ≤30.0",
                 "Biome: minecraft:plains",
                 "Structure: minecraft:mineshaft",
                 "Dimension: minecraft:overworld",
@@ -862,7 +862,7 @@ public class GenericTooltipTest {
                 "Mob Effects:",
                 "  -> Mob Effect: minecraft:absorption",
                 "    -> Amplifier: 10-15",
-                "    -> Duration: <5",
+                "    -> Duration: ≤5",
                 "    -> Is Ambient: true",
                 "    -> Is Visible: false",
                 "  -> Mob Effect: minecraft:blindness",
@@ -886,7 +886,7 @@ public class GenericTooltipTest {
 
         assertTooltip(GenericTooltipUtils.getMobEffectInstancePredicateTooltip(0, (MobEffectsPredicate.MobEffectInstancePredicate) mobEffectInstancePredicate), List.of(
                 "Amplifier: 10-15",
-                "Duration: <5",
+                "Duration: ≤5",
                 "Is Ambient: true",
                 "Is Visible: false"
         ));
@@ -939,7 +939,7 @@ public class GenericTooltipTest {
             "  -> Head:",
             "    -> Count: 10-15",
             "  -> Chest:",
-            "    -> Count: <5",
+            "    -> Count: ≤5",
             "  -> Legs:",
             "    -> Durability: ≥5",
             "  -> Feet:",
@@ -992,7 +992,7 @@ public class GenericTooltipTest {
                 "  -> Item: Cake",
                 "  -> Item: Netherite Axe",
                 "Count: 10-15",
-                "Durability: <5",
+                "Durability: ≤5",
                 "Enchantments:",
                 "  -> Enchantment: Smite",
                 "    -> Level: ≥1",
@@ -1000,7 +1000,7 @@ public class GenericTooltipTest {
                 "    -> Level: 2-4",
                 "Stored Enchantments:",
                 "  -> Enchantment: Depth Strider",
-                "    -> Level: <5",
+                "    -> Level: ≤5",
                 "  -> Enchantment: Lure",
                 "    -> Level: ≥4",
                 "Potion:",
@@ -1028,7 +1028,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(0, EnchantmentPredicate.ANY), List.of());
         assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(0, (EnchantmentPredicate) enchantmentPredicate), List.of(
                 "Enchantment: Feather Falling",
-                "  -> Level: <2"
+                "  -> Level: ≤2"
         ));
     }
 
