@@ -12,17 +12,15 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.*;
-
-public class SetComponentsFunction extends LootConditionalFunction {
+public class SetComponentsAliFunction extends LootConditionalAliFunction {
     public final DataComponentPatch components;
 
-    public SetComponentsFunction(IContext context, LootItemFunction function) {
+    public SetComponentsAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         components = ((MixinSetComponentsFunction) function).getComponents();
     }
 
-    public SetComponentsFunction(IContext context, FriendlyByteBuf buf) {
+    public SetComponentsAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         components = DataComponentPatch.CODEC.decode(JsonOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst();
     }
@@ -36,10 +34,10 @@ public class SetComponentsFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.set_components")));
         components.add(pad(pad + 1, value(this.components.toString())));
-
+*/
         return components;
     }
 }

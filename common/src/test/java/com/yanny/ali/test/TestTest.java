@@ -1,20 +1,15 @@
 package com.yanny.ali.test;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.authlib.GameProfile;
 import com.yanny.ali.datagen.LanguageHolder;
-import net.minecraft.SystemReport;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringDecomposer;
-import net.minecraft.world.level.storage.loot.LootDataManager;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -146,78 +141,5 @@ public class TestTest {
                                 StringDecomposer.iterateFormatted(text, style, charSink) ? Optional.empty() : FormattedText.STOP_ITERATION, Style.EMPTY).isPresent();
             }
         };
-    }
-
-    private static class FakeServer extends MinecraftServer {
-        LootDataManager manager;
-
-        public FakeServer() {
-            super(null, null, null, null, null, null, null, null);
-        }
-
-        @Override
-        public LootDataManager getLootData() {
-            return manager;
-        }
-
-        @Override
-        protected boolean initServer() throws IOException {
-            return false;
-        }
-
-        @Override
-        public int getOperatorUserPermissionLevel() {
-            return 0;
-        }
-
-        @Override
-        public int getFunctionCompilationLevel() {
-            return 0;
-        }
-
-        @Override
-        public boolean shouldRconBroadcast() {
-            return false;
-        }
-
-        @Override
-        public SystemReport fillServerSystemReport(SystemReport systemReport) {
-            return null;
-        }
-
-        @Override
-        public boolean isDedicatedServer() {
-            return false;
-        }
-
-        @Override
-        public int getRateLimitPacketsPerSecond() {
-            return 0;
-        }
-
-        @Override
-        public boolean isEpollEnabled() {
-            return false;
-        }
-
-        @Override
-        public boolean isCommandBlockEnabled() {
-            return false;
-        }
-
-        @Override
-        public boolean isPublished() {
-            return false;
-        }
-
-        @Override
-        public boolean shouldInformAdmins() {
-            return false;
-        }
-
-        @Override
-        public boolean isSingleplayerOwner(GameProfile gameProfile) {
-            return false;
-        }
     }
 }

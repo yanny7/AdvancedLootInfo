@@ -14,10 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-
-public class SetFireworkExplosionFunction extends LootConditionalFunction {
+public class SetFireworkExplosionAliFunction extends LootConditionalAliFunction {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public final Optional<FireworkExplosion.Shape> shape;
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
@@ -29,7 +26,7 @@ public class SetFireworkExplosionFunction extends LootConditionalFunction {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public final Optional<Boolean> twinkle;
 
-    public SetFireworkExplosionFunction(IContext context, LootItemFunction function) {
+    public SetFireworkExplosionAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         shape = ((MixinSetFireworkExplosionFunction) function).getShape();
         colors = ((MixinSetFireworkExplosionFunction) function).getColors();
@@ -38,7 +35,7 @@ public class SetFireworkExplosionFunction extends LootConditionalFunction {
         twinkle = ((MixinSetFireworkExplosionFunction) function).getTwinkle();
     }
 
-    public SetFireworkExplosionFunction(IContext context, FriendlyByteBuf buf) {
+    public SetFireworkExplosionAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         shape = buf.readOptional((b) -> FireworkExplosion.Shape.CODEC.decode(JsonOps.INSTANCE, b.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst());
         colors = buf.readOptional((b) -> FireworkExplosion.COLOR_LIST_CODEC.decode(JsonOps.INSTANCE, b.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst());
@@ -60,14 +57,14 @@ public class SetFireworkExplosionFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.set_firework_explosion")));
         shape.ifPresent((s) -> components.add(pad(pad + 1, translatable("ali.property.function.set_firework_explosion.shape", s.getSerializedName()))));
         colors.ifPresent((c) -> components.add(pad(pad + 1, translatable("ali.property.function.set_firework_explosion.colors", c))));
         fadeColors.ifPresent((c) -> components.add(pad(pad + 1, translatable("ali.property.function.set_firework_explosion.fade_colors", c))));
         trail.ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.function.set_firework_explosion.has_trails", t))));
         twinkle.ifPresent((t) -> components.add(pad(pad + 1, translatable("ali.property.function.set_firework_explosion.has_twinkle", t))));
-
+*/
         return components;
     }
 }

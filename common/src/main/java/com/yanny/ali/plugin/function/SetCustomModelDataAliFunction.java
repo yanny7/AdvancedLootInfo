@@ -10,18 +10,15 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-
-public class SetCustomModelDataFunction extends LootConditionalFunction {
+public class SetCustomModelDataAliFunction extends LootConditionalAliFunction {
     public final RangeValue valueProvider;
 
-    public SetCustomModelDataFunction(IContext context, LootItemFunction function) {
+    public SetCustomModelDataAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         valueProvider = context.utils().convertNumber(context, ((MixinSetCustomModelDataFunction) function).getValueProvider());
     }
 
-    public SetCustomModelDataFunction(IContext context, FriendlyByteBuf buf) {
+    public SetCustomModelDataAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         valueProvider = new RangeValue(buf);
     }
@@ -35,9 +32,9 @@ public class SetCustomModelDataFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.set_custom_model_data", valueProvider)));
-
+*/
         return components;
     }
 }

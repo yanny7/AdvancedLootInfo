@@ -1,39 +1,39 @@
 package com.yanny.ali.plugin.function;
 
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinSetContainerContents;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
+import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.List;
 
 public class SetContentsAliFunction extends LootConditionalAliFunction {
-    public final Holder<BlockEntityType<?>> blockEntityType;
+    public final ContainerComponentManipulator<?> component;
 
     public SetContentsAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        blockEntityType = ((MixinSetContainerContents) function).getType();
+        component = ((MixinSetContainerContents) function).getComponent();
     }
 
     public SetContentsAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        blockEntityType = BuiltInRegistries.BLOCK_ENTITY_TYPE.getHolderOrThrow(buf.readResourceKey(Registries.BLOCK_ENTITY_TYPE));
+        component = ContainerComponentManipulators.CODEC.decode(JsonOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst();
     }
 
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeResourceKey(blockEntityType.unwrap().orThrow());
+        buf.writeJsonWithCodec(ExtraCodecs.JSON, ContainerComponentManipulators.CODEC.encodeStart(JsonOps.INSTANCE, component).getOrThrow());
     }
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getSetContentsTooltip(pad, blockEntityType);
+        return FunctionTooltipUtils.getSetContentsTooltip(pad, component);
     }
 }

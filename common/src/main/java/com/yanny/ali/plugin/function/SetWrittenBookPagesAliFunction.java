@@ -13,20 +13,17 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-
-public class SetWrittenBookPagesFunction extends LootConditionalFunction {
+public class SetWrittenBookPagesAliFunction extends LootConditionalAliFunction {
     public final List<Filterable<Component>> pages;
     public final String operation;
 
-    public SetWrittenBookPagesFunction(IContext context, LootItemFunction function) {
+    public SetWrittenBookPagesAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         pages = ((MixinSetWrittenBookPagesFunction) function).getPages();
         operation = ((MixinSetWrittenBookPagesFunction) function).getPageOperation().mode().getSerializedName();
     }
 
-    public SetWrittenBookPagesFunction(IContext context, FriendlyByteBuf buf) {
+    public SetWrittenBookPagesAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         int count = buf.readInt();
 
@@ -50,7 +47,7 @@ public class SetWrittenBookPagesFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.set_written_book_pages")));
 
         if (!pages.isEmpty()) {
@@ -62,7 +59,7 @@ public class SetWrittenBookPagesFunction extends LootConditionalFunction {
         }
 
         components.add(pad(pad + 1, translatable("ali.property.function.set_written_book_pages.page_operation", operation)));
-
+*/
         return components;
     }
 }

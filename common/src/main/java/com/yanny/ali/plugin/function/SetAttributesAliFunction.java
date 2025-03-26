@@ -9,7 +9,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -42,16 +42,16 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
         for (int i = 0; i < count; i++) {
             String name = buf.readUtf();
             Holder<Attribute> attribute = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(buf.readResourceKey(Registries.ATTRIBUTE));
-            AttributeModifier.Operation operation = AttributeModifier.Operation.fromValue(buf.readInt());
+            AttributeModifier.Operation operation = AttributeModifier.Operation.valueOf(buf.readUtf());
             RangeValue amount = new RangeValue(buf);
             Optional<UUID> id = buf.readOptional(FriendlyByteBuf::readUtf).map(UUID::fromString);
 
             int slotCount = buf.readInt();
 
-            List<EquipmentSlot> slots = new LinkedList<>();
+            List<EquipmentSlotGroup> slots = new LinkedList<>();
 
             for (int j = 0; j < slotCount; j++) {
-                slots.add(EquipmentSlot.byName(buf.readUtf()));
+                slots.add(EquipmentSlotGroup.STREAM_CODEC.decode(buf));
             }
 
             modifiers.add(new Modifier(
@@ -73,13 +73,13 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
         for (Modifier modifier : modifiers) {
             buf.writeUtf(modifier.name);
             buf.writeResourceKey(modifier.attribute.unwrap().orThrow());
-            buf.writeInt(modifier.operation.toValue());
+            buf.writeUtf(modifier.operation.name());
             modifier.amount.encode(buf);
             buf.writeOptional(modifier.id.map(UUID::toString), FriendlyByteBuf::writeUtf);
             buf.writeInt(modifier.slots.size());
 
-            for (EquipmentSlot slot : modifier.slots) {
-                buf.writeUtf(slot.getName());
+            for (EquipmentSlotGroup slot : modifier.slots) {
+                EquipmentSlotGroup.STREAM_CODEC.encode(buf, slot);
             }
         }
     }
@@ -95,6 +95,6 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
             AttributeModifier.Operation operation,
             RangeValue amount,
             Optional<UUID> id,
-            List<EquipmentSlot> slots
+            List<EquipmentSlotGroup> slots
     ) {}
 }

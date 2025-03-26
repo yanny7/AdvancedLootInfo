@@ -12,10 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-
-public class ReferenceAliFunction extends LootConditionalFunction {
+public class ReferenceAliFunction extends LootConditionalAliFunction {
     public final ResourceKey<LootTable> name;
 
     public ReferenceAliFunction(IContext context, LootItemFunction function) {

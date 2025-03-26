@@ -12,9 +12,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-
 public class ReferenceAliCondition implements ILootCondition {
     public final ResourceKey<LootItemCondition> name;
 

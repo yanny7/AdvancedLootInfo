@@ -16,22 +16,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yanny.ali.plugin.TooltipUtils.pad;
-import static com.yanny.ali.plugin.TooltipUtils.translatable;
-
-public class SetFireworksFunction extends LootConditionalFunction {
+public class SetFireworksAliFunction extends LootConditionalAliFunction {
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public final Optional<ListOperation.StandAlone<FireworkExplosion>> explosions;
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public final Optional<Integer> duration;
 
-    public SetFireworksFunction(IContext context, LootItemFunction function) {
+    public SetFireworksAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         explosions = ((MixinSetFireworksFunction) function).getExplosions();
         duration = ((MixinSetFireworksFunction) function).getFlightDuration();
     }
 
-    public SetFireworksFunction(IContext context, FriendlyByteBuf buf) {
+    public SetFireworksAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         Optional<JsonElement> jsonElement = buf.readOptional((a) -> a.readJsonWithCodec(ExtraCodecs.JSON));
         explosions = jsonElement.flatMap((e) -> ListOperation.StandAlone.codec(FireworkExplosion.CODEC, 256).decode(JsonOps.INSTANCE, e).result()).map(Pair::getFirst);
@@ -48,7 +45,7 @@ public class SetFireworksFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.set_fireworks")));
         explosions.ifPresent((e) -> {
             components.add(pad(pad + 1, translatable("ali.property.function.set_fireworks.explosions")));
@@ -66,7 +63,7 @@ public class SetFireworksFunction extends LootConditionalFunction {
                 });
             }
         });
-
+*/
         return components;
     }
 }

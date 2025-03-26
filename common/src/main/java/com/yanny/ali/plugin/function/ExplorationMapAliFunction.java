@@ -1,21 +1,24 @@
 package com.yanny.ali.plugin.function;
 
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinExplorationMapFunction;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.List;
 
 public class ExplorationMapAliFunction extends LootConditionalAliFunction {
     public final TagKey<Structure> structure;
-    public final MapDecoration.Type mapDecoration;
+    public final Holder<MapDecorationType> mapDecoration;
     public final byte zoom;
     public final int searchRadius;
     public final boolean skipKnownStructures;
@@ -32,7 +35,7 @@ public class ExplorationMapAliFunction extends LootConditionalAliFunction {
     public ExplorationMapAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         structure = TagKey.create(Registries.STRUCTURE, buf.readResourceLocation());
-        mapDecoration = MapDecoration.Type.byIcon(buf.readByte());
+        mapDecoration = MapDecorationType.CODEC.decode(JsonOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst();
         zoom = buf.readByte();
         searchRadius = buf.readInt();
         skipKnownStructures = buf.readBoolean();
@@ -42,7 +45,7 @@ public class ExplorationMapAliFunction extends LootConditionalAliFunction {
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
         buf.writeResourceLocation(structure.location());
-        buf.writeByte(mapDecoration.getIcon());
+        buf.writeJsonWithCodec(ExtraCodecs.JSON, MapDecorationType.CODEC.encodeStart(JsonOps.INSTANCE, mapDecoration).getOrThrow());
         buf.writeByte(zoom);
         buf.writeInt(searchRadius);
         buf.writeBoolean(skipKnownStructures);

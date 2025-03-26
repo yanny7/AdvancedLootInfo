@@ -6,11 +6,12 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -144,8 +145,8 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getReferenceTooltip(int pad, ResourceLocation name) {
-        return new LinkedList<>(GenericTooltipUtils.getResourceLocationTooltip(pad, "ali.type.condition.reference", name));
+    public static List<Component> getReferenceTooltip(int pad, ResourceKey<LootItemCondition> name) {
+        return new LinkedList<>(GenericTooltipUtils.getResourceKeyTooltip(pad, "ali.type.condition.reference", Optional.of(name)));
     }
 
     @Unmodifiable

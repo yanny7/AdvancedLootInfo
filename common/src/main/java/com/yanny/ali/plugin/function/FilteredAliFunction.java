@@ -14,19 +14,17 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.*;
-
-public class FilteredFunction extends LootConditionalFunction {
+public class FilteredAliFunction extends LootConditionalAliFunction {
     public final ItemPredicate filter;
     public final ILootFunction modifier;
 
-    public FilteredFunction(IContext context, LootItemFunction function) {
+    public FilteredAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         filter = ((MixinFilteredFunction) function).getFilter();
         modifier = context.utils().convertFunction(context, ((MixinFilteredFunction) function).getModifier());
     }
 
-    public FilteredFunction(IContext context, FriendlyByteBuf buf) {
+    public FilteredAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         filter = ItemPredicate.CODEC.decode(JavaOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst();
         modifier = context.utils().decodeFunction(context, buf);
@@ -42,12 +40,12 @@ public class FilteredFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.filtered")));
         addItemPredicate(components, pad + 1, translatable("ali.property.function.filtered.filter"), filter);
         components.add(pad(pad + 1, translatable("ali.property.function.filtered.modifier")));
         components.addAll(modifier.getTooltip(pad + 2));
-
+*/
         return components;
     }
 }

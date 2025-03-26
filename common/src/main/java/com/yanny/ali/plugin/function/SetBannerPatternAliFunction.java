@@ -3,13 +3,13 @@ package com.yanny.ali.plugin.function;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinSetBannerPatternFunction;
+import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class SetBannerPatternAliFunction extends LootConditionalAliFunction {

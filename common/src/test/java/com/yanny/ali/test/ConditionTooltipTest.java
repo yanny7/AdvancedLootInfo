@@ -9,7 +9,9 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Tuple;
@@ -225,7 +227,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(0, new ResourceLocation("test")), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(0, ResourceKey.create(Registries.PREDICATE, new ResourceLocation("test"))), List.of("Reference: minecraft:test"));
     }
 
     @Test
@@ -241,7 +243,7 @@ public class ConditionTooltipTest {
         values.add(0.5555F);
         values.add(0.99F);
 
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(0, Holder.direct(Enchantments.MOB_LOOTING), values), List.of(
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(0, Holder.direct(Enchantments.LOOTING), values), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Values: [0.25, 0.5555, 0.99]" //FIXME to 2 decimal places

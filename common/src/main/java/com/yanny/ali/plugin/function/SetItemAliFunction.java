@@ -13,17 +13,15 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.TooltipUtils.*;
-
-public class SetItemFunction extends LootConditionalFunction {
+public class SetItemAliFunction extends LootConditionalAliFunction {
     public final Holder<Item> item;
 
-    public SetItemFunction(IContext context, LootItemFunction function) {
+    public SetItemAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
         item = ((MixinSetItemFunction) function).getItem();
     }
 
-    public SetItemFunction(IContext context, FriendlyByteBuf buf) {
+    public SetItemAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
         item = BuiltInRegistries.ITEM.getHolderOrThrow(buf.readResourceKey(Registries.ITEM));
     }
@@ -37,10 +35,10 @@ public class SetItemFunction extends LootConditionalFunction {
     @Override
     public List<Component> getTooltip(int pad) {
         List<Component> components = new LinkedList<>();
-
+/* FIXME
         components.add(pad(pad, translatable("ali.type.function.set_item")));
         components.add(pad(pad + 1, value(item.value().getDescriptionId())));
-
+*/
         return components;
     }
 }

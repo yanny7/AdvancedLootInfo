@@ -17,22 +17,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class SetLoreAliFunction extends LootConditionalFunction {
-    public final boolean replace;
+public class SetLoreAliFunction extends LootConditionalAliFunction {
+    public final ListOperation mode;
     public final List<Component> lore;
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public final Optional<LootContext.EntityTarget> resolutionContext;
 
     public SetLoreAliFunction(IContext context, LootItemFunction function) {
         super(context, function);
-        replace = ((MixinSetLoreFunction) function).getMode().mode();
+        mode = ((MixinSetLoreFunction) function).getMode();
         lore = ((MixinSetLoreFunction) function).getLore();
         resolutionContext = ((MixinSetLoreFunction) function).getResolutionContext();
     }
 
     public SetLoreAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-        replace = ListOperation.Type.CODEC.decode(JavaOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow().getFirst();
+        mode = ListOperation.codec(255).compressedDecode(JavaOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).getOrThrow();
         lore = new LinkedList<>();
 
         int count = buf.readInt();
@@ -48,7 +48,7 @@ public class SetLoreAliFunction extends LootConditionalFunction {
     @Override
     public void encode(IContext context, FriendlyByteBuf buf) {
         super.encode(context, buf);
-        buf.writeJsonWithCodec(ExtraCodecs.JSON, ListOperation.Type.CODEC.encodeStart(JsonOps.INSTANCE, replace).getOrThrow());
+        buf.writeJsonWithCodec(ExtraCodecs.JSON, ListOperation.codec(255).encode(mode, JsonOps.INSTANCE, JsonOps.INSTANCE.mapBuilder()).build(JsonOps.INSTANCE.empty()).getOrThrow());
         buf.writeInt(lore.size());
         lore.forEach((l) -> buf.writeJsonWithCodec(ExtraCodecs.JSON, ComponentSerialization.CODEC.encodeStart(JsonOps.INSTANCE, l).getOrThrow()));
         buf.writeOptional(resolutionContext.map(Enum::name), FriendlyByteBuf::writeUtf);
@@ -56,6 +56,6 @@ public class SetLoreAliFunction extends LootConditionalFunction {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getSetLoreTooltip(pad, replace, lore, resolutionContext);
+        return FunctionTooltipUtils.getSetLoreTooltip(pad, mode, lore, resolutionContext);
     }
 }
