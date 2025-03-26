@@ -125,11 +125,11 @@ public class GenericTooltipUtils {
 
         if (!conditions.isEmpty()) {
             components.add(translatable("ali.util.advanced_loot_info.delimiter.conditions"));
-            components.addAll(getConditionsTooltip(1, conditions));
+            components.addAll(getConditionsTooltip(0, conditions));
         }
         if (!functions.isEmpty()) {
             components.add(translatable("ali.util.advanced_loot_info.delimiter.functions"));
-            components.addAll(getFunctionsTooltip(1, functions));
+            components.addAll(getFunctionsTooltip(0, functions));
         }
 
         return components;

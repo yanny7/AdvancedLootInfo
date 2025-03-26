@@ -91,6 +91,7 @@ public class GenericTooltipTest {
         assertTooltip(pad(1, Component.literal("Hello")), "  -> Hello");
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testTooltip() {
         Map<Integer, RangeValue> bonusChanceMap = new LinkedHashMap<>();
@@ -113,7 +114,6 @@ public class GenericTooltipTest {
         when(context.utils()).thenReturn(utils);
         when(utils.convertConditions(any(), any())).thenReturn(List.of());
         when(utils.convertFunctions(any(), any())).thenReturn(List.of());
-        //noinspection unchecked
         when(utils.decodeConditions(any(), any())).thenReturn(List.of(new SurvivesExplosionAliCondition(context, buf)), List.of());
 
         assertTooltip(GenericTooltipUtils.getTooltip(
@@ -147,12 +147,12 @@ public class GenericTooltipTest {
                 "  -> 2-4 (Fortune II)",
                 "  -> 4-8 (Fortune III)",
                 "----- Conditions -----",
-                "  -> Must be killed by player",
+                "Must be killed by player",
                 "----- Functions -----",
-                "  -> Explosion Decay",
-                "    -> Conditions:",
-                "      -> Must survive explosion",
-                "  -> Use Smelting Recipe On Item"
+                "Explosion Decay",
+                "  -> Conditions:",
+                "    -> Must survive explosion",
+                "Use Smelting Recipe On Item"
         ));
     }
 
