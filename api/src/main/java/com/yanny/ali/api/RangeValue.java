@@ -198,7 +198,7 @@ public final class RangeValue {
     @NotNull
     public static String rangeToString(RangeValue min, RangeValue max) {
         if (min.isUnknown()) {
-            return "<" + max;
+            return "≤" + max;
         } else {
             if (max.isUnknown()) {
                 return "≥" + min;
