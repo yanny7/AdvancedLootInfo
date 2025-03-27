@@ -45,8 +45,8 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.block_state_property")));
-        components.addAll(GenericTooltipUtils.getBlockTooltip(pad + 1, block));
-        components.addAll(GenericTooltipUtils.getStatePropertiesPredicateTooltip(pad + 1, predicate));
+        components.addAll(GenericTooltipUtils.getHolderTooltip(pad + 1, block, GenericTooltipUtils::getBlockTooltip));
+        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, predicate, GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return components;
     }
@@ -56,7 +56,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.damage_source_properties")));
-        components.addAll(GenericTooltipUtils.getDamageSourcePredicateTooltip(pad + 1, predicate));
+        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, predicate, GenericTooltipUtils::getDamageSourcePredicateTooltip));
 
         return components;
     }
@@ -67,7 +67,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
         components.addAll(getEnumTooltip(pad + 1, "ali.property.value.target", "target", Optional.of(target)));
-        components.addAll(getComponentsTooltip(pad + 1, "ali.property.branch.predicate", GenericTooltipUtils.getEntityPredicateTooltip(pad + 2, predicate)));
+        components.addAll(getComponentsTooltip(pad + 1, "ali.property.branch.predicate", predicate, GenericTooltipUtils::getEntityPredicateTooltip));
 
         return components;
     }
@@ -111,15 +111,15 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
-        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.location", GenericTooltipUtils.getLocationPredicateTooltip(pad + 2, predicate)));
-        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.offset", GenericTooltipUtils.getBlockPosTooltip(pad + 2, offset)));
+        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.location", predicate, GenericTooltipUtils::getLocationPredicateTooltip));
+        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.offset", offset, GenericTooltipUtils::getBlockPosTooltip));
 
         return components;
     }
 
     @NotNull
     public static List<Component> getMatchToolTooltip(int pad, Optional<ItemPredicate> predicate) {
-        return new LinkedList<>(GenericTooltipUtils.getComponentsTooltip(pad, "ali.type.condition.match_tool", GenericTooltipUtils.getItemPredicateTooltip(pad + 1, predicate)));
+        return new LinkedList<>(GenericTooltipUtils.getComponentsTooltip(pad, "ali.type.condition.match_tool", predicate, GenericTooltipUtils::getItemPredicateTooltip));
     }
 
     @NotNull
@@ -127,7 +127,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance")));
-        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.probability", Optional.of(probability)));
+        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.probability", probability));
 
         return components;
     }
@@ -137,8 +137,8 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance_with_looting")));
-        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.percent", Optional.of(percent)));
-        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.multiplier", Optional.of(multiplier)));
+        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.percent", percent));
+        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.multiplier", multiplier));
 
         return components;
     }
@@ -159,8 +159,8 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
-        components.addAll(GenericTooltipUtils.getEnchantmentTooltip(pad + 1, Optional.of(enchantment)));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.values", Optional.of(Arrays.toString(values.toArray(Float[]::new)))));
+        components.addAll(GenericTooltipUtils.getHolderTooltip(pad + 1, enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.values", Arrays.toString(values.toArray(Float[]::new))));
 
         return components;
     }
@@ -170,8 +170,8 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.time_check")));
-        components.addAll(GenericTooltipUtils.getLongTooltip(pad + 1, "ali.property.value.period", period));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.value", Optional.of(RangeValue.rangeToString(min, max))));
+        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, "ali.property.value.period", period, GenericTooltipUtils::getLongTooltip));
+        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.value", RangeValue.rangeToString(min, max)));
 
         return components;
     }
@@ -182,7 +182,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.value_check")));
         components.addAll(GenericTooltipUtils.getRangeValueTooltip(pad + 1, "ali.property.value.provider", provider));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.range", Optional.of(RangeValue.rangeToString(min, max))));
+        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.range", RangeValue.rangeToString(min, max)));
 
         return components;
     }
@@ -192,8 +192,8 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.weather_check")));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.value.is_raining", isRaining));
-        components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.value.is_thundering", isThundering));
+        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, "ali.property.value.is_raining", isRaining, GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, "ali.property.value.is_thundering", isThundering, GenericTooltipUtils::getBooleanTooltip));
 
         return components;
     }

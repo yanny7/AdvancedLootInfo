@@ -27,12 +27,16 @@ public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void assertTooltip(List<Component> components, List<String> expected) {
-        Assertions.assertEquals(expected.size(), components.size());
         List<Executable> executables = new LinkedList<>();
+
+        executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
 
         for (int i = 0; i < components.size(); i++) {
             int index = i;
-            executables.add(() -> assertTooltip(components.get(index), expected.get(index), String.format("Index: %d", index)));
+
+            if (i < expected.size()) {
+                executables.add(() -> assertTooltip(components.get(index), expected.get(index), String.format("Index: %d", index)));
+            }
         }
 
         Assertions.assertAll(executables);

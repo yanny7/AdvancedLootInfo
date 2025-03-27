@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
-import java.util.Optional;
 
 public class CanToolPerformActionCondition implements ILootCondition {
     public final String action;
@@ -29,6 +28,6 @@ public class CanToolPerformActionCondition implements ILootCondition {
 
     @Override
     public List<Component> getTooltip(int pad) {
-        return GenericTooltipUtils.getStringTooltip(pad, "ali.type.condition.can_tool_perform_action", Optional.ofNullable(action));
+        return GenericTooltipUtils.getStringTooltip(pad, "ali.type.condition.can_tool_perform_action", action);
     }
 }
