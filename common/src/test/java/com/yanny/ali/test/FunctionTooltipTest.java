@@ -24,14 +24,18 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FurnaceBlock;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
+import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
+import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
@@ -65,9 +69,11 @@ public class FunctionTooltipTest {
     }
 
     @Test
-    public void testCopyNbtTooltip() {
+    public void testCopyCustomDataTooltip() {
         //FIXME pridaj testy
-        assertTooltip(FunctionTooltipUtils.getCopyCustomData(0, ContextNbtProvider.forContextEntity(LootContext.EntityTarget.KILLER), List.of()), List.of("Copy Nbt"));
+        assertTooltip(FunctionTooltipUtils.getCopyCustomData(0, ContextNbtProvider.forContextEntity(LootContext.EntityTarget.KILLER), List.of()), List.of(
+                "Copy Custom Data:"
+        ));
     }
 
     @Test
@@ -101,7 +107,7 @@ public class FunctionTooltipTest {
     @Test
     public void testEnchantWithLevelsTooltip() {
         assertTooltip(FunctionTooltipUtils.getEnchantWithLevelsTooltip(0, new RangeValue(1, 3), true), List.of(
-                "Enchant With Levels:",
+                "Enchanted With Levels:",
                 "  -> Levels: 1-3",
                 "  -> Treasure: true"
         ));
@@ -113,7 +119,12 @@ public class FunctionTooltipTest {
                 MapDecorationTypes.OCEAN_MONUMENT, 2, 50, true), List.of(
                 "Exploration Map:",
                 "  -> Destination: minecraft:ruined_portal",
-                "  -> Map Decoration: MONUMENT",
+                "  -> Map Decoration:",
+                "    -> Asset Id: minecraft:ocean_monument",
+                "    -> Color: 3830373",
+                "    -> Show On Item Frame: true",
+                "    -> Exploration Map Element: true",
+                "    -> Track Count: false",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
                 "  -> Skip Known Structures: true"
@@ -175,7 +186,7 @@ public class FunctionTooltipTest {
         List<ILootFunction> functions = List.of(new FurnaceSmeltAliFunction(context, buf), new ExplosionDecayAliFunction(context, buf));
 
         assertTooltip(FunctionTooltipUtils.getSequenceTooltip(0, functions), List.of(
-                "Sequence:",
+                "Sequence Functions:",
                 "  -> Use Smelting Recipe On Item",
                 "  -> Explosion Decay"
         ));
@@ -205,7 +216,7 @@ public class FunctionTooltipTest {
                 "    -> Modifier:",
                 "      -> Name: armor",
                 "      -> Attribute: Armor",
-                "      -> Operation: MULTIPLY_TOTAL",
+                "      -> Operation: ADD_MULTIPLIED_TOTAL",
                 "      -> Amount: 1-5",
                 "      -> Equipment Slots:",
                 "        -> HEAD",
@@ -217,28 +228,25 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetBannerPatternTooltip() {
-        /*BannerPatternLayers bannerPatternLayers = new BannerPatternLayers.Builder() FIXME
-                .add(BannerPatterns.BASE, DyeColor.WHITE)
-                .add(BannerPatterns.CREEPER, DyeColor.WHITE)
+        BannerPatternLayers bannerPatternLayers = new BannerPatternLayers.Builder()
+                .add(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow(), DyeColor.WHITE)
+                .add(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.CREEPER).orElseThrow(), DyeColor.GREEN)
                 .build();
         assertTooltip(FunctionTooltipUtils.getSetBannerPatternTooltip(0, true, bannerPatternLayers), List.of(
                 "Set Banner Pattern:",
                 "  -> Append: true",
                 "  -> Banner Patterns:",
-                "    -> Banner Pattern: minecraft:base",
-                "      -> Color: WHITE",
-                "    -> Banner Pattern: minecraft:creeper",
-                "      -> Color: GREEN"
-        ));*/
+                "    -> Banner Pattern: Fully White Field",
+                "    -> Banner Pattern: Green Creeper Charge"
+        ));
     }
 
     @Test
     public void testSetContentsTooltip() {
-        /* FIXME
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(0, BlockEntityType.BREWING_STAND), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(0, ContainerComponentManipulators.CONTAINER), List.of(
                 "Set Contents:",
-                "  -> Block Entity Type: minecraft:brewing_stand"
-        ));*/
+                "  -> Component: minecraft:container"
+        ));
     }
 
     @Test
@@ -306,14 +314,15 @@ public class FunctionTooltipTest {
     public void testSetLoreTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(0, ListOperation.ReplaceAll.INSTANCE, List.of(Component.literal("Hello"), Component.literal("World")), Optional.empty()), List.of(
                 "Set Lore:",
-                "  -> Replace: REPLACE_ALL",
+                "  -> List Operation: REPLACE_ALL",
                 "  -> Lore:",
                 "    -> Hello",
                 "    -> World"
         ));
         assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(0, new ListOperation.Insert(1), List.of(Component.translatable("emi.category.ali.block_loot")), Optional.of(LootContext.EntityTarget.KILLER)), List.of(
                 "Set Lore:",
-                "  -> Replace: true",
+                "  -> List Operation: INSERT",
+                "    -> Offset: 1",
                 "  -> Lore:",
                 "    -> Block Drops",
                 "  -> Resolution Context: Killer Entity"
@@ -340,8 +349,8 @@ public class FunctionTooltipTest {
         compoundTag.putBoolean("antlers", true);
 
         assertTooltip(FunctionTooltipUtils.getSetCustomDataTooltip(0, compoundTag), List.of(
-                "Set Nbt:",
-                "  -> Tag: {antlers:true}"
+                "Set Custom Data:",
+                "  -> Tag: {antlers:1b}"
         ));
     }
 

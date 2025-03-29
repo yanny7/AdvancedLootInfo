@@ -7,6 +7,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.packs.PackResources;
@@ -38,6 +40,7 @@ import java.util.concurrent.ExecutionException;
 })
 public class TooltipTestSuite {
     private static Set<String> UNUSED;
+    public static HolderLookup.Provider LOOKUP;
 
     @BeforeSuite
     static void beforeAllTests() {
@@ -48,6 +51,7 @@ public class TooltipTestSuite {
 
         Language.inject(pair.getFirst());
         UNUSED = pair.getSecond();
+        LOOKUP = VanillaRegistries.createLookup();
 
         System.out.printf("----- Translation keys (%d) -----\n", UNUSED.size());
     }

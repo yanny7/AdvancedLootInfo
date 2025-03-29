@@ -146,7 +146,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static List<Component> getReferenceTooltip(int pad, ResourceKey<LootItemCondition> name) {
-        return new LinkedList<>(GenericTooltipUtils.getResourceKeyTooltip(pad, "ali.type.condition.reference", Optional.of(name)));
+        return new LinkedList<>(GenericTooltipUtils.getResourceKeyTooltip(pad, "ali.type.condition.reference", name));
     }
 
     @Unmodifiable

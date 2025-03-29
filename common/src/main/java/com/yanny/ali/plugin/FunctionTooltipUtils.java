@@ -61,8 +61,14 @@ public class FunctionTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getCopyCustomData(int pad, NbtProvider source, List<CopyCustomDataFunction.CopyOperation> operations) { //FIXME
-        return List.of(pad(pad, translatable("ali.type.function.copy_custom_data")));
+    public static List<Component> getCopyCustomData(int pad, NbtProvider source, List<CopyCustomDataFunction.CopyOperation> operations) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.function.copy_custom_data")));
+        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad, "ali.property.value.source", source, GenericTooltipUtils::getNtbProviderTooltip));
+        components.addAll(GenericTooltipUtils.getCollectionTooltip(pad + 1, "ali.property.branch.copy_operations", operations, GenericTooltipUtils::getCopyOperationTooltip));
+
+        return components;
     }
 
     @NotNull
@@ -103,7 +109,8 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
         components.addAll(GenericTooltipUtils.getTagKeyTooltip(pad + 1, "ali.property.value.destination", structure));
-        components.addAll(GenericTooltipUtils.getHolderTooltip(pad + 1, "ali.property.value.map_decoration", mapDecoration, GenericTooltipUtils::getMapDecorationTypeTooltip));
+        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.map_decoration", mapDecoration,
+                (p, c) -> GenericTooltipUtils.getHolderTooltip(p, c, GenericTooltipUtils::getMapDecorationTypeTooltip)));
         components.addAll(GenericTooltipUtils.getIntegerTooltip(pad + 1, "ali.property.value.zoom", zoom));
         components.addAll(GenericTooltipUtils.getIntegerTooltip(pad + 1, "ali.property.value.search_radius", searchRadius));
         components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.value.skip_known_structures", skipKnownStructures));
@@ -191,7 +198,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_banner_pattern")));
         components.addAll(GenericTooltipUtils.getBooleanTooltip(pad + 1, "ali.property.value.append", append));
-        components.addAll(GenericTooltipUtils.getCollectionTooltip(pad + 1, "ali.property.branch.banner_patterns", patterns, GenericTooltipUtils::getBannerPatternLayersTooltip));
+        components.addAll(GenericTooltipUtils.getBannerPatternLayersTooltip(pad + 1, patterns));
 
         return components;
     }
@@ -202,6 +209,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
         components.addAll(GenericTooltipUtils.getContainerComponentManipulatorTooltip(pad + 1, component));
+        //FIXME .getEntries
 
         return components;
     }
@@ -297,7 +305,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_data")));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.tag", tag));
+        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.tag", tag.getAsString()));
 
         return components;
     }
