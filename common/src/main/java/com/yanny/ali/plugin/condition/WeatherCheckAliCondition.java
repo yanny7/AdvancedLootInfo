@@ -3,13 +3,10 @@ package com.yanny.ali.plugin.condition;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.mixin.MixinWeatherCheck;
-import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Optional;
 
 public class WeatherCheckAliCondition implements ILootCondition {
@@ -32,10 +29,5 @@ public class WeatherCheckAliCondition implements ILootCondition {
     public void encode(IContext context, FriendlyByteBuf buf) {
         buf.writeOptional(Optional.ofNullable(isRaining), FriendlyByteBuf::writeBoolean);
         buf.writeOptional(Optional.ofNullable(isThundering), FriendlyByteBuf::writeBoolean);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return ConditionTooltipUtils.getWeatherCheckTooltip(pad, isRaining, isThundering);
     }
 }

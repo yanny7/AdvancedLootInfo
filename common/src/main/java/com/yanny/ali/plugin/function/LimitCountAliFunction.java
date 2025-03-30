@@ -4,13 +4,9 @@ import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinIntRange;
 import com.yanny.ali.mixin.MixinLimitCount;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-
-import java.util.List;
 
 public class LimitCountAliFunction extends LootConditionalAliFunction {
     public final RangeValue min;
@@ -34,10 +30,5 @@ public class LimitCountAliFunction extends LootConditionalAliFunction {
         super.encode(context, buf);
         min.encode(buf);
         max.encode(buf);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getLimitCountTooltip(pad, min, max);
     }
 }

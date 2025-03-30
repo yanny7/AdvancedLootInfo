@@ -1,12 +1,8 @@
 package com.yanny.ali.plugin.function;
 
 import com.yanny.ali.api.IContext;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-
-import java.util.List;
 
 public class ExplosionDecayAliFunction extends LootConditionalAliFunction {
     public ExplosionDecayAliFunction(IContext context, LootItemFunction function) {
@@ -15,10 +11,5 @@ public class ExplosionDecayAliFunction extends LootConditionalAliFunction {
 
     public ExplosionDecayAliFunction(IContext context, FriendlyByteBuf buf) {
         super(context, buf);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getExplosionDecayTooltip(pad);
     }
 }

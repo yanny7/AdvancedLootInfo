@@ -2,10 +2,8 @@ package com.yanny.ali.plugin.function;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinEnchantRandomlyFunction;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
@@ -36,10 +34,5 @@ public class EnchantRandomlyAliFunction extends LootConditionalAliFunction {
         super.encode(context, buf);
         buf.writeInt(enchantments.size());
         enchantments.stream().map(BuiltInRegistries.ENCHANTMENT::getKey).filter(Objects::nonNull).forEach(buf::writeResourceLocation);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getEnchantRandomlyTooltip(pad, enchantments);
     }
 }

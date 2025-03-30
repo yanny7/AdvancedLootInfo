@@ -3,10 +3,8 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinSetAttributesFunction;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -82,11 +80,6 @@ public class SetAttributesAliFunction extends LootConditionalAliFunction {
                 buf.writeUtf(slot.getName());
             }
         }
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getSetAttributesTooltip(pad, modifiers);
     }
 
     public record Modifier(

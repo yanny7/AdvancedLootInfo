@@ -5,13 +5,10 @@ import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinIntRange;
 import com.yanny.ali.mixin.MixinTimeCheck;
-import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Optional;
 
 public class TimeCheckAliCondition implements ILootCondition {
@@ -37,10 +34,5 @@ public class TimeCheckAliCondition implements ILootCondition {
         buf.writeOptional(Optional.ofNullable(period), FriendlyByteBuf::writeLong);
         min.encode(buf);
         max.encode(buf);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return ConditionTooltipUtils.getTimeCheckTooltip(pad, period, min, max);
     }
 }

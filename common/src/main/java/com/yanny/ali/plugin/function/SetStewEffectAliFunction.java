@@ -3,15 +3,12 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinSetStewEffectFunction;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -46,10 +43,5 @@ public class SetStewEffectAliFunction extends LootConditionalAliFunction {
             buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(location)));
             level.encode(buf);
         });
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getSetStewEffectTooltip(pad, effectMap);
     }
 }

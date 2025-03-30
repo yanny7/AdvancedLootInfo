@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.function;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinLootContext;
 import com.yanny.ali.mixin.MixinSetLoreFunction;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.ExtraCodecs;
@@ -50,10 +49,5 @@ public class SetLoreAliFunction extends LootConditionalAliFunction {
         buf.writeInt(lore.size());
         lore.forEach((l) -> buf.writeJsonWithCodec(ExtraCodecs.JSON, Component.Serializer.toJsonTree(l)));
         buf.writeOptional(Optional.ofNullable(resolutionContext != null ? (((MixinLootContext.EntityTarget) ((Object) resolutionContext)).getName()) : null), FriendlyByteBuf::writeUtf);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getSetLoreTooltip(pad, replace, lore, resolutionContext);
     }
 }

@@ -38,7 +38,7 @@ public class DynamicWidget implements IEntryWidget {
         widget = WidgetUtils.getDynamicWidget(x, y);
         bounds = widget.getRect();
         this.entry = entry;
-        GenericTooltipUtils.getTooltip(dynamicEntry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions).forEach(this::appendTooltip);
+        GenericTooltipUtils.getTooltip(utils, dynamicEntry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions).forEach(this::appendTooltip);
     }
 
     public void appendTooltip(Component text) {

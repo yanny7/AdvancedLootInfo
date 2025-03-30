@@ -39,7 +39,7 @@ public class EmptyWidget implements IEntryWidget {
 
         bounds = getBounds(utils, entry, x, y);
         this.entry = entry;
-        GenericTooltipUtils.getTooltip(emptyEntry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions).forEach(this::appendTooltip);
+        GenericTooltipUtils.getTooltip(utils, emptyEntry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions).forEach(this::appendTooltip);
     }
 
     public void appendTooltip(Component text) {

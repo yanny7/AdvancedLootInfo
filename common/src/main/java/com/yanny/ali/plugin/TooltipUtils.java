@@ -11,7 +11,6 @@ import com.yanny.ali.plugin.function.ApplyBonusAliFunction;
 import com.yanny.ali.plugin.function.LimitCountAliFunction;
 import com.yanny.ali.plugin.function.LootingEnchantAliFunction;
 import com.yanny.ali.plugin.function.SetCountAliFunction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
@@ -121,7 +120,7 @@ public class TooltipUtils {
 
         for (ILootFunction f : list) {
             ApplyBonusAliFunction function = (ApplyBonusAliFunction) f;
-            Enchantment enchantment = BuiltInRegistries.ENCHANTMENT.get(function.enchantment);
+            Enchantment enchantment = function.enchantment;
 
             if (enchantment != null) {
                 for (int level = 1; level < enchantment.getMaxLevel() + 1; level++) {

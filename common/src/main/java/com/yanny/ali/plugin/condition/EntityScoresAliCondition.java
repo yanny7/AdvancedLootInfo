@@ -5,15 +5,12 @@ import com.yanny.ali.api.ILootCondition;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.MixinEntityHasScoreCondition;
 import com.yanny.ali.mixin.MixinIntRange;
-import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -52,10 +49,5 @@ public class EntityScoresAliCondition implements ILootCondition {
             r.getA().encode(buf);
             r.getB().encode(buf);
         });
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return ConditionTooltipUtils.getEntityScoresTooltip(0, target, scores);
     }
 }

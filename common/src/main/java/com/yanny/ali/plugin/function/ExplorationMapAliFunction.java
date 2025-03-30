@@ -2,16 +2,12 @@ package com.yanny.ali.plugin.function;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinExplorationMapFunction;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-
-import java.util.List;
 
 public class ExplorationMapAliFunction extends LootConditionalAliFunction {
     public final TagKey<Structure> structure;
@@ -46,10 +42,5 @@ public class ExplorationMapAliFunction extends LootConditionalAliFunction {
         buf.writeByte(zoom);
         buf.writeInt(searchRadius);
         buf.writeBoolean(skipKnownStructures);
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getExplorationMapTooltip(pad, structure, mapDecoration, zoom, searchRadius, skipKnownStructures);
     }
 }

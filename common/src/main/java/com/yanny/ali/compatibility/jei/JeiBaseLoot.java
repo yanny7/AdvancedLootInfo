@@ -3,8 +3,8 @@ package com.yanny.ali.compatibility.jei;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
-import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -65,7 +65,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup iFocusGroup) {
-        widget = new JeiWidgetWrapper(new LootTableWidget(getJeiUtils(), recipe.entry(), 0, getYOffset(recipe)));
+        IWidgetUtils utils = getJeiUtils();
+        widget = new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe)));
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);
@@ -76,7 +77,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setSlotName(String.valueOf(i))
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addItemLike(itemSlotParams.item);
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addOutputSlot()
@@ -84,7 +85,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setSlotName(String.valueOf(i))
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
         }
@@ -122,23 +123,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     private IWidgetUtils getJeiUtils() {
         slotParams = new LinkedList<>();
 
-        return new IWidgetUtils() {
-            @Override
-            public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<ILootEntry> entries, int x, int y, List<ILootFunction> functions, List<ILootCondition> conditions) {
-                return PluginManager.CLIENT_REGISTRY.createWidgets(registry, entries, x, y, functions, conditions);
-            }
-
-            @Override
-            public Rect getBounds(IClientUtils registry, List<ILootEntry> entries, int x, int y) {
-                return PluginManager.CLIENT_REGISTRY.getBounds(registry, entries, x, y);
-            }
-
-            @Nullable
-            @Override
-            public WidgetDirection getWidgetDirection(ILootEntry entry) {
-                return PluginManager.CLIENT_REGISTRY.getWidgetDirection(entry);
-            }
-
+        return new Utils() {
             @Override
             public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
                                       @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {

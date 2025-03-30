@@ -3,12 +3,10 @@ package com.yanny.ali.plugin.function;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinSetBannerPatternFunction;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -51,10 +49,5 @@ public class SetBannerPatternAliFunction extends LootConditionalAliFunction {
             buf.writeResourceLocation(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.getKey(pair.getFirst().value()), "Banner Pattern is not registered!"));
             buf.writeInt(pair.getSecond().getId());
         });
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getSetBannerPatternTooltip(pad, append, patterns);
     }
 }

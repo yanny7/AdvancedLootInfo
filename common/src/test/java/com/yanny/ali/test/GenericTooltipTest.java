@@ -1,8 +1,8 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.ICommonUtils;
 import com.yanny.ali.api.IContext;
+import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.GenericTooltipUtils;
@@ -64,6 +64,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 import static org.mockito.Mockito.*;
 
@@ -97,7 +98,7 @@ public class GenericTooltipTest {
         Map<Integer, RangeValue> bonusChanceMap = new LinkedHashMap<>();
         Map<Integer, RangeValue> bonusCountMap = new LinkedHashMap<>();
         IContext context = mock(IContext.class);
-        ICommonUtils utils = mock(ICommonUtils.class);
+        IUtils utils = mock(IUtils.class);
         LootPoolEntryContainer container = mock(LootPoolEntryContainer.class, withSettings().extraInterfaces(MixinLootPoolSingletonContainer.class, MixinLootPoolEntryContainer.class));
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 
@@ -117,7 +118,7 @@ public class GenericTooltipTest {
         when(utils.decodeConditions(any(), any())).thenReturn(List.of(new SurvivesExplosionAliCondition(context, buf)), List.of());
 
         assertTooltip(GenericTooltipUtils.getTooltip(
-                mock(AlternativesEntry.class),
+                utils, mock(AlternativesEntry.class),
                 new RangeValue(2.5F),
                 null,
                 new RangeValue(2, 10),
@@ -129,7 +130,7 @@ public class GenericTooltipTest {
                 "Count: 2-10"
         ));
         assertTooltip(GenericTooltipUtils.getTooltip(
-                new EmptyEntry(context, container),
+                UTILS, new EmptyEntry(context, container),
                 new RangeValue(2.5F),
                 Pair.of(Enchantments.MOB_LOOTING, bonusChanceMap),
                 new RangeValue(2, 10),

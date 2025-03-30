@@ -1,6 +1,9 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.*;
+import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
@@ -15,8 +18,12 @@ import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
@@ -25,6 +32,7 @@ import org.junit.platform.suite.api.Suite;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -36,6 +44,8 @@ import java.util.concurrent.ExecutionException;
         GenericTooltipTest.class,
 })
 public class TooltipTestSuite {
+    public static Utils UTILS;
+
     private static Set<String> UNUSED;
 
     @BeforeSuite
@@ -47,6 +57,20 @@ public class TooltipTestSuite {
 
         Language.inject(pair.getFirst());
         UNUSED = pair.getSecond();
+
+        PluginManager.registerCommonEvent();
+        PluginManager.registerClientEvent();
+        UTILS = new Utils() {
+            @Override
+            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+                return null;
+            }
+
+            @Override
+            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+                return null;
+            }
+        };
 
         System.out.printf("----- Translation keys (%d) -----\n", UNUSED.size());
     }

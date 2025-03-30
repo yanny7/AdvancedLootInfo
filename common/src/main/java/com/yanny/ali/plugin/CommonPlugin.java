@@ -65,7 +65,7 @@ public class CommonPlugin implements IPlugin {
         registry.registerCondition(InvertedAliCondition.class, getKey(LootItemConditions.INVERTED), InvertedAliCondition::new, InvertedAliCondition::new);
         registry.registerCondition(KilledByPlayerAliCondition.class, getKey(LootItemConditions.KILLED_BY_PLAYER), KilledByPlayerAliCondition::new, KilledByPlayerAliCondition::new);
         registry.registerCondition(LocationCheckAliCondition.class, getKey(LootItemConditions.LOCATION_CHECK), LocationCheckAliCondition::new, LocationCheckAliCondition::new);
-        registry.registerCondition(MatchToolCondition.class, getKey(LootItemConditions.MATCH_TOOL), MatchToolCondition::new, MatchToolCondition::new);
+        registry.registerCondition(MatchToolAliCondition.class, getKey(LootItemConditions.MATCH_TOOL), MatchToolAliCondition::new, MatchToolAliCondition::new);
         registry.registerCondition(RandomChanceAliCondition.class, getKey(LootItemConditions.RANDOM_CHANCE), RandomChanceAliCondition::new, RandomChanceAliCondition::new);
         registry.registerCondition(RandomChanceWithLootingAliCondition.class, getKey(LootItemConditions.RANDOM_CHANCE_WITH_LOOTING), RandomChanceWithLootingAliCondition::new, RandomChanceWithLootingAliCondition::new);
         registry.registerCondition(ReferenceAliCondition.class, getKey(LootItemConditions.REFERENCE), ReferenceAliCondition::new, ReferenceAliCondition::new);

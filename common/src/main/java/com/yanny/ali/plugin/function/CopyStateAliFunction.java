@@ -2,10 +2,8 @@ package com.yanny.ali.plugin.function;
 
 import com.yanny.ali.api.IContext;
 import com.yanny.ali.mixin.MixinCopyBlockState;
-import com.yanny.ali.plugin.FunctionTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -13,7 +11,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CopyStateAliFunction extends LootConditionalAliFunction {
@@ -46,10 +43,5 @@ public class CopyStateAliFunction extends LootConditionalAliFunction {
         buf.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(block));
         buf.writeInt(properties.size());
         properties.forEach((property) -> buf.writeUtf(property.getName()));
-    }
-
-    @Override
-    public List<Component> getTooltip(int pad) {
-        return FunctionTooltipUtils.getCopyStateTooltip(pad, block, properties);
     }
 }

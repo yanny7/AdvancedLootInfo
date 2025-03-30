@@ -2,10 +2,7 @@ package com.yanny.ali.plugin;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.api.ILootEntry;
-import com.yanny.ali.api.ILootFunction;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.entry.SingletonEntry;
 import com.yanny.ali.plugin.function.LootConditionalAliFunction;
@@ -108,7 +105,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getTooltip(ILootEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+    public static List<Component> getTooltip(IUtils utils, ILootEntry entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                                              RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
                                              List<ILootCondition> conditions) {
         List<Component> components = new LinkedList<>();
@@ -125,29 +122,29 @@ public class GenericTooltipUtils {
 
         if (!conditions.isEmpty()) {
             components.add(translatable("ali.util.advanced_loot_info.delimiter.conditions"));
-            components.addAll(getConditionsTooltip(0, conditions));
+            components.addAll(getConditionsTooltip(utils, 0, conditions));
         }
         if (!functions.isEmpty()) {
             components.add(translatable("ali.util.advanced_loot_info.delimiter.functions"));
-            components.addAll(getFunctionsTooltip(0, functions));
+            components.addAll(getFunctionsTooltip(utils, 0, functions));
         }
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getConditionsTooltip(int pad, List<ILootCondition> conditions) {
-        return conditions.stream().map((condition) -> condition.getTooltip(pad)).flatMap(Collection::stream).toList();
+    public static List<Component> getConditionsTooltip(IUtils utils, int pad, List<ILootCondition> conditions) {
+        return conditions.stream().map((condition) -> utils.getConditionTooltip(condition.getClass(), utils, pad, condition)).flatMap(Collection::stream).toList();
     }
 
     @NotNull
-    public static List<Component> getFunctionsTooltip(int pad, List<ILootFunction> functions) {
+    public static List<Component> getFunctionsTooltip(IUtils utils, int pad, List<ILootFunction> functions) {
         return functions.stream().map((function) -> {
-            List<Component> components = new LinkedList<>(function.getTooltip(pad));
+            List<Component> components = new LinkedList<>(utils.getFunctionTooltip(function.getClass(), utils, pad, function));
 
             if (function instanceof LootConditionalAliFunction conditionalFunction && !conditionalFunction.conditions.isEmpty()) {
                 components.add(pad(pad + 1, translatable("ali.property.branch.conditions")));
-                components.addAll(getConditionsTooltip(pad + 2, conditionalFunction.conditions));
+                components.addAll(getConditionsTooltip(utils, pad + 2, conditionalFunction.conditions));
             }
 
             return components;

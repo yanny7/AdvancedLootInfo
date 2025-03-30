@@ -2,10 +2,7 @@ package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.api.ILootEntry;
-import com.yanny.ali.api.ILootFunction;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GenericTooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
@@ -24,11 +21,11 @@ public class EmiLootSlotWidget extends SlotWidget {
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(ILootEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+    public EmiLootSlotWidget(IUtils utils, ILootEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                              RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
                              List<ILootCondition> conditions) {
         super(ingredient, x, y);
-        GenericTooltipUtils.getTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);
+        GenericTooltipUtils.getTooltip(utils, entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);
         setCount(count);
     }
 
