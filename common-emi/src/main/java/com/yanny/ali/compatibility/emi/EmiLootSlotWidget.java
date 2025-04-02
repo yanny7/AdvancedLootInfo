@@ -2,9 +2,7 @@ package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.ILootCondition;
-import com.yanny.ali.api.ILootEntry;
-import com.yanny.ali.api.ILootFunction;
+import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.GenericTooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -15,6 +13,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,11 +28,11 @@ public class EmiLootSlotWidget extends SlotWidget {
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(ILootEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
-                             RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<ILootFunction> functions,
-                             List<ILootCondition> conditions) {
+    public EmiLootSlotWidget(IUtils utils, LootPoolEntryContainer entry, EmiIngredient ingredient, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
+                             RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> functions,
+                             List<LootItemCondition> conditions) {
         super(ingredient, x, y);
-        GenericTooltipUtils.getTooltip(entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);
+        GenericTooltipUtils.getTooltip(utils, entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);
         setCount(count);
     }
 

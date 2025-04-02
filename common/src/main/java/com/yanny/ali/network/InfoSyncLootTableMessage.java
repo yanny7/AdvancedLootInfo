@@ -1,26 +1,27 @@
 package com.yanny.ali.network;
 
-import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 public class InfoSyncLootTableMessage {
     public final ResourceLocation location;
-    public final LootTableEntry value;
+    public final LootTable lootTable;
 
-    public InfoSyncLootTableMessage(ResourceLocation location, LootTableEntry value) {
+    public InfoSyncLootTableMessage(ResourceLocation location, LootTable lootTable) {
         this.location = location;
-        this.value = value;
+        this.lootTable = lootTable;
     }
 
     public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
         location = buf.readResourceLocation();
-        value = new LootTableEntry(new AliContext(null, PluginManager.COMMON_REGISTRY, null), buf);
+        lootTable = LootDataType.TABLE.parser().fromJson(buf.readJsonWithCodec(ExtraCodecs.JSON), LootTable.class);
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeResourceLocation(location);
-        value.encode(new AliContext(null, PluginManager.COMMON_REGISTRY, null), buf);
+        buf.writeJsonWithCodec(ExtraCodecs.JSON, LootDataType.TABLE.parser().toJsonTree(lootTable));
     }
 }
