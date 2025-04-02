@@ -1,13 +1,207 @@
 accessWidener v2 named
+
+accessible field net/minecraft/world/level/storage/loot/LootTable pools [Lnet/minecraft/world/level/storage/loot/LootPool;
+accessible field net/minecraft/world/level/storage/loot/LootTable functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
+accessible field net/minecraft/world/level/storage/loot/LootPool bonusRolls Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/LootPool conditions [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible field net/minecraft/world/level/storage/loot/LootPool entries [Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer;
+accessible field net/minecraft/world/level/storage/loot/LootPool functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
+accessible field net/minecraft/world/level/storage/loot/LootPool rolls Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/IntRange min Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/IntRange max Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer conditions [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible field net/minecraft/world/level/storage/loot/entries/CompositeEntryBase children [Lnet/minecraft/world/level/storage/loot/entries/LootPoolEntryContainer;
+accessible field net/minecraft/world/level/storage/loot/entries/LootItem item Lnet/minecraft/world/item/Item;
+accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
+accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer quality I
+accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingletonContainer weight I
+accessible field net/minecraft/world/level/storage/loot/entries/LootTableReference name Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/world/level/storage/loot/entries/TagEntry expand Z
+accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/TagKey;
+
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemBlockStatePropertyCondition block Lnet/minecraft/world/level/block/Block;
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemBlockStatePropertyCondition properties Lnet/minecraft/advancements/critereon/StatePropertiesPredicate;
+accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible field net/minecraft/world/level/storage/loot/predicates/DamageSourceCondition predicate Lnet/minecraft/advancements/critereon/DamageSourcePredicate;
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemEntityPropertyCondition predicate Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemEntityPropertyCondition entityTarget Lnet/minecraft/world/level/storage/loot/LootContext$EntityTarget;
+accessible field net/minecraft/world/level/storage/loot/predicates/EntityHasScoreCondition scores Ljava/util/Map;
+accessible field net/minecraft/world/level/storage/loot/predicates/EntityHasScoreCondition entityTarget Lnet/minecraft/world/level/storage/loot/LootContext$EntityTarget;
+accessible field net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition term Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible field net/minecraft/world/level/storage/loot/predicates/LocationCheck offset Lnet/minecraft/core/BlockPos;
+accessible field net/minecraft/world/level/storage/loot/predicates/LocationCheck predicate Lnet/minecraft/advancements/critereon/LocationPredicate;
+accessible field net/minecraft/world/level/storage/loot/predicates/MatchTool predicate Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemRandomChanceCondition probability F
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemRandomChanceWithLootingCondition lootingMultiplier F
+accessible field net/minecraft/world/level/storage/loot/predicates/LootItemRandomChanceWithLootingCondition percent F
+accessible field net/minecraft/world/level/storage/loot/predicates/BonusLevelTableCondition enchantment Lnet/minecraft/world/item/enchantment/Enchantment;
+accessible field net/minecraft/world/level/storage/loot/predicates/BonusLevelTableCondition values [F
+accessible field net/minecraft/world/level/storage/loot/predicates/TimeCheck period Ljava/lang/Long;
+accessible field net/minecraft/world/level/storage/loot/predicates/TimeCheck value Lnet/minecraft/world/level/storage/loot/IntRange;
+accessible field net/minecraft/world/level/storage/loot/predicates/TimeCheck$Builder period Ljava/lang/Long;
+accessible field net/minecraft/world/level/storage/loot/predicates/ValueCheckCondition provider Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/predicates/ValueCheckCondition range Lnet/minecraft/world/level/storage/loot/IntRange;
+accessible field net/minecraft/world/level/storage/loot/predicates/WeatherCheck isRaining Ljava/lang/Boolean;
+accessible field net/minecraft/world/level/storage/loot/predicates/WeatherCheck isThundering Ljava/lang/Boolean;
+accessible field net/minecraft/world/level/storage/loot/predicates/WeatherCheck$Builder isRaining Ljava/lang/Boolean;
+accessible field net/minecraft/world/level/storage/loot/predicates/ConditionReference name Lnet/minecraft/resources/ResourceLocation;
+
+accessible field net/minecraft/world/level/storage/loot/functions/LootItemConditionalFunction predicates [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction modifiers Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier amount Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier attribute Lnet/minecraft/world/entity/ai/attributes/Attribute;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier id Ljava/util/UUID;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier name Ljava/lang/String;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier operation Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier slots [Lnet/minecraft/world/entity/EquipmentSlot;
+accessible field net/minecraft/world/level/storage/loot/functions/SetItemCountFunction add Z
+accessible field net/minecraft/world/level/storage/loot/functions/SetItemCountFunction value Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/LimitCount limiter Lnet/minecraft/world/level/storage/loot/IntRange;
+accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCount enchantment Lnet/minecraft/world/item/enchantment/Enchantment;
+accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCount formula Lnet/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula;
+accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount extraRounds I
+accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount probability F
+accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount bonusMultiplier I
+accessible field net/minecraft/world/level/storage/loot/functions/LootingEnchantFunction limit I
+accessible field net/minecraft/world/level/storage/loot/functions/LootingEnchantFunction value Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNameFunction source Lnet/minecraft/world/level/storage/loot/functions/CopyNameFunction$NameSource;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyBlockState block Lnet/minecraft/world/level/block/Block;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyBlockState properties Ljava/util/Set;
+accessible field net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction enchantments Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/EnchantWithLevelsFunction levels Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/EnchantWithLevelsFunction treasure Z
+accessible field net/minecraft/world/level/storage/loot/functions/ExplorationMapFunction destination Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/level/storage/loot/functions/ExplorationMapFunction mapDecoration Lnet/minecraft/world/level/saveddata/maps/MapDecoration$Type;
+accessible field net/minecraft/world/level/storage/loot/functions/ExplorationMapFunction searchRadius I
+accessible field net/minecraft/world/level/storage/loot/functions/ExplorationMapFunction skipKnownStructures Z
+accessible field net/minecraft/world/level/storage/loot/functions/ExplorationMapFunction zoom B
+accessible field net/minecraft/world/level/storage/loot/functions/FillPlayerHead entityTarget Lnet/minecraft/world/level/storage/loot/LootContext$EntityTarget;
+accessible field net/minecraft/world/level/storage/loot/functions/SetBannerPatternFunction append Z
+accessible field net/minecraft/world/level/storage/loot/functions/SetBannerPatternFunction patterns Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetContainerContents entries Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetContainerContents type Lnet/minecraft/world/level/block/entity/BlockEntityType;
+accessible field net/minecraft/world/level/storage/loot/functions/SetItemDamageFunction add Z
+accessible field net/minecraft/world/level/storage/loot/functions/SetItemDamageFunction damage Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/SetEnchantmentsFunction add Z
+accessible field net/minecraft/world/level/storage/loot/functions/SetEnchantmentsFunction enchantments Ljava/util/Map;
+accessible field net/minecraft/world/level/storage/loot/functions/SetInstrumentFunction options Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/level/storage/loot/functions/SetContainerLootTable name Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/world/level/storage/loot/functions/SetContainerLootTable seed J
+accessible field net/minecraft/world/level/storage/loot/functions/SetContainerLootTable type Lnet/minecraft/world/level/block/entity/BlockEntityType;
+accessible field net/minecraft/world/level/storage/loot/functions/SetLoreFunction lore Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetLoreFunction replace Z
+accessible field net/minecraft/world/level/storage/loot/functions/SetLoreFunction resolutionContext Lnet/minecraft/world/level/storage/loot/LootContext$EntityTarget;
+accessible field net/minecraft/world/level/storage/loot/functions/SetNameFunction name Lnet/minecraft/network/chat/Component;
+accessible field net/minecraft/world/level/storage/loot/functions/SetNameFunction resolutionContext Lnet/minecraft/world/level/storage/loot/LootContext$EntityTarget;
+accessible field net/minecraft/world/level/storage/loot/functions/SetNbtFunction tag Lnet/minecraft/nbt/CompoundTag;
+accessible field net/minecraft/world/level/storage/loot/functions/SetPotionFunction potion Lnet/minecraft/world/item/alchemy/Potion;
+accessible field net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction effectDurationMap Ljava/util/Map;
+accessible field net/minecraft/world/level/storage/loot/functions/FunctionReference name Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction operations Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction source Lnet/minecraft/world/level/storage/loot/providers/nbt/NbtProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$CopyOperation op Lnet/minecraft/world/level/storage/loot/functions/CopyNbtFunction$MergeStrategy;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$CopyOperation sourcePathText Ljava/lang/String;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$CopyOperation targetPathText Ljava/lang/String;
+
+accessible field net/minecraft/world/level/storage/loot/providers/number/UniformGenerator max Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/providers/number/UniformGenerator min Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/providers/number/BinomialDistributionGenerator n Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/providers/number/BinomialDistributionGenerator p Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+
+accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate properties Ljava/util/List;
+accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher name Ljava/lang/String;
+accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedPropertyMatcher maxValue Ljava/lang/String;
+accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedPropertyMatcher minValue Ljava/lang/String;
+accessible field net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactPropertyMatcher value Ljava/lang/String;
+accessible field net/minecraft/advancements/critereon/EntityTypePredicate$TagPredicate tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/advancements/critereon/EntityTypePredicate$TypePredicate type Lnet/minecraft/world/entity/EntityType;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate directEntity Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate sourceEntity Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/DamageSourcePredicate tags Ljava/util/List;
+accessible field net/minecraft/advancements/critereon/TagPredicate expected Z
+accessible field net/minecraft/advancements/critereon/TagPredicate tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/advancements/critereon/EntityPredicate distanceToPlayer Lnet/minecraft/advancements/critereon/DistancePredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate effects Lnet/minecraft/advancements/critereon/MobEffectsPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate entityType Lnet/minecraft/advancements/critereon/EntityTypePredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate equipment Lnet/minecraft/advancements/critereon/EntityEquipmentPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate flags Lnet/minecraft/advancements/critereon/EntityFlagsPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate nbt Lnet/minecraft/advancements/critereon/NbtPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate passenger Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate steppingOnLocation Lnet/minecraft/advancements/critereon/LocationPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate subPredicate Lnet/minecraft/advancements/critereon/EntitySubPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate targetedEntity Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate team Ljava/lang/String;
+accessible field net/minecraft/advancements/critereon/EntityPredicate vehicle Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/EntityPredicate location Lnet/minecraft/advancements/critereon/LocationPredicate;
+accessible field net/minecraft/advancements/critereon/DistancePredicate absolute Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/DistancePredicate horizontal Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/DistancePredicate x Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/DistancePredicate y Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/DistancePredicate z Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/LocationPredicate biome Lnet/minecraft/resources/ResourceKey;
+accessible field net/minecraft/advancements/critereon/LocationPredicate block Lnet/minecraft/advancements/critereon/BlockPredicate;
+accessible field net/minecraft/advancements/critereon/LocationPredicate dimension Lnet/minecraft/resources/ResourceKey;
+accessible field net/minecraft/advancements/critereon/LocationPredicate fluid Lnet/minecraft/advancements/critereon/FluidPredicate;
+accessible field net/minecraft/advancements/critereon/LocationPredicate light Lnet/minecraft/advancements/critereon/LightPredicate;
+accessible field net/minecraft/advancements/critereon/LocationPredicate smokey Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/LocationPredicate structure Lnet/minecraft/resources/ResourceKey;
+accessible field net/minecraft/advancements/critereon/LocationPredicate x Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/LocationPredicate y Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/LocationPredicate z Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;
+accessible field net/minecraft/advancements/critereon/LightPredicate composite Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/BlockPredicate blocks Ljava/util/Set;
+accessible field net/minecraft/advancements/critereon/BlockPredicate nbt Lnet/minecraft/advancements/critereon/NbtPredicate;
+accessible field net/minecraft/advancements/critereon/BlockPredicate properties Lnet/minecraft/advancements/critereon/StatePropertiesPredicate;
+accessible field net/minecraft/advancements/critereon/BlockPredicate tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/advancements/critereon/NbtPredicate tag Lnet/minecraft/nbt/CompoundTag;
+accessible field net/minecraft/advancements/critereon/FluidPredicate fluid Lnet/minecraft/world/level/material/Fluid;
+accessible field net/minecraft/advancements/critereon/FluidPredicate properties Lnet/minecraft/advancements/critereon/StatePropertiesPredicate;
+accessible field net/minecraft/advancements/critereon/FluidPredicate tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/advancements/critereon/MobEffectsPredicate effects Ljava/util/Map;
+accessible field net/minecraft/advancements/critereon/MobEffectsPredicate$MobEffectInstancePredicate ambient Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/MobEffectsPredicate$MobEffectInstancePredicate amplifier Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/MobEffectsPredicate$MobEffectInstancePredicate duration Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/MobEffectsPredicate$MobEffectInstancePredicate visible Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/EntityFlagsPredicate isBaby Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/EntityFlagsPredicate isCrouching Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/EntityFlagsPredicate isOnFire Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/EntityFlagsPredicate isSprinting Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/EntityFlagsPredicate isSwimming Ljava/lang/Boolean;
+accessible field net/minecraft/advancements/critereon/EntityEquipmentPredicate chest Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/advancements/critereon/EntityEquipmentPredicate feet Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/advancements/critereon/EntityEquipmentPredicate head Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/advancements/critereon/EntityEquipmentPredicate legs Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/advancements/critereon/EntityEquipmentPredicate mainhand Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/advancements/critereon/EntityEquipmentPredicate offhand Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/advancements/critereon/ItemPredicate count Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/ItemPredicate durability Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/ItemPredicate enchantments [Lnet/minecraft/advancements/critereon/EnchantmentPredicate;
+accessible field net/minecraft/advancements/critereon/ItemPredicate items Ljava/util/Set;
+accessible field net/minecraft/advancements/critereon/ItemPredicate nbt Lnet/minecraft/advancements/critereon/NbtPredicate;
+accessible field net/minecraft/advancements/critereon/ItemPredicate potion Lnet/minecraft/world/item/alchemy/Potion;
+accessible field net/minecraft/advancements/critereon/ItemPredicate storedEnchantments [Lnet/minecraft/advancements/critereon/EnchantmentPredicate;
+accessible field net/minecraft/advancements/critereon/ItemPredicate tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/advancements/critereon/EnchantmentPredicate enchantment Lnet/minecraft/world/item/enchantment/Enchantment;
+accessible field net/minecraft/advancements/critereon/EnchantmentPredicate level Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/LighthingBoltPredicate blocksSetOnFire Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/LighthingBoltPredicate entityStruck Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/FishingHookPredicate inOpenWater Z
+accessible field net/minecraft/advancements/critereon/PlayerPredicate advancements Ljava/util/Map;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate gameType Lnet/minecraft/world/level/GameType;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate level Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate lookingAt Lnet/minecraft/advancements/critereon/EntityPredicate;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate recipes Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate stats Ljava/util/Map;
+accessible field net/minecraft/advancements/critereon/SlimePredicate size Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate criterions Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;
+accessible field net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate state Z
+
+accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
 accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
+
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
-extendable class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
-extendable class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
-accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaDeserializer
-accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
-accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
-accessible method net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier <init> (Ljava/lang/String;Lnet/minecraft/world/entity/ai/attributes/Attribute;Lnet/minecraft/world/entity/ai/attributes/AttributeModifier$Operation;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;[Lnet/minecraft/world/entity/EquipmentSlot;Ljava/util/UUID;)V
+accessible class net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$CopyOperation
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactPropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedPropertyMatcher
@@ -16,3 +210,11 @@ accessible class net/minecraft/advancements/critereon/EntityTypePredicate$TypePr
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementPredicate
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate
+
+#########
+# TESTS #
+#########
+
+accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
+accessible method net/minecraft/advancements/critereon/LighthingBoltPredicate <init> (Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;Lnet/minecraft/advancements/critereon/EntityPredicate;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate <init> (Ljava/util/List;)V

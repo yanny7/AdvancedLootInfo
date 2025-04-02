@@ -3,35 +3,39 @@ package com.yanny.ali.plugin.widget;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.TooltipUtils;
-import com.yanny.ali.plugin.entry.TagEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.TagEntry;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class TagWidget implements IEntryWidget {
     private final Rect bounds;
-    private final ILootEntry entry;
+    private final LootPoolEntryContainer entry;
 
-    public TagWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
-                     List<ILootFunction> functions, List<ILootCondition> conditions) {
+    public TagWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+                     List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         TagEntry tagEntry = (TagEntry) entry;
-        List<ILootFunction> allFunctions = new LinkedList<>(functions);
-        List<ILootCondition> allConditions = new LinkedList<>(conditions);
+        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
+        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allFunctions.addAll(tagEntry.functions);
-        allConditions.addAll(tagEntry.conditions);
+        allFunctions.addAll(Arrays.asList(tagEntry.functions));
+        allConditions.addAll(Arrays.asList(tagEntry.conditions));
 
         float rawChance = (float) tagEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
         Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
-        RangeValue count = TooltipUtils.getCount(allFunctions);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
+        RangeValue count = TooltipUtils.getCount(utils, allFunctions);
+        Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(utils, allFunctions, count);
 
-        bounds = utils.addSlotWidget(tagEntry.item, tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+        bounds = utils.addSlotWidget(tagEntry.tag, tagEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;
     }
 
@@ -41,7 +45,7 @@ public class TagWidget implements IEntryWidget {
     }
 
     @Override
-    public ILootEntry getLootEntry() {
+    public LootPoolEntryContainer getLootEntry() {
         return entry;
     }
 
@@ -50,7 +54,7 @@ public class TagWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
+    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
         return new Rect(x, y, 18, 18);
     }
 }

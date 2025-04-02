@@ -1,16 +1,13 @@
 package com.yanny.ali.network;
 
-import java.util.LinkedList;
-import java.util.List;
+import com.yanny.ali.manager.PluginManager;
 
 public abstract class AbstractClient {
-    public final List<InfoSyncLootTableMessage> lootEntries = new LinkedList<>();
-
     protected void onLootInfo(InfoSyncLootTableMessage msg) {
-        lootEntries.add(msg);
+        PluginManager.CLIENT_REGISTRY.addLootTable(msg.location, msg.lootTable);
     }
 
     protected void onClear(ClearMessage msg) {
-        lootEntries.clear();
+        PluginManager.CLIENT_REGISTRY.clearLootTables();
     }
 }

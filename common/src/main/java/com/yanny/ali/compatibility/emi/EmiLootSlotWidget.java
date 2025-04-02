@@ -2,7 +2,8 @@ package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.GenericTooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
@@ -11,6 +12,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -21,9 +25,9 @@ public class EmiLootSlotWidget extends SlotWidget {
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(IUtils utils, ILootEntry entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
-                             List<ILootCondition> conditions) {
+    public EmiLootSlotWidget(IUtils utils, LootPoolEntryContainer entry, EmiIngredient ingredient, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> functions,
+                             List<LootItemCondition> conditions) {
         super(ingredient, x, y);
         GenericTooltipUtils.getTooltip(utils, entry, chance, bonusChance, count, bonusCount, functions, conditions).forEach(this::appendTooltip);
         setCount(count);

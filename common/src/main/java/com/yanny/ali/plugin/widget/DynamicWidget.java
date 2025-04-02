@@ -6,12 +6,16 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.WidgetUtils;
-import com.yanny.ali.plugin.entry.DynamicEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +24,16 @@ public class DynamicWidget implements IEntryWidget {
     private final List<Component> components = Lists.newArrayList();
     private final Rect bounds;
     private final IWidget widget;
-    private final ILootEntry entry;
+    private final LootPoolEntryContainer entry;
 
-    public DynamicWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
-                         List<ILootFunction> functions, List<ILootCondition> conditions) {
-        DynamicEntry dynamicEntry = (DynamicEntry) entry;
-        List<ILootFunction> allFunctions = new LinkedList<>(functions);
-        List<ILootCondition> allConditions = new LinkedList<>(conditions);
+    public DynamicWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+                         List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        DynamicLoot dynamicEntry = (DynamicLoot) entry;
+        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
+        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allFunctions.addAll(dynamicEntry.functions);
-        allConditions.addAll(dynamicEntry.conditions);
+        allFunctions.addAll(Arrays.asList(dynamicEntry.functions));
+        allConditions.addAll(Arrays.asList(dynamicEntry.conditions));
 
         float rawChance = (float) dynamicEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
@@ -51,7 +55,7 @@ public class DynamicWidget implements IEntryWidget {
     }
 
     @Override
-    public ILootEntry getLootEntry() {
+    public LootPoolEntryContainer getLootEntry() {
         return entry;
     }
 
@@ -74,7 +78,7 @@ public class DynamicWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
+    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
         return new Rect(x, y, 7, 18);
     }
 }

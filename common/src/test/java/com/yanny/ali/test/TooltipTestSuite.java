@@ -1,7 +1,8 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.Rect;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.test.utils.TestUtils;
@@ -22,6 +23,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
@@ -62,12 +66,12 @@ public class TooltipTestSuite {
         PluginManager.registerClientEvent();
         UTILS = new Utils() {
             @Override
-            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 return null;
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 return null;
             }
         };

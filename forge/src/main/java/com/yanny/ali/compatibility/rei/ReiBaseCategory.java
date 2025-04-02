@@ -2,7 +2,9 @@ package com.yanny.ali.compatibility.rei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IWidgetUtils;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.GenericTooltipUtils;
 import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
@@ -25,6 +27,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,8 +76,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     private IWidgetUtils getUtils(List<Widget> widgets, Rectangle bounds) {
         return new Utils() {
             @Override
-            public Rect addSlotWidget(Item item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 EntryStack<ItemStack> stack = EntryStacks.of(item);
 
                 stack.tooltip(GenericTooltipUtils.getTooltip(this, entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
@@ -82,8 +87,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, ILootEntry entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
-                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> allFunctions, List<ILootCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
+                                      @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(item);
 
                 ingredient.map((stack) -> stack.tooltip(GenericTooltipUtils.getTooltip(this, entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));

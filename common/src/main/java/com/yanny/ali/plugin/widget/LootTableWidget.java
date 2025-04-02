@@ -1,15 +1,16 @@
 package com.yanny.ali.plugin.widget;
 
-import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.plugin.entry.LootPoolEntry;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,15 +20,15 @@ public class LootTableWidget implements IWidget {
     private final List<IWidget> widgets;
     private final Rect bounds;
 
-    public LootTableWidget(IWidgetUtils utils, LootTableEntry entry, int x, int y) {
+    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
         widgets = new LinkedList<>();
         widgets.add(getLootTableTypeWidget(x, y));
 
-        for (LootPoolEntry pool : entry.pools) {
-            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(entry.functions));
+        for (LootPool pool : utils.getLootPools(lootTable)) {
+            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(Arrays.asList(lootTable.functions)));
             Rect bound = widget.getRect();
 
             width = Math.max(width, bound.width());
@@ -96,16 +97,20 @@ public class LootTableWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootTableEntry entry, int x, int y) {
+    public static Rect getBounds(IUtils utils, LootTable lootTable, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
-        for (LootPoolEntry pool : entry.pools) {
+        for (LootPool pool : utils.getLootPools(lootTable)) {
             Rect bound = LootPoolWidget.getBounds(utils, pool, posX, posY);
 
             width = Math.max(width, bound.width());
             height += bound.height() + VERTICAL_OFFSET;
             posY += bound.height() + VERTICAL_OFFSET;
+        }
+
+        if (height == 0) {
+            height = 18;
         }
 
         return new Rect(x, y, width + 7, height);

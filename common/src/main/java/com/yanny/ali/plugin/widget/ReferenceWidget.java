@@ -1,10 +1,13 @@
 package com.yanny.ali.plugin.widget;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.entry.LootTableEntry;
-import com.yanny.ali.plugin.entry.ReferenceEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -12,11 +15,11 @@ import java.util.List;
 public class ReferenceWidget implements IEntryWidget {
     private final Rect bounds;
     private final IWidget widget;
-    private final ILootEntry entry;
+    private final LootPoolEntryContainer entry;
 
-    public ReferenceWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
-                           List<ILootFunction> functions, List<ILootCondition> conditions) {
-        LootTableEntry tableEntry = ((ReferenceEntry) entry).lootTable;
+    public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+                           List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        LootTable tableEntry = utils.getLootTable(((LootTableReference) entry).name);
 
         if (tableEntry != null) {
             widget = new LootTableWidget(utils, tableEntry, x, y);
@@ -44,7 +47,7 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @Override
-    public ILootEntry getLootEntry() {
+    public LootPoolEntryContainer getLootEntry() {
         return entry;
     }
 
@@ -64,11 +67,11 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
-        LootTableEntry lootTableEntry = ((ReferenceEntry) entry).lootTable;
+    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+        LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
 
-        if (lootTableEntry != null) {
-            return LootTableWidget.getBounds(utils, lootTableEntry, x, y);
+        if (lootTable != null) {
+            return LootTableWidget.getBounds(utils, lootTable, x, y);
         } else {
             return new Rect(x, y, 0, 18);
         }

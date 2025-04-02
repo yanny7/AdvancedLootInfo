@@ -1,14 +1,12 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.*;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.LootDataManager;
+import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.slf4j.Logger;
 
 import java.util.LinkedList;
@@ -22,16 +20,12 @@ public abstract class AbstractServer {
     public final void readLootTables(LootDataManager manager, ServerLevel level) {
         messages.clear();
         manager.getKeys(LootDataType.TABLE).forEach((location) -> {
-            LootTable table = manager.getElement(LootDataType.TABLE, location);
+            LootTable table = manager.getLootTable(location);
 
-            if (table != null && table != LootTable.EMPTY) {
-                LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
-                LootContext context = new LootContext.Builder(lootParams).create(null);
-                AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
-                LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
-                List<Item> items = lootTableEntry.collectItems();
-
-                if (!items.isEmpty()) {
+            if (table != LootTable.EMPTY) {
+//                List<Item> items = TooltipUtils.collectItems(PluginManager.CLIENT_REGISTRY, table);
+//
+//                if (!items.isEmpty()) {
 //                        LootModifierManager man = ForgeInternalHandler.getLootModifierManager();
 //                        ObjectArrayList<ItemStack> generatedLoot = new ObjectArrayList<>(items.stream().map(Item::getDefaultInstance).toList());
 //
@@ -39,10 +33,10 @@ public abstract class AbstractServer {
 //                            generatedLoot = mod.apply(generatedLoot, context);
 //                        }
 
-                    messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
-                } else {
-                    LOGGER.info("LootTable {} has no items", location);
-                }
+                    messages.add(new InfoSyncLootTableMessage(location, table));
+//                } else {
+//                    LOGGER.info("LootTable {} has no items", location);
+//                }
             } else {
                 LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
             }

@@ -39,7 +39,6 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-                    source project(":common-mixin").sourceSets.main
                 }
             }
         }
@@ -55,7 +54,6 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-                    source project(":common-mixin").sourceSets.main
                 }
             }
         }
@@ -72,7 +70,6 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-                    source project(":common-mixin").sourceSets.main
                 }
             }
         }
@@ -87,7 +84,6 @@ dependencies {
 
     compileOnly project(":api")
     compileOnly project(":common")
-    compileOnly project(":common-mixin")
 
     // EMI
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
@@ -119,7 +115,6 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
-    source(project(":common-mixin").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {

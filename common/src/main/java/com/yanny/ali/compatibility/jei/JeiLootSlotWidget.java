@@ -2,7 +2,8 @@ package com.yanny.ali.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.Rect;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
 import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
@@ -12,6 +13,9 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,9 +30,9 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     private Component count;
     private boolean isRange = false;
 
-    public JeiLootSlotWidget(ILootEntry entry, IRecipeSlotDrawable slotDrawable, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<ILootFunction> functions,
-                             List<ILootCondition> conditions) {
+    public JeiLootSlotWidget(LootPoolEntryContainer entry, IRecipeSlotDrawable slotDrawable, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> functions,
+                             List<LootItemCondition> conditions) {
         this.slotDrawable = slotDrawable;
         rect = new Rect(x, y, 18, 18);
         setCount(count);
