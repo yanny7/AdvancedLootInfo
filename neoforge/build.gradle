@@ -44,7 +44,6 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":api")
     compileOnly project(":common")
-    compileOnly project(":common-mixin")
 
     // EMI
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
@@ -79,7 +78,6 @@ tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
     source(project(":common").sourceSets.main.allSource)
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
-    source(project(":common-mixin").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {

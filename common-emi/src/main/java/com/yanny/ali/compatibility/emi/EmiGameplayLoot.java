@@ -1,14 +1,14 @@
 package com.yanny.ali.compatibility.emi;
 
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 public class EmiGameplayLoot extends EmiBaseLoot {
-    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTableEntry message) {
-        super(category, id, message, 0, 10);
+    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable) {
+        super(category, id, lootTable, 0, 10);
     }
 
     @Override

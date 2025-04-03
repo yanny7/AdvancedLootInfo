@@ -12,7 +12,7 @@
     "license": "${license}",
     "icon": "logo.png",
     "environment": "*",
-    "accessWidener": "${mod_id}.accesswidener",
+    "accessWidener": "ali.accesswidener",
     "entrypoints": {
         "main": [
             "com.yanny.ali.CommonAliMod"
@@ -24,7 +24,7 @@
             "com.yanny.ali.datagen.DataGeneration"
         ],
         "ali": [
-            "com.yanny.ali.plugin.CommonPlugin"
+          "com.yanny.ali.plugin.Plugin"
         ],
         "emi": [
             "com.yanny.ali.compatibility.EmiCompatibility"
@@ -37,8 +37,8 @@
         ]
     },
     "mixins": [
-        "${mod_id}.mixins.json",
-        "${mod_id}.fabric.mixins.json"
+        "ali.mixins.json",
+        "ali.fabric.mixins.json"
     ],
     "depends": {
         "fabricloader": "${fabric_loader_version_range_fabric}",

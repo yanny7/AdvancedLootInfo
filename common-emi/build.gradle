@@ -22,7 +22,6 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":api")
     compileOnly project(":common")
-    compileOnly project(":common-mixin")
 
     compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}:api"
 }

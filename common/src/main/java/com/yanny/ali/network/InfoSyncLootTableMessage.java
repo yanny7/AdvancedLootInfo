@@ -1,13 +1,15 @@
 package com.yanny.ali.network;
 
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.Utils;
-import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.world.level.storage.loot.LootDataType;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
 public class InfoSyncLootTableMessage implements CustomPacketPayload {
@@ -26,21 +28,21 @@ public class InfoSyncLootTableMessage implements CustomPacketPayload {
     };
 
     public final ResourceLocation location;
-    public final LootTableEntry value;
+    public final LootTable lootTable;
 
-    public InfoSyncLootTableMessage(ResourceLocation location, LootTableEntry value) {
+    public InfoSyncLootTableMessage(ResourceLocation location, LootTable lootTable) {
         this.location = location;
-        this.value = value;
+        this.lootTable = lootTable;
     }
 
     public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
         location = buf.readResourceLocation();
-        value = new LootTableEntry(new AliContext(null, PluginManager.COMMON_REGISTRY, null), buf);
+        lootTable = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).get().orThrow();
     }
 
     public void write(FriendlyByteBuf buf) {
         buf.writeResourceLocation(location);
-        value.encode(new AliContext(null, PluginManager.COMMON_REGISTRY, null), buf);
+        buf.writeJsonWithCodec(ExtraCodecs.JSON, LootDataType.TABLE.codec.encodeStart(JsonOps.INSTANCE, lootTable).get().orThrow());
     }
 
     @NotNull

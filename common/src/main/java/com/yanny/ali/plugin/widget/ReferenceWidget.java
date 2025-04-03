@@ -4,6 +4,11 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.entry.ReferenceEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -11,19 +16,27 @@ import java.util.List;
 public class ReferenceWidget implements IEntryWidget {
     private final Rect bounds;
     private final IWidget widget;
-    private final ILootEntry entry;
+    private final LootPoolEntryContainer entry;
 
-    public ReferenceWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
-                           List<ILootFunction> functions, List<ILootCondition> conditions) {
-        widget = ((ReferenceEntry) entry).lootTable.map((l) -> (IWidget) new LootTableWidget(utils, l, x, y)).orElse(new IWidget() {
-            @Override
-            public Rect getRect() {
-                return new Rect(0, 0, 0, 0);
-            }
+    public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+                           List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        LootTable tableEntry = utils.getLootTable(((LootTableReference) entry).name);
 
-            @Override
-            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
-        });
+        if (tableEntry != null) {
+            widget = new LootTableWidget(utils, tableEntry, x, y);
+        } else {
+            widget = new IWidget() {
+                @Override
+                public Rect getRect() {
+                    return new Rect(0, 0, 0, 0);
+                }
+
+                @Override
+                public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+
+                }
+            };
+        }
 
         bounds = widget.getRect();
         this.entry = entry;
@@ -35,7 +48,7 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @Override
-    public ILootEntry getLootEntry() {
+    public LootPoolEntryContainer getLootEntry() {
         return entry;
     }
 
@@ -55,7 +68,13 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
-        return ((ReferenceEntry) entry).lootTable.map((l) -> LootTableWidget.getBounds(utils, l, x, y)).orElse(new Rect(x, y, 0, 18));
+    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+        LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
+
+        if (lootTable != null) {
+            return LootTableWidget.getBounds(utils, lootTable, x, y);
+        } else {
+            return new Rect(x, y, 0, 18);
+        }
     }
 }

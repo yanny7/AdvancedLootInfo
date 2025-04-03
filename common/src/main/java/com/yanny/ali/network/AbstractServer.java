@@ -33,13 +33,13 @@ public abstract class AbstractServer {
                 LootTable table = reference.value();
 
                 if (table != LootTable.EMPTY) {
-                    LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
-                    LootContext context = new LootContext.Builder(lootParams).create(Optional.empty());
-                    AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
-                    LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
-                    List<Item> items = lootTableEntry.collectItems();
-
-                    if (!items.isEmpty()) {
+//                    LootParams lootParams = (new LootParams.Builder(level)).create(LootContextParamSets.EMPTY);
+//                    LootContext context = new LootContext.Builder(lootParams).create(Optional.empty());
+//                    AliContext aliContext = new AliContext(context, PluginManager.COMMON_REGISTRY, manager);
+//                    LootTableEntry lootTableEntry = new LootTableEntry(aliContext, table);
+//                    List<Item> items = lootTableEntry.collectItems();
+//
+//                    if (!items.isEmpty()) {
 //                        LootModifierManager man = ForgeInternalHandler.getLootModifierManager();
 //                        ObjectArrayList<ItemStack> generatedLoot = new ObjectArrayList<>(items.stream().map(Item::getDefaultInstance).toList());
 //
@@ -51,9 +51,9 @@ public abstract class AbstractServer {
                     } else {
                         LOGGER.info("LootTable {} has no items", location);
                     }
-                } else {
-                    LOGGER.warn("Ignoring {} LootTable, because it's empty", location);
-                }
+//                } else {
+//                    LOGGER.warn("Ignoring {} LootTable, because it's empty", location);
+//                }
             });
         });
 

@@ -1,6 +1,10 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.Rect;
+import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
@@ -17,8 +21,14 @@ import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
@@ -28,6 +38,8 @@ import org.junit.platform.suite.api.Suite;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -39,6 +51,8 @@ import java.util.concurrent.ExecutionException;
         GenericTooltipTest.class,
 })
 public class TooltipTestSuite {
+    public static Utils UTILS;
+
     private static Set<String> UNUSED;
     public static HolderLookup.Provider LOOKUP;
 
@@ -52,6 +66,20 @@ public class TooltipTestSuite {
         Language.inject(pair.getFirst());
         UNUSED = pair.getSecond();
         LOOKUP = VanillaRegistries.createLookup();
+
+        PluginManager.registerCommonEvent();
+        PluginManager.registerClientEvent();
+        UTILS = new Utils() {
+            @Override
+            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+                return null;
+            }
+
+            @Override
+            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+                return null;
+            }
+        };
 
         System.out.printf("----- Translation keys (%d) -----\n", UNUSED.size());
     }
