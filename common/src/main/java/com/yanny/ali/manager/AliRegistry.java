@@ -3,7 +3,6 @@ package com.yanny.ali.manager;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.platform.Services;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -11,7 +10,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -241,11 +239,6 @@ public class AliRegistry implements IRegistry, IUtils {
     @Override
     public LootContext getLootContext() {
         return LOOT_CONTEXT;
-    }
-
-    @Override
-    public List<LootPool> getLootPools(LootTable lootTable) {
-        return Services.PLATFORM.getLootPools(lootTable);
     }
 
     @Nullable

@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +35,8 @@ public class EmptyWidget implements IEntryWidget {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allFunctions.addAll(Arrays.asList(emptyEntry.functions));
-        allConditions.addAll(Arrays.asList(emptyEntry.conditions));
+        allFunctions.addAll(emptyEntry.functions);
+        allConditions.addAll(emptyEntry.conditions);
 
         float rawChance = (float) emptyEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);

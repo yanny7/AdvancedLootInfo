@@ -7,7 +7,10 @@ import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.yanny.ali.plugin.GenericTooltipUtils.*;
 
@@ -159,11 +162,12 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSequenceTooltip(int pad, List<ILootFunction> functions) {
+    public static List<Component> getSequenceTooltip(IUtils utils, int pad, LootItemFunction function) {
         List<Component> components = new LinkedList<>();
+        SequenceFunction fun = (SequenceFunction) function;
 
         components.add(pad(pad, translatable("ali.type.function.sequence")));
-        components.addAll(GenericTooltipUtils.getFunctionsTooltip(pad + 1, functions));
+        components.addAll(GenericTooltipUtils.getFunctionsTooltip(utils, pad + 1, fun.functions));
 
         return components;
     }
@@ -197,7 +201,7 @@ public class FunctionTooltipUtils {
         SetContainerContents fun = (SetContainerContents) function;
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.blockEntityType, GenericTooltipUtils::getBlockEntityTypeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, fun.type, GenericTooltipUtils::getBlockEntityTypeTooltip));
 
         return components;
     }
@@ -235,7 +239,7 @@ public class FunctionTooltipUtils {
 
         if (!fun.enchantments.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
-            enchantments.forEach((enchantment, value) -> {
+            fun.enchantments.forEach((enchantment, value) -> {
                 components.addAll(getHolderTooltip(utils, pad + 2, enchantment, GenericTooltipUtils::getEnchantmentTooltip));
                 components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.levels", utils.convertNumber(utils, value)));
             });
@@ -277,7 +281,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.replace", fun.replace));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore, (p, c) -> List.of(pad(pad + 2, c))));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore, (u, p, c) -> List.of(pad(pad + 2, c))));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", "target", fun.resolutionContext));
 
         return components;
@@ -324,11 +328,11 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
 
-        if (!fun.effectDurationMap.isEmpty()) {
+        if (!fun.effects.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
-            effectMap.forEach((effect, duration) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, fun.effect, GenericTooltipUtils::getMobEffectTooltip));
-                components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.duration", fun.duration));
+            fun.effects.forEach((effect) -> {
+                components.addAll(getHolderTooltip(utils, pad + 2, effect.effect(), GenericTooltipUtils::getMobEffectTooltip));
+                components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.duration", utils.convertNumber(utils, effect.duration())));
             });
         }
 

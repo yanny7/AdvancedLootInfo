@@ -12,7 +12,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,16 +27,16 @@ public class ItemWidget implements IEntryWidget {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allFunctions.addAll(Arrays.asList(itemEntry.functions));
-        allConditions.addAll(Arrays.asList(itemEntry.conditions));
+        allFunctions.addAll(itemEntry.functions);
+        allConditions.addAll(itemEntry.conditions);
 
         float rawChance = (float) itemEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
         Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
         RangeValue count = TooltipUtils.getCount(utils, allFunctions);
-        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount = TooltipUtils.getBonusCount(allFunctions, count);
+        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount = TooltipUtils.getBonusCount(utils, allFunctions, count);
 
-        bounds = utils.addSlotWidget(itemEntry.item, itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+        bounds = utils.addSlotWidget(itemEntry.item.value(), itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
         this.entry = entry;
     }
 

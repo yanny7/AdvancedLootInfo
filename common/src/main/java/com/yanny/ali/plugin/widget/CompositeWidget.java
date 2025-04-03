@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
@@ -10,7 +11,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,9 +27,9 @@ public class CompositeWidget implements IEntryWidget {
         CompositeEntryBase compositeEntry = (CompositeEntryBase) entry;
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allConditions.addAll(Arrays.asList(compositeEntry.conditions));
+        allConditions.addAll(compositeEntry.conditions);
 
-        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, Arrays.asList(compositeEntry.children), x, y, List.copyOf(functions), allConditions);
+        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, compositeEntry.children, x, y, List.copyOf(functions), allConditions);
 
         widgets = new LinkedList<>(pair.getFirst());
         bounds = pair.getSecond();
@@ -117,6 +117,6 @@ public class CompositeWidget implements IEntryWidget {
 
     @NotNull
     public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
-        return utils.getBounds(utils, Arrays.asList(((CompositeEntryBase) entry).children), x, y);
+        return utils.getBounds(utils, ((CompositeEntryBase) entry).children, x, y);
     }
 }

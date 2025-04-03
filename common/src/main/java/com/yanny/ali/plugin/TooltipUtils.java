@@ -3,6 +3,7 @@ package com.yanny.ali.plugin;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -17,11 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWit
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class TooltipUtils {
     private TooltipUtils() {}
@@ -32,21 +29,21 @@ public class TooltipUtils {
 
         for (LootItemCondition c : list) {
             LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
-            value.multiply(condition.percent);
+            value.multiply(condition.percent());
         }
 
         list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceCondition).toList();
 
         for (LootItemCondition c : list) {
             LootItemRandomChanceCondition condition = (LootItemRandomChanceCondition) c;
-            value.multiply(condition.probability);
+            value.multiply(condition.probability());
         }
 
         list = conditions.stream().filter((f) -> f instanceof BonusLevelTableCondition).toList();
 
         for (LootItemCondition c : list) {
             BonusLevelTableCondition condition = (BonusLevelTableCondition) c;
-            value.set(new RangeValue(condition.values.get(0)));
+            value.set(new RangeValue(condition.values().get(0)));
         }
 
         return value.multiply(100);
@@ -62,7 +59,7 @@ public class TooltipUtils {
             LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
 
             for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
-                RangeValue value = new RangeValue(chance * (condition.percent + level * condition.lootingMultiplier));
+                RangeValue value = new RangeValue(chance * (condition.percent() + level * condition.lootingMultiplier()));
                 bonusChance.put(level, value.multiply(100));
             }
 
@@ -74,14 +71,12 @@ public class TooltipUtils {
         for (LootItemCondition c : list) {
             BonusLevelTableCondition condition = (BonusLevelTableCondition) c;
 
-            if (((TableBonusAliCondition) c).enchantment != null) {
-                for (int level = 1; level < condition.values.size(); level++) {
-                    RangeValue value = new RangeValue(condition.values.get(level));
-                    bonusChance.put(level, value.multiply(100));
-                }
-
-                return Optional.of(new Pair<>(condition.enchantment, bonusChance));
+            for (int level = 1; level < condition.values().size(); level++) {
+                RangeValue value = new RangeValue(condition.values().get(level));
+                bonusChance.put(level, value.multiply(100));
             }
+
+            return Optional.of(new Pair<>(condition.enchantment(), bonusChance));
         }
 
         return Optional.empty();
@@ -115,23 +110,22 @@ public class TooltipUtils {
     }
 
     @Unmodifiable
-    public static Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> getBonusCount(List<LootItemFunction> functions, RangeValue count) {
+    public static Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> getBonusCount(IUtils utils, List<LootItemFunction> functions, RangeValue count) {
         Map<Integer, RangeValue> bonusCount = new HashMap<>();
 
         List<LootItemFunction> list = functions.stream().filter((f) -> f instanceof ApplyBonusCount).toList();
 
         for (LootItemFunction f : list) {
             ApplyBonusCount function = (ApplyBonusCount) f;
-            Enchantment enchantment = function.enchantment;
 
-            for (int level = 1; level < enchantment.value().getMaxLevel() + 1; level++) {
+            for (int level = 1; level < function.enchantment.value().getMaxLevel() + 1; level++) {
                 RangeValue value = new RangeValue(count);
 
                 calculateCount(function, value, level);
                 bonusCount.put(level, value);
             }
 
-            return Optional.of(new Pair<>(enchantment, bonusCount));
+            return Optional.of(new Pair<>(function.enchantment, bonusCount));
         }
 
         list = functions.stream().filter((f) -> f instanceof LootingEnchantFunction).toList();
@@ -155,7 +149,7 @@ public class TooltipUtils {
     public static List<Item> collectItems(IUtils utils, LootTable lootTable) {
         List<Item> items = new LinkedList<>();
 
-        for (LootPool pool : utils.getLootPools(lootTable)) {
+        for (LootPool pool : lootTable.pools) {
             for (LootPoolEntryContainer entry : pool.entries) {
                 items.addAll(utils.collectItems(entry.getClass(), utils, entry));
             }
@@ -170,10 +164,10 @@ public class TooltipUtils {
                 value.multiplyMax(level + 1);
             }
         } else if (function.formula instanceof ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount) {
-            value.addMax(binomialWithBonusCount.extraRounds + level);
+            value.addMax(binomialWithBonusCount.extraRounds() + level);
         } else if (function.formula instanceof ApplyBonusCount.UniformBonusCount uniformBonusCount) {
             if (level > 0) {
-                value.addMax(uniformBonusCount.bonusMultiplier * level);
+                value.addMax(uniformBonusCount.bonusMultiplier() * level);
             }
         }
     }

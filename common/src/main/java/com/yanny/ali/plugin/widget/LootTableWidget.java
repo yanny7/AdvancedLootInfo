@@ -5,15 +5,12 @@ import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.WidgetUtils;
-import com.yanny.ali.plugin.entry.LootPoolEntry;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,8 +27,8 @@ public class LootTableWidget implements IWidget {
         widgets = new LinkedList<>();
         widgets.add(getLootTableTypeWidget(x, y));
 
-        for (LootPool pool : utils.getLootPools(lootTable)) {
-            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(Arrays.asList(lootTable.functions)));
+        for (LootPool pool : lootTable.pools) {
+            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(lootTable.functions));
             Rect bound = widget.getRect();
 
             width = Math.max(width, bound.width());
@@ -104,7 +101,7 @@ public class LootTableWidget implements IWidget {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
-        for (LootPool pool : utils.getLootPools(lootTable)) {
+        for (LootPool pool : lootTable.pools) {
             Rect bound = LootPoolWidget.getBounds(utils, pool, posX, posY);
 
             width = Math.max(width, bound.width());

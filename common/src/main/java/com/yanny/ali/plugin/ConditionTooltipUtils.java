@@ -2,19 +2,17 @@ package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.yanny.ali.plugin.GenericTooltipUtils.*;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class ConditionTooltipUtils {
     @NotNull
     public static List<Component> getAllOfTooltip(IUtils utils, int pad, LootItemCondition condition) {
@@ -22,7 +20,7 @@ public class ConditionTooltipUtils {
         AllOfCondition cond = (AllOfCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.all_of")));
-        components.addAll(getConditionsTooltip(utils, pad + 1, List.of(cond.terms())));
+        components.addAll(getConditionsTooltip(utils, pad + 1, cond.terms));
 
         return components;
     }
@@ -33,7 +31,7 @@ public class ConditionTooltipUtils {
         AnyOfCondition cond = (AnyOfCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.any_of")));
-        components.addAll(getConditionsTooltip(utils, pad + 1, List.of(cond.terms())));
+        components.addAll(getConditionsTooltip(utils, pad + 1, cond.terms));
 
         return components;
     }
@@ -81,9 +79,9 @@ public class ConditionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.condition.entity_scores")));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", Optional.of(cond.entityTarget())));
 
-        if (!cond.scores.isEmpty()) {
+        if (!cond.scores().isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.scores")));
-            cond.scores.forEach((score, range) -> components.add(pad(pad + 2, keyValue(score, RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
+            cond.scores().forEach((score, range) -> components.add(pad(pad + 2, keyValue(score, RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
         }
 
         return components;
@@ -95,7 +93,7 @@ public class ConditionTooltipUtils {
         InvertedLootItemCondition cond = (InvertedLootItemCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.inverted")));
-        components.addAll(utils.getConditionTooltip(cond.term.getClass(), utils, pad + 1, cond.term));
+        components.addAll(utils.getConditionTooltip(cond.term().getClass(), utils, pad + 1, cond.term()));
 
         return components;
     }
@@ -133,7 +131,7 @@ public class ConditionTooltipUtils {
         LootItemRandomChanceCondition cond = (LootItemRandomChanceCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance")));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.probability", cond.probability));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.probability", cond.probability()));
 
         return components;
     }
@@ -144,8 +142,8 @@ public class ConditionTooltipUtils {
         LootItemRandomChanceWithLootingCondition cond = (LootItemRandomChanceWithLootingCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance_with_looting")));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.percent", cond.percent));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.multiplier", cond.lootingMultiplier));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.percent", cond.percent()));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.multiplier", cond.lootingMultiplier()));
 
         return components;
     }
@@ -153,7 +151,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static List<Component> getReferenceTooltip(IUtils utils, int pad, LootItemCondition condition) {
         ConditionReference cond = (ConditionReference) condition;
-        return new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.type.condition.reference", cond.name));
+        return new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.type.condition.reference", cond.name()));
     }
 
     @Unmodifiable
@@ -169,7 +167,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
         components.addAll(getHolderTooltip(utils, pad + 1, cond.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
-        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.values", Arrays.toString(cond.values())));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.values", cond.values().toString()));
 
         return components;
     }
@@ -181,7 +179,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.time_check")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.period", cond.period(), GenericTooltipUtils::getLongTooltip));
-        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.value", RangeValue.rangeToString(min, max)));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.value", RangeValue.rangeToString(utils.convertNumber(utils, cond.value().min), utils.convertNumber(utils, cond.value().max))));
 
         return components;
     }
@@ -192,8 +190,8 @@ public class ConditionTooltipUtils {
         ValueCheckCondition cond = (ValueCheckCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.value_check")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.provider", utils.convertNumber(utils, cond.provider)));
-        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.range", RangeValue.rangeToString(utils.convertNumber(utils, cond.range.min), utils.convertNumber(utils, cond.range.max))));
+        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.provider", utils.convertNumber(utils, cond.provider())));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.range", RangeValue.rangeToString(utils.convertNumber(utils, cond.range().min), utils.convertNumber(utils, cond.range().max))));
 
         return components;
     }

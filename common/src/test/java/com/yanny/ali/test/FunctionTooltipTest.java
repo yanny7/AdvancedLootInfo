@@ -173,7 +173,7 @@ public class FunctionTooltipTest {
     @Test
     public void testSetAttributesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, 0, SetAttributesFunction.setAttributes()
-                .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Attributes.ARMOR, AttributeModifier.Operation.MULTIPLY_TOTAL, UniformGenerator.between(1, 5))
+                .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Holder.direct(Attributes.ARMOR), AttributeModifier.Operation.MULTIPLY_TOTAL, UniformGenerator.between(1, 5))
                         .forSlot(EquipmentSlot.HEAD)
                         .forSlot(EquipmentSlot.CHEST)
                         .forSlot(EquipmentSlot.LEGS)

@@ -27,7 +27,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -73,7 +72,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
                                       Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(entry, EmiStack.of(item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
 
                 widget.recipeContext(recipe);
                 slotWidgets.add(widget);
@@ -85,7 +84,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             @Override
             public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
                                       Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(entry, EmiIngredient.of(item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiIngredient.of(item), x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
 
                 widget.recipeContext(recipe);
                 slotWidgets.add(widget);

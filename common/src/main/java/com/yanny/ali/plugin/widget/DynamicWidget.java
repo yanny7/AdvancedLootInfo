@@ -16,7 +16,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +33,8 @@ public class DynamicWidget implements IEntryWidget {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allFunctions.addAll(Arrays.asList(dynamicEntry.functions));
-        allConditions.addAll(Arrays.asList(dynamicEntry.conditions));
+        allFunctions.addAll(dynamicEntry.functions);
+        allConditions.addAll(dynamicEntry.conditions);
 
         float rawChance = (float) dynamicEntry.weight / sumWeight;
         RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);

@@ -9,7 +9,6 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,9 +22,9 @@ public class LootPoolWidget implements IWidget {
     public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, List<LootItemFunction> functions) {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
 
-        allFunctions.addAll(Arrays.asList(entry.functions));
+        allFunctions.addAll(entry.functions);
 
-        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, Arrays.asList(entry.entries), x, y, allFunctions, List.copyOf(Arrays.asList(entry.conditions)));
+        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, entry.entries, x, y, allFunctions, List.copyOf(entry.conditions));
 
         widgets = new LinkedList<>(info.getFirst());
         widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)));
@@ -108,6 +107,6 @@ public class LootPoolWidget implements IWidget {
 
     @NotNull
     public static Rect getBounds(IUtils registry, LootPool entry, int x, int y) {
-        return registry.getBounds(registry, Arrays.asList(entry.entries), x, y);
+        return registry.getBounds(registry, entry.entries, x, y);
     }
 }

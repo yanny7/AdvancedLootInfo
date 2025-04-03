@@ -2,6 +2,7 @@ package com.yanny.ali.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;

@@ -23,14 +23,14 @@ import java.util.Objects;
 public class Plugin implements IPlugin {
     @Override
     public void register(IRegistry registry) {
-        registry.registerWidget(LootItem.class, WidgetDirection.HORIZONTAL, ItemWidget::new, (utils, entry, x, y) -> ItemWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(EmptyLootItem.class, WidgetDirection.HORIZONTAL, EmptyWidget::new, (utils, entry, x, y) -> EmptyWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(LootTableReference.class, WidgetDirection.VERTICAL, ReferenceWidget::new, (utils, entry, x, y) -> ReferenceWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(DynamicLoot.class, WidgetDirection.VERTICAL, DynamicWidget::new, (utils, entry, x, y) -> DynamicWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(TagEntry.class, WidgetDirection.HORIZONTAL, TagWidget::new, (utils, entry, x, y) -> TagWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(AlternativesEntry.class, WidgetDirection.VERTICAL, AlternativesWidget::new, (utils, entry, x, y) -> CompositeWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(SequentialEntry.class, WidgetDirection.VERTICAL, SequentialWidget::new, (utils, entry, x, y) -> CompositeWidget.getBounds(utils, entry, x, y));
-        registry.registerWidget(EntryGroup.class, WidgetDirection.VERTICAL, GroupWidget::new, (utils, entry, x, y) -> CompositeWidget.getBounds(utils, entry, x, y));
+        registry.registerWidget(LootItem.class, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
+        registry.registerWidget(EmptyLootItem.class, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
+        registry.registerWidget(LootTableReference.class, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
+        registry.registerWidget(DynamicLoot.class, WidgetDirection.VERTICAL, DynamicWidget::new, DynamicWidget::getBounds);
+        registry.registerWidget(TagEntry.class, WidgetDirection.HORIZONTAL, TagWidget::new, TagWidget::getBounds);
+        registry.registerWidget(AlternativesEntry.class, WidgetDirection.VERTICAL, AlternativesWidget::new, CompositeWidget::getBounds);
+        registry.registerWidget(SequentialEntry.class, WidgetDirection.VERTICAL, SequentialWidget::new, CompositeWidget::getBounds);
+        registry.registerWidget(EntryGroup.class, WidgetDirection.VERTICAL, GroupWidget::new, CompositeWidget::getBounds);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
@@ -64,6 +64,7 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(LimitCount.class, FunctionTooltipUtils::getLimitCountTooltip);
         registry.registerFunctionTooltip(LootingEnchantFunction.class, FunctionTooltipUtils::getLootingEnchantTooltip);
         registry.registerFunctionTooltip(FunctionReference.class, FunctionTooltipUtils::getReferenceTooltip);
+        registry.registerFunctionTooltip(SequenceFunction.class, FunctionTooltipUtils::getSequenceTooltip);
         registry.registerFunctionTooltip(SetAttributesFunction.class, FunctionTooltipUtils::getSetAttributesTooltip);
         registry.registerFunctionTooltip(SetBannerPatternFunction.class, FunctionTooltipUtils::getSetBannerPatternTooltip);
         registry.registerFunctionTooltip(SetContainerContents.class, FunctionTooltipUtils::getSetContentsTooltip);
@@ -102,7 +103,7 @@ public class Plugin implements IPlugin {
     @Unmodifiable
     @NotNull
     private static List<Item> collectItems(IUtils utils, LootPoolEntryContainer entry) {
-        return List.of(((LootItem) entry).item);
+        return List.of(((LootItem) entry).item.value());
     }
 
     @Unmodifiable
@@ -143,14 +144,14 @@ public class Plugin implements IPlugin {
     @NotNull
     private static RangeValue convertUniform(IUtils utils, NumberProvider numberProvider) {
         UniformGenerator uniformGenerator = (UniformGenerator) numberProvider;
-        return new RangeValue(utils.convertNumber(utils, uniformGenerator.min).min(),
-                utils.convertNumber(utils, uniformGenerator.max).max());
+        return new RangeValue(utils.convertNumber(utils, uniformGenerator.min()).min(),
+                utils.convertNumber(utils, uniformGenerator.max()).max());
     }
 
     @NotNull
     private static RangeValue convertBinomial(IUtils utils, NumberProvider numberProvider) {
         BinomialDistributionGenerator binomialGenerator = (BinomialDistributionGenerator) numberProvider;
-        return new RangeValue(0, binomialGenerator.n.getFloat(utils.getLootContext()));
+        return new RangeValue(0, binomialGenerator.n().getFloat(utils.getLootContext()));
     }
 
     @NotNull
@@ -159,7 +160,7 @@ public class Plugin implements IPlugin {
     }
 
     @NotNull
-    private static ResourceLocation getKey(LootNumberProviderType key) {
+    static ResourceLocation getKey(LootNumberProviderType key) {
         return getKey(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, key);
     }
 
