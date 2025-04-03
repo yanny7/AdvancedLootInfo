@@ -1,7 +1,7 @@
 package com.yanny.ali.compatibility.common;
 
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.loot.LootTable;
 
-public record EntityLootType(Entity entity, LootTableEntry entry) implements IType {
+public record EntityLootType(Entity entity, LootTable entry) implements IType {
 }

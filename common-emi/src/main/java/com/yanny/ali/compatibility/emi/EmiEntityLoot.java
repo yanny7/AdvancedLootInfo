@@ -2,7 +2,6 @@ package com.yanny.ali.compatibility.emi;
 
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.GenericUtils;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
@@ -14,14 +13,15 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.List;
 
 public class EmiEntityLoot extends EmiBaseLoot {
     private final Entity entity;
 
-    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootTableEntry message) {
-        super(category, id, message, 0, 48);
+    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootTable lootTable) {
+        super(category, id, lootTable, 0, 48);
         this.entity = entity;
 
         SpawnEggItem spawnEgg = SpawnEggItem.byId(entity.getType());

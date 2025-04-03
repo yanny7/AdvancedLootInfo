@@ -1,6 +1,6 @@
 package com.yanny.ali.compatibility.common;
 
-import com.yanny.ali.plugin.entry.LootTableEntry;
+import net.minecraft.world.level.storage.loot.LootTable;
 
-public record GameplayLootType(LootTableEntry entry, String id) implements IType {
+public record GameplayLootType(LootTable entry, String id) implements IType {
 }

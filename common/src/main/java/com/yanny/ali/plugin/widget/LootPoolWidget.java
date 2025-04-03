@@ -3,9 +3,10 @@ package com.yanny.ali.plugin.widget;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.WidgetUtils;
-import com.yanny.ali.plugin.entry.LootPoolEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -16,17 +17,17 @@ import static com.yanny.ali.plugin.WidgetUtils.TEXTURE_LOC;
 public class LootPoolWidget implements IWidget {
     private final List<IWidget> widgets;
     private final Rect bounds;
-    private final IClientUtils utils;
+    private final IUtils utils;
 
-    public LootPoolWidget(IWidgetUtils utils, LootPoolEntry entry, int x, int y, List<ILootFunction> functions) {
-        List<ILootFunction> allFunctions = new LinkedList<>(functions);
+    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, List<LootItemFunction> functions) {
+        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
 
         allFunctions.addAll(entry.functions);
 
         Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, entry.entries, x, y, allFunctions, List.copyOf(entry.conditions));
 
         widgets = new LinkedList<>(info.getFirst());
-        widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, entry.rolls, entry.bonusRolls));
+        widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)));
         bounds = info.getSecond();
         this.utils = utils;
     }
@@ -105,7 +106,7 @@ public class LootPoolWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils registry, LootPoolEntry entry, int x, int y) {
+    public static Rect getBounds(IUtils registry, LootPool entry, int x, int y) {
         return registry.getBounds(registry, entry.entries, x, y);
     }
 }

@@ -21,7 +21,6 @@ dependencies {
 
     implementation project(":api")
     implementation project(":common")
-    implementation project(":common-mixin")
 
     modCompileOnlyApi "dev.emi:emi-fabric:${emi_version}:api"
 //    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
@@ -75,7 +74,6 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
-    source(project(":common-mixin").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {

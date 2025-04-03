@@ -1,104 +1,105 @@
 package com.yanny.ali.plugin;
 
-import com.yanny.ali.api.ILootCondition;
+import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
-import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Tuple;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.yanny.ali.plugin.GenericTooltipUtils.*;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class ConditionTooltipUtils {
     @NotNull
-    public static List<Component> getAllOfTooltip(int pad, List<ILootCondition> terms) {
+    public static List<Component> getAllOfTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        AllOfCondition cond = (AllOfCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.all_of")));
-        components.addAll(GenericTooltipUtils.getConditionsTooltip(pad + 1, terms));
+        components.addAll(getConditionsTooltip(utils, pad + 1, cond.terms));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getAnyOfTooltip(int pad, List<ILootCondition> terms) {
+    public static List<Component> getAnyOfTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        AnyOfCondition cond = (AnyOfCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.any_of")));
-        components.addAll(GenericTooltipUtils.getConditionsTooltip(pad + 1, terms));
+        components.addAll(getConditionsTooltip(utils, pad + 1, cond.terms));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getBlockStatePropertyTooltip(int pad, Holder<Block> block, Optional<StatePropertiesPredicate> predicate) {
+    public static List<Component> getBlockStatePropertyTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        LootItemBlockStatePropertyCondition cond = (LootItemBlockStatePropertyCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.block_state_property")));
-        components.addAll(GenericTooltipUtils.getHolderTooltip(pad + 1, block, GenericTooltipUtils::getBlockTooltip));
-        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, predicate, GenericTooltipUtils::getStatePropertiesPredicateTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, cond.block(), GenericTooltipUtils::getBlockTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, cond.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getDamageSourcePropertiesTooltip(int pad, Optional<DamageSourcePredicate> predicate) {
+    public static List<Component> getDamageSourcePropertiesTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        DamageSourceCondition cond = (DamageSourceCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.damage_source_properties")));
-        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, predicate, GenericTooltipUtils::getDamageSourcePredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, cond.predicate(), GenericTooltipUtils::getDamageSourcePredicateTooltip));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEntityPropertiesTooltip(int pad, LootContext.EntityTarget target, Optional<EntityPredicate> predicate) {
+    public static List<Component> getEntityPropertiesTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        LootItemEntityPropertyCondition cond = (LootItemEntityPropertyCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
-        components.addAll(getEnumTooltip(pad + 1, "ali.property.value.target", "target", Optional.of(target)));
-        components.addAll(getComponentsTooltip(pad + 1, "ali.property.branch.predicate", predicate, GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", Optional.of(cond.entityTarget())));
+        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.predicate", cond.predicate(), GenericTooltipUtils::getEntityPredicateTooltip));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEntityScoresTooltip(int pad, LootContext.EntityTarget target, Map<String, Tuple<RangeValue, RangeValue>> scores) {
+    public static List<Component> getEntityScoresTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        EntityHasScoreCondition cond = (EntityHasScoreCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.entity_scores")));
-        components.addAll(GenericTooltipUtils.getEnumTooltip(pad + 1, "ali.property.value.target", "target", Optional.of(target)));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", Optional.of(cond.entityTarget())));
 
-        if (!scores.isEmpty()) {
+        if (!cond.scores().isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.scores")));
-            scores.forEach((score, tuple) -> components.add(pad(pad + 2, keyValue(score, RangeValue.rangeToString(tuple.getA(), tuple.getB())))));
+            cond.scores().forEach((score, range) -> components.add(pad(pad + 2, keyValue(score, RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
         }
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getInvertedTooltip(int pad, ILootCondition term) {
+    public static List<Component> getInvertedTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        InvertedLootItemCondition cond = (InvertedLootItemCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.inverted")));
-        components.addAll(term.getTooltip(pad + 1));
+        components.addAll(utils.getConditionTooltip(cond.term().getClass(), utils, pad + 1, cond.term()));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getKilledByPlayerTooltip(int pad) {
+    public static List<Component> getKilledByPlayerTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.killed_by_player")));
@@ -107,95 +108,103 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getLocationCheckTooltip(int pad, BlockPos offset, Optional<LocationPredicate> predicate) {
+    public static List<Component> getLocationCheckTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        LocationCheck cond = (LocationCheck) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
-        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.location", predicate, GenericTooltipUtils::getLocationPredicateTooltip));
-        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad + 1, "ali.property.branch.offset", offset, GenericTooltipUtils::getBlockPosTooltip));
+        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate(), GenericTooltipUtils::getLocationPredicateTooltip));
+        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.offset", cond.offset(), GenericTooltipUtils::getBlockPosTooltip));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getMatchToolTooltip(int pad, Optional<ItemPredicate> predicate) {
-        return new LinkedList<>(GenericTooltipUtils.getComponentsTooltip(pad, "ali.type.condition.match_tool", predicate, GenericTooltipUtils::getItemPredicateTooltip));
+    public static List<Component> getMatchToolTooltip(IUtils utils, int pad, LootItemCondition condition) {
+        MatchTool cond = (MatchTool) condition;
+        return new LinkedList<>(getComponentsTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate(), GenericTooltipUtils::getItemPredicateTooltip));
     }
 
     @NotNull
-    public static List<Component> getRandomChanceTooltip(int pad, float probability) {
+    public static List<Component> getRandomChanceTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        LootItemRandomChanceCondition cond = (LootItemRandomChanceCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance")));
-        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.probability", probability));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.probability", cond.probability()));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getRandomChanceWithLootingTooltip(int pad, float percent, float multiplier) {
+    public static List<Component> getRandomChanceWithLootingTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        LootItemRandomChanceWithLootingCondition cond = (LootItemRandomChanceWithLootingCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance_with_looting")));
-        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.percent", percent));
-        components.addAll(GenericTooltipUtils.getFloatTooltip(pad + 1, "ali.property.value.multiplier", multiplier));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.percent", cond.percent()));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.multiplier", cond.lootingMultiplier()));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getReferenceTooltip(int pad, ResourceLocation name) {
-        return new LinkedList<>(GenericTooltipUtils.getResourceLocationTooltip(pad, "ali.type.condition.reference", name));
+    public static List<Component> getReferenceTooltip(IUtils utils, int pad, LootItemCondition condition) {
+        ConditionReference cond = (ConditionReference) condition;
+        return new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.type.condition.reference", cond.name()));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getSurvivesExplosionTooltip(int pad) {
+    public static List<Component> getSurvivesExplosionTooltip(IUtils utils, int pad, LootItemCondition condition) {
         return List.of(pad(pad, translatable("ali.type.condition.survives_explosion")));
     }
 
     @NotNull
-    public static List<Component> getTableBonusTooltip(int pad, Holder<Enchantment> enchantment, List<Float> values) {
+    public static List<Component> getTableBonusTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        BonusLevelTableCondition cond = (BonusLevelTableCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
-        components.addAll(GenericTooltipUtils.getHolderTooltip(pad + 1, enchantment, GenericTooltipUtils::getEnchantmentTooltip));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.values", Arrays.toString(values.toArray(Float[]::new))));
+        components.addAll(getHolderTooltip(utils, pad + 1, cond.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.values", cond.values().toString()));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getTimeCheckTooltip(int pad, Optional<Long> period, RangeValue min, RangeValue max) {
+    public static List<Component> getTimeCheckTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        TimeCheck cond = (TimeCheck) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.time_check")));
-        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, "ali.property.value.period", period, GenericTooltipUtils::getLongTooltip));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.value", RangeValue.rangeToString(min, max)));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.period", cond.period(), GenericTooltipUtils::getLongTooltip));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.value", RangeValue.rangeToString(utils.convertNumber(utils, cond.value().min), utils.convertNumber(utils, cond.value().max))));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getValueCheckTooltip(int pad, RangeValue provider, RangeValue min, RangeValue max) {
+    public static List<Component> getValueCheckTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        ValueCheckCondition cond = (ValueCheckCondition) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.value_check")));
-        components.addAll(GenericTooltipUtils.getRangeValueTooltip(pad + 1, "ali.property.value.provider", provider));
-        components.addAll(GenericTooltipUtils.getStringTooltip(pad + 1, "ali.property.value.range", RangeValue.rangeToString(min, max)));
+        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.provider", utils.convertNumber(utils, cond.provider())));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.range", RangeValue.rangeToString(utils.convertNumber(utils, cond.range().min), utils.convertNumber(utils, cond.range().max))));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getWeatherCheckTooltip(int pad, Optional<Boolean> isRaining, Optional<Boolean> isThundering) {
+    public static List<Component> getWeatherCheckTooltip(IUtils utils, int pad, LootItemCondition condition) {
         List<Component> components = new LinkedList<>();
+        WeatherCheck cond = (WeatherCheck) condition;
 
         components.add(pad(pad, translatable("ali.type.condition.weather_check")));
-        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, "ali.property.value.is_raining", isRaining, GenericTooltipUtils::getBooleanTooltip));
-        components.addAll(GenericTooltipUtils.getOptionalTooltip(pad + 1, "ali.property.value.is_thundering", isThundering, GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.is_raining", cond.isRaining(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.is_thundering", cond.isThundering(), GenericTooltipUtils::getBooleanTooltip));
 
         return components;
     }
-
 }

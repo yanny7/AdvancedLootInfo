@@ -3,9 +3,12 @@ package com.yanny.ali.plugin.widget;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.WidgetUtils;
-import com.yanny.ali.plugin.entry.CompositeEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -16,13 +19,13 @@ import static com.yanny.ali.plugin.WidgetUtils.TEXTURE_LOC;
 public class CompositeWidget implements IEntryWidget {
     private final Rect bounds;
     protected final List<IWidget> widgets;
-    private final ILootEntry entry;
-    private final IClientUtils utils;
+    private final LootPoolEntryContainer entry;
+    private final IUtils utils;
 
-    public CompositeWidget(IWidgetUtils utils, ILootEntry entry, int x, int y, int sumWeight,
-                           List<ILootFunction> functions, List<ILootCondition> conditions) {
-        CompositeEntry compositeEntry = (CompositeEntry) entry;
-        List<ILootCondition> allConditions = new LinkedList<>(conditions);
+    public CompositeWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+                           List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        CompositeEntryBase compositeEntry = (CompositeEntryBase) entry;
+        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
         allConditions.addAll(compositeEntry.conditions);
 
@@ -40,7 +43,7 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @Override
-    public ILootEntry getLootEntry() {
+    public LootPoolEntryContainer getLootEntry() {
         return entry;
     }
 
@@ -113,7 +116,7 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, ILootEntry entry, int x, int y) {
-        return utils.getBounds(utils, ((CompositeEntry) entry).children, x, y);
+    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+        return utils.getBounds(utils, ((CompositeEntryBase) entry).children, x, y);
     }
 }
