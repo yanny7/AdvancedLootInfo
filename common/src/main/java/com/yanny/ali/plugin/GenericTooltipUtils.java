@@ -46,61 +46,6 @@ public class GenericTooltipUtils {
     private static final ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 
     @NotNull
-    public static MutableComponent translatableType(String prefix, Enum<?> type, Object... args) {
-        return translatable(prefix + "." + type.name().toLowerCase(), args);
-    }
-
-    @NotNull
-    public static MutableComponent translatable(String key, Object... args) {
-        return Component.translatable(key, Arrays.stream(args).map((arg) -> {
-            if (arg instanceof MutableComponent) {
-                return arg;
-            } else if (arg != null) {
-                return Component.literal(arg.toString());
-            } else {
-                return Component.literal("null");
-            }
-        }).toArray()).withStyle(TEXT_STYLE);
-    }
-
-    @NotNull
-    public static MutableComponent value(Object value) {
-        if (value instanceof MutableComponent) {
-            return ((MutableComponent) value).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
-        } else {
-            return Component.literal(value.toString()).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
-        }
-    }
-
-    @NotNull
-    public static MutableComponent value(Object value, String unit) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values", value.toString(), unit).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
-    }
-
-    @NotNull
-    public static MutableComponent pair(Object value1, Object value2) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", value1.toString(), value2.toString());
-    }
-
-    @NotNull
-    public static MutableComponent pad(int count, Object arg) {
-        if (count > 0) {
-            return pair(Component.translatable("ali.util.advanced_loot_info.pad." + count), arg);
-        } else {
-            if (arg instanceof MutableComponent mutableComponent) {
-                return mutableComponent;
-            } else {
-                return Component.literal(arg.toString());
-            }
-        }
-    }
-
-    @NotNull
-    public static MutableComponent keyValue(Object key, Object value) {
-        return translatable("ali.util.advanced_loot_info.key_value", key instanceof MutableComponent ? key : Component.literal(key.toString()), value(value.toString()));
-    }
-
-    @NotNull
     public static List<Component> getTooltip(IUtils utils, LootPoolEntryContainer entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                                              RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> functions,
                                              List<LootItemCondition> conditions) {
@@ -729,6 +674,45 @@ public class GenericTooltipUtils {
 
     // HELPERS
 
+    @NotNull
+    public static Component translatableType(String prefix, Enum<?> type, Object... args) {
+        return translatable(prefix + "." + type.name().toLowerCase(), args);
+    }
+
+    @NotNull
+    public static Component translatable(String key, Object... args) {
+        return Component.translatable(key, Arrays.stream(args).map(GenericTooltipUtils::convertObject).toArray()).withStyle(TEXT_STYLE);
+    }
+
+    @NotNull
+    public static Component value(Object value) {
+        return convertObject(value).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
+    }
+
+    @NotNull
+    public static Component value(Object value, String unit) {
+        return Component.translatable("ali.util.advanced_loot_info.two_values", convertObject(value), unit).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
+    }
+
+    @NotNull
+    public static Component pair(Object value1, Object value2) {
+        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", convertObject(value1), convertObject(value2));
+    }
+
+    @NotNull
+    public static Component pad(int count, Object arg) {
+        if (count > 0) {
+            return pair(Component.translatable("ali.util.advanced_loot_info.pad." + count), convertObject(arg));
+        } else {
+            return convertObject(arg);
+        }
+    }
+
+    @NotNull
+    public static Component keyValue(Object key, Object value) {
+        return translatable("ali.util.advanced_loot_info.key_value", convertObject(key), value(value));
+    }
+
     @Unmodifiable
     @NotNull
     public static List<Component> getRangeValueTooltip(IUtils utils, int pad, String key, RangeValue value) {
@@ -982,6 +966,17 @@ public class GenericTooltipUtils {
         }
 
         return components;
+    }
+
+    @NotNull
+    private static MutableComponent convertObject(@Nullable Object object) {
+        if (object instanceof MutableComponent component) {
+            return component;
+        } else if (object != null) {
+            return Component.literal(object.toString());
+        } else {
+            return Component.literal("null");
+        }
     }
 
     @FunctionalInterface

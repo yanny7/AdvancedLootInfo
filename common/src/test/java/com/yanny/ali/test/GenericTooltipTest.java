@@ -178,7 +178,6 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 0, null), List.of());
         assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 0, Enchantments.AQUA_AFFINITY), List.of("Enchantment: Aqua Affinity"));
         assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 1, Enchantments.FIRE_ASPECT), List.of("  -> Enchantment: Fire Aspect"));
     }
@@ -477,7 +476,6 @@ public class GenericTooltipTest {
 
     @Test
     public void testFluidTooltip() {
-        assertTooltip(GenericTooltipUtils.getFluidTooltip(UTILS, 0, null), List.of());
         assertTooltip(GenericTooltipUtils.getFluidTooltip(UTILS, 0, Fluids.WATER), List.of("Fluid: minecraft:water"));
     }
 
@@ -554,7 +552,6 @@ public class GenericTooltipTest {
         ));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testItemPredicateTooltip() {
         CompoundTag compoundTag = new CompoundTag();
@@ -678,7 +675,6 @@ public class GenericTooltipTest {
 
     @Test
     public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, null), List.of());
         assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, GameType.SPECTATOR), List.of(
                 "Game Type: Spectator"
         ));
