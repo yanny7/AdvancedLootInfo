@@ -118,8 +118,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.offset", "Offset:");
         TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
         TRANSLATION_MAP.put("ali.property.branch.operations", "Operations:");
-        TRANSLATION_MAP.put("ali.property.branch.potion", "Potion:");
         TRANSLATION_MAP.put("ali.property.branch.position", "Position:");
+        TRANSLATION_MAP.put("ali.property.branch.potion", "Potion:");
         TRANSLATION_MAP.put("ali.property.branch.predicate", "Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.properties", "Properties:");
         TRANSLATION_MAP.put("ali.property.branch.recipes", "Recipes:");
@@ -200,6 +200,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.ranged_property_lte", "%s: ≤%s");
         TRANSLATION_MAP.put("ali.property.value.replace", "Replace: %s");
         TRANSLATION_MAP.put("ali.property.value.resolution_context", "Resolution Context: %s");
+        TRANSLATION_MAP.put("ali.property.value.score", "Score: %s");
         TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
         TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
         TRANSLATION_MAP.put("ali.property.value.show_icon", "Show Icon: %s");

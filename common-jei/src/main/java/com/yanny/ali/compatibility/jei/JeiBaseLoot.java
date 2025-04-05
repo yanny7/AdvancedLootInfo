@@ -7,7 +7,7 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.IType;
-import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.EntryTooltipUtils;
 import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
@@ -91,13 +91,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                 builder.addSlot(RecipeIngredientRole.OUTPUT, itemSlotParams.x + 1, itemSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
                         .addTooltipCallback((iRecipeSlotView, components)
-                                -> components.addAll(GenericTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addItemStack(itemSlotParams.item.getDefaultInstance());
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, tagSlotParams.x + 1, tagSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
                         .addTooltipCallback((iRecipeSlotView, components)
-                                -> components.addAll(GenericTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
         }

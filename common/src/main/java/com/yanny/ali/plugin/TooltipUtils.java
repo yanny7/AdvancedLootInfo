@@ -151,7 +151,7 @@ public class TooltipUtils {
 
         for (LootPool pool : lootTable.pools) {
             for (LootPoolEntryContainer entry : pool.entries) {
-                items.addAll(utils.collectItems(entry.getClass(), utils, entry));
+                items.addAll(utils.collectItems(utils, entry));
             }
         }
 
