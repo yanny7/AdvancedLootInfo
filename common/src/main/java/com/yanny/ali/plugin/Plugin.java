@@ -116,7 +116,7 @@ public class Plugin implements IPlugin {
         List<Item> items = new LinkedList<>();
 
         for (LootPoolEntryContainer child : ((CompositeEntryBase) entry).children) {
-            items.addAll(utils.collectItems(child.getClass(), utils, child));
+            items.addAll(utils.collectItems(utils, child));
         }
 
         return items;

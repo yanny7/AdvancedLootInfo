@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class EntryTooltipUtils {
-
     @NotNull
     public static List<Component> getLootItemTooltip(IUtils utils, int pad, LootPoolEntryContainer entry) {
         List<Component> components = new LinkedList<>();

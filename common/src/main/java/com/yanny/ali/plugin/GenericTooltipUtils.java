@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
@@ -75,13 +76,13 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static List<Component> getConditionsTooltip(IUtils utils, int pad, List<LootItemCondition> conditions) {
-        return conditions.stream().map((condition) -> utils.getConditionTooltip(condition.getClass(), utils, pad, condition)).flatMap(Collection::stream).toList();
+        return conditions.stream().map((condition) -> utils.getConditionTooltip(utils, pad, condition)).flatMap(Collection::stream).toList();
     }
 
     @NotNull
     public static List<Component> getFunctionsTooltip(IUtils utils, int pad, List<LootItemFunction> functions) {
         return functions.stream().map((function) -> {
-            List<Component> components = new LinkedList<>(utils.getFunctionTooltip(function.getClass(), utils, pad, function));
+            List<Component> components = new LinkedList<>(utils.getFunctionTooltip(utils, pad, function));
 
             if (function instanceof LootItemConditionalFunction conditionalFunction && conditionalFunction.predicates.length > 0) {
                 components.add(pad(pad + 1, translatable("ali.property.branch.conditions")));
@@ -717,6 +718,11 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getRangeValueTooltip(IUtils utils, int pad, String key, RangeValue value) {
         return List.of(pad(pad, translatable(key, value(value))));
+    }
+
+    @NotNull
+    public static List<Component> getIntRangeTooltip(IUtils utils, int pad, String key, IntRange range) {
+        return List.of(pad(pad, translatable(key, value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
     }
 
     @Unmodifiable

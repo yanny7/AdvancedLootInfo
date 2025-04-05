@@ -24,18 +24,18 @@ public abstract class Utils implements IWidgetUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> List<Component> getConditionTooltip(Class<T> clazz, IUtils utils, int pad, LootItemCondition condition) {
-        return PluginManager.CLIENT_REGISTRY.getConditionTooltip(clazz, utils, pad, condition);
+    public <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition) {
+        return PluginManager.CLIENT_REGISTRY.getConditionTooltip(utils, pad, condition);
     }
 
     @Override
-    public <T extends LootItemFunction> List<Component> getFunctionTooltip(Class<T> clazz, IUtils utils, int pad, LootItemFunction function) {
-        return PluginManager.CLIENT_REGISTRY.getFunctionTooltip(clazz, utils, pad, function);
+    public <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function) {
+        return PluginManager.CLIENT_REGISTRY.getFunctionTooltip(utils, pad, function);
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> List<Item> collectItems(Class<T> clazz, IUtils utils, LootPoolEntryContainer entry) {
-        return PluginManager.CLIENT_REGISTRY.collectItems(clazz, utils, entry);
+    public <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry) {
+        return PluginManager.CLIENT_REGISTRY.collectItems(utils, entry);
     }
 
     @Override

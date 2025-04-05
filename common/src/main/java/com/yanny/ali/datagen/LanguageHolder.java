@@ -197,6 +197,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.ranged_property_lte", "%s: ≤%s");
         TRANSLATION_MAP.put("ali.property.value.replace", "Replace: %s");
         TRANSLATION_MAP.put("ali.property.value.resolution_context", "Resolution Context: %s");
+        TRANSLATION_MAP.put("ali.property.value.score", "Score: %s");
         TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
         TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
         TRANSLATION_MAP.put("ali.property.value.show_icon", "Show Icon: %s");
