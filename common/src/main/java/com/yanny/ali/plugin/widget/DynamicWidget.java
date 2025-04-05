@@ -1,24 +1,18 @@
 package com.yanny.ali.plugin.widget;
 
 import com.google.common.collect.Lists;
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.GenericTooltipUtils;
-import com.yanny.ali.plugin.TooltipUtils;
 import com.yanny.ali.plugin.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class DynamicWidget implements IEntryWidget {
     private final List<Component> components = Lists.newArrayList();
@@ -28,21 +22,9 @@ public class DynamicWidget implements IEntryWidget {
 
     public DynamicWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
                          List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        DynamicLoot dynamicEntry = (DynamicLoot) entry;
-        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
-        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
-
-        allFunctions.addAll(Arrays.asList(dynamicEntry.functions));
-        allConditions.addAll(Arrays.asList(dynamicEntry.conditions));
-
-        float rawChance = (float) dynamicEntry.weight / sumWeight;
-        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
-
-        widget = WidgetUtils.getDynamicWidget(x, y);
+        widget = WidgetUtils.getDynamicWidget(x, y, (DynamicLoot) entry, sumWeight);
         bounds = widget.getRect();
         this.entry = entry;
-        GenericTooltipUtils.getTooltip(utils, dynamicEntry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions).forEach(this::appendTooltip);
     }
 
     public void appendTooltip(Component text) {

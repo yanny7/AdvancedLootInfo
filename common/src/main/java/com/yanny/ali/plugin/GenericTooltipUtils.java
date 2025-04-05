@@ -31,8 +31,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.apache.commons.lang3.function.TriFunction;
@@ -45,34 +43,6 @@ import java.util.*;
 public class GenericTooltipUtils {
     private static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
     private static final ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
-
-    @NotNull
-    public static List<Component> getTooltip(IUtils utils, LootPoolEntryContainer entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> functions,
-                                             List<LootItemCondition> conditions) {
-        List<Component> components = new LinkedList<>();
-
-        if (entry instanceof LootPoolSingletonContainer singletonEntry) {
-            components.addAll(getQualityTooltip(singletonEntry));
-        }
-
-        components.addAll(getChanceTooltip(chance));
-        components.addAll(getBonusChanceTooltip(bonusChance));
-
-        components.addAll(getCountTooltip(count));
-        components.addAll(getBonusCountTooltip(bonusCount));
-
-        if (!conditions.isEmpty()) {
-            components.add(translatable("ali.util.advanced_loot_info.delimiter.conditions"));
-            components.addAll(getConditionsTooltip(utils, 0, conditions));
-        }
-        if (!functions.isEmpty()) {
-            components.add(translatable("ali.util.advanced_loot_info.delimiter.functions"));
-            components.addAll(getFunctionsTooltip(utils, 0, functions));
-        }
-
-        return components;
-    }
 
     @NotNull
     public static List<Component> getConditionsTooltip(IUtils utils, int pad, List<LootItemCondition> conditions) {
@@ -914,64 +884,6 @@ public class GenericTooltipUtils {
 
             return "???";
         }
-    }
-
-    @NotNull
-    @Unmodifiable
-    private static List<Component> getQualityTooltip(LootPoolSingletonContainer entry) {
-        if (entry.quality != 0) {
-            return List.of(translatable("ali.description.quality", entry.quality));
-        }
-
-        return List.of();
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<Component> getCountTooltip(RangeValue count) {
-        return List.of(translatable("ali.description.count", value(count)));
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<Component> getChanceTooltip(RangeValue chance) {
-        return List.of(translatable("ali.description.chance", value(chance, "%")));
-    }
-
-    @NotNull
-    private static List<Component> getBonusChanceTooltip(@Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance) {
-        List<Component> components = new LinkedList<>();
-
-        if (bonusChance != null) {
-            bonusChance.getSecond().entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).forEach((entry) ->
-                    components.add(pad(1, translatable(
-                            "ali.description.chance_bonus",
-                            value(entry.getValue(), "%"),
-                            Component.translatable(bonusChance.getFirst().getDescriptionId()),
-                            Component.translatable("enchantment.level." + entry.getKey())
-                    )))
-            );
-        }
-
-        return components;
-    }
-
-    @NotNull
-    private static List<Component> getBonusCountTooltip(@Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount) {
-        List<Component> components = new LinkedList<>();
-
-        if (bonusCount != null) {
-            bonusCount.getSecond().entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).forEach((entry) ->
-                    components.add(pad(1, translatable(
-                            "ali.description.count_bonus",
-                            value(entry.getValue()),
-                            Component.translatable(bonusCount.getFirst().getDescriptionId()),
-                            Component.translatable("enchantment.level." + entry.getKey())
-                    )))
-            );
-        }
-
-        return components;
     }
 
     @NotNull

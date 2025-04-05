@@ -5,7 +5,7 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.IType;
-import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.EntryTooltipUtils;
 import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
@@ -82,7 +82,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setSlotName(String.valueOf(i))
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> tooltipBuilder.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addItemLike(itemSlotParams.item);
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addOutputSlot()
@@ -90,7 +90,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setSlotName(String.valueOf(i))
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                                -> tooltipBuilder.addAll(GenericTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> tooltipBuilder.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
         }
