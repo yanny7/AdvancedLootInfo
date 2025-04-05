@@ -9,6 +9,7 @@ import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -87,7 +88,7 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Map<ResourceLocation, LootTable> getLootTables() {
+    public static Map<ResourceKey<LootTable>, LootTable> getLootTables() {
         return new HashMap<>(PluginManager.CLIENT_REGISTRY.getLootTables()
                 .entrySet()
                 .stream()
@@ -95,7 +96,7 @@ public class GenericUtils {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
     }
 
-    private static boolean lootTableFilter(Map.Entry<ResourceLocation, LootTable> e) {
+    private static boolean lootTableFilter(Map.Entry<ResourceKey<LootTable>, LootTable> e) {
         return e.getValue() != LootTable.EMPTY && !TooltipUtils.collectItems(PluginManager.CLIENT_REGISTRY, e.getValue()).isEmpty();
     }
 }

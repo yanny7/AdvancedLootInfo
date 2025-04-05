@@ -43,7 +43,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
         TRANSLATION_MAP.put("ali.type.condition.unknown", "Unknown Predicate: %s");
         TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
-        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
         TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
 
         TRANSLATION_MAP.put("ali.type.function.apply_bonus", "Apply Bonus:");
@@ -53,7 +52,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.copy_nbt", "Copy Nbt");
         TRANSLATION_MAP.put("ali.type.function.copy_state", "Copy State:");
         TRANSLATION_MAP.put("ali.type.function.enchant_randomly", "Enchant Randomly:");
-        TRANSLATION_MAP.put("ali.type.function.enchant_with_levels", "Enchanted With Levels:");
+        TRANSLATION_MAP.put("ali.type.function.enchant_with_levels", "Enchant With Levels:");
         TRANSLATION_MAP.put("ali.type.function.exploration_map", "Exploration Map:");
         TRANSLATION_MAP.put("ali.type.function.explosion_decay", "Explosion Decay");
         TRANSLATION_MAP.put("ali.type.function.fill_player_head", "Fill Player Head:");
@@ -157,6 +156,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");
 
         TRANSLATION_MAP.put("ali.property.value.absolute", "Absolute: %s");
+        TRANSLATION_MAP.put("ali.property.value.source_path", "Source Path: %s");
+        TRANSLATION_MAP.put("ali.property.value.target_path", "Target Path: %s");
         TRANSLATION_MAP.put("ali.property.value.add", "Add: %s");
         TRANSLATION_MAP.put("ali.property.value.offset", "Offset: %s");
         TRANSLATION_MAP.put("ali.property.value.entity_sub_predicate", "Entity Sub Predicate: %s");

@@ -18,6 +18,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -48,7 +49,7 @@ public class EmiCompatibility implements EmiPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceKey<LootTable>, LootTable> map = GenericUtils.getLootTables();
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategoryMap = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
@@ -77,7 +78,7 @@ public class EmiCompatibility implements EmiPlugin {
             registry.addCategory(gameplayCategory);
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceLocation location = block.getLootTable().location();
+                ResourceKey<LootTable> location = block.getLootTable();
                 LootTable lootEntry = map.get(location);
 
                 if (lootEntry != null) {
@@ -97,7 +98,7 @@ public class EmiCompatibility implements EmiPlugin {
                         }
                     }
 
-                    registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, lootEntry));
+                    registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.location().getNamespace(), "/" + location.location().getPath()), block, lootEntry));
                     map.remove(location);
                 }
             }
@@ -150,7 +151,7 @@ public class EmiCompatibility implements EmiPlugin {
 
                 entityList.forEach((entity) -> {
                     if (entity instanceof Mob mob) {
-                        ResourceLocation location = mob.getLootTable().location();
+                        ResourceKey<LootTable> location = mob.getLootTable();
                         LootTable lootEntry = map.get(location);
 
                         if (lootEntry != null) {
@@ -166,19 +167,19 @@ public class EmiCompatibility implements EmiPlugin {
                                 category = entityCategory;
                             }
 
-                            registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entity, lootEntry));
+                            registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.location().getNamespace(), "/" + location.location().getPath()), entity, lootEntry));
                             map.remove(location);
                         }
                     }
                 });
             }
 
-            for (Map.Entry<ResourceLocation, LootTable> entry : map.entrySet()) {
-                ResourceLocation location = entry.getKey();
+            for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : map.entrySet()) {
+                ResourceKey<LootTable> location = entry.getKey();
                 EmiRecipeCategory category = null;
 
                 for (Map.Entry<LootCategory<String>, EmiRecipeCategory> gameplayEntry : gameplayCategoryMap.entrySet()) {
-                    if (gameplayEntry.getKey().validate(location.getPath())) {
+                    if (gameplayEntry.getKey().validate(location.location().getPath())) {
                         category = gameplayEntry.getValue();
                     }
                 }
@@ -187,7 +188,7 @@ public class EmiCompatibility implements EmiPlugin {
                     category = gameplayCategory;
                 }
 
-                registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entry.getValue()));
+                registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.location().getNamespace(), "/" + location.location().getPath()), entry.getValue()));
             }
         }
     }

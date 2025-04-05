@@ -1,15 +1,8 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.api.ICommonUtils;
-import com.yanny.ali.api.IContext;
-import com.yanny.ali.api.ILootFunction;
-import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.FunctionTooltipUtils;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -23,20 +16,20 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.FurnaceBlock;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
@@ -44,7 +37,7 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class FunctionTooltipTest {
     @Test
     public void testApplyBonusCountTooltip() {
-        assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(UTILS, 0, ApplyBonusCount.addOreBonusCount(Enchantments.MOB_LOOTING).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(UTILS, 0, ApplyBonusCount.addOreBonusCount(Enchantments.LOOTING).build()), List.of(
                 "Apply Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Formula: minecraft:ore_drops"
@@ -61,21 +54,20 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyNbtTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyNbtTooltip(UTILS, 0, CopyNbtFunction.copyData(LootContext.EntityTarget.KILLER).build()), List.of(
-                "Copy Nbt:",
-                "  -> Nbt Provider: minecraft:context"
+        assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, CopyCustomDataFunction.copyData(LootContext.EntityTarget.KILLER).build()), List.of(
+                "Copy Custom Data:",
+                "  -> Source: minecraft:context"
         ));
-        assertTooltip(FunctionTooltipUtils.getCopyNbtTooltip(UTILS, 0, CopyNbtFunction.copyData(LootContext.EntityTarget.KILLER)
-                .copy("asdf", "jklo", CopyNbtFunction.MergeStrategy.MERGE)
+        assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, CopyCustomDataFunction.copyData(LootContext.EntityTarget.KILLER)
+                .copy("asdf", "jklo", CopyCustomDataFunction.MergeStrategy.MERGE)
                 .build()
         ), List.of(
-                "Copy Nbt:",
-                "  -> Nbt Provider: minecraft:context",
-                "  -> Operations:",
-                "    -> Operation:",
-                "      -> Source: asdf",
-                "      -> Target: jklo",
-                "      -> Merge Strategy: MERGE"
+                "Copy Custom Data:",
+                "  -> Source: minecraft:context",
+                "  -> Copy Operations:",
+                "    -> Source Path: asdf",
+                "    -> Target Path: jklo",
+                "    -> Merge Strategy: MERGE"
         ));
     }
 
@@ -119,7 +111,7 @@ public class FunctionTooltipTest {
     public void testExplorationMapTooltip() {
         assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(UTILS, 0, ExplorationMapFunction.makeExplorationMap()
                 .setDestination(StructureTags.RUINED_PORTAL)
-                .setMapDecoration(MapDecoration.Type.MONUMENT)
+                .setMapDecoration(MapDecorationTypes.OCEAN_MONUMENT)
                 .setZoom((byte) 2)
                 .setSearchRadius(50)
                 .setSkipKnownStructures(true)
@@ -177,7 +169,10 @@ public class FunctionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, 0, FunctionReference.functionReference(new ResourceLocation("gameplay/fishing")).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, 0, FunctionReference.functionReference(ResourceKey.create(
+                Registries.ITEM_MODIFIER,
+                new ResourceLocation("gameplay/fishing"))
+        ).build()), List.of(
                 "Reference:",
                 "  -> Name: minecraft:gameplay/fishing"
         ));
@@ -186,11 +181,11 @@ public class FunctionTooltipTest {
     @Test
     public void testSetAttributesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, 0, SetAttributesFunction.setAttributes()
-                .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Holder.direct(Attributes.ARMOR), AttributeModifier.Operation.MULTIPLY_TOTAL, UniformGenerator.between(1, 5))
-                        .forSlot(EquipmentSlot.HEAD)
-                        .forSlot(EquipmentSlot.CHEST)
-                        .forSlot(EquipmentSlot.LEGS)
-                        .forSlot(EquipmentSlot.FEET))
+                .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))
+                        .forSlot(EquipmentSlotGroup.HEAD)
+                        .forSlot(EquipmentSlotGroup.CHEST)
+                        .forSlot(EquipmentSlotGroup.LEGS)
+                        .forSlot(EquipmentSlotGroup.FEET))
                 .build()), List.of(
                 "Set Attributes:",
                 "  -> Modifiers:",
@@ -210,8 +205,8 @@ public class FunctionTooltipTest {
     @Test
     public void testSetBannerPatternTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetBannerPatternTooltip(UTILS, 0, SetBannerPatternFunction.setBannerPattern(true)
-                .addPattern(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)
-                .addPattern(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.CREEPER))), DyeColor.GREEN)
+                .addPattern(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow(), DyeColor.WHITE)
+                .addPattern(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.CREEPER).orElseThrow(), DyeColor.GREEN)
                 .build()), List.of(
                 "Set Banner Pattern:",
                 "  -> Append: true",
@@ -223,7 +218,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, SetContainerContents.setContents(BlockEntityType.BREWING_STAND).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER).build()), List.of(
                 "Set Contents:",
                 "  -> Component: minecraft:container"
         ));
@@ -276,7 +271,7 @@ public class FunctionTooltipTest {
     public void testSetLootTableTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(UTILS, 0, SetContainerLootTable.withLootTable(
                 BlockEntityType.BELL,
-                new ResourceLocation("gameplay/mesh"),
+                ResourceKey.create(Registries.LOOT_TABLE, new ResourceLocation("gameplay/mesh")),
                 42L
         ).build()), List.of(
                 "Set Loot Table:",
@@ -291,17 +286,19 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(UTILS, 0, SetLoreFunction.setLore()
                 .addLine(Component.literal("Hello"))
                 .addLine(Component.literal("World"))
-                .setReplace(true)
+                .setMode(new ListOperation.ReplaceSection(1, Optional.of(2)))
                 .build()
         ), List.of(
                 "Set Lore:",
-                "  -> List Operation: REPLACE_ALL",
+                "  -> List Operation: REPLACE_SECTION",
+                "    -> Offset: 1",
+                "    -> Size: 2",
                 "  -> Lore:",
                 "    -> Hello",
                 "    -> World"
         ));
         assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(UTILS, 0, SetLoreFunction.setLore()
-                .setReplace(true)
+                .setMode(new ListOperation.Insert(1))
                 .addLine(Component.translatable("emi.category.ali.block_loot"))
                 .setResolutionContext(LootContext.EntityTarget.KILLER)
                 .build()
@@ -317,17 +314,20 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetNameTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, 0, SetNameFunction.setName(Component.literal("Epic Item")).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, 0, SetNameFunction.setName(Component.literal("Epic Item"), SetNameFunction.Target.ITEM_NAME).build()), List.of(
                 "Set Name:",
-                "  -> Name: Epic Item"
+                "  -> Name: Epic Item",
+                "  -> Target: ITEM_NAME"
         ));
         assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, 0, SetNameFunction.setName(
                 Component.translatable("emi.category.ali.block_loot"),
+                SetNameFunction.Target.CUSTOM_NAME,
                 LootContext.EntityTarget.KILLER).build()
         ), List.of(
                 "Set Name:",
                 "  -> Name: Block Drops",
-                "  -> Resolution Context: Killer Entity"
+                "  -> Resolution Context: Killer Entity",
+                "  -> Target: CUSTOM_NAME"
         ));
     }
 
@@ -337,7 +337,7 @@ public class FunctionTooltipTest {
 
         compoundTag.putBoolean("antlers", true);
 
-        assertTooltip(FunctionTooltipUtils.getSetNbtTooltip(UTILS, 0, SetNbtFunction.setTag(compoundTag).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetCustomDataTooltip(UTILS, 0, SetCustomDataFunction.setCustomData(compoundTag).build()), List.of(
                 "Set Custom Data:",
                 "  -> Tag: {antlers:1b}"
         ));

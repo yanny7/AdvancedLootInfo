@@ -59,7 +59,7 @@ public class TooltipUtils {
             LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
 
             for (int level = 1; level < Enchantments.LOOTING.getMaxLevel() + 1; level++) {
-                RangeValue value = new RangeValue(chance * (condition.percent() + level * condition.multiplier()));
+                RangeValue value = new RangeValue(chance * (condition.percent() + level * condition.lootingMultiplier()));
                 bonusChance.put(level, value.multiply(100));
             }
 
@@ -159,15 +159,20 @@ public class TooltipUtils {
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {
-        if (function.formula instanceof ApplyBonusCount.OreDrops) {
-            if (level > 0) {
-                value.multiplyMax(level + 1);
+        switch (function.formula) {
+            case ApplyBonusCount.OreDrops ignored -> {
+                if (level > 0) {
+                    value.multiplyMax(level + 1);
+                }
             }
-        } else if (function.formula instanceof ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount) {
-            value.addMax(binomialWithBonusCount.extraRounds() + level);
-        } else if (function.formula instanceof ApplyBonusCount.UniformBonusCount uniformBonusCount) {
-            if (level > 0) {
-                value.addMax(uniformBonusCount.bonusMultiplier() * level);
+            case ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount ->
+                    value.addMax(binomialWithBonusCount.extraRounds() + level);
+            case ApplyBonusCount.UniformBonusCount(int bonusMultiplier) -> {
+                if (level > 0) {
+                    value.addMax(bonusMultiplier * level);
+                }
+            }
+            default -> {
             }
         }
     }

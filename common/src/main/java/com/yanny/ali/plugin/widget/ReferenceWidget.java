@@ -1,12 +1,11 @@
 package com.yanny.ali.plugin.widget;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.entry.ReferenceEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +19,7 @@ public class ReferenceWidget implements IEntryWidget {
 
     public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        LootTable tableEntry = utils.getLootTable(((LootTableReference) entry).name);
+        LootTable tableEntry = utils.getLootTable(((NestedLootTable) entry).contents);
 
         if (tableEntry != null) {
             widget = new LootTableWidget(utils, tableEntry, x, y);
@@ -69,7 +68,7 @@ public class ReferenceWidget implements IEntryWidget {
 
     @NotNull
     public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
-        LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
+        LootTable lootTable = utils.getLootTable(((NestedLootTable) entry).contents);
 
         if (lootTable != null) {
             return LootTableWidget.getBounds(utils, lootTable, x, y);

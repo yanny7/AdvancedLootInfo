@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -90,13 +91,13 @@ public class ReiCompatibility implements REIClientPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceKey<LootTable>, LootTable> map = GenericUtils.getLootTables();
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceLocation location = block.getLootTable().location();
+                ResourceKey<LootTable> location = block.getLootTable();
                 LootTable lootEntry = map.get(location);
 
                 if (lootEntry != null) {
@@ -159,7 +160,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
-                        ResourceLocation location = mob.getLootTable().location();
+                        ResourceKey<LootTable> location = mob.getLootTable();
                         LootTable lootEntry = map.get(location);
 
                         if (lootEntry != null) {
@@ -176,12 +177,12 @@ public class ReiCompatibility implements REIClientPlugin {
                 }
             }
 
-            for (Map.Entry<ResourceLocation, LootTable> entry : new HashMap<>(map).entrySet()) {
-                ResourceLocation location = entry.getKey();
+            for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : new HashMap<>(map).entrySet()) {
+                ResourceKey<LootTable> location = entry.getKey();
 
                 for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
-                    if (holder.category.getLootCategory().validate(location.getPath())) {
-                        gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath()));
+                    if (holder.category.getLootCategory().validate(location.location().getPath())) {
+                        gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.location().getPath()));
                         break;
                     }
                 }

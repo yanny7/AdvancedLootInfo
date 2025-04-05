@@ -9,6 +9,7 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -19,13 +20,13 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.entity.animal.FrogVariant;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -34,7 +35,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BedPart;
@@ -42,9 +42,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
+import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
+import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
+import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -186,10 +189,10 @@ public class GenericTooltipTest {
                 Attributes.ARMOR,
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL,
                 UniformGenerator.between(1, 5))
-                        .forSlot(EquipmentSlot.HEAD)
-                        .forSlot(EquipmentSlot.CHEST)
-                        .forSlot(EquipmentSlot.LEGS)
-                        .forSlot(EquipmentSlot.FEET)
+                        .forSlot(EquipmentSlotGroup.HEAD)
+                        .forSlot(EquipmentSlotGroup.CHEST)
+                        .forSlot(EquipmentSlotGroup.LEGS)
+                        .forSlot(EquipmentSlotGroup.FEET)
                         .build()), List.of(
                 "Modifier:",
                 "  -> Name: armor",
@@ -206,12 +209,12 @@ public class GenericTooltipTest {
 
     @Test
     public void testAttributeTooltip() {
-        assertTooltip(GenericTooltipUtils.getAttributeTooltip(UTILS, 0, Attributes.JUMP_STRENGTH), List.of("Attribute: Horse Jump Strength"));
+        assertTooltip(GenericTooltipUtils.getAttributeTooltip(UTILS, 0, Attributes.JUMP_STRENGTH.value()), List.of("Attribute: Jump Strength"));
     }
 
     @Test
     public void testOperationTooltip() {
-        assertTooltip(GenericTooltipUtils.getOperationTooltip(UTILS, 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), List.of("Operation: MULTIPLY_BASE"));
+        assertTooltip(GenericTooltipUtils.getOperationTooltip(UTILS, 0, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), List.of("Operation: ADD_MULTIPLIED_BASE"));
     }
 
     @Test
@@ -221,15 +224,9 @@ public class GenericTooltipTest {
 
     @Test
     public void testBannerPatternTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)), List.of(
-                "Banner Pattern: minecraft:base",
-                "  -> Color: WHITE"
+        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow().value(), DyeColor.WHITE), List.of(
+                "Banner Pattern: Fully White Field"
         ));
-    }
-
-    @Test
-    public void testBannerPatternSlotsTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.FLOWER))), List.of("Banner Pattern: minecraft:flower"));
     }
 
     @Test
@@ -239,7 +236,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testPotionTooltip() {
-        assertTooltip(GenericTooltipUtils.getPotionTooltip(UTILS, 0, Potions.HEALING), List.of(
+        assertTooltip(GenericTooltipUtils.getPotionTooltip(UTILS, 0, Potions.HEALING.value()), List.of(
                 "Potion:",
                 "  -> Mob Effects:",
                 "    -> Mob Effect: minecraft:instant_health",
@@ -265,7 +262,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testMobEffectTooltip() {
-        assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, MobEffects.CONFUSION), List.of("Mob Effect: minecraft:nausea"));
+        assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, MobEffects.CONFUSION.value()), List.of("Mob Effect: minecraft:nausea"));
     }
 
     @Test
@@ -427,7 +424,7 @@ public class GenericTooltipTest {
 
         compoundTag.putFloat("test", 3F);
 
-        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(BlockTags.DIRT).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(Blocks.DIRT).build()), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
                 "    -> Block: Dirt"
@@ -476,7 +473,7 @@ public class GenericTooltipTest {
                 "  -> State Properties:",
                 "    -> facing: east"
         ));
-        assertTooltip(GenericTooltipUtils.getFluidPredicateTooltip(0, FluidPredicate.Builder.fluid().of(HolderSet.direct(Fluids.LAVA.builtInRegistryHolder())).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getFluidPredicateTooltip(UTILS, 0, FluidPredicate.Builder.fluid().of(HolderSet.direct(Fluids.LAVA.builtInRegistryHolder())).build()), List.of(
                 "Fluid Predicate:",
                 "  -> Fluids:",
                 "    -> Fluid: minecraft:lava"
@@ -617,7 +614,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, new EnchantmentPredicate(Enchantments.FALL_PROTECTION, MinMaxBounds.Ints.atMost(2))), List.of(
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, new EnchantmentPredicate(Enchantments.FEATHER_FALLING, MinMaxBounds.Ints.atMost(2))), List.of(
                 "Enchantment: Feather Falling",
                 "  -> Level: ≤2"
         ));
@@ -626,7 +623,7 @@ public class GenericTooltipTest {
     @Test
     @Disabled //TODO register EntitySubPredicate
     public void testEntitySubPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
+        /*assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
             "Entity Sub Predicate:",
             "  -> Variant: minecraft:cold"
         ));
@@ -675,7 +672,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(0, EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
                 "Entity Sub Predicate:",
                 "  -> Variant: minecraft:cold"
-        ));
+        ));*/
     }
 
     @Test

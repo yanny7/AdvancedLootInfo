@@ -1,10 +1,12 @@
 package com.yanny.ali.manager;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -40,13 +42,13 @@ public class AliRegistry implements IRegistry, IUtils {
     private final Map<Class<?>, BiFunction<IUtils, LootPoolEntryContainer, List<Item>>> itemCollectorMap = new HashMap<>();
     private final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
     private final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
-    private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
+    private final Map<ResourceKey<LootTable>, LootTable> lootTableMap = new HashMap<>();
 
-    public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
+    public void addLootTable(ResourceKey<LootTable> resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
     }
 
-    public Map<ResourceLocation, LootTable> getLootTables() {
+    public Map<ResourceKey<LootTable>, LootTable> getLootTables() {
         return lootTableMap;
     }
 
@@ -243,8 +245,8 @@ public class AliRegistry implements IRegistry, IUtils {
 
     @Nullable
     @Override
-    public LootTable getLootTable(ResourceLocation resourceLocation) {
-        return lootTableMap.get(resourceLocation);
+    public LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either) {
+        return either.map(lootTableMap::get, lootTable -> lootTable);
     }
 
     @Override

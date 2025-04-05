@@ -1,24 +1,17 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.entry.LootTableEntry;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.slf4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class AbstractServer {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -29,7 +22,7 @@ public abstract class AbstractServer {
         messages.clear();
         manager.get().lookup(Registries.LOOT_TABLE).ifPresent((lookup) -> {
             lookup.listElements().forEach((reference) -> {
-                ResourceLocation location = reference.key().location();
+                ResourceKey<LootTable> location = reference.key();
                 LootTable table = reference.value();
 
                 if (table != LootTable.EMPTY) {
@@ -47,13 +40,13 @@ public abstract class AbstractServer {
 //                            generatedLoot = mod.apply(generatedLoot, context);
 //                        }
 
-                        messages.add(new InfoSyncLootTableMessage(location, lootTableEntry));
-                    } else {
-                        LOGGER.info("LootTable {} has no items", location);
-                    }
-//                } else {
-//                    LOGGER.warn("Ignoring {} LootTable, because it's empty", location);
-//                }
+                        messages.add(new InfoSyncLootTableMessage(location, table, level.getServer().registryAccess()));
+//                    } else {
+//                        LOGGER.info("LootTable {} has no items", location);
+//                    }
+                } else {
+                    LOGGER.warn("Ignoring {} LootTable, because it's empty", location);
+                }
             });
         });
 

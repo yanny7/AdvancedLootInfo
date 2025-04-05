@@ -1,8 +1,9 @@
 package com.yanny.ali.api;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -30,7 +31,7 @@ public interface IUtils {
     LootContext getLootContext();
 
     @Nullable
-    LootTable getLootTable(ResourceLocation resourceLocation);
+    LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either);
 
     RangeValue convertNumber(IUtils utils, @Nullable NumberProvider numberProvider);
 }

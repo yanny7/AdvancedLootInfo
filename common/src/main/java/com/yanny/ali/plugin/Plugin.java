@@ -25,7 +25,7 @@ public class Plugin implements IPlugin {
     public void register(IRegistry registry) {
         registry.registerWidget(LootItem.class, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
         registry.registerWidget(EmptyLootItem.class, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
-        registry.registerWidget(LootTableReference.class, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
+        registry.registerWidget(NestedLootTable.class, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
         registry.registerWidget(DynamicLoot.class, WidgetDirection.VERTICAL, DynamicWidget::new, DynamicWidget::getBounds);
         registry.registerWidget(TagEntry.class, WidgetDirection.HORIZONTAL, TagWidget::new, TagWidget::getBounds);
         registry.registerWidget(AlternativesEntry.class, WidgetDirection.VERTICAL, AlternativesWidget::new, CompositeWidget::getBounds);
@@ -53,7 +53,7 @@ public class Plugin implements IPlugin {
 
         registry.registerFunctionTooltip(ApplyBonusCount.class, FunctionTooltipUtils::getApplyBonusTooltip);
         registry.registerFunctionTooltip(CopyNameFunction.class, FunctionTooltipUtils::getCopyNameTooltip);
-        registry.registerFunctionTooltip(CopyNbtFunction.class, FunctionTooltipUtils::getCopyNbtTooltip);
+        registry.registerFunctionTooltip(CopyCustomDataFunction.class, FunctionTooltipUtils::getCopyCustomDataTooltip);
         registry.registerFunctionTooltip(CopyBlockState.class, FunctionTooltipUtils::getCopyStateTooltip);
         registry.registerFunctionTooltip(EnchantRandomlyFunction.class, FunctionTooltipUtils::getEnchantRandomlyTooltip);
         registry.registerFunctionTooltip(EnchantWithLevelsFunction.class, FunctionTooltipUtils::getEnchantWithLevelsTooltip);
@@ -75,7 +75,7 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(SetContainerLootTable.class, FunctionTooltipUtils::getSetLootTableTooltip);
         registry.registerFunctionTooltip(SetLoreFunction.class, FunctionTooltipUtils::getSetLoreTooltip);
         registry.registerFunctionTooltip(SetNameFunction.class, FunctionTooltipUtils::getSetNameTooltip);
-        registry.registerFunctionTooltip(SetNbtFunction.class, FunctionTooltipUtils::getSetNbtTooltip);
+        registry.registerFunctionTooltip(SetCustomDataFunction.class, FunctionTooltipUtils::getSetCustomDataTooltip);
         registry.registerFunctionTooltip(SetPotionFunction.class, FunctionTooltipUtils::getSetPotionTooltip);
         registry.registerFunctionTooltip(SetStewEffectFunction.class, FunctionTooltipUtils::getSetStewEffectTooltip);
 
@@ -91,7 +91,7 @@ public class Plugin implements IPlugin {
         registry.registerItemCollector(SequentialEntry.class, Plugin::collectComposite);
         registry.registerItemCollector(EmptyLootItem.class, Plugin::collectEmpty);
         registry.registerItemCollector(DynamicLoot.class, Plugin::collectEmpty);
-        registry.registerItemCollector(LootTableReference.class, Plugin::collectReference);
+        registry.registerItemCollector(NestedLootTable.class, Plugin::collectReference);
     }
 
     @Unmodifiable
@@ -127,7 +127,7 @@ public class Plugin implements IPlugin {
     private static List<Item> collectReference(IUtils utils, LootPoolEntryContainer entry) {
         List<Item> items = new LinkedList<>();
 
-        LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
+        LootTable lootTable = utils.getLootTable(((NestedLootTable) entry).contents);
 
         if (lootTable != null) {
             items.addAll(TooltipUtils.collectItems(utils, lootTable));

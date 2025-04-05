@@ -1,10 +1,11 @@
 package com.yanny.ali.plugin;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -43,8 +44,8 @@ public abstract class Utils implements IWidgetUtils {
     }
 
     @Override
-    public @Nullable LootTable getLootTable(ResourceLocation resourceLocation) {
-        return PluginManager.CLIENT_REGISTRY.getLootTable(resourceLocation);
+    public @Nullable LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either) {
+        return PluginManager.CLIENT_REGISTRY.getLootTable(either);
     }
 
     @Nullable

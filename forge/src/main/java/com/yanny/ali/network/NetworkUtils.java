@@ -26,7 +26,7 @@ public class NetworkUtils {
 
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
                 .encoder(InfoSyncLootTableMessage::write)
-                .decoder(InfoSyncLootTableMessage::new)
+                .decoder(buf -> new InfoSyncLootTableMessage(buf))
                 .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
@@ -43,7 +43,7 @@ public class NetworkUtils {
 
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
                 .encoder(InfoSyncLootTableMessage::write)
-                .decoder(InfoSyncLootTableMessage::new)
+                .decoder(buf -> new InfoSyncLootTableMessage(buf))
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::write)

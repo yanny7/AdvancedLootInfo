@@ -1,30 +1,9 @@
 package com.yanny.ali.plugin;
 
-import com.yanny.ali.api.ILootFunction;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.function.SetAttributesAliFunction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.nbt.CompoundTag;
+import com.yanny.ali.api.IUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.item.Instrument;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.saveddata.maps.MapDecorationType;
-import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -35,7 +14,6 @@ import java.util.Optional;
 
 import static com.yanny.ali.plugin.GenericTooltipUtils.*;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class FunctionTooltipUtils {
     @NotNull
     public static List<Component> getApplyBonusTooltip(IUtils utils, int pad, LootItemFunction function) {
@@ -62,13 +40,14 @@ public class FunctionTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getCopyCustomData(IUtils utils, int pad, LootItemFunction function) {
+    public static List<Component> getCopyCustomDataTooltip(IUtils utils, int pad, LootItemFunction function) {
         List<Component> components = new LinkedList<>();
         CopyCustomDataFunction fun = (CopyCustomDataFunction) function;
 
         components.add(pad(pad, translatable("ali.type.function.copy_custom_data")));
-        components.addAll(GenericTooltipUtils.getComponentsTooltip(pad, "ali.property.value.source", fun.source(), GenericTooltipUtils::getNtbProviderTooltip));
-        components.addAll(GenericTooltipUtils.getCollectionTooltip(pad + 1, "ali.property.branch.copy_operations", fun.operations(), GenericTooltipUtils::getCopyOperationTooltip));
+        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.source",
+                Objects.requireNonNull(BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE.getKey(fun.source.getType()))));
+        components.addAll(GenericTooltipUtils.getCollectionTooltip(utils, pad + 1, "ali.property.branch.copy_operations", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
 
         return components;
     }
@@ -116,8 +95,8 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
         components.addAll(getTagKeyTooltip(utils, pad + 1, "ali.property.value.destination", fun.destination));
         components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.map_decoration", fun.mapDecoration,
-                (p, c) -> getHolderTooltip(utils, p, c, GenericTooltipUtils::getMapDecorationTypeTooltip)));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.zoom", fun.zoom));
+                (u, p, c) -> getHolderTooltip(u, p, c, GenericTooltipUtils::getMapDecorationTypeTooltip)));
+        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.zoom", (int) fun.zoom));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.search_radius", fun.searchRadius));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.skip_known_structures", fun.skipKnownStructures));
 
@@ -177,7 +156,7 @@ public class FunctionTooltipUtils {
         FunctionReference fun = (FunctionReference) function;
 
         components.add(pad(pad, translatable("ali.type.function.reference")));
-        components.addAll(getResourceKeyTooltip(pad + 1, "ali.property.value.name", fun.name));
+        components.addAll(getResourceKeyTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
 
         return components;
     }
@@ -222,7 +201,7 @@ public class FunctionTooltipUtils {
         SetContainerContents fun = (SetContainerContents) function;
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
-        components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, component));
+        components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, fun.component));
         //FIXME .getEntries
 
         return components;
@@ -289,7 +268,7 @@ public class FunctionTooltipUtils {
         SetContainerLootTable fun = (SetContainerLootTable) function;
 
         components.add(pad(pad, translatable("ali.type.function.set_loot_table")));
-        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
+        components.addAll(getResourceKeyTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
         components.addAll(getLongTooltip(utils, pad + 1, "ali.property.value.seed", fun.seed));
         components.addAll(getHolderTooltip(utils, pad + 1, fun.type, GenericTooltipUtils::getBlockEntityTypeTooltip));
 
@@ -317,14 +296,15 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_name")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.name", fun.name, GenericTooltipUtils::getComponentTooltip));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", "target", fun.resolutionContext));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", fun.target));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetNbtTooltip(IUtils utils, int pad, LootItemFunction function) {
+    public static List<Component> getSetCustomDataTooltip(IUtils utils, int pad, LootItemFunction function) {
         List<Component> components = new LinkedList<>();
-        SetNbtFunction fun = (SetNbtFunction) function;
+        SetCustomDataFunction fun = (SetCustomDataFunction) function;
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_data")));
         components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.tag", fun.tag.getAsString()));

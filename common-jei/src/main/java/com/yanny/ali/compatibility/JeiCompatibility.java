@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -84,13 +85,13 @@ public class JeiCompatibility implements IModPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceKey<LootTable>, LootTable> map = GenericUtils.getLootTables();
             Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceLocation location = block.getLootTable().location();
+                ResourceKey<LootTable> location = block.getLootTable();
                 LootTable lootEntry = map.get(location);
 
                 if (lootEntry != null) {
@@ -159,7 +160,7 @@ public class JeiCompatibility implements IModPlugin {
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
-                        ResourceLocation location = mob.getLootTable().location();
+                        ResourceKey<LootTable> location = mob.getLootTable();
                         LootTable lootEntry = map.get(location);
 
                         if (lootEntry != null) {
@@ -182,19 +183,19 @@ public class JeiCompatibility implements IModPlugin {
                 }
             }
 
-            for (Map.Entry<ResourceLocation, LootTable> entry : map.entrySet()) {
-                ResourceLocation location = entry.getKey();
+            for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : map.entrySet()) {
+                ResourceKey<LootTable> location = entry.getKey();
                 RecipeType<GameplayLootType> recipeType = null;
 
                 for (JeiGameplayLoot recipeCategory : gameplayCategoryList) {
-                    if (recipeCategory.getLootCategory().validate(location.getPath())) {
+                    if (recipeCategory.getLootCategory().validate(location.location().getPath())) {
                         recipeType = recipeCategory.getRecipeType();
                         break;
                     }
                 }
 
                 if (recipeType != null) {
-                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath()));
+                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.location().getPath()));
                 }
             }
 

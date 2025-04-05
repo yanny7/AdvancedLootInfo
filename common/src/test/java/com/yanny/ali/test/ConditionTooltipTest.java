@@ -3,9 +3,8 @@ package com.yanny.ali.test;
 import com.yanny.ali.plugin.ConditionTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
@@ -187,7 +186,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, 0, ConditionReference.conditionReference(new ResourceLocation("test")).build()), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, 0, ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, new ResourceLocation("test"))).build()), List.of("Reference: minecraft:test"));
     }
 
     @Test
@@ -197,7 +196,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTableBonusTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.MOB_LOOTING, 0.25F, 0.5555F, 0.99F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.LOOTING, 0.25F, 0.5555F, 0.99F).build()), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Values: [0.25, 0.5555, 0.99]" //FIXME to 2 decimal places
