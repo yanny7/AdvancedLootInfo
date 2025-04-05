@@ -74,12 +74,12 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static MutableComponent value(Object value, String unit) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values", value, unit).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
+        return Component.translatable("ali.util.advanced_loot_info.two_values", value.toString(), unit).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
     }
 
     @NotNull
     public static MutableComponent pair(Object value1, Object value2) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", value1, value2);
+        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", value1.toString(), value2.toString());
     }
 
     @NotNull
@@ -97,7 +97,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static MutableComponent keyValue(Object key, Object value) {
-        return translatable("ali.util.advanced_loot_info.key_value", key instanceof MutableComponent ? key : Component.literal(key.toString()), value(value));
+        return translatable("ali.util.advanced_loot_info.key_value", key instanceof MutableComponent ? key : Component.literal(key.toString()), value(value.toString()));
     }
 
     @NotNull
