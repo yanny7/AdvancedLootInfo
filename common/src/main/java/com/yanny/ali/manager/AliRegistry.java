@@ -69,18 +69,21 @@ public class AliRegistry implements IRegistry, IUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, LootItemCondition, List<Component>> getter) {
-        conditionTooltipMap.put(clazz, getter);
+    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        conditionTooltipMap.put(clazz, (u, i, c) -> getter.apply(u, i, (T) c));
     }
 
     @Override
-    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, LootItemFunction, List<Component>> getter) {
-        functionTooltipMap.put(clazz, getter);
+    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        functionTooltipMap.put(clazz, (u, i, f) -> getter.apply(u, i, (T) f));
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> clazz, BiFunction<IUtils, LootPoolEntryContainer, List<Item>> itemSupplier) {
-        itemCollectorMap.put(clazz, itemSupplier);
+    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> clazz, BiFunction<IUtils, T, List<Item>> itemSupplier) {
+        //noinspection unchecked
+        itemCollectorMap.put(clazz, (u, e) -> itemSupplier.apply(u, (T) e));
     }
 
     @Override
@@ -146,37 +149,37 @@ public class AliRegistry implements IRegistry, IUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> List<Component> getConditionTooltip(Class<T> clazz, IUtils utils, int pad, LootItemCondition condition) {
-        TriFunction<IUtils, Integer, LootItemCondition, List<Component>> entryTooltipGetter = conditionTooltipMap.get(clazz);
+    public <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition) {
+        TriFunction<IUtils, Integer, LootItemCondition, List<Component>> entryTooltipGetter = conditionTooltipMap.get(condition.getClass());
 
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, pad, condition);
         } else {
-            LOGGER.warn("Condition tooltip {} was not registered", clazz.getCanonicalName());
+            LOGGER.warn("Condition tooltip {} was not registered", condition.getClass().getCanonicalName());
             return List.of();
         }
     }
 
     @Override
-    public <T extends LootItemFunction> List<Component> getFunctionTooltip(Class<T> clazz, IUtils utils, int pad, LootItemFunction function) {
-        TriFunction<IUtils, Integer, LootItemFunction, List<Component>> entryTooltipGetter = functionTooltipMap.get(clazz);
+    public <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function) {
+        TriFunction<IUtils, Integer, LootItemFunction, List<Component>> entryTooltipGetter = functionTooltipMap.get(function.getClass());
 
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, pad, function);
         } else {
-            LOGGER.warn("Function tooltip {} was not registered", clazz.getCanonicalName());
+            LOGGER.warn("Function tooltip {} was not registered", function.getClass().getCanonicalName());
             return List.of();
         }
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> List<Item> collectItems(Class<T> clazz, IUtils utils, LootPoolEntryContainer entry) {
+    public <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry) {
         BiFunction<IUtils, LootPoolEntryContainer, List<Item>> itemSupplier = itemCollectorMap.get(entry.getClass());
 
         if (itemSupplier != null) {
             return itemSupplier.apply(utils, entry);
         } else {
-            LOGGER.warn("Item collector {} was not registered", clazz.getCanonicalName());
+            LOGGER.warn("Item collector {} was not registered", entry.getClass().getCanonicalName());
             return List.of();
         }
     }

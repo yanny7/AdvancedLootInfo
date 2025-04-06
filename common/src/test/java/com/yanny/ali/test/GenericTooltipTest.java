@@ -2,6 +2,7 @@ package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.EntryTooltipUtils;
 import com.yanny.ali.plugin.GenericTooltipUtils;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
@@ -100,7 +101,7 @@ public class GenericTooltipTest {
         bonusCountMap.put(2, new RangeValue(2, 4));
         bonusCountMap.put(3, new RangeValue(4, 8));
 
-        assertTooltip(GenericTooltipUtils.getTooltip(
+        assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 AlternativesEntry.alternatives().build(),
                 new RangeValue(2.5F),
@@ -113,7 +114,7 @@ public class GenericTooltipTest {
                 "Chance: 2.50%",
                 "Count: 2-10"
         ));
-        assertTooltip(GenericTooltipUtils.getTooltip(
+        assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 EmptyLootItem.emptyItem().setQuality(5).build(),
                 new RangeValue(2.5F),

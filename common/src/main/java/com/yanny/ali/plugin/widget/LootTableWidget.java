@@ -21,11 +21,15 @@ public class LootTableWidget implements IWidget {
     private final Rect bounds;
 
     public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y) {
+        this(utils, lootTable, x, y, 0, 100);
+    }
+
+    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int quality, float chance) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
         widgets = new LinkedList<>();
-        widgets.add(getLootTableTypeWidget(x, y));
+        widgets.add(getLootTableTypeWidget(x, y, quality, chance));
 
         for (LootPool pool : lootTable.pools) {
             IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(lootTable.functions));

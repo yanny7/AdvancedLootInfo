@@ -27,7 +27,7 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class ConditionTooltipTest {
     @Test
     public void testAllOfTooltip() {
-        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, 0, AllOfCondition.allOf(
+        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, 0, (AllOfCondition) AllOfCondition.allOf(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()), List.of(
@@ -42,7 +42,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testAnyOfTooltip() {
-        assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, 0, AnyOfCondition.anyOf(
+        assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, 0, (AnyOfCondition) AnyOfCondition.anyOf(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()), List.of(
@@ -57,11 +57,11 @@ public class ConditionTooltipTest {
 
     @Test
     public void testBlockStatePropertyTooltip() {
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, 0, LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.FURNACE).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, 0, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.FURNACE).build()), List.of(
                 "Block State Property:",
                 "  -> Block: Furnace"
         ));
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, 0, LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.BAMBOO)
+        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, 0, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.BAMBOO)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()), List.of(
                 "Block State Property:",
                 "  -> Block: Bamboo",
@@ -72,7 +72,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testDamageSourceProperties() {
-        assertTooltip(ConditionTooltipUtils.getDamageSourcePropertiesTooltip(UTILS, 0, DamageSourceCondition.hasDamageSource(
+        assertTooltip(ConditionTooltipUtils.getDamageSourcePropertiesTooltip(UTILS, 0, (DamageSourceCondition) DamageSourceCondition.hasDamageSource(
                 DamageSourcePredicate.Builder.damageType()
                         .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                         .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
@@ -94,7 +94,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEntityPropertiesTooltip() {
-        assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(UTILS, 0, LootItemEntityPropertyCondition.hasProperties(
+        assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(UTILS, 0, (LootItemEntityPropertyCondition) LootItemEntityPropertyCondition.hasProperties(
                 LootContext.EntityTarget.KILLER,
                 EntityPredicate.Builder.entity().team("blue")
         ).build()), List.of(
@@ -107,11 +107,11 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEntityScoresTooltip() {
-        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER).build()), List.of(
                 "Entity Scores:",
                 "  -> Target: Directly Killed By"
         ));
-        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER)
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER)
                 .withScore("single", IntRange.range(2, 5))
                 .withScore("double", IntRange.range(1, 7))
                 .build()
@@ -119,14 +119,16 @@ public class ConditionTooltipTest {
                 "Entity Scores:",
                 "  -> Target: Directly Killed By",
                 "  -> Scores:",
-                "    -> single: 2 - 5",
-                "    -> double: 1 - 7"
+                "    -> Score: single",
+                "      -> Limit: 2 - 5",
+                "    -> Score: double",
+                "      -> Limit: 1 - 7"
         ));
     }
 
     @Test
     public void testInvertedTooltip() {
-        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, 0, InvertedLootItemCondition.invert(
+        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, 0, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10)
         ).build()), List.of(
                 "Inverted:",
@@ -138,12 +140,12 @@ public class ConditionTooltipTest {
 
     @Test
     public void testKilledByPlayerTooltip() {
-        assertTooltip(ConditionTooltipUtils.getKilledByPlayerTooltip(UTILS, 0, LootItemKilledByPlayerCondition.killedByPlayer().build()), List.of("Must be killed by player"));
+        assertTooltip(ConditionTooltipUtils.getKilledByPlayerTooltip(UTILS, 0, (LootItemKilledByPlayerCondition) LootItemKilledByPlayerCondition.killedByPlayer().build()), List.of("Must be killed by player"));
     }
 
     @Test
     public void testLocationCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(UTILS, 0, LocationCheck.checkLocation(
+        assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(UTILS, 0, (LocationCheck) LocationCheck.checkLocation(
                 LocationPredicate.Builder.location().setSmokey(true),
                 new BlockPos(2, 4, 6)
         ).build()), List.of(
@@ -159,7 +161,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testItemMatchTooltip() {
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, 0, MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE)).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, 0, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE)).build()), List.of(
                 "Match Tool:",
                 "  -> Items:",
                 "    -> Item: Andesite",
@@ -169,7 +171,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testRandomChanceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceTooltip(UTILS, 0, LootItemRandomChanceCondition.randomChance(0.25F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getRandomChanceTooltip(UTILS, 0, (LootItemRandomChanceCondition) LootItemRandomChanceCondition.randomChance(0.25F).build()), List.of(
                 "Random Chance:",
                 "  -> Probability: 0.25"
         ));
@@ -177,7 +179,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testRandomChanceWithLootingTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceWithLootingTooltip(UTILS, 0, LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.25F, 5F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getRandomChanceWithLootingTooltip(UTILS, 0, (LootItemRandomChanceWithLootingCondition) LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.25F, 5F).build()), List.of(
                 "Random Chance With Looting:",
                 "  -> Percent: 0.25",
                 "  -> Multiplier: 5.0"
@@ -186,17 +188,17 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, 0, ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, new ResourceLocation("test"))).build()), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, 0, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, new ResourceLocation("test"))).build()), List.of("Reference: minecraft:test"));
     }
 
     @Test
     public void testSurvivesExplosionTooltip() {
-        assertTooltip(ConditionTooltipUtils.getSurvivesExplosionTooltip(UTILS, 0, ExplosionCondition.survivesExplosion().build()), List.of("Must survive explosion"));
+        assertTooltip(ConditionTooltipUtils.getSurvivesExplosionTooltip(UTILS, 0, (ExplosionCondition) ExplosionCondition.survivesExplosion().build()), List.of("Must survive explosion"));
     }
 
     @Test
     public void testTableBonusTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.LOOTING, 0.25F, 0.5555F, 0.99F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.LOOTING, 0.25F, 0.5555F, 0.99F).build()), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Values: [0.25, 0.5555, 0.99]" //FIXME to 2 decimal places
@@ -214,7 +216,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testValueCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, 0, ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, 0, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()), List.of(
                 "Value Check:",
                 "  -> Provider: 1-20",
                 "  -> Range: 1 - 10"

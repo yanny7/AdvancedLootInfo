@@ -16,9 +16,9 @@ public interface IRegistry {
     <T extends LootPoolEntryContainer> void registerWidget(Class<T> clazz, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter);
     void registerNumberProvider(ResourceLocation key, BiFunction<IUtils, NumberProvider, RangeValue> converter);
 
-    <T extends LootItemCondition> void registerConditionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, LootItemCondition, List<Component>> getter);
-    <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, LootItemFunction, List<Component>> getter);
-    <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> clazz, BiFunction<IUtils, LootPoolEntryContainer, List<Item>> itemSupplier);
+    <T extends LootItemCondition> void registerConditionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> clazz, BiFunction<IUtils, T, List<Item>> itemSupplier);
 
     interface IBoundsGetter {
         Rect apply(IUtils utils, LootPoolEntryContainer entry, int x, int y);

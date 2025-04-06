@@ -2,7 +2,6 @@ package com.yanny.ali.plugin;
 
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
@@ -39,12 +38,12 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
@@ -55,97 +54,14 @@ public class GenericTooltipUtils {
     private static final ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 
     @NotNull
-    public static Component translatableType(String prefix, Enum<?> type, Object... args) {
-        return translatable(prefix + "." + type.name().toLowerCase(), args);
-    }
-
-    @NotNull
-    public static Component translatable(String key, Object... args) {
-        return Component.translatable(key, Arrays.stream(args).map((arg) -> {
-            if (arg instanceof MutableComponent) {
-                return arg;
-            } else if (arg != null) {
-                return Component.literal(arg.toString());
-            } else {
-                return Component.literal("null");
-            }
-        }).toArray()).withStyle(TEXT_STYLE);
-    }
-
-    @NotNull
-    public static Component value(Object value) {
-        if (value instanceof MutableComponent) {
-            return ((MutableComponent) value).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
-        } else {
-            return Component.literal(value.toString()).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
-        }
-    }
-
-    @NotNull
-    public static Component value(Object value, String unit) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values", value, unit).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
-    }
-
-    @NotNull
-    public static Component pair(Object value1, Object value2) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", value1, value2);
-    }
-
-    @NotNull
-    public static Component pad(int count, Object arg) {
-        if (count > 0) {
-            return pair(Component.translatable("ali.util.advanced_loot_info.pad." + count), arg);
-        } else {
-            if (arg instanceof MutableComponent mutableComponent) {
-                return mutableComponent;
-            } else {
-                return Component.literal(arg.toString());
-            }
-        }
-    }
-
-    @NotNull
-    public static Component keyValue(Object key, Object value) {
-        return translatable("ali.util.advanced_loot_info.key_value", key instanceof MutableComponent ? key : Component.literal(key.toString()), value(value));
-    }
-
-    @NotNull
-    public static List<Component> getTooltip(IUtils utils, LootPoolEntryContainer entry, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
-                                             RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> functions,
-                                             List<LootItemCondition> conditions) {
-        List<Component> components = new LinkedList<>();
-
-        if (entry instanceof LootPoolSingletonContainer singletonEntry) {
-            components.addAll(getQualityTooltip(singletonEntry));
-        }
-
-        components.addAll(getChanceTooltip(chance));
-        components.addAll(getBonusChanceTooltip(bonusChance));
-
-        components.addAll(getCountTooltip(count));
-        components.addAll(getBonusCountTooltip(bonusCount));
-
-        if (!conditions.isEmpty()) {
-            components.add(translatable("ali.util.advanced_loot_info.delimiter.conditions"));
-            components.addAll(getConditionsTooltip(utils, 0, conditions));
-        }
-        if (!functions.isEmpty()) {
-            components.add(translatable("ali.util.advanced_loot_info.delimiter.functions"));
-            components.addAll(getFunctionsTooltip(utils, 0, functions));
-        }
-
-        return components;
-    }
-
-    @NotNull
     public static List<Component> getConditionsTooltip(IUtils utils, int pad, List<LootItemCondition> conditions) {
-        return conditions.stream().map((condition) -> utils.getConditionTooltip(condition.getClass(), utils, pad, condition)).flatMap(Collection::stream).toList();
+        return conditions.stream().map((condition) -> utils.getConditionTooltip(utils, pad, condition)).flatMap(Collection::stream).toList();
     }
 
     @NotNull
     public static List<Component> getFunctionsTooltip(IUtils utils, int pad, List<LootItemFunction> functions) {
         return functions.stream().map((function) -> {
-            List<Component> components = new LinkedList<>(utils.getFunctionTooltip(function.getClass(), utils, pad, function));
+            List<Component> components = new LinkedList<>(utils.getFunctionTooltip(utils, pad, function));
 
             if (function instanceof LootItemConditionalFunction conditionalFunction && !conditionalFunction.predicates.isEmpty()) {
                 components.add(pad(pad + 1, translatable("ali.property.branch.conditions")));
@@ -708,10 +624,54 @@ public class GenericTooltipUtils {
 
     // HELPERS
 
+    @NotNull
+    public static Component translatableType(String prefix, Enum<?> type, Object... args) {
+        return translatable(prefix + "." + type.name().toLowerCase(), args);
+    }
+
+    @NotNull
+    public static Component translatable(String key, Object... args) {
+        return Component.translatable(key, Arrays.stream(args).map(GenericTooltipUtils::convertObject).toArray()).withStyle(TEXT_STYLE);
+    }
+
+    @NotNull
+    public static Component value(Object value) {
+        return convertObject(value).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
+    }
+
+    @NotNull
+    public static Component value(Object value, String unit) {
+        return Component.translatable("ali.util.advanced_loot_info.two_values", convertObject(value), unit).withStyle(PARAM_STYLE, ChatFormatting.BOLD);
+    }
+
+    @NotNull
+    public static Component pair(Object value1, Object value2) {
+        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", convertObject(value1), convertObject(value2));
+    }
+
+    @NotNull
+    public static Component pad(int count, Object arg) {
+        if (count > 0) {
+            return pair(Component.translatable("ali.util.advanced_loot_info.pad." + count), convertObject(arg));
+        } else {
+            return convertObject(arg);
+        }
+    }
+
+    @NotNull
+    public static Component keyValue(Object key, Object value) {
+        return translatable("ali.util.advanced_loot_info.key_value", convertObject(key), value(value));
+    }
+
     @Unmodifiable
     @NotNull
     public static List<Component> getRangeValueTooltip(IUtils utils, int pad, String key, RangeValue value) {
         return List.of(pad(pad, translatable(key, value(value))));
+    }
+
+    @NotNull
+    public static List<Component> getIntRangeTooltip(IUtils utils, int pad, String key, IntRange range) {
+        return List.of(pad(pad, translatable(key, value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
     }
 
     @Unmodifiable
@@ -956,57 +916,14 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    @Unmodifiable
-    private static List<Component> getQualityTooltip(LootPoolSingletonContainer entry) {
-        if (entry.quality != 0) {
-            return List.of(translatable("ali.description.quality", entry.quality));
+    private static MutableComponent convertObject(@Nullable Object object) {
+        if (object instanceof MutableComponent component) {
+            return component;
+        } else if (object != null) {
+            return Component.literal(object.toString());
+        } else {
+            return Component.literal("null");
         }
-
-        return List.of();
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<Component> getCountTooltip(RangeValue count) {
-        return List.of(translatable("ali.description.count", value(count)));
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<Component> getChanceTooltip(RangeValue chance) {
-        return List.of(translatable("ali.description.chance", value(chance, "%")));
-    }
-
-    @NotNull
-    private static List<Component> getBonusChanceTooltip(Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance) {
-        List<Component> components = new LinkedList<>();
-
-        bonusChance.ifPresent((pair) -> pair.getSecond().entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).forEach((entry) ->
-                components.add(pad(1, translatable(
-                        "ali.description.chance_bonus",
-                        value(entry.getValue(), "%"),
-                        Component.translatable(pair.getFirst().value().getDescriptionId()),
-                        Component.translatable("enchantment.level." + entry.getKey())
-                )))
-        ));
-
-        return components;
-    }
-
-    @NotNull
-    private static List<Component> getBonusCountTooltip(Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount) {
-        List<Component> components = new LinkedList<>();
-
-        bonusCount.ifPresent((pair) -> pair.getSecond().entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).forEach((entry) ->
-                components.add(pad(1, translatable(
-                        "ali.description.count_bonus",
-                        value(entry.getValue()),
-                        Component.translatable(pair.getFirst().value().getDescriptionId()),
-                        Component.translatable("enchantment.level." + entry.getKey())
-                )))
-        ));
-
-        return components;
     }
 
     @FunctionalInterface

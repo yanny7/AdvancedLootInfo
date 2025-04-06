@@ -5,7 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.EntryTooltipUtils;
 import com.yanny.ali.plugin.Utils;
 import com.yanny.ali.plugin.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
@@ -82,7 +82,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                                       Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 EntryStack<ItemStack> stack = EntryStacks.of(item);
 
-                stack.tooltip(GenericTooltipUtils.getTooltip(this, entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
+                stack.tooltip(EntryTooltipUtils.getTooltip(this, entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entry(stack).markOutput());
                 widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(count)));
                 return new Rect(x, y, 18, 18);
@@ -93,7 +93,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                                       Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(item);
 
-                ingredient.map((stack) -> stack.tooltip(GenericTooltipUtils.getTooltip(this, entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));
+                ingredient.map((stack) -> stack.tooltip(EntryTooltipUtils.getTooltip(this, entry, chance, bonusChance, count, bonusCount, allFunctions, allConditions)));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entries(ingredient).markOutput());
                 widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(count)));
                 return new Rect(x, y, 18, 18);
