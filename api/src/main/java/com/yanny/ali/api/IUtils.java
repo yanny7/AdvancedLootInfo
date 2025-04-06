@@ -18,9 +18,9 @@ public interface IUtils {
     Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y,
                                                  List<LootItemFunction> functions, List<LootItemCondition> conditions);
 
-    <T extends LootItemCondition> List<Component> getConditionTooltip(Class<T> clazz, IUtils utils, int pad, LootItemCondition condition);
-    <T extends LootItemFunction> List<Component> getFunctionTooltip(Class<T> clazz, IUtils utils, int pad, LootItemFunction function);
-    <T extends LootPoolEntryContainer> List<Item> collectItems(Class<T> clazz, IUtils utils, LootPoolEntryContainer entry);
+    <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition);
+    <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function);
+    <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry);
 
     Rect getBounds(IUtils registry, List<LootPoolEntryContainer> entries, int x, int y);
 

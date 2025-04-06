@@ -1,3 +1,8 @@
+## []
+
+- Added missing group tooltips
+- Performance improvements
+
 ## [1.0.5]
 
 - Changed displaying of tooltips

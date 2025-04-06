@@ -19,10 +19,11 @@ public class ReferenceWidget implements IEntryWidget {
 
     public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        LootTable tableEntry = utils.getLootTable(((LootTableReference) entry).name);
+        LootTableReference reference = (LootTableReference) entry;
+        LootTable tableEntry = utils.getLootTable(reference.name);
 
         if (tableEntry != null) {
-            widget = new LootTableWidget(utils, tableEntry, x, y);
+            widget = new LootTableWidget(utils, tableEntry, x, y, ((LootTableReference) entry).quality, (float) reference.weight / sumWeight * 100);
         } else {
             widget = new IWidget() {
                 @Override
