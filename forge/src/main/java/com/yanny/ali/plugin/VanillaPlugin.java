@@ -16,7 +16,7 @@ public class VanillaPlugin extends Plugin {
     @Override
     public void register(IRegistry registry) {
         super.register(registry);
-        registry.registerConditionTooltip(CanToolPerformAction.class, VanillaPlugin::getTooltip);
+        registry.registerConditionTooltip(CanToolPerformAction.TYPE, VanillaPlugin::getTooltip);
     }
 
     @Unmodifiable
