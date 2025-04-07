@@ -1,5 +1,7 @@
 package com.yanny.ali.network;
 
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -25,13 +27,11 @@ public class NetworkUtils {
         Server server = new Server(channel);
 
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::write)
-                .decoder(buf -> new InfoSyncLootTableMessage(buf))
+                .codec((StreamCodec<FriendlyByteBuf, InfoSyncLootTableMessage>)(Object) InfoSyncLootTableMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::write)
-                .decoder(ClearMessage::new)
+                .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
                 .add();
         return new DistHolder<>(client, server);
@@ -42,12 +42,10 @@ public class NetworkUtils {
         Server server = new Server(channel);
 
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::write)
-                .decoder(buf -> new InfoSyncLootTableMessage(buf))
+                .codec((StreamCodec<FriendlyByteBuf, InfoSyncLootTableMessage>)(Object) InfoSyncLootTableMessage.CODEC)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::write)
-                .decoder(ClearMessage::new)
+                .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
                 .add();
         return new DistHolder<>(null, server);
     }

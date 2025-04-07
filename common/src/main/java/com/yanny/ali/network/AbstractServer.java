@@ -40,7 +40,7 @@ public abstract class AbstractServer {
 //                            generatedLoot = mod.apply(generatedLoot, context);
 //                        }
 
-                        messages.add(new InfoSyncLootTableMessage(location, table, level.getServer().registryAccess()));
+                        messages.add(new InfoSyncLootTableMessage(location, table));
 //                    } else {
 //                        LOGGER.info("LootTable {} has no items", location);
 //                    }
