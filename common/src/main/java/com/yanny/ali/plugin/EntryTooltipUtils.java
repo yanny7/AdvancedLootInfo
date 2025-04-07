@@ -93,7 +93,7 @@ public class EntryTooltipUtils {
     @Unmodifiable
     private static List<Component> getQualityTooltip(int quality) {
         if (quality != 0) {
-            return List.of(translatable("ali.description.quality", quality));
+            return List.of(translatable("ali.description.quality", value(quality)));
         }
 
         return List.of();
