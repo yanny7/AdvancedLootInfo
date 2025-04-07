@@ -87,6 +87,26 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.set_written_book_pages", "Set Written Book Pages:");
         TRANSLATION_MAP.put("ali.type.function.toggle_tooltips", "Toggle Tooltips:");
 
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_attribute_modifiers", "Attribute Modifiers:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_bundle", "Bundle:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_container", "Container:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_custom_data", "Custom Data:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_damage", "Damage:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_enchantments", "Enchantments:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_firework_explosion", "Firework Explosion:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_fireworks", "Fireworks:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_potions", "Potions:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_stored_enchantments", "Stored Enchantments:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_trim", "Trim:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_writable_book", "Writable Book:");
+        TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_written_book", "Written Book:");
+
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.fishing_hook", "Fishing Hook:");
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.lightning_bolt", "Lightning Bolt:");
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.player", "Player:");
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.raider", "Raider:");
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.slime", "Slime:");
+
         TRANSLATION_MAP.put("ali.enum.target.this", "This Entity");
         TRANSLATION_MAP.put("ali.enum.target.killer", "Killer Entity");
         TRANSLATION_MAP.put("ali.enum.target.direct_killer", "Directly Killed By");
@@ -124,6 +144,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.fluid_predicate", "Fluid Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.fluids", "Fluids:");
         TRANSLATION_MAP.put("ali.property.branch.head", "Head:");
+        TRANSLATION_MAP.put("ali.property.branch.item_predicates", "Item Predicates:");
         TRANSLATION_MAP.put("ali.property.branch.items", "Items:");
         TRANSLATION_MAP.put("ali.property.branch.legs", "Legs:");
         TRANSLATION_MAP.put("ali.property.branch.list_operation", "List Operation:");

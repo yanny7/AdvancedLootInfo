@@ -1,5 +1,7 @@
 package com.yanny.ali.api;
 
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -18,6 +20,8 @@ public interface IRegistry {
 
     <T extends LootItemCondition> void registerConditionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter);
     <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter);
     <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> clazz, BiFunction<IUtils, T, List<Item>> itemSupplier);
 
     interface IBoundsGetter {

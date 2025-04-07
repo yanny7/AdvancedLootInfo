@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -39,6 +41,8 @@ public class AliRegistry implements IRegistry, IUtils {
     private final Map<ResourceLocation, BiFunction<IUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
+    private final Map<Class<?>, TriFunction<IUtils, Integer, ItemSubPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
+    private final Map<Class<?>, TriFunction<IUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IUtils, LootPoolEntryContainer, List<Item>>> itemCollectorMap = new HashMap<>();
     private final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
     private final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
@@ -78,6 +82,18 @@ public class AliRegistry implements IRegistry, IUtils {
     public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
         functionTooltipMap.put(clazz, (u, i, f) -> getter.apply(u, i, (T) f));
+    }
+
+    @Override
+    public <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        itemSubPredicateTooltipMap.put(clazz, (u, i, f) -> getter.apply(u, i, (T) f));
+    }
+
+    @Override
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        entitySubPredicateTooltipMap.put(clazz, (u, i, f) -> getter.apply(u, i, (T) f));
     }
 
     @Override
@@ -168,6 +184,30 @@ public class AliRegistry implements IRegistry, IUtils {
             return entryTooltipGetter.apply(utils, pad, function);
         } else {
             LOGGER.warn("Function tooltip {} was not registered", function.getClass().getCanonicalName());
+            return List.of();
+        }
+    }
+
+    @Override
+    public <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, T predicate) {
+        TriFunction<IUtils, Integer, ItemSubPredicate, List<Component>> entryTooltipGetter = itemSubPredicateTooltipMap.get(predicate.getClass());
+
+        if (entryTooltipGetter != null) {
+            return entryTooltipGetter.apply(utils, pad, predicate);
+        } else {
+            LOGGER.warn("ItemSubPredicate tooltip {} was not registered", predicate.getClass().getCanonicalName());
+            return List.of();
+        }
+    }
+
+    @Override
+    public <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, T predicate) {
+        TriFunction<IUtils, Integer, EntitySubPredicate, List<Component>> entryTooltipGetter = entitySubPredicateTooltipMap.get(predicate.getClass());
+
+        if (entryTooltipGetter != null) {
+            return entryTooltipGetter.apply(utils, pad, predicate);
+        } else {
+            LOGGER.warn("EntitySubPredicate tooltip {} was not registered", predicate.getClass().getCanonicalName());
             return List.of();
         }
     }

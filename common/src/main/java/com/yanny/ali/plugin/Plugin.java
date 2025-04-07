@@ -2,6 +2,7 @@ package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.widget.*;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -78,6 +79,28 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(SetCustomDataFunction.class, FunctionTooltipUtils::getSetCustomDataTooltip);
         registry.registerFunctionTooltip(SetPotionFunction.class, FunctionTooltipUtils::getSetPotionTooltip);
         registry.registerFunctionTooltip(SetStewEffectFunction.class, FunctionTooltipUtils::getSetStewEffectTooltip);
+
+        registry.registerItemSubPredicateTooltip(ItemDamagePredicate.class, ItemSubPredicateTooltipUtils::getItemDamagePredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemEnchantmentsPredicate.Enchantments.class, ItemSubPredicateTooltipUtils::getItemEnchantmentsPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemEnchantmentsPredicate.StoredEnchantments.class, ItemSubPredicateTooltipUtils::getItemStoredEnchantmentsPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemPotionsPredicate.class, ItemSubPredicateTooltipUtils::getItemPotionsPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemCustomDataPredicate.class, ItemSubPredicateTooltipUtils::getItemCustomDataPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemContainerPredicate.class, ItemSubPredicateTooltipUtils::getItemContainerPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemBundlePredicate.class, ItemSubPredicateTooltipUtils::getItemBundlePredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemFireworkExplosionPredicate.class, ItemSubPredicateTooltipUtils::getItemFireworkExplosionPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemFireworksPredicate.class, ItemSubPredicateTooltipUtils::getItemFireworksPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemWritableBookPredicate.class, ItemSubPredicateTooltipUtils::getItemWritableBookPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemWrittenBookPredicate.class, ItemSubPredicateTooltipUtils::getItemWrittenBookPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemAttributeModifiersPredicate.class, ItemSubPredicateTooltipUtils::getItemAttributeModifiersPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemTrimPredicate.class, ItemSubPredicateTooltipUtils::getItemTrimPredicateTooltip);
+
+        registry.registerEntitySubPredicateTooltip(LightningBoltPredicate.class, EntitySubPredicateTooltipUtils::getLightningBoltPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(FishingHookPredicate.class, EntitySubPredicateTooltipUtils::getFishingHookPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(PlayerPredicate.class, EntitySubPredicateTooltipUtils::getPlayerPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(SlimePredicate.class, EntitySubPredicateTooltipUtils::getSlimePredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(RaiderPredicate.class, EntitySubPredicateTooltipUtils::getRaiderPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.EntityVariantPredicateType.Instance.class, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.EntityHolderVariantPredicateType.Instance.class, EntitySubPredicateTooltipUtils::getHolderVariantPredicateTooltip);
 
         registry.registerNumberProvider(getKey(NumberProviders.CONSTANT), Plugin::convertConstant);
         registry.registerNumberProvider(getKey(NumberProviders.UNIFORM), Plugin::convertUniform);

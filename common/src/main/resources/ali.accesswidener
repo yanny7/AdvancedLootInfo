@@ -19,6 +19,10 @@ accessible field net/minecraft/world/level/storage/loot/entries/NestedLootTable 
 accessible field net/minecraft/world/level/storage/loot/entries/TagEntry expand Z
 accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/TagKey;
 
+accessible field net/minecraft/advancements/critereon/ItemEnchantmentsPredicate enchantments Ljava/util/List;
+accessible field net/minecraft/advancements/critereon/EntitySubPredicates$EntityHolderVariantPredicateType$Instance variants Lnet/minecraft/core/HolderSet;
+accessible field net/minecraft/advancements/critereon/EntitySubPredicates$EntityVariantPredicateType$Instance variant Ljava/lang/Object;
+
 accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms Ljava/util/List;
 
 accessible field net/minecraft/core/component/DataComponentPredicate expectedComponents Ljava/util/List;
@@ -86,6 +90,8 @@ accessible class net/minecraft/advancements/critereon/PlayerPredicate$Advancemen
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$StatMatcher
 accessible class net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate
+accessible class net/minecraft/advancements/critereon/EntitySubPredicates$EntityVariantPredicateType$Instance
+accessible class net/minecraft/advancements/critereon/EntitySubPredicates$EntityHolderVariantPredicateType$Instance
 
 #########
 # TESTS #

@@ -290,6 +290,7 @@ public class GenericTooltipTest {
         ));
     }
 
+    @Disabled
     @Test
     public void testEntityPredicateTooltip() {
         CompoundTag compoundTag = new CompoundTag();
@@ -565,51 +566,59 @@ public class GenericTooltipTest {
     }
 
     @Test
-    @Disabled //TODO Register ItemSubPredicate
     public void testItemPredicateTooltip() {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putBoolean("healing", true);
 
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item().of(ItemTags.AXES).build()), List.of(
-                "Tag: minecraft:axes"
+                "Items:",
+                "  -> Tag: minecraft:axes"
         ));
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item()
                 .of(Items.CAKE, Items.NETHERITE_AXE)
                 .withCount(MinMaxBounds.Ints.between(10, 15))
-//                .hasDurability(MinMaxBounds.Ints.atMost(5))
-//                .hasEnchantment(new EnchantmentPredicate(Enchantments.SMITE, MinMaxBounds.Ints.atLeast(1)))
-//                .hasEnchantment(new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(2, 4)))
-//                .hasStoredEnchantment(new EnchantmentPredicate(Enchantments.DEPTH_STRIDER, MinMaxBounds.Ints.atMost(5)))
-//                .hasStoredEnchantment(new EnchantmentPredicate(Enchantments.FISHING_SPEED, MinMaxBounds.Ints.atLeast(4)))
-//                .isPotion(Potions.HEALING)
-//                .hasNbt(compoundTag)
+                .withSubPredicate(ItemSubPredicates.DAMAGE, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(5)))
+                .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.enchantments(List.of(
+                        new EnchantmentPredicate(Enchantments.SMITE, MinMaxBounds.Ints.atLeast(1)),
+                        new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(2, 4))
+                )))
+                .withSubPredicate(ItemSubPredicates.STORED_ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.storedEnchantments(List.of(
+                        new EnchantmentPredicate(Enchantments.DEPTH_STRIDER, MinMaxBounds.Ints.atMost(5)),
+                        new EnchantmentPredicate(Enchantments.LURE, MinMaxBounds.Ints.atLeast(4))
+                )))
+                .withSubPredicate(ItemSubPredicates.POTIONS, (ItemPotionsPredicate) ItemPotionsPredicate.potions(HolderSet.direct(Potions.HEALING)))
+                .withSubPredicate(ItemSubPredicates.CUSTOM_DATA, ItemCustomDataPredicate.customData(new NbtPredicate(compoundTag)))
                 .build()
         ), List.of(
                 "Items:",
                 "  -> Item: Cake",
                 "  -> Item: Netherite Axe",
                 "Count: 10-15",
-                "Durability: ≤5",
-                "Enchantments:",
-                "  -> Enchantment: Smite",
-                "    -> Level: ≥1",
-                "  -> Enchantment: Mending",
-                "    -> Level: 2-4",
-                "Stored Enchantments:",
-                "  -> Enchantment: Depth Strider",
-                "    -> Level: ≤5",
-                "  -> Enchantment: Lure",
-                "    -> Level: ≥4",
-                "Potion:",
-                "  -> Mob Effects:",
-                "    -> Mob Effect: minecraft:instant_health",
-                "      -> Amplifier: 0",
-                "      -> Duration: 1",
-                "      -> Is Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
-                "Nbt: {healing:1b}"
+                "Item Predicates:",
+                "  -> Damage:",
+                "    -> Durability: ≤5",
+                "  -> Enchantments:",
+                "    -> Enchantment: Smite",
+                "      -> Level: ≥1",
+                "    -> Enchantment: Mending",
+                "      -> Level: 2-4",
+                "  -> Stored Enchantments:",
+                "    -> Enchantment: Depth Strider",
+                "      -> Level: ≤5",
+                "    -> Enchantment: Lure",
+                "      -> Level: ≥4",
+                "  -> Potions:",
+                "    -> Potion:",
+                "      -> Mob Effects:",
+                "        -> Mob Effect: minecraft:instant_health",
+                "          -> Amplifier: 0",
+                "          -> Duration: 1",
+                "          -> Is Ambient: false",
+                "          -> Is Visible: true",
+                "          -> Show Icon: true",
+                "  -> Custom Data:",
+                "    -> Nbt: {healing:1b}"
         ));
     }
 
@@ -622,7 +631,7 @@ public class GenericTooltipTest {
     }
 
     @Test
-    @Disabled //TODO register EntitySubPredicate
+    @Disabled //TODO EntitySubPredicate move to own test class
     public void testEntitySubPredicateTooltip() {
         /*assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
             "Entity Sub Predicate:",

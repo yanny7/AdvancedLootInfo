@@ -2,6 +2,8 @@ package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -21,6 +23,8 @@ public interface IUtils {
 
     <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition);
     <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function);
+    <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, T predicate);
+    <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, T predicate);
     <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry);
 
     Rect getBounds(IUtils registry, List<LootPoolEntryContainer> entries, int x, int y);

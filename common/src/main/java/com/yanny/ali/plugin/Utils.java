@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -31,6 +33,16 @@ public abstract class Utils implements IWidgetUtils {
     @Override
     public <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function) {
         return PluginManager.CLIENT_REGISTRY.getFunctionTooltip(utils, pad, function);
+    }
+
+    @Override
+    public <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, T predicate) {
+        return PluginManager.CLIENT_REGISTRY.getItemSubPredicateTooltip(utils, pad, predicate);
+    }
+
+    @Override
+    public <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, T predicate) {
+        return PluginManager.CLIENT_REGISTRY.getEntitySubPredicateTooltip(utils, pad, predicate);
     }
 
     @Override
