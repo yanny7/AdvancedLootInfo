@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.platform.Services;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -14,9 +13,13 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
@@ -35,13 +38,13 @@ public class AliRegistry implements IRegistry, IUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final LootContext LOOT_CONTEXT = new LootContext(new LootParams(null, Map.of(), Map.of(), 0F), RandomSource.create(), null);
 
-    private final Map<Class<?>, IWidgetFactory> widgetMap = new HashMap<>();
-    private final Map<ResourceLocation, BiFunction<IUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
-    private final Map<Class<?>, TriFunction<IUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
-    private final Map<Class<?>, TriFunction<IUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IUtils, LootPoolEntryContainer, List<Item>>> itemCollectorMap = new HashMap<>();
-    private final Map<Class<?>, WidgetDirection> widgetDirectionMap = new HashMap<>();
-    private final Map<Class<?>, IBoundsGetter> widgetBoundsMap = new HashMap<>();
+    private final Map<LootPoolEntryType, IWidgetFactory> widgetMap = new HashMap<>();
+    private final Map<LootNumberProviderType, BiFunction<IUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
+    private final Map<LootItemConditionType, TriFunction<IUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
+    private final Map<LootItemFunctionType, TriFunction<IUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
+    private final Map<LootPoolEntryType, BiFunction<IUtils, LootPoolEntryContainer, List<Item>>> itemCollectorMap = new HashMap<>();
+    private final Map<LootPoolEntryType, WidgetDirection> widgetDirectionMap = new HashMap<>();
+    private final Map<LootPoolEntryType, IBoundsGetter> widgetBoundsMap = new HashMap<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
@@ -57,33 +60,33 @@ public class AliRegistry implements IRegistry, IUtils {
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> void registerWidget(Class<T> clazz, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter) {
-        widgetMap.put(clazz, factory);
-        widgetDirectionMap.put(clazz, direction);
-        widgetBoundsMap.put(clazz, boundsGetter);
+    public void registerWidget(LootPoolEntryType type, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter) {
+        widgetMap.put(type, factory);
+        widgetDirectionMap.put(type, direction);
+        widgetBoundsMap.put(type, boundsGetter);
     }
 
     @Override
-    public void registerNumberProvider(ResourceLocation key, BiFunction<IUtils, NumberProvider, RangeValue> converter) {
-        numberConverterMap.put(key, converter);
+    public void registerNumberProvider(LootNumberProviderType type, BiFunction<IUtils, NumberProvider, RangeValue> converter) {
+        numberConverterMap.put(type, converter);
     }
 
     @Override
-    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
+    public <T extends LootItemCondition> void registerConditionTooltip(LootItemConditionType type, TriFunction<IUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
-        conditionTooltipMap.put(clazz, (u, i, c) -> getter.apply(u, i, (T) c));
+        conditionTooltipMap.put(type, (u, i, c) -> getter.apply(u, i, (T) c));
     }
 
     @Override
-    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> clazz, TriFunction<IUtils, Integer, T, List<Component>> getter) {
+    public <T extends LootItemFunction> void registerFunctionTooltip(LootItemFunctionType type, TriFunction<IUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
-        functionTooltipMap.put(clazz, (u, i, f) -> getter.apply(u, i, (T) f));
+        functionTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> clazz, BiFunction<IUtils, T, List<Item>> itemSupplier) {
+    public <T extends LootPoolEntryContainer> void registerItemCollector(LootPoolEntryType type, BiFunction<IUtils, T, List<Item>> itemSupplier) {
         //noinspection unchecked
-        itemCollectorMap.put(clazz, (u, e) -> itemSupplier.apply(u, (T) e));
+        itemCollectorMap.put(type, (u, e) -> itemSupplier.apply(u, (T) e));
     }
 
     @Override
@@ -102,9 +105,9 @@ public class AliRegistry implements IRegistry, IUtils {
         }
 
         for (LootPoolEntryContainer entry : entries) {
-            WidgetDirection direction = widgetDirectionMap.get(entry.getClass());
-            IWidgetFactory widgetFactory = widgetMap.get(entry.getClass());
-            IBoundsGetter bounds = widgetBoundsMap.get(entry.getClass());
+            WidgetDirection direction = widgetDirectionMap.get(entry.getType());
+            IWidgetFactory widgetFactory = widgetMap.get(entry.getType());
+            IBoundsGetter bounds = widgetBoundsMap.get(entry.getType());
 
             if (direction != null && widgetFactory != null && bounds != null) {
                 if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
@@ -150,36 +153,36 @@ public class AliRegistry implements IRegistry, IUtils {
 
     @Override
     public <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition) {
-        TriFunction<IUtils, Integer, LootItemCondition, List<Component>> entryTooltipGetter = conditionTooltipMap.get(condition.getClass());
+        TriFunction<IUtils, Integer, LootItemCondition, List<Component>> entryTooltipGetter = conditionTooltipMap.get(condition.getType());
 
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, pad, condition);
         } else {
-            LOGGER.warn("Condition tooltip {} was not registered", condition.getClass().getCanonicalName());
+            LOGGER.warn("Condition tooltip for {} was not registered", condition.getClass().getCanonicalName());
             return List.of();
         }
     }
 
     @Override
     public <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function) {
-        TriFunction<IUtils, Integer, LootItemFunction, List<Component>> entryTooltipGetter = functionTooltipMap.get(function.getClass());
+        TriFunction<IUtils, Integer, LootItemFunction, List<Component>> entryTooltipGetter = functionTooltipMap.get(function.getType());
 
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, pad, function);
         } else {
-            LOGGER.warn("Function tooltip {} was not registered", function.getClass().getCanonicalName());
+            LOGGER.warn("Function tooltip for {} was not registered", function.getClass().getCanonicalName());
             return List.of();
         }
     }
 
     @Override
     public <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry) {
-        BiFunction<IUtils, LootPoolEntryContainer, List<Item>> itemSupplier = itemCollectorMap.get(entry.getClass());
+        BiFunction<IUtils, LootPoolEntryContainer, List<Item>> itemSupplier = itemCollectorMap.get(entry.getType());
 
         if (itemSupplier != null) {
             return itemSupplier.apply(utils, entry);
         } else {
-            LOGGER.warn("Item collector {} was not registered", entry.getClass().getCanonicalName());
+            LOGGER.warn("Item collector for {} was not registered", entry.getClass().getCanonicalName());
             return List.of();
         }
     }
@@ -191,9 +194,9 @@ public class AliRegistry implements IRegistry, IUtils {
         WidgetDirection lastDirection = null;
 
         for (LootPoolEntryContainer entry : entries) {
-            WidgetDirection direction = widgetDirectionMap.get(entry.getClass());
-            IWidgetFactory widgetFactory = widgetMap.get(entry.getClass());
-            IBoundsGetter bounds = widgetBoundsMap.get(entry.getClass());
+            WidgetDirection direction = widgetDirectionMap.get(entry.getType());
+            IWidgetFactory widgetFactory = widgetMap.get(entry.getType());
+            IBoundsGetter bounds = widgetBoundsMap.get(entry.getType());
 
             if (direction != null && widgetFactory != null && bounds != null) {
                 if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
@@ -238,7 +241,7 @@ public class AliRegistry implements IRegistry, IUtils {
     @Nullable
     @Override
     public WidgetDirection getWidgetDirection(LootPoolEntryContainer entry) {
-        return widgetDirectionMap.get(entry.getClass());
+        return widgetDirectionMap.get(entry.getType());
     }
 
     @Override
@@ -260,22 +263,17 @@ public class AliRegistry implements IRegistry, IUtils {
     @Override
     public RangeValue convertNumber(IUtils utils, @Nullable NumberProvider numberProvider) {
         if (numberProvider != null) {
-            ResourceLocation key = BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE.getKey(numberProvider.getType());
+            BiFunction<IUtils, NumberProvider, RangeValue> function = numberConverterMap.get(numberProvider.getType());
 
-            if (key != null) {
-                BiFunction<IUtils, NumberProvider, RangeValue> function = numberConverterMap.get(key);
-
-                if (function != null) {
-                    try {
-                        return function.apply(utils, numberProvider);
-                    } catch (Throwable throwable) {
-                        LOGGER.warn("Failed to convert number with error {}", throwable.getMessage());
-                    }
-                } else {
-                    LOGGER.warn("Number converter {} was not registered", key);
+            if (function != null) {
+                try {
+                    return function.apply(utils, numberProvider);
+                } catch (Throwable throwable) {
+                    LOGGER.warn("Failed to convert number with error {}", throwable.getMessage());
                 }
+            } else {
+                LOGGER.warn("Number converter for {} was not registered", numberProvider.getClass().getCanonicalName());
             }
-
         }
 
         return new RangeValue(false, true);
