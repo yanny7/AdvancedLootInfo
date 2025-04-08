@@ -1,5 +1,6 @@
 package com.yanny.ali.api;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.network.chat.Component;
@@ -22,9 +23,9 @@ public interface IRegistry {
     void registerNumberProvider(LootNumberProviderType type, BiFunction<IUtils, NumberProvider, RangeValue> converter);
 
     <T extends LootItemCondition> void registerConditionTooltip(LootItemConditionType type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends LootItemFunction> void registerFunctionTooltip(LootItemFunctionType type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(ItemSubPredicate type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(EntitySubPredicate type, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends LootItemFunction> void registerFunctionTooltip(LootItemFunctionType<T> type, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(ItemSubPredicate.Type<T> type, TriFunction<IUtils, Integer, T, List<Component>> getter);
+    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IUtils, Integer, T, List<Component>> getter);
     <T extends LootPoolEntryContainer> void registerItemCollector(LootPoolEntryType type, BiFunction<IUtils, T, List<Item>> itemSupplier);
 
     @FunctionalInterface

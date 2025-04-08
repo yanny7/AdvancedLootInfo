@@ -27,6 +27,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.armortrim.TrimMaterial;
+import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
@@ -258,7 +259,7 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad, entityPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad, entityPredicate.flags(), GenericTooltipUtils::getEntityFlagsPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad, entityPredicate.equipment(), GenericTooltipUtils::getEntityEquipmentPredicateTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, entityPredicate.subPredicate(), utils::getEntitySubPredicateTooltip));
+        components.addAll(getComponentsTooltip(utils, pad, "ali.property.branch.entity_sub_predicate", entityPredicate.subPredicate(), utils::getEntitySubPredicateTooltip));
         components.addAll(getComponentsTooltip(utils, pad, "ali.property.branch.vehicle", entityPredicate.vehicle(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getComponentsTooltip(utils, pad, "ali.property.value.passenger", entityPredicate.passenger(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getComponentsTooltip(utils, pad, "ali.property.branch.targeted_entity", entityPredicate.targetedEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
@@ -422,7 +423,11 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.items", itemPredicate.items(), GenericTooltipUtils::getItemTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad, "ali.property.value.count", itemPredicate.count()));
         components.addAll(getDataComponentPredicateTooltip(utils, pad, itemPredicate.components()));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.item_predicates", itemPredicate.subPredicates().values(), utils::getItemSubPredicateTooltip));
+
+        if (!itemPredicate.subPredicates().isEmpty()) {
+            components.add(pad(pad, translatable("ali.property.branch.item_predicates")));
+            itemPredicate.subPredicates().forEach((type, predicate) -> components.addAll(utils.getItemSubPredicateTooltip(utils, pad +1, type, predicate)));
+        }
 
         return components;
     }
@@ -581,12 +586,19 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.branch.contains", predicate.contains(),
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.contains", predicate.contains(),
                 (u, i, s, c) -> getCollectionTooltip(u, i, s, c.unpack(), subPredicate)));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.branch.counts", predicate.counts(),
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.counts", predicate.counts(),
                 (u, i, s, c) -> getCollectionTooltip(u, i, s, c.unpack(),
-                        (u1, i1, s1) -> getMinMaxBoundsTooltip(u1, i1, "ali.property.value.count", s1.count()))));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.size", predicate.size(), GenericTooltipUtils::getMinMaxBoundsTooltip));
+                        (u1, i1, s1) -> {
+                            List<Component> comps = new LinkedList<>();
+
+                            comps.addAll(subPredicate.apply(u1, i1, s1.test()));
+                            comps.addAll(getMinMaxBoundsTooltip(u1, i1, "ali.property.value.count", s1.count()));
+
+                            return comps;
+                        })));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.size", predicate.size(), GenericTooltipUtils::getMinMaxBoundsTooltip));
 
         return components;
     }
@@ -623,7 +635,7 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.name", predicate.name(), GenericTooltipUtils::getStringTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad, "ali.property.value.amount", predicate.amount()));
         components.addAll(getOptionalTooltip(utils, pad, predicate.operation(), GenericTooltipUtils::getOperationTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.branch.slots", predicate.slot(), GenericTooltipUtils::getEnumTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.slot", predicate.slot(), GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }
@@ -637,11 +649,17 @@ public class GenericTooltipUtils {
         components.addAll(getFloatTooltip(utils, pad, "ali.property.value.model_index", material.itemModelIndex()));
         components.addAll(getComponentTooltip(utils, pad, "ali.property.value.description", material.description()));
 
-        if (!material.overrideArmorMaterials().isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.branch.override_armor_materials")));
-            //todo check if I should print armor info
-            material.overrideArmorMaterials().forEach((holder, string) -> components.add(pad(pad + 1, keyValue(holder.value().toString(), string))));
-        }
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getTrimPatternTooltip(IUtils utils, int pad, TrimPattern material) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getResourceLocationTooltip(utils, pad, "ali.property.value.asset_id", material.assetId()));
+        components.addAll(getHolderTooltip(utils, pad, material.templateItem(), GenericTooltipUtils::getItemTooltip));
+        components.addAll(getComponentTooltip(utils, pad, "ali.property.value.description", material.description()));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.decal", material.decal()));
 
         return components;
     }

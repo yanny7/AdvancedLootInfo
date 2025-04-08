@@ -49,7 +49,6 @@ import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -290,7 +289,6 @@ public class GenericTooltipTest {
         ));
     }
 
-    @Disabled
     @Test
     public void testEntityPredicateTooltip() {
         CompoundTag compoundTag = new CompoundTag();
@@ -339,7 +337,10 @@ public class GenericTooltipTest {
                 "    -> Items:",
                 "      -> Item: Andesite",
                 "      -> Item: Diorite",
-                "Entity Sub Predicate: minecraft:cat",
+                "Entity Sub Predicate:",
+                "  -> Type: minecraft:cat",
+                "    -> Variants:",
+                "      -> Variant: minecraft:persian",
                 "Vehicle:",
                 "  -> Team: blue",
                 "Passenger:",
@@ -628,61 +629,6 @@ public class GenericTooltipTest {
                 "Enchantment: Feather Falling",
                 "  -> Level: ≤2"
         ));
-    }
-
-    @Test
-    @Disabled //TODO EntitySubPredicate move to own test class
-    public void testEntitySubPredicateTooltip() {
-        /*assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
-            "Entity Sub Predicate:",
-            "  -> Variant: minecraft:cold"
-        ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN)))), List.of(
-            "Entity Sub Predicate:",
-            "  -> Variant: minecraft:persian"
-        ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, new LightningBoltPredicate(MinMaxBounds.Ints.atLeast(2), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
-                "Entity Sub Predicate:",
-                "  -> Blocks On Fire: ≥2",
-                "  -> Stuck Entity:",
-                "    -> Team: blue"
-        ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, FishingHookPredicate.inOpenWater(true)), List.of(
-                "Entity Sub Predicate:",
-                "  -> Is In Open Water: true"
-        ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
-                .setLevel(MinMaxBounds.Ints.atLeast(3))
-                .setGameType(GameType.SURVIVAL)
-                .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(4))
-                .addRecipe(new ResourceLocation("recipe1"), true)
-                .addRecipe(new ResourceLocation("recipe2"), false)
-                .checkAdvancementDone(new ResourceLocation("first"), true)
-                .checkAdvancementDone(new ResourceLocation("second"), false)
-                .build()), List.of(
-                "Entity Sub Predicate:",
-                "  -> Level: ≥3",
-                "  -> Game Type: Survival",
-                "  -> Stats:",
-                "    -> Block: Cobblestone",
-                "      -> Times Mined: ≥4",
-                "  -> Recipes:",
-                "    -> minecraft:recipe1: true",
-                "    -> minecraft:recipe2: false",
-                "  -> Advancements:",
-                "    -> minecraft:first",
-                "      -> Done: true",
-                "    -> minecraft:second",
-                "      -> Done: false"
-        ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, SlimePredicate.sized(MinMaxBounds.Ints.atLeast(1))), List.of(
-                "Entity Sub Predicate:",
-                "  -> Size: ≥1"
-        ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(0, EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
-                "Entity Sub Predicate:",
-                "  -> Variant: minecraft:cold"
-        ));*/
     }
 
     @Test

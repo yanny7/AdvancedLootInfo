@@ -51,10 +51,9 @@ public class ItemSubPredicateTooltipUtils {
     public static List<Component> getItemContainerPredicateTooltip(IUtils utils, int pad, ItemContainerPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_container")));
-        components.addAll(getOptionalTooltip(utils, pad + 1, predicate.items(),
+        components.addAll(getOptionalTooltip(utils, pad, predicate.items(),
                 (u, i, p) ->
-                        getCollectionPredicateTooltip(u, i, "ali.property.branch.items", p, GenericTooltipUtils::getItemPredicateTooltip)));
+                        getCollectionPredicateTooltip(u, i, "ali.type.item_sub_predicate.item_container", p, GenericTooltipUtils::getItemPredicateTooltip)));
 
         return components;
     }
@@ -63,10 +62,9 @@ public class ItemSubPredicateTooltipUtils {
     public static List<Component> getItemBundlePredicateTooltip(IUtils utils, int pad, ItemBundlePredicate predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_bundle")));
-        components.addAll(getOptionalTooltip(utils, pad + 1, predicate.items(),
+        components.addAll(getOptionalTooltip(utils, pad, predicate.items(),
                 (u, i, p) ->
-                        getCollectionPredicateTooltip(u, i, "ali.property.branch.items", p, GenericTooltipUtils::getItemPredicateTooltip)));
+                        getCollectionPredicateTooltip(u, i, "ali.type.item_sub_predicate.item_bundle", p, GenericTooltipUtils::getItemPredicateTooltip)));
 
         return components;
     }
@@ -89,7 +87,7 @@ public class ItemSubPredicateTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad + 1, predicate.explosions(),
                 (u, i, p) ->
                         getCollectionPredicateTooltip(u, i, "ali.property.branch.explosions", p, GenericTooltipUtils::getFireworkPredicateTooltip)));
-        components.addAll(getMinMaxBoundsTooltip(utils, pad, "ali.property.value.flight_duration", predicate.flightDuration()));
+        components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.flight_duration", predicate.flightDuration()));
 
         return components;
     }
@@ -139,7 +137,8 @@ public class ItemSubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_trim")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.materials", predicate.material(), GenericTooltipUtils::getTrimMaterialTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.materials", predicate.material(), GenericTooltipUtils::getTrimMaterialTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.patterns", predicate.pattern(), GenericTooltipUtils::getTrimPatternTooltip));
 
         return components;
     }

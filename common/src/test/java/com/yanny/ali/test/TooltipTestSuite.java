@@ -50,6 +50,8 @@ import java.util.concurrent.ExecutionException;
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
         GenericTooltipTest.class,
+        EntitySubPredicateTooltipTest.class,
+        ItemSubPredicateTooltipTest.class
 })
 public class TooltipTestSuite {
     public static Utils UTILS;

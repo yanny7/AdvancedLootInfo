@@ -21,11 +21,11 @@ public interface IUtils {
     Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y,
                                                  List<LootItemFunction> functions, List<LootItemCondition> conditions);
 
-    <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition);
-    <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function);
-    <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, T predicate);
-    <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, T predicate);
-    <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry);
+    List<Component> getConditionTooltip(IUtils utils, int pad, LootItemCondition condition);
+    List<Component> getFunctionTooltip(IUtils utils, int pad, LootItemFunction function);
+    List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, ItemSubPredicate.Type<?> type, ItemSubPredicate predicate);
+    List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, EntitySubPredicate predicate);
+    List<Item> collectItems(IUtils utils, LootPoolEntryContainer entry);
 
     Rect getBounds(IUtils registry, List<LootPoolEntryContainer> entries, int x, int y);
 

@@ -4,6 +4,10 @@ import com.yanny.ali.api.IUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.animal.CatVariant;
+import net.minecraft.world.entity.animal.FrogVariant;
+import net.minecraft.world.entity.animal.WolfVariant;
+import net.minecraft.world.entity.decoration.PaintingVariant;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
@@ -55,7 +59,7 @@ public class EntitySubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.slime")));
-        components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.common.size", predicate.size()));
+        components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.size", predicate.size()));
 
         return components;
     }
@@ -65,18 +69,15 @@ public class EntitySubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.raider")));
-        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.common.has_raid", predicate.hasRaid()));
-        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.common.is_captain", predicate.isCaptain()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.has_raid", predicate.hasRaid()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_captain", predicate.isCaptain()));
 
         return components;
     }
 
     @NotNull
     public static <V> List<Component> getVariantPredicateTooltip(IUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.entity_sub_predicate.variant")));
-        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
+        List<Component> components = new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
 
         if (predicate.variant instanceof Enum<?> variant) {
             components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.variant", variant));
@@ -89,10 +90,20 @@ public class EntitySubPredicateTooltipUtils {
     public static <V> List<Component> getHolderVariantPredicateTooltip(IUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.type.entity_sub_predicate.variant")));
-        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
-        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", predicate.variants,
-                (u, i, v) -> List.of()));
+        components.addAll(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
+        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", predicate.variants, (u, i, v) -> {
+            if (v instanceof CatVariant catVariant) {
+                return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.getKey(catVariant)));
+            } else if (v instanceof PaintingVariant paintingVariant) {
+                return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.PAINTING_VARIANT.getKey(paintingVariant)));
+            } else if (v instanceof FrogVariant frogVariant) {
+                return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.getKey(frogVariant)));
+            } else if (v instanceof WolfVariant wolfVariant) {
+                //TODO wolf variant
+            }
+
+            return List.of();
+        }));
 
         return components;
     }

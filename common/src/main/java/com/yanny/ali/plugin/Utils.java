@@ -26,27 +26,27 @@ public abstract class Utils implements IWidgetUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition) {
+    public List<Component> getConditionTooltip(IUtils utils, int pad, LootItemCondition condition) {
         return PluginManager.CLIENT_REGISTRY.getConditionTooltip(utils, pad, condition);
     }
 
     @Override
-    public <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function) {
+    public List<Component> getFunctionTooltip(IUtils utils, int pad, LootItemFunction function) {
         return PluginManager.CLIENT_REGISTRY.getFunctionTooltip(utils, pad, function);
     }
 
     @Override
-    public <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, T predicate) {
-        return PluginManager.CLIENT_REGISTRY.getItemSubPredicateTooltip(utils, pad, predicate);
+    public List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, ItemSubPredicate.Type<?> type, ItemSubPredicate predicate) {
+        return PluginManager.CLIENT_REGISTRY.getItemSubPredicateTooltip(utils, pad, type, predicate);
     }
 
     @Override
-    public <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, T predicate) {
+    public List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, EntitySubPredicate predicate) {
         return PluginManager.CLIENT_REGISTRY.getEntitySubPredicateTooltip(utils, pad, predicate);
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry) {
+    public List<Item> collectItems(IUtils utils, LootPoolEntryContainer entry) {
         return PluginManager.CLIENT_REGISTRY.collectItems(utils, entry);
     }
 
