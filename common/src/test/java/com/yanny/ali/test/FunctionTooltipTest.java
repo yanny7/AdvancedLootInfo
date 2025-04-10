@@ -1,19 +1,27 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.FunctionTooltipUtils;
+import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.InstrumentTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
@@ -29,6 +37,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -219,7 +228,7 @@ public class FunctionTooltipTest {
     public void testSetContentsTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER).build()), List.of(
                 "Set Contents:",
-                "  -> Component: minecraft:container"
+                "  -> Type: minecraft:container"
         ));
     }
 
@@ -336,6 +345,7 @@ public class FunctionTooltipTest {
 
         compoundTag.putBoolean("antlers", true);
 
+        //noinspection deprecation
         assertTooltip(FunctionTooltipUtils.getSetCustomDataTooltip(UTILS, 0, (SetCustomDataFunction) SetCustomDataFunction.setCustomData(compoundTag).build()), List.of(
                 "Set Custom Data:",
                 "  -> Tag: {antlers:1b}"
@@ -379,6 +389,217 @@ public class FunctionTooltipTest {
                 "      -> Duration: 1-5",
                 "    -> Mob Effect: minecraft:unluck",
                 "      -> Duration: 3-4"
+        ));
+    }
+
+    @Test
+    public void testSetItemTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, 0, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))), List.of(
+                "Set Item:",
+                "  -> Item: Music Disc"
+        ));
+    }
+
+    @Test
+    public void testSetComponentsTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetComponentsTooltip(UTILS, 0, (SetComponentsFunction) SetComponentsFunction
+                .setComponent(DataComponents.DAMAGE, 5)
+                .build()
+        ), List.of(
+                "Set Components:",
+                "  -> Components:",
+                "    -> Type: minecraft:damage"
+        ));
+    }
+
+    @Test
+    public void testModifyContentsTooltip() {
+        assertTooltip(FunctionTooltipUtils.getModifyContentsTooltip(UTILS, 0, new ModifyContainerContents(
+                List.of(),
+                ContainerComponentManipulators.CONTAINER,
+                ApplyExplosionDecay.explosionDecay().build()
+        )), List.of(
+                "Modify Contents:",
+                "  -> Type: minecraft:container",
+                "  -> Modifier:",
+                "    -> Explosion Decay"
+        ));
+    }
+
+    @Test
+    public void testFilteredTooltip() {
+        assertTooltip(FunctionTooltipUtils.getFilteredTooltip(UTILS, 0, new FilteredFunction(
+                List.of(),
+                ItemPredicate.Builder.item().of(ItemTags.COALS).build(),
+                ApplyExplosionDecay.explosionDecay().build()
+        )), List.of(
+                "Filtered:",
+                "  -> Filter:",
+                "    -> Items:",
+                "      -> Tag: minecraft:coals",
+                "  -> Modifier:",
+                "    -> Explosion Decay"
+        ));
+    }
+
+    @Test
+    public void testCopyComponentsTooltip() {
+        assertTooltip(FunctionTooltipUtils.getCopyComponentsTooltip(UTILS, 0, (CopyComponentsFunction) CopyComponentsFunction
+                .copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                .include(DataComponents.DAMAGE)
+                .include(DataComponents.FOOD)
+                .exclude(DataComponents.BEES)
+                .exclude(DataComponents.DYED_COLOR)
+                .build()
+        ), List.of(
+                "Copy Components:",
+                "  -> Source: BLOCK_ENTITY",
+                "  -> Include:",
+                "    -> Type: minecraft:damage",
+                "    -> Type: minecraft:food",
+                "  -> Exclude:",
+                "    -> Type: minecraft:bees",
+                "    -> Type: minecraft:dyed_color"
+        ));
+    }
+
+    @Test
+    public void testSetFireworks() {
+        assertTooltip(FunctionTooltipUtils.getSetFireworksTooltip(UTILS, 0, new SetFireworksFunction(
+                List.of(),
+                Optional.of(new ListOperation.StandAlone<>(
+                        List.of(
+                                FireworkExplosion.DEFAULT,
+                                new FireworkExplosion(FireworkExplosion.Shape.STAR, IntList.of(1), IntList.of(2), true, false)
+                        ),
+                        new ListOperation.Insert(0)
+                )),
+                Optional.of(10)
+        )), List.of(
+                "Set Fireworks:",
+                "  -> Explosions:",
+                "    -> Explosion:",
+                "      -> Shape: SMALL_BALL",
+                "      -> Colors: []",
+                "      -> Fade Colors: []",
+                "      -> Has Trail: false",
+                "      -> Has Twinkle: false",
+                "    -> Explosion:",
+                "      -> Shape: STAR",
+                "      -> Colors: [1]",
+                "      -> Fade Colors: [2]",
+                "      -> Has Trail: true",
+                "      -> Has Twinkle: false",
+                "  -> Flight Duration: 10"
+        ));
+    }
+
+    @Test
+    public void testSetFireworkExplosionTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetFireworkExplosionTooltip(UTILS, 0, new SetFireworkExplosionFunction(
+                List.of(),
+                Optional.of(FireworkExplosion.Shape.CREEPER),
+                Optional.of(IntList.of(1, 2)),
+                Optional.of(IntList.of(3, 4)),
+                Optional.of(false),
+                Optional.of(true)
+        )), List.of(
+                "Set Firework Explosion:",
+                "  -> Shape: CREEPER",
+                "  -> Colors: [1, 2]",
+                "  -> Fade Colors: [3, 4]",
+                "  -> Trail: false",
+                "  -> Twinkle: true"
+        ));
+    }
+
+    @Test
+    public void testSetBookCoverTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetBookCoverTooltip(UTILS, 0, new SetBookCoverFunction(
+                List.of(),
+                Optional.of(new Filterable<>("Hello", Optional.of("World"))),
+                Optional.of("Yanny"),
+                Optional.of(3)
+        )), List.of(
+                "Set Book Cover:",
+                "  -> Author: Yanny",
+                "  -> Title:",
+                "    -> Raw: Hello",
+                "    -> Filtered: World",
+                "  -> Generation: 3"
+        ));
+    }
+
+    @Test
+    public void testSetWrittenBookPagesTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetWrittenBookPagesTooltip(UTILS, 0, new SetWrittenBookPagesFunction(
+                List.of(),
+                List.of(new Filterable<>(Component.literal("Hello"), Optional.of(Component.literal("World")))),
+                new ListOperation.Insert(0)
+        )), List.of(
+                "Set Written Book Pages:",
+                "  -> Pages:",
+                "    -> Page:",
+                "      -> Raw: Hello",
+                "      -> Filtered: World",
+                "  -> List Operation: INSERT",
+                "    -> Offset: 0"
+        ));
+    }
+
+    @Test
+    public void testSetWritableBookPagesTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetWritableBookPagesTooltip(UTILS, 0, new SetWritableBookPagesFunction(
+                List.of(),
+                List.of(new Filterable<>("Hello", Optional.of("World")), new Filterable<>("Keep", Optional.of("Calm"))),
+                new ListOperation.ReplaceSection(1, Optional.of(4))
+        )), List.of(
+                "Set Writable Book Pages:",
+                "  -> Pages:",
+                "    -> Page:",
+                "      -> Raw: Hello",
+                "      -> Filtered: World",
+                "    -> Page:",
+                "      -> Raw: Keep",
+                "      -> Filtered: Calm",
+                "  -> List Operation: REPLACE_SECTION",
+                "    -> Offset: 1",
+                "    -> Size: 4"
+        ));
+    }
+
+    @Test
+    public void testToggleTooltipsTooltip() {
+        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(
+                List.of(),
+                Map.of(new ToggleTooltips.ComponentToggle<>(DataComponents.BASE_COLOR, (dyeColor, b) -> DyeColor.BLACK), true)
+        )), List.of(
+                "Toggle Tooltips:",
+                "  -> Values:",
+                "    -> Type: minecraft:base_color",
+                "      -> Value: true"
+        ));
+    }
+
+    @Test
+    public void testSetOminousBottleAmplifierTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetOminousBottleAmplifierTooltip(UTILS, 0, new SetOminousBottleAmplifierFunction(
+                List.of(),
+                UniformGenerator.between(0.5F, 4.99F)
+        )), List.of(
+                "Set Ominous Bottle Amplifier:",
+                "  -> Amplifier: 0.50-4.99"
+        ));
+    }
+
+    @Test
+    public void testSetCustomModelDataTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetCustomModelDataTooltip(UTILS, 0, new SetCustomModelDataFunction(
+                List.of(),
+                ConstantValue.exactly(3.14F)
+        )), List.of(
+                "Set Custom Model Data:",
+                "  -> Value: 3.14"
         ));
     }
 }

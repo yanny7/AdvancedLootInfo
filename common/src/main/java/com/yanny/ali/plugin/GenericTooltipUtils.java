@@ -3,6 +3,7 @@ package com.yanny.ali.plugin;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.RangeValue;
+import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
@@ -10,13 +11,16 @@ import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -28,6 +32,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimPattern;
+import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
@@ -545,7 +550,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getContainerComponentManipulatorTooltip(IUtils utils, int pad, ContainerComponentManipulator<?> component) {
-        return getStringTooltip(utils, pad, "ali.property.value.component", component.type().toString());
+        return getDataComponentTypeTooltip(utils, pad, component.type());
     }
 
     @NotNull
@@ -660,6 +665,56 @@ public class GenericTooltipUtils {
         components.addAll(getHolderTooltip(utils, pad, material.templateItem(), GenericTooltipUtils::getItemTooltip));
         components.addAll(getComponentTooltip(utils, pad, "ali.property.value.description", material.description()));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.decal", material.decal()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getDataComponentPatchTooltip(IUtils utils, int pad, DataComponentPatch data) {
+        List<Component> components = new LinkedList<>();
+
+        if (!data.map.isEmpty()) {
+            components.add(pad(pad, translatable("ali.property.branch.components")));
+            data.map.forEach((type, value) -> components.addAll(getDataComponentTypeTooltip(utils, pad + 1, type)));
+        }
+
+        return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getDataComponentTypeTooltip(IUtils utils, int pad, DataComponentType<?> data) {
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(data)));
+    }
+
+    @NotNull
+    public static List<Component> getFireworkExplosionTooltip(IUtils utils, int pad, FireworkExplosion data) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.property.branch.explosion")));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.shape", data.shape()));
+        components.addAll(getIntListTooltip(utils, pad + 1, "ali.property.value.colors", data.colors()));
+        components.addAll(getIntListTooltip(utils, pad + 1, "ali.property.value.fade_colors", data.fadeColors()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.has_trail", data.hasTrail()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.has_twinkle", data.hasTwinkle()));
+
+        return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getIntListTooltip(IUtils utils, int pad, String key, IntList data) {
+        return getStringTooltip(utils, pad, key, data.toString());
+    }
+
+    @NotNull
+    public static <T> List<Component> getFilterableTooltip(IUtils utils, int pad, String key, Filterable<T> data,
+                                                           QuadFunction<IUtils, Integer, String, T, List<Component>> mapper) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable(key)));
+        components.addAll(mapper.apply(utils, pad + 1, "ali.property.value.raw", data.raw()));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.filtered", data.filtered(), mapper));
 
         return components;
     }
@@ -910,6 +965,20 @@ public class GenericTooltipUtils {
             components.add(pad(pad, translatable(key)));
             values.forEach((value) -> components.addAll(mapper.apply(utils, pad + 1, value)));
         }
+
+        return components;
+    }
+
+    @NotNull
+    public static <T, P extends Collection<T>> List<Component> getCollectionTooltip(IUtils utils, int pad, String key, Optional<P> values, TriFunction<IUtils, Integer, T, List<Component>> mapper) {
+        List<Component> components = new LinkedList<>();
+
+        values.ifPresent((v) -> {
+            if (!v.isEmpty()) {
+                components.add(pad(pad, translatable(key)));
+                v.forEach((value) -> components.addAll(mapper.apply(utils, pad + 1, value)));
+            }
+        });
 
         return components;
     }

@@ -28,6 +28,7 @@ accessible field net/minecraft/advancements/critereon/EntitySubPredicates$Entity
 accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms Ljava/util/List;
 
 accessible field net/minecraft/core/component/DataComponentPredicate expectedComponents Ljava/util/List;
+accessible field net/minecraft/core/component/DataComponentPatch map Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
 
 accessible field net/minecraft/world/level/storage/loot/functions/LootItemConditionalFunction predicates Ljava/util/List;
 accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction modifiers Ljava/util/List;
@@ -75,8 +76,44 @@ accessible field net/minecraft/world/level/storage/loot/functions/FunctionRefere
 accessible field net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction operations Ljava/util/List;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction source Lnet/minecraft/world/level/storage/loot/providers/nbt/NbtProvider;
 accessible field net/minecraft/world/level/storage/loot/functions/SequenceFunction functions Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetItemFunction item Lnet/minecraft/core/Holder;
+accessible field net/minecraft/world/level/storage/loot/functions/SetComponentsFunction components Lnet/minecraft/core/component/DataComponentPatch;
+accessible field net/minecraft/world/level/storage/loot/functions/ModifyContainerContents component Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;
+accessible field net/minecraft/world/level/storage/loot/functions/ModifyContainerContents modifier Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
+accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction filter Lnet/minecraft/advancements/critereon/ItemPredicate;
+accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction modifier Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction source Lnet/minecraft/world/level/storage/loot/functions/CopyComponentsFunction$Source;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction include Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction exclude Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworksFunction explosions Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworksFunction flightDuration Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworkExplosionFunction colors Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworkExplosionFunction fadeColors Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworkExplosionFunction shape Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworkExplosionFunction trail Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetFireworkExplosionFunction twinkle Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetBookCoverFunction author Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetBookCoverFunction generation Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetBookCoverFunction title Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/SetWrittenBookPagesFunction pageOperation Lnet/minecraft/world/level/storage/loot/functions/ListOperation;
+accessible field net/minecraft/world/level/storage/loot/functions/SetWrittenBookPagesFunction pages Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetWritableBookPagesFunction pageOperation Lnet/minecraft/world/level/storage/loot/functions/ListOperation;
+accessible field net/minecraft/world/level/storage/loot/functions/SetWritableBookPagesFunction pages Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/ToggleTooltips values Ljava/util/Map;
+accessible field net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction amplifierGenerator Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
+accessible field net/minecraft/world/level/storage/loot/functions/SetCustomModelDataFunction valueProvider Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/HolderGetter$Provider;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetItemFunction <init> (Ljava/util/List;Lnet/minecraft/core/Holder;)V
+accessible method net/minecraft/world/level/storage/loot/functions/ModifyContainerContents <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
+accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/critereon/ItemPredicate;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetFireworksFunction <init> (Ljava/util/List;Ljava/util/Optional;Ljava/util/Optional;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetWrittenBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetWritableBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
+accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips <init> (Ljava/util/List;Ljava/util/Map;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetCustomModelDataFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
+accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle <init> (Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/level/storage/loot/functions/ToggleTooltips$TooltipWither;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType
@@ -84,6 +121,8 @@ accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible class net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction$CopyOperation
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
+accessible class net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle
+accessible class net/minecraft/world/level/storage/loot/functions/ToggleTooltips$TooltipWither
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher
@@ -94,6 +133,7 @@ accessible class net/minecraft/advancements/critereon/PlayerPredicate$StatMatche
 accessible class net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate
 accessible class net/minecraft/advancements/critereon/EntitySubPredicates$EntityVariantPredicateType$Instance
 accessible class net/minecraft/advancements/critereon/EntitySubPredicates$EntityHolderVariantPredicateType$Instance
+
 
 #########
 # TESTS #

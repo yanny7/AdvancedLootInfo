@@ -80,6 +80,19 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(LootItemFunctions.SET_CUSTOM_DATA, FunctionTooltipUtils::getSetCustomDataTooltip);
         registry.registerFunctionTooltip(LootItemFunctions.SET_POTION, FunctionTooltipUtils::getSetPotionTooltip);
         registry.registerFunctionTooltip(LootItemFunctions.SET_STEW_EFFECT, FunctionTooltipUtils::getSetStewEffectTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_ITEM, FunctionTooltipUtils::getSetItemTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_COMPONENTS, FunctionTooltipUtils::getSetComponentsTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.MODIFY_CONTENTS, FunctionTooltipUtils::getModifyContentsTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.FILTERED, FunctionTooltipUtils::getFilteredTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.COPY_COMPONENTS, FunctionTooltipUtils::getCopyComponentsTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_FIREWORKS, FunctionTooltipUtils::getSetFireworksTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_FIREWORK_EXPLOSION, FunctionTooltipUtils::getSetFireworkExplosionTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_BOOK_COVER, FunctionTooltipUtils::getSetBookCoverTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_WRITTEN_BOOK_PAGES, FunctionTooltipUtils::getSetWrittenBookPagesTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_WRITABLE_BOOK_PAGES, FunctionTooltipUtils::getSetWritableBookPagesTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.TOGGLE_TOOLTIPS, FunctionTooltipUtils::getToggleTooltipsTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_OMINOUS_BOTTLE_AMPLIFIER, FunctionTooltipUtils::getSetOminousBottleAmplifierTooltip);
+        registry.registerFunctionTooltip(LootItemFunctions.SET_CUSTOM_MODEL_DATA, FunctionTooltipUtils::getSetCustomModelDataTooltip);
 
         registry.registerItemSubPredicateTooltip(ItemSubPredicates.DAMAGE, ItemSubPredicateTooltipUtils::getItemDamagePredicateTooltip);
         registry.registerItemSubPredicateTooltip(ItemSubPredicates.ENCHANTMENTS, ItemSubPredicateTooltipUtils::getItemEnchantmentsPredicateTooltip);
