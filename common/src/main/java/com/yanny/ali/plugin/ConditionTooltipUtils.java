@@ -59,7 +59,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
-        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", cond.entityTarget));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", cond.entityTarget));
         components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.predicate", getEntityPredicateTooltip(utils, pad + 2, cond.predicate)));
 
         return components;
@@ -70,7 +70,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.entity_scores")));
-        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", cond.entityTarget));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", cond.entityTarget));
 
         if (!cond.scores.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.scores")));
@@ -94,7 +94,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getKilledByPlayerTooltip(IUtils utils, int pad, LootItemKilledByPlayerCondition cond) {
+    public static List<Component> getKilledByPlayerTooltip(IUtils ignoredUtils, int pad, LootItemKilledByPlayerCondition ignoredCond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.killed_by_player")));
@@ -146,7 +146,7 @@ public class ConditionTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getSurvivesExplosionTooltip(IUtils utils, int pad, ExplosionCondition cond) {
+    public static List<Component> getSurvivesExplosionTooltip(IUtils ignoredUtils, int pad, ExplosionCondition ignoredCond) {
         return List.of(pad(pad, translatable("ali.type.condition.survives_explosion")));
     }
 
@@ -177,7 +177,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.value_check")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.provider", utils.convertNumber(utils, cond.provider)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.provider", cond.provider));
         components.addAll(getIntRangeTooltip(utils, pad + 1, "ali.property.value.range", cond.range));
 
         return components;

@@ -30,7 +30,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_name")));
-        components.addAll(getNameSourceTooltip(utils, pad + 1, fun.source));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.source", fun.source));
 
         return components;
     }
@@ -74,7 +74,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_with_levels")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.levels", utils.convertNumber(utils, fun.levels)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.levels", fun.levels));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.treasure", fun.treasure));
 
         return components;
@@ -96,7 +96,7 @@ public class FunctionTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getExplosionDecayTooltip(IUtils utils, int pad, ApplyExplosionDecay fun) {
+    public static List<Component> getExplosionDecayTooltip(IUtils ignoredUtils, int pad, ApplyExplosionDecay ignoredFun) {
         return List.of(pad(pad, translatable("ali.type.function.explosion_decay")));
     }
 
@@ -105,14 +105,14 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.fill_player_head")));
-        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", fun.entityTarget));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", fun.entityTarget));
 
         return components;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getFurnaceSmeltTooltip(IUtils utils, int pad, SmeltItemFunction fun) {
+    public static List<Component> getFurnaceSmeltTooltip(IUtils ignoredUtils, int pad, SmeltItemFunction ignoredFun) {
         return List.of(pad(pad, translatable("ali.type.function.furnace_smelt")));
     }
 
@@ -131,7 +131,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.looting_enchant")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.value", utils.convertNumber(utils, fun.value)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.value));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
 
         return components;
@@ -184,7 +184,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_count")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.count", utils.convertNumber(utils, fun.value)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.count", fun.value));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
@@ -195,7 +195,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_damage")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.damage", utils.convertNumber(utils, fun.damage)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.damage", fun.damage));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
@@ -211,7 +211,7 @@ public class FunctionTooltipUtils {
             components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
             fun.enchantments.forEach((enchantment, value) -> {
                 components.addAll(getEnchantmentTooltip(utils, pad + 2, enchantment));
-                components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.levels", utils.convertNumber(utils, value)));
+                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
             });
         }
 
@@ -248,10 +248,10 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.replace", fun.replace));
-        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore.stream().map((c) -> (Component)pad(pad + 2, c)).toList()));
+        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore.stream().map((c) -> pad(pad + 2, c)).toList()));
 
         if (fun.resolutionContext != null) {
-            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", "target", fun.resolutionContext));
+            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext));
         }
 
         return components;
@@ -265,7 +265,7 @@ public class FunctionTooltipUtils {
         components.addAll(getComponentTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
 
         if (fun.resolutionContext != null) {
-            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", "target", fun.resolutionContext));
+            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext));
         }
 
         return components;
@@ -301,7 +301,7 @@ public class FunctionTooltipUtils {
             components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
             fun.effectDurationMap.forEach((effect, duration) -> {
                 components.addAll(getMobEffectTooltip(utils, pad + 2, effect));
-                components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.duration", utils.convertNumber(utils, duration)));
+                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", duration));
             });
         }
 

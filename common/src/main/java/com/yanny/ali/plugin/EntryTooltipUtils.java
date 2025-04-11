@@ -53,7 +53,7 @@ public class EntryTooltipUtils {
 
         components.add(pad(pad, translatable("ali.enum.group_type.dynamic")));
         components.addAll(getQualityTooltip(entry.quality));
-        components.addAll(getChanceTooltip(new RangeValue((float) sumWeight / entry.weight * 100)));
+        components.addAll(getChanceTooltip(new RangeValue((float) entry.weight / sumWeight * 100)));
 
         return components;
     }
@@ -73,6 +73,7 @@ public class EntryTooltipUtils {
         return new LinkedList<>(getTooltip(utils, entry, chance, bonusChance, new RangeValue(), null, allFunctions, allConditions));
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getGroupTooltip(int pad) {
         return List.of(pad(pad, translatable("ali.enum.group_type.all")));
@@ -82,20 +83,6 @@ public class EntryTooltipUtils {
     @NotNull
     public static List<Component> getSequentialTooltip(int pad) {
         return List.of(pad(pad, translatable("ali.enum.group_type.sequence")));
-    }
-
-    /*
-     * PRIVATE
-     */
-
-    @NotNull
-    @Unmodifiable
-    private static List<Component> getQualityTooltip(int quality) {
-        if (quality != 0) {
-            return List.of(translatable("ali.description.quality", value(quality)));
-        }
-
-        return List.of();
     }
 
     @NotNull
@@ -124,6 +111,20 @@ public class EntryTooltipUtils {
         }
 
         return components;
+    }
+
+    /*
+     * PRIVATE
+     */
+
+    @NotNull
+    @Unmodifiable
+    private static List<Component> getQualityTooltip(int quality) {
+        if (quality != 0) {
+            return List.of(translatable("ali.description.quality", value(quality)));
+        }
+
+        return List.of();
     }
 
     @Unmodifiable

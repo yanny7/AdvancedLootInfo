@@ -17,9 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.alchemy.Potion;
@@ -33,6 +31,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,19 +78,13 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getNameSourceTooltip(IUtils utils, int pad, CopyNameFunction.NameSource source) {
-        return getEnumTooltip(utils, pad, "ali.property.value.name_source", "name_source", source);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBlockTooltip(IUtils utils, int pad, Block block) {
+    public static List<Component> getBlockTooltip(IUtils ignoredUtils, int pad, Block block) {
         return List.of(pad(pad, translatable("ali.property.value.block", value(translatable(block.getDescriptionId())))));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getPropertyTooltip(IUtils utils, int pad, Property<?> property) {
+    public static List<Component> getPropertyTooltip(IUtils ignoredUtils, int pad, Property<?> property) {
         return List.of(pad(pad, value(pair(property.getName(), property.getPossibleValues().toString()))));
     }
 
@@ -108,8 +101,8 @@ public class GenericTooltipUtils {
         components.add(pad(pad, translatable("ali.property.branch.modifier")));
         components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.name", modifier.name));
         components.addAll(getAttributeTooltip(utils, pad + 1, modifier.attribute));
-        components.addAll(getOperationTooltip(utils, pad + 1, modifier.operation));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.amount", utils.convertNumber(utils, modifier.amount)));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.operation", modifier.operation));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.amount", modifier.amount));
         components.addAll(getOptionalTooltip(utils, pad + 1, modifier.id, GenericTooltipUtils::getUUIDTooltip));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.equipment_slots", Arrays.asList(modifier.slots), GenericTooltipUtils::getEnumTooltip));
 
@@ -118,14 +111,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getAttributeTooltip(IUtils utils, int pad, Attribute attribute) {
+    public static List<Component> getAttributeTooltip(IUtils ignoredUtils, int pad, Attribute attribute) {
         return List.of(pad(pad, translatable("ali.property.value.attribute", value(translatable(attribute.getDescriptionId())))));
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getOperationTooltip(IUtils utils, int pad, AttributeModifier.Operation operation) {
-        return List.of(pad(pad, translatable("ali.property.value.operation", value(operation.name()))));
     }
 
     @Unmodifiable
@@ -152,43 +139,24 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getBannerPatternTooltip(IUtils utils, int pad, BannerPattern bannerPattern) {
-        return List.of(pad(pad, translatable("ali.property.value.banner_pattern", value(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.getKey(bannerPattern))))));
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.banner_pattern", Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.getKey(bannerPattern)));
     }
 
     @Unmodifiable
     @NotNull
     public static List<Component> getBlockEntityTypeTooltip(IUtils utils, int pad, BlockEntityType<?> blockEntityType) {
-        return List.of(pad(pad, translatable("ali.property.value.block_entity_type", value(Objects.requireNonNull(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityType))))));
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.block_entity_type", Objects.requireNonNull(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityType)));
     }
 
     @NotNull
     public static List<Component> getPotionTooltip(IUtils utils, int pad, Potion potion) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.property.branch.potion")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.mob_effects", potion.getEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
-
-        return components;
-    }
-
-    @NotNull
-    public static List<Component> getMobEffectInstanceTooltip(IUtils utils, int pad, MobEffectInstance effectInstance) {
-        List<Component> components = new LinkedList<>();
-
-        components.addAll(getMobEffectTooltip(utils, pad, effectInstance.getEffect()));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.amplifier", effectInstance.getAmplifier()));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.duration", effectInstance.getDuration()));
-        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_ambient", effectInstance.isAmbient()));
-        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_visible", effectInstance.isVisible()));
-        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.show_icon", effectInstance.showIcon()));
-
-        return components;
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.potion", BuiltInRegistries.POTION.getKey(potion));
     }
 
     @Unmodifiable
     @NotNull
     public static List<Component> getMobEffectTooltip(IUtils utils, int pad, MobEffect mobEffect) {
-        return List.of(pad(pad, translatable("ali.property.value.mob_effect", value(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect))))));
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.mob_effect", Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect)));
     }
 
     @NotNull
@@ -206,7 +174,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getPropertyMatcherTooltip(IUtils utils, int pad, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
+    public static List<Component> getPropertyMatcherTooltip(IUtils ignoredUtils, int pad, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
         List<Component> components = new LinkedList<>();
 
         if (propertyMatcher instanceof StatePropertiesPredicate.ExactPropertyMatcher matcher) {
@@ -363,7 +331,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getNbtPredicateTooltip(IUtils utils, int pad, NbtPredicate nbtPredicate) {
+    public static List<Component> getNbtPredicateTooltip(IUtils ignoredUtils, int pad, NbtPredicate nbtPredicate) {
         List<Component> components = new LinkedList<>();
 
         if (nbtPredicate != NbtPredicate.ANY) {
@@ -389,13 +357,10 @@ public class GenericTooltipUtils {
         return components;
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getFluidTooltip(IUtils utils, int pad, Fluid fluid) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.property.value.fluid", value(translatable(BuiltInRegistries.FLUID.getKey(fluid).toString())))));
-
-        return components;
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID.getKey(fluid));
     }
 
     @NotNull
@@ -554,7 +519,7 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getItemTooltip(IUtils utils, int pad, Item item) {
+    public static List<Component> getItemTooltip(IUtils ignoredUtils, int pad, Item item) {
         return List.of(pad(pad, translatable("ali.property.value.item", value(translatable(item.getDescriptionId())))));
     }
 
@@ -589,7 +554,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getRecipesTooltip(IUtils utils, int pad, Object2BooleanMap<ResourceLocation> recipes) {
+    public static List<Component> getRecipesTooltip(IUtils ignoredUtils, int pad, Object2BooleanMap<ResourceLocation> recipes) {
         List<Component> components = new LinkedList<>();
 
         if (!recipes.isEmpty()) {
@@ -601,7 +566,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getAdvancementsTooltip(IUtils utils, int pad, Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> predicateMap) {
+    public static List<Component> getAdvancementsTooltip(IUtils ignoredUtils, int pad, Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> predicateMap) {
         List<Component> components = new LinkedList<>();
 
         if (!predicateMap.isEmpty()) {
@@ -646,11 +611,6 @@ public class GenericTooltipUtils {
     // HELPERS
 
     @NotNull
-    public static Component translatableType(String prefix, Enum<?> type, Object... args) {
-        return translatable(prefix + "." + type.name().toLowerCase(), args);
-    }
-
-    @NotNull
     public static Component translatable(String key, Object... args) {
         return Component.translatable(key, Arrays.stream(args).map(GenericTooltipUtils::convertObject).toArray()).withStyle(TEXT_STYLE);
     }
@@ -686,8 +646,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getRangeValueTooltip(IUtils utils, int pad, String key, RangeValue value) {
-        return List.of(pad(pad, translatable(key, value(value))));
+    public static List<Component> getNumberProviderTooltip(IUtils utils, int pad, String key, NumberProvider value) {
+        return List.of(pad(pad, translatable(key, value(utils.convertNumber(utils, value)))));
     }
 
     @NotNull
@@ -703,13 +663,13 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getIntegerTooltip(IUtils utils, int pad, String key, int value) {
+    public static List<Component> getIntegerTooltip(IUtils ignoredUtils, int pad, String key, int value) {
         return List.of(pad(pad, translatable(key, value(value))));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getLongTooltip(IUtils utils, int pad, String key, Long value) {
+    public static List<Component> getLongTooltip(IUtils ignoredUtils, int pad, String key, Long value) {
         return List.of(pad(pad, translatable(key, value(value))));
     }
 
@@ -721,19 +681,13 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getFloatTooltip(IUtils utils, int pad, String key, Float value) {
+    public static List<Component> getFloatTooltip(IUtils ignoredUtils, int pad, String key, Float value) {
         return List.of(pad(pad, translatable(key, value(value))));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getEnumTooltip(IUtils utils, int pad, String key, String enumName, Enum<?> value) {
-        return List.of(pad(pad, translatable(key, value(translatableType("ali.enum." + enumName, value)))));
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getEnumTooltip(IUtils utils, int pad, String key, Enum<?> value) {
+    public static List<Component> getEnumTooltip(IUtils ignoredUtils, int pad, String key, Enum<?> value) {
         return List.of(pad(pad, translatable(key, value(value.name()))));
     }
 
@@ -745,7 +699,7 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getResourceLocationTooltip(IUtils utils, int pad, String key, ResourceLocation value) {
+    public static List<Component> getResourceLocationTooltip(IUtils ignoredUtils, int pad, String key, ResourceLocation value) {
         return List.of(pad(pad, translatable(key, value(value))));
     }
 
@@ -763,12 +717,12 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getComponentTooltip(IUtils utils, int pad, String key, Component component) {
+    public static List<Component> getComponentTooltip(IUtils ignoredUtils, int pad, String key, Component component) {
         return List.of(pad(pad, translatable(key, value(component))));
     }
 
     @NotNull
-    public static List<Component> getComponentsTooltip(IUtils utils, int pad, String key, List<Component> componentList) {
+    public static List<Component> getComponentsTooltip(IUtils ignoredUtils, int pad, String key, List<Component> componentList) {
         List<Component> components = new LinkedList<>();
 
         if (!componentList.isEmpty()) {
@@ -780,7 +734,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getMinMaxBoundsTooltip(IUtils utils, int pad, String key, MinMaxBounds.Ints ints) {
+    public static List<Component> getMinMaxBoundsTooltip(IUtils ignoredUtils, int pad, String key, MinMaxBounds.Ints ints) {
         List<Component> components = new LinkedList<>();
 
         if (ints != MinMaxBounds.Ints.ANY) {
@@ -791,7 +745,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getMinMaxBoundsTooltip(IUtils utils, int pad, String key, MinMaxBounds.Doubles doubles) {
+    public static List<Component> getMinMaxBoundsTooltip(IUtils ignoredUtils, int pad, String key, MinMaxBounds.Doubles doubles) {
         List<Component> components = new LinkedList<>();
 
         if (doubles != MinMaxBounds.Doubles.ANY) {

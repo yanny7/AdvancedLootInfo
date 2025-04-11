@@ -43,9 +43,10 @@ import java.util.concurrent.ExecutionException;
 
 @Suite
 @SelectClasses({
+        GenericTooltipTest.class,
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
-        GenericTooltipTest.class,
+        EntryTooltipTest.class
 })
 public class TooltipTestSuite {
     public static Utils UTILS;
