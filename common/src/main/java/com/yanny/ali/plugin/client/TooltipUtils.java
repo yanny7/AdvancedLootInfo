@@ -1,15 +1,11 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.core.Holder;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -83,7 +79,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static RangeValue getCount(IUtils utils, List<LootItemFunction> functions) {
+    public static RangeValue getCount(IClientUtils utils, List<LootItemFunction> functions) {
         RangeValue value = new RangeValue();
 
         functions.stream().filter((f) -> f instanceof SetItemCountFunction).forEach((f) -> {
@@ -110,7 +106,7 @@ public class TooltipUtils {
     }
 
     @Unmodifiable
-    public static Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> getBonusCount(IUtils utils, List<LootItemFunction> functions, RangeValue count) {
+    public static Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> getBonusCount(IClientUtils utils, List<LootItemFunction> functions, RangeValue count) {
         Map<Integer, RangeValue> bonusCount = new HashMap<>();
 
         List<LootItemFunction> list = functions.stream().filter((f) -> f instanceof ApplyBonusCount).toList();
@@ -143,19 +139,6 @@ public class TooltipUtils {
         }
 
         return Optional.empty();
-    }
-
-    @NotNull
-    public static List<Item> collectItems(IUtils utils, LootTable lootTable) {
-        List<Item> items = new LinkedList<>();
-
-        for (LootPool pool : lootTable.pools) {
-            for (LootPoolEntryContainer entry : pool.entries) {
-                items.addAll(utils.collectItems(utils, entry));
-            }
-        }
-
-        return items;
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {

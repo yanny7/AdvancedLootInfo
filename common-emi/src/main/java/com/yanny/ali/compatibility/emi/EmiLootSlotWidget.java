@@ -2,9 +2,9 @@ package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
@@ -28,7 +28,7 @@ public class EmiLootSlotWidget extends SlotWidget {
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(IUtils utils, LootPoolEntryContainer entry, EmiIngredient ingredient, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
+    public EmiLootSlotWidget(IClientUtils utils, LootPoolEntryContainer entry, EmiIngredient ingredient, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
                              RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> functions,
                              List<LootItemCondition> conditions) {
         super(ingredient, x, y);

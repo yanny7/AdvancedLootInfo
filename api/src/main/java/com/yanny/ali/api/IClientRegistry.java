@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -18,19 +17,18 @@ import org.apache.commons.lang3.function.TriFunction;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public interface IRegistry {
+public interface IClientRegistry {
     void registerWidget(LootPoolEntryType type, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter);
-    void registerNumberProvider(LootNumberProviderType type, BiFunction<IUtils, NumberProvider, RangeValue> converter);
+    <T extends NumberProvider> void registerNumberProvider(LootNumberProviderType type, BiFunction<IClientUtils, T, RangeValue> converter);
 
-    <T extends LootItemCondition> void registerConditionTooltip(LootItemConditionType type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends LootItemFunction> void registerFunctionTooltip(LootItemFunctionType<T> type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(ItemSubPredicate.Type<T> type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IUtils, Integer, T, List<Component>> getter);
-    <T extends LootPoolEntryContainer> void registerItemCollector(LootPoolEntryType type, BiFunction<IUtils, T, List<Item>> itemSupplier);
+    <T extends LootItemCondition> void registerConditionTooltip(LootItemConditionType type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
+    <T extends LootItemFunction> void registerFunctionTooltip(LootItemFunctionType<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
+    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(ItemSubPredicate.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
+    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
 
     @FunctionalInterface
     interface IBoundsGetter {
-        Rect apply(IUtils utils, LootPoolEntryContainer entry, int x, int y);
+        Rect apply(IClientUtils utils, LootPoolEntryContainer entry, int x, int y);
     }
 
     @FunctionalInterface

@@ -1,6 +1,6 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.functions.*;
@@ -10,13 +10,12 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
 public class FunctionTooltipUtils {
     @NotNull
-    public static List<Component> getApplyBonusTooltip(IUtils utils, int pad, ApplyBonusCount fun) {
+    public static List<Component> getApplyBonusTooltip(IClientUtils utils, int pad, ApplyBonusCount fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.apply_bonus")));
@@ -27,18 +26,18 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getCopyNameTooltip(IUtils utils, int pad, CopyNameFunction fun) {
+    public static List<Component> getCopyNameTooltip(IClientUtils utils, int pad, CopyNameFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_name")));
-        components.addAll(getNameSourceTooltip(utils, pad + 1, fun.source));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.source", fun.source));
 
         return components;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getCopyCustomDataTooltip(IUtils utils, int pad, CopyCustomDataFunction fun) {
+    public static List<Component> getCopyCustomDataTooltip(IClientUtils utils, int pad, CopyCustomDataFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_custom_data")));
@@ -50,7 +49,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getCopyStateTooltip(IUtils utils, int pad, CopyBlockState fun) {
+    public static List<Component> getCopyStateTooltip(IClientUtils utils, int pad, CopyBlockState fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_state")));
@@ -61,7 +60,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantRandomlyTooltip(IUtils utils, int pad, EnchantRandomlyFunction fun) {
+    public static List<Component> getEnchantRandomlyTooltip(IClientUtils utils, int pad, EnchantRandomlyFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
@@ -71,18 +70,18 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantWithLevelsTooltip(IUtils utils, int pad, EnchantWithLevelsFunction fun) {
+    public static List<Component> getEnchantWithLevelsTooltip(IClientUtils utils, int pad, EnchantWithLevelsFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_with_levels")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.levels", utils.convertNumber(utils, fun.levels)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.levels", fun.levels));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.treasure", fun.treasure));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getExplorationMapTooltip(IUtils utils, int pad, ExplorationMapFunction fun) {
+    public static List<Component> getExplorationMapTooltip(IClientUtils utils, int pad, ExplorationMapFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
@@ -98,28 +97,28 @@ public class FunctionTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getExplosionDecayTooltip(IUtils utils, int pad, ApplyExplosionDecay fun) {
+    public static List<Component> getExplosionDecayTooltip(IClientUtils ignoredUtils, int pad, ApplyExplosionDecay ignoredFun) {
         return List.of(pad(pad, translatable("ali.type.function.explosion_decay")));
     }
 
     @NotNull
-    public static List<Component> getFillPlayerHeadTooltip(IUtils utils, int pad, FillPlayerHead fun) {
+    public static List<Component> getFillPlayerHeadTooltip(IClientUtils utils, int pad, FillPlayerHead fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.fill_player_head")));
-        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", "target", Optional.of(fun.entityTarget)));
+        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", fun.entityTarget));
 
         return components;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getFurnaceSmeltTooltip(IUtils utils, int pad, SmeltItemFunction fun) {
+    public static List<Component> getFurnaceSmeltTooltip(IClientUtils ignoredUtils, int pad, SmeltItemFunction ignoredFun) {
         return List.of(pad(pad, translatable("ali.type.function.furnace_smelt")));
     }
 
     @NotNull
-    public static List<Component> getLimitCountTooltip(IUtils utils, int pad, LimitCount fun) {
+    public static List<Component> getLimitCountTooltip(IClientUtils utils, int pad, LimitCount fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.limit_count")));
@@ -129,18 +128,18 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getLootingEnchantTooltip(IUtils utils, int pad, LootingEnchantFunction fun) {
+    public static List<Component> getLootingEnchantTooltip(IClientUtils utils, int pad, LootingEnchantFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.looting_enchant")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.value", utils.convertNumber(utils, fun.value)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.value));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getReferenceTooltip(IUtils utils, int pad, FunctionReference fun) {
+    public static List<Component> getReferenceTooltip(IClientUtils utils, int pad, FunctionReference fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.reference")));
@@ -150,7 +149,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSequenceTooltip(IUtils utils, int pad, LootItemFunction function) {
+    public static List<Component> getSequenceTooltip(IClientUtils utils, int pad, LootItemFunction function) {
         List<Component> components = new LinkedList<>();
         SequenceFunction fun = (SequenceFunction) function;
 
@@ -161,7 +160,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetAttributesTooltip(IUtils utils, int pad, SetAttributesFunction fun) {
+    public static List<Component> getSetAttributesTooltip(IClientUtils utils, int pad, SetAttributesFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_attributes")));
@@ -171,7 +170,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetBannerPatternTooltip(IUtils utils, int pad, SetBannerPatternFunction fun) {
+    public static List<Component> getSetBannerPatternTooltip(IClientUtils utils, int pad, SetBannerPatternFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_banner_pattern")));
@@ -182,7 +181,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetContentsTooltip(IUtils utils, int pad, SetContainerContents fun) {
+    public static List<Component> getSetContentsTooltip(IClientUtils utils, int pad, SetContainerContents fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
@@ -193,29 +192,29 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetCountTooltip(IUtils utils, int pad, SetItemCountFunction fun) {
+    public static List<Component> getSetCountTooltip(IClientUtils utils, int pad, SetItemCountFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_count")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.count", utils.convertNumber(utils, fun.value)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.count", fun.value));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetDamageTooltip(IUtils utils, int pad, SetItemDamageFunction fun) {
+    public static List<Component> getSetDamageTooltip(IClientUtils utils, int pad, SetItemDamageFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_damage")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.damage", utils.convertNumber(utils, fun.damage)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.damage", fun.damage));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetEnchantmentsTooltip(IUtils utils, int pad, SetEnchantmentsFunction fun) {
+    public static List<Component> getSetEnchantmentsTooltip(IClientUtils utils, int pad, SetEnchantmentsFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
@@ -224,7 +223,7 @@ public class FunctionTooltipUtils {
             components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
             fun.enchantments.forEach((enchantment, value) -> {
                 components.addAll(getHolderTooltip(utils, pad + 2, enchantment, GenericTooltipUtils::getEnchantmentTooltip));
-                components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.levels", utils.convertNumber(utils, value)));
+                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
             });
         }
 
@@ -234,7 +233,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetInstrumentTooltip(IUtils utils, int pad, SetInstrumentFunction fun) {
+    public static List<Component> getSetInstrumentTooltip(IClientUtils utils, int pad, SetInstrumentFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_instrument")));
@@ -244,7 +243,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetLootTableTooltip(IUtils utils, int pad, SetContainerLootTable fun) {
+    public static List<Component> getSetLootTableTooltip(IClientUtils utils, int pad, SetContainerLootTable fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_loot_table")));
@@ -256,31 +255,31 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetLoreTooltip(IUtils utils, int pad, SetLoreFunction fun) {
+    public static List<Component> getSetLoreTooltip(IClientUtils utils, int pad, SetLoreFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
         components.addAll(getListOperationTooltip(utils, pad + 1, fun.mode));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore, (u, p, c) -> List.of(pad(pad + 2, c))));
-        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", "target", fun.resolutionContext));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext, GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetNameTooltip(IUtils utils, int pad, SetNameFunction fun) {
+    public static List<Component> getSetNameTooltip(IClientUtils utils, int pad, SetNameFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_name")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.name", fun.name, GenericTooltipUtils::getComponentTooltip));
-        components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", "target", fun.resolutionContext));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext, GenericTooltipUtils::getEnumTooltip));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", fun.target));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetCustomDataTooltip(IUtils utils, int pad, SetCustomDataFunction fun) {
+    public static List<Component> getSetCustomDataTooltip(IClientUtils utils, int pad, SetCustomDataFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_data")));
@@ -290,7 +289,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetPotionTooltip(IUtils utils, int pad, SetPotionFunction fun) {
+    public static List<Component> getSetPotionTooltip(IClientUtils utils, int pad, SetPotionFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_potion")));
@@ -300,7 +299,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetStewEffectTooltip(IUtils utils, int pad, SetStewEffectFunction fun) {
+    public static List<Component> getSetStewEffectTooltip(IClientUtils utils, int pad, SetStewEffectFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
@@ -309,7 +308,7 @@ public class FunctionTooltipUtils {
             components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
             fun.effects.forEach((effect) -> {
                 components.addAll(getHolderTooltip(utils, pad + 2, effect.effect(), GenericTooltipUtils::getMobEffectTooltip));
-                components.addAll(getRangeValueTooltip(utils, pad + 3, "ali.property.value.duration", utils.convertNumber(utils, effect.duration())));
+                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", effect.duration()));
             });
         }
 
@@ -317,7 +316,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetItemTooltip(IUtils utils, int pad, SetItemFunction fun) {
+    public static List<Component> getSetItemTooltip(IClientUtils utils, int pad, SetItemFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_item")));
@@ -327,7 +326,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetComponentsTooltip(IUtils utils, int pad, SetComponentsFunction fun) {
+    public static List<Component> getSetComponentsTooltip(IClientUtils utils, int pad, SetComponentsFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_components")));
@@ -337,7 +336,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getModifyContentsTooltip(IUtils utils, int pad, ModifyContainerContents fun) {
+    public static List<Component> getModifyContentsTooltip(IClientUtils utils, int pad, ModifyContainerContents fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.modify_contents")));
@@ -348,7 +347,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getFilteredTooltip(IUtils utils, int pad, FilteredFunction fun) {
+    public static List<Component> getFilteredTooltip(IClientUtils utils, int pad, FilteredFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.filtered")));
@@ -359,7 +358,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getCopyComponentsTooltip(IUtils utils, int pad, CopyComponentsFunction fun) {
+    public static List<Component> getCopyComponentsTooltip(IClientUtils utils, int pad, CopyComponentsFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_components")));
@@ -371,7 +370,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetFireworksTooltip(IUtils utils, int pad, SetFireworksFunction fun) {
+    public static List<Component> getSetFireworksTooltip(IClientUtils utils, int pad, SetFireworksFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_fireworks")));
@@ -383,7 +382,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetFireworkExplosionTooltip(IUtils utils, int pad, SetFireworkExplosionFunction fun) {
+    public static List<Component> getSetFireworkExplosionTooltip(IClientUtils utils, int pad, SetFireworkExplosionFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_firework_explosion")));
@@ -397,7 +396,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetBookCoverTooltip(IUtils utils, int pad, SetBookCoverFunction fun) {
+    public static List<Component> getSetBookCoverTooltip(IClientUtils utils, int pad, SetBookCoverFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_book_cover")));
@@ -410,7 +409,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetWrittenBookPagesTooltip(IUtils utils, int pad, SetWrittenBookPagesFunction fun) {
+    public static List<Component> getSetWrittenBookPagesTooltip(IClientUtils utils, int pad, SetWrittenBookPagesFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_written_book_pages")));
@@ -422,7 +421,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetWritableBookPagesTooltip(IUtils utils, int pad, SetWritableBookPagesFunction fun) {
+    public static List<Component> getSetWritableBookPagesTooltip(IClientUtils utils, int pad, SetWritableBookPagesFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_writable_book_pages")));
@@ -434,7 +433,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getToggleTooltipsTooltip(IUtils utils, int pad, ToggleTooltips fun) {
+    public static List<Component> getToggleTooltipsTooltip(IClientUtils utils, int pad, ToggleTooltips fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.toggle_tooltips")));
@@ -451,21 +450,21 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSetOminousBottleAmplifierTooltip(IUtils utils, int pad, SetOminousBottleAmplifierFunction fun) {
+    public static List<Component> getSetOminousBottleAmplifierTooltip(IClientUtils utils, int pad, SetOminousBottleAmplifierFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_ominous_bottle_amplifier")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.amplifier", utils.convertNumber(utils, fun.amplifierGenerator)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.amplifier", fun.amplifierGenerator));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSetCustomModelDataTooltip(IUtils utils, int pad, SetCustomModelDataFunction fun) {
+    public static List<Component> getSetCustomModelDataTooltip(IClientUtils utils, int pad, SetCustomModelDataFunction fun) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_model_data")));
-        components.addAll(getRangeValueTooltip(utils, pad + 1, "ali.property.value.value", utils.convertNumber(utils, fun.valueProvider)));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.valueProvider));
 
         return components;
     }

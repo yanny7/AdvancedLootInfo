@@ -1,7 +1,7 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.plugin.WidgetUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;

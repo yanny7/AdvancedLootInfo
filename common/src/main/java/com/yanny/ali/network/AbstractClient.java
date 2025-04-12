@@ -5,8 +5,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 
 public abstract class AbstractClient {
     protected void onLootInfo(InfoSyncLootTableMessage msg) {
-        LootTable lootTable = msg.lootTable();
-        PluginManager.CLIENT_REGISTRY.addLootTable(msg.location(), lootTable);
+        PluginManager.CLIENT_REGISTRY.addLootTable(msg.location(), msg.lootTable(), msg.items());
     }
 
     protected void onClear(ClearMessage msg) {

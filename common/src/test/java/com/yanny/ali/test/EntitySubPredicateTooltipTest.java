@@ -1,16 +1,21 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.EntitySubPredicateTooltipUtils;
+import com.yanny.ali.plugin.client.EntitySubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Blocks;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -44,20 +49,35 @@ public class EntitySubPredicateTooltipTest {
         ));
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testPlayerPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
                 .checkAdvancementDone(new ResourceLocation("test"), true)
                 .addRecipe(new ResourceLocation("test"), false)
+                .checkAdvancementCriterions(new ResourceLocation("criterion"), Map.of("test", true))
+                .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(100))
+                .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
+                .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
                 .setGameType(GameType.SURVIVAL)
                 .build()), List.of(
                 "Player:",
                 "  -> Game Type: Survival",
+                "  -> Stats:",
+                "    -> Block: Cobblestone",
+                "      -> Times Mined: ≥100",
+                "    -> Item: Raw Chicken",
+                "      -> Times Used: ≤10",
                 "  -> Recipes:",
                 "    -> minecraft:test: false",
                 "  -> Advancements:",
                 "    -> minecraft:test",
-                "      -> Done: true"
+                "      -> Done: true",
+                "    -> minecraft:criterion",
+                "      -> test: true",
+                "  -> Looking At:",
+                "    -> Entity Types:",
+                "      -> Entity Type: Warden"
         ));
     }
 

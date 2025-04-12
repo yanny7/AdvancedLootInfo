@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.ItemSubPredicateTooltipUtils;
+import com.yanny.ali.plugin.client.ItemSubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -75,14 +75,7 @@ public class ItemSubPredicateTooltipTest {
                 HolderSet.direct(Potions.HEALING)
         )), List.of(
                 "Potions:",
-                "  -> Potion:",
-                "    -> Mob Effects:",
-                "      -> Mob Effect: minecraft:instant_health",
-                "        -> Amplifier: 0",
-                "        -> Duration: 1",
-                "        -> Is Ambient: false",
-                "        -> Is Visible: true",
-                "        -> Show Icon: true"
+                "  -> Potion: minecraft:healing"
         ));
     }
 

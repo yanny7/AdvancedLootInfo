@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.ConditionTooltipUtils;
+import com.yanny.ali.plugin.client.ConditionTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -99,7 +99,7 @@ public class ConditionTooltipTest {
                 EntityPredicate.Builder.entity().team("blue")
         ).build()), List.of(
             "Entity Properties:",
-            "  -> Target: Killer Entity",
+            "  -> Target: KILLER",
             "  -> Predicate:",
             "    -> Team: blue"
         ));
@@ -109,7 +109,7 @@ public class ConditionTooltipTest {
     public void testEntityScoresTooltip() {
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER).build()), List.of(
                 "Entity Scores:",
-                "  -> Target: Directly Killed By"
+                "  -> Target: DIRECT_KILLER"
         ));
         assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER)
                 .withScore("single", IntRange.range(2, 5))
@@ -117,7 +117,7 @@ public class ConditionTooltipTest {
                 .build()
         ), List.of(
                 "Entity Scores:",
-                "  -> Target: Directly Killed By",
+                "  -> Target: DIRECT_KILLER",
                 "  -> Scores:",
                 "    -> Score: single",
                 "      -> Limit: 2 - 5",

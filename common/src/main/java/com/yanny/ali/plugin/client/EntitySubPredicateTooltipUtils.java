@@ -1,6 +1,6 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -14,11 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
 public class EntitySubPredicateTooltipUtils {
     @NotNull
-    public static List<Component> getLightningBoltPredicateTooltip(IUtils utils, int pad, LightningBoltPredicate predicate) {
+    public static List<Component> getLightningBoltPredicateTooltip(IClientUtils utils, int pad, LightningBoltPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.lightning_bolt")));
@@ -29,7 +29,7 @@ public class EntitySubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getFishingHookPredicateTooltip(IUtils utils, int pad, FishingHookPredicate predicate) {
+    public static List<Component> getFishingHookPredicateTooltip(IClientUtils utils, int pad, FishingHookPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.fishing_hook")));
@@ -39,7 +39,7 @@ public class EntitySubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getPlayerPredicateTooltip(IUtils utils, int pad, PlayerPredicate predicate) {
+    public static List<Component> getPlayerPredicateTooltip(IClientUtils utils, int pad, PlayerPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.player")));
@@ -48,14 +48,13 @@ public class EntitySubPredicateTooltipUtils {
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
         components.addAll(getRecipesTooltip(utils, pad + 1, predicate.recipes()));
         components.addAll(getAdvancementsTooltip(utils, pad + 1, predicate.advancements()));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(),
-                (u, p, s, c) -> getComponentsTooltip(u, p, s, c, GenericTooltipUtils::getEntityPredicateTooltip)));
+        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getSlimePredicateTooltip(IUtils utils, int pad, SlimePredicate predicate) {
+    public static List<Component> getSlimePredicateTooltip(IClientUtils utils, int pad, SlimePredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.slime")));
@@ -65,7 +64,7 @@ public class EntitySubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getRaiderPredicateTooltip(IUtils utils, int pad, RaiderPredicate predicate) {
+    public static List<Component> getRaiderPredicateTooltip(IClientUtils utils, int pad, RaiderPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.raider")));
@@ -76,7 +75,7 @@ public class EntitySubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static <V> List<Component> getVariantPredicateTooltip(IUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
+    public static <V> List<Component> getVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
 
         if (predicate.variant instanceof Enum<?> variant) {
@@ -87,7 +86,7 @@ public class EntitySubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static <V> List<Component> getHolderVariantPredicateTooltip(IUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
+    public static <V> List<Component> getHolderVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));

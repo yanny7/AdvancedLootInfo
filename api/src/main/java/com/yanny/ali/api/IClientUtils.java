@@ -1,6 +1,5 @@
 package com.yanny.ali.api;
 
-import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
@@ -17,25 +16,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface IUtils {
+public interface IClientUtils extends ICommonUtils {
     Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y,
                                                  List<LootItemFunction> functions, List<LootItemCondition> conditions);
 
-    List<Component> getConditionTooltip(IUtils utils, int pad, LootItemCondition condition);
-    List<Component> getFunctionTooltip(IUtils utils, int pad, LootItemFunction function);
-    List<Component> getItemSubPredicateTooltip(IUtils utils, int pad, ItemSubPredicate.Type<?> type, ItemSubPredicate predicate);
-    List<Component> getEntitySubPredicateTooltip(IUtils utils, int pad, EntitySubPredicate predicate);
-    List<Item> collectItems(IUtils utils, LootPoolEntryContainer entry);
+    <T extends LootItemCondition> List<Component> getConditionTooltip(IClientUtils utils, int pad, T condition);
+    <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function);
+    <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, ItemSubPredicate.Type<?> type, T predicate);
+    <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IClientUtils utils, int pad, T predicate);
 
-    Rect getBounds(IUtils registry, List<LootPoolEntryContainer> entries, int x, int y);
+    Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y);
 
     @Nullable
     WidgetDirection getWidgetDirection(LootPoolEntryContainer entry);
 
     LootContext getLootContext();
 
-    @Nullable
-    LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either);
+    List<Item> getItems(ResourceKey<LootTable> location);
 
-    RangeValue convertNumber(IUtils utils, @Nullable NumberProvider numberProvider);
+    RangeValue convertNumber(IClientUtils utils, @Nullable NumberProvider numberProvider);
 }

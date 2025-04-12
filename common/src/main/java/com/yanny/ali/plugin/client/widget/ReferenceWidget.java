@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.yanny.ali.api.*;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,6 +10,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class ReferenceWidget implements IEntryWidget {
@@ -21,9 +22,14 @@ public class ReferenceWidget implements IEntryWidget {
                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         NestedLootTable reference = (NestedLootTable) entry;
         LootTable tableEntry = utils.getLootTable(reference.contents);
+        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
+        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
+
+        allFunctions.addAll(reference.functions);
+        allConditions.addAll(reference.conditions);
 
         if (tableEntry != null) {
-            widget = new LootTableWidget(utils, tableEntry, x, y, ((NestedLootTable) entry).quality, (float) reference.weight / sumWeight * 100);
+            widget = new LootTableWidget(utils, tableEntry, x, y, reference.quality, (float) reference.weight / sumWeight * 100, allFunctions, allConditions);
         } else {
             widget = new IWidget() {
                 @Override
@@ -68,7 +74,7 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
         LootTable lootTable = utils.getLootTable(((NestedLootTable) entry).contents);
 
         if (lootTable != null) {
