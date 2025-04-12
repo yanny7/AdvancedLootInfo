@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.Utils;
+import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
@@ -45,12 +45,13 @@ import java.util.concurrent.ExecutionException;
 
 @Suite
 @SelectClasses({
+        GenericTooltipTest.class,
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
-        GenericTooltipTest.class,
+        EntryTooltipTest.class
 })
 public class TooltipTestSuite {
-    public static Utils UTILS;
+    public static ClientUtils UTILS;
 
     private static Set<String> UNUSED;
 
@@ -66,7 +67,7 @@ public class TooltipTestSuite {
 
         PluginManager.registerCommonEvent();
         PluginManager.registerClientEvent();
-        UTILS = new Utils() {
+        UTILS = new ClientUtils() {
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 return null;

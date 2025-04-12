@@ -1,38 +1,43 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.plugin.WidgetUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.WidgetUtils.*;
+import static com.yanny.ali.plugin.client.WidgetUtils.*;
 
 public class LootTableWidget implements IWidget {
     private final List<IWidget> widgets;
     private final Rect bounds;
 
     public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y) {
-        this(utils, lootTable, x, y, 0, 100);
+        this(utils, lootTable, x, y, 0, 100, List.of(), List.of());
     }
 
-    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int quality, float chance) {
+    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
+        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
+
+        allFunctions.addAll(lootTable.functions);
 
         widgets = new LinkedList<>();
         widgets.add(getLootTableTypeWidget(x, y, quality, chance));
 
         for (LootPool pool : lootTable.pools) {
-            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(lootTable.functions));
+            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(allFunctions), List.copyOf(conditions));
             Rect bound = widget.getRect();
 
             width = Math.max(width, bound.width());
@@ -101,7 +106,7 @@ public class LootTableWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootTable lootTable, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootTable lootTable, int x, int y) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 

@@ -1,7 +1,7 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class EntryTooltipUtils {
@@ -54,13 +54,13 @@ public class EntryTooltipUtils {
 
         components.add(pad(pad, translatable("ali.enum.group_type.dynamic")));
         components.addAll(getQualityTooltip(entry.quality));
-        components.addAll(getChanceTooltip(new RangeValue((float) sumWeight / entry.weight * 100)));
+        components.addAll(getChanceTooltip(new RangeValue((float) entry.weight / sumWeight * 100)));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getEmptyTooltip(IUtils utils, EmptyLootItem entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static List<Component> getEmptyTooltip(IClientUtils utils, EmptyLootItem entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
@@ -74,6 +74,7 @@ public class EntryTooltipUtils {
         return new LinkedList<>(getTooltip(utils, entry, chance, bonusChance, new RangeValue(), Optional.empty(), allFunctions, allConditions));
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getGroupTooltip(int pad) {
         return List.of(pad(pad, translatable("ali.enum.group_type.all")));
@@ -85,22 +86,8 @@ public class EntryTooltipUtils {
         return List.of(pad(pad, translatable("ali.enum.group_type.sequence")));
     }
 
-    /*
-     * PRIVATE
-     */
-
     @NotNull
-    @Unmodifiable
-    private static List<Component> getQualityTooltip(int quality) {
-        if (quality != 0) {
-            return List.of(translatable("ali.description.quality", value(quality)));
-        }
-
-        return List.of();
-    }
-
-    @NotNull
-    public static List<Component> getTooltip(IUtils utils, LootPoolEntryContainer entry, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
+    public static List<Component> getTooltip(IClientUtils utils, LootPoolEntryContainer entry, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
                                              RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> functions,
                                              List<LootItemCondition> conditions) {
         List<Component> components = new LinkedList<>();
@@ -125,6 +112,20 @@ public class EntryTooltipUtils {
         }
 
         return components;
+    }
+
+    /*
+     * PRIVATE
+     */
+
+    @NotNull
+    @Unmodifiable
+    private static List<Component> getQualityTooltip(int quality) {
+        if (quality != 0) {
+            return List.of(translatable("ali.description.quality", value(quality)));
+        }
+
+        return List.of();
     }
 
     @Unmodifiable

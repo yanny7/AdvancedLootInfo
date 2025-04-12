@@ -1,29 +1,21 @@
 package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.widget.*;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.*;
+import com.yanny.ali.plugin.client.ConditionTooltipUtils;
+import com.yanny.ali.plugin.client.FunctionTooltipUtils;
+import com.yanny.ali.plugin.client.widget.*;
+import com.yanny.ali.plugin.server.ItemCollectorUtils;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.functions.SequenceFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
-import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Unmodifiable;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
-    public void register(IRegistry registry) {
+    public void registerClient(IClientRegistry registry) {
         registry.registerWidget(LootPoolEntries.ITEM, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
         registry.registerWidget(LootPoolEntries.EMPTY, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
         registry.registerWidget(LootPoolEntries.REFERENCE, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
@@ -84,79 +76,40 @@ public class Plugin implements IPlugin {
         registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
         registry.registerNumberProvider(NumberProviders.BINOMIAL, Plugin::convertBinomial);
         registry.registerNumberProvider(NumberProviders.SCORE, Plugin::convertScore);
-
-        registry.registerItemCollector(LootPoolEntries.ITEM, Plugin::collectItems);
-        registry.registerItemCollector(LootPoolEntries.TAG, Plugin::collectTags);
-        registry.registerItemCollector(LootPoolEntries.ALTERNATIVES, Plugin::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.GROUP, Plugin::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.SEQUENCE, Plugin::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.EMPTY, Plugin::collectEmpty);
-        registry.registerItemCollector(LootPoolEntries.DYNAMIC, Plugin::collectEmpty);
-        registry.registerItemCollector(LootPoolEntries.REFERENCE, Plugin::collectReference);
     }
 
-    @Unmodifiable
-    @NotNull
-    private static List<Item> collectEmpty(IUtils utils, LootPoolEntryContainer entry) {
-        return List.of();
-    }
+    @Override
+    public void registerServer(IServerRegistry registry) {
+        registry.registerItemCollector(LootPoolEntries.ITEM, ItemCollectorUtils::collectItems);
+        registry.registerItemCollector(LootPoolEntries.TAG, ItemCollectorUtils::collectTags);
+        registry.registerItemCollector(LootPoolEntries.ALTERNATIVES, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(LootPoolEntries.GROUP, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(LootPoolEntries.SEQUENCE, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(LootPoolEntries.EMPTY, ItemCollectorUtils::collectSingleton);
+        registry.registerItemCollector(LootPoolEntries.DYNAMIC, ItemCollectorUtils::collectSingleton);
+        registry.registerItemCollector(LootPoolEntries.REFERENCE, ItemCollectorUtils::collectReference);
 
-    @Unmodifiable
-    @NotNull
-    private static List<Item> collectItems(IUtils utils, LootPoolEntryContainer entry) {
-        return List.of(((LootItem) entry).item.value());
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<Item> collectTags(IUtils utils, LootPoolEntryContainer entry) {
-        return BuiltInRegistries.ITEM.getTag(((TagEntry) entry).tag).map((tag) -> tag.stream().map(Holder::value).toList()).orElse(List.of());
+        registry.registerItemCollector(LootItemFunctions.FURNACE_SMELT, ItemCollectorUtils::collectFurnaceSmelt);
     }
 
     @NotNull
-    private static List<Item> collectComposite(IUtils utils, LootPoolEntryContainer entry) {
-        List<Item> items = new LinkedList<>();
-
-        for (LootPoolEntryContainer child : ((CompositeEntryBase) entry).children) {
-            items.addAll(utils.collectItems(utils, child));
-        }
-
-        return items;
-    }
-
-    @NotNull
-    private static List<Item> collectReference(IUtils utils, LootPoolEntryContainer entry) {
-        List<Item> items = new LinkedList<>();
-
-        LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
-
-        if (lootTable != null) {
-            items.addAll(TooltipUtils.collectItems(utils, lootTable));
-        }
-
-        return items;
-    }
-
-    @NotNull
-    private static RangeValue convertConstant(IUtils utils, NumberProvider numberProvider) {
+    private static RangeValue convertConstant(IClientUtils utils, ConstantValue numberProvider) {
         return new RangeValue(numberProvider.getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static RangeValue convertUniform(IUtils utils, NumberProvider numberProvider) {
-        UniformGenerator uniformGenerator = (UniformGenerator) numberProvider;
-        return new RangeValue(utils.convertNumber(utils, uniformGenerator.min()).min(),
-                utils.convertNumber(utils, uniformGenerator.max()).max());
+    private static RangeValue convertUniform(IClientUtils utils, UniformGenerator numberProvider) {
+        return new RangeValue(utils.convertNumber(utils, numberProvider.min()).min(),
+                utils.convertNumber(utils, numberProvider.max()).max());
     }
 
     @NotNull
-    private static RangeValue convertBinomial(IUtils utils, NumberProvider numberProvider) {
-        BinomialDistributionGenerator binomialGenerator = (BinomialDistributionGenerator) numberProvider;
-        return new RangeValue(0, binomialGenerator.n().getFloat(utils.getLootContext()));
+    private static RangeValue convertBinomial(IClientUtils utils, BinomialDistributionGenerator numberProvider) {
+        return new RangeValue(0, numberProvider.n().getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static RangeValue convertScore(IUtils utils, NumberProvider numberProvider) {
+    private static RangeValue convertScore(IClientUtils utils, ScoreboardValue numberProvider) {
         return new RangeValue(true, false);
     }
 }

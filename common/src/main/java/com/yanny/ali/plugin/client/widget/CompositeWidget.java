@@ -1,8 +1,8 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.WidgetUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
@@ -14,13 +14,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.WidgetUtils.TEXTURE_LOC;
+import static com.yanny.ali.plugin.client.WidgetUtils.TEXTURE_LOC;
 
 public class CompositeWidget implements IEntryWidget {
     private final Rect bounds;
     protected final List<IWidget> widgets;
     private final LootPoolEntryContainer entry;
-    private final IUtils utils;
+    private final IClientUtils utils;
 
     public CompositeWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
@@ -116,7 +116,7 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
         return utils.getBounds(utils, ((CompositeEntryBase) entry).children, x, y);
     }
 }

@@ -2,8 +2,8 @@ package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.EntryTooltipUtils;
-import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.GenericTooltipUtils;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
@@ -16,7 +16,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.*;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -41,7 +40,10 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
-import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.SetAttributesFunction;
+import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -49,7 +51,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -155,14 +157,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testNameSourceTooltip() {
-        assertTooltip(GenericTooltipUtils.getNameSourceTooltip(UTILS, 0, CopyNameFunction.NameSource.THIS), List.of("Source: This Entity"));
-        assertTooltip(GenericTooltipUtils.getNameSourceTooltip(UTILS, 1, CopyNameFunction.NameSource.BLOCK_ENTITY), List.of("  -> Source: Block Entity"));
-        assertTooltip(GenericTooltipUtils.getNameSourceTooltip(UTILS, 2, CopyNameFunction.NameSource.KILLER), List.of("    -> Source: Killer Entity"));
-        assertTooltip(GenericTooltipUtils.getNameSourceTooltip(UTILS, 3, CopyNameFunction.NameSource.KILLER_PLAYER), List.of("      -> Source: Last Damaged By Player"));
-    }
-
-    @Test
     public void testBlockTooltip() {
         assertTooltip(GenericTooltipUtils.getBlockTooltip(UTILS, 1, Blocks.DIAMOND_BLOCK), List.of("  -> Block: Block of Diamond"));
     }
@@ -209,11 +203,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testOperationTooltip() {
-        assertTooltip(GenericTooltipUtils.getOperationTooltip(UTILS, 0, AttributeModifier.Operation.MULTIPLY_BASE), List.of("Operation: MULTIPLY_BASE"));
-    }
-
-    @Test
     public void testUUIDTooltip() {
         assertTooltip(GenericTooltipUtils.getUUIDTooltip(UTILS, 0, UUID.nameUUIDFromBytes(new byte[]{1, 2, 3})), List.of("UUID: 5289df73-7df5-3326-bcdd-22597afb1fac"));
     }
@@ -239,26 +228,7 @@ public class GenericTooltipTest {
     @Test
     public void testPotionTooltip() {
         assertTooltip(GenericTooltipUtils.getPotionTooltip(UTILS, 0, Potions.HEALING), List.of(
-                "Potion:",
-                "  -> Mob Effects:",
-                "    -> Mob Effect: minecraft:instant_health",
-                "      -> Amplifier: 0",
-                "      -> Duration: 1",
-                "      -> Is Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true"
-        ));
-    }
-
-    @Test
-    public void testMobEffectInstanceTooltip() {
-        assertTooltip(GenericTooltipUtils.getMobEffectInstanceTooltip(UTILS, 0, new MobEffectInstance(MobEffects.ABSORPTION, 1, 5)), List.of(
-                "Mob Effect: minecraft:absorption",
-                "  -> Amplifier: 5",
-                "  -> Duration: 1",
-                "  -> Is Ambient: false",
-                "  -> Is Visible: true",
-                "  -> Show Icon: true"
+                "Potion: minecraft:healing"
         ));
     }
 
@@ -590,14 +560,7 @@ public class GenericTooltipTest {
                 "    -> Level: ≤5",
                 "  -> Enchantment: Lure",
                 "    -> Level: ≥4",
-                "Potion:",
-                "  -> Mob Effects:",
-                "    -> Mob Effect: minecraft:instant_health",
-                "      -> Amplifier: 0",
-                "      -> Duration: 1",
-                "      -> Is Ambient: false",
-                "      -> Is Visible: true",
-                "      -> Show Icon: true",
+                "Potion: minecraft:healing",
                 "Nbt: {healing:1b}"
         ));
     }

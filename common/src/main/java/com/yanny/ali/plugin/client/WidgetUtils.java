@@ -1,10 +1,10 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
 import com.mojang.math.Divisor;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.widget.TextureWidget;
+import com.yanny.ali.plugin.client.widget.TextureWidget;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;

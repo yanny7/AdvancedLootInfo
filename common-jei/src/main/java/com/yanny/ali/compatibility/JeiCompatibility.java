@@ -9,8 +9,6 @@ import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.jei.JeiBlockLoot;
 import com.yanny.ali.compatibility.jei.JeiEntityLoot;
 import com.yanny.ali.compatibility.jei.JeiGameplayLoot;
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.IModPlugin;
@@ -80,10 +78,9 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
-        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
-        if (client != null && level != null) {
+        if (level != null) {
             Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
             Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
@@ -104,7 +101,7 @@ public class JeiCompatibility implements IModPlugin {
                     }
 
                     if (recipeType != null) {
-                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry));
+                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, GenericUtils.getItems(location)));
                     }
 
                     map.remove(location);
@@ -173,7 +170,7 @@ public class JeiCompatibility implements IModPlugin {
                             }
 
                             if (recipeType != null) {
-                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry));
+                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, GenericUtils.getItems(location)));
                             }
 
                             map.remove(location);
@@ -194,7 +191,7 @@ public class JeiCompatibility implements IModPlugin {
                 }
 
                 if (recipeType != null) {
-                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath()));
+                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath(), GenericUtils.getItems(location)));
                 }
             }
 

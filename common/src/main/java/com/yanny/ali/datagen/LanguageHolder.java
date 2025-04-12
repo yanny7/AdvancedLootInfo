@@ -22,7 +22,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.description.count", "Count: %s");
         TRANSLATION_MAP.put("ali.description.count_bonus", "%s (%s %s)");
         TRANSLATION_MAP.put("ali.description.quality", "Quality: %s");
-        TRANSLATION_MAP.put("ali.description.weight", "Weight: %s");
 
         TRANSLATION_MAP.put("ali.type.condition.all_of", "All must pass:");
         TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
@@ -72,16 +71,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.set_potion", "Set Potion:");
         TRANSLATION_MAP.put("ali.type.function.set_stew_effect", "Set Stew Effect:");
 
-        TRANSLATION_MAP.put("ali.enum.target.this", "This Entity");
-        TRANSLATION_MAP.put("ali.enum.target.killer", "Killer Entity");
-        TRANSLATION_MAP.put("ali.enum.target.direct_killer", "Directly Killed By");
-        TRANSLATION_MAP.put("ali.enum.target.killer_player", "Last Damaged By Player");
-
-        TRANSLATION_MAP.put("ali.enum.name_source.this", "This Entity");
-        TRANSLATION_MAP.put("ali.enum.name_source.killer", "Killer Entity");
-        TRANSLATION_MAP.put("ali.enum.name_source.killer_player", "Last Damaged By Player");
-        TRANSLATION_MAP.put("ali.enum.name_source.block_entity", "Block Entity");
-
         TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
         TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");
         TRANSLATION_MAP.put("ali.enum.group_type.alternatives", "Selects only first successful entry");
@@ -119,7 +108,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
         TRANSLATION_MAP.put("ali.property.branch.operations", "Operations:");
         TRANSLATION_MAP.put("ali.property.branch.position", "Position:");
-        TRANSLATION_MAP.put("ali.property.branch.potion", "Potion:");
         TRANSLATION_MAP.put("ali.property.branch.predicate", "Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.properties", "Properties:");
         TRANSLATION_MAP.put("ali.property.branch.recipes", "Recipes:");
@@ -177,13 +165,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.light", "Light: %s");
         TRANSLATION_MAP.put("ali.property.value.limit", "Limit: %s");
         TRANSLATION_MAP.put("ali.property.value.map_decoration", "Map Decoration: %s");
-        TRANSLATION_MAP.put("ali.property.value.max", "Max: %s");
         TRANSLATION_MAP.put("ali.property.value.merge_strategy", "Merge Strategy: %s");
-        TRANSLATION_MAP.put("ali.property.value.min", "Min: %s");
         TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.multiplier", "Multiplier: %s");
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
-        TRANSLATION_MAP.put("ali.property.value.name_source", "Source: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt_provider", "Nbt Provider: %s");
         TRANSLATION_MAP.put("ali.property.value.operation", "Operation: %s");
@@ -191,6 +176,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.passenger", "Passenger:");
         TRANSLATION_MAP.put("ali.property.value.percent", "Percent: %s");
         TRANSLATION_MAP.put("ali.property.value.period", "Period: %s");
+        TRANSLATION_MAP.put("ali.property.value.potion", "Potion: %s");
         TRANSLATION_MAP.put("ali.property.value.probability", "Probability: %s");
         TRANSLATION_MAP.put("ali.property.value.provider", "Provider: %s");
         TRANSLATION_MAP.put("ali.property.value.range", "Range: %s");
@@ -203,7 +189,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.score", "Score: %s");
         TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
         TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
-        TRANSLATION_MAP.put("ali.property.value.show_icon", "Show Icon: %s");
         TRANSLATION_MAP.put("ali.property.value.size", "Size: %s");
         TRANSLATION_MAP.put("ali.property.value.skip_known_structures", "Skip Known Structures: %s");
         TRANSLATION_MAP.put("ali.property.value.smokey", "Smokey: %s");

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
@@ -16,29 +16,24 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class Utils implements IWidgetUtils {
+public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return PluginManager.CLIENT_REGISTRY.createWidgets(registry, entries, x, y, functions, conditions);
     }
 
     @Override
-    public <T extends LootItemCondition> List<Component> getConditionTooltip(IUtils utils, int pad, T condition) {
+    public <T extends LootItemCondition> List<Component> getConditionTooltip(IClientUtils utils, int pad, T condition) {
         return PluginManager.CLIENT_REGISTRY.getConditionTooltip(utils, pad, condition);
     }
 
     @Override
-    public <T extends LootItemFunction> List<Component> getFunctionTooltip(IUtils utils, int pad, T function) {
+    public <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function) {
         return PluginManager.CLIENT_REGISTRY.getFunctionTooltip(utils, pad, function);
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> List<Item> collectItems(IUtils utils, T entry) {
-        return PluginManager.CLIENT_REGISTRY.collectItems(utils, entry);
-    }
-
-    @Override
-    public Rect getBounds(IUtils registry, List<LootPoolEntryContainer> entries, int x, int y) {
+    public Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y) {
         return PluginManager.CLIENT_REGISTRY.getBounds(registry, entries, x, y);
     }
 
@@ -59,7 +54,12 @@ public abstract class Utils implements IWidgetUtils {
     }
 
     @Override
-    public RangeValue convertNumber(IUtils utils, @Nullable NumberProvider numberProvider) {
+    public RangeValue convertNumber(IClientUtils utils, @Nullable NumberProvider numberProvider) {
         return PluginManager.CLIENT_REGISTRY.convertNumber(utils, numberProvider);
+    }
+
+    @Override
+    public List<Item> getItems(ResourceLocation location) {
+        return PluginManager.CLIENT_REGISTRY.getItems(location);
     }
 }
