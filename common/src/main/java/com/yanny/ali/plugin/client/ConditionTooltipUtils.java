@@ -1,6 +1,6 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
@@ -10,11 +10,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
 public class ConditionTooltipUtils {
     @NotNull
-    public static List<Component> getAllOfTooltip(IUtils utils, int pad, AllOfCondition cond) {
+    public static List<Component> getAllOfTooltip(IClientUtils utils, int pad, AllOfCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.all_of")));
@@ -24,7 +24,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getAnyOfTooltip(IUtils utils, int pad, AnyOfCondition cond) {
+    public static List<Component> getAnyOfTooltip(IClientUtils utils, int pad, AnyOfCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.any_of")));
@@ -34,7 +34,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getBlockStatePropertyTooltip(IUtils utils, int pad, LootItemBlockStatePropertyCondition cond) {
+    public static List<Component> getBlockStatePropertyTooltip(IClientUtils utils, int pad, LootItemBlockStatePropertyCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.block_state_property")));
@@ -45,7 +45,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getDamageSourcePropertiesTooltip(IUtils utils, int pad, DamageSourceCondition cond) {
+    public static List<Component> getDamageSourcePropertiesTooltip(IClientUtils utils, int pad, DamageSourceCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.damage_source_properties")));
@@ -55,7 +55,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEntityPropertiesTooltip(IUtils utils, int pad, LootItemEntityPropertyCondition cond) {
+    public static List<Component> getEntityPropertiesTooltip(IClientUtils utils, int pad, LootItemEntityPropertyCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
@@ -66,7 +66,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEntityScoresTooltip(IUtils utils, int pad, EntityHasScoreCondition cond) {
+    public static List<Component> getEntityScoresTooltip(IClientUtils utils, int pad, EntityHasScoreCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.entity_scores")));
@@ -84,7 +84,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getInvertedTooltip(IUtils utils, int pad, InvertedLootItemCondition cond) {
+    public static List<Component> getInvertedTooltip(IClientUtils utils, int pad, InvertedLootItemCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.inverted")));
@@ -94,7 +94,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getKilledByPlayerTooltip(IUtils ignoredUtils, int pad, LootItemKilledByPlayerCondition ignoredCond) {
+    public static List<Component> getKilledByPlayerTooltip(IClientUtils ignoredUtils, int pad, LootItemKilledByPlayerCondition ignoredCond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.killed_by_player")));
@@ -103,7 +103,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getLocationCheckTooltip(IUtils utils, int pad, LocationCheck cond) {
+    public static List<Component> getLocationCheckTooltip(IClientUtils utils, int pad, LocationCheck cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
@@ -114,12 +114,12 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getMatchToolTooltip(IUtils utils, int pad, MatchTool cond) {
+    public static List<Component> getMatchToolTooltip(IClientUtils utils, int pad, MatchTool cond) {
         return new LinkedList<>(getComponentsTooltip(utils, pad, "ali.type.condition.match_tool", getItemPredicateTooltip(utils, pad + 1, cond.predicate)));
     }
 
     @NotNull
-    public static List<Component> getRandomChanceTooltip(IUtils utils, int pad, LootItemRandomChanceCondition cond) {
+    public static List<Component> getRandomChanceTooltip(IClientUtils utils, int pad, LootItemRandomChanceCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance")));
@@ -129,7 +129,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getRandomChanceWithLootingTooltip(IUtils utils, int pad, LootItemRandomChanceWithLootingCondition cond) {
+    public static List<Component> getRandomChanceWithLootingTooltip(IClientUtils utils, int pad, LootItemRandomChanceWithLootingCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance_with_looting")));
@@ -140,18 +140,18 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getReferenceTooltip(IUtils utils, int pad, ConditionReference cond) {
+    public static List<Component> getReferenceTooltip(IClientUtils utils, int pad, ConditionReference cond) {
         return new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.type.condition.reference", cond.name));
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getSurvivesExplosionTooltip(IUtils ignoredUtils, int pad, ExplosionCondition ignoredCond) {
+    public static List<Component> getSurvivesExplosionTooltip(IClientUtils ignoredUtils, int pad, ExplosionCondition ignoredCond) {
         return List.of(pad(pad, translatable("ali.type.condition.survives_explosion")));
     }
 
     @NotNull
-    public static List<Component> getTableBonusTooltip(IUtils utils, int pad, BonusLevelTableCondition cond) {
+    public static List<Component> getTableBonusTooltip(IClientUtils utils, int pad, BonusLevelTableCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
@@ -162,7 +162,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getTimeCheckTooltip(IUtils utils, int pad, TimeCheck cond) {
+    public static List<Component> getTimeCheckTooltip(IClientUtils utils, int pad, TimeCheck cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.time_check")));
@@ -173,7 +173,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getValueCheckTooltip(IUtils utils, int pad, ValueCheckCondition cond) {
+    public static List<Component> getValueCheckTooltip(IClientUtils utils, int pad, ValueCheckCondition cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.value_check")));
@@ -184,7 +184,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getWeatherCheckTooltip(IUtils utils, int pad, WeatherCheck cond) {
+    public static List<Component> getWeatherCheckTooltip(IClientUtils utils, int pad, WeatherCheck cond) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.weather_check")));

@@ -2,8 +2,8 @@ package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.EntryTooltipUtils;
-import com.yanny.ali.plugin.GenericTooltipUtils;
+import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.GenericTooltipUtils;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
@@ -52,7 +52,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.pad;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 

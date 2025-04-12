@@ -1,8 +1,8 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.TooltipUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -54,7 +54,7 @@ public class TagWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
         return new Rect(x, y, 18, 18);
     }
 }

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.Rect;

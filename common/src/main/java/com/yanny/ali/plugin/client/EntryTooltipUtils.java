@@ -1,7 +1,7 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
 import com.mojang.datafixers.util.Pair;
-import com.yanny.ali.api.IUtils;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
 public class EntryTooltipUtils {
     @NotNull
@@ -59,7 +59,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEmptyTooltip(IUtils utils, EmptyLootItem entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static List<Component> getEmptyTooltip(IClientUtils utils, EmptyLootItem entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
@@ -86,7 +86,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getTooltip(IUtils utils, LootPoolEntryContainer entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
+    public static List<Component> getTooltip(IClientUtils utils, LootPoolEntryContainer entry, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
                                              RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> functions,
                                              List<LootItemCondition> conditions) {
         List<Component> components = new LinkedList<>();

@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.TooltipUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -13,14 +12,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
@@ -85,14 +85,11 @@ public class GenericUtils {
 
     @NotNull
     public static Map<ResourceLocation, LootTable> getLootTables() {
-        return new HashMap<>(PluginManager.CLIENT_REGISTRY.getLootTables()
-                .entrySet()
-                .stream()
-                .filter(GenericUtils::lootTableFilter)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        return new HashMap<>(PluginManager.CLIENT_REGISTRY.getLootTables());
     }
 
-    private static boolean lootTableFilter(Map.Entry<ResourceLocation, LootTable> e) {
-        return e.getValue() != LootTable.EMPTY && !TooltipUtils.collectItems(PluginManager.CLIENT_REGISTRY, e.getValue()).isEmpty();
+    @NotNull
+    public static List<Item> getItems(ResourceLocation location) {
+        return PluginManager.CLIENT_REGISTRY.getItems(location);
     }
 }

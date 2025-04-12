@@ -2,7 +2,7 @@ package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;

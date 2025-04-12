@@ -1,8 +1,8 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.google.common.collect.Lists;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.WidgetUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
@@ -60,7 +60,7 @@ public class DynamicWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
         return new Rect(x, y, 7, 18);
     }
 }

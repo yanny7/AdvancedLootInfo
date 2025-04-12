@@ -1,11 +1,11 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -14,37 +14,31 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.WidgetUtils.TEXTURE_LOC;
+import static com.yanny.ali.plugin.client.WidgetUtils.TEXTURE_LOC;
 
-public class CompositeWidget implements IEntryWidget {
+public class LootPoolWidget implements IWidget {
+    private final List<IWidget> widgets;
     private final Rect bounds;
-    protected final List<IWidget> widgets;
-    private final LootPoolEntryContainer entry;
-    private final IUtils utils;
+    private final IClientUtils utils;
 
-    public CompositeWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
-                           List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        CompositeEntryBase compositeEntry = (CompositeEntryBase) entry;
+    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
-        allConditions.addAll(Arrays.asList(compositeEntry.conditions));
+        allFunctions.addAll(Arrays.asList(entry.functions));
+        allConditions.addAll(Arrays.asList(entry.conditions));
 
-        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, Arrays.asList(compositeEntry.children), x, y, List.copyOf(functions), allConditions);
+        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, Arrays.asList(entry.entries), x, y, List.copyOf(allFunctions), List.copyOf(allConditions));
 
-        widgets = new LinkedList<>(pair.getFirst());
-        bounds = pair.getSecond();
-        this.entry = entry;
+        widgets = new LinkedList<>(info.getFirst());
+        widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)));
+        bounds = info.getSecond();
         this.utils = utils;
     }
 
     @Override
     public Rect getRect() {
         return bounds;
-    }
-
-    @Override
-    public LootPoolEntryContainer getLootEntry() {
-        return entry;
     }
 
     @Override
@@ -116,7 +110,7 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
-        return utils.getBounds(utils, Arrays.asList(((CompositeEntryBase) entry).children), x, y);
+    public static Rect getBounds(IClientUtils registry, LootPool entry, int x, int y) {
+        return registry.getBounds(registry, Arrays.asList(entry.entries), x, y);
     }
 }

@@ -4,11 +4,14 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootTable;
 
+import java.util.List;
+
 public class EmiGameplayLoot extends EmiBaseLoot {
-    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable) {
-        super(category, id, lootTable, 0, 10);
+    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable, List<Item> items) {
+        super(category, id, lootTable, 0, 10, items);
     }
 
     @Override

@@ -1,9 +1,9 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.widget.TextureWidget;
+import com.yanny.ali.plugin.client.widget.TextureWidget;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import org.jetbrains.annotations.NotNull;

@@ -5,9 +5,9 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.plugin.EntryTooltipUtils;
-import com.yanny.ali.plugin.Utils;
-import com.yanny.ali.plugin.widget.LootTableWidget;
+import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -74,7 +74,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
     @NotNull
     private IWidgetUtils getUtils(List<Widget> widgets, Rectangle bounds) {
-        return new Utils() {
+        return new ClientUtils() {
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance, RangeValue count,
                                       @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {

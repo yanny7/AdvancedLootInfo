@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -20,8 +21,8 @@ import java.util.List;
 public class EmiEntityLoot extends EmiBaseLoot {
     private final Entity entity;
 
-    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootTable lootTable) {
-        super(category, id, lootTable, 0, 48);
+    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, LootTable lootTable, List<Item> items) {
+        super(category, id, lootTable, 0, 48, items);
         this.entity = entity;
 
         SpawnEggItem spawnEgg = SpawnEggItem.byId(entity.getType());
