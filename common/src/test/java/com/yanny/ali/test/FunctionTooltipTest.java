@@ -170,6 +170,18 @@ public class FunctionTooltipTest {
     }
 
     @Test
+    public void testSequenceTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, 0, SequenceFunction.of(List.of(
+                ApplyExplosionDecay.explosionDecay().build(),
+                SmeltItemFunction.smelted().build()
+        ))), List.of(
+                "Sequence:",
+                "  -> Explosion Decay",
+                "  -> Use Smelting Recipe On Item"
+        ));
+    }
+
+    @Test
     public void testSetAttributesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, 0, (SetAttributesFunction) SetAttributesFunction.setAttributes()
                 .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Holder.direct(Attributes.ARMOR), AttributeModifier.Operation.MULTIPLY_TOTAL, UniformGenerator.between(1, 5))
