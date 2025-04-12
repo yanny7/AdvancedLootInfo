@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.mixin.MixinBushBlock;
-import com.yanny.ali.plugin.WidgetUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

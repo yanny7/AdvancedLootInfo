@@ -1,11 +1,11 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.google.common.collect.Lists;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IEntryWidget;
-import com.yanny.ali.api.IUtils;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.plugin.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -58,7 +58,7 @@ public class EmptyWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
         return new Rect(x, y, 18, 18);
     }
 }

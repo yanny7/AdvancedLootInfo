@@ -4,10 +4,8 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.TooltipUtils;
-import com.yanny.ali.plugin.Utils;
-import com.yanny.ali.plugin.widget.LootTableWidget;
+import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -37,10 +35,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private final Widget widget;
     private final List<Widget> slotWidgets = new LinkedList<>();
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable, int widgetX, int widgetY) {
+    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable, int widgetX, int widgetY, List<Item> items) {
         super(category, id, 9 * 18, 1024);
         widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, widgetX, widgetY));
-        outputs.addAll(TooltipUtils.collectItems(PluginManager.CLIENT_REGISTRY, lootTable).stream().map(EmiStack::of).toList());
+        outputs.addAll(items.stream().map(EmiStack::of).toList());
     }
 
     @Override
@@ -68,7 +66,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     @NotNull
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
-        return new Utils() {
+        return new ClientUtils() {
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
                                       Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {

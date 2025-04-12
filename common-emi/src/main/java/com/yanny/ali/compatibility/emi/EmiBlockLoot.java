@@ -4,6 +4,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
@@ -15,8 +16,8 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final Block block;
     private final boolean isSpecial;
 
-    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootTable lootTable) {
-        super(category, id, lootTable, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22);
+    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootTable lootTable, List<Item> items) {
+        super(category, id, lootTable, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22, items);
         this.block = block;
         isSpecial = block instanceof BushBlock || block.asItem() == Items.AIR;
         inputs = List.of(EmiStack.of(block));

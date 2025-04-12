@@ -1,7 +1,11 @@
 package com.yanny.ali.api;
 
 public interface IPlugin {
-    default void register(IRegistry registry) {
+    default void registerClient(IClientRegistry registry) {
+
+    }
+
+    default void registerServer(IServerRegistry registry) {
 
     }
 }

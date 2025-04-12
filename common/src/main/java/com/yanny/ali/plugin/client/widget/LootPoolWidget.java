@@ -1,30 +1,33 @@
-package com.yanny.ali.plugin.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.WidgetUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.yanny.ali.plugin.WidgetUtils.TEXTURE_LOC;
+import static com.yanny.ali.plugin.client.WidgetUtils.TEXTURE_LOC;
 
 public class LootPoolWidget implements IWidget {
     private final List<IWidget> widgets;
     private final Rect bounds;
-    private final IUtils utils;
+    private final IClientUtils utils;
 
-    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, List<LootItemFunction> functions) {
+    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
+        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
         allFunctions.addAll(entry.functions);
+        allConditions.addAll(entry.conditions);
 
-        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, entry.entries, x, y, allFunctions, List.copyOf(entry.conditions));
+        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, entry.entries, x, y, List.copyOf(allFunctions), List.copyOf(allConditions));
 
         widgets = new LinkedList<>(info.getFirst());
         widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)));
@@ -106,7 +109,7 @@ public class LootPoolWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IUtils registry, LootPool entry, int x, int y) {
+    public static Rect getBounds(IClientUtils registry, LootPool entry, int x, int y) {
         return registry.getBounds(registry, entry.entries, x, y);
     }
 }

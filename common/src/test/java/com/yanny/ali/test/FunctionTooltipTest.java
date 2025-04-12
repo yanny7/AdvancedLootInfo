@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.FunctionTooltipUtils;
+import com.yanny.ali.plugin.client.FunctionTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -47,7 +47,7 @@ public class FunctionTooltipTest {
     public void testCopyNameTooltip() {
         assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, 0, (CopyNameFunction) CopyNameFunction.copyName(CopyNameFunction.NameSource.THIS).build()), List.of(
                 "Copy Name:",
-                "  -> Source: This Entity"
+                "  -> Source: THIS"
         ));
     }
 
@@ -135,7 +135,7 @@ public class FunctionTooltipTest {
     public void testFillPlayerHeadTooltip() {
         assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, 0, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.KILLER).build()), List.of(
                 "Fill Player Head:",
-                "  -> Target: Killer Entity"
+                "  -> Target: KILLER"
         ));
     }
 
@@ -166,6 +166,18 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, 0, (FunctionReference) FunctionReference.functionReference(new ResourceLocation("gameplay/fishing")).build()), List.of(
                 "Reference:",
                 "  -> Name: minecraft:gameplay/fishing"
+        ));
+    }
+
+    @Test
+    public void testSequenceTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, 0, SequenceFunction.of(List.of(
+                ApplyExplosionDecay.explosionDecay().build(),
+                SmeltItemFunction.smelted().build()
+        ))), List.of(
+                "Sequence:",
+                "  -> Explosion Decay",
+                "  -> Use Smelting Recipe On Item"
         ));
     }
 
@@ -298,7 +310,7 @@ public class FunctionTooltipTest {
                 "  -> Replace: true",
                 "  -> Lore:",
                 "    -> Block Drops",
-                "  -> Resolution Context: Killer Entity"
+                "  -> Resolution Context: KILLER"
         ));
     }
 
@@ -314,7 +326,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Set Name:",
                 "  -> Name: Block Drops",
-                "  -> Resolution Context: Killer Entity"
+                "  -> Resolution Context: KILLER"
         ));
     }
 
@@ -324,6 +336,7 @@ public class FunctionTooltipTest {
 
         compoundTag.putBoolean("antlers", true);
 
+        //noinspection deprecation
         assertTooltip(FunctionTooltipUtils.getSetNbtTooltip(UTILS, 0, (SetNbtFunction) SetNbtFunction.setTag(compoundTag).build()), List.of(
                 "Set Nbt:",
                 "  -> Tag: {antlers:1b}"
@@ -334,20 +347,7 @@ public class FunctionTooltipTest {
     public void testSetPotionTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetPotionTooltip(UTILS, 0, (SetPotionFunction) SetPotionFunction.setPotion(Potions.TURTLE_MASTER).build()), List.of(
                 "Set Potion:",
-                "  -> Potion:",
-                "    -> Mob Effects:",
-                "      -> Mob Effect: minecraft:slowness",
-                "        -> Amplifier: 3",
-                "        -> Duration: 400",
-                "        -> Is Ambient: false",
-                "        -> Is Visible: true",
-                "        -> Show Icon: true",
-                "      -> Mob Effect: minecraft:resistance",
-                "        -> Amplifier: 2",
-                "        -> Duration: 400",
-                "        -> Is Ambient: false",
-                "        -> Is Visible: true",
-                "        -> Show Icon: true"
+                "  -> Potion: minecraft:turtle_master"
         ));
     }
 
