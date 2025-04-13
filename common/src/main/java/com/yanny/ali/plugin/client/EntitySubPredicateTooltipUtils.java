@@ -48,7 +48,7 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.player")));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
-        components.addAll(getOptionalTooltip(utils, pad + 1, predicate.gameType(), GenericTooltipUtils::getGameTypeTooltip));
+        components.addAll(getGameTypeTooltip(utils, pad + 1, predicate.gameType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
         components.addAll(getRecipesTooltip(utils, pad + 1, predicate.recipes()));
         components.addAll(getAdvancementsTooltip(utils, pad + 1, predicate.advancements()));
@@ -98,7 +98,19 @@ public class EntitySubPredicateTooltipUtils {
             if (v instanceof CatVariant catVariant) {
                 return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.getKey(catVariant)));
             } else if (v instanceof PaintingVariant paintingVariant) {
-                return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.PAINTING_VARIANT.getKey(paintingVariant)));
+                HolderLookup.Provider provider = utils.lookupProvider();
+
+                if (provider != null) {
+                    Optional<HolderLookup.RegistryLookup<PaintingVariant>> lookup = provider.lookup(Registries.PAINTING_VARIANT);
+
+                    if (lookup.isPresent()) {
+                        Optional<Holder.Reference<PaintingVariant>> first = lookup.get().listElements().filter((l) -> l.value() == paintingVariant).findFirst();
+
+                        if (first.isPresent()) {
+                            return getResourceKeyTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(first.get().key()));
+                        }
+                    }
+                }
             } else if (v instanceof FrogVariant frogVariant) {
                 return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.getKey(frogVariant)));
             } else if (v instanceof WolfVariant wolfVariant) {

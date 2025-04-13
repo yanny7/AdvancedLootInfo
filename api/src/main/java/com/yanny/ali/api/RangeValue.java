@@ -130,6 +130,16 @@ public final class RangeValue {
         }
     }
 
+    public RangeValue clamp(float min, float max) {
+        if (this.min < min) {
+            this.min = min;
+        }
+        if (this.max > max) {
+            this.max = max;
+        }
+        return this;
+    }
+
     public void encode(FriendlyByteBuf buf) {
         buf.writeFloat(min);
         buf.writeFloat(max);

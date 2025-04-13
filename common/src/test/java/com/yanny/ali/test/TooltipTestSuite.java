@@ -103,7 +103,7 @@ public class TooltipTestSuite {
 
     @NotNull
     private static ResourceManager loadClientResources() {
-        LanguageManager languageManager = new LanguageManager("en_us");
+        LanguageManager languageManager = new LanguageManager("en_us", (lang) -> {});
         ReloadableResourceManager resourceManager = new ReloadableResourceManager(PackType.CLIENT_RESOURCES);
 
         resourceManager.registerReloadListener(languageManager);

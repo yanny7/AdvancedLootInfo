@@ -64,7 +64,8 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.enchantments, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.options, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.only_compatible", fun.onlyCompatible));
 
         return components;
     }
@@ -75,7 +76,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.enchant_with_levels")));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.levels", fun.levels));
-        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.treasure", fun.treasure));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.options", fun.options, GenericTooltipUtils::getEnchantmentTooltip));
 
         return components;
     }
@@ -128,10 +129,11 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getLootingEnchantTooltip(IClientUtils utils, int pad, LootingEnchantFunction fun) {
+    public static List<Component> getEnchantedCountIncreaseTooltip(IClientUtils utils, int pad, EnchantedCountIncreaseFunction fun) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.type.function.looting_enchant")));
+        components.add(pad(pad, translatable("ali.type.function.enchanted_count_increase")));
+        components.addAll(getHolderTooltip(utils, pad + 1, fun.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.value));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
 

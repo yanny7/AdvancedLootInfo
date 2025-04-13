@@ -9,7 +9,6 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.core.component.DataComponents;
@@ -55,9 +54,13 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerC
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -121,9 +124,9 @@ public class GenericTooltipTest {
                 UTILS,
                 EmptyLootItem.emptyItem().setQuality(5).build(),
                 new RangeValue(2.5F),
-                Optional.of(Pair.of(Holder.direct(Enchantments.LOOTING), bonusChanceMap)),
+                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), bonusChanceMap)),
                 new RangeValue(2, 10),
-                Optional.of(Pair.of(Holder.direct(Enchantments.FORTUNE), bonusCountMap)),
+                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), bonusCountMap)),
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),
                 List.of(LootItemKilledByPlayerCondition.killedByPlayer().build())
         ), List.of(
@@ -174,14 +177,14 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 0, Enchantments.AQUA_AFFINITY), List.of("Enchantment: Aqua Affinity"));
-        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 1, Enchantments.FIRE_ASPECT), List.of("  -> Enchantment: Fire Aspect"));
+        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 0, LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.AQUA_AFFINITY).orElseThrow().value()), List.of("Enchantment: Aqua Affinity"));
+        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 1, LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FIRE_ASPECT).orElseThrow().value()), List.of("  -> Enchantment: Fire Aspect"));
     }
 
     @Test
     public void testModifierTooltip() {
         assertTooltip(GenericTooltipUtils.getModifierTooltip(UTILS, 0, new SetAttributesFunction.ModifierBuilder(
-                "armor",
+                ResourceLocation.withDefaultNamespace("armor"),
                 Attributes.ARMOR,
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL,
                 UniformGenerator.between(1, 5))
@@ -191,10 +194,10 @@ public class GenericTooltipTest {
                         .forSlot(EquipmentSlotGroup.FEET)
                         .build()), List.of(
                 "Modifier:",
-                "  -> Name: armor",
                 "  -> Attribute: Armor",
                 "  -> Operation: ADD_MULTIPLIED_TOTAL",
                 "  -> Amount: 1-5",
+                "  -> Id: minecraft:armor",
                 "  -> Equipment Slots:",
                 "    -> FEET",
                 "    -> LEGS",
@@ -206,11 +209,6 @@ public class GenericTooltipTest {
     @Test
     public void testAttributeTooltip() {
         assertTooltip(GenericTooltipUtils.getAttributeTooltip(UTILS, 0, Attributes.JUMP_STRENGTH.value()), List.of("Attribute: Jump Strength"));
-    }
-
-    @Test
-    public void testUUIDTooltip() {
-        assertTooltip(GenericTooltipUtils.getUUIDTooltip(UTILS, 0, UUID.nameUUIDFromBytes(new byte[]{1, 2, 3})), List.of("UUID: 5289df73-7df5-3326-bcdd-22597afb1fac"));
     }
 
     @Test
@@ -291,11 +289,12 @@ public class GenericTooltipTest {
                 "Distance to Player:",
                 "  -> X: =10.0",
                 "Location:",
-                "  -> Position:",
-                "    -> X: ≥20.0",
-                "Stepping on Location:",
-                "  -> Position:",
-                "    -> X: ≤30.0",
+                "  -> Located:",
+                "    -> Position:",
+                "      -> X: ≥20.0",
+                "  -> Stepping on Location:",
+                "    -> Position:",
+                "      -> X: ≤30.0",
                 "Mob Effects:",
                 "  -> Mob Effect: minecraft:absorption",
                 "    -> Is Ambient: true",
@@ -354,7 +353,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testLocationPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getLocationPredicateTooltip(UTILS, 0, LocationPredicate.Builder.location()
+        assertTooltip(GenericTooltipUtils.getLocationPredicateTooltip(UTILS, 0, "ali.property.branch.located", LocationPredicate.Builder.location()
                 .setX(MinMaxBounds.Doubles.exactly(10D))
                 .setY(MinMaxBounds.Doubles.atLeast(20D))
                 .setZ(MinMaxBounds.Doubles.atMost(30D))
@@ -367,24 +366,25 @@ public class GenericTooltipTest {
                 .setFluid(FluidPredicate.Builder.fluid().of(Fluids.LAVA))
                 .build()
         ), List.of(
-                "Position:",
-                "  -> X: =10.0",
-                "  -> Y: ≥20.0",
-                "  -> Z: ≤30.0",
-                "Biomes:",
-                "  -> Biome: minecraft:plains",
-                "Structures:",
-                "  -> Structure: minecraft:mineshaft",
-                "Dimension: minecraft:overworld",
-                "Smokey: true",
-                "Light: 10-15",
-                "Block Predicate:",
-                "  -> Blocks:",
-                "    -> Block: Stone",
-                "    -> Block: Cobblestone",
-                "Fluid Predicate:",
-                "  -> Fluids:",
-                "    -> Fluid: minecraft:lava"
+                "Located:",
+                "  -> Position:",
+                "    -> X: =10.0",
+                "    -> Y: ≥20.0",
+                "    -> Z: ≤30.0",
+                "  -> Biomes:",
+                "    -> Biome: minecraft:plains",
+                "  -> Structures:",
+                "    -> Structure: minecraft:mineshaft",
+                "  -> Dimension: minecraft:overworld",
+                "  -> Smokey: true",
+                "  -> Light: 10-15",
+                "  -> Block Predicate:",
+                "    -> Blocks:",
+                "      -> Block: Stone",
+                "      -> Block: Cobblestone",
+                "  -> Fluid Predicate:",
+                "    -> Fluids:",
+                "      -> Fluid: minecraft:lava"
         ));
     }
 
@@ -559,12 +559,12 @@ public class GenericTooltipTest {
                 .withCount(MinMaxBounds.Ints.between(10, 15))
                 .withSubPredicate(ItemSubPredicates.DAMAGE, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(5)))
                 .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.enchantments(List.of(
-                        new EnchantmentPredicate(Enchantments.SMITE, MinMaxBounds.Ints.atLeast(1)),
-                        new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(2, 4))
+                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.SMITE).orElseThrow(), MinMaxBounds.Ints.atLeast(1)),
+                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(2, 4))
                 )))
                 .withSubPredicate(ItemSubPredicates.STORED_ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.storedEnchantments(List.of(
-                        new EnchantmentPredicate(Enchantments.DEPTH_STRIDER, MinMaxBounds.Ints.atMost(5)),
-                        new EnchantmentPredicate(Enchantments.LURE, MinMaxBounds.Ints.atLeast(4))
+                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.DEPTH_STRIDER).orElseThrow(), MinMaxBounds.Ints.atMost(5)),
+                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LURE).orElseThrow(), MinMaxBounds.Ints.atLeast(4))
                 )))
                 .withSubPredicate(ItemSubPredicates.POTIONS, (ItemPotionsPredicate) ItemPotionsPredicate.potions(HolderSet.direct(Potions.HEALING)))
                 .withSubPredicate(ItemSubPredicates.CUSTOM_DATA, ItemCustomDataPredicate.customData(new NbtPredicate(compoundTag)))
@@ -578,14 +578,18 @@ public class GenericTooltipTest {
                 "  -> Damage:",
                 "    -> Durability: ≤5",
                 "  -> Enchantments:",
-                "    -> Enchantment: Smite",
+                "    -> Enchantments:",
+                "      -> Enchantment: Smite",
                 "      -> Level: ≥1",
-                "    -> Enchantment: Mending",
+                "    -> Enchantments:",
+                "      -> Enchantment: Mending",
                 "      -> Level: 2-4",
                 "  -> Stored Enchantments:",
-                "    -> Enchantment: Depth Strider",
+                "    -> Enchantments:",
+                "      -> Enchantment: Depth Strider",
                 "      -> Level: ≤5",
-                "    -> Enchantment: Lure",
+                "    -> Enchantments:",
+                "      -> Enchantment: Lure",
                 "      -> Level: ≥4",
                 "  -> Potions:",
                 "    -> Potion: minecraft:healing",
@@ -596,8 +600,9 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, new EnchantmentPredicate(Enchantments.FEATHER_FALLING, MinMaxBounds.Ints.atMost(2))), List.of(
-                "Enchantment: Feather Falling",
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FEATHER_FALLING).orElseThrow(), MinMaxBounds.Ints.atMost(2))), List.of(
+                "Enchantments:",
+                "  -> Enchantment: Feather Falling",
                 "  -> Level: ≤2"
         ));
     }
@@ -611,8 +616,9 @@ public class GenericTooltipTest {
 
     @Test
     public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, GameType.SPECTATOR), List.of(
-                "Game Type: Spectator"
+        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, GameTypePredicate.of(GameType.SPECTATOR)), List.of(
+                "Game Types:",
+                "  -> SPECTATOR"
         ));
     }
 
@@ -634,8 +640,8 @@ public class GenericTooltipTest {
     public void testRecipesTooltip() {
         Object2BooleanMap<ResourceLocation> recipeList = new Object2BooleanArrayMap<>();
 
-        recipeList.put(new ResourceLocation("furnace_recipe"), true);
-        recipeList.put(new ResourceLocation("apple_recipe"), false);
+        recipeList.put(ResourceLocation.withDefaultNamespace("furnace_recipe"), true);
+        recipeList.put(ResourceLocation.withDefaultNamespace("apple_recipe"), false);
 
         assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, new Object2BooleanArrayMap<>()), List.of());
         assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, recipeList), List.of(
@@ -651,8 +657,8 @@ public class GenericTooltipTest {
         Object2BooleanMap<String> criterions = new Object2BooleanArrayMap<>();
 
         criterions.put("test", true);
-        predicateMap.put(new ResourceLocation("first"), new PlayerPredicate.AdvancementDonePredicate(true));
-        predicateMap.put(new ResourceLocation("second"), new PlayerPredicate.AdvancementCriterionsPredicate(criterions));
+        predicateMap.put(ResourceLocation.withDefaultNamespace("first"), new PlayerPredicate.AdvancementDonePredicate(true));
+        predicateMap.put(ResourceLocation.withDefaultNamespace("second"), new PlayerPredicate.AdvancementCriterionsPredicate(criterions));
 
         assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, Map.of()), List.of());
         assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, predicateMap), List.of(

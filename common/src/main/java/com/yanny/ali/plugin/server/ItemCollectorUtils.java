@@ -4,9 +4,9 @@ import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
@@ -102,7 +102,7 @@ public class ItemCollectorUtils {
 
         if (level != null) {
             return items.stream().map((i) -> level.getRecipeManager()
-                    .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(i.getDefaultInstance()), level)
+                    .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), level)
                     .map((l) -> List.of(l.value().getResultItem(null).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
         }
 

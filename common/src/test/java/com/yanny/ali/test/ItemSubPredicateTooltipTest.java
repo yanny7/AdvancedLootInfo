@@ -7,6 +7,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,8 +22,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -46,12 +47,14 @@ public class ItemSubPredicateTooltipTest {
     @Test
     public void testItemEnchantmentsPredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemEnchantmentsPredicateTooltip(UTILS, 0, ItemEnchantmentsPredicate.enchantments(List.of(
-                new EnchantmentPredicate(Enchantments.LOOTING, MinMaxBounds.Ints.ANY),
-                new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(1, 5))
+                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
+                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
                 "Enchantments:",
-                "  -> Enchantment: Looting",
-                "  -> Enchantment: Mending",
+                "  -> Enchantments:",
+                "    -> Enchantment: Looting",
+                "  -> Enchantments:",
+                "    -> Enchantment: Mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -59,12 +62,14 @@ public class ItemSubPredicateTooltipTest {
     @Test
     public void testItemStoredEnchantmentsPredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemStoredEnchantmentsPredicateTooltip(UTILS, 0, ItemEnchantmentsPredicate.storedEnchantments(List.of(
-                new EnchantmentPredicate(Enchantments.LOOTING, MinMaxBounds.Ints.ANY),
-                new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(1, 5))
+                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
+                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
                 "Stored Enchantments:",
-                "  -> Enchantment: Looting",
-                "  -> Enchantment: Mending",
+                "  -> Enchantments:",
+                "    -> Enchantment: Looting",
+                "  -> Enchantments:",
+                "    -> Enchantment: Mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -207,15 +212,13 @@ public class ItemSubPredicateTooltipTest {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemAttributeModifiersPredicateTooltip(UTILS, 0, new ItemAttributeModifiersPredicate(Optional.of(new CollectionPredicate<>(
                 Optional.of(CollectionContentsPredicate.of(new ItemAttributeModifiersPredicate.EntryPredicate(
                         Optional.of(HolderSet.direct(Attributes.ARMOR)),
-                        Optional.of(UUID.nameUUIDFromBytes(new byte[]{1, 2, 3, 4})),
-                        Optional.of("Help"),
+                        Optional.of(ResourceLocation.withDefaultNamespace("help")),
                         MinMaxBounds.Doubles.between(1, 4),
                         Optional.of(AttributeModifier.Operation.ADD_VALUE),
                         Optional.of(EquipmentSlotGroup.ARMOR)
                 ))),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new ItemAttributeModifiersPredicate.EntryPredicate(
                         Optional.of(HolderSet.direct(Attributes.GRAVITY)),
-                        Optional.empty(),
                         Optional.empty(),
                         MinMaxBounds.Doubles.ANY,
                         Optional.empty(),
@@ -228,8 +231,7 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Contains:",
                 "      -> Attributes:",
                 "        -> Attribute: Armor",
-                "      -> UUID: 08d6c05a-2151-3a79-a1df-eb9d2a8f262f",
-                "      -> Name: Help",
+                "      -> Id: minecraft:help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
                 "      -> Slot: ARMOR",

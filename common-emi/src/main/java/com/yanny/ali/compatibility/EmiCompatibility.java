@@ -98,7 +98,7 @@ public class EmiCompatibility implements EmiPlugin {
                         }
                     }
 
-                    registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.location().getNamespace(), "/" + location.location().getPath()), block, lootEntry, GenericUtils.getItems(location)));
+                    registry.addRecipe(new EmiBlockLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), block, lootEntry, GenericUtils.getItems(location)));
                     map.remove(location);
                 }
             }
@@ -167,7 +167,7 @@ public class EmiCompatibility implements EmiPlugin {
                                 category = entityCategory;
                             }
 
-                            registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.location().getNamespace(), "/" + location.location().getPath()), entity, lootEntry, GenericUtils.getItems(location)));
+                            registry.addRecipe(new EmiEntityLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entity, lootEntry, GenericUtils.getItems(location)));
                             map.remove(location);
                         }
                     }
@@ -188,7 +188,7 @@ public class EmiCompatibility implements EmiPlugin {
                     category = gameplayCategory;
                 }
 
-                registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.location().getNamespace(), "/" + location.location().getPath()), entry.getValue(), GenericUtils.getItems(location)));
+                registry.addRecipe(new EmiGameplayLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entry.getValue(), GenericUtils.getItems(location)));
             }
         }
     }

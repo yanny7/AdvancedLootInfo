@@ -69,7 +69,7 @@ public class LootCategories {
                         JsonObject jsonObject = GsonHelper.convertToJsonObject(value, location.toString());
                         LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
                         String key = GsonHelper.getAsString(jsonObject, "key");
-                        Item icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
+                        Item icon = BuiltInRegistries.ITEM.get(ResourceLocation.parse(GsonHelper.getAsString(jsonObject, "icon")));
 
                         switch (type) {
                             case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));

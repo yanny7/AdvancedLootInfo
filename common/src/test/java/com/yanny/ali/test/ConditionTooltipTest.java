@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -95,11 +96,11 @@ public class ConditionTooltipTest {
     @Test
     public void testEntityPropertiesTooltip() {
         assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(UTILS, 0, (LootItemEntityPropertyCondition) LootItemEntityPropertyCondition.hasProperties(
-                LootContext.EntityTarget.KILLER,
+                LootContext.EntityTarget.ATTACKER,
                 EntityPredicate.Builder.entity().team("blue")
         ).build()), List.of(
             "Entity Properties:",
-            "  -> Target: KILLER",
+            "  -> Target: ATTACKER",
             "  -> Predicate:",
             "    -> Team: blue"
         ));
@@ -107,17 +108,17 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEntityScoresTooltip() {
-        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER).build()), List.of(
                 "Entity Scores:",
-                "  -> Target: DIRECT_KILLER"
+                "  -> Target: DIRECT_ATTACKER"
         ));
-        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_KILLER)
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, 0, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER)
                 .withScore("single", IntRange.range(2, 5))
                 .withScore("double", IntRange.range(1, 7))
                 .build()
         ), List.of(
                 "Entity Scores:",
-                "  -> Target: DIRECT_KILLER",
+                "  -> Target: DIRECT_ATTACKER",
                 "  -> Scores:",
                 "    -> Score: single",
                 "      -> Limit: 2 - 5",
@@ -173,22 +174,26 @@ public class ConditionTooltipTest {
     public void testRandomChanceTooltip() {
         assertTooltip(ConditionTooltipUtils.getRandomChanceTooltip(UTILS, 0, (LootItemRandomChanceCondition) LootItemRandomChanceCondition.randomChance(0.25F).build()), List.of(
                 "Random Chance:",
-                "  -> Probability: 0.25"
+                "  -> Chance: 0.25"
         ));
     }
 
     @Test
     public void testRandomChanceWithLootingTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceWithLootingTooltip(UTILS, 0, (LootItemRandomChanceWithLootingCondition) LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.25F, 5F).build()), List.of(
-                "Random Chance With Looting:",
-                "  -> Percent: 0.25",
-                "  -> Multiplier: 5.0"
+        assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, 0, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()), List.of(
+                "Random Chance With Enchanted Bonus:",
+                "  -> Unenchanted Chance: 0.25",
+                "  -> Enchanted Chance:",
+                "    -> Linear:",
+                "      -> Base: 5.25",
+                "      -> Per Level: 5.0",
+                "  -> Enchantment: Looting"
         ));
     }
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, 0, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, new ResourceLocation("test"))).build()), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, 0, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()), List.of("Reference: minecraft:test"));
     }
 
     @Test
@@ -198,7 +203,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTableBonusTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.LOOTING, 0.25F, 0.5555F, 0.99F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow(), 0.25F, 0.5555F, 0.99F).build()), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: Looting",
                 "  -> Values: [0.25, 0.5555, 0.99]" //FIXME to 2 decimal places

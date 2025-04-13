@@ -68,7 +68,7 @@ public class EntryTooltipUtils {
         allConditions.addAll(entry.conditions);
 
         float rawChance = (float) entry.weight / sumWeight;
-        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
+        RangeValue chance = TooltipUtils.getChance(utils, allConditions, rawChance);
         Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
 
         return new LinkedList<>(getTooltip(utils, entry, chance, bonusChance, new RangeValue(), Optional.empty(), allFunctions, allConditions));
@@ -148,7 +148,7 @@ public class EntryTooltipUtils {
                 components.add(pad(1, translatable(
                         "ali.description.chance_bonus",
                         value(entry.getValue(), "%"),
-                        Component.translatable(c.getFirst().value().getDescriptionId()),
+                        c.getFirst().value().description(),
                         Component.translatable("enchantment.level." + entry.getKey())
                 )))
         ));
@@ -164,7 +164,7 @@ public class EntryTooltipUtils {
                     components.add(pad(1, translatable(
                             "ali.description.count_bonus",
                             value(entry.getValue()),
-                            Component.translatable(c.getFirst().value().getDescriptionId()),
+                            c.getFirst().value().description(),
                             Component.translatable("enchantment.level." + entry.getKey())
                     )))
         ));

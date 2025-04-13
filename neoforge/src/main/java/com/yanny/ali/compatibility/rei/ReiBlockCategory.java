@@ -23,9 +23,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.common.IPlantable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
 
     @Override
     public List<Widget> setupDisplay(ReiBlockDisplay display, Rectangle bounds) {
-        boolean isSpecial = display.getBlock() instanceof IPlantable || display.getBlock().asItem() == Items.AIR;
+        boolean isSpecial = display.getBlock() instanceof BushBlock || display.getBlock().asItem() == Items.AIR;
         List<Widget> widgets = new LinkedList<>();
 
         widgets.add(Widgets.createCategoryBase(bounds));
@@ -85,7 +85,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         public BlockSlotRenderer(Block block) {
             this.block = block;
             blockState = block.defaultBlockState();
-            isPlant = block instanceof IPlantable;
+            isPlant = block instanceof BushBlock;
             level = Minecraft.getInstance().level;
         }
 

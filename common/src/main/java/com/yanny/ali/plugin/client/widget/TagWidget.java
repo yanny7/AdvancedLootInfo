@@ -31,7 +31,7 @@ public class TagWidget implements IEntryWidget {
         allConditions.addAll(tagEntry.conditions);
 
         float rawChance = (float) tagEntry.weight / sumWeight;
-        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
+        RangeValue chance = TooltipUtils.getChance(utils, allConditions, rawChance);
         Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
         RangeValue count = TooltipUtils.getCount(utils, allFunctions);
         Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount = TooltipUtils.getBonusCount(utils, allFunctions, count);

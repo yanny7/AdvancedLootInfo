@@ -59,16 +59,17 @@ public class EntitySubPredicateTooltipTest {
     @Test
     public void testPlayerPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
-                .checkAdvancementDone(new ResourceLocation("test"), true)
-                .addRecipe(new ResourceLocation("test"), false)
-                .checkAdvancementCriterions(new ResourceLocation("criterion"), Map.of("test", true))
+                .checkAdvancementDone(ResourceLocation.withDefaultNamespace("test"), true)
+                .addRecipe(ResourceLocation.withDefaultNamespace("test"), false)
+                .checkAdvancementCriterions(ResourceLocation.withDefaultNamespace("criterion"), Map.of("test", true))
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(100))
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
-                .setGameType(GameType.SURVIVAL)
+                .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
                 .build()), List.of(
                 "Player:",
-                "  -> Game Type: Survival",
+                "  -> Game Types:",
+                "    -> SURVIVAL",
                 "  -> Stats:",
                 "    -> Block: Cobblestone",
                 "      -> Times Mined: ≥100",
@@ -125,7 +126,7 @@ public class EntitySubPredicateTooltipTest {
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.PAINTING.createPredicate(
-                HolderSet.direct(Holder.direct(Objects.requireNonNull(BuiltInRegistries.PAINTING_VARIANT.get(PaintingVariants.BOMB))))
+                HolderSet.direct(LOOKUP.lookup(Registries.PAINTING_VARIANT).orElseThrow().get(PaintingVariants.BOMB).orElseThrow())
         )), List.of(
                 "Type: minecraft:painting",
                 "  -> Variants:",

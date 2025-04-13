@@ -4,35 +4,39 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.core.Holder;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class TooltipUtils {
     private TooltipUtils() {}
 
-    public static RangeValue getChance(List<LootItemCondition> conditions, float chance) {
+    public static RangeValue getChance(IClientUtils utils, List<LootItemCondition> conditions, float chance) {
         RangeValue value = new RangeValue(chance);
-        List<LootItemCondition> list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceWithLootingCondition).toList();
+        List<LootItemCondition> list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceWithEnchantedBonusCondition).toList();
 
         for (LootItemCondition c : list) {
-            LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
-            value.multiply(condition.percent());
+            LootItemRandomChanceWithEnchantedBonusCondition condition = (LootItemRandomChanceWithEnchantedBonusCondition) c;
+            value.multiply(condition.unenchantedChance());
         }
 
         list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceCondition).toList();
 
         for (LootItemCondition c : list) {
             LootItemRandomChanceCondition condition = (LootItemRandomChanceCondition) c;
-            value.multiply(condition.probability());
+            value.multiply(utils.convertNumber(utils, condition.chance()));
         }
 
         list = conditions.stream().filter((f) -> f instanceof BonusLevelTableCondition).toList();
@@ -49,17 +53,18 @@ public class TooltipUtils {
     public static Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> getBonusChance(List<LootItemCondition> conditions, float chance) {
         Map<Integer, RangeValue> bonusChance = new HashMap<>();
 
-        List<LootItemCondition> list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceWithLootingCondition).toList();
+        List<LootItemCondition> list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceWithEnchantedBonusCondition).toList();
 
         for (LootItemCondition c : list) {
-            LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
+            LootItemRandomChanceWithEnchantedBonusCondition condition = (LootItemRandomChanceWithEnchantedBonusCondition) c;
 
-            for (int level = 1; level < Enchantments.LOOTING.getMaxLevel() + 1; level++) {
-                RangeValue value = new RangeValue(chance * (condition.percent() + level * condition.lootingMultiplier()));
+            for (int level = 1; level < condition.enchantment().value().getMaxLevel() + 1; level++) {
+                RangeValue value = new RangeValue(chance);
+                calculateCount(condition.enchantedChance(), value, level);
                 bonusChance.put(level, value.multiply(100));
             }
 
-            return Optional.of(new Pair<>(Holder.direct(Enchantments.LOOTING), bonusChance));
+            return Optional.of(new Pair<>(condition.enchantment(), bonusChance));
         }
 
         list = conditions.stream().filter((f) -> f instanceof BonusLevelTableCondition).toList();
@@ -124,18 +129,23 @@ public class TooltipUtils {
             return Optional.of(new Pair<>(function.enchantment, bonusCount));
         }
 
-        list = functions.stream().filter((f) -> f instanceof LootingEnchantFunction).toList();
+        list = functions.stream().filter((f) -> f instanceof EnchantedCountIncreaseFunction).toList();
 
         for (LootItemFunction f : list) {
-            LootingEnchantFunction function = (LootingEnchantFunction) f;
+            EnchantedCountIncreaseFunction function = (EnchantedCountIncreaseFunction) f;
 
-            for (int level = 1; level < Enchantments.LOOTING.getMaxLevel() + 1; level++) {
+            for (int level = 1; level < function.enchantment.value().getMaxLevel() + 1; level++) {
                 RangeValue value = new RangeValue(count);
                 value.addMax(new RangeValue(utils.convertNumber(utils, function.value)).multiply(level));
+
+                if (function.limit > 0) {
+                    value.clamp(Integer.MIN_VALUE, function.limit);
+                }
+
                 bonusCount.put(level, value);
             }
 
-            return Optional.of(new Pair<>(Holder.direct(Enchantments.LOOTING), bonusCount));
+            return Optional.of(new Pair<>(function.enchantment, bonusCount));
         }
 
         return Optional.empty();
@@ -158,5 +168,32 @@ public class TooltipUtils {
             default -> {
             }
         }
+    }
+
+    private static void calculateCount(LevelBasedValue levelBasedValue, RangeValue v, int level) {
+        switch (levelBasedValue) {
+            case LevelBasedValue.Constant(float value) -> v.multiply(value);
+            case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
+                calculateCount(value, v, level);
+                v.clamp(min, max);
+            }
+            case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
+                RangeValue n = new RangeValue();
+                RangeValue d = new RangeValue();
+                calculateCount(numerator, n, level);
+                calculateCount(denominator, d, level);
+                v.multiply(new RangeValue(n.min() / d.max(), n.max() / d.min()));
+            }
+            case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> v.multiply(new RangeValue(base).add(perLevelAboveFirst * (level - 1)));
+            case LevelBasedValue.LevelsSquared(float added) -> v.multiply(added + Mth.square(level));
+            case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
+                if (level < values.size()) {
+                    v.multiply(values.get(level));
+                } else {
+                    calculateCount(fallback, v, level);
+                }
+            }
+            default -> v.set(new RangeValue(false, true));
+        };
     }
 }

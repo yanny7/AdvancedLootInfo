@@ -31,7 +31,7 @@ public class ItemWidget implements IEntryWidget {
         allConditions.addAll(itemEntry.conditions);
 
         float rawChance = (float) itemEntry.weight / sumWeight;
-        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
+        RangeValue chance = TooltipUtils.getChance(utils, allConditions, rawChance);
         Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
         RangeValue count = TooltipUtils.getCount(utils, allFunctions);
         Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount = TooltipUtils.getBonusCount(utils, allFunctions, count);

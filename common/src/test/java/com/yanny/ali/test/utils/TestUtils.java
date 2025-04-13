@@ -97,7 +97,7 @@ public class TestUtils {
 
         for(String namespace : resourceManager.getNamespaces()) {
             try {
-                ResourceLocation langLocation = new ResourceLocation(namespace, lang);
+                ResourceLocation langLocation = ResourceLocation.fromNamespaceAndPath(namespace, lang);
 
                 for(Resource resource : resourceManager.getResourceStack(langLocation)) {
                     try (InputStream inputStream = resource.open()) {

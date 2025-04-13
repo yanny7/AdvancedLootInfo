@@ -106,7 +106,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
-        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate(), GenericTooltipUtils::getLocationPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate(), GenericTooltipUtils::getLocationPredicateTooltip));
         components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.offset", cond.offset(), GenericTooltipUtils::getBlockPosTooltip));
 
         return components;
@@ -122,18 +122,19 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.random_chance")));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.probability", cond.probability()));
+        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.chance", cond.chance()));
 
         return components;
     }
 
     @NotNull
-    public static List<Component> getRandomChanceWithLootingTooltip(IClientUtils utils, int pad, LootItemRandomChanceWithLootingCondition cond) {
+    public static List<Component> getRandomChanceWithEnchantedBonusTooltip(IClientUtils utils, int pad, LootItemRandomChanceWithEnchantedBonusCondition cond) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.type.condition.random_chance_with_looting")));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.percent", cond.percent()));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.multiplier", cond.lootingMultiplier()));
+        components.add(pad(pad, translatable("ali.type.condition.random_chance_with_enchanted_bonus")));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.unenchanted_chance", cond.unenchantedChance()));
+        components.addAll(getLevelBasedValueTooltip(utils, pad + 1, "ali.property.branch.enchanted_chance", cond.enchantedChance()));
+        components.addAll(getHolderTooltip(utils, pad + 1, cond.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
 
         return components;
     }
