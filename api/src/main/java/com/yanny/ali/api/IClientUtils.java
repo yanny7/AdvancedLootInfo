@@ -3,6 +3,7 @@ package com.yanny.ali.api;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -35,4 +36,7 @@ public interface IClientUtils extends ICommonUtils {
     List<Item> getItems(ResourceKey<LootTable> location);
 
     RangeValue convertNumber(IClientUtils utils, @Nullable NumberProvider numberProvider);
+
+    @Nullable
+    HolderLookup.Provider lookupProvider();
 }

@@ -2,7 +2,10 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.FrogVariant;
@@ -13,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
@@ -98,7 +102,19 @@ public class EntitySubPredicateTooltipUtils {
             } else if (v instanceof FrogVariant frogVariant) {
                 return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.getKey(frogVariant)));
             } else if (v instanceof WolfVariant wolfVariant) {
-                //TODO wolf variant
+                HolderLookup.Provider provider = utils.lookupProvider();
+
+                if (provider != null) {
+                    Optional<HolderLookup.RegistryLookup<WolfVariant>> lookup = provider.lookup(Registries.WOLF_VARIANT);
+
+                    if (lookup.isPresent()) {
+                        Optional<Holder.Reference<WolfVariant>> first = lookup.get().listElements().filter((l) -> l.value() == wolfVariant).findFirst();
+
+                        if (first.isPresent()) {
+                            return getResourceKeyTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(first.get().key()));
+                        }
+                    }
+                }
             }
 
             return List.of();

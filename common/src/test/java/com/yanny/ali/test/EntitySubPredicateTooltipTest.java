@@ -3,12 +3,17 @@ package com.yanny.ali.test;
 import com.yanny.ali.plugin.client.EntitySubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.CatVariant;
+import net.minecraft.world.entity.animal.FrogVariant;
+import net.minecraft.world.entity.animal.WolfVariants;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
+import net.minecraft.world.entity.decoration.PaintingVariants;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -19,6 +24,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -116,6 +122,30 @@ public class EntitySubPredicateTooltipTest {
                 "Type: minecraft:cat",
                 "  -> Variants:",
                 "    -> Variant: minecraft:calico"
+        ));
+
+        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.PAINTING.createPredicate(
+                HolderSet.direct(Holder.direct(Objects.requireNonNull(BuiltInRegistries.PAINTING_VARIANT.get(PaintingVariants.BOMB))))
+        )), List.of(
+                "Type: minecraft:painting",
+                "  -> Variants:",
+                "    -> Variant: minecraft:bomb"
+        ));
+
+        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.frogVariant(
+                Holder.direct(Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.get(FrogVariant.TEMPERATE)))
+        )), List.of(
+                "Type: minecraft:frog",
+                "  -> Variants:",
+                "    -> Variant: minecraft:temperate"
+        ));
+
+        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.wolfVariant(
+                HolderSet.direct(LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).get(WolfVariants.ASHEN).orElseThrow())
+        )), List.of(
+                "Type: minecraft:wolf",
+                "  -> Variants:",
+                "    -> Variant: minecraft:ashen"
         ));
     }
 }

@@ -7,10 +7,13 @@ import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -301,6 +304,14 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         }
 
         return new RangeValue(false, true);
+    }
+
+    @Nullable
+    @Override
+    public HolderLookup.Provider lookupProvider() {
+        Level level = Minecraft.getInstance().level;
+
+        return level != null ? level.registryAccess() : null;
     }
 
     public void printClientInfo() {

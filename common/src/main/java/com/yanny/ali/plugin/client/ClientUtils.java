@@ -6,6 +6,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -74,5 +75,11 @@ public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public List<Item> getItems(ResourceKey<LootTable> location) {
         return PluginManager.CLIENT_REGISTRY.getItems(location);
+    }
+
+    @Nullable
+    @Override
+    public HolderLookup.Provider lookupProvider() {
+        return PluginManager.CLIENT_REGISTRY.lookupProvider();
     }
 }
