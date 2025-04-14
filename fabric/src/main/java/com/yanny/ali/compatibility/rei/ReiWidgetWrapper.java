@@ -8,6 +8,7 @@ import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,8 +29,13 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
         guiGraphics.pose().popPose();
     }
 
+    @Nullable
     public Tooltip getTooltip(Point point) {
-        return Tooltip.create(widget.getTooltipComponents(point.getX() - bounds.getX(), point.getY() - bounds.getY()));
+        if (bounds.contains(point)) {
+            return Tooltip.create(widget.getTooltipComponents(point.getX() - bounds.getX(), point.getY() - bounds.getY()));
+        } else {
+            return null;
+        }
     }
 
     @Override
