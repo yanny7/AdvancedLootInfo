@@ -62,11 +62,13 @@ loom {
 tasks.withType(JavaCompile).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
+    source(project(":common-rei").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
+    from(project(":common-rei").sourceSets.main.allSource)
 }
 
 processResources {

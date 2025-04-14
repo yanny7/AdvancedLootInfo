@@ -24,5 +24,6 @@ plugins {
 rootProject.name = 'MultiLoader-AdvancedLootInfo'
 include("api")
 include("common")
+include("common-rei")
 include("fabric")
 include("forge")
