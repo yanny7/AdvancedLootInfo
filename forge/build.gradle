@@ -39,7 +39,7 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-                    source project(":common-rei").sourceSets.main
+//                    source project(":common-rei").sourceSets.main
                 }
             }
         }
@@ -55,7 +55,7 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-                    source project(":common-rei").sourceSets.main
+//                    source project(":common-rei").sourceSets.main
                 }
             }
         }
@@ -72,7 +72,7 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-                    source project(":common-rei").sourceSets.main
+//                    source project(":common-rei").sourceSets.main
                 }
             }
         }

@@ -1,5 +1,6 @@
 ## []
 
+- Fixed bonus count calculation
 - Fixed missing tooltip in REI right panel when displayed ALI category
 - Added missing group tooltips
 - Performance improvements

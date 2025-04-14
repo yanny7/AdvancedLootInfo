@@ -136,7 +136,7 @@ public class TooltipUtils {
 
             for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
                 RangeValue value = new RangeValue(count);
-                value.addMax(new RangeValue(utils.convertNumber(utils, function.value)).multiply(level));
+                value.add(new RangeValue(utils.convertNumber(utils, function.value)).multiply(level));
                 bonusCount.put(level, value);
             }
 
