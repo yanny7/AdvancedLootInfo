@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
@@ -30,12 +29,12 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     private Component count;
     private boolean isRange = false;
 
-    public JeiLootSlotWidget(LootPoolEntryContainer entry, IRecipeSlotDrawable slotDrawable, int x, int y, RangeValue chance, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusChance,
-                             RangeValue count, @Nullable Pair<Enchantment, Map<Integer, RangeValue>> bonusCount, List<LootItemFunction> functions,
+    public JeiLootSlotWidget(LootPoolEntryContainer entry, IRecipeSlotDrawable slotDrawable, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
+                             Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> functions,
                              List<LootItemCondition> conditions) {
         this.slotDrawable = slotDrawable;
         rect = new Rect(x, y, 18, 18);
-        setCount(count);
+        setCount(count.get(null).get(0));
     }
 
     @NotNull

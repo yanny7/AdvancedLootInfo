@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.client.widget;
 
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.TooltipUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -30,12 +29,10 @@ public class ItemWidget implements IEntryWidget {
         allConditions.addAll(Arrays.asList(itemEntry.conditions));
 
         float rawChance = (float) itemEntry.weight / sumWeight;
-        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
-        RangeValue count = TooltipUtils.getCount(utils, allFunctions);
-        Pair<Enchantment, Map<Integer, RangeValue>> bonusCount = TooltipUtils.getBonusCount(utils, allFunctions, count);
+        Map<Enchantment, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, allConditions, rawChance);
+        Map<Enchantment, Map<Integer, RangeValue>> count = TooltipUtils.getCount(utils, allFunctions);
 
-        bounds = utils.addSlotWidget(itemEntry.item, itemEntry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions);
+        bounds = utils.addSlotWidget(itemEntry.item, itemEntry, x, y, chance, count, allFunctions, allConditions);
         this.entry = entry;
     }
 

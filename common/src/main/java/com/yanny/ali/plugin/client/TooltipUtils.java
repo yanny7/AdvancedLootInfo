@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.client;
 
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -11,139 +10,175 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TooltipUtils {
     private TooltipUtils() {}
 
-    public static RangeValue getChance(List<LootItemCondition> conditions, float chance) {
-        RangeValue value = new RangeValue(chance);
-        List<LootItemCondition> list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceWithLootingCondition).toList();
+    @NotNull
+    public static Map<Enchantment, Map<Integer, RangeValue>> getChance(IClientUtils utils, List<LootItemCondition> conditions, float rawChance) {
+        Map<Enchantment, Map<Integer, RangeValue>> chance = new LinkedHashMap<>();
 
-        for (LootItemCondition c : list) {
-            LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
-            value.multiply(condition.percent);
+        chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
+
+        for (LootItemCondition condition : conditions) {
+            utils.applyChance(utils, condition, chance);
         }
 
-        list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceCondition).toList();
-
-        for (LootItemCondition c : list) {
-            LootItemRandomChanceCondition condition = (LootItemRandomChanceCondition) c;
-            value.multiply(condition.probability);
-        }
-
-        list = conditions.stream().filter((f) -> f instanceof BonusLevelTableCondition).toList();
-
-        for (LootItemCondition c : list) {
-            BonusLevelTableCondition condition = (BonusLevelTableCondition) c;
-            value.set(new RangeValue(condition.values[0]));
-        }
-
-        return value.multiply(100);
-    }
-
-    @Nullable
-    @Unmodifiable
-    public static Pair<Enchantment, Map<Integer, RangeValue>> getBonusChance(List<LootItemCondition> conditions, float chance) {
-        Map<Integer, RangeValue> bonusChance = new HashMap<>();
-
-        List<LootItemCondition> list = conditions.stream().filter((f) -> f instanceof LootItemRandomChanceWithLootingCondition).toList();
-
-        for (LootItemCondition c : list) {
-            LootItemRandomChanceWithLootingCondition condition = (LootItemRandomChanceWithLootingCondition) c;
-
-            for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
-                RangeValue value = new RangeValue(chance * (condition.percent + level * condition.lootingMultiplier));
-                bonusChance.put(level, value.multiply(100));
-            }
-
-            return new Pair<>(Enchantments.MOB_LOOTING, bonusChance);
-        }
-
-        list = conditions.stream().filter((f) -> f instanceof BonusLevelTableCondition).toList();
-
-        for (LootItemCondition c : list) {
-            BonusLevelTableCondition condition = (BonusLevelTableCondition) c;
-
-            for (int level = 1; level < condition.values.length; level++) {
-                RangeValue value = new RangeValue(condition.values[level]);
-                bonusChance.put(level, value.multiply(100));
-            }
-
-            return new Pair<>(condition.enchantment, bonusChance);
-        }
-
-        return null;
+        return chance;
     }
 
     @NotNull
-    public static RangeValue getCount(IClientUtils utils, List<LootItemFunction> functions) {
-        RangeValue value = new RangeValue();
+    public static Map<Enchantment, Map<Integer, RangeValue>> getCount(IClientUtils utils, List<LootItemFunction> functions) {
+        Map<Enchantment, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
 
-        functions.stream().filter((f) -> f instanceof SetItemCountFunction).forEach((f) -> {
-            SetItemCountFunction function = (SetItemCountFunction) f;
+        count.put(null, Map.of(0, new RangeValue()));
 
-            if (function.add) {
-                value.add(utils.convertNumber(utils, function.value));
-            } else {
-                value.set(utils.convertNumber(utils, function.value));
-            }
+        for (LootItemFunction function : functions) {
+            utils.applyCount(utils, function, count);
+        }
 
-        });
-
-        functions.stream().filter((f) -> f instanceof ApplyBonusCount).forEach((f) ->
-                calculateCount((ApplyBonusCount) f, value, 0));
-
-        functions.stream().filter((f) -> f instanceof LimitCount).forEach((f) -> {
-            LimitCount function = (LimitCount) f;
-
-            value.clamp(utils.convertNumber(utils, function.limiter.min), utils.convertNumber(utils, function.limiter.max));
-        });
-
-        return value;
+        return count;
     }
 
-    @Nullable
-    @Unmodifiable
-    public static Pair<Enchantment, Map<Integer, RangeValue>> getBonusCount(IClientUtils utils, List<LootItemFunction> functions, RangeValue count) {
-        Map<Integer, RangeValue> bonusCount = new HashMap<>();
+    public static void applyRandomChance(IClientUtils utils, LootItemRandomChanceCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : chance.entrySet()) {
+            for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
+                levelEntry.getValue().multiply(condition.probability);
+            }
+        }
+    }
 
-        List<LootItemFunction> list = functions.stream().filter((f) -> f instanceof ApplyBonusCount).toList();
+    public static void applyRandomChanceWithLooting(IClientUtils utils, LootItemRandomChanceWithLootingCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+        Enchantment enchantment = Enchantments.MOB_LOOTING;
 
-        for (LootItemFunction f : list) {
-            ApplyBonusCount function = (ApplyBonusCount) f;
-            Enchantment enchantment = function.enchantment;
+        if (chance.containsKey(enchantment)) {
+            chance.get(null).get(0).multiply(condition.percent);
 
-            for (int level = 1; level < enchantment.getMaxLevel() + 1; level++) {
-                RangeValue value = new RangeValue(count);
+            for (Map.Entry<Integer, RangeValue> entry : chance.get(enchantment).entrySet()) {
+                entry.getValue().multiply(condition.percent + entry.getKey() * condition.lootingMultiplier);
+            }
+        } else {
+            RangeValue baseChance = new RangeValue(chance.get(null).get(0));
+            Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
+
+            chance.get(null).get(0).multiply(condition.percent);
+            chance.put(enchantment, levelMap);
+
+            for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
+                levelMap.put(level, new RangeValue(baseChance).multiply(condition.percent + level * condition.lootingMultiplier));
+            }
+        }
+    }
+
+    public static void applyTableBonus(IClientUtils utils, BonusLevelTableCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+        Enchantment enchantment = condition.enchantment;
+
+        if (condition.values.length > 0) {
+            if (chance.containsKey(enchantment)) {
+                chance.get(null).get(0).multiply(condition.values[0]);
+
+                if (condition.values.length > 1) {
+                    for (Map.Entry<Integer, RangeValue> entry : chance.get(enchantment).entrySet()) {
+                        Integer level = entry.getKey();
+
+                        if (level < condition.values.length) {
+                            entry.getValue().multiply(condition.values[level]);
+                        }
+                    }
+                }
+            } else {
+                RangeValue baseChance = new RangeValue(chance.get(null).get(0));
+                Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
+
+                chance.get(null).get(0).multiply(condition.values[0]);
+                chance.put(enchantment, levelMap);
+
+                for (int level = 1; level <= enchantment.getMaxLevel() && level < condition.values.length; level++) {
+                    levelMap.put(level, new RangeValue(baseChance).multiply(condition.values[level]));
+                }
+            }
+        }
+    }
+
+    public static void applySetCount(IClientUtils utils, SetItemCountFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : count.entrySet()) {
+            for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
+                if (function.add) {
+                    levelEntry.getValue().add(utils.convertNumber(utils, function.value));
+                } else {
+                    levelEntry.getValue().set(utils.convertNumber(utils, function.value));
+                }
+            }
+        }
+    }
+
+    public static void applyBonus(IClientUtils utils, ApplyBonusCount function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+        Enchantment enchantment = function.enchantment;
+
+        if (count.containsKey(enchantment)) {
+            calculateCount(function, count.get(null).get(0), 0);
+
+            for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
+                calculateCount(function, entry.getValue(), entry.getKey());
+            }
+        } else {
+            RangeValue baseCount = new RangeValue(count.get(null).get(0));
+            Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
+
+            calculateCount(function, count.get(null).get(0), 0);
+            count.put(enchantment, levelMap);
+
+            for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
+                RangeValue value = new RangeValue(baseCount);
 
                 calculateCount(function, value, level);
-                bonusCount.put(level, value);
+                levelMap.put(level, value);
             }
-
-            return new Pair<>(enchantment, bonusCount);
         }
+    }
 
-        list = functions.stream().filter((f) -> f instanceof LootingEnchantFunction).toList();
-
-        for (LootItemFunction f : list) {
-            LootingEnchantFunction function = (LootingEnchantFunction) f;
-
-            for (int level = 1; level < Enchantments.MOB_LOOTING.getMaxLevel() + 1; level++) {
-                RangeValue value = new RangeValue(count);
-                value.add(new RangeValue(utils.convertNumber(utils, function.value)).multiply(level));
-                bonusCount.put(level, value);
+    public static void applyLimitCount(IClientUtils utils, LimitCount function, Map<Enchantment, Map<Integer, RangeValue>> bonusCount) {
+        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> entry : bonusCount.entrySet()) {
+            for (Map.Entry<Integer, RangeValue> mapEntry : entry.getValue().entrySet()) {
+                RangeValue value = mapEntry.getValue();
+                value.clamp(utils.convertNumber(utils, function.limiter.min), utils.convertNumber(utils, function.limiter.max));
             }
-
-            return new Pair<>(Enchantments.MOB_LOOTING, bonusCount);
         }
+    }
 
-        return null;
+    public static void applyLootingEnchant(IClientUtils utils, LootingEnchantFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+        Enchantment enchantment = Enchantments.MOB_LOOTING;
+
+        if (count.containsKey(enchantment)) {
+            for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
+                RangeValue value = entry.getValue();
+
+                value.add(utils.convertNumber(utils, function.value).multiply(entry.getKey()));
+
+                if (function.limit > 0) {
+                    value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
+                }
+            }
+        } else {
+            RangeValue baseCount = new RangeValue(count.get(null).get(0));
+            Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
+
+            count.put(enchantment, levelMap);
+
+            for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
+                RangeValue value = new RangeValue(baseCount).add(utils.convertNumber(utils, function.value).multiply(level));
+
+                if (function.limit > 0) {
+                    value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
+                }
+
+                levelMap.put(level, value);
+            }
+        }
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {

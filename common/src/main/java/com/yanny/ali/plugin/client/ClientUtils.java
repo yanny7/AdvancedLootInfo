@@ -6,6 +6,7 @@ import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class ClientUtils implements IWidgetUtils {
     @Override
@@ -31,6 +33,16 @@ public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function) {
         return PluginManager.CLIENT_REGISTRY.getFunctionTooltip(utils, pad, function);
+    }
+
+    @Override
+    public <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+        PluginManager.CLIENT_REGISTRY.applyCount(utils, function, count);
+    }
+
+    @Override
+    public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+        PluginManager.CLIENT_REGISTRY.applyChance(utils, condition, chance);
     }
 
     @Override
