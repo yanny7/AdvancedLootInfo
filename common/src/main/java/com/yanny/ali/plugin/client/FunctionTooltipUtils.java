@@ -132,7 +132,10 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.looting_enchant")));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.value));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
+
+        if (fun.limit > 0) {
+            components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
+        }
 
         return components;
     }
