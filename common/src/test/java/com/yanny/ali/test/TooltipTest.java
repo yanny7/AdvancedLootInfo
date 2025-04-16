@@ -161,29 +161,4 @@ public class TooltipTest {
                 "  -> 4-12 (Looting III)"
         ));
     }
-/*
-    @Test
-    public void testBonusCountTooltip() {
-
-        assertTooltip(getCountTooltip(getCount(UTILS, List.of(LootingEnchantFunction.lootingMultiplier(ConstantValue.exactly(2)).build()))), List.of(
-                "  -> 3 (Looting I)",
-                "  -> 5 (Looting II)",
-                "  -> 7 (Looting III)"
-        ));
-        assertTooltip(getCountTooltip(getCount(UTILS, List.of(LootingEnchantFunction.lootingMultiplier(BinomialDistributionGenerator.binomial(3, 0.5f)).build()))), List.of(
-                "  -> 1-4 (Looting I)",
-                "  -> 1-7 (Looting II)",
-                "  -> 1-10 (Looting III)"
-        ));
-        assertTooltip(getCountTooltip(getCount(UTILS, List.of(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(1, 4)).build()))), List.of(
-                "  -> 2-5 (Looting I)",
-                "  -> 3-9 (Looting II)",
-                "  -> 4-13 (Looting III)"
-        ));
-        assertTooltip(getCountTooltip(getCount(UTILS, List.of(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(1, 4)).setLimit(12).build()))), List.of(
-                "  -> 2-5 (Looting I)",
-                "  -> 3-9 (Looting II)",
-                "  -> 4-12 (Looting III)"
-        ));
-    }*/
 }

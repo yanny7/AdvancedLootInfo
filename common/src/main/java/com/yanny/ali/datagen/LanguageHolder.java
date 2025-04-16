@@ -42,6 +42,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
         TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
         TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
+        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
 
         TRANSLATION_MAP.put("ali.type.function.apply_bonus", "Apply Bonus:");
         TRANSLATION_MAP.put("ali.type.function.copy_name", "Copy Name:");

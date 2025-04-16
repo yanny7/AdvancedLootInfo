@@ -5,7 +5,8 @@
   "mixins": [
     "MixinBushBlock",
     "MixinForgeHooks",
-    "MixinLootTableForge"
+    "MixinLootTableForge",
+    "MixinLootTableIdCondition"
   ],
   "refmap": "ali.refmap.json",
   "client": [
