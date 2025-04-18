@@ -5,8 +5,8 @@ import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.plugin.client.GenericTooltipUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.CanToolPerformAction;
+import net.minecraftforge.common.loot.LootTableIdCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -17,13 +17,19 @@ public class VanillaPlugin extends Plugin {
     @Override
     public void registerClient(IClientRegistry registry) {
         super.registerClient(registry);
-        registry.registerConditionTooltip(CanToolPerformAction.TYPE, VanillaPlugin::getTooltip);
+        registry.registerConditionTooltip(CanToolPerformAction.TYPE, VanillaPlugin::getCanToolPerformActionTooltip);
+        registry.registerConditionTooltip(LootTableIdCondition.TYPE, VanillaPlugin::getLootTableIdTooltip);
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getTooltip(IClientUtils utils, int pad, LootItemCondition condition) {
-        CanToolPerformAction cond = (CanToolPerformAction) condition;
+    public static List<Component> getCanToolPerformActionTooltip(IClientUtils utils, int pad, CanToolPerformAction cond) {
         return GenericTooltipUtils.getStringTooltip(utils, pad, "ali.type.condition.can_tool_perform_action", cond.action.name());
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getLootTableIdTooltip(IClientUtils utils, int pad, LootTableIdCondition cond) {
+        return GenericTooltipUtils.getResourceLocationTooltip(utils, pad, "ali.type.condition.loot_table_id", cond.id());
     }
 }

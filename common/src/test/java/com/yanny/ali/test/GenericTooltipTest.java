@@ -26,6 +26,7 @@ import net.minecraft.world.entity.animal.FrogVariant;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -88,6 +89,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testTooltip() {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = EntryTooltipUtils.getBaseMap(2.5F);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = EntryTooltipUtils.getBaseMap(2, 10);
         Map<Integer, RangeValue> bonusChanceMap = new LinkedHashMap<>();
         Map<Integer, RangeValue> bonusCountMap = new LinkedHashMap<>();
 
@@ -97,14 +100,14 @@ public class GenericTooltipTest {
         bonusCountMap.put(1, new RangeValue(1, 2));
         bonusCountMap.put(2, new RangeValue(2, 4));
         bonusCountMap.put(3, new RangeValue(4, 8));
+        chanceMap.put(Holder.direct(Enchantments.MOB_LOOTING), bonusChanceMap);
+        countMap.put(Holder.direct(Enchantments.BLOCK_FORTUNE), bonusCountMap);
 
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 AlternativesEntry.alternatives().build(),
-                new RangeValue(2.5F),
-                Optional.empty(),
-                new RangeValue(2, 10),
-                Optional.empty(),
+                EntryTooltipUtils.getBaseMap(2.5F),
+                EntryTooltipUtils.getBaseMap(2, 10),
                 List.of(),
                 List.of()
         ), List.of(
@@ -114,10 +117,8 @@ public class GenericTooltipTest {
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 EmptyLootItem.emptyItem().setQuality(5).build(),
-                new RangeValue(2.5F),
-                Optional.of(Pair.of(Holder.direct(Enchantments.MOB_LOOTING), bonusChanceMap)),
-                new RangeValue(2, 10),
-                Optional.of(Pair.of(Holder.direct(Enchantments.BLOCK_FORTUNE), bonusCountMap)),
+                chanceMap,
+                countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),
                 List.of(LootItemKilledByPlayerCondition.killedByPlayer().build())
         ), List.of(

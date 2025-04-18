@@ -148,6 +148,7 @@
   "ali.type.condition.inverted": "Inverted:",
   "ali.type.condition.killed_by_player": "Must be killed by player",
   "ali.type.condition.location_check": "Location Check:",
+  "ali.type.condition.loot_table_id": "Loot Table Id: %s",
   "ali.type.condition.match_tool": "Match Tool:",
   "ali.type.condition.random_chance": "Random Chance:",
   "ali.type.condition.random_chance_with_looting": "Random Chance With Looting:",

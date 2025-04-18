@@ -3,6 +3,7 @@ package com.yanny.ali.plugin;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.ConditionTooltipUtils;
 import com.yanny.ali.plugin.client.FunctionTooltipUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
@@ -71,6 +72,15 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(LootItemFunctions.SET_NBT, FunctionTooltipUtils::getSetNbtTooltip);
         registry.registerFunctionTooltip(LootItemFunctions.SET_POTION, FunctionTooltipUtils::getSetPotionTooltip);
         registry.registerFunctionTooltip(LootItemFunctions.SET_STEW_EFFECT, FunctionTooltipUtils::getSetStewEffectTooltip);
+
+        registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE, TooltipUtils::applyRandomChance);
+        registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE_WITH_LOOTING, TooltipUtils::applyRandomChanceWithLooting);
+        registry.registerChanceModifier(LootItemConditions.TABLE_BONUS, TooltipUtils::applyTableBonus);
+
+        registry.registerCountModifier(LootItemFunctions.SET_COUNT, TooltipUtils::applySetCount);
+        registry.registerCountModifier(LootItemFunctions.APPLY_BONUS, TooltipUtils::applyBonus);
+        registry.registerCountModifier(LootItemFunctions.LIMIT_COUNT, TooltipUtils::applyLimitCount);
+        registry.registerCountModifier(LootItemFunctions.LOOTING_ENCHANT, TooltipUtils::applyLootingEnchant);
 
         registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
         registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
