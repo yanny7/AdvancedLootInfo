@@ -74,6 +74,7 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
+    source(project(":common-rei").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -81,6 +82,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
+    from(project(":common-rei").sourceSets.main.allSource)
 }
 
 processResources {

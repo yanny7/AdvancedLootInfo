@@ -44,6 +44,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":api")
     compileOnly project(":common")
+    compileOnly project(":common-rei")
 
     // EMI
 //    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
@@ -76,11 +77,13 @@ tasks.named('test') {
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
     source(project(":api").sourceSets.main.allSource)
     source(project(":common").sourceSets.main.allSource)
+    source(project(":common-rei").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
+    from(project(":common-rei").sourceSets.main.allSource)
 }
 
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
