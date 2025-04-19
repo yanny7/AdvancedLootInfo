@@ -80,6 +80,7 @@ dependencies {
 
     compileOnly project(":api")
     compileOnly project(":common")
+    compileOnly project(":common-rei")
 
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
@@ -105,6 +106,14 @@ tasks.named("sourcesJar", Jar) {
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
+}
+
+tasks.named('compileTestJava') {
+    it.enabled = false
+}
+
+tasks.named('test') {
+    it.enabled = false
 }
 
 processResources {

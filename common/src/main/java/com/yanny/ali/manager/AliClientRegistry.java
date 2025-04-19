@@ -9,10 +9,12 @@ import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -27,6 +29,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
+import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -49,6 +52,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
     private final Map<ItemSubPredicate.Type<?>, TriFunction<IClientUtils, Integer, ItemSubPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, TriFunction<IClientUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
+    private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceMap = new HashMap<>();
+    private final Map<LootItemFunctionType, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countMap = new HashMap<>();
     private final Map<LootPoolEntryType, WidgetDirection> widgetDirectionMap = new HashMap<>();
     private final Map<LootPoolEntryType, IBoundsGetter> widgetBoundsMap = new HashMap<>();
     private final Map<ResourceKey<LootTable>, LootTable> lootTableMap = new HashMap<>();
@@ -102,6 +107,18 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
         entitySubPredicateTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
+    }
+
+    @Override
+    public <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
+        //noinspection unchecked
+        countMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+    }
+
+    @Override
+    public <T extends LootItemCondition> void registerChanceModifier(LootItemConditionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
+        //noinspection unchecked
+        chanceMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
 
     @Override
@@ -211,6 +228,24 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         } else {
             LOGGER.warn("EntitySubPredicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
             return List.of();
+        }
+    }
+
+    @Override
+    public <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+        TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countMap.get(function.getType());
+
+        if (bonusCountConsumer != null) {
+            bonusCountConsumer.accept(utils, function, count);
+        }
+    }
+
+    @Override
+    public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+        TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceMap.get(condition.getType());
+
+        if (bonusChanceConsumer != null) {
+            bonusChanceConsumer.accept(utils, condition, chance);
         }
     }
 

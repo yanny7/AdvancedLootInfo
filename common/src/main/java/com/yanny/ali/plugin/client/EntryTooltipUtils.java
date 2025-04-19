@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.client;
 
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.core.Holder;
@@ -15,11 +14,13 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class EntryTooltipUtils {
     @NotNull
     public static List<Component> getLootTableTooltip(int pad, int quality, float chance) {
@@ -27,7 +28,7 @@ public class EntryTooltipUtils {
 
         components.add(pad(pad, translatable("ali.enum.group_type.all")));
         components.addAll(getQualityTooltip(quality));
-        components.addAll(getChanceTooltip(new RangeValue(chance)));
+        components.addAll(getChanceTooltip(getBaseMap(chance)));
 
         return components;
     }
@@ -54,7 +55,7 @@ public class EntryTooltipUtils {
 
         components.add(pad(pad, translatable("ali.enum.group_type.dynamic")));
         components.addAll(getQualityTooltip(entry.quality));
-        components.addAll(getChanceTooltip(new RangeValue((float) entry.weight / sumWeight * 100)));
+        components.addAll(getChanceTooltip(getBaseMap((float) entry.weight / sumWeight * 100)));
 
         return components;
     }
@@ -68,10 +69,9 @@ public class EntryTooltipUtils {
         allConditions.addAll(entry.conditions);
 
         float rawChance = (float) entry.weight / sumWeight;
-        RangeValue chance = TooltipUtils.getChance(allConditions, rawChance);
-        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance = TooltipUtils.getBonusChance(allConditions, rawChance);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, allConditions, rawChance);
 
-        return new LinkedList<>(getTooltip(utils, entry, chance, bonusChance, new RangeValue(), Optional.empty(), allFunctions, allConditions));
+        return getTooltip(utils, entry, chance, getBaseMap(1), allFunctions, allConditions);
     }
 
     @Unmodifiable
@@ -87,9 +87,8 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getTooltip(IClientUtils utils, LootPoolEntryContainer entry, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
-                                             RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> functions,
-                                             List<LootItemCondition> conditions) {
+    public static List<Component> getTooltip(IClientUtils utils, LootPoolEntryContainer entry, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
+                                             Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<Component> components = new LinkedList<>();
 
         if (entry instanceof LootPoolSingletonContainer singletonEntry) {
@@ -97,10 +96,7 @@ public class EntryTooltipUtils {
         }
 
         components.addAll(getChanceTooltip(chance));
-        components.addAll(getBonusChanceTooltip(bonusChance));
-
         components.addAll(getCountTooltip(count));
-        components.addAll(getBonusCountTooltip(bonusCount));
 
         if (!conditions.isEmpty()) {
             components.add(translatable("ali.util.advanced_loot_info.delimiter.conditions"));
@@ -114,13 +110,9 @@ public class EntryTooltipUtils {
         return components;
     }
 
-    /*
-     * PRIVATE
-     */
-
     @NotNull
     @Unmodifiable
-    private static List<Component> getQualityTooltip(int quality) {
+    public static List<Component> getQualityTooltip(int quality) {
         if (quality != 0) {
             return List.of(translatable("ali.description.quality", value(quality)));
         }
@@ -128,48 +120,76 @@ public class EntryTooltipUtils {
         return List.of();
     }
 
-    @Unmodifiable
     @NotNull
-    private static List<Component> getCountTooltip(RangeValue count) {
-        return List.of(translatable("ali.description.count", value(count)));
-    }
-
-    @Unmodifiable
-    @NotNull
-    private static List<Component> getChanceTooltip(RangeValue chance) {
-        return List.of(translatable("ali.description.chance", value(chance, "%")));
-    }
-
-    @NotNull
-    private static List<Component> getBonusChanceTooltip(Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance) {
+    public static List<Component> getChanceTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
         List<Component> components = new LinkedList<>();
 
-        bonusChance.ifPresent((c) -> c.getSecond().entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).forEach((entry) ->
-                components.add(pad(1, translatable(
-                        "ali.description.chance_bonus",
-                        value(entry.getValue(), "%"),
-                        Component.translatable(c.getFirst().value().getDescriptionId()),
-                        Component.translatable("enchantment.level." + entry.getKey())
-                )))
-        ));
+        components.add(translatable("ali.description.chance", value(chance.get(null).get(0), "%")));
+
+        for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceEntry : chance.entrySet()) {
+            Holder<Enchantment> enchantment = chanceEntry.getKey();
+            Map<Integer, RangeValue> levelMap = chanceEntry.getValue();
+
+            if (enchantment != null) {
+                for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
+                    int level = levelEntry.getKey();
+                    RangeValue value = levelEntry.getValue();
+
+                    components.add(pad(1, translatable(
+                            "ali.description.chance_bonus",
+                            value(value, "%"),
+                            Component.translatable(enchantment.value().getDescriptionId()),
+                            Component.translatable("enchantment.level." + level)
+                    )));
+                }
+            }
+        }
 
         return components;
     }
 
     @NotNull
-    private static List<Component> getBonusCountTooltip(Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount) {
+    public static List<Component> getCountTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
         List<Component> components = new LinkedList<>();
 
-        bonusCount.ifPresent((c) -> c.getSecond().entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getKey)).forEach((entry) ->
+        components.add(translatable("ali.description.count", value(count.get(null).get(0))));
+
+        for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceEntry : count.entrySet()) {
+            Holder<Enchantment> enchantment = chanceEntry.getKey();
+            Map<Integer, RangeValue> levelMap = chanceEntry.getValue();
+
+            if (enchantment != null) {
+                for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
+                    int level = levelEntry.getKey();
+                    RangeValue value = levelEntry.getValue();
+
                     components.add(pad(1, translatable(
                             "ali.description.count_bonus",
-                            value(entry.getValue()),
-                            Component.translatable(c.getFirst().value().getDescriptionId()),
-                            Component.translatable("enchantment.level." + entry.getKey())
-                    )))
-        ));
+                            value(value),
+                            Component.translatable(enchantment.value().getDescriptionId()),
+                            Component.translatable("enchantment.level." + level)
+                    )));
+                }
+            }
+        }
 
         return components;
+    }
+
+    @NotNull
+    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getBaseMap(float value) {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> map = new LinkedHashMap<>();
+
+        map.put(null, Map.of(0, new RangeValue(value)));
+        return map;
+    }
+
+    @NotNull
+    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getBaseMap(float min, float max) {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> map = new LinkedHashMap<>();
+
+        map.put(null, Map.of(0, new RangeValue(min, max)));
+        return map;
     }
 
     @NotNull

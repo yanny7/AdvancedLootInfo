@@ -1,10 +1,7 @@
 package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.client.ConditionTooltipUtils;
-import com.yanny.ali.plugin.client.EntitySubPredicateTooltipUtils;
-import com.yanny.ali.plugin.client.FunctionTooltipUtils;
-import com.yanny.ali.plugin.client.ItemSubPredicateTooltipUtils;
+import com.yanny.ali.plugin.client.*;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import net.minecraft.advancements.critereon.EntitySubPredicates;
@@ -122,10 +119,20 @@ public class Plugin implements IPlugin {
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FROG.codec, EntitySubPredicateTooltipUtils::getHolderVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.WOLF.codec, EntitySubPredicateTooltipUtils::getHolderVariantPredicateTooltip);
 
+        registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE, TooltipUtils::applyRandomChance);
+        registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE_WITH_LOOTING, TooltipUtils::applyRandomChanceWithLooting);
+        registry.registerChanceModifier(LootItemConditions.TABLE_BONUS, TooltipUtils::applyTableBonus);
+
+        registry.registerCountModifier(LootItemFunctions.SET_COUNT, TooltipUtils::applySetCount);
+        registry.registerCountModifier(LootItemFunctions.APPLY_BONUS, TooltipUtils::applyBonus);
+        registry.registerCountModifier(LootItemFunctions.LIMIT_COUNT, TooltipUtils::applyLimitCount);
+        registry.registerCountModifier(LootItemFunctions.LOOTING_ENCHANT, TooltipUtils::applyLootingEnchant);
+
         registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
         registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
         registry.registerNumberProvider(NumberProviders.BINOMIAL, Plugin::convertBinomial);
         registry.registerNumberProvider(NumberProviders.SCORE, Plugin::convertScore);
+        registry.registerNumberProvider(NumberProviders.STORAGE, Plugin::convertStorage);
     }
 
     @Override
@@ -140,6 +147,7 @@ public class Plugin implements IPlugin {
         registry.registerItemCollector(LootPoolEntries.LOOT_TABLE, ItemCollectorUtils::collectReference);
 
         registry.registerItemCollector(LootItemFunctions.FURNACE_SMELT, ItemCollectorUtils::collectFurnaceSmelt);
+        registry.registerItemCollector(LootItemFunctions.SET_ITEM, ItemCollectorUtils::collectSetItem);
     }
 
     @NotNull
@@ -161,5 +169,10 @@ public class Plugin implements IPlugin {
     @NotNull
     private static RangeValue convertScore(IClientUtils utils, ScoreboardValue numberProvider) {
         return new RangeValue(true, false);
+    }
+
+    @NotNull
+    private static RangeValue convertStorage(IClientUtils utils, StorageValue numberProvider) {
+        return new RangeValue(false, true);
     }
 }
