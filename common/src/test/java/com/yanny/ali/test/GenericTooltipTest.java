@@ -1,6 +1,5 @@
 package com.yanny.ali.test;
 
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import com.yanny.ali.plugin.client.GenericTooltipUtils;
@@ -9,6 +8,7 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.core.component.DataComponents;
@@ -31,6 +31,7 @@ import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -97,6 +98,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testTooltip() {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = EntryTooltipUtils.getBaseMap(2.5F);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = EntryTooltipUtils.getBaseMap(2, 10);
         Map<Integer, RangeValue> bonusChanceMap = new LinkedHashMap<>();
         Map<Integer, RangeValue> bonusCountMap = new LinkedHashMap<>();
 
@@ -106,14 +109,14 @@ public class GenericTooltipTest {
         bonusCountMap.put(1, new RangeValue(1, 2));
         bonusCountMap.put(2, new RangeValue(2, 4));
         bonusCountMap.put(3, new RangeValue(4, 8));
+        chanceMap.put(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), bonusChanceMap);
+        countMap.put(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), bonusCountMap);
 
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 AlternativesEntry.alternatives().build(),
-                new RangeValue(2.5F),
-                Optional.empty(),
-                new RangeValue(2, 10),
-                Optional.empty(),
+                EntryTooltipUtils.getBaseMap(2.5F),
+                EntryTooltipUtils.getBaseMap(2, 10),
                 List.of(),
                 List.of()
         ), List.of(
@@ -123,10 +126,8 @@ public class GenericTooltipTest {
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 EmptyLootItem.emptyItem().setQuality(5).build(),
-                new RangeValue(2.5F),
-                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), bonusChanceMap)),
-                new RangeValue(2, 10),
-                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), bonusCountMap)),
+                chanceMap,
+                countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),
                 List.of(LootItemKilledByPlayerCondition.killedByPlayer().build())
         ), List.of(

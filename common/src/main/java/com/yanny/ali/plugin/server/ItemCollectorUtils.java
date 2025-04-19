@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
+import net.minecraft.world.level.storage.loot.functions.SetItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -107,5 +108,11 @@ public class ItemCollectorUtils {
         }
 
         return List.of();
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Item> collectSetItem(IServerUtils utils, List<Item> items, SetItemFunction function) {
+        return List.of(function.item.value());
     }
 }

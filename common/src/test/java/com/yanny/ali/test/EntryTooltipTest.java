@@ -1,12 +1,13 @@
 package com.yanny.ali.test;
 
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
@@ -16,9 +17,9 @@ import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -93,13 +94,23 @@ public class EntryTooltipTest {
 
     @Test
     public void testTooltip() {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = EntryTooltipUtils.getBaseMap(1.25F);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = EntryTooltipUtils.getBaseMap(1, 5);
+        Map<Integer, RangeValue> e1 = new LinkedHashMap<>();
+        Map<Integer, RangeValue> e2 = new LinkedHashMap<>();
+
+        e1.put(1, new RangeValue(0.1F));
+        e1.put(2, new RangeValue(0.3F));
+        e2.put(1, new RangeValue(1, 5));
+        e2.put(2, new RangeValue(1, 10));
+        chanceMap.put(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), e1);
+        countMap.put(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), e2);
+
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 LootItem.lootTableItem(Items.ANDESITE).setQuality(3).setWeight(1).build(),
-                new RangeValue(1.25F),
-                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), Map.of(1, new RangeValue(0.1F), 2, new RangeValue(0.3F)))),
-                new RangeValue(1, 5),
-                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), Map.of(1, new RangeValue(1, 5), 2, new RangeValue(1, 10)))),
+                chanceMap,
+                countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
         ), List.of(
@@ -118,10 +129,8 @@ public class EntryTooltipTest {
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 TagEntry.expandTag(ItemTags.LOGS).setQuality(3).setWeight(1).build(),
-                new RangeValue(1.25F),
-                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), Map.of(1, new RangeValue(0.1F), 2, new RangeValue(0.3F)))),
-                new RangeValue(1, 5),
-                Optional.of(Pair.of(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), Map.of(1, new RangeValue(1, 5), 2, new RangeValue(1, 10)))),
+                chanceMap,
+                countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
         ), List.of(

@@ -34,6 +34,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.inverted", "Inverted:");
         TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Must be killed by player");
         TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
+        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
         TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
         TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
         TRANSLATION_MAP.put("ali.type.condition.random_chance_with_enchanted_bonus", "Random Chance With Enchanted Bonus:");
@@ -403,5 +404,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/gameplay/sniffer_digging", "Sniffer Digging");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/panda_sneeze", "Panda Sneeze");
     }
 }

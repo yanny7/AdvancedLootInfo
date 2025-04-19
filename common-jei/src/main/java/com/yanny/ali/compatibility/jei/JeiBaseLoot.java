@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
@@ -91,13 +90,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                 builder.addSlot(RecipeIngredientRole.OUTPUT, itemSlotParams.x + 1, itemSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
                         .addTooltipCallback((iRecipeSlotView, components)
-                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.count(), p.allFunctions(), p.allConditions())))
                         .addItemStack(itemSlotParams.item.getDefaultInstance());
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addSlot(RecipeIngredientRole.OUTPUT, tagSlotParams.x + 1, tagSlotParams.y + 1)
                         .setSlotName(String.valueOf(i))
                         .addTooltipCallback((iRecipeSlotView, components)
-                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.bonusChance(), p.count(), p.bonusCount(), p.allFunctions(), p.allConditions())))
+                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.count(), p.allFunctions(), p.allConditions())))
                         .addIngredients(Ingredient.of(tagSlotParams.item));
             }
         }
@@ -116,9 +115,11 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             guiHelper.getSlotDrawable().draw(guiGraphics, p.x(), p.y());
 
             recipeSlotsView.findSlotByName(String.valueOf(i)).ifPresent((slotView) -> {
-                if (p.count().isRange() || p.count().min() > 1) {
-                    Component count = Component.literal(p.count().toIntString());
-                    boolean isRange = p.count().isRange();
+                RangeValue value = p.count().get(null).get(0);
+
+                if (value.isRange() || value.min() > 1) {
+                    Component count = Component.literal(value.toIntString());
+                    boolean isRange = value.isRange();
                     Font font = Minecraft.getInstance().font;
                     PoseStack stack = guiGraphics.pose();
 
@@ -161,16 +162,16 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
         return new ClientUtils() {
             @Override
-            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
-                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                slotParams.add(new ItemSlotParams(item, entry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
+            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
+                                      Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+                slotParams.add(new ItemSlotParams(item, entry, x, y, chance, count, allFunctions, allConditions));
                 return new Rect(x, y, 18, 18);
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count,
-                                      Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                slotParams.add(new TagSlotParams(item, entry, x, y, chance, bonusChance, count, bonusCount, allFunctions, allConditions));
+            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
+                                      Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+                slotParams.add(new TagSlotParams(item, entry, x, y, chance, count, allFunctions, allConditions));
                 return new Rect(x, y, 18, 18);
             }
         };
@@ -180,10 +181,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         LootPoolEntryContainer entry();
         int x();
         int y();
-        RangeValue chance();
-        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance();
-        RangeValue count();
-        Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount();
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance();
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> count();
         List<LootItemFunction> allFunctions();
         List<LootItemCondition> allConditions();
     }
@@ -193,10 +192,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             LootPoolEntryContainer entry,
             int x,
             int y,
-            RangeValue chance,
-            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
-            RangeValue count,
-            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount,
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> count,
             List<LootItemFunction> allFunctions,
             List<LootItemCondition> allConditions
     ) implements ISlotParams {}
@@ -206,10 +203,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             LootPoolEntryContainer entry,
             int x,
             int y,
-            RangeValue chance,
-            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance,
-            RangeValue count,
-            Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount,
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> count,
             List<LootItemFunction> allFunctions,
             List<LootItemCondition> allConditions
     ) implements ISlotParams {}

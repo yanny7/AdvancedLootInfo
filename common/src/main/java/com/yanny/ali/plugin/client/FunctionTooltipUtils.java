@@ -135,7 +135,10 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.enchanted_count_increase")));
         components.addAll(getHolderTooltip(utils, pad + 1, fun.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.value));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
+
+        if (fun.limit > 0) {
+            components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.limit", fun.limit));
+        }
 
         return components;
     }

@@ -52,10 +52,12 @@ public final class RangeValue {
         return this;
     }
 
-    public void multiply(RangeValue value) {
+    public RangeValue multiply(RangeValue value) {
         this.min *= value.min;
         this.max *= value.max;
         this.isRange |= value.isRange;
+        this.isUnknown |= value.isUnknown;
+        return this;
     }
 
     public void multiplyMax(float value) {
@@ -65,11 +67,6 @@ public final class RangeValue {
 
     public void addMax(float value) {
         this.max += value;
-        this.isRange = true;
-    }
-
-    public void addMax(RangeValue value) {
-        this.max += value.max;
         this.isRange = true;
     }
 
@@ -113,21 +110,29 @@ public final class RangeValue {
         return isRange;
     }
 
-    public boolean hasScore() {
-        return hasScore;
-    }
-
     public boolean isUnknown() {
         return isUnknown;
     }
 
-    public void clamp(RangeValue min, RangeValue max) {
-        if (this.min < min.min) {
+    public RangeValue clamp(RangeValue min, RangeValue max) {
+        if (this.min < min.min && !min.isUnknown && !isUnknown) {
             this.min = min.min;
+
+            if (this.max < min.min) {
+                this.max = min.min;
+                this.isRange = false;
+            }
         }
-        if (this.max > max.max) {
+        if (this.max > max.max && !max.isUnknown && !isUnknown) {
             this.max = max.max;
+
+            if (this.min > max.max) {
+                this.min = max.max;
+                this.isRange = false;
+            }
         }
+
+        return this;
     }
 
     public RangeValue clamp(float min, float max) {
@@ -138,14 +143,6 @@ public final class RangeValue {
             this.max = max;
         }
         return this;
-    }
-
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeFloat(min);
-        buf.writeFloat(max);
-        buf.writeBoolean(isRange);
-        buf.writeBoolean(hasScore);
-        buf.writeBoolean(isUnknown);
     }
 
     @NotNull

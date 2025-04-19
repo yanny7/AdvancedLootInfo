@@ -41,7 +41,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +52,8 @@ import java.util.concurrent.ExecutionException;
         FunctionTooltipTest.class,
         EntryTooltipTest.class,
         EntitySubPredicateTooltipTest.class,
-        ItemSubPredicateTooltipTest.class
+        ItemSubPredicateTooltipTest.class,
+        TooltipTest.class
 })
 public class TooltipTestSuite {
     public static ClientUtils UTILS;
@@ -76,12 +76,12 @@ public class TooltipTestSuite {
         PluginManager.registerClientEvent();
         UTILS = new ClientUtils() {
             @Override
-            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 return null;
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, RangeValue chance, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChance, RangeValue count, Optional<Pair<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCount, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
                 return null;
             }
 

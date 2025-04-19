@@ -7,9 +7,11 @@ import com.yanny.ali.manager.PluginManager;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class ClientUtils implements IWidgetUtils {
     @Override
@@ -44,6 +47,16 @@ public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IClientUtils utils, int pad, T predicate) {
         return PluginManager.CLIENT_REGISTRY.getEntitySubPredicateTooltip(utils, pad, predicate);
+    }
+
+    @Override
+    public <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+        PluginManager.CLIENT_REGISTRY.applyCount(utils, function, count);
+    }
+
+    @Override
+    public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+        PluginManager.CLIENT_REGISTRY.applyChance(utils, condition, chance);
     }
 
     @Override
