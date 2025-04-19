@@ -29,6 +29,7 @@ public class Plugin implements IPlugin {
         registry.registerConditionTooltip(LootItemConditions.ANY_OF, ConditionTooltipUtils::getAnyOfTooltip);
         registry.registerConditionTooltip(LootItemConditions.BLOCK_STATE_PROPERTY, ConditionTooltipUtils::getBlockStatePropertyTooltip);
         registry.registerConditionTooltip(LootItemConditions.DAMAGE_SOURCE_PROPERTIES, ConditionTooltipUtils::getDamageSourcePropertiesTooltip);
+        registry.registerConditionTooltip(LootItemConditions.ENCHANTMENT_ACTIVE_CHECK, ConditionTooltipUtils::getEnchantActiveCheckTooltip);
         registry.registerConditionTooltip(LootItemConditions.ENTITY_PROPERTIES, ConditionTooltipUtils::getEntityPropertiesTooltip);
         registry.registerConditionTooltip(LootItemConditions.ENTITY_SCORES, ConditionTooltipUtils::getEntityScoresTooltip);
         registry.registerConditionTooltip(LootItemConditions.INVERTED, ConditionTooltipUtils::getInvertedTooltip);
@@ -98,6 +99,7 @@ public class Plugin implements IPlugin {
         registry.registerItemSubPredicateTooltip(ItemSubPredicates.WRITTEN_BOOK, ItemSubPredicateTooltipUtils::getItemWrittenBookPredicateTooltip);
         registry.registerItemSubPredicateTooltip(ItemSubPredicates.ATTRIBUTE_MODIFIERS, ItemSubPredicateTooltipUtils::getItemAttributeModifiersPredicateTooltip);
         registry.registerItemSubPredicateTooltip(ItemSubPredicates.ARMOR_TRIM, ItemSubPredicateTooltipUtils::getItemTrimPredicateTooltip);
+        registry.registerItemSubPredicateTooltip(ItemSubPredicates.JUKEBOX_PLAYABLE, ItemSubPredicateTooltipUtils::getItemJukeboxPlayableTooltip);
 
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.LIGHTNING, EntitySubPredicateTooltipUtils::getLightningBoltPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FISHING_HOOK, EntitySubPredicateTooltipUtils::getFishingHookPredicateTooltip);

@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.JukeboxSongs;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.armortrim.TrimMaterials;
 import net.minecraft.world.item.armortrim.TrimPatterns;
@@ -260,6 +261,17 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Item: Smithing Template",
                 "    -> Description: Eye Armor Trim",
                 "    -> Decal: false"
+        ));
+    }
+
+    @Test
+    public void testJukebox() {
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemJukeboxPlayableTooltip(UTILS, 0, new ItemJukeboxPlayablePredicate(
+                Optional.of(HolderSet.direct(LOOKUP.lookup(Registries.JUKEBOX_SONG).orElseThrow().get(JukeboxSongs.PIGSTEP).orElseThrow()))
+        )), List.of(
+                "Jukebox Playable:",
+                "  -> Songs:",
+                "    -> Song: minecraft:pigstep"
         ));
     }
 }

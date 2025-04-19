@@ -33,6 +33,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -252,11 +253,13 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, DamageSourcePredicate.Builder.damageType()
                 .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                 .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                .isDirect(false)
                 .build()), List.of(
                 "Damage Source:",
                 "  -> Tags:",
                 "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false"
+                "    -> minecraft:is_explosion: false",
+                "  -> Is Direct: false"
         ));
     }
 
@@ -282,6 +285,8 @@ public class GenericTooltipTest {
                 .vehicle(EntityPredicate.Builder.entity().team("blue"))
                 .passenger(EntityPredicate.Builder.entity().team("white"))
                 .targetedEntity(EntityPredicate.Builder.entity().team("red"))
+                .periodicTick(1000)
+                .moving(new MovementPredicate(MinMaxBounds.Doubles.between(1, 5), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .team("orange")
                 .build()
         ), List.of(
@@ -296,6 +301,9 @@ public class GenericTooltipTest {
                 "  -> Stepping on Location:",
                 "    -> Position:",
                 "      -> X: ≤30.0",
+                "Movement:",
+                "  -> X: 1.0-5.0",
+                "Periodic Tick: 1000",
                 "Mob Effects:",
                 "  -> Mob Effect: minecraft:absorption",
                 "    -> Is Ambient: true",
@@ -365,6 +373,7 @@ public class GenericTooltipTest {
                 .setLight(LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)))
                 .setBlock(BlockPredicate.Builder.block().of(Blocks.STONE, Blocks.COBBLESTONE))
                 .setFluid(FluidPredicate.Builder.fluid().of(Fluids.LAVA))
+                .setCanSeeSky(true)
                 .build()
         ), List.of(
                 "Located:",
@@ -385,7 +394,8 @@ public class GenericTooltipTest {
                 "      -> Block: Cobblestone",
                 "  -> Fluid Predicate:",
                 "    -> Fluids:",
-                "      -> Fluid: minecraft:lava"
+                "      -> Fluid: minecraft:lava",
+                "  -> Can See Sky: true"
         ));
     }
 
@@ -502,14 +512,18 @@ public class GenericTooltipTest {
                 .setCrouching(true)
                 .setSprinting(true)
                 .setSwimming(false)
+                .setIsFlying(true)
+                .setOnGround(false)
                 .build()
         ), List.of(
                 "Entity Flags:",
+                "  -> Is On Ground: false",
                 "  -> Is On Fire: false",
                 "  -> Is Baby: true",
                 "  -> Is Crouching: true",
                 "  -> Is Sprinting: true",
-                "  -> Is Swimming: false"
+                "  -> Is Swimming: false",
+                "  -> Is Flying: true"
         ));
     }
 
@@ -677,6 +691,70 @@ public class GenericTooltipTest {
                 "X: 10",
                 "Y: 12",
                 "Z: 14"
+        ));
+    }
+
+    @Test
+    public void testLevelBasedValueTooltip() {
+        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, 0, "ali.property.branch.enchanted_chance", LevelBasedValue.constant(2.5F)), List.of(
+                "Enchanted Chance:",
+                "  -> Constant: 2.5"
+        ));
+        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, 0, "ali.property.branch.enchanted_chance", new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)), List.of(
+                "Enchanted Chance:",
+                "  -> Clamped:",
+                "    -> Value:",
+                "      -> Constant: 2.5",
+                "    -> Min: 0.5",
+                "    -> Max: 5.0"
+        ));
+        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, 0, "ali.property.branch.enchanted_chance", new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))), List.of(
+                "Enchanted Chance:",
+                "  -> Fraction:",
+                "    -> Numerator:",
+                "      -> Constant: 2.0",
+                "    -> Denominator:",
+                "      -> Constant: 3.0"
+        ));
+        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, 0, "ali.property.branch.enchanted_chance", new LevelBasedValue.Linear(0.5F, 5F)), List.of(
+                "Enchanted Chance:",
+                "  -> Linear:",
+                "    -> Base: 0.5",
+                "    -> Per Level: 5.0"
+        ));
+        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, 0, "ali.property.branch.enchanted_chance", new LevelBasedValue.LevelsSquared(0.5F)), List.of(
+                "Enchanted Chance:",
+                "  -> Squared Level:",
+                "    -> Added: 0.5"
+        ));
+        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, 0, "ali.property.branch.enchanted_chance", new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))), List.of(
+                "Enchanted Chance:",
+                "  -> Lookup:",
+                "    -> Values: [0.5, 1.5, 2.5]",
+                "    -> Fallback:",
+                "      -> Constant: 3.3"
+        ));
+    }
+
+    @Test
+    public void testMovementPredicateTooltip() {
+        assertTooltip(GenericTooltipUtils.getMovementPredicateTooltip(UTILS, 0, new MovementPredicate(
+                MinMaxBounds.Doubles.atMost(3),
+                MinMaxBounds.Doubles.between(1, 2),
+                MinMaxBounds.Doubles.atLeast(3),
+                MinMaxBounds.Doubles.atLeast(2),
+                MinMaxBounds.Doubles.atLeast(1.5F),
+                MinMaxBounds.Doubles.atLeast(0.5F),
+                MinMaxBounds.Doubles.atLeast(10)
+        )), List.of(
+                "Movement:",
+                "  -> X: ≤3.0",
+                "  -> Y: 1.0-2.0",
+                "  -> Z: ≥3.0",
+                "  -> Speed: ≥2.0",
+                "  -> Horizontal Speed: ≥1.5",
+                "  -> Vertical Speed: ≥0.5",
+                "  -> Fall Distance: ≥10.0"
         ));
     }
 }

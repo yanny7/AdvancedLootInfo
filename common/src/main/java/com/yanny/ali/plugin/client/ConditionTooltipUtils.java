@@ -54,6 +54,16 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
+    public static List<Component> getEnchantActiveCheckTooltip(IClientUtils utils, int pad, EnchantmentActiveCheck cond) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.condition.enchantment_active_check")));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.active", cond.active()));
+
+        return components;
+    }
+
+    @NotNull
     public static List<Component> getEntityPropertiesTooltip(IClientUtils utils, int pad, LootItemEntityPropertyCondition cond) {
         List<Component> components = new LinkedList<>();
 

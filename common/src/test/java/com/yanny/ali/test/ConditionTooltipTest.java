@@ -79,6 +79,7 @@ public class ConditionTooltipTest {
                         .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
                         .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
                         .source(EntityPredicate.Builder.entity().team("Blue"))
+                        .isDirect(true)
         ).build()), List.of(
                 "Damage Source Properties:",
                 "  -> Damage Source:",
@@ -89,7 +90,20 @@ public class ConditionTooltipTest {
                 "      -> Entity Types:",
                 "        -> Entity Type: Warden",
                 "    -> Source Entity:",
-                "      -> Team: Blue"
+                "      -> Team: Blue",
+                "    -> Is Direct: true"
+        ));
+    }
+
+    @Test
+    public void testEnchantmentActiveCheck() {
+        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, 0, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentActiveCheck().build()), List.of(
+                "Enchantment Active Check:",
+                "  -> Active: true"
+        ));
+        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, 0, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentInactiveCheck().build()), List.of(
+                "Enchantment Active Check:",
+                "  -> Active: false"
         ));
     }
 
