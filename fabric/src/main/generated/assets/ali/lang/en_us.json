@@ -300,7 +300,7 @@
   "ali.type.item_sub_predicate.item_trim": "Trim:",
   "ali.type.item_sub_predicate.item_writable_book": "Writable Book:",
   "ali.type.item_sub_predicate.item_written_book": "Written Book:",
-  "ali.type.item_sub_predicate.jukebox_playable": "Jukebox Playable:",
+  "ali.type.item_sub_predicate.item_jukebox_playable": "Jukebox Playable:",
   "ali.util.advanced_loot_info.delimiter.conditions": "----- Conditions -----",
   "ali.util.advanced_loot_info.delimiter.functions": "----- Functions -----",
   "ali.util.advanced_loot_info.key_value": "%s: %s",
