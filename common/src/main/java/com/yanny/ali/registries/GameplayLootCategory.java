@@ -2,16 +2,15 @@ package com.yanny.ali.registries;
 
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class GameplayLootCategory extends LootCategory<String> {
-    @Nullable
-    private final List<String> prefix;
+    private final List<Pattern> prefix;
 
-    public GameplayLootCategory(String key, ItemStack icon, Type type, List<String> prefix) {
-        super(key, icon, type, (path) -> prefix.stream().anyMatch(path::startsWith));
+    public GameplayLootCategory(String key, ItemStack icon, Type type, List<Pattern> prefix) {
+        super(key, icon, type, (path) -> prefix.stream().anyMatch((p) -> p.matcher(path).find()));
         this.prefix = prefix;
     }
 
@@ -20,8 +19,7 @@ public class GameplayLootCategory extends LootCategory<String> {
         this.prefix = List.of();
     }
 
-    @Nullable
-    public List<String> getPrefix() {
+    public List<Pattern> getPrefix() {
         return prefix;
     }
 }
