@@ -2,5 +2,7 @@
   "type": "GAMEPLAY",
   "icon": "minecraft:emerald",
   "key": "hero_loot",
-  "prefix": "gameplay/hero_of_the_village"
+  "prefix": [
+    "gameplay/hero_of_the_village"
+  ]
 }
