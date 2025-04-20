@@ -136,11 +136,11 @@ public class GenericTooltipTest {
                 "  -> 1-2 (Fortune I)",
                 "  -> 2-4 (Fortune II)",
                 "  -> 4-8 (Fortune III)",
-                "----- Conditions -----",
+                "----- Predicates -----",
                 "Must be killed by player",
-                "----- Functions -----",
+                "----- Modifiers -----",
                 "Explosion Decay",
-                "  -> Conditions:",
+                "  -> Predicates:",
                 "    -> Must survive explosion",
                 "Use Smelting Recipe On Item"
         ));
