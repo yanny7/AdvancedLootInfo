@@ -2,5 +2,7 @@
   "type": "GAMEPLAY",
   "icon": "minecraft:fishing_rod",
   "key": "fishing_loot",
-  "prefix": "fishing"
+  "prefix": [
+    "fishing"
+  ]
 }
