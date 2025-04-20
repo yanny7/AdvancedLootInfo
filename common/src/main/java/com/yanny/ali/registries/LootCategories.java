@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<Block>> BLOCK_LOOT_CATEGORIES = new HashMap<>();
@@ -53,7 +54,7 @@ public class LootCategories {
     }
 
     @NotNull
-    private static LootCategory<String> getGameplayCategory(String key, Item icon, List<String> prefix) {
+    private static LootCategory<String> getGameplayCategory(String key, Item icon, List<Pattern> prefix) {
         return new GameplayLootCategory(key, new ItemStack(icon), LootCategory.Type.GAMEPLAY, prefix);
     }
 
@@ -77,7 +78,7 @@ public class LootCategories {
                             case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));
                             case ENTITY -> ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(key, icon, (entity) -> true));
                             case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(key, icon,
-                                    GsonHelper.getAsJsonArray(jsonObject, "prefix").asList().stream().map(JsonElement::getAsString).toList()));
+                                    GsonHelper.getAsJsonArray(jsonObject, "prefix").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
                         }
 
                         LOGGER.info("Loaded LootCategory resource: {}", location);
