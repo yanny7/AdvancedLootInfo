@@ -83,7 +83,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.block_predicate", "Block Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
-        TRANSLATION_MAP.put("ali.property.branch.conditions", "Conditions:");
+        TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
         TRANSLATION_MAP.put("ali.property.branch.damage_source_predicate", "Damage Source:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
         TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
@@ -221,8 +221,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.9", "                  ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.10", "                    ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Functions -----");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Conditions -----");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
         TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city", "Ancient City Chest");

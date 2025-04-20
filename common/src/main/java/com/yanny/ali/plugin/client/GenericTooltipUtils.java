@@ -226,7 +226,7 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad, entityPredicate.equipment(), GenericTooltipUtils::getEntityEquipmentPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad, entityPredicate.subPredicate(), GenericTooltipUtils::getEntitySubPredicateTooltip));
         components.addAll(getComponentsTooltip(utils, pad, "ali.property.branch.vehicle", entityPredicate.vehicle(), GenericTooltipUtils::getEntityPredicateTooltip));
-        components.addAll(getComponentsTooltip(utils, pad, "ali.property.value.passenger", entityPredicate.passenger(), GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getComponentsTooltip(utils, pad, "ali.property.branch.passenger", entityPredicate.passenger(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getComponentsTooltip(utils, pad, "ali.property.branch.targeted_entity", entityPredicate.targetedEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.team", entityPredicate.team(), GenericTooltipUtils::getStringTooltip));
 
