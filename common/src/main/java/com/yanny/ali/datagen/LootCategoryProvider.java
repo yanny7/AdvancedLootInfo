@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 
 public class LootCategoryProvider implements DataProvider {
     private final PackOutput generator;
@@ -31,13 +32,13 @@ public class LootCategoryProvider implements DataProvider {
     }
 
     public void generate() {
-        addGameplayCategory("chest_loot", Items.CHEST, List.of("chest"));
-        addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of("fishing"));
-        addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of("archaeology"));
-        addGameplayCategory("hero_loot", Items.EMERALD, List.of("gameplay/hero_of_the_village"));
+        addGameplayCategory("chest_loot", Items.CHEST, List.of(Pattern.compile("chest")));
+        addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("fishing")));
+        addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("archaeology")));
+        addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("gameplay/hero_of_the_village")));
     }
 
-    protected void addGameplayCategory(String key, Item icon, List<String> prefix) {
+    protected void addGameplayCategory(String key, Item icon, List<Pattern> prefix) {
         categories.add(new GameplayLootCategory(key, new ItemStack(icon), LootCategory.Type.GAMEPLAY, prefix));
     }
 
@@ -77,7 +78,7 @@ public class LootCategoryProvider implements DataProvider {
             if (category instanceof GameplayLootCategory lootCategory && lootCategory.getPrefix() != null) {
                 JsonArray array = new JsonArray();
 
-                lootCategory.getPrefix().forEach(array::add);
+                lootCategory.getPrefix().forEach((p) -> array.add(p.pattern()));
                 object.add("prefix", array);
             }
         }
