@@ -71,9 +71,9 @@ public class EntryTooltipTest {
                 "Quality: 1",
                 "Chance: 50%",
                 "Count: 1",
-                "----- Conditions -----",
+                "----- Predicates -----",
                 "Must survive explosion",
-                "----- Functions -----",
+                "----- Modifiers -----",
                 "Explosion Decay"
         ));
     }
@@ -121,9 +121,9 @@ public class EntryTooltipTest {
                 "Count: 1-5",
                 "  -> 1-5 (Fortune I)",
                 "  -> 1-10 (Fortune II)",
-                "----- Conditions -----",
+                "----- Predicates -----",
                 "Must survive explosion",
-                "----- Functions -----",
+                "----- Modifiers -----",
                 "Explosion Decay"
         ));
         assertTooltip(EntryTooltipUtils.getTooltip(
@@ -141,9 +141,9 @@ public class EntryTooltipTest {
                 "Count: 1-5",
                 "  -> 1-5 (Fortune I)",
                 "  -> 1-10 (Fortune II)",
-                "----- Conditions -----",
+                "----- Predicates -----",
                 "Must survive explosion",
-                "----- Functions -----",
+                "----- Modifiers -----",
                 "Explosion Decay"
         ));
     }
