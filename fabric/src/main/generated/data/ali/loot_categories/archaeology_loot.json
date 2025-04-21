@@ -3,6 +3,6 @@
   "icon": "minecraft:decorated_pot",
   "key": "archaeology_loot",
   "prefix": [
-    "archaeology"
+    "^archaeology/.*$"
   ]
 }

@@ -32,10 +32,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -93,6 +90,8 @@ public class ReiCompatibility implements REIClientPlugin {
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
+
+            map.entrySet().stream().sorted(Comparator.comparing(s -> s.getKey().location().getPath())).forEach((f) -> LOGGER.warn(f.getKey().location().getPath()));
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceKey<LootTable> location = block.getLootTable();

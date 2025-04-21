@@ -3,6 +3,6 @@
   "icon": "minecraft:fishing_rod",
   "key": "fishing_loot",
   "prefix": [
-    "fishing"
+    "^gameplay/fishing.*$"
   ]
 }

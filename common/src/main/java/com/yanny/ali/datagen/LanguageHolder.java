@@ -15,6 +15,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.archaeology_loot", "Archaeology Loot");
         TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
+        TRANSLATION_MAP.put("emi.category.ali.trial_chambers", "Trial Chambers");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s");
@@ -416,5 +417,32 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/panda_sneeze", "Panda Sneeze");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/bogged", "Bogged Shearing");
+
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/corridor", "Corridor Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/entrance", "Entrance Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/intersection", "Intersection Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/intersection_barrel", "Intersection Barrel Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward", "Reward Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_common", "Reward Common Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_ominous", "Reward Ominous Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_ominous_common", "Reward Ominous Common Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_ominous_rare", "Reward Ominous Rare Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_ominous_unique", "Reward Ominous Unique Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_rare", "Reward Rare Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/reward_unique", "Reward Unique Chest");
+        TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/supply", "Supply Chest");
+        TRANSLATION_MAP.put("ali/loot_table/pots/trial_chambers/corridor", "Corridor Pots");
+        TRANSLATION_MAP.put("ali/loot_table/dispensers/trial_chambers/chamber", "Chamber Dispensers");
+        TRANSLATION_MAP.put("ali/loot_table/dispensers/trial_chambers/corridor", "Corridor Dispensers");
+        TRANSLATION_MAP.put("ali/loot_table/dispensers/trial_chambers/water", "Water Dispensers");
+        TRANSLATION_MAP.put("ali/loot_table/spawners/ominous/trial_chamber/consumables", "Ominous Consumables Spawners");
+        TRANSLATION_MAP.put("ali/loot_table/spawners/ominous/trial_chamber/key", "Ominous Key Spawners");
+        TRANSLATION_MAP.put("ali/loot_table/spawners/trial_chamber/consumables", "Consumables Spawners");
+        TRANSLATION_MAP.put("ali/loot_table/spawners/trial_chamber/items_to_drop_when_ominous", "Items To Drop When Ominous Spawners");
+        TRANSLATION_MAP.put("ali/loot_table/spawners/trial_chamber/key", "Key Spawners");
+        TRANSLATION_MAP.put("ali/loot_table/equipment/trial_chamber", "Equipment");
+        TRANSLATION_MAP.put("ali/loot_table/equipment/trial_chamber_melee", "Melee Equipment");
+        TRANSLATION_MAP.put("ali/loot_table/equipment/trial_chamber_ranged", "Ranged Equipment");
     }
 }

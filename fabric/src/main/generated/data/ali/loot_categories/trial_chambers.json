@@ -1,0 +1,13 @@
+{
+  "type": "GAMEPLAY",
+  "icon": "minecraft:spawner",
+  "key": "trial_chambers",
+  "prefix": [
+    "^chests/trial_chambers/.*$",
+    "^pots/trial_chambers/.*$",
+    "^dispensers/trial_chambers/.*$",
+    "^spawners/ominous/trial_chamber/.*$",
+    "^spawners/trial_chamber/.*$",
+    "^equipment/.*$"
+  ]
+}
