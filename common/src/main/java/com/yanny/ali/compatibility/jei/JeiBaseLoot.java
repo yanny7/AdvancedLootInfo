@@ -24,20 +24,20 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import oshi.util.tuples.Pair;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
+    private static final Map<IType, Pair<IRecipeWidget, List<ISlotParams>>> widgets = new HashMap<>();
+
     private final RecipeType<T> recipeType;
     private final LootCategory<V> lootCategory;
     private final Component title;
     private final IDrawable icon;
-    @Nullable
-    private IRecipeWidget widget;
-    private List<ISlotParams> slotParams;
 
     public JeiBaseLoot(RecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
         this.recipeType = recipeType;
@@ -69,8 +69,10 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup iFocusGroup) {
-        IWidgetUtils utils = getJeiUtils();
-        widget = new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe)));
+        List<ISlotParams> slotParams = new LinkedList<>();
+        IWidgetUtils utils = getJeiUtils(slotParams);
+
+        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe))), slotParams));
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);
@@ -97,9 +99,15 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, T recipe, IFocusGroup focuses) {
-        if (widget != null) {
-            builder.addWidget(widget);
+        Pair<IRecipeWidget, List<ISlotParams>> pair = widgets.remove(recipe);
+
+        if (pair == null) {
+            return;
         }
+
+        List<ISlotParams> slotParams = pair.getB();
+
+        builder.addWidget(pair.getA());
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);
@@ -124,9 +132,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     abstract int getYOffset(T recipe);
 
     @NotNull
-    private IWidgetUtils getJeiUtils() {
-        slotParams = new LinkedList<>();
-
+    private IWidgetUtils getJeiUtils(List<ISlotParams> slotParams) {
         return new ClientUtils() {
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
