@@ -32,10 +32,10 @@ public class LootCategoryProvider implements DataProvider {
     }
 
     public void generate() {
-        addGameplayCategory("chest_loot", Items.CHEST, List.of(Pattern.compile("chest")));
-        addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("fishing")));
-        addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("archaeology")));
-        addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("gameplay/hero_of_the_village")));
+        addGameplayCategory("chest_loot", Items.CHEST, List.of(Pattern.compile("^chests/.*$")));
+        addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("^gameplay/fishing/.*$")));
+        addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("^archaeology/.*$")));
+        addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("^gameplay/hero_of_the_village/.*$")));
     }
 
     protected void addGameplayCategory(String key, Item icon, List<Pattern> prefix) {
@@ -46,9 +46,6 @@ public class LootCategoryProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cachedOutput) {
         generate();
-        JsonObject exampleResource = new JsonObject();
-        exampleResource.addProperty("value", "Hello, Custom Resource!");
-        exampleResource.addProperty("number", 123);
 
         return CompletableFuture.allOf(
                 categories.stream()
