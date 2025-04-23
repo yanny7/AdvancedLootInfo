@@ -8,6 +8,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -43,8 +44,9 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootNumberProviderType, BiFunction<IClientUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
     private final Map<LootItemConditionType, TriFunction<IClientUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
     private final Map<LootItemFunctionType, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
-    private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceMap = new HashMap<>();
-    private final Map<LootItemFunctionType, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countMap = new HashMap<>();
+    private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
+    private final Map<LootItemFunctionType, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
+    private final Map<LootItemFunctionType, TriFunction<IClientUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
     private final Map<LootPoolEntryType, WidgetDirection> widgetDirectionMap = new HashMap<>();
     private final Map<LootPoolEntryType, IBoundsGetter> widgetBoundsMap = new HashMap<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
@@ -91,13 +93,19 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     @Override
     public <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
-        countMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+        countModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
 
     @Override
     public <T extends LootItemCondition> void registerChanceModifier(LootItemConditionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
-        chanceMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+        chanceModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+    }
+
+    @Override
+    public <T extends LootItemFunction> void registerItemStackModifier(LootItemFunctionType type, TriFunction<IClientUtils, T, ItemStack, ItemStack> consumer) {
+        //noinspection unchecked
+        itemStackModifierMap.put(type, (u, f, i) -> consumer.apply(u, (T) f, i));
     }
 
     @Override
@@ -187,8 +195,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countMap.get(function.getType());
+    public <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+        TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getType());
 
         if (bonusCountConsumer != null) {
             bonusCountConsumer.accept(utils, function, count);
@@ -196,12 +204,23 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
-        TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceMap.get(condition.getType());
+    public <T extends LootItemCondition> void applyChanceModifier(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+        TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceModifierMap.get(condition.getType());
 
         if (bonusChanceConsumer != null) {
             bonusChanceConsumer.accept(utils, condition, chance);
         }
+    }
+
+    @Override
+    public <T extends LootItemFunction> ItemStack applyItemStackModifier(IClientUtils utils, T function, ItemStack itemStack) {
+        TriFunction<IClientUtils, LootItemFunction, ItemStack, ItemStack> bonusChanceConsumer = itemStackModifierMap.get(function.getType());
+
+        if (bonusChanceConsumer != null) {
+            itemStack = bonusChanceConsumer.apply(utils, function, itemStack);
+        }
+
+        return itemStack;
     }
 
     @Override
