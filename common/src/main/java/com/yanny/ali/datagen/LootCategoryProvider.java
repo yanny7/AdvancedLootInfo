@@ -57,9 +57,6 @@ public class LootCategoryProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(CachedOutput cachedOutput) {
         generate();
-        JsonObject exampleResource = new JsonObject();
-        exampleResource.addProperty("value", "Hello, Custom Resource!");
-        exampleResource.addProperty("number", 123);
 
         return CompletableFuture.allOf(
                 categories.stream()
