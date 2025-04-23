@@ -6,6 +6,7 @@ import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -18,6 +19,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -84,7 +86,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                         .setPosition(1, 1)
                         .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
                                 -> tooltipBuilder.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.count(), p.allFunctions(), p.allConditions())))
-                        .addItemLike(itemSlotParams.item);
+                        .addItemStack(itemSlotParams.item);
             } else if (p instanceof TagSlotParams tagSlotParams) {
                 builder.addOutputSlot()
                         .setStandardSlotBackground()
@@ -137,7 +139,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
                                       Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                slotParams.add(new ItemSlotParams(item, entry, x, y, chance, count, allFunctions, allConditions));
+                ItemStack itemStack = TooltipUtils.getItemStack(this, entry, item);
+                slotParams.add(new ItemSlotParams(itemStack, entry, x, y, chance, count, allFunctions, allConditions));
                 return new Rect(x, y, 18, 18);
             }
 
@@ -161,7 +164,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     private record ItemSlotParams (
-            Item item,
+            ItemStack item,
             LootPoolEntryContainer entry,
             int x,
             int y,

@@ -4,6 +4,7 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -16,6 +17,7 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -67,7 +69,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
                                       Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(item), x, y, chance, count, allFunctions, allConditions);
+                ItemStack itemStack = TooltipUtils.getItemStack(this, entry, item);
+                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(itemStack), x, y, chance, count, allFunctions, allConditions);
 
                 widget.recipeContext(recipe);
                 slotWidgets.add(widget);

@@ -6,6 +6,7 @@ import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -43,6 +44,11 @@ public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         PluginManager.CLIENT_REGISTRY.applyChance(utils, condition, chance);
+    }
+
+    @Override
+    public <T extends LootItemFunction> ItemStack applyItemStackModifier(IClientUtils utils, T function, ItemStack itemStack) {
+        return PluginManager.CLIENT_REGISTRY.applyItemStackModifier(utils, function, itemStack);
     }
 
     @Override

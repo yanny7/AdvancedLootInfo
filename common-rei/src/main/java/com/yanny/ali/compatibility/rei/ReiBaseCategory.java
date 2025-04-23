@@ -6,6 +6,7 @@ import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
@@ -77,7 +78,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             @Override
             public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
                                       Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                EntryStack<ItemStack> stack = EntryStacks.of(item);
+                ItemStack itemStack = TooltipUtils.getItemStack(this, entry, item);
+                EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
 
                 stack.tooltip(EntryTooltipUtils.getTooltip(this, entry, chance, count, allFunctions, allConditions));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entry(stack).markOutput());

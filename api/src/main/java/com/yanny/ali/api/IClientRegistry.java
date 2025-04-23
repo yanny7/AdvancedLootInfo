@@ -1,6 +1,7 @@
 package com.yanny.ali.api;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
@@ -26,6 +27,8 @@ public interface IClientRegistry {
 
     <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType type, TriConsumer<IClientUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer);
     <T extends LootItemCondition> void registerChanceModifier(LootItemConditionType type, TriConsumer<IClientUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer);
+
+    <T extends LootItemFunction> void registerItemStackModifier(LootItemFunctionType type, TriFunction<IClientUtils, T, ItemStack, ItemStack> consumer);
 
     @FunctionalInterface
     interface IBoundsGetter {
