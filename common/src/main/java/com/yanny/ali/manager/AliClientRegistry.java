@@ -45,8 +45,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootNumberProviderType, BiFunction<IClientUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
     private final Map<LootItemConditionType, TriFunction<IClientUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
     private final Map<LootItemFunctionType, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
-    private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>>> chanceMap = new HashMap<>();
-    private final Map<LootItemFunctionType, TriConsumer<IClientUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>>> countMap = new HashMap<>();
+    private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
+    private final Map<LootItemFunctionType, TriConsumer<IClientUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType, TriFunction<IClientUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
     private final Map<LootPoolEntryType, WidgetDirection> widgetDirectionMap = new HashMap<>();
     private final Map<LootPoolEntryType, IBoundsGetter> widgetBoundsMap = new HashMap<>();
@@ -94,13 +94,13 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     @Override
     public <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType type, TriConsumer<IClientUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
-        countMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+        countModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
 
     @Override
     public <T extends LootItemCondition> void registerChanceModifier(LootItemConditionType type, TriConsumer<IClientUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
-        chanceMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+        chanceModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
 
     @Override
@@ -196,8 +196,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-        TriConsumer<IClientUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>> bonusCountConsumer = countMap.get(function.getType());
+    public <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+        TriConsumer<IClientUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getType());
 
         if (bonusCountConsumer != null) {
             bonusCountConsumer.accept(utils, function, count);
@@ -205,8 +205,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
-        TriConsumer<IClientUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceMap.get(condition.getType());
+    public <T extends LootItemCondition> void applyChanceModifier(IClientUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+        TriConsumer<IClientUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceModifierMap.get(condition.getType());
 
         if (bonusChanceConsumer != null) {
             bonusChanceConsumer.accept(utils, condition, chance);

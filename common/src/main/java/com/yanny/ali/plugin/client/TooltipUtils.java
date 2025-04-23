@@ -38,7 +38,7 @@ public class TooltipUtils {
         chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
 
         for (LootItemCondition condition : conditions) {
-            utils.applyChance(utils, condition, chance);
+            utils.applyChanceModifier(utils, condition, chance);
         }
 
         return chance;
@@ -51,7 +51,7 @@ public class TooltipUtils {
         count.put(null, Map.of(0, new RangeValue()));
 
         for (LootItemFunction function : functions) {
-            utils.applyCount(utils, function, count);
+            utils.applyCountModifier(utils, function, count);
         }
 
         return count;

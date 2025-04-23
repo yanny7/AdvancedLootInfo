@@ -37,13 +37,13 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-        PluginManager.CLIENT_REGISTRY.applyCount(utils, function, count);
+    public <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+        PluginManager.CLIENT_REGISTRY.applyCountModifier(utils, function, count);
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
-        PluginManager.CLIENT_REGISTRY.applyChance(utils, condition, chance);
+    public <T extends LootItemCondition> void applyChanceModifier(IClientUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+        PluginManager.CLIENT_REGISTRY.applyChanceModifier(utils, condition, chance);
     }
 
     @Override
