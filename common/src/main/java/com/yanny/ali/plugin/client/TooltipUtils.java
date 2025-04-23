@@ -217,12 +217,8 @@ public class TooltipUtils {
                 enchantments = BuiltInRegistries.ENCHANTMENT.stream().filter(Enchantment::isDiscoverable).filter((enchantment) -> isBook || enchantment.canEnchant(finalItemStack)).toList();
             }
 
-            if (enchantments.size() == 1) {
-                Enchantment enchantment = function.enchantments.get(0);
-
-                if (enchantment.getMinLevel() == enchantment.getMaxLevel()) {
-                    itemStack.enchant(enchantment, enchantment.getMaxLevel());
-                }
+            if (enchantments.size() == 1 && enchantments.get(0).getMinLevel() == enchantments.get(0).getMaxLevel()) {
+                itemStack.enchant(enchantments.get(0), enchantments.get(0).getMaxLevel());
             } else if (isBook) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
             }
