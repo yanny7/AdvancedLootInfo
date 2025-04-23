@@ -220,12 +220,8 @@ public class TooltipUtils {
                 }
             }
 
-            if (enchantments.isPresent() && enchantments.get().size() == 1) {
-                Enchantment enchantment = enchantments.get().get(0).value();
-
-                if (enchantment.getMinLevel() == enchantment.getMaxLevel()) {
-                    itemStack.enchant(enchantment, enchantment.getMaxLevel());
-                }
+            if (enchantments.isPresent() && enchantments.get().size() == 1 && enchantments.get().get(0).value().getMinLevel() == enchantments.get().get(0).value().getMaxLevel()) {
+                itemStack.enchant(enchantments.get().get(0).value(), enchantments.get().get(0).value().getMaxLevel());
             } else if (isBook) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
             }
