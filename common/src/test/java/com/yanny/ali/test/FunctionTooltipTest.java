@@ -228,7 +228,8 @@ public class FunctionTooltipTest {
                 "        -> FEET",
                 "        -> LEGS",
                 "        -> CHEST",
-                "        -> HEAD"
+                "        -> HEAD",
+                "  -> Replace: false"
         ));
     }
 

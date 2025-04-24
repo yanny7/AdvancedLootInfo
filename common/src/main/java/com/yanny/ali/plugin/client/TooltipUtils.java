@@ -2,20 +2,38 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
+import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class TooltipUtils {
     private TooltipUtils() {}
@@ -27,7 +45,7 @@ public class TooltipUtils {
         chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
 
         for (LootItemCondition condition : conditions) {
-            utils.applyChance(utils, condition, chance);
+            utils.applyChanceModifier(utils, condition, chance);
         }
 
         return chance;
@@ -40,10 +58,22 @@ public class TooltipUtils {
         count.put(null, Map.of(0, new RangeValue()));
 
         for (LootItemFunction function : functions) {
-            utils.applyCount(utils, function, count);
+            utils.applyCountModifier(utils, function, count);
         }
 
         return count;
+    }
+
+    public static ItemStack getItemStack(IClientUtils utils, LootPoolEntryContainer entry, Item item) {
+        ItemStack itemStack = item.getDefaultInstance();
+
+        if (entry.conditions.isEmpty() && entry instanceof LootPoolSingletonContainer container) {
+            for (LootItemFunction function : container.functions) {
+                itemStack = utils.applyItemStackModifier(utils, function, itemStack);
+            }
+        }
+
+        return itemStack;
     }
 
     public static void applyRandomChance(IClientUtils utils, LootItemRandomChanceCondition condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
@@ -189,6 +219,79 @@ public class TooltipUtils {
         }
     }
 
+    @NotNull
+    public static ItemStack applyEnchantRandomlyItemStackModifier(IClientUtils utils, EnchantRandomlyFunction function, ItemStack itemStack) {
+        if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
+            boolean isBook = itemStack.is(Items.BOOK);
+            boolean compatible = !isBook && function.onlyCompatible;
+            ItemStack finalItemStack = itemStack;
+            Optional<HolderSet<Enchantment>> enchantments = function.options;
+
+            if (enchantments.isEmpty()) {
+                List<Holder<Enchantment>> list = function.options.map(HolderSet::stream).orElseGet(() -> utils.lookupProvider().lookupOrThrow(Registries.ENCHANTMENT)
+                        .listElements().map(Function.identity())).filter((ref) -> compatible || ref.value().canEnchant(finalItemStack)).toList();
+
+                if (list.size() == 1) {
+                    enchantments = Optional.of(HolderSet.direct(list.getFirst()));
+                }
+            }
+
+            if (enchantments.isPresent() && enchantments.get().size() == 1 && enchantments.get().get(0).value().getMinLevel() == enchantments.get().get(0).value().getMaxLevel()) {
+                itemStack.enchant(enchantments.get().get(0), enchantments.get().get(0).value().getMaxLevel());
+            } else if (isBook) {
+                itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
+            }
+        }
+
+        return itemStack;
+    }
+
+    @NotNull
+    public static ItemStack applyEnchantWithLevelsItemStackModifier(IClientUtils utils, EnchantWithLevelsFunction function, ItemStack itemStack) {
+        if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
+            if (itemStack.is(Items.BOOK)) {
+                itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
+            }
+        }
+
+        return itemStack;
+    }
+
+    public static ItemStack applySetAttributesItemStackModifier(IClientUtils utils, SetAttributesFunction function, ItemStack itemStack) {
+        if (function.predicates.isEmpty()) {
+            if (function.replace) {
+                itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, updateModifiers(function.modifiers, ItemAttributeModifiers.EMPTY));
+            } else {
+                itemStack.update(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY, (modifiers) -> {
+                    if (modifiers.modifiers().isEmpty()) {
+                        return updateModifiers(function.modifiers, itemStack.getItem().getDefaultAttributeModifiers());
+                    } else {
+                        return updateModifiers(function.modifiers, modifiers);
+                    }
+                });
+            }
+        }
+
+        return itemStack;
+    }
+
+    public static ItemStack applySetNameItemStackModifier(IClientUtils utils, SetNameFunction function, ItemStack itemStack) {
+        if (function.predicates.isEmpty() && function.name.isPresent()) {
+            itemStack.set(function.target.component(), function.name.get());
+        }
+
+        return itemStack;
+    }
+
+    public static ItemStack applyItemStackModifier(IClientUtils utils, LootItemFunction function, ItemStack itemStack) {
+        if (function instanceof LootItemConditionalFunction conditional && !conditional.predicates.isEmpty()) {
+            return itemStack;
+        }
+
+        itemStack = function.apply(itemStack, null);
+        return itemStack;
+    }
+
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {
         switch (function.formula) {
             case ApplyBonusCount.OreDrops ignored -> {
@@ -233,5 +336,20 @@ public class TooltipUtils {
             }
             default -> v.set(new RangeValue(false, true));
         };
+    }
+
+    private static ItemAttributeModifiers updateModifiers(List<SetAttributesFunction.Modifier> modifiers, ItemAttributeModifiers itemAttributeModifiers) {
+        for (SetAttributesFunction.Modifier modifier : modifiers) {
+            ResourceLocation id = modifier.id();
+
+            if (modifier.slots().size() == 1 && modifier.amount().getType() == NumberProviders.CONSTANT) {
+                EquipmentSlotGroup equipmentSlot = Util.getRandom(modifier.slots(), RandomSource.create());
+                ConstantValue value = (ConstantValue) modifier.amount();
+
+                itemAttributeModifiers = itemAttributeModifiers.withModifierAdded(modifier.attribute(), new AttributeModifier(id, value.getFloat(null), modifier.operation()), equipmentSlot);
+            }
+        }
+
+        return itemAttributeModifiers;
     }
 }
