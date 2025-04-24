@@ -130,78 +130,86 @@ public class TooltipUtils {
     }
 
     public static void applySetCount(IClientUtils utils, SetItemCountFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : count.entrySet()) {
-            for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
-                if (function.add) {
-                    levelEntry.getValue().add(utils.convertNumber(utils, function.value));
-                } else {
-                    levelEntry.getValue().set(utils.convertNumber(utils, function.value));
+        if (function.predicates.length == 0) {
+            for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : count.entrySet()) {
+                for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
+                    if (function.add) {
+                        levelEntry.getValue().add(utils.convertNumber(utils, function.value));
+                    } else {
+                        levelEntry.getValue().set(utils.convertNumber(utils, function.value));
+                    }
                 }
             }
         }
     }
 
     public static void applyBonus(IClientUtils utils, ApplyBonusCount function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-        Enchantment enchantment = function.enchantment;
+        if (function.predicates.length == 0) {
+            Enchantment enchantment = function.enchantment;
 
-        if (count.containsKey(enchantment)) {
-            calculateCount(function, count.get(null).get(0), 0);
+            if (count.containsKey(enchantment)) {
+                calculateCount(function, count.get(null).get(0), 0);
 
-            for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
-                calculateCount(function, entry.getValue(), entry.getKey());
-            }
-        } else {
-            RangeValue baseCount = new RangeValue(count.get(null).get(0));
-            Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
+                for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
+                    calculateCount(function, entry.getValue(), entry.getKey());
+                }
+            } else {
+                RangeValue baseCount = new RangeValue(count.get(null).get(0));
+                Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
 
-            calculateCount(function, count.get(null).get(0), 0);
-            count.put(enchantment, levelMap);
+                calculateCount(function, count.get(null).get(0), 0);
+                count.put(enchantment, levelMap);
 
-            for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
-                RangeValue value = new RangeValue(baseCount);
+                for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
+                    RangeValue value = new RangeValue(baseCount);
 
-                calculateCount(function, value, level);
-                levelMap.put(level, value);
+                    calculateCount(function, value, level);
+                    levelMap.put(level, value);
+                }
             }
         }
     }
 
     public static void applyLimitCount(IClientUtils utils, LimitCount function, Map<Enchantment, Map<Integer, RangeValue>> bonusCount) {
-        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> entry : bonusCount.entrySet()) {
-            for (Map.Entry<Integer, RangeValue> mapEntry : entry.getValue().entrySet()) {
-                RangeValue value = mapEntry.getValue();
-                value.clamp(utils.convertNumber(utils, function.limiter.min), utils.convertNumber(utils, function.limiter.max));
+        if (function.predicates.length == 0) {
+            for (Map.Entry<Enchantment, Map<Integer, RangeValue>> entry : bonusCount.entrySet()) {
+                for (Map.Entry<Integer, RangeValue> mapEntry : entry.getValue().entrySet()) {
+                    RangeValue value = mapEntry.getValue();
+                    value.clamp(utils.convertNumber(utils, function.limiter.min), utils.convertNumber(utils, function.limiter.max));
+                }
             }
         }
     }
 
     public static void applyLootingEnchant(IClientUtils utils, LootingEnchantFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-        Enchantment enchantment = Enchantments.MOB_LOOTING;
+        if (function.predicates.length == 0) {
+            Enchantment enchantment = Enchantments.MOB_LOOTING;
 
-        if (count.containsKey(enchantment)) {
-            for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
-                RangeValue value = entry.getValue();
+            if (count.containsKey(enchantment)) {
+                for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
+                    RangeValue value = entry.getValue();
 
-                value.add(utils.convertNumber(utils, function.value).multiply(entry.getKey()));
+                    value.add(utils.convertNumber(utils, function.value).multiply(entry.getKey()));
 
-                if (function.limit > 0) {
-                    value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
+                    if (function.limit > 0) {
+                        value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
+                    }
                 }
-            }
-        } else {
-            RangeValue baseCount = new RangeValue(count.get(null).get(0));
-            Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
+            } else {
+                RangeValue baseCount = new RangeValue(count.get(null).get(0));
+                Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
 
-            count.put(enchantment, levelMap);
+                count.put(enchantment, levelMap);
 
-            for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
-                RangeValue value = new RangeValue(baseCount).add(utils.convertNumber(utils, function.value).multiply(level));
+                for (int level = 1; level <= enchantment.getMaxLevel(); level++) {
+                    RangeValue value = new RangeValue(baseCount).add(utils.convertNumber(utils, function.value).multiply(level));
 
-                if (function.limit > 0) {
-                    value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
+                    if (function.limit > 0) {
+                        value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
+                    }
+
+                    levelMap.put(level, value);
                 }
-
-                levelMap.put(level, value);
             }
         }
     }
