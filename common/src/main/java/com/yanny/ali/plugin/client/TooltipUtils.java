@@ -245,20 +245,17 @@ public class TooltipUtils {
 
     public static ItemStack applySetAttributesItemStackModifier(IClientUtils utils, SetAttributesFunction function, ItemStack itemStack) {
         if (function.predicates.isEmpty()) {
-            ItemAttributeModifiers itemAttributeModifiers = ItemAttributeModifiers.EMPTY;
-
-            for (SetAttributesFunction.Modifier modifier : function.modifiers) {
-                UUID id = modifier.id().orElse(UUID.randomUUID());
-
-                if (modifier.slots().size() == 1 && modifier.amount().getType() == NumberProviders.CONSTANT) {
-                    EquipmentSlotGroup equipmentSlot = Util.getRandom(modifier.slots(), RandomSource.create());
-                    ConstantValue value = (ConstantValue) modifier.amount();
-
-                    itemAttributeModifiers = itemAttributeModifiers.withModifierAdded(modifier.attribute(), new AttributeModifier(id, modifier.name(), value.getFloat(null), modifier.operation()), equipmentSlot);
-                }
+            if (function.replace) {
+                itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, updateModifiers(function.modifiers, ItemAttributeModifiers.EMPTY));
+            } else {
+                itemStack.update(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY, (modifiers) -> {
+                    if (modifiers.modifiers().isEmpty()) {
+                        return updateModifiers(function.modifiers, itemStack.getItem().getDefaultAttributeModifiers());
+                    } else {
+                        return updateModifiers(function.modifiers, modifiers);
+                    }
+                });
             }
-
-            itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, itemAttributeModifiers);
         }
 
         return itemStack;
@@ -298,5 +295,20 @@ public class TooltipUtils {
             default -> {
             }
         }
+    }
+
+    private static ItemAttributeModifiers updateModifiers(List<SetAttributesFunction.Modifier> modifiers, ItemAttributeModifiers itemAttributeModifiers) {
+        for (SetAttributesFunction.Modifier modifier : modifiers) {
+            UUID id = modifier.id().orElse(UUID.randomUUID());
+
+            if (modifier.slots().size() == 1 && modifier.amount().getType() == NumberProviders.CONSTANT) {
+                EquipmentSlotGroup equipmentSlot = Util.getRandom(modifier.slots(), RandomSource.create());
+                ConstantValue value = (ConstantValue) modifier.amount();
+
+                itemAttributeModifiers = itemAttributeModifiers.withModifierAdded(modifier.attribute(), new AttributeModifier(id, modifier.name(), value.getFloat(null), modifier.operation()), equipmentSlot);
+            }
+        }
+
+        return itemAttributeModifiers;
     }
 }

@@ -156,6 +156,7 @@
   "ali.property.value.ranged_property_gte": "%s: ≥%s",
   "ali.property.value.ranged_property_lte": "%s: ≤%s",
   "ali.property.value.raw": "Raw: %s",
+  "ali.property.value.replace": "Replace: %s",
   "ali.property.value.resolution_context": "Resolution Context: %s",
   "ali.property.value.resolved": "Resolved: %s",
   "ali.property.value.score": "Score: %s",

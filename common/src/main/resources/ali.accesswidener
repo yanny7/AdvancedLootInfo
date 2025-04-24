@@ -32,6 +32,7 @@ accessible field net/minecraft/core/component/DataComponentPatch map Lit/unimi/d
 
 accessible field net/minecraft/world/level/storage/loot/functions/LootItemConditionalFunction predicates Ljava/util/List;
 accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction modifiers Ljava/util/List;
+accessible field net/minecraft/world/level/storage/loot/functions/SetAttributesFunction replace Z
 accessible field net/minecraft/world/level/storage/loot/functions/SetItemCountFunction add Z
 accessible field net/minecraft/world/level/storage/loot/functions/SetItemCountFunction value Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/level/storage/loot/functions/LimitCount limiter Lnet/minecraft/world/level/storage/loot/IntRange;

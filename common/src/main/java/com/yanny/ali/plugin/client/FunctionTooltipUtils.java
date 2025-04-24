@@ -168,6 +168,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_attributes")));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.modifiers", fun.modifiers, GenericTooltipUtils::getModifierTooltip));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.replace", fun.replace));
 
         return components;
     }
