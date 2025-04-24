@@ -5,6 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -23,8 +24,10 @@ public interface IClientUtils extends ICommonUtils {
     <T extends LootItemCondition> List<Component> getConditionTooltip(IClientUtils utils, int pad, T condition);
     <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function);
 
-    <T extends LootItemFunction> void applyCount(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
-    <T extends LootItemCondition> void applyChance(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
+    <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
+    <T extends LootItemCondition> void applyChanceModifier(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
+
+    <T extends LootItemFunction> ItemStack applyItemStackModifier(IClientUtils utils, T function, ItemStack itemStack);
 
     Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y);
 

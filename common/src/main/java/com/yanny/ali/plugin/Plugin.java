@@ -82,6 +82,14 @@ public class Plugin implements IPlugin {
         registry.registerCountModifier(LootItemFunctions.LIMIT_COUNT, TooltipUtils::applyLimitCount);
         registry.registerCountModifier(LootItemFunctions.LOOTING_ENCHANT, TooltipUtils::applyLootingEnchant);
 
+        registry.registerItemStackModifier(LootItemFunctions.ENCHANT_RANDOMLY, TooltipUtils::applyEnchantRandomlyItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.ENCHANT_WITH_LEVELS, TooltipUtils::applyEnchantWithLevelsItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.SET_ATTRIBUTES, TooltipUtils::applySetAttributesItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.SET_BANNER_PATTERN, TooltipUtils::applyItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.SET_NAME, TooltipUtils::applySetNameItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.SET_NBT, TooltipUtils::applyItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.SET_POTION, TooltipUtils::applyItemStackModifier);
+
         registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
         registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
         registry.registerNumberProvider(NumberProviders.BINOMIAL, Plugin::convertBinomial);
