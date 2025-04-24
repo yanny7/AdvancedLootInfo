@@ -152,9 +152,8 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getSequenceTooltip(IClientUtils utils, int pad, LootItemFunction function) {
+    public static List<Component> getSequenceTooltip(IClientUtils utils, int pad, SequenceFunction fun) {
         List<Component> components = new LinkedList<>();
-        SequenceFunction fun = (SequenceFunction) function;
 
         components.add(pad(pad, translatable("ali.type.function.sequence")));
         components.addAll(GenericTooltipUtils.getFunctionsTooltip(utils, pad + 1, fun.functions));
