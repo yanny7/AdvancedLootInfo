@@ -281,6 +281,19 @@ public class TooltipUtils {
         return itemStack;
     }
 
+    @NotNull
+    public static ItemStack applySetEnchantmentsItemStackModifier(IClientUtils utils, SetEnchantmentsFunction function, ItemStack itemStack) {
+        if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
+            if (itemStack.is(Items.BOOK)) {
+                itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
+            } else {
+                itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
+            }
+        }
+
+        return itemStack;
+    }
+
     public static ItemStack applyItemStackModifier(IClientUtils utils, LootItemFunction function, ItemStack itemStack) {
         if (function instanceof LootItemConditionalFunction conditional && !conditional.predicates.isEmpty()) {
             return itemStack;

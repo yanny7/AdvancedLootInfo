@@ -142,6 +142,7 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(LootItemFunctions.SET_WRITABLE_BOOK_PAGES, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(LootItemFunctions.SET_WRITTEN_BOOK_PAGES, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(LootItemFunctions.TOGGLE_TOOLTIPS, TooltipUtils::applyItemStackModifier);
+        registry.registerItemStackModifier(LootItemFunctions.SET_ENCHANTMENTS, TooltipUtils::applySetEnchantmentsItemStackModifier);
 
         registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
         registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
