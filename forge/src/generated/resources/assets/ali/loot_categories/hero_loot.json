@@ -3,6 +3,6 @@
   "icon": "minecraft:emerald",
   "key": "hero_loot",
   "prefix": [
-    "gameplay/hero_of_the_village"
+    "^gameplay/hero_of_the_village/.*$"
   ]
 }
