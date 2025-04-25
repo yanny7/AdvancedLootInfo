@@ -19,7 +19,7 @@ public class CommonAliMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(FabricReloadListener.onResourceReload());
+        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(FabricReloadListener.onResourceReload());
         FabricBusSubscriber.registerEvents();
         NetworkUtils.registerLootInfoPropagator();
         PluginManager.registerCommonEvent();

@@ -11,7 +11,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
 
 @Mod(Utils.MOD_ID)
@@ -24,7 +23,7 @@ public class AliMod {
         modEventBus.addListener(AliMod::registerCommonEvent);
         modEventBus.addListener(AliMod::registerClientEvent);
         modEventBus.addListener(AliMod::registerPayloadHandler);
-        NeoForge.EVENT_BUS.addListener(NeoForgeReloadListener::onResourceReload);
+        modEventBus.addListener(NeoForgeReloadListener::onResourceReload);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
