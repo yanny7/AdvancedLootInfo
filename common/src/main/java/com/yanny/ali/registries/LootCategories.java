@@ -1,7 +1,6 @@
 package com.yanny.ali.registries;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
@@ -88,9 +87,5 @@ public class LootCategories {
                 });
             }
         };
-    }
-
-    private static List<String> toList(JsonArray array) {
-        return array.asList().stream().map(JsonElement::getAsString).toList();
     }
 }

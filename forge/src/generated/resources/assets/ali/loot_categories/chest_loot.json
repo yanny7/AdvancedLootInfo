@@ -3,6 +3,6 @@
   "icon": "minecraft:chest",
   "key": "chest_loot",
   "prefix": [
-    "chest"
+    "^chests/.*$"
   ]
 }
