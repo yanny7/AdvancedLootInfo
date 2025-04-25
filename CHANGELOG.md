@@ -1,5 +1,6 @@
 ## []
 
+- Fixed gameplay sub-categories not showing on multiplayer
 - Apply item modifiers (like potion/name/lore...) to displayed item
 - Fixed bonus count calculation
 - Fixed missing tooltip in REI right panel when displayed ALI category

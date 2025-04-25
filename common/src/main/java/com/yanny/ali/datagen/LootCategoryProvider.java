@@ -61,7 +61,7 @@ public class LootCategoryProvider implements DataProvider {
         return CompletableFuture.allOf(
                 categories.stream()
                         .map((category) -> {
-                            Path output = generator.getOutputFolder().resolve("data/" + Utils.MOD_ID + "/loot_categories/" + category.getKey() + ".json");
+                            Path output = generator.getOutputFolder().resolve("assets/" + Utils.MOD_ID + "/loot_categories/" + category.getKey() + ".json");
                             return DataProvider.saveStable(cachedOutput, toJson(category), output);
                         })
                         .toArray(CompletableFuture[]::new)
