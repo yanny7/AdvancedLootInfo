@@ -234,6 +234,8 @@ public class TooltipUtils {
                 itemStack.enchant(enchantments.get().get(0).value(), enchantments.get().get(0).value().getMaxLevel());
             } else if (isBook) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
+            } else {
+                itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
             }
         }
 
@@ -245,6 +247,8 @@ public class TooltipUtils {
         if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
             if (itemStack.is(Items.BOOK)) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
+            } else {
+                itemStack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
             }
         }
 
