@@ -1,4 +1,4 @@
-## []
+## [1.1.0]
 
 - Fixed gameplay sub-categories not showing on multiplayer
 - Apply item modifiers (like potion/name/lore...) to displayed item
