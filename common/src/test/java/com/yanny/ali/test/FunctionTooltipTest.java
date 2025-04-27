@@ -606,10 +606,28 @@ public class FunctionTooltipTest {
     public void testSetCustomModelDataTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetCustomModelDataTooltip(UTILS, 0, new SetCustomModelDataFunction(
                 List.of(),
-                ConstantValue.exactly(3.14F)
+                Optional.of(new ListOperation.StandAlone<>(List.of(ConstantValue.exactly(3.14F)), ListOperation.ReplaceAll.INSTANCE)),
+                Optional.of(new ListOperation.StandAlone<>(List.of(true), ListOperation.ReplaceAll.INSTANCE)),
+                Optional.of(new ListOperation.StandAlone<>(List.of("test"), ListOperation.ReplaceAll.INSTANCE)),
+                Optional.of(new ListOperation.StandAlone<>(List.of(ConstantValue.exactly(25)), ListOperation.ReplaceAll.INSTANCE))
         )), List.of(
                 "Set Custom Model Data:",
-                "  -> Value: 3.14"
+                "  -> Floats:",
+                "    -> List Operation: REPLACE_ALL",
+                "    -> Values:",
+                "      -> Value: 3.14",
+                "  -> Colors:",
+                "    -> List Operation: REPLACE_ALL",
+                "    -> Values:",
+                "      -> Value: 25",
+                "  -> Flags:",
+                "    -> List Operation: REPLACE_ALL",
+                "    -> Values:",
+                "      -> Value: true",
+                "  -> Strings:",
+                "    -> List Operation: REPLACE_ALL",
+                "    -> Values:",
+                "      -> Value: test"
         ));
     }
 }

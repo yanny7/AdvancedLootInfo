@@ -622,7 +622,6 @@ public class GenericTooltipUtils {
 
         components.addAll(getStringTooltip(utils, pad, "ali.property.value.asset_name", material.assetName()));
         components.addAll(getHolderTooltip(utils, pad, material.ingredient(), GenericTooltipUtils::getItemTooltip));
-        components.addAll(getFloatTooltip(utils, pad, "ali.property.value.model_index", material.itemModelIndex()));
         components.addAll(getComponentTooltip(utils, pad, "ali.property.value.description", material.description()));
 
         return components;
@@ -793,6 +792,17 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.jump", predicate.jump(), GenericTooltipUtils::getBooleanTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.sneak", predicate.sneak(), GenericTooltipUtils::getBooleanTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.sprint", predicate.sprint(), GenericTooltipUtils::getBooleanTooltip));
+
+        return components;
+    }
+
+    @NotNull
+    public static <T> List<Component> getStandaloneListOperationTooltip(IClientUtils utils, int pad, String key, ListOperation.StandAlone<T> predicate, QuadFunction<IClientUtils, Integer, String, T, List<Component>> mapper) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable(key)));
+        components.addAll(getListOperationTooltip(utils, pad + 1, predicate.operation()));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.values", predicate.value(), (u, i, v) -> mapper.apply(u, i, "ali.property.value.value", v)));
 
         return components;
     }

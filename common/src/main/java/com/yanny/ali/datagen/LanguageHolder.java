@@ -126,6 +126,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.branch.clamped", "Clamped:");
+        TRANSLATION_MAP.put("ali.property.branch.colors", "Colors:");
         TRANSLATION_MAP.put("ali.property.branch.component_predicates", "Component Predicates:");
         TRANSLATION_MAP.put("ali.property.branch.components", "Components:");
         TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
@@ -149,6 +150,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.fallback", "Fallback:");
         TRANSLATION_MAP.put("ali.property.branch.feet", "Feet:");
         TRANSLATION_MAP.put("ali.property.branch.filter", "Filter:");
+        TRANSLATION_MAP.put("ali.property.branch.flags", "Flags:");
+        TRANSLATION_MAP.put("ali.property.branch.floats", "Floats:");
         TRANSLATION_MAP.put("ali.property.branch.fluid_predicate", "Fluid Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.fluids", "Fluids:");
         TRANSLATION_MAP.put("ali.property.branch.fraction", "Fraction:");
@@ -191,6 +194,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.state_properties_predicate", "State Properties:");
         TRANSLATION_MAP.put("ali.property.branch.stats", "Stats:");
         TRANSLATION_MAP.put("ali.property.branch.stepping_on_location", "Stepping on Location:");
+        TRANSLATION_MAP.put("ali.property.branch.strings", "Strings:");
         TRANSLATION_MAP.put("ali.property.branch.structures", "Structures:");
         TRANSLATION_MAP.put("ali.property.branch.stuck_entity", "Stuck Entity:");
         TRANSLATION_MAP.put("ali.property.branch.tag_predicates", "Tags:");

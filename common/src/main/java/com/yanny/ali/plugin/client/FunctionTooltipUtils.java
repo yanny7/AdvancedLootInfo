@@ -469,7 +469,14 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_model_data")));
-        components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.valueProvider));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.floats", fun.floats,
+                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getNumberProviderTooltip)));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.colors", fun.colors,
+                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getNumberProviderTooltip)));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.flags", fun.flags,
+                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getBooleanTooltip)));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.strings", fun.strings,
+                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getStringTooltip)));
 
         return components;
     }

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -60,7 +61,7 @@ public class LootCategories {
 
     @NotNull
     public static SimpleJsonResourceReloadListener<JsonElement> getReloadListener(Gson gson, String id) {
-        return new SimpleJsonResourceReloadListener<>(ExtraCodecs.JSON, id) {
+        return new SimpleJsonResourceReloadListener<>(ExtraCodecs.JSON, FileToIdConverter.json(id)) {
             @Override
             protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
                 BLOCK_LOOT_CATEGORIES.clear();

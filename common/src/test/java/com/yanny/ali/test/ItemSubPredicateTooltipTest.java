@@ -254,7 +254,6 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Materials:",
                 "    -> Asset Name: gold",
                 "    -> Item: Gold Ingot",
-                "    -> Model Index: 0.6",
                 "    -> Description: Gold Material",
                 "  -> Patterns:",
                 "    -> Asset Id: minecraft:eye",
