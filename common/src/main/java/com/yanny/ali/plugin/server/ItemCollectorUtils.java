@@ -60,7 +60,7 @@ public class ItemCollectorUtils {
     @Unmodifiable
     @NotNull
     public static List<Item> collectTags(IServerUtils utils, TagEntry entry) {
-        LinkedList<Item> result = new LinkedList<>(BuiltInRegistries.ITEM.getTag(entry.tag).map((tag) -> tag.stream().map(Holder::value).toList()).orElse(List.of()));
+        LinkedList<Item> result = new LinkedList<>(BuiltInRegistries.ITEM.get(entry.tag).map((tag) -> tag.stream().map(Holder::value).toList()).orElse(List.of()));
 
         result.addAll(entry.functions.stream().map((f) -> utils.collectItems(utils, List.copyOf(result), f)).flatMap(Collection::stream).toList());
 
@@ -102,9 +102,9 @@ public class ItemCollectorUtils {
         ServerLevel level = utils.getServerLevel();
 
         if (level != null) {
-            return items.stream().map((i) -> level.getRecipeManager()
+            return items.stream().map((i) -> level.recipeAccess()
                     .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.value().getResultItem(null).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
+                    .map((l) -> List.of(l.value().result().getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
         }
 
         return List.of();

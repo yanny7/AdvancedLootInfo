@@ -16,6 +16,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -270,7 +272,7 @@ public class GenericTooltipTest {
         compoundTag.putInt("range", 5);
 
         assertTooltip(GenericTooltipUtils.getEntityPredicateTooltip(UTILS, 0, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(EntityType.CAT))
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT))
                 .distance(new DistancePredicate(MinMaxBounds.Doubles.exactly(10), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .located(LocationPredicate.Builder.location().setX(MinMaxBounds.Doubles.atLeast(20)))
                 .steppingOn(LocationPredicate.Builder.location().setX(MinMaxBounds.Doubles.atMost(30)))
@@ -280,8 +282,8 @@ public class GenericTooltipTest {
                 )
                 .nbt(new NbtPredicate(compoundTag))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))
-                .equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE)))
-                .subPredicate(EntitySubPredicates.CAT.createPredicate(HolderSet.direct(BuiltInRegistries.CAT_VARIANT.getHolderOrThrow(CatVariant.PERSIAN))))
+                .equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)))
+                .subPredicate(EntitySubPredicates.CAT.createPredicate(HolderSet.direct(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN).orElseThrow())))
                 .vehicle(EntityPredicate.Builder.entity().team("blue"))
                 .passenger(EntityPredicate.Builder.entity().team("white"))
                 .targetedEntity(EntityPredicate.Builder.entity().team("red"))
@@ -333,11 +335,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, EntityTypePredicate.of(EntityType.CAT)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT)), List.of(
                 "Entity Types:",
                 "  -> Entity Type: Cat"
         ));
-        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, EntityTypePredicate.of(EntityTypeTags.SKELETONS)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS)), List.of(
                 "Entity Types:",
                 "  -> Tag: minecraft:skeletons"
         ));
@@ -371,7 +373,7 @@ public class GenericTooltipTest {
                 .setDimension(Level.OVERWORLD)
                 .setSmokey(true)
                 .setLight(LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)))
-                .setBlock(BlockPredicate.Builder.block().of(Blocks.STONE, Blocks.COBBLESTONE))
+                .setBlock(BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.STONE, Blocks.COBBLESTONE))
                 .setFluid(FluidPredicate.Builder.fluid().of(Fluids.LAVA))
                 .setCanSeeSky(true)
                 .build()
@@ -410,18 +412,18 @@ public class GenericTooltipTest {
 
         compoundTag.putFloat("test", 3F);
 
-        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(Blocks.DIRT).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.DIRT).build()), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
                 "    -> Block: Dirt"
         ));
-        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(BlockTags.BEDS).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), BlockTags.BEDS).build()), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
                 "    -> Tag: minecraft:beds"
         ));
         assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block()
-                .of(Blocks.STONE, Blocks.COBBLESTONE)
+                .of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.STONE, Blocks.COBBLESTONE)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST))
                 .hasNbt(compoundTag)
                 .build()
@@ -560,7 +562,7 @@ public class GenericTooltipTest {
         compoundTag.putBoolean("healing", true);
 
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item()
-                .of(ItemTags.AXES)
+                .of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.AXES)
                 .hasComponents(DataComponentPredicate.builder().expect(DataComponents.BASE_COLOR, DyeColor.BLUE).build())
                 .build()
         ), List.of(
@@ -570,7 +572,7 @@ public class GenericTooltipTest {
                 "  -> Component: minecraft:base_color: blue"
         ));
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item()
-                .of(Items.CAKE, Items.NETHERITE_AXE)
+                .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.CAKE, Items.NETHERITE_AXE)
                 .withCount(MinMaxBounds.Ints.between(10, 15))
                 .withSubPredicate(ItemSubPredicates.DAMAGE, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(5)))
                 .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.enchantments(List.of(
@@ -653,10 +655,10 @@ public class GenericTooltipTest {
 
     @Test
     public void testRecipesTooltip() {
-        Object2BooleanMap<ResourceLocation> recipeList = new Object2BooleanArrayMap<>();
+        Object2BooleanMap<ResourceKey<Recipe<?>>> recipeList = new Object2BooleanArrayMap<>();
 
-        recipeList.put(ResourceLocation.withDefaultNamespace("furnace_recipe"), true);
-        recipeList.put(ResourceLocation.withDefaultNamespace("apple_recipe"), false);
+        recipeList.put(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("furnace_recipe")), true);
+        recipeList.put(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("apple_recipe")), false);
 
         assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, new Object2BooleanArrayMap<>()), List.of());
         assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, recipeList), List.of(

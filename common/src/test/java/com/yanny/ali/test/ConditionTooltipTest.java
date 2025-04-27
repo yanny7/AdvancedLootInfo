@@ -77,7 +77,7 @@ public class ConditionTooltipTest {
                 DamageSourcePredicate.Builder.damageType()
                         .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                         .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
-                        .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
+                        .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
                         .source(EntityPredicate.Builder.entity().team("Blue"))
                         .isDirect(true)
         ).build()), List.of(
@@ -176,7 +176,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testItemMatchTooltip() {
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, 0, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE)).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, 0, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)).build()), List.of(
                 "Match Tool:",
                 "  -> Items:",
                 "    -> Item: Andesite",

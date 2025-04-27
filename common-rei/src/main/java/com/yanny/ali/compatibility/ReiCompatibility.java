@@ -14,6 +14,7 @@ import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
+import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReasons;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -22,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Sheep;
@@ -34,8 +36,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 public class ReiCompatibility implements REIClientPlugin {
@@ -94,19 +95,20 @@ public class ReiCompatibility implements REIClientPlugin {
             map.entrySet().stream().sorted(Comparator.comparing(s -> s.getKey().location().getPath())).forEach((f) -> LOGGER.warn(f.getKey().location().getPath()));
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceKey<LootTable> location = block.getLootTable();
-                LootTable lootEntry = map.get(location);
+                block.getLootTable().ifPresent((location) -> {
+                    LootTable lootEntry = map.get(location);
 
-                if (lootEntry != null) {
-                    for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
-                        if (holder.category.getLootCategory().validate(block)) {
-                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, GenericUtils.getItems(location)));
-                            break;
+                    if (lootEntry != null) {
+                        for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
+                            if (holder.category.getLootCategory().validate(block)) {
+                                blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, GenericUtils.getItems(location)));
+                                break;
+                            }
                         }
-                    }
 
-                    map.remove(location);
-                }
+                        map.remove(location);
+                    }
+                });
             }
 
             for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
@@ -117,7 +119,7 @@ public class ReiCompatibility implements REIClientPlugin {
                         Sheep sheep;
 
                         try {
-                            sheep = (Sheep) entityType.create(level);
+                            sheep = (Sheep) entityType.create(level, EntitySpawnReason.LOAD);
                         } catch (Throwable e) {
                             LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
                             continue;
@@ -132,7 +134,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     Sheep sheep;
 
                     try {
-                        sheep = (Sheep) entityType.create(level);
+                        sheep = (Sheep) entityType.create(level, EntitySpawnReason.LOAD);
                     } catch (Throwable e) {
                         LOGGER.warn("Failed to create sheep: {}", e.getMessage());
                         continue;
@@ -146,7 +148,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     Entity entity;
 
                     try {
-                        entity = entityType.create(level);
+                        entity = entityType.create(level, EntitySpawnReason.LOAD);
                     } catch (Throwable e) {
                         LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
                         continue;
@@ -157,19 +159,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
-                        ResourceKey<LootTable> location = mob.getLootTable();
-                        LootTable lootEntry = map.get(location);
+                        mob.getLootTable().ifPresent((location) -> {
+                            LootTable lootEntry = map.get(location);
 
-                        if (lootEntry != null) {
-                            for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
-                                if (holder.category.getLootCategory().validate(entity)) {
-                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, GenericUtils.getItems(location)));
-                                    break;
+                            if (lootEntry != null) {
+                                for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
+                                    if (holder.category.getLootCategory().validate(entity)) {
+                                        entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, GenericUtils.getItems(location)));
+                                        break;
+                                    }
                                 }
-                            }
 
-                            map.remove(location);
-                        }
+                                map.remove(location);
+                            }
+                        });
                     }
                 }
             }
@@ -188,17 +191,17 @@ public class ReiCompatibility implements REIClientPlugin {
             }
 
             for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
-                registry.registerFiller(blockPredicate(entry.getValue()), entry.getKey().filler());
+                registry.registerFillerWithReason(blockPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }
 
             for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
-                registry.registerFiller(entityPredicate(entry.getValue()), entry.getKey().filler());
+                registry.registerFillerWithReason(entityPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }
 
             for (Map.Entry<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
-                registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
+                registry.registerFillerWithReason(gameplayPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }
         }
@@ -211,7 +214,7 @@ public class ReiCompatibility implements REIClientPlugin {
         ResourceLocation id = e.getKey();
         CategoryIdentifier<D> identifier = CategoryIdentifier.of(id.getNamespace(), id.getPath());
         Component title = Component.translatable("emi.category." + id.getNamespace() + "." + id.getPath().replace('/', '.'));
-        Function<T, D> filler = (type) -> displayFactory.apply(type, identifier);
+        BiFunction<T, DisplayAdditionReasons, D> filler = (type, r) -> displayFactory.apply(type, identifier);
         return new Holder<>(identifier, categoryFactory.apply(identifier, title, e.getValue()), filler);
     }
 
@@ -221,13 +224,13 @@ public class ReiCompatibility implements REIClientPlugin {
                                                                             TriFunction<CategoryIdentifier<D>, Component, LootCategory<U>, ReiBaseCategory<D, U>> categoryFactory) {
         CategoryIdentifier<D> identifier = CategoryIdentifier.of(Utils.MOD_ID, lootCategory.getKey());
         Component title = Component.translatable("emi.category." + Utils.MOD_ID + "." + lootCategory.getKey().replace('/', '.'));
-        Function<T, D> filler = (type) -> displayFactory.apply(type, identifier);
+        BiFunction<T, DisplayAdditionReasons, D> filler = (type, r) -> displayFactory.apply(type, identifier);
         return new Holder<>(identifier, categoryFactory.apply(identifier, title, lootCategory), filler);
     }
 
     @NotNull
-    private Predicate<Object> blockPredicate(List<BlockLootType> lootTypes) {
-        return (o) -> {
+    private BiPredicate<Object, DisplayAdditionReasons> blockPredicate(List<BlockLootType> lootTypes) {
+        return (o, r) -> {
             if (o != null) {
                 if (o instanceof BlockLootType type) {
                     return lootTypes.contains(type);
@@ -239,8 +242,8 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> entityPredicate(List<EntityLootType> lootTypes) {
-        return (o) -> {
+    private BiPredicate<Object, DisplayAdditionReasons> entityPredicate(List<EntityLootType> lootTypes) {
+        return (o, r) -> {
             if (o != null) {
                 if (o instanceof EntityLootType type) {
                     return lootTypes.contains(type);
@@ -252,8 +255,8 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> gameplayPredicate(List<GameplayLootType> lootTypes) {
-        return (o) -> {
+    private BiPredicate<Object, DisplayAdditionReasons> gameplayPredicate(List<GameplayLootType> lootTypes) {
+        return (o, r) -> {
             if (o != null) {
                 if (o instanceof GameplayLootType type) {
                     return lootTypes.contains(type);
@@ -264,5 +267,5 @@ public class ReiCompatibility implements REIClientPlugin {
         };
     }
 
-    private record Holder<D extends ReiBaseDisplay, T, U>(CategoryIdentifier<D> identifier, ReiBaseCategory<D, U> category, Function<T, D> filler) {}
+    private record Holder<D extends ReiBaseDisplay, T, U>(CategoryIdentifier<D> identifier, ReiBaseCategory<D, U> category, BiFunction<T, DisplayAdditionReasons, D> filler) {}
 }

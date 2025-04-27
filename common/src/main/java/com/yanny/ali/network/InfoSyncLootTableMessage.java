@@ -22,7 +22,7 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
             ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()), (l) -> l.lootTable,
             StreamCodec.of(
                     (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
-                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.get(a.readResourceLocation()))
+                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.getValue(a.readResourceLocation()))
             ), (l) -> l.items,
             InfoSyncLootTableMessage::new
     );

@@ -15,10 +15,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.JukeboxSongs;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.armortrim.TrimMaterials;
-import net.minecraft.world.item.armortrim.TrimPatterns;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -100,8 +100,8 @@ public class ItemSubPredicateTooltipTest {
     @Test
     public void testContainerPredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemContainerPredicateTooltip(UTILS, 0, new ItemContainerPredicate(Optional.of(new CollectionPredicate<>(
-                Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(Items.ANDESITE).build())),
-                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
+                Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build())),
+                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Container:",
@@ -119,8 +119,8 @@ public class ItemSubPredicateTooltipTest {
     @Test
     public void testBundlePredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemBundlePredicateTooltip(UTILS, 0, new ItemBundlePredicate(Optional.of(new CollectionPredicate<>(
-                Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(Items.ANDESITE).build())),
-                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
+                Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build())),
+                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Bundle:",

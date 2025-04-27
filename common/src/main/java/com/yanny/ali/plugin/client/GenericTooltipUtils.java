@@ -31,11 +31,12 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
@@ -449,12 +450,12 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getRecipesTooltip(IClientUtils ignoredUtils, int pad, Object2BooleanMap<ResourceLocation> recipes) {
+    public static List<Component> getRecipesTooltip(IClientUtils ignoredUtils, int pad, Object2BooleanMap<ResourceKey<Recipe<?>>> recipes) {
         List<Component> components = new LinkedList<>();
 
         if (!recipes.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.branch.recipes")));
-            recipes.forEach((recipe, required) -> components.add(pad(pad + 1, keyValue(recipe.toString(), required))));
+            recipes.forEach((recipe, required) -> components.add(pad(pad + 1, keyValue(recipe.location().toString(), required))));
         }
 
         return components;
@@ -750,7 +751,7 @@ public class GenericTooltipUtils {
         HolderLookup.Provider provider = utils.lookupProvider();
 
         if (provider != null) {
-            Optional<HolderLookup.RegistryLookup<JukeboxSong>> lookup = provider.lookup(Registries.JUKEBOX_SONG);
+            Optional<? extends HolderLookup.RegistryLookup<JukeboxSong>> lookup = provider.lookup(Registries.JUKEBOX_SONG);
 
             if (lookup.isPresent()) {
                 Optional<Holder.Reference<JukeboxSong>> first = lookup.get().listElements().filter((l) -> l.value() == song).findFirst();

@@ -101,7 +101,7 @@ public class EntitySubPredicateTooltipUtils {
                 HolderLookup.Provider provider = utils.lookupProvider();
 
                 if (provider != null) {
-                    Optional<HolderLookup.RegistryLookup<PaintingVariant>> lookup = provider.lookup(Registries.PAINTING_VARIANT);
+                    Optional<? extends HolderLookup.RegistryLookup<PaintingVariant>> lookup = provider.lookup(Registries.PAINTING_VARIANT);
 
                     if (lookup.isPresent()) {
                         Optional<Holder.Reference<PaintingVariant>> first = lookup.get().listElements().filter((l) -> l.value() == paintingVariant).findFirst();
@@ -117,7 +117,7 @@ public class EntitySubPredicateTooltipUtils {
                 HolderLookup.Provider provider = utils.lookupProvider();
 
                 if (provider != null) {
-                    Optional<HolderLookup.RegistryLookup<WolfVariant>> lookup = provider.lookup(Registries.WOLF_VARIANT);
+                    Optional<? extends HolderLookup.RegistryLookup<WolfVariant>> lookup = provider.lookup(Registries.WOLF_VARIANT);
 
                     if (lookup.isPresent()) {
                         Optional<Holder.Reference<WolfVariant>> first = lookup.get().listElements().filter((l) -> l.value() == wolfVariant).findFirst();

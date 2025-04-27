@@ -440,7 +440,7 @@ public class FunctionTooltipTest {
     public void testFilteredTooltip() {
         assertTooltip(FunctionTooltipUtils.getFilteredTooltip(UTILS, 0, new FilteredFunction(
                 List.of(),
-                ItemPredicate.Builder.item().of(ItemTags.COALS).build(),
+                ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.COALS).build(),
                 ApplyExplosionDecay.explosionDecay().build()
         )), List.of(
                 "Filtered:",

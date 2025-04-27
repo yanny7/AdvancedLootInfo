@@ -8,11 +8,13 @@ import com.yanny.ali.api.*;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.context.ContextKeySet;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -45,7 +47,7 @@ import static com.yanny.ali.plugin.client.WidgetUtils.VERTICAL_OFFSET;
 
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final LootContext LOOT_CONTEXT = new LootContext(new LootParams(null, Map.of(), Map.of(), 0F), RandomSource.create(), null);
+    private static final LootContext LOOT_CONTEXT = new LootContext(new LootParams(null, new ContextMap.Builder().create(new ContextKeySet.Builder().build()), Map.of(), 0F), RandomSource.create(), null);
 
     private final Map<LootPoolEntryType, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<LootNumberProviderType, BiFunction<IClientUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
@@ -54,7 +56,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<ItemSubPredicate.Type<?>, TriFunction<IClientUtils, Integer, ItemSubPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, TriFunction<IClientUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
-    private final Map<LootItemFunctionType, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
+    private final Map<LootItemFunctionType<?>, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
     private final Map<LootPoolEntryType, WidgetDirection> widgetDirectionMap = new HashMap<>();
     private final Map<LootPoolEntryType, IBoundsGetter> widgetBoundsMap = new HashMap<>();
@@ -112,7 +114,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
+    public <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType<T> type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
         countModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
@@ -124,7 +126,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void registerItemStackModifier(LootItemFunctionType type, TriFunction<IClientUtils, T, ItemStack, ItemStack> consumer) {
+    public <T extends LootItemFunction> void registerItemStackModifier(LootItemFunctionType<T> type, TriFunction<IClientUtils, T, ItemStack, ItemStack> consumer) {
         //noinspection unchecked
         itemStackModifierMap.put(type, (u, f, i) -> consumer.apply(u, (T) f, i));
     }

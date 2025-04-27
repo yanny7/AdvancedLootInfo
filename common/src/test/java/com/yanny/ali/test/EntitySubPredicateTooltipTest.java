@@ -2,10 +2,10 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.client.EntitySubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EntityType;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
@@ -60,11 +59,11 @@ public class EntitySubPredicateTooltipTest {
     public void testPlayerPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
                 .checkAdvancementDone(ResourceLocation.withDefaultNamespace("test"), true)
-                .addRecipe(ResourceLocation.withDefaultNamespace("test"), false)
+                .addRecipe(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("test")), false)
                 .checkAdvancementCriterions(ResourceLocation.withDefaultNamespace("criterion"), Map.of("test", true))
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(100))
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
-                .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
+                .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
                 .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
                 .build()), List.of(
                 "Player:",
@@ -118,7 +117,7 @@ public class EntitySubPredicateTooltipTest {
     @Test
     public void testHolderVariantPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.catVariant(
-                Holder.direct(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.CALICO)))
+                BuiltInRegistries.CAT_VARIANT.get(CatVariant.CALICO).orElseThrow()
         )), List.of(
                 "Type: minecraft:cat",
                 "  -> Variants:",
@@ -134,7 +133,7 @@ public class EntitySubPredicateTooltipTest {
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.frogVariant(
-                Holder.direct(Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.get(FrogVariant.TEMPERATE)))
+                BuiltInRegistries.FROG_VARIANT.get(FrogVariant.TEMPERATE).orElseThrow()
         )), List.of(
                 "Type: minecraft:frog",
                 "  -> Variants:",

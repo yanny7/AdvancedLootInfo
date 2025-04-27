@@ -117,6 +117,7 @@ accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltip
 accessible method net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetCustomModelDataFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle <init> (Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/level/storage/loot/functions/ToggleTooltips$TooltipWither;)V
+accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStack;
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType

@@ -2,7 +2,9 @@ package com.yanny.ali.plugin.client.widget;
 
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -59,6 +61,6 @@ public class TextureWidget implements IWidget {
 
     @Override
     public void render(GuiGraphics draw, int mouseX, int mouseY) {
-        draw.blit(texture, x, y, width, height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
+        draw.drawSpecial((source) -> WidgetUtils.innerBlit(source.getBuffer(RenderType.guiTextured(texture)), draw.pose().last().pose(), x, x + width, y, y + height, 0, width, height, u, v, textureWidth, textureHeight));
     }
 }

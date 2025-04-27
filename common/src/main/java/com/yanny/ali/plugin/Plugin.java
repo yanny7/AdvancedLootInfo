@@ -107,7 +107,6 @@ public class Plugin implements IPlugin {
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.SLIME, EntitySubPredicateTooltipUtils::getSlimePredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.RAIDER, EntitySubPredicateTooltipUtils::getRaiderPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.AXOLOTL.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.BOAT.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FOX.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.MOOSHROOM.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.RABBIT.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);

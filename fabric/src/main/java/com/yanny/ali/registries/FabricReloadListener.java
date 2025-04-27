@@ -2,12 +2,12 @@ package com.yanny.ali.registries;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.yanny.ali.Utils;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,8 +18,9 @@ public class FabricReloadListener {
 
     @NotNull
     public static IdentifiableResourceReloadListener onResourceReload() {
-        SimpleJsonResourceReloadListener listener = LootCategories.getReloadListener(GSON, "loot_categories");
+        SimpleJsonResourceReloadListener<JsonElement> listener = LootCategories.getReloadListener(GSON, "loot_categories");
         return new IdentifiableResourceReloadListener() {
+
             @Override
             public ResourceLocation getFabricId() {
                 return Utils.modLoc("loot_categories");
@@ -27,8 +28,8 @@ public class FabricReloadListener {
 
             @NotNull
             @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
-                return listener.reload(preparationBarrier, resourceManager, profilerFiller, profilerFiller2, executor, executor2);
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, Executor executor, Executor executor2) {
+                return listener.reload(preparationBarrier, resourceManager, executor, executor2);
             }
         };
     }

@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
@@ -58,8 +59,8 @@ public class LootCategories {
     }
 
     @NotNull
-    public static SimpleJsonResourceReloadListener getReloadListener(Gson gson, String id) {
-        return new SimpleJsonResourceReloadListener(gson, id) {
+    public static SimpleJsonResourceReloadListener<JsonElement> getReloadListener(Gson gson, String id) {
+        return new SimpleJsonResourceReloadListener<>(ExtraCodecs.JSON, id) {
             @Override
             protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
                 BLOCK_LOOT_CATEGORIES.clear();
@@ -71,7 +72,7 @@ public class LootCategories {
                         JsonObject jsonObject = GsonHelper.convertToJsonObject(value, location.toString());
                         LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
                         String key = GsonHelper.getAsString(jsonObject, "key");
-                        Item icon = BuiltInRegistries.ITEM.get(ResourceLocation.parse(GsonHelper.getAsString(jsonObject, "icon")));
+                        Item icon = BuiltInRegistries.ITEM.getValue(ResourceLocation.parse(GsonHelper.getAsString(jsonObject, "icon")));
 
                         switch (type) {
                             case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));

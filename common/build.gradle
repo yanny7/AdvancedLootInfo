@@ -47,9 +47,9 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":api")
 
-    compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}:api"
+//    compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}:api"
 
-    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+//    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
 
     testImplementation project(":api")
     testImplementation project(":common")

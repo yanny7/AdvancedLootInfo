@@ -274,13 +274,7 @@ public class TooltipUtils {
             if (function.replace) {
                 itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, updateModifiers(function.modifiers, ItemAttributeModifiers.EMPTY));
             } else {
-                itemStack.update(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY, (modifiers) -> {
-                    if (modifiers.modifiers().isEmpty()) {
-                        return updateModifiers(function.modifiers, itemStack.getItem().getDefaultAttributeModifiers());
-                    } else {
-                        return updateModifiers(function.modifiers, modifiers);
-                    }
-                });
+                itemStack.update(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY, (modifiers) -> updateModifiers(function.modifiers, modifiers));
             }
         }
 

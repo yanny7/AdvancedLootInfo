@@ -8,6 +8,7 @@ import com.yanny.ali.manager.PluginManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -53,13 +54,14 @@ public class GenericUtils {
         if (entity instanceof LivingEntity livingEntity) {
             guiGraphics.pose().pushPose();
             guiGraphics.blit(
+                    RenderType::guiTextured,
                     TEXTURE_LOC,
                     bounds.x(),
                     bounds.y(),
-                    bounds.width(),
-                    bounds.height(),
                     0,
                     36,
+                    bounds.width(),
+                    bounds.height(),
                     36,
                     36,
                     256,
@@ -77,7 +79,7 @@ public class GenericUtils {
                     screenY + bounds.bottom(),
                     (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
                     0.0625F,
-                    mouseX,
+                    mouseX - fullWidth / 2f,
                     mouseY,
                     livingEntity
             );

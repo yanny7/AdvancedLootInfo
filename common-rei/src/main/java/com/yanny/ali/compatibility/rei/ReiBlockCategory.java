@@ -100,7 +100,8 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                 poseStack.scale(9, -9, 9);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+
+                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
 
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
@@ -112,13 +113,13 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                 }
 
                 poseStack.translate(0, -1, 0);
-                blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(base, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
             } else {
                 poseStack.translate(25.5, 21, 100);
                 poseStack.scale(18, -18, 18);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
                 poseStack.translate(0, -1, 0);
             }
 
