@@ -53,6 +53,7 @@ public class EntitySubPredicateTooltipUtils {
         components.addAll(getRecipesTooltip(utils, pad + 1, predicate.recipes()));
         components.addAll(getAdvancementsTooltip(utils, pad + 1, predicate.advancements()));
         components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
 
         return components;
     }
@@ -74,6 +75,17 @@ public class EntitySubPredicateTooltipUtils {
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.raider")));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.has_raid", predicate.hasRaid()));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_captain", predicate.isCaptain()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getSheepPredicateTooltip(IClientUtils utils, int pad, SheepPredicate predicate) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.type.entity_sub_predicate.sheep")));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.sheared", predicate.sheared(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.color", predicate.color(), GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }

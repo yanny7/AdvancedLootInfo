@@ -96,7 +96,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
             poseStack.translate(bounds.getX(), bounds.getY(), 100);
 
             if (isPlant) {
-                poseStack.translate(14, 8, 100);
+                poseStack.translate(18, 14, 100);
                 poseStack.scale(9, -9, 9);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));

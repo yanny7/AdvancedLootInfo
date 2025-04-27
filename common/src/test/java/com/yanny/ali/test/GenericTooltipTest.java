@@ -759,4 +759,26 @@ public class GenericTooltipTest {
                 "  -> Fall Distance: ≥10.0"
         ));
     }
+
+    @Test
+    public void testInputPredicateTooltip() {
+        assertTooltip(GenericTooltipUtils.getInputPredicateTooltip(UTILS, 0, new InputPredicate(
+                Optional.of(true),
+                Optional.of(true),
+                Optional.of(false),
+                Optional.of(false),
+                Optional.of(false),
+                Optional.of(true),
+                Optional.of(true)
+        )), List.of(
+                "Input:",
+                "  -> Forward: true",
+                "  -> Backward: true",
+                "  -> Left: false",
+                "  -> Right: false",
+                "  -> Jump: false",
+                "  -> Sneak: true",
+                "  -> Sprint: true"
+        ));
+    }
 }

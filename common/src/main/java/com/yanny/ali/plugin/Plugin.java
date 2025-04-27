@@ -106,6 +106,7 @@ public class Plugin implements IPlugin {
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.PLAYER, EntitySubPredicateTooltipUtils::getPlayerPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.SLIME, EntitySubPredicateTooltipUtils::getSlimePredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.RAIDER, EntitySubPredicateTooltipUtils::getRaiderPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.SHEEP, EntitySubPredicateTooltipUtils::getSheepPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.AXOLOTL.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FOX.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.MOOSHROOM.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
@@ -115,6 +116,7 @@ public class Plugin implements IPlugin {
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.VILLAGER.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.PARROT.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.TROPICAL_FISH.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.SALMON.codec, EntitySubPredicateTooltipUtils::getVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.PAINTING.codec, EntitySubPredicateTooltipUtils::getHolderVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.CAT.codec, EntitySubPredicateTooltipUtils::getHolderVariantPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FROG.codec, EntitySubPredicateTooltipUtils::getHolderVariantPredicateTooltip);

@@ -781,6 +781,22 @@ public class GenericTooltipUtils {
         return components;
     }
 
+    @NotNull
+    public static List<Component> getInputPredicateTooltip(IClientUtils utils, int pad, InputPredicate predicate) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.property.branch.input")));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.forward", predicate.forward(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.backward", predicate.backward(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.left", predicate.left(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.right", predicate.right(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.jump", predicate.jump(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.sneak", predicate.sneak(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.sprint", predicate.sprint(), GenericTooltipUtils::getBooleanTooltip));
+
+        return components;
+    }
+
     // HELPERS
 
     @NotNull

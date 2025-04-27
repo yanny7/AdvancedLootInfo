@@ -16,6 +16,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
         TRANSLATION_MAP.put("emi.category.ali.trial_chambers", "Trial Chambers");
+        TRANSLATION_MAP.put("emi.category.ali.shearing_loot", "Shearing Loot");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s");
@@ -107,6 +108,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.lightning_bolt", "Lightning Bolt:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.player", "Player:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.raider", "Raider:");
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.sheep", "Sheep:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.slime", "Slime:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.variant", "Variant:");
 
@@ -153,6 +155,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.game_types", "Game Types:");
         TRANSLATION_MAP.put("ali.property.branch.head", "Head:");
         TRANSLATION_MAP.put("ali.property.branch.include", "Include:");
+        TRANSLATION_MAP.put("ali.property.branch.input", "Input:");
         TRANSLATION_MAP.put("ali.property.branch.item_predicates", "Item Predicates:");
         TRANSLATION_MAP.put("ali.property.branch.items", "Items:");
         TRANSLATION_MAP.put("ali.property.branch.legs", "Legs:");
@@ -209,6 +212,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.asset_name", "Asset Name: %s");
         TRANSLATION_MAP.put("ali.property.value.attribute", "Attribute: %s");
         TRANSLATION_MAP.put("ali.property.value.author", "Author: %s");
+        TRANSLATION_MAP.put("ali.property.value.backward", "Backward: %s");
         TRANSLATION_MAP.put("ali.property.value.banner_pattern", "Banner Pattern: %s");
         TRANSLATION_MAP.put("ali.property.value.base", "Base: %s");
         TRANSLATION_MAP.put("ali.property.value.biome", "Biome: %s");
@@ -241,6 +245,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.flight_duration", "Flight Duration: %s");
         TRANSLATION_MAP.put("ali.property.value.fluid", "Fluid: %s");
         TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
+        TRANSLATION_MAP.put("ali.property.value.forward", "Forward: %s");
         TRANSLATION_MAP.put("ali.property.value.generation", "Generation: %s");
         TRANSLATION_MAP.put("ali.property.value.has_raid", "Has Raid: %s");
         TRANSLATION_MAP.put("ali.property.value.has_trail", "Has Trail: %s");
@@ -263,6 +268,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.is_thundering", "Is Thundering: %s");
         TRANSLATION_MAP.put("ali.property.value.is_visible", "Is Visible: %s");
         TRANSLATION_MAP.put("ali.property.value.item", "Item: %s");
+        TRANSLATION_MAP.put("ali.property.value.jump", "Jump: %s");
+        TRANSLATION_MAP.put("ali.property.value.left", "Left: %s");
         TRANSLATION_MAP.put("ali.property.value.level", "Level: %s");
         TRANSLATION_MAP.put("ali.property.value.levels", "Levels: %s");
         TRANSLATION_MAP.put("ali.property.value.light", "Light: %s");
@@ -295,19 +302,23 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.replace", "Replace: %s");
         TRANSLATION_MAP.put("ali.property.value.resolution_context", "Resolution Context: %s");
         TRANSLATION_MAP.put("ali.property.value.resolved", "Resolved: %s");
+        TRANSLATION_MAP.put("ali.property.value.right", "Right: %s");
         TRANSLATION_MAP.put("ali.property.value.score", "Score: %s");
         TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
         TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
         TRANSLATION_MAP.put("ali.property.value.shape", "Shape: %s");
+        TRANSLATION_MAP.put("ali.property.value.sheared", "Sheared: %s");
         TRANSLATION_MAP.put("ali.property.value.show_on_item_frame", "Show On Item Frame: %s");
         TRANSLATION_MAP.put("ali.property.value.size", "Size: %s");
         TRANSLATION_MAP.put("ali.property.value.skip_known_structures", "Skip Known Structures: %s");
         TRANSLATION_MAP.put("ali.property.value.slot", "Slot: %s");
         TRANSLATION_MAP.put("ali.property.value.smokey", "Smokey: %s");
+        TRANSLATION_MAP.put("ali.property.value.sneak", "Sneak: %s");
         TRANSLATION_MAP.put("ali.property.value.song", "Song: %s");
         TRANSLATION_MAP.put("ali.property.value.source", "Source: %s");
         TRANSLATION_MAP.put("ali.property.value.source_path", "Source Path: %s");
         TRANSLATION_MAP.put("ali.property.value.speed", "Speed: %s");
+        TRANSLATION_MAP.put("ali.property.value.sprint", "Sprint: %s");
         TRANSLATION_MAP.put("ali.property.value.structure", "Structure: %s");
         TRANSLATION_MAP.put("ali.property.value.tag", "Tag: %s");
         TRANSLATION_MAP.put("ali.property.value.target", "Target: %s");
@@ -396,6 +407,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/archaeology/trail_ruins_rare", "Trail Ruins Rare");
 
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/armorer_gift", "Armorer Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/baby_gift", "Baby Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/butcher_gift", "Butcher Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/cartographer_gift", "Cartographer Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/cleric_gift", "Cleric Gift");
@@ -407,6 +419,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/mason_gift", "Mason Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/shepherd_gift", "Shepherd Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/toolsmith_gift", "Toolsmith Gift");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/unemployed_gift", "Unemployed Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/hero_of_the_village/weaponsmith_gift", "Weaponsmith Gift");
 
         TRANSLATION_MAP.put("ali/loot_table/gameplay/fishing", "Fishing");
@@ -418,7 +431,25 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/gameplay/cat_morning_gift", "Cat Morning Gift");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/piglin_bartering", "Piglin Bartering");
         TRANSLATION_MAP.put("ali/loot_table/gameplay/panda_sneeze", "Panda Sneeze");
-        TRANSLATION_MAP.put("ali/loot_table/shearing/bogged", "Bogged Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/armadillo_shed", "Armadillo Shed");
+        TRANSLATION_MAP.put("ali/loot_table/gameplay/chicken_lay", "Chicken Lay");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/black", "Black Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/blue", "Blue Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/brown", "Brown Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/cyan", "Cyan Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/gray", "Gray Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/green", "Green Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/light_blue", "Light Blue Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/light_gray", "Light Gray Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/lime", "Lime Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/magenta", "Magenta Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/orange", "Orange Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/pink", "Pink Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/purple", "Purple Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/red", "Red Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/white", "White Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/sheep/yellow", "Yellow Sheep");
+        TRANSLATION_MAP.put("ali/loot_table/entities/snow_golem", "Snow Golem");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/corridor", "Corridor Chest");
         TRANSLATION_MAP.put("ali/loot_table/chests/trial_chambers/entrance", "Entrance Chest");
@@ -445,5 +476,28 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali/loot_table/equipment/trial_chamber", "Equipment");
         TRANSLATION_MAP.put("ali/loot_table/equipment/trial_chamber_melee", "Melee Equipment");
         TRANSLATION_MAP.put("ali/loot_table/equipment/trial_chamber_ranged", "Ranged Equipment");
+
+        TRANSLATION_MAP.put("ali/loot_table/shearing/bogged", "Bogged Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/mooshroom", "Mooshroom Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/mooshroom/brown", "Brown Mooshroom Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/mooshroom/red", "Red Mooshroom Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep", "Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/black", "Black Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/blue", "Blue Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/brown", "Brown Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/cyan", "Cyan Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/gray", "Gray Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/green", "Green Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/light_blue", "Light Blue Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/light_gray", "Light Gray Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/lime", "Lime Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/magenta", "Magenta Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/orange", "Orange Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/pink", "Pink Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/purple", "Purple Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/red", "Red Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/white", "White Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/sheep/yellow", "Yellow Sheep Shearing");
+        TRANSLATION_MAP.put("ali/loot_table/shearing/snow_golem", "Snow Golem Shearing");
     }
 }

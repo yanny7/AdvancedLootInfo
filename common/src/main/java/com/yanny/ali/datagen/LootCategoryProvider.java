@@ -47,6 +47,7 @@ public class LootCategoryProvider implements DataProvider {
         addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("^gameplay/fishing.*$")));
         addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("^archaeology/.*$")));
         addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("^gameplay/hero_of_the_village/.*$")));
+        addGameplayCategory("shearing_loot", Items.SHEARS, List.of(Pattern.compile("^shearing/.*$")));
     }
 
     protected void addGameplayCategory(String key, Item icon, List<Pattern> prefix) {

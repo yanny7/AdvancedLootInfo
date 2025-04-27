@@ -14,6 +14,7 @@ import net.minecraft.world.entity.animal.FrogVariant;
 import net.minecraft.world.entity.animal.WolfVariants;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.decoration.PaintingVariants;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -65,6 +66,7 @@ public class EntitySubPredicateTooltipTest {
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
                 .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
+                .hasInput(new InputPredicate(Optional.of(true), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()))
                 .build()), List.of(
                 "Player:",
                 "  -> Game Types:",
@@ -83,7 +85,9 @@ public class EntitySubPredicateTooltipTest {
                 "      -> test: true",
                 "  -> Looking At:",
                 "    -> Entity Types:",
-                "      -> Entity Type: Warden"
+                "      -> Entity Type: Warden",
+                "  -> Input:",
+                "    -> Forward: true"
         ));
     }
 
@@ -101,6 +105,15 @@ public class EntitySubPredicateTooltipTest {
                 "Raider:",
                 "  -> Has Raid: false",
                 "  -> Is Captain: true"
+        ));
+    }
+
+    @Test
+    public void testSheepPredicateTooltip() {
+        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, 0, new SheepPredicate(Optional.of(false), Optional.of(DyeColor.BROWN))), List.of(
+                "Sheep:",
+                "  -> Sheared: false",
+                "  -> Color: BROWN"
         ));
     }
 

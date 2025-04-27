@@ -1,0 +1,8 @@
+{
+  "type": "GAMEPLAY",
+  "icon": "minecraft:shears",
+  "key": "shearing_loot",
+  "prefix": [
+    "^shearing/.*$"
+  ]
+}
