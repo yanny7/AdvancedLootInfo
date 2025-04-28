@@ -1,3 +1,7 @@
+## []
+
+- Fixed double tooltip rendering in JEI
+
 ## [1.1.0]
 
 - Fixed gameplay sub-categories not showing on multiplayer
