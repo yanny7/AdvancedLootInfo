@@ -1,3 +1,7 @@
+## []
+
+- Removed entity tooltip in REI
+
 ## [1.1.0]
 
 - Fixed gameplay sub-categories not showing on multiplayer
