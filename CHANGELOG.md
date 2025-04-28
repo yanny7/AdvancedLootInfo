@@ -1,6 +1,7 @@
 ## []
 
 - Removed entity tooltip in REI
+- Fixed enchantment level coloring
 
 ## [1.1.0]
 

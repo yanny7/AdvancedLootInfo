@@ -134,8 +134,8 @@ public class EntryTooltipUtils {
                     components.add(pad(1, translatable(
                             "ali.description.chance_bonus",
                             value(value, "%"),
-                            Component.translatable(enchantment.getDescriptionId()),
-                            Component.translatable("enchantment.level." + level)
+                            value(Component.translatable(enchantment.getDescriptionId())),
+                            value(Component.translatable("enchantment.level." + level))
                     )));
                 }
             }
@@ -162,8 +162,8 @@ public class EntryTooltipUtils {
                     components.add(pad(1, translatable(
                             "ali.description.count_bonus",
                             value(value),
-                            Component.translatable(enchantment.getDescriptionId()),
-                            Component.translatable("enchantment.level." + level)
+                            value(Component.translatable(enchantment.getDescriptionId())),
+                            value(Component.translatable("enchantment.level." + level))
                     )));
                 }
             }
