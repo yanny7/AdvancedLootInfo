@@ -582,7 +582,7 @@ public class FunctionTooltipTest {
     public void testToggleTooltipsTooltip() {
         assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(
                 List.of(),
-                Map.of(new ToggleTooltips.ComponentToggle<>(DataComponents.BASE_COLOR, (dyeColor, b) -> DyeColor.BLACK), true)
+                Map.of(DataComponents.BASE_COLOR, true)
         )), List.of(
                 "Toggle Tooltips:",
                 "  -> Values:",

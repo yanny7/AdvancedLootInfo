@@ -6,10 +6,10 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
@@ -53,7 +53,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootNumberProviderType, BiFunction<IClientUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
     private final Map<LootItemConditionType, TriFunction<IClientUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
-    private final Map<ItemSubPredicate.Type<?>, TriFunction<IClientUtils, Integer, ItemSubPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
+    private final Map<DataComponentPredicate.Type<?>, TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, TriFunction<IClientUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
@@ -102,7 +102,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(ItemSubPredicate.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
+    public <T extends DataComponentPredicate> void registerItemSubPredicateTooltip(DataComponentPredicate.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
         itemSubPredicateTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
     }
@@ -218,13 +218,13 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, ItemSubPredicate.Type<?> type, T predicate) {
-        TriFunction<IClientUtils, Integer, ItemSubPredicate, List<Component>> entryTooltipGetter = itemSubPredicateTooltipMap.get(type);
+    public <T extends DataComponentPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, DataComponentPredicate.Type<?> type, T predicate) {
+        TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>> entryTooltipGetter = itemSubPredicateTooltipMap.get(type);
 
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, pad, predicate);
         } else {
-            LOGGER.warn("ItemSubPredicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            LOGGER.warn("DataComponentPredicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
             return List.of();
         }
     }

@@ -288,7 +288,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_data")));
-        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.tag", fun.tag.getAsString()));
+        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.tag", fun.tag.toString()));
 
         return components;
     }
@@ -446,7 +446,7 @@ public class FunctionTooltipUtils {
         if (!fun.values.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.values")));
             fun.values.forEach((toggle, value) -> {
-                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, toggle.type()));
+                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, toggle));
                 components.addAll(getBooleanTooltip(utils, pad + 3, "ali.property.value.value", value));
             });
         }

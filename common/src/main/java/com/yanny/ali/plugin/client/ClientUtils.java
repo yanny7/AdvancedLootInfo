@@ -5,9 +5,9 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
@@ -41,7 +41,7 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, ItemSubPredicate.Type<?> type, T predicate) {
+    public <T extends DataComponentPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, DataComponentPredicate.Type<?> type, T predicate) {
         return PluginManager.CLIENT_REGISTRY.getItemSubPredicateTooltip(utils, pad, type, predicate);
     }
 

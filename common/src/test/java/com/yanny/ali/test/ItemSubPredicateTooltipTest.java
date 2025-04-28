@@ -4,6 +4,8 @@ import com.yanny.ali.plugin.client.ItemSubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.predicates.*;
+import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -31,11 +33,11 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class ItemSubPredicateTooltipTest {
     @Test
     public void testItemDamagePredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, 0, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(50))), List.of(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, 0, DamagePredicate.durability(MinMaxBounds.Ints.atMost(50))), List.of(
                 "Damage:",
                 "  -> Durability: ≤50"
         ));
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, 0, new ItemDamagePredicate(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, 0, new DamagePredicate(
                 MinMaxBounds.Ints.atMost(50),
                 MinMaxBounds.Ints.atLeast(5)
         )), List.of(
@@ -47,7 +49,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testItemEnchantmentsPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemEnchantmentsPredicateTooltip(UTILS, 0, ItemEnchantmentsPredicate.enchantments(List.of(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemEnchantmentsPredicateTooltip(UTILS, 0, EnchantmentsPredicate.enchantments(List.of(
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
@@ -62,7 +64,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testItemStoredEnchantmentsPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemStoredEnchantmentsPredicateTooltip(UTILS, 0, ItemEnchantmentsPredicate.storedEnchantments(List.of(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemStoredEnchantmentsPredicateTooltip(UTILS, 0, EnchantmentsPredicate.storedEnchantments(List.of(
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
@@ -77,7 +79,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testPotionsPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemPotionsPredicateTooltip(UTILS, 0, (ItemPotionsPredicate) ItemPotionsPredicate.potions(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemPotionsPredicateTooltip(UTILS, 0, (PotionsPredicate) PotionsPredicate.potions(
                 HolderSet.direct(Potions.HEALING)
         )), List.of(
                 "Potions:",
@@ -91,7 +93,7 @@ public class ItemSubPredicateTooltipTest {
 
         compoundTag.putInt("tst", 5);
 
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemCustomDataPredicateTooltip(UTILS, 0, ItemCustomDataPredicate.customData(new NbtPredicate(compoundTag))), List.of(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemCustomDataPredicateTooltip(UTILS, 0, CustomDataPredicate.customData(new NbtPredicate(compoundTag))), List.of(
                 "Custom Data:",
                 "  -> Nbt: {tst:5}"
         ));
@@ -99,7 +101,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testContainerPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemContainerPredicateTooltip(UTILS, 0, new ItemContainerPredicate(Optional.of(new CollectionPredicate<>(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemContainerPredicateTooltip(UTILS, 0, new ContainerPredicate(Optional.of(new CollectionPredicate<>(
                 Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build())),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
@@ -118,7 +120,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testBundlePredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemBundlePredicateTooltip(UTILS, 0, new ItemBundlePredicate(Optional.of(new CollectionPredicate<>(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemBundlePredicateTooltip(UTILS, 0, new BundlePredicate(Optional.of(new CollectionPredicate<>(
                 Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build())),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
@@ -137,7 +139,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testFireworkExplosionPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemFireworkExplosionPredicateTooltip(UTILS, 0, new ItemFireworkExplosionPredicate(new ItemFireworkExplosionPredicate.FireworkPredicate(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemFireworkExplosionPredicateTooltip(UTILS, 0, new FireworkExplosionPredicate(new FireworkExplosionPredicate.FireworkPredicate(
                 Optional.of(FireworkExplosion.Shape.LARGE_BALL),
                 Optional.of(true),
                 Optional.of(false)
@@ -151,9 +153,9 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testFireworksPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemFireworksPredicateTooltip(UTILS, 0, new ItemFireworksPredicate(Optional.of(new CollectionPredicate<>(
-                Optional.of(CollectionContentsPredicate.of(new ItemFireworkExplosionPredicate.FireworkPredicate(Optional.of(FireworkExplosion.Shape.BURST), Optional.empty(), Optional.empty()))),
-                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new ItemFireworkExplosionPredicate.FireworkPredicate(Optional.of(FireworkExplosion.Shape.CREEPER), Optional.empty(), Optional.empty()), MinMaxBounds.Ints.between(1, 5)))),
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemFireworksPredicateTooltip(UTILS, 0, new FireworksPredicate(Optional.of(new CollectionPredicate<>(
+                Optional.of(CollectionContentsPredicate.of(new FireworkExplosionPredicate.FireworkPredicate(Optional.of(FireworkExplosion.Shape.BURST), Optional.empty(), Optional.empty()))),
+                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new FireworkExplosionPredicate.FireworkPredicate(Optional.of(FireworkExplosion.Shape.CREEPER), Optional.empty(), Optional.empty()), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )), MinMaxBounds.Ints.between(1, 4))), List.of(
                 "Fireworks:",
@@ -170,9 +172,9 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testWritableBookPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemWritableBookPredicateTooltip(UTILS, 0, new ItemWritableBookPredicate(Optional.of(new CollectionPredicate<>(
-                Optional.of(CollectionContentsPredicate.of(new ItemWritableBookPredicate.PagePredicate("Hello"))),
-                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new ItemWritableBookPredicate.PagePredicate("World"), MinMaxBounds.Ints.between(1, 5)))),
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemWritableBookPredicateTooltip(UTILS, 0, new WritableBookPredicate(Optional.of(new CollectionPredicate<>(
+                Optional.of(CollectionContentsPredicate.of(new WritableBookPredicate.PagePredicate("Hello"))),
+                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new WritableBookPredicate.PagePredicate("World"), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Writable Book:",
@@ -188,9 +190,9 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testWrittenBookPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemWrittenBookPredicateTooltip(UTILS, 0, new ItemWrittenBookPredicate(Optional.of(new CollectionPredicate<>(
-                Optional.of(CollectionContentsPredicate.of(new ItemWrittenBookPredicate.PagePredicate(Component.literal("Hello")))),
-                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new ItemWrittenBookPredicate.PagePredicate(Component.literal("World")), MinMaxBounds.Ints.between(1, 5)))),
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemWrittenBookPredicateTooltip(UTILS, 0, new WrittenBookPredicate(Optional.of(new CollectionPredicate<>(
+                Optional.of(CollectionContentsPredicate.of(new WrittenBookPredicate.PagePredicate(Component.literal("Hello")))),
+                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new WrittenBookPredicate.PagePredicate(Component.literal("World")), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )), Optional.of("Yanny"), Optional.of("Testing"), MinMaxBounds.Ints.between(1, 8), Optional.of(false))), List.of(
                 "Written Book:",
@@ -210,15 +212,15 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testAttributeModifiersPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemAttributeModifiersPredicateTooltip(UTILS, 0, new ItemAttributeModifiersPredicate(Optional.of(new CollectionPredicate<>(
-                Optional.of(CollectionContentsPredicate.of(new ItemAttributeModifiersPredicate.EntryPredicate(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemAttributeModifiersPredicateTooltip(UTILS, 0, new AttributeModifiersPredicate(Optional.of(new CollectionPredicate<>(
+                Optional.of(CollectionContentsPredicate.of(new AttributeModifiersPredicate.EntryPredicate(
                         Optional.of(HolderSet.direct(Attributes.ARMOR)),
                         Optional.of(ResourceLocation.withDefaultNamespace("help")),
                         MinMaxBounds.Doubles.between(1, 4),
                         Optional.of(AttributeModifier.Operation.ADD_VALUE),
                         Optional.of(EquipmentSlotGroup.ARMOR)
                 ))),
-                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new ItemAttributeModifiersPredicate.EntryPredicate(
+                Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new AttributeModifiersPredicate.EntryPredicate(
                         Optional.of(HolderSet.direct(Attributes.GRAVITY)),
                         Optional.empty(),
                         MinMaxBounds.Doubles.ANY,
@@ -246,7 +248,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testTrimPredicateTooltip() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemTrimPredicateTooltip(UTILS, 0, new ItemTrimPredicate(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemTrimPredicateTooltip(UTILS, 0, new TrimPredicate(
                 Optional.of(HolderSet.direct(Holder.direct(TooltipTestSuite.LOOKUP.lookup(Registries.TRIM_MATERIAL).orElseThrow().get(TrimMaterials.GOLD).orElseThrow().value()))),
                 Optional.of(HolderSet.direct(Holder.direct(TooltipTestSuite.LOOKUP.lookup(Registries.TRIM_PATTERN).orElseThrow().get(TrimPatterns.EYE).orElseThrow().value()))
         ))), List.of(
@@ -265,7 +267,7 @@ public class ItemSubPredicateTooltipTest {
 
     @Test
     public void testJukebox() {
-        assertTooltip(ItemSubPredicateTooltipUtils.getItemJukeboxPlayableTooltip(UTILS, 0, new ItemJukeboxPlayablePredicate(
+        assertTooltip(ItemSubPredicateTooltipUtils.getItemJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayablePredicate(
                 Optional.of(HolderSet.direct(LOOKUP.lookup(Registries.JUKEBOX_SONG).orElseThrow().get(JukeboxSongs.PIGSTEP).orElseThrow()))
         )), List.of(
                 "Jukebox Playable:",

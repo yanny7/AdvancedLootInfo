@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.component.predicates.*;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,7 +12,7 @@ import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
 public class ItemSubPredicateTooltipUtils {
     @NotNull
-    public static List<Component> getItemDamagePredicateTooltip(IClientUtils utils, int pad, ItemDamagePredicate predicate) {
+    public static List<Component> getItemDamagePredicateTooltip(IClientUtils utils, int pad, DamagePredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_damage")));
@@ -23,22 +23,22 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemEnchantmentsPredicateTooltip(IClientUtils utils, int pad, ItemEnchantmentsPredicate.Enchantments predicate) {
+    public static List<Component> getItemEnchantmentsPredicateTooltip(IClientUtils utils, int pad, EnchantmentsPredicate.Enchantments predicate) {
         return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
-    public static List<Component> getItemStoredEnchantmentsPredicateTooltip(IClientUtils utils, int pad, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
+    public static List<Component> getItemStoredEnchantmentsPredicateTooltip(IClientUtils utils, int pad, EnchantmentsPredicate.StoredEnchantments predicate) {
         return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_stored_enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
-    public static List<Component> getItemPotionsPredicateTooltip(IClientUtils utils, int pad, ItemPotionsPredicate predicate) {
+    public static List<Component> getItemPotionsPredicateTooltip(IClientUtils utils, int pad, PotionsPredicate predicate) {
         return getHolderSetTooltip(utils, pad, "ali.type.item_sub_predicate.item_potions", predicate.potions(), GenericTooltipUtils::getPotionTooltip);
     }
 
     @NotNull
-    public static List<Component> getItemCustomDataPredicateTooltip(IClientUtils utils, int pad, ItemCustomDataPredicate predicate) {
+    public static List<Component> getItemCustomDataPredicateTooltip(IClientUtils utils, int pad, CustomDataPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_custom_data")));
@@ -48,7 +48,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemContainerPredicateTooltip(IClientUtils utils, int pad, ItemContainerPredicate predicate) {
+    public static List<Component> getItemContainerPredicateTooltip(IClientUtils utils, int pad, ContainerPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getOptionalTooltip(utils, pad, predicate.items(),
@@ -59,7 +59,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemBundlePredicateTooltip(IClientUtils utils, int pad, ItemBundlePredicate predicate) {
+    public static List<Component> getItemBundlePredicateTooltip(IClientUtils utils, int pad, BundlePredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getOptionalTooltip(utils, pad, predicate.items(),
@@ -70,7 +70,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemFireworkExplosionPredicateTooltip(IClientUtils utils, int pad, ItemFireworkExplosionPredicate predicate) {
+    public static List<Component> getItemFireworkExplosionPredicateTooltip(IClientUtils utils, int pad, FireworkExplosionPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_firework_explosion")));
@@ -80,7 +80,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemFireworksPredicateTooltip(IClientUtils utils, int pad, ItemFireworksPredicate predicate) {
+    public static List<Component> getItemFireworksPredicateTooltip(IClientUtils utils, int pad, FireworksPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_fireworks")));
@@ -93,7 +93,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemWritableBookPredicateTooltip(IClientUtils utils, int pad, ItemWritableBookPredicate predicate) {
+    public static List<Component> getItemWritableBookPredicateTooltip(IClientUtils utils, int pad, WritableBookPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_writable_book")));
@@ -105,7 +105,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemWrittenBookPredicateTooltip(IClientUtils utils, int pad, ItemWrittenBookPredicate predicate) {
+    public static List<Component> getItemWrittenBookPredicateTooltip(IClientUtils utils, int pad, WrittenBookPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_written_book")));
@@ -121,7 +121,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemAttributeModifiersPredicateTooltip(IClientUtils utils, int pad, ItemAttributeModifiersPredicate predicate) {
+    public static List<Component> getItemAttributeModifiersPredicateTooltip(IClientUtils utils, int pad, AttributeModifiersPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_attribute_modifiers")));
@@ -133,7 +133,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemTrimPredicateTooltip(IClientUtils utils, int pad, ItemTrimPredicate predicate) {
+    public static List<Component> getItemTrimPredicateTooltip(IClientUtils utils, int pad, TrimPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_trim")));
@@ -144,7 +144,7 @@ public class ItemSubPredicateTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getItemJukeboxPlayableTooltip(IClientUtils utils, int pad, ItemJukeboxPlayablePredicate predicate) {
+    public static List<Component> getItemJukeboxPlayableTooltip(IClientUtils utils, int pad, JukeboxPlayablePredicate predicate) {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_jukebox_playable")));

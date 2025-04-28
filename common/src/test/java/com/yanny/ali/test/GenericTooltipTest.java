@@ -10,9 +10,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.component.predicates.*;
+import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,7 +29,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.CatVariant;
+import net.minecraft.world.entity.animal.CatVariants;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -236,7 +237,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testMobEffectTooltip() {
-        assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, MobEffects.CONFUSION.value()), List.of("Mob Effect: minecraft:nausea"));
+        assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, MobEffects.NAUSEA.value()), List.of("Mob Effect: minecraft:nausea"));
     }
 
     @Test
@@ -283,7 +284,8 @@ public class GenericTooltipTest {
                 .nbt(new NbtPredicate(compoundTag))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))
                 .equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)))
-                .subPredicate(EntitySubPredicates.CAT.createPredicate(HolderSet.direct(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN).orElseThrow())))
+                .subPredicate(LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(10)))
+                .components(DataComponentMatchers.Builder.components().exact(DataComponentExactPredicate.expect(DataComponents.CAT_VARIANT, LOOKUP.lookup(Registries.CAT_VARIANT).orElseThrow().getOrThrow(CatVariants.PERSIAN))).build())
                 .vehicle(EntityPredicate.Builder.entity().team("blue"))
                 .passenger(EntityPredicate.Builder.entity().team("white"))
                 .targetedEntity(EntityPredicate.Builder.entity().team("red"))
@@ -563,7 +565,7 @@ public class GenericTooltipTest {
 
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.AXES)
-                .hasComponents(DataComponentPredicate.builder().expect(DataComponents.BASE_COLOR, DyeColor.BLUE).build())
+                .withComponents(DataComponentMatchers.Builder.components().exact(DataComponentExactPredicate.expect(DataComponents.BASE_COLOR, DyeColor.BLUE)).build())
                 .build()
         ), List.of(
                 "Items:",
@@ -574,17 +576,20 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.CAKE, Items.NETHERITE_AXE)
                 .withCount(MinMaxBounds.Ints.between(10, 15))
-                .withSubPredicate(ItemSubPredicates.DAMAGE, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(5)))
-                .withSubPredicate(ItemSubPredicates.ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.enchantments(List.of(
-                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.SMITE).orElseThrow(), MinMaxBounds.Ints.atLeast(1)),
-                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(2, 4))
-                )))
-                .withSubPredicate(ItemSubPredicates.STORED_ENCHANTMENTS, ItemEnchantmentsPredicate.Enchantments.storedEnchantments(List.of(
-                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.DEPTH_STRIDER).orElseThrow(), MinMaxBounds.Ints.atMost(5)),
-                        new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LURE).orElseThrow(), MinMaxBounds.Ints.atLeast(4))
-                )))
-                .withSubPredicate(ItemSubPredicates.POTIONS, (ItemPotionsPredicate) ItemPotionsPredicate.potions(HolderSet.direct(Potions.HEALING)))
-                .withSubPredicate(ItemSubPredicates.CUSTOM_DATA, ItemCustomDataPredicate.customData(new NbtPredicate(compoundTag)))
+                .withComponents(DataComponentMatchers.Builder.components()
+                        .partial(DataComponentPredicates.DAMAGE, DamagePredicate.durability(MinMaxBounds.Ints.atMost(5)))
+                        .partial(DataComponentPredicates.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
+                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.SMITE).orElseThrow(), MinMaxBounds.Ints.atLeast(1)),
+                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(2, 4))
+                        )))
+                        .partial(DataComponentPredicates.STORED_ENCHANTMENTS, EnchantmentsPredicate.storedEnchantments(List.of(
+                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.DEPTH_STRIDER).orElseThrow(), MinMaxBounds.Ints.atLeast(1)),
+                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LURE).orElseThrow(), MinMaxBounds.Ints.between(2, 4))
+                        )))
+                        .partial(DataComponentPredicates.POTIONS, new PotionsPredicate(HolderSet.direct(Potions.HEALING)))
+                        .partial(DataComponentPredicates.CUSTOM_DATA, new CustomDataPredicate(new NbtPredicate(compoundTag)))
+                        .build()
+                )
                 .build()
         ), List.of(
                 "Items:",

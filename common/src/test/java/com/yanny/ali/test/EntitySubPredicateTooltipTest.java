@@ -2,19 +2,11 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.client.EntitySubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.entity.animal.FrogVariant;
-import net.minecraft.world.entity.animal.WolfVariants;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.world.entity.decoration.PaintingVariants;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -110,55 +102,9 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testSheepPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, 0, new SheepPredicate(Optional.of(false), Optional.of(DyeColor.BROWN))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, 0, new SheepPredicate(Optional.of(false))), List.of(
                 "Sheep:",
-                "  -> Sheared: false",
-                "  -> Color: BROWN"
-        ));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testVariantPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityVariantPredicateType<Axolotl>.Instance)EntitySubPredicates.AXOLOTL.createPredicate(Axolotl.Variant.BLUE)), List.of(
-                "Type: minecraft:axolotl",
-                "  -> Variant: BLUE"
-        ));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testHolderVariantPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.catVariant(
-                BuiltInRegistries.CAT_VARIANT.get(CatVariant.CALICO).orElseThrow()
-        )), List.of(
-                "Type: minecraft:cat",
-                "  -> Variants:",
-                "    -> Variant: minecraft:calico"
-        ));
-
-        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.PAINTING.createPredicate(
-                HolderSet.direct(LOOKUP.lookup(Registries.PAINTING_VARIANT).orElseThrow().get(PaintingVariants.BOMB).orElseThrow())
-        )), List.of(
-                "Type: minecraft:painting",
-                "  -> Variants:",
-                "    -> Variant: minecraft:bomb"
-        ));
-
-        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.frogVariant(
-                BuiltInRegistries.FROG_VARIANT.get(FrogVariant.TEMPERATE).orElseThrow()
-        )), List.of(
-                "Type: minecraft:frog",
-                "  -> Variants:",
-                "    -> Variant: minecraft:temperate"
-        ));
-
-        assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, 0, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.wolfVariant(
-                HolderSet.direct(LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).get(WolfVariants.ASHEN).orElseThrow())
-        )), List.of(
-                "Type: minecraft:wolf",
-                "  -> Variants:",
-                "    -> Variant: minecraft:ashen"
+                "  -> Sheared: false"
         ));
     }
 }

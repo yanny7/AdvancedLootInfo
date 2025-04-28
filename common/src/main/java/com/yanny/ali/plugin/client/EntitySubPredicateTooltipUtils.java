@@ -2,21 +2,11 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.entity.animal.FrogVariant;
-import net.minecraft.world.entity.animal.WolfVariant;
-import net.minecraft.world.entity.decoration.PaintingVariant;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
@@ -85,11 +75,10 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.sheep")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.sheared", predicate.sheared(), GenericTooltipUtils::getBooleanTooltip));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.color", predicate.color(), GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }
-
+/*
     @NotNull
     public static <V> List<Component> getVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
@@ -145,5 +134,5 @@ public class EntitySubPredicateTooltipUtils {
         }));
 
         return components;
-    }
+    }*/
 }
