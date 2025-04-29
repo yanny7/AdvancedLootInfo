@@ -103,7 +103,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
 
         poseStack.popPose();
 
-        if (mouseX >= 4 * 18 - 4 && mouseX < 4 * 18 + 20 && mouseY >= 0 && mouseY < 24) {
+        if (isSpecial && mouseX >= 4 * 18 - 4 && mouseX < 4 * 18 + 20 && mouseY >= 0 && mouseY < 24) {
             guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable(recipe.block().getDescriptionId()), (int) mouseX, (int) mouseY);
         }
     }

@@ -249,15 +249,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Trim:",
                 "  -> Materials:",
-                "    -> Asset Name: gold",
-                "    -> Item: Gold Ingot",
-                "    -> Model Index: 0.6",
-                "    -> Description: Gold Material",
+                "    -> Type: minecraft:gold",
                 "  -> Patterns:",
-                "    -> Asset Id: minecraft:eye",
-                "    -> Item: Smithing Template",
-                "    -> Description: Eye Armor Trim",
-                "    -> Decal: false"
+                "    -> Type: minecraft:eye"
         ));
     }
 }

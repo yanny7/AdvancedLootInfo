@@ -92,13 +92,10 @@ public class ConditionTooltipUtils {
         return components;
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getKilledByPlayerTooltip(IClientUtils ignoredUtils, int pad, LootItemKilledByPlayerCondition ignoredCond) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.condition.killed_by_player")));
-
-        return components;
+        return List.of(pad(pad, translatable("ali.type.condition.killed_by_player")));
     }
 
     @NotNull
