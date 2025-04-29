@@ -12,6 +12,7 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -138,25 +139,25 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, BannerPattern bannerPattern) {
-        return List.of(pad(pad, translatable("ali.property.value.banner_pattern", value(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.getKey(bannerPattern))))));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.banner_pattern", BuiltInRegistries.BANNER_PATTERN, bannerPattern);
     }
 
     @Unmodifiable
     @NotNull
     public static List<Component> getBlockEntityTypeTooltip(IClientUtils utils, int pad, BlockEntityType<?> blockEntityType) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.block_entity_type", Objects.requireNonNull(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(blockEntityType)));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getPotionTooltip(IClientUtils utils, int pad, Potion potion) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.potion", BuiltInRegistries.POTION.getKey(potion));
-
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.potion", BuiltInRegistries.POTION, potion);
     }
 
     @Unmodifiable
     @NotNull
     public static List<Component> getMobEffectTooltip(IClientUtils utils, int pad, MobEffect mobEffect) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.mob_effect", Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect)));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, mobEffect);
     }
 
     @NotNull
@@ -324,7 +325,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getFluidTooltip(IClientUtils utils, int pad, Fluid fluid) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID.getKey(fluid));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID, fluid);
     }
 
     @NotNull
@@ -571,6 +572,7 @@ public class GenericTooltipUtils {
         return List.of(pad(pad, translatable(key, value(utils.convertNumber(utils, value)))));
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getIntRangeTooltip(IClientUtils utils, int pad, String key, IntRange range) {
         return List.of(pad(pad, translatable(key, value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
@@ -622,6 +624,12 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getResourceLocationTooltip(IClientUtils ignoredUtils, int pad, String key, ResourceLocation value) {
         return List.of(pad(pad, translatable(key, value(value))));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static <T> List<Component> getBuiltInRegistryTooltip(IClientUtils utils, int pad, String key, Registry<T> registry, T value) {
+        return getResourceLocationTooltip(utils, pad, key, Objects.requireNonNull(registry.getKey(value)));
     }
 
     @Unmodifiable

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
@@ -41,8 +40,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_nbt")));
-        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.nbt_provider",
-                Objects.requireNonNull(BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE.getKey(fun.source.getType()))));
+        components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.nbt_provider", BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, fun.source.getType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.operations", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
 
         return components;
@@ -155,7 +153,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.sequence")));
-        components.addAll(GenericTooltipUtils.getFunctionsTooltip(utils, pad + 1, fun.functions));
+        components.addAll(getFunctionsTooltip(utils, pad + 1, fun.functions));
 
         return components;
     }
