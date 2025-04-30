@@ -21,12 +21,15 @@ import java.util.function.BiFunction;
 
 public interface IClientRegistry {
     void registerWidget(LootPoolEntryType type, WidgetDirection direction, IWidgetFactory factory, IBoundsGetter boundsGetter);
+
     <T extends NumberProvider> void registerNumberProvider(LootNumberProviderType type, BiFunction<IClientUtils, T, RangeValue> converter);
 
     <T extends LootItemCondition> void registerConditionTooltip(LootItemConditionType type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
+
     <T extends LootItemFunction> void registerFunctionTooltip(LootItemFunctionType type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
 
     <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer);
+
     <T extends LootItemCondition> void registerChanceModifier(LootItemConditionType type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer);
 
     <T extends LootItemFunction> void registerItemStackModifier(LootItemFunctionType type, TriFunction<IClientUtils, T, ItemStack, ItemStack> consumer);
