@@ -130,34 +130,11 @@ public class GenericTooltipUtils {
     public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, Pair<Holder<BannerPattern>, DyeColor> pair) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
+        components.addAll(getHolderTooltip(utils, pad, pair.getFirst(),
+                (u, i, p) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.banner_pattern", BuiltInRegistries.BANNER_PATTERN, p)));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.color", pair.getSecond()));
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, BannerPattern bannerPattern) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.banner_pattern", BuiltInRegistries.BANNER_PATTERN, bannerPattern);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBlockEntityTypeTooltip(IClientUtils utils, int pad, BlockEntityType<?> blockEntityType) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getPotionTooltip(IClientUtils utils, int pad, Potion potion) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.potion", BuiltInRegistries.POTION, potion);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getMobEffectTooltip(IClientUtils utils, int pad, MobEffect mobEffect) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, mobEffect);
     }
 
     @NotNull
@@ -316,16 +293,11 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable("ali.property.branch.fluid_predicate")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", fluidPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
-        components.addAll(getOptionalHolderTooltip(utils, pad + 1, fluidPredicate.fluid(), GenericTooltipUtils::getFluidTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad + 1, fluidPredicate.fluid(),
+                (u, i, f) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.fluid", BuiltInRegistries.FLUID, f)));
         components.addAll(getOptionalTooltip(utils, pad + 1, fluidPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getFluidTooltip(IClientUtils utils, int pad, Fluid fluid) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID, fluid);
     }
 
     @NotNull
@@ -334,7 +306,8 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable("ali.property.branch.mob_effects")));
         mobEffectsPredicate.effectMap().forEach((effect, instancePredicate) -> {
-            components.addAll(getHolderTooltip(utils, pad + 1, effect, GenericTooltipUtils::getMobEffectTooltip));
+            components.addAll(getHolderTooltip(utils, pad + 1, effect,
+                    (u, i, e) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, e)));
             components.addAll(getMobEffectInstancePredicateTooltip(utils, pad + 2, instancePredicate));
         });
 
@@ -392,7 +365,8 @@ public class GenericTooltipUtils {
         components.addAll(getMinMaxBoundsTooltip(utils, pad, "ali.property.value.durability", itemPredicate.durability()));
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.enchantments", itemPredicate.enchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.stored_enchantments", itemPredicate.storedEnchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-        components.addAll(getOptionalHolderTooltip(utils, pad, itemPredicate.potion(), GenericTooltipUtils::getPotionTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad, itemPredicate.potion(),
+                (u, i, p) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.potion", BuiltInRegistries.POTION, p)));
         components.addAll(getOptionalTooltip(utils, pad, itemPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
 
         return components;
