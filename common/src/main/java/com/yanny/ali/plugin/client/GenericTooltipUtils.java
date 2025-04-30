@@ -8,10 +8,7 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
+import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.core.component.DataComponentType;
@@ -31,8 +28,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -150,21 +145,20 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getBlockEntityTypeTooltip(IClientUtils ignoredUtils, int pad, BlockEntityType<?> blockEntityType) {
-        ResourceLocation location = Objects.requireNonNull(blockEntityType.builtInRegistryHolder()).unwrapKey().orElseThrow().location();
-        return List.of(pad(pad, translatable("ali.property.value.block_entity_type", value(location))));
+    public static List<Component> getBlockEntityTypeTooltip(IClientUtils utils, int pad, BlockEntityType<?> blockEntityType) {
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getPotionTooltip(IClientUtils utils, int pad, Potion potion) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.potion", Objects.requireNonNull(BuiltInRegistries.POTION.getKey(potion)));
-
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.potion", BuiltInRegistries.POTION, potion);
     }
 
     @Unmodifiable
     @NotNull
     public static List<Component> getMobEffectTooltip(IClientUtils utils, int pad, MobEffect mobEffect) {
-        return List.of(pad(pad, translatable("ali.property.value.mob_effect", value(Objects.requireNonNull(BuiltInRegistries.MOB_EFFECT.getKey(mobEffect))))));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, mobEffect);
     }
 
     @NotNull
@@ -333,7 +327,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getFluidTooltip(IClientUtils utils, int pad, Fluid fluid) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID.getKey(fluid));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID, fluid);
     }
 
     @NotNull
@@ -616,30 +610,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getTrimMaterialTooltip(IClientUtils utils, int pad, TrimMaterial material) {
-        List<Component> components = new LinkedList<>();
-
-        components.addAll(getStringTooltip(utils, pad, "ali.property.value.asset_name", material.assetName()));
-        components.addAll(getHolderTooltip(utils, pad, material.ingredient(), GenericTooltipUtils::getItemTooltip));
-        components.addAll(getFloatTooltip(utils, pad, "ali.property.value.model_index", material.itemModelIndex()));
-        components.addAll(getComponentTooltip(utils, pad, "ali.property.value.description", material.description()));
-
-        return components;
-    }
-
-    @NotNull
-    public static List<Component> getTrimPatternTooltip(IClientUtils utils, int pad, TrimPattern material) {
-        List<Component> components = new LinkedList<>();
-
-        components.addAll(getResourceLocationTooltip(utils, pad, "ali.property.value.asset_id", material.assetId()));
-        components.addAll(getHolderTooltip(utils, pad, material.templateItem(), GenericTooltipUtils::getItemTooltip));
-        components.addAll(getComponentTooltip(utils, pad, "ali.property.value.description", material.description()));
-        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.decal", material.decal()));
-
-        return components;
-    }
-
-    @NotNull
     public static List<Component> getDataComponentPatchTooltip(IClientUtils utils, int pad, DataComponentPatch data) {
         List<Component> components = new LinkedList<>();
 
@@ -654,7 +624,8 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getDataComponentTypeTooltip(IClientUtils utils, int pad, DataComponentType<?> data) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(data)));
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, data);
+        //FIXME Data component type registration
     }
 
     @NotNull
@@ -747,21 +718,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getJukeboxSongTooltip(IClientUtils utils, int pad, JukeboxSong song) {
-        HolderLookup.Provider provider = utils.lookupProvider();
-
-        if (provider != null) {
-            Optional<HolderLookup.RegistryLookup<JukeboxSong>> lookup = provider.lookup(Registries.JUKEBOX_SONG);
-
-            if (lookup.isPresent()) {
-                Optional<Holder.Reference<JukeboxSong>> first = lookup.get().listElements().filter((l) -> l.value() == song).findFirst();
-
-                if (first.isPresent()) {
-                    return getResourceKeyTooltip(utils, pad, "ali.property.value.song", Objects.requireNonNull(first.get().key()));
-                }
-            }
-        }
-
-        return List.of();
+        return getRegistryTooltip(utils, pad, "ali.property.value.song", Registries.JUKEBOX_SONG, song);
     }
 
     @NotNull
@@ -822,6 +779,7 @@ public class GenericTooltipUtils {
         return List.of(pad(pad, translatable(key, value(utils.convertNumber(utils, value)))));
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getIntRangeTooltip(IClientUtils utils, int pad, String key, IntRange range) {
         return List.of(pad(pad, translatable(key, value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max))))));
@@ -873,6 +831,32 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getResourceLocationTooltip(IClientUtils ignoredUtils, int pad, String key, ResourceLocation value) {
         return List.of(pad(pad, translatable(key, value(value))));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static <T> List<Component> getBuiltInRegistryTooltip(IClientUtils utils, int pad, String key, Registry<T> registry, T value) {
+        return getResourceLocationTooltip(utils, pad, key, Objects.requireNonNull(registry.getKey(value)));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static <V, T extends Registry<V>> List<Component> getRegistryTooltip(IClientUtils utils, int pad, String key, ResourceKey<T> registry, V value) {
+        HolderLookup.Provider provider = utils.lookupProvider();
+
+        if (provider != null) {
+            Optional<HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
+
+            if (lookup.isPresent()) {
+                Optional<Holder.Reference<V>> first = lookup.get().listElements().filter((l) -> l.value() == value).findFirst();
+
+                if (first.isPresent()) {
+                    return getResourceKeyTooltip(utils, pad, key, Objects.requireNonNull(first.get().key()));
+                }
+            }
+        }
+
+        return List.of();
     }
 
     @Unmodifiable

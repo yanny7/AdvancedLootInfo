@@ -37,7 +37,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
         int WIDGET_SIZE = 36;
         Rect rect = new Rect(0, 0, WIDGET_SIZE, WIDGET_SIZE);
         SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntity().getType());
-        Rectangle entityRect = new Rectangle(bounds.getCenterX() - 18, bounds.getY() + 14, 36, 48);
+        Rectangle entityRect = new Rectangle(bounds.getCenterX() - 18, bounds.getY() + 14, 36, 36);
 
         widgets.add(Widgets.createCategoryBase(bounds));
         widgets.addAll(getBaseWidget(display, bounds, 0, 48));
@@ -65,7 +65,6 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
                     graphics.pose().popPose();
                 }
         ));
-        widgets.add(Widgets.createTooltip(entityRect, display.getEntity().getDisplayName()));
 
         return widgets;
     }
