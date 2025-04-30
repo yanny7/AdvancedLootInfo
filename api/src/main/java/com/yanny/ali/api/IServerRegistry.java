@@ -14,6 +14,8 @@ import java.util.function.BiFunction;
 
 public interface IServerRegistry {
     <T extends LootPoolEntryContainer> void registerItemCollector(LootPoolEntryType type, BiFunction<IServerUtils, T, List<Item>> itemSupplier);
+
     <T extends LootItemCondition> void registerItemCollector(LootItemConditionType type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier);
+
     <T extends LootItemFunction> void registerItemCollector(LootItemFunctionType<?> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier);
 }
