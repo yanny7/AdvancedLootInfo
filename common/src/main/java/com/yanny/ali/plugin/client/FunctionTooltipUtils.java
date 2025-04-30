@@ -187,7 +187,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
         components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, fun.component));
-        //FIXME .getEntries
+        //TODO entries
 
         return components;
     }
@@ -250,7 +250,8 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_loot_table")));
         components.addAll(getResourceKeyTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
         components.addAll(getLongTooltip(utils, pad + 1, "ali.property.value.seed", fun.seed));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.type, GenericTooltipUtils::getBlockEntityTypeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, fun.type,
+                (u, i, e) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, e)));
 
         return components;
     }
@@ -294,7 +295,8 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_potion")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.potion, GenericTooltipUtils::getPotionTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, fun.potion,
+                (u, i, p) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.potion", BuiltInRegistries.POTION, p)));
 
         return components;
     }
@@ -308,7 +310,8 @@ public class FunctionTooltipUtils {
         if (!fun.effects.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
             fun.effects.forEach((effect) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, effect.effect(), GenericTooltipUtils::getMobEffectTooltip));
+                components.addAll(getHolderTooltip(utils, pad + 2, effect.effect(),
+                        (u, i, e) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, e)));
                 components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", effect.duration()));
             });
         }
