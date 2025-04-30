@@ -174,7 +174,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
-        components.addAll(getBlockEntityTypeTooltip(utils, pad + 1, fun.type));
+        components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, fun.type));
         //TODO entries
 
         return components;
@@ -238,7 +238,7 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_loot_table")));
         components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
         components.addAll(getLongTooltip(utils, pad + 1, "ali.property.value.seed", fun.seed));
-        components.addAll(getBlockEntityTypeTooltip(utils, pad + 1, fun.type));
+        components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, fun.type));
 
         return components;
     }
@@ -287,7 +287,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_potion")));
-        components.addAll(getPotionTooltip(utils, pad + 1, fun.potion));
+        components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.potion", BuiltInRegistries.POTION, fun.potion));
 
         return components;
     }
@@ -301,7 +301,7 @@ public class FunctionTooltipUtils {
         if (!fun.effectDurationMap.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
             fun.effectDurationMap.forEach((effect, duration) -> {
-                components.addAll(getMobEffectTooltip(utils, pad + 2, effect));
+                components.addAll(getBuiltInRegistryTooltip(utils, pad + 2, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, effect));
                 components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", duration));
             });
         }

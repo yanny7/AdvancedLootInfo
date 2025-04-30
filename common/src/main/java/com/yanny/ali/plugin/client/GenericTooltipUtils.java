@@ -129,36 +129,12 @@ public class GenericTooltipUtils {
         if (!patterns.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.branch.banner_patterns")));
             patterns.forEach((pair) -> {
-                components.addAll(getHolderTooltip(utils, pad + 1, pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
+                components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.banner_pattern", BuiltInRegistries.BANNER_PATTERN, pair.getFirst().value()));
                 components.addAll(getEnumTooltip(utils, pad + 2, "ali.property.value.color", pair.getSecond()));
             });
         }
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, BannerPattern bannerPattern) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.banner_pattern", BuiltInRegistries.BANNER_PATTERN, bannerPattern);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBlockEntityTypeTooltip(IClientUtils utils, int pad, BlockEntityType<?> blockEntityType) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getPotionTooltip(IClientUtils utils, int pad, Potion potion) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.potion", BuiltInRegistries.POTION, potion);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getMobEffectTooltip(IClientUtils utils, int pad, MobEffect mobEffect) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, mobEffect);
     }
 
     @NotNull
@@ -352,17 +328,12 @@ public class GenericTooltipUtils {
         if (fluidPredicate != FluidPredicate.ANY) {
             components.add(pad(pad, translatable("ali.property.branch.fluid_predicate")));
             components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", fluidPredicate.tag, GenericTooltipUtils::getTagKeyTooltip));
-            components.addAll(getOptionalTooltip(utils, pad + 1, fluidPredicate.fluid, GenericTooltipUtils::getFluidTooltip));
+            components.addAll(getOptionalTooltip(utils, pad + 1, fluidPredicate.fluid,
+                    (u, i, f) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.fluid", BuiltInRegistries.FLUID, f)));
             components.addAll(getStatePropertiesPredicateTooltip(utils, pad + 1, fluidPredicate.properties));
         }
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getFluidTooltip(IClientUtils utils, int pad, Fluid fluid) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.fluid", BuiltInRegistries.FLUID, fluid);
     }
 
     @NotNull
@@ -373,7 +344,7 @@ public class GenericTooltipUtils {
             components.add(pad(pad, translatable("ali.property.branch.mob_effects")));
 
             mobEffectsPredicate.effects.forEach((effect, instancePredicate) -> {
-                components.addAll(getMobEffectTooltip(utils, pad + 1, effect));
+                components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, effect));
                 components.addAll(getMobEffectInstancePredicateTooltip(utils, pad + 2, instancePredicate));
             });
         }
@@ -462,7 +433,8 @@ public class GenericTooltipUtils {
                 }
             }
 
-            components.addAll(getOptionalTooltip(utils, pad, itemPredicate.potion, GenericTooltipUtils::getPotionTooltip));
+            components.addAll(getOptionalTooltip(utils, pad, itemPredicate.potion,
+                    (u, i, p) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.potion", BuiltInRegistries.POTION, p)));
             components.addAll(getNbtPredicateTooltip(utils, pad, itemPredicate.nbt));
         }
 

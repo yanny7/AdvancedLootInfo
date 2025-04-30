@@ -225,28 +225,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testBannerPatternSlotsTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.FLOWER))), List.of("Banner Pattern: minecraft:flower"));
-    }
-
-    @Test
-    public void testBlockEntityTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getBlockEntityTypeTooltip(UTILS, 0, BlockEntityType.BEACON), List.of("Block Entity Type: minecraft:beacon"));
-    }
-
-    @Test
-    public void testPotionTooltip() {
-        assertTooltip(GenericTooltipUtils.getPotionTooltip(UTILS, 0, Potions.HEALING), List.of(
-                "Potion: minecraft:healing"
-        ));
-    }
-
-    @Test
-    public void testMobEffectTooltip() {
-        assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, MobEffects.CONFUSION), List.of("Mob Effect: minecraft:nausea"));
-    }
-
-    @Test
     public void testStatePropertiesPredicateTooltip() {
         assertTooltip(GenericTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, 0, StatePropertiesPredicate.Builder.properties()
                 .hasProperty(BlockStateProperties.FACING, Direction.EAST)
@@ -440,11 +418,6 @@ public class GenericTooltipTest {
                 "  -> State Properties:",
                 "    -> facing: east"
         ));
-    }
-
-    @Test
-    public void testFluidTooltip() {
-        assertTooltip(GenericTooltipUtils.getFluidTooltip(UTILS, 0, Fluids.WATER), List.of("Fluid: minecraft:water"));
     }
 
     @Test
