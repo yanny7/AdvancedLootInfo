@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -137,8 +138,10 @@ public class ItemSubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_trim")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.materials", predicate.material(), GenericTooltipUtils::getTrimMaterialTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.patterns", predicate.pattern(), GenericTooltipUtils::getTrimPatternTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.materials", predicate.material(),
+                (u, i, m) -> getRegistryTooltip(u, i, "ali.property.value.type", Registries.TRIM_MATERIAL, m)));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.patterns", predicate.pattern(),
+                (u, i, p) -> getRegistryTooltip(u, i, "ali.property.value.type", Registries.TRIM_PATTERN, p)));
 
         return components;
     }

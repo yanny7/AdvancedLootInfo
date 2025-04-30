@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 
@@ -41,8 +40,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_custom_data")));
-        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.source",
-                Objects.requireNonNull(BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE.getKey(fun.source.getType()))));
+        components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.source", BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, fun.source.getType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.copy_operations", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
 
         return components;
@@ -158,7 +156,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.sequence")));
-        components.addAll(GenericTooltipUtils.getFunctionsTooltip(utils, pad + 1, fun.functions));
+        components.addAll(getFunctionsTooltip(utils, pad + 1, fun.functions));
 
         return components;
     }
@@ -368,8 +366,10 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.copy_components")));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.source", fun.source));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.include", fun.include, GenericTooltipUtils::getDataComponentTypeTooltip));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.exclude", fun.exclude, GenericTooltipUtils::getDataComponentTypeTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.include", fun.include,
+                (u, i, c) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, c)));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.exclude", fun.exclude,
+                (u, i, c) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, c)));
 
         return components;
     }
@@ -446,7 +446,7 @@ public class FunctionTooltipUtils {
         if (!fun.values.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.values")));
             fun.values.forEach((toggle, value) -> {
-                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, toggle.type()));
+                components.addAll(getBuiltInRegistryTooltip(utils, pad + 2, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, toggle.type()));
                 components.addAll(getBooleanTooltip(utils, pad + 3, "ali.property.value.value", value));
             });
         }
