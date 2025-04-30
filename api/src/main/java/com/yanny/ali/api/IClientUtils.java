@@ -22,9 +22,11 @@ public interface IClientUtils extends ICommonUtils {
                                                  List<LootItemFunction> functions, List<LootItemCondition> conditions);
 
     <T extends LootItemCondition> List<Component> getConditionTooltip(IClientUtils utils, int pad, T condition);
+
     <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function);
 
     <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
+
     <T extends LootItemCondition> void applyChanceModifier(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
 
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IClientUtils utils, T function, ItemStack itemStack);
