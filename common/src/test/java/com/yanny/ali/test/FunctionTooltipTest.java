@@ -408,7 +408,8 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Set Components:",
                 "  -> Components:",
-                "    -> Type: minecraft:damage"
+                "    -> Type: minecraft:damage",
+                "      -> Value: 5"
         ));
     }
 

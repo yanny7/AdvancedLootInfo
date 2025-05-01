@@ -9,9 +9,9 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentPredicate;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -20,21 +20,22 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -492,7 +493,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getContainerComponentManipulatorTooltip(IClientUtils utils, int pad, ContainerComponentManipulator<?> component) {
-        return getDataComponentTypeTooltip(utils, pad, component.type());
+        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, component.type());
     }
 
     @NotNull
@@ -593,17 +594,13 @@ public class GenericTooltipUtils {
 
         if (!data.map.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.branch.components")));
-            data.map.forEach((type, value) -> components.addAll(getDataComponentTypeTooltip(utils, pad + 1, type)));
+            data.map.forEach((type, value) -> {
+                components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, type));
+                components.addAll(getOptionalTooltip(utils, pad + 2, value, (u, i, v) -> utils.getDataComponentTypeTooltip(utils, pad + 2, type, v)));
+            });
         }
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getDataComponentTypeTooltip(IClientUtils utils, int pad, DataComponentType<?> data) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, data);
-        //FIXME Data component type registration
     }
 
     @NotNull
@@ -634,6 +631,139 @@ public class GenericTooltipUtils {
         components.add(pad(pad, translatable(key)));
         components.addAll(mapper.apply(utils, pad + 1, "ali.property.value.raw", data.raw()));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.filtered", data.filtered(), mapper));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getItemAttributeModifiersEntryTooltip(IClientUtils utils, int pad, ItemAttributeModifiers.Entry entry) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getHolderTooltip(utils, pad, entry.attribute(), GenericTooltipUtils::getAttributeTooltip));
+        components.addAll(getAttributeModifierTooltip(utils, pad, entry.modifier()));
+        components.addAll(getEnumTooltip(utils, pad, "ali.property.value.slot", entry.slot()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getAttributeModifierTooltip(IClientUtils utils, int pad, AttributeModifier modifier) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getUUIDTooltip(utils, pad, modifier.id()));
+        components.addAll(getStringTooltip(utils, pad, "ali.property.value.name", modifier.name()));
+        components.addAll(getDoubleTooltip(utils, pad, "ali.property.value.amount", modifier.amount()));
+        components.addAll(getEnumTooltip(utils, pad, "ali.property.value.operation", modifier.operation()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getPossibleEffectTooltip(IClientUtils utils, int pad, FoodProperties.PossibleEffect effect) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getMobEffectInstanceTooltip(utils, pad, "ali.property.branch.effect", effect.effect()));
+        components.addAll(getFloatTooltip(utils, pad, "ali.property.value.probability", effect.probability()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getMobEffectInstanceTooltip(IClientUtils utils, int pad, String key, MobEffectInstance effect) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable(key)));
+        components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, effect.getEffect().value()));
+        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.duration", effect.getDuration()));
+        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.amplifier", effect.getAmplifier()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.ambient", effect.isAmbient()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_visible", effect.isVisible()));
+        components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.show_icon", effect.showIcon()));
+
+        if (effect.hiddenEffect != null) {
+            components.addAll(getMobEffectInstanceTooltip(utils, pad + 1, "ali.property.branch.hidden_effect", effect.hiddenEffect));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getRuleTooltip(IClientUtils utils, int pad, Tool.Rule rule) {
+        List<Component> components = new LinkedList<>();
+
+        components.add(pad(pad, translatable("ali.property.branch.rule")));
+        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.blocks", rule.blocks(), GenericTooltipUtils::getBlockTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.correct_for_drops", rule.correctForDrops(), GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.speed", rule.speed(), GenericTooltipUtils::getFloatTooltip));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getMapDecorationEntryTooltip(IClientUtils utils, int pad, MapDecorations.Entry entry) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.MAP_DECORATION_TYPE, entry.type().value()));
+        components.addAll(getDoubleTooltip(utils, pad + 1, "ali.property.value.x", entry.x()));
+        components.addAll(getDoubleTooltip(utils, pad + 1, "ali.property.value.z", entry.z()));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.rotation", entry.rotation()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getItemStackTooltip(IClientUtils utils, int pad, ItemStack item) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getItemTooltip(utils, pad, item.getItem()));
+        components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.count", item.getCount()));
+        components.addAll(getDataComponentMapTooltip(utils, pad, "ali.property.branch.components", item.getComponents()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getDataComponentMapTooltip(IClientUtils utils, int pad, String key, DataComponentMap map) {
+        List<Component> components = new LinkedList<>();
+
+        if (!map.isEmpty()) {
+            components.add(pad(pad, translatable(key)));
+            map.forEach((action) -> {
+                components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, action.type()));
+                components.addAll(utils.getDataComponentTypeTooltip(utils, pad + 2, action.type(), action.value()));
+            });
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getSuspiciousStewEffectEntryTooltip(IClientUtils utils, int pad, SuspiciousStewEffects.Entry entry) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.MOB_EFFECT, entry.effect().value()));
+        components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.duration", entry.duration()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getGlobalPosTooltip(IClientUtils utils, int pad, GlobalPos globalPos) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getResourceKeyTooltip(utils, pad, "ali.property.value.dimension", globalPos.dimension()));
+        components.addAll(getBlockPosTooltip(utils, pad, globalPos.pos()));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getBeehiveBlockEntityOccupant(IClientUtils utils, int pad, BeehiveBlockEntity.Occupant occupant) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getStringTooltip(utils, pad, "ali.property.value.entity_data", occupant.entityData().copyTag().getAsString()));
+        components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.ticks_in_hive", occupant.ticksInHive()));
+        components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.min_ticks_in_hive", occupant.minTicksInHive()));
 
         return components;
     }
@@ -700,7 +830,7 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getLongTooltip(IClientUtils utils, int pad, String key, Long value) {
+    public static List<Component> getLongTooltip(IClientUtils ignoredUtils, int pad, String key, Long value) {
         return List.of(pad(pad, translatable(key, value(value))));
     }
 
@@ -713,6 +843,12 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getFloatTooltip(IClientUtils ignoredUtils, int pad, String key, Float value) {
+        return List.of(pad(pad, translatable(key, value(value))));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getDoubleTooltip(IClientUtils ignoredUtils, int pad, String key, Double value) {
         return List.of(pad(pad, translatable(key, value(value))));
     }
 

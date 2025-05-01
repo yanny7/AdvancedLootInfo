@@ -8,8 +8,10 @@ import com.yanny.ali.api.*;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
@@ -53,6 +55,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
     private final Map<ItemSubPredicate.Type<?>, TriFunction<IClientUtils, Integer, ItemSubPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, TriFunction<IClientUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
+    private final Map<DataComponentType<?>, TriFunction<IClientUtils, Integer, Object, List<Component>>> dataComponentTypeTooltipMap = new HashMap<>();
     private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
@@ -109,6 +112,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
         entitySubPredicateTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
+    }
+
+    @Override
+    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        dataComponentTypeTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
     }
 
     @Override
@@ -235,6 +244,18 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             return entryTooltipGetter.apply(utils, pad, predicate);
         } else {
             LOGGER.warn("EntitySubPredicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            return List.of();
+        }
+    }
+
+    @Override
+    public List<Component> getDataComponentTypeTooltip(IClientUtils utils, int pad, DataComponentType<?> type, Object value) {
+        TriFunction<IClientUtils, Integer, Object, List<Component>> getter = dataComponentTypeTooltipMap.get(type);
+
+        if (getter != null) {
+            return getter.apply(utils, pad, value);
+        } else {
+            LOGGER.warn("DataComponentType tooltip for {} was not registered", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type));
             return List.of();
         }
     }

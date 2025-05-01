@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +36,8 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static List<Component> getItemPotionsPredicateTooltip(IClientUtils utils, int pad, ItemPotionsPredicate predicate) {
-        return getHolderSetTooltip(utils, pad, "ali.type.item_sub_predicate.item_potions", predicate.potions(), GenericTooltipUtils::getPotionTooltip);
+        return getHolderSetTooltip(utils, pad, "ali.type.item_sub_predicate.item_potions", predicate.potions(),
+                (u, i, p) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.potion", BuiltInRegistries.POTION, p));
     }
 
     @NotNull
