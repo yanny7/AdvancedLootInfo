@@ -170,6 +170,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt_provider", "Nbt Provider: %s");
+        TRANSLATION_MAP.put("ali.property.value.null", "%s");
         TRANSLATION_MAP.put("ali.property.value.operation", "Operation: %s");
         TRANSLATION_MAP.put("ali.property.value.options", "Options: %s");
         TRANSLATION_MAP.put("ali.property.value.percent", "Percent: %s");
