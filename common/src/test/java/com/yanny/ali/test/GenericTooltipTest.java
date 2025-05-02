@@ -33,7 +33,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -143,14 +142,14 @@ public class GenericTooltipTest {
 
     @Test
     public void testFormulaTooltip() {
-        assertTooltip(GenericTooltipUtils.getFormulaTooltip(UTILS, 0, new ApplyBonusCount.OreDrops()), List.of(
+        assertTooltip(GenericTooltipUtils.getFormulaTooltip(UTILS, 0, "ali.property.value.formula", new ApplyBonusCount.OreDrops()), List.of(
                 "Formula: minecraft:ore_drops"
         ));
-        assertTooltip(GenericTooltipUtils.getFormulaTooltip(UTILS, 0, new ApplyBonusCount.UniformBonusCount(2)), List.of(
+        assertTooltip(GenericTooltipUtils.getFormulaTooltip(UTILS, 0, "ali.property.value.formula", new ApplyBonusCount.UniformBonusCount(2)), List.of(
                 "Formula: minecraft:uniform_bonus_count",
                 "  -> Bonus Multiplier: 2"
         ));
-        assertTooltip(GenericTooltipUtils.getFormulaTooltip(UTILS, 0, new ApplyBonusCount.BinomialWithBonusCount(3, 0.51F)), List.of(
+        assertTooltip(GenericTooltipUtils.getFormulaTooltip(UTILS, 0, "ali.property.value.formula", new ApplyBonusCount.BinomialWithBonusCount(3, 0.51F)), List.of(
                 "Formula: minecraft:binomial_with_bonus_count",
                 "  -> Extra Rounds: 3",
                 "  -> Probability: 0.51"
@@ -159,23 +158,23 @@ public class GenericTooltipTest {
 
     @Test
     public void testBlockTooltip() {
-        assertTooltip(GenericTooltipUtils.getBlockTooltip(UTILS, 1, Blocks.DIAMOND_BLOCK), List.of("  -> Block: Block of Diamond"));
+        assertTooltip(GenericTooltipUtils.getBlockTooltip(UTILS, 1, "ali.property.value.block", Blocks.DIAMOND_BLOCK), List.of("  -> Block: Block of Diamond"));
     }
 
     @Test
     public void testPropertyTooltip() {
-        assertTooltip(GenericTooltipUtils.getPropertyTooltip(UTILS, 1, EnumProperty.create("bed", BedPart.class)), List.of("  -> bed [head, foot]"));
+        assertTooltip(GenericTooltipUtils.getPropertyTooltip(UTILS, 1, "ali.property.value.null", EnumProperty.create("bed", BedPart.class)), List.of("  -> bed"));
     }
 
     @Test
     public void testEnchantmentTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 0, Enchantments.AQUA_AFFINITY), List.of("Enchantment: Aqua Affinity"));
-        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 1, Enchantments.FIRE_ASPECT), List.of("  -> Enchantment: Fire Aspect"));
+        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 0, "ali.property.value.enchantment", Enchantments.AQUA_AFFINITY), List.of("Enchantment: Aqua Affinity"));
+        assertTooltip(GenericTooltipUtils.getEnchantmentTooltip(UTILS, 1, "ali.property.value.enchantment", Enchantments.FIRE_ASPECT), List.of("  -> Enchantment: Fire Aspect"));
     }
 
     @Test
     public void testModifierTooltip() {
-        assertTooltip(GenericTooltipUtils.getModifierTooltip(UTILS, 0, new SetAttributesFunction.ModifierBuilder(
+        assertTooltip(GenericTooltipUtils.getModifierTooltip(UTILS, 0, "ali.property.branch.modifier", new SetAttributesFunction.ModifierBuilder(
                 "armor",
                 Holder.direct(Attributes.ARMOR),
                 AttributeModifier.Operation.MULTIPLY_TOTAL,
@@ -200,12 +199,12 @@ public class GenericTooltipTest {
 
     @Test
     public void testAttributeTooltip() {
-        assertTooltip(GenericTooltipUtils.getAttributeTooltip(UTILS, 0, Attributes.JUMP_STRENGTH), List.of("Attribute: Horse Jump Strength"));
+        assertTooltip(GenericTooltipUtils.getAttributeTooltip(UTILS, 0, "ali.property.value.attribute", Attributes.JUMP_STRENGTH), List.of("Attribute: Horse Jump Strength"));
     }
 
     @Test
     public void testUUIDTooltip() {
-        assertTooltip(GenericTooltipUtils.getUUIDTooltip(UTILS, 0, UUID.nameUUIDFromBytes(new byte[]{1, 2, 3})), List.of("UUID: 5289df73-7df5-3326-bcdd-22597afb1fac"));
+        assertTooltip(GenericTooltipUtils.getUUIDTooltip(UTILS, 0, "ali.property.value.uuid", UUID.nameUUIDFromBytes(new byte[]{1, 2, 3})), List.of("UUID: 5289df73-7df5-3326-bcdd-22597afb1fac"));
     }
 
     @Test
@@ -218,7 +217,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testStatePropertiesPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, 0, StatePropertiesPredicate.Builder.properties()
+        assertTooltip(GenericTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, 0, "ali.property.branch.state_properties_predicate", StatePropertiesPredicate.Builder.properties()
                 .hasProperty(BlockStateProperties.FACING, Direction.EAST)
                 .build().orElseThrow()
         ), List.of(
@@ -229,7 +228,7 @@ public class GenericTooltipTest {
 
     @Test
     void testDamageSourcePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, DamageSourcePredicate.Builder.damageType()
+        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.damage_source_predicate", DamageSourcePredicate.Builder.damageType()
                 .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                 .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
                 .build()), List.of(
@@ -246,7 +245,7 @@ public class GenericTooltipTest {
 
         compoundTag.putInt("range", 5);
 
-        assertTooltip(GenericTooltipUtils.getEntityPredicateTooltip(UTILS, 0, EntityPredicate.Builder.entity()
+        assertTooltip(GenericTooltipUtils.getEntityPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", EntityPredicate.Builder.entity()
                 .entityType(EntityTypePredicate.of(EntityType.CAT))
                 .distance(new DistancePredicate(MinMaxBounds.Doubles.exactly(10), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .located(LocationPredicate.Builder.location().setX(MinMaxBounds.Doubles.atLeast(20)))
@@ -265,48 +264,49 @@ public class GenericTooltipTest {
                 .team("orange")
                 .build()
         ), List.of(
-                "Entity Types:",
-                "  -> Entity Type: Cat",
-                "Distance to Player:",
-                "  -> X: =10.0",
-                "Location:",
-                "  -> Position:",
-                "    -> X: ≥20.0",
-                "Stepping on Location:",
-                "  -> Position:",
-                "    -> X: ≤30.0",
-                "Mob Effects:",
-                "  -> Mob Effect: minecraft:absorption",
-                "    -> Is Ambient: true",
-                "  -> Mob Effect: minecraft:blindness",
-                "    -> Is Visible: false",
-                "Nbt: {range:5}",
-                "Entity Flags:",
-                "  -> Is Baby: true",
-                "Entity Equipment:",
-                "  -> Head:",
-                "    -> Items:",
-                "      -> Item: Andesite",
-                "      -> Item: Diorite",
-                "Entity Sub Predicate:",
-                "  -> Variant: minecraft:calico",
-                "Vehicle:",
-                "  -> Team: blue",
-                "Passenger:",
-                "  -> Team: white",
-                "Targeted Entity:",
-                "  -> Team: red",
-                "Team: orange"
+                "Predicate:",
+                "  -> Entity Types:",
+                "    -> Cat",
+                "  -> Distance to Player:",
+                "    -> X: =10.0",
+                "  -> Location:",
+                "    -> Position:",
+                "      -> X: ≥20.0",
+                "  -> Stepping on Location:",
+                "    -> Position:",
+                "      -> X: ≤30.0",
+                "  -> Mob Effects:",
+                "    -> Mob Effect: minecraft:absorption",
+                "      -> Is Ambient: true",
+                "    -> Mob Effect: minecraft:blindness",
+                "      -> Is Visible: false",
+                "  -> Nbt: {range:5}",
+                "  -> Entity Flags:",
+                "    -> Is Baby: true",
+                "  -> Entity Equipment:",
+                "    -> Head:",
+                "      -> Items:",
+                "        -> Andesite",
+                "        -> Diorite",
+                "  -> Entity Sub Predicate:",
+                "    -> Variant: minecraft:calico",
+                "  -> Vehicle:",
+                "    -> Team: blue",
+                "  -> Passenger:",
+                "    -> Team: white",
+                "  -> Targeted Entity:",
+                "    -> Team: red",
+                "  -> Team: orange"
         ));
     }
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, EntityTypePredicate.of(EntityType.CAT)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, "ali.property.branch.entity_types", EntityTypePredicate.of(EntityType.CAT)), List.of(
                 "Entity Types:",
-                "  -> Entity Type: Cat"
+                "  -> Cat"
         ));
-        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, EntityTypePredicate.of(EntityTypeTags.SKELETONS)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, "ali.property.branch.entity_types", EntityTypePredicate.of(EntityTypeTags.SKELETONS)), List.of(
                 "Entity Types:",
                 "  -> Tag: minecraft:skeletons"
         ));
@@ -314,24 +314,25 @@ public class GenericTooltipTest {
 
     @Test
     public void testDistancePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getDistancePredicateTooltip(UTILS, 0, new DistancePredicate(
+        assertTooltip(GenericTooltipUtils.getDistancePredicateTooltip(UTILS, 0, "ali.property.branch.distance_to_player", new DistancePredicate(
                 MinMaxBounds.Doubles.exactly(10),
                 MinMaxBounds.Doubles.atLeast(20),
                 MinMaxBounds.Doubles.atMost(30),
                 MinMaxBounds.Doubles.atLeast(15),
                 MinMaxBounds.Doubles.between(2, 5.5)
         )), List.of(
-                "X: =10.0",
-                "Y: ≥20.0",
-                "Z: ≤30.0",
-                "Horizontal: ≥15.0",
-                "Absolute: 2.0-5.5"
+                "Distance to Player:",
+                "  -> X: =10.0",
+                "  -> Y: ≥20.0",
+                "  -> Z: ≤30.0",
+                "  -> Horizontal: ≥15.0",
+                "  -> Absolute: 2.0-5.5"
         ));
     }
 
     @Test
     public void testLocationPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getLocationPredicateTooltip(UTILS, 0, LocationPredicate.Builder.location()
+        assertTooltip(GenericTooltipUtils.getLocationPredicateTooltip(UTILS, 0, "ali.property.branch.location", LocationPredicate.Builder.location()
                 .setX(MinMaxBounds.Doubles.exactly(10))
                 .setY(MinMaxBounds.Doubles.atLeast(20))
                 .setZ(MinMaxBounds.Doubles.atMost(30))
@@ -344,27 +345,28 @@ public class GenericTooltipTest {
                 .setFluid(FluidPredicate.Builder.fluid().of(Fluids.LAVA))
                 .build()
         ), List.of(
-                "Position:",
-                "  -> X: =10.0",
-                "  -> Y: ≥20.0",
-                "  -> Z: ≤30.0",
-                "Biome: minecraft:plains",
-                "Structure: minecraft:mineshaft",
-                "Dimension: minecraft:overworld",
-                "Smokey: true",
-                "Light: 10-15",
-                "Block Predicate:",
-                "  -> Blocks:",
-                "    -> Block: Stone",
-                "    -> Block: Cobblestone",
-                "Fluid Predicate:",
-                "  -> Fluid: minecraft:lava"
+                "Location:",
+                "  -> Position:",
+                "    -> X: =10.0",
+                "    -> Y: ≥20.0",
+                "    -> Z: ≤30.0",
+                "  -> Biome: minecraft:plains",
+                "  -> Structure: minecraft:mineshaft",
+                "  -> Dimension: minecraft:overworld",
+                "  -> Smokey: true",
+                "  -> Light: 10-15",
+                "  -> Block Predicate:",
+                "    -> Blocks:",
+                "      -> Stone",
+                "      -> Cobblestone",
+                "  -> Fluid Predicate:",
+                "    -> Fluid: minecraft:lava"
         ));
     }
 
     @Test
     public void testLightPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getLightPredicateTooltip(UTILS, 0, LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)).build()), List.of("Light: 10-15"));
+        assertTooltip(GenericTooltipUtils.getLightPredicateTooltip(UTILS, 0, "ali.property.value.light", LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)).build()), List.of("Light: 10-15"));
     }
 
     @Test
@@ -373,15 +375,15 @@ public class GenericTooltipTest {
 
         compoundTag.putFloat("test", 3F);
 
-        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(BlockTags.DIRT).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(BlockTags.DIRT).build()), List.of(
                 "Block Predicate:",
                 "  -> Tag: minecraft:dirt"
         ));
-        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block().of(BlockTags.BEDS).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(BlockTags.BEDS).build()), List.of(
                 "Block Predicate:",
                 "  -> Tag: minecraft:beds"
         ));
-        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, BlockPredicate.Builder.block()
+        assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block()
                 .of(Blocks.STONE, Blocks.COBBLESTONE)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST))
                 .hasNbt(compoundTag)
@@ -389,8 +391,8 @@ public class GenericTooltipTest {
         ), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
-                "    -> Block: Stone",
-                "    -> Block: Cobblestone",
+                "    -> Stone",
+                "    -> Cobblestone",
                 "State Properties:",
                 "  -> facing: east",
                 "Nbt: {test:3.0f}"
@@ -403,12 +405,12 @@ public class GenericTooltipTest {
 
         compoundTag.putFloat("test", 3F);
 
-        assertTooltip(GenericTooltipUtils.getNbtPredicateTooltip(UTILS, 0, new NbtPredicate(compoundTag)), List.of("Nbt: {test:3.0f}"));
+        assertTooltip(GenericTooltipUtils.getNbtPredicateTooltip(UTILS, 0, "ali.property.value.nbt", new NbtPredicate(compoundTag)), List.of("Nbt: {test:3.0f}"));
     }
 
     @Test
     public void testFluidPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getFluidPredicateTooltip(UTILS, 0, FluidPredicate.Builder.fluid()
+        assertTooltip(GenericTooltipUtils.getFluidPredicateTooltip(UTILS, 0, "ali.property.branch.fluid_predicate", FluidPredicate.Builder.fluid()
                 .of(FluidTags.WATER)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST).build().orElseThrow())
                 .build()
@@ -422,7 +424,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testMobEffectPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getMobEffectPredicateTooltip(UTILS, 0, MobEffectsPredicate.Builder.effects()
+        assertTooltip(GenericTooltipUtils.getMobEffectPredicateTooltip(UTILS, 0, "ali.property.branch.mob_effects", MobEffectsPredicate.Builder.effects()
                 .and(MobEffects.ABSORPTION, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.between(10, 15), MinMaxBounds.Ints.atMost(5), Optional.of(true), Optional.of(false)))
                 .and(MobEffects.BLINDNESS, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.atLeast(5), MinMaxBounds.Ints.between(1, 2), Optional.empty(), Optional.empty())).build().orElseThrow()
         ), List.of(
@@ -455,7 +457,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityFlagsPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntityFlagsPredicateTooltip(UTILS, 0, EntityFlagsPredicate.Builder.flags()
+        assertTooltip(GenericTooltipUtils.getEntityFlagsPredicateTooltip(UTILS, 0, "ali.property.branch.entity_flags", EntityFlagsPredicate.Builder.flags()
                 .setOnFire(false)
                 .setIsBaby(true)
                 .setCrouching(true)
@@ -474,7 +476,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityEquipmentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntityEquipmentPredicateTooltip(UTILS, 0, EntityEquipmentPredicate.Builder.equipment()
+        assertTooltip(GenericTooltipUtils.getEntityEquipmentPredicateTooltip(UTILS, 0, "ali.property.branch.entity_equipment", EntityEquipmentPredicate.Builder.equipment()
                 .head(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(10, 15)))
                 .chest(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atMost(5)))
                 .legs(ItemPredicate.Builder.item().hasDurability(MinMaxBounds.Ints.atLeast(5)))
@@ -504,10 +506,11 @@ public class GenericTooltipTest {
 
         compoundTag.putBoolean("healing", true);
 
-        assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item().of(ItemTags.AXES).build()), List.of(
-                "Tag: minecraft:axes"
+        assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, "ali.type.condition.match_tool", ItemPredicate.Builder.item().of(ItemTags.AXES).build()), List.of(
+                "Match Tool:",
+                "  -> Tag: minecraft:axes"
         ));
-        assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, ItemPredicate.Builder.item()
+        assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, "ali.type.condition.match_tool", ItemPredicate.Builder.item()
                 .of(Items.CAKE, Items.NETHERITE_AXE)
                 .withCount(MinMaxBounds.Ints.between(10, 15))
                 .hasDurability(MinMaxBounds.Ints.atMost(5))
@@ -519,23 +522,24 @@ public class GenericTooltipTest {
                 .hasNbt(compoundTag)
                 .build()
         ), List.of(
-                "Items:",
-                "  -> Item: Cake",
-                "  -> Item: Netherite Axe",
-                "Count: 10-15",
-                "Durability: ≤5",
-                "Enchantments:",
-                "  -> Enchantment: Smite",
-                "    -> Level: ≥1",
-                "  -> Enchantment: Mending",
-                "    -> Level: 2-4",
-                "Stored Enchantments:",
-                "  -> Enchantment: Depth Strider",
-                "    -> Level: ≤5",
-                "  -> Enchantment: Lure",
-                "    -> Level: ≥4",
-                "Potion: minecraft:healing",
-                "Nbt: {healing:1b}"
+                "Match Tool:",
+                "  -> Items:",
+                "    -> Cake",
+                "    -> Netherite Axe",
+                "  -> Count: 10-15",
+                "  -> Durability: ≤5",
+                "  -> Enchantments:",
+                "    -> Enchantment: Smite",
+                "      -> Level: ≥1",
+                "    -> Enchantment: Mending",
+                "      -> Level: 2-4",
+                "  -> Stored Enchantments:",
+                "    -> Enchantment: Depth Strider",
+                "      -> Level: ≤5",
+                "    -> Enchantment: Lure",
+                "      -> Level: ≥4",
+                "  -> Potion: minecraft:healing",
+                "  -> Nbt: {healing:1b}"
         ));
     }
 
@@ -549,25 +553,25 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntitySubPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
             "Entity Sub Predicate:",
             "  -> Variant: minecraft:cold"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN)))), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN)))), List.of(
             "Entity Sub Predicate:",
             "  -> Variant: minecraft:persian"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, new LightningBoltPredicate(MinMaxBounds.Ints.atLeast(2), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", new LightningBoltPredicate(MinMaxBounds.Ints.atLeast(2), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
                 "Entity Sub Predicate:",
                 "  -> Blocks On Fire: ≥2",
                 "  -> Stuck Entity:",
                 "    -> Team: blue"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, FishingHookPredicate.inOpenWater(true)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", FishingHookPredicate.inOpenWater(true)), List.of(
                 "Entity Sub Predicate:",
                 "  -> Is In Open Water: true"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
                 .setGameType(GameType.SURVIVAL)
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(4))
@@ -591,11 +595,11 @@ public class GenericTooltipTest {
                 "    -> minecraft:second",
                 "      -> Done: false"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, SlimePredicate.sized(MinMaxBounds.Ints.atLeast(1))), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", SlimePredicate.sized(MinMaxBounds.Ints.atLeast(1))), List.of(
                 "Entity Sub Predicate:",
                 "  -> Size: ≥1"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
                 "Entity Sub Predicate:",
                 "  -> Variant: minecraft:cold"
         ));
@@ -603,14 +607,14 @@ public class GenericTooltipTest {
 
     @Test
     public void testItemTooltip() {
-        assertTooltip(GenericTooltipUtils.getItemTooltip(UTILS, 0, Items.ACACIA_DOOR), List.of(
+        assertTooltip(GenericTooltipUtils.getItemTooltip(UTILS, 0, "ali.property.value.item", Items.ACACIA_DOOR), List.of(
                 "Item: Acacia Door"
         ));
     }
 
     @Test
     public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, GameType.SPECTATOR), List.of(
+        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, "ali.property.value.game_type", GameType.SPECTATOR), List.of(
                 "Game Type: Spectator"
         ));
     }
@@ -623,7 +627,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Ints.atLeast(4)
         );
 
-        assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, 0, statMatcher), List.of(
+        assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, 0, "ali.property.branch.stats", statMatcher), List.of(
                 "Block: Cobblestone",
                 "  -> Times Mined: ≥4"
         ));
@@ -636,8 +640,8 @@ public class GenericTooltipTest {
         recipeList.put(new ResourceLocation("furnace_recipe"), true);
         recipeList.put(new ResourceLocation("apple_recipe"), false);
 
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, new Object2BooleanArrayMap<>()), List.of());
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, recipeList), List.of(
+        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", new Object2BooleanArrayMap<>()), List.of());
+        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", recipeList), List.of(
                 "Recipes:",
                 "  -> minecraft:furnace_recipe: true",
                 "  -> minecraft:apple_recipe: false"
@@ -653,8 +657,8 @@ public class GenericTooltipTest {
         predicateMap.put(new ResourceLocation("first"), new PlayerPredicate.AdvancementDonePredicate(true));
         predicateMap.put(new ResourceLocation("second"), new PlayerPredicate.AdvancementCriterionsPredicate(criterions));
 
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, Map.of()), List.of());
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, predicateMap), List.of(
+        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", Map.of()), List.of());
+        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", predicateMap), List.of(
                 "Advancements:",
                 "  -> minecraft:first",
                 "    -> Done: true",
@@ -665,10 +669,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testBlockPosTooltip() {
-        assertTooltip(GenericTooltipUtils.getBlockPosTooltip(UTILS, 0, new BlockPos(10, 12, 14)), List.of(
-                "X: 10",
-                "Y: 12",
-                "Z: 14"
+        assertTooltip(GenericTooltipUtils.getBlockPosTooltip(UTILS, 0, "ali.property.branch.offset", new BlockPos(10, 12, 14)), List.of(
+                "Offset:",
+                "  -> X: 10",
+                "  -> Y: 12",
+                "  -> Z: 14"
         ));
     }
 }
