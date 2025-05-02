@@ -15,22 +15,12 @@ import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
 public class ConditionTooltipUtils {
     @NotNull
     public static List<Component> getAllOfTooltip(IClientUtils utils, int pad, AllOfCondition cond) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.condition.all_of")));
-        components.addAll(getConditionsTooltip(utils, pad + 1, List.of(cond.terms)));
-
-        return components;
+        return getCollectionTooltip(utils, pad, "ali.type.condition.all_of", List.of(cond.terms), utils::getConditionTooltip);
     }
 
     @NotNull
     public static List<Component> getAnyOfTooltip(IClientUtils utils, int pad, AnyOfCondition cond) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.condition.any_of")));
-        components.addAll(getConditionsTooltip(utils, pad + 1, List.of(cond.terms)));
-
-        return components;
+        return getCollectionTooltip(utils, pad, "ali.type.condition.any_of", List.of(cond.terms), utils::getConditionTooltip);
     }
 
     @NotNull

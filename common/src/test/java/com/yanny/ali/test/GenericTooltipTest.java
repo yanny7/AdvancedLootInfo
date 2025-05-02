@@ -210,7 +210,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBannerPatternsSlotsTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternsTooltip(UTILS, 0, Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)), List.of(
+        assertTooltip(GenericTooltipUtils.getBannerPatternsTooltip(UTILS, 0, "ali.property.value.banner_pattern", Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)), List.of(
                 "Banner Pattern: minecraft:base",
                 "  -> Color: WHITE"
         ));
@@ -533,8 +533,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, EnchantmentPredicate.ANY), List.of());
-        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, new EnchantmentPredicate(Enchantments.FALL_PROTECTION, MinMaxBounds.Ints.atMost(2))), List.of(
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, "ali.property.value.enchantment", EnchantmentPredicate.ANY), List.of());
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, "ali.property.value.enchantment", new EnchantmentPredicate(Enchantments.FALL_PROTECTION, MinMaxBounds.Ints.atMost(2))), List.of(
                 "Enchantment: Feather Falling",
                 "  -> Level: ≤2"
         ));

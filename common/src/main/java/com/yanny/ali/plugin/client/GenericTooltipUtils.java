@@ -123,10 +123,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getBannerPatternsTooltip(IClientUtils utils, int pad, Pair<Holder<BannerPattern>, DyeColor> pair) {
+    public static List<Component> getBannerPatternsTooltip(IClientUtils utils, int pad, String key, Pair<Holder<BannerPattern>, DyeColor> pair) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, "ali.property.value.banner_pattern", pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
+        components.addAll(getHolderTooltip(utils, pad, key, pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.color", pair.getSecond()));
 
         return components;
@@ -425,8 +425,8 @@ public class GenericTooltipUtils {
 
             components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.count", itemPredicate.count));
             components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.durability", itemPredicate.durability));
-            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", List.of(itemPredicate.enchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", List.of(itemPredicate.storedEnchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
+            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.enchantment", List.of(itemPredicate.enchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
+            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", "ali.property.value.enchantment", List.of(itemPredicate.storedEnchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
             components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.potion", itemPredicate.potion, GenericTooltipUtils::getPotionTooltip));
             components.addAll(getNbtPredicateTooltip(utils, pad + 1, "ali.property.value.nbt", itemPredicate.nbt));
         }
@@ -435,11 +435,11 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, EnchantmentPredicate enchantmentPredicate) {
+    public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, String key, EnchantmentPredicate enchantmentPredicate) {
         List<Component> components = new LinkedList<>();
 
         if (enchantmentPredicate != EnchantmentPredicate.ANY) {
-            components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.enchantment", enchantmentPredicate.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+            components.addAll(getOptionalTooltip(utils, pad, key, enchantmentPredicate.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
             components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", enchantmentPredicate.level));
         }
 
