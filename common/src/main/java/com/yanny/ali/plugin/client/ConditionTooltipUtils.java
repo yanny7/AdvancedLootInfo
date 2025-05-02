@@ -59,7 +59,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.entity_properties")));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", cond.entityTarget()));
-        components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.predicate", cond.predicate()));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.predicate", cond.predicate(), GenericTooltipUtils::getEntityPredicateTooltip));
 
         return components;
     }
@@ -103,7 +103,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
-        components.addAll(getLocationPredicateTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate()));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate(), GenericTooltipUtils::getLocationPredicateTooltip));
         components.addAll(getBlockPosTooltip(utils, pad + 1, "ali.property.branch.offset", cond.offset()));
 
         return components;
@@ -111,7 +111,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static List<Component> getMatchToolTooltip(IClientUtils utils, int pad, MatchTool cond) {
-        return new LinkedList<>(getItemPredicateTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate()));
+        return new LinkedList<>(getOptionalTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate(), GenericTooltipUtils::getItemPredicateTooltip));
     }
 
     @NotNull
@@ -151,7 +151,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", cond.enchantment()));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", cond.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.values", cond.values().toString()));
 
         return components;

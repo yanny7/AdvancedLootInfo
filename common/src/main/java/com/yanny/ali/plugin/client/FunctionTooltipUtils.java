@@ -301,15 +301,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
-
-        if (!fun.effects.isEmpty()) {
-            //FIXME collection + new entry
-            components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
-            fun.effects.forEach((effect) -> {
-                components.addAll(getMobEffectTooltip(utils, pad + 2, "ali.property.value.mob_effect", effect.effect()));
-                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", effect.duration()));
-            });
-        }
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.mob_effects", fun.effects, GenericTooltipUtils::getEffectEntryTooltip));
 
         return components;
     }

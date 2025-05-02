@@ -266,7 +266,7 @@ public class GenericTooltipTest {
         ), List.of(
                 "Predicate:",
                 "  -> Entity Types:",
-                "    -> Entity Type: Cat",
+                "    -> Cat",
                 "  -> Distance to Player:",
                 "    -> X: =10.0",
                 "  -> Location:",
@@ -286,8 +286,8 @@ public class GenericTooltipTest {
                 "  -> Entity Equipment:",
                 "    -> Head:",
                 "      -> Items:",
-                "        -> Item: Andesite",
-                "        -> Item: Diorite",
+                "        -> Andesite",
+                "        -> Diorite",
                 "  -> Entity Sub Predicate:",
                 "    -> Variant: minecraft:calico",
                 "  -> Vehicle:",
@@ -302,11 +302,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, "ali.property.value.entity_type", EntityTypePredicate.of(EntityType.CAT)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, "ali.property.branch.entity_types", EntityTypePredicate.of(EntityType.CAT)), List.of(
                 "Entity Types:",
-                "  -> Entity Type: Cat"
+                "  -> Cat"
         ));
-        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, "ali.property.value.entity_type", EntityTypePredicate.of(EntityTypeTags.SKELETONS)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntityTypePredicateTooltip(UTILS, 0, "ali.property.branch.entity_types", EntityTypePredicate.of(EntityTypeTags.SKELETONS)), List.of(
                 "Entity Types:",
                 "  -> Tag: minecraft:skeletons"
         ));
@@ -524,8 +524,8 @@ public class GenericTooltipTest {
         ), List.of(
                 "Match Tool:",
                 "  -> Items:",
-                "    -> Item: Cake",
-                "    -> Item: Netherite Axe",
+                "    -> Cake",
+                "    -> Netherite Axe",
                 "  -> Count: 10-15",
                 "  -> Durability: ≤5",
                 "  -> Enchantments:",
