@@ -18,8 +18,8 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.apply_bonus")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
-        components.addAll(getFormulaTooltip(utils, pad + 1, fun.formula));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", fun.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getFormulaTooltip(utils, pad + 1, "ali.property.value.formula", fun.formula));
 
         return components;
     }
@@ -41,7 +41,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.copy_nbt")));
         components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.nbt_provider", BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, fun.source.getType()));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.operations", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.operations", "ali.property.branch.operation", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
 
         return components;
     }
@@ -51,8 +51,8 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_state")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.block, GenericTooltipUtils::getBlockTooltip));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.properties", fun.properties, GenericTooltipUtils::getPropertyTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.block", fun.block, GenericTooltipUtils::getBlockTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.properties", "ali.property.value.null", fun.properties, GenericTooltipUtils::getPropertyTooltip));
 
         return components;
     }
@@ -62,7 +62,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.enchantments, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", fun.enchantments, GenericTooltipUtils::getEnchantmentTooltip));
 
         return components;
     }
@@ -163,7 +163,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_attributes")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.modifiers", fun.modifiers, GenericTooltipUtils::getModifierTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.modifiers", "ali.property.branch.modifier", fun.modifiers, GenericTooltipUtils::getModifierTooltip));
 
         return components;
     }
@@ -184,8 +184,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.type,
-                (u, i, e) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, e)));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.block_entity_type", fun.type, GenericTooltipUtils::getBlockEntityTypeTooltip));
         //TODO entries
 
         return components;
@@ -222,7 +221,7 @@ public class FunctionTooltipUtils {
         if (!fun.enchantments.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
             fun.enchantments.forEach((enchantment, value) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.enchantment", enchantment, GenericTooltipUtils::getEnchantmentTooltip));
                 components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
             });
         }
@@ -249,8 +248,7 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_loot_table")));
         components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
         components.addAll(getLongTooltip(utils, pad + 1, "ali.property.value.seed", fun.seed));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.type,
-                (u, i, e) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.block_entity_type", BuiltInRegistries.BLOCK_ENTITY_TYPE, e)));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.block_entity_type", fun.type, GenericTooltipUtils::getBlockEntityTypeTooltip));
 
         return components;
     }
@@ -261,7 +259,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.replace", fun.replace));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore, (u, p, c) -> List.of(pad(pad + 2, c))));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", "ali.property.value.null", fun.lore, GenericTooltipUtils::getComponentTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext, GenericTooltipUtils::getEnumTooltip));
 
         return components;
@@ -293,8 +291,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_potion")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.potion,
-                (u, i, p) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.potion", BuiltInRegistries.POTION, p)));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.potion", fun.potion, GenericTooltipUtils::getPotionTooltip));
 
         return components;
     }
@@ -306,10 +303,10 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
 
         if (!fun.effects.isEmpty()) {
+            //FIXME collection + new entry
             components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
             fun.effects.forEach((effect) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, effect.effect(),
-                        (u, i, e) -> getBuiltInRegistryTooltip(u, i, "ali.property.value.mob_effect", BuiltInRegistries.MOB_EFFECT, e)));
+                components.addAll(getMobEffectTooltip(utils, pad + 2, "ali.property.value.mob_effect", effect.effect()));
                 components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", effect.duration()));
             });
         }
