@@ -226,7 +226,7 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.nbt", entityPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.entity_flags", entityPredicate.flags(), GenericTooltipUtils::getEntityFlagsPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.entity_equipment", entityPredicate.equipment(), GenericTooltipUtils::getEntityEquipmentPredicateTooltip));
-        components.addAll(getOptionalTooltip(utils, pad + 1, entityPredicate.subPredicate(), GenericTooltipUtils::getEntitySubPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.entity_sub_predicate", entityPredicate.subPredicate(), GenericTooltipUtils::getEntitySubPredicateTooltip));
         components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.vehicle", entityPredicate.vehicle()));
         components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.passenger", entityPredicate.passenger()));
         components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.targeted_entity", entityPredicate.targetedEntity()));
@@ -411,12 +411,12 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEntitySubPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicate entitySubPredicate) {
+    public static List<Component> getEntitySubPredicateTooltip(IClientUtils utils, int pad, String key, EntitySubPredicate entitySubPredicate) {
         List<Component> components = new LinkedList<>();
         Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
 
         optional.ifPresent((entry) -> {
-            components.add(pad(pad, translatable("ali.property.branch.entity_sub_predicate", entry.getKey())));
+            components.add(pad(pad, translatable(key, entry.getKey())));
 
             if (entitySubPredicate instanceof LightningBoltPredicate predicate) {
                 components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.blocks_on_fire", predicate.blocksSetOnFire()));

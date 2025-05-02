@@ -553,25 +553,25 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntitySubPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.variant(FrogVariant.COLD)), List.of(
             "Entity Sub Predicate:",
             "  -> Variant: minecraft:cold"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN)))), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.variant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.PERSIAN)))), List.of(
             "Entity Sub Predicate:",
             "  -> Variant: minecraft:persian"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, new LightningBoltPredicate(MinMaxBounds.Ints.atLeast(2), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", new LightningBoltPredicate(MinMaxBounds.Ints.atLeast(2), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
                 "Entity Sub Predicate:",
                 "  -> Blocks On Fire: ≥2",
                 "  -> Stuck Entity:",
                 "    -> Team: blue"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, FishingHookPredicate.inOpenWater(true)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", FishingHookPredicate.inOpenWater(true)), List.of(
                 "Entity Sub Predicate:",
                 "  -> Is In Open Water: true"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
                 .setGameType(GameType.SURVIVAL)
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(4))
@@ -595,11 +595,11 @@ public class GenericTooltipTest {
                 "    -> minecraft:second",
                 "      -> Done: false"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, SlimePredicate.sized(MinMaxBounds.Ints.atLeast(1))), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", SlimePredicate.sized(MinMaxBounds.Ints.atLeast(1))), List.of(
                 "Entity Sub Predicate:",
                 "  -> Size: ≥1"
         ));
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
+        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
                 "Entity Sub Predicate:",
                 "  -> Variant: minecraft:cold"
         ));
