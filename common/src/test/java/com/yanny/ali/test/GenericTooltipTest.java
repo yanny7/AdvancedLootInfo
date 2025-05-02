@@ -214,7 +214,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBannerPatternTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow().value(), DyeColor.WHITE), List.of(
+        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, "ali.property.value.banner_pattern", TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow().value(), DyeColor.WHITE), List.of(
                 "Banner Pattern: Fully White Field"
         ));
     }
@@ -577,7 +577,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, new EnchantmentPredicate(Enchantments.FEATHER_FALLING, MinMaxBounds.Ints.atMost(2))), List.of(
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, "ali.property.value.enchantment", new EnchantmentPredicate(Enchantments.FEATHER_FALLING, MinMaxBounds.Ints.atMost(2))), List.of(
                 "Enchantment: Feather Falling",
                 "  -> Level: ≤2"
         ));

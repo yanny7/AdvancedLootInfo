@@ -411,10 +411,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, EnchantmentPredicate enchantmentPredicate) {
+    public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, String key, EnchantmentPredicate enchantmentPredicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.enchantment", enchantmentPredicate.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad, key, enchantmentPredicate.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", enchantmentPredicate.level()));
 
         return components;
@@ -800,10 +800,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEffectEntryTooltip(IClientUtils utils, int pad, SetStewEffectFunction.EffectEntry entry) {
+    public static List<Component> getEffectEntryTooltip(IClientUtils utils, int pad, String key, SetStewEffectFunction.EffectEntry entry) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, "ali.property.value.mob_effect", entry.effect(), GenericTooltipUtils::getMobEffectTooltip));
+        components.addAll(getHolderTooltip(utils, pad, key, entry.effect(), GenericTooltipUtils::getMobEffectTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.duration", entry.duration()));
 
         return components;

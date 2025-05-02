@@ -305,7 +305,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.mob_effects", fun.effects, GenericTooltipUtils::getEffectEntryTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.mob_effects", "ali.property.value.mob_effect", fun.effects, GenericTooltipUtils::getEffectEntryTooltip));
 
         return components;
     }
