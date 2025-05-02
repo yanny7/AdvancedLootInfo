@@ -605,7 +605,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Ints.atLeast(4)
         );
 
-        assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, 0, "ali.property.branch.stats", statMatcher), List.of(
+        assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, 0, statMatcher), List.of(
                 "Block: Cobblestone",
                 "  -> Times Mined: ≥4"
         ));

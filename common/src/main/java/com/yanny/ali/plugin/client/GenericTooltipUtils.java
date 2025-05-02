@@ -433,7 +433,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getStatMatcherTooltip(IClientUtils utils, int pad, String key, PlayerPredicate.StatMatcher<?> stat) {
+    public static List<Component> getStatMatcherTooltip(IClientUtils utils, int pad, PlayerPredicate.StatMatcher<?> stat) {
         List<Component> components = new LinkedList<>();
         Holder<?> value = stat.value();
 
