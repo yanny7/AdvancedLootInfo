@@ -127,10 +127,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, Pair<Holder<BannerPattern>, DyeColor> pair) {
+    public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, String key, Pair<Holder<BannerPattern>, DyeColor> pair) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, "ali.property.value.banner_pattern", pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
+        components.addAll(getHolderTooltip(utils, pad, key, pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.color", pair.getSecond()));
 
         return components;
@@ -394,8 +394,8 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), GenericTooltipUtils::getItemTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.count", itemPredicate.count()));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.durability", itemPredicate.durability()));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", itemPredicate.enchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", itemPredicate.storedEnchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.enchantment", itemPredicate.enchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", "ali.property.value.enchantment", itemPredicate.storedEnchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
         components.addAll(getOptionalHolderTooltip(utils, pad + 1, "ali.property.value.potion", itemPredicate.potion(), GenericTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.nbt", itemPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
 
@@ -403,10 +403,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, EnchantmentPredicate enchantmentPredicate) {
+    public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, String key, EnchantmentPredicate enchantmentPredicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.enchantment", enchantmentPredicate.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad, key, enchantmentPredicate.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", enchantmentPredicate.level()));
 
         return components;
@@ -536,10 +536,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getEffectEntryTooltip(IClientUtils utils, int pad, SetStewEffectFunction.EffectEntry entry) {
+    public static List<Component> getEffectEntryTooltip(IClientUtils utils, int pad, String key, SetStewEffectFunction.EffectEntry entry) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, "ali.property.value.mob_effect", entry.effect(), GenericTooltipUtils::getMobEffectTooltip));
+        components.addAll(getHolderTooltip(utils, pad, key, entry.effect(), GenericTooltipUtils::getMobEffectTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.duration", entry.duration()));
 
         return components;
