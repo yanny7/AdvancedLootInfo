@@ -428,7 +428,7 @@ public class GenericTooltipUtils {
             } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
                 components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
                 components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.game_type", predicate.gameType(), GenericTooltipUtils::getGameTypeTooltip));
-                components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", "ali.property.value.null", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
+                components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
                 components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
                 components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));
             } else if (entitySubPredicate instanceof SlimePredicate predicate) {
@@ -462,7 +462,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getStatMatcherTooltip(IClientUtils utils, int pad, String key, PlayerPredicate.StatMatcher<?> stat) {
+    public static List<Component> getStatMatcherTooltip(IClientUtils utils, int pad, PlayerPredicate.StatMatcher<?> stat) {
         List<Component> components = new LinkedList<>();
         Holder<?> value = stat.value();
 
