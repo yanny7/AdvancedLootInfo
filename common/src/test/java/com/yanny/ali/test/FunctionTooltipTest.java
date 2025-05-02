@@ -90,8 +90,8 @@ public class FunctionTooltipTest {
                 "Copy State:",
                 "  -> Block: Furnace",
                 "  -> Properties:",
-                "    -> lit [true, false]",
-                "    -> facing [north, south, west, east]"
+                "    -> lit",
+                "    -> facing"
         ));
     }
 
@@ -103,7 +103,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Channeling"
+                "    -> Channeling"
         ));
     }
 

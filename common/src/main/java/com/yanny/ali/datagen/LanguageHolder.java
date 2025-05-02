@@ -244,6 +244,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.multiplier", "Multiplier: %s");
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
+        TRANSLATION_MAP.put("ali.property.value.null", "%s");
         TRANSLATION_MAP.put("ali.property.value.offset", "Offset: %s");
         TRANSLATION_MAP.put("ali.property.value.operation", "Operation: %s");
         TRANSLATION_MAP.put("ali.property.value.options", "Options: %s");
