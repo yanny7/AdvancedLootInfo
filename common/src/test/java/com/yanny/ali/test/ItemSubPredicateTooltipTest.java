@@ -75,7 +75,7 @@ public class ItemSubPredicateTooltipTest {
                 HolderSet.direct(Potions.HEALING)
         )), List.of(
                 "Potions:",
-                "  -> Potion: minecraft:healing"
+                "  -> minecraft:healing"
         ));
     }
 
@@ -100,11 +100,13 @@ public class ItemSubPredicateTooltipTest {
         )))), List.of(
                 "Container:",
                 "  -> Contains:",
-                "    -> Items:",
-                "      -> Item: Andesite",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Andesite",
                 "  -> Counts:",
-                "    -> Items:",
-                "      -> Tag: minecraft:arrows",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Tag: minecraft:arrows",
                 "    -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
@@ -119,11 +121,13 @@ public class ItemSubPredicateTooltipTest {
         )))), List.of(
                 "Bundle:",
                 "  -> Contains:",
-                "    -> Items:",
-                "      -> Item: Andesite",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Andesite",
                 "  -> Counts:",
-                "    -> Items:",
-                "      -> Tag: minecraft:arrows",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Tag: minecraft:arrows",
                 "    -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
@@ -153,9 +157,11 @@ public class ItemSubPredicateTooltipTest {
                 "Fireworks:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Shape: BURST",
+                "      -> Predicate:",
+                "        -> Shape: BURST",
                 "    -> Counts:",
-                "      -> Shape: CREEPER",
+                "      -> Predicate:",
+                "        -> Shape: CREEPER",
                 "      -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Flight Duration: 1-4"
@@ -170,13 +176,12 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Writable Book:",
-                "  -> Pages:",
-                "    -> Contains:",
-                "      -> Page: Hello",
-                "    -> Counts:",
-                "      -> Page: World",
-                "      -> Count: 1-5",
-                "    -> Size: ≥4"
+                "  -> Contains:",
+                "    -> Page: Hello",
+                "  -> Counts:",
+                "    -> Page: World",
+                "    -> Count: 1-5",
+                "  -> Size: ≥4"
         ));
     }
 
@@ -224,20 +229,21 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Attribute Modifiers:",
-                "  -> Modifiers:",
-                "    -> Contains:",
+                "  -> Contains:",
+                "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Attribute: Armor",
+                "        -> Armor",
                 "      -> UUID: 08d6c05a-2151-3a79-a1df-eb9d2a8f262f",
                 "      -> Name: Help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
                 "      -> Slot: ARMOR",
-                "    -> Counts:",
+                "  -> Counts:",
+                "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Attribute: Gravity",
-                "      -> Count: 1-5",
-                "    -> Size: ≥4"
+                "        -> Gravity",
+                "    -> Count: 1-5",
+                "  -> Size: ≥4"
         ));
     }
 
@@ -249,9 +255,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Trim:",
                 "  -> Materials:",
-                "    -> Type: minecraft:gold",
+                "    -> minecraft:gold",
                 "  -> Patterns:",
-                "    -> Type: minecraft:eye"
+                "    -> minecraft:eye"
         ));
     }
 }

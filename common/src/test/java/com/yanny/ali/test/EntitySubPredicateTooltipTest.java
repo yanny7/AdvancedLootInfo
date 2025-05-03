@@ -83,7 +83,7 @@ public class EntitySubPredicateTooltipTest {
                 "      -> test: true",
                 "  -> Looking At:",
                 "    -> Entity Types:",
-                "      -> Entity Type: Warden"
+                "      -> Warden"
         ));
     }
 

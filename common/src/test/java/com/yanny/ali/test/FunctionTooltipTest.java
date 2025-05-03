@@ -232,8 +232,8 @@ public class FunctionTooltipTest {
                 "Set Banner Pattern:",
                 "  -> Append: true",
                 "  -> Banner Patterns:",
-                "    -> Banner Pattern: Fully White Field",
-                "    -> Banner Pattern: Green Creeper Charge"
+                "    -> Fully White Field",
+                "    -> Green Creeper Charge"
         ));
     }
 
@@ -241,7 +241,7 @@ public class FunctionTooltipTest {
     public void testSetContentsTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER).build()), List.of(
                 "Set Contents:",
-                "  -> Type: minecraft:container"
+                "  -> Component: minecraft:container"
         ));
     }
 
@@ -421,7 +421,7 @@ public class FunctionTooltipTest {
                 ApplyExplosionDecay.explosionDecay().build()
         )), List.of(
                 "Modify Contents:",
-                "  -> Type: minecraft:container",
+                "  -> Component: minecraft:container",
                 "  -> Modifier:",
                 "    -> Explosion Decay"
         ));
@@ -456,11 +456,11 @@ public class FunctionTooltipTest {
                 "Copy Components:",
                 "  -> Source: BLOCK_ENTITY",
                 "  -> Include:",
-                "    -> Type: minecraft:damage",
-                "    -> Type: minecraft:food",
+                "    -> minecraft:damage",
+                "    -> minecraft:food",
                 "  -> Exclude:",
-                "    -> Type: minecraft:bees",
-                "    -> Type: minecraft:dyed_color"
+                "    -> minecraft:bees",
+                "    -> minecraft:dyed_color"
         ));
     }
 

@@ -357,9 +357,9 @@ public class GenericTooltipTest {
                 "    -> Y: ≥20.0",
                 "    -> Z: ≤30.0",
                 "  -> Biomes:",
-                "    -> Biome: minecraft:plains",
+                "    -> minecraft:plains",
                 "  -> Structures:",
-                "    -> Structure: minecraft:mineshaft",
+                "    -> minecraft:mineshaft",
                 "  -> Dimension: minecraft:overworld",
                 "  -> Smokey: true",
                 "  -> Light: 10-15",
@@ -369,7 +369,7 @@ public class GenericTooltipTest {
                 "      -> Cobblestone",
                 "  -> Fluid Predicate:",
                 "    -> Fluids:",
-                "      -> Fluid: minecraft:lava"
+                "      -> minecraft:lava"
         ));
     }
 
@@ -387,7 +387,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(Blocks.DIRT).build()), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
-                "    -> Block: Dirt"
+                "    -> Dirt"
         ));
         assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(BlockTags.BEDS).build()), List.of(
                 "Block Predicate:",
@@ -429,14 +429,14 @@ public class GenericTooltipTest {
         ), List.of(
                 "Fluid Predicate:",
                 "  -> Fluids:",
-                "    -> Fluid: minecraft:water",
+                "    -> minecraft:water",
                 "  -> State Properties:",
                 "    -> facing: east"
         ));
-        assertTooltip(GenericTooltipUtils.getFluidPredicateTooltip(UTILS, 0, FluidPredicate.Builder.fluid().of(HolderSet.direct(Fluids.LAVA.builtInRegistryHolder())).build()), List.of(
+        assertTooltip(GenericTooltipUtils.getFluidPredicateTooltip(UTILS, 0, "ali.property.branch.fluid_predicate", FluidPredicate.Builder.fluid().of(HolderSet.direct(Fluids.LAVA.builtInRegistryHolder())).build()), List.of(
                 "Fluid Predicate:",
                 "  -> Fluids:",
-                "    -> Fluid: minecraft:lava"
+                "    -> minecraft:lava"
         ));
     }
 
@@ -529,10 +529,11 @@ public class GenericTooltipTest {
                 .hasComponents(DataComponentPredicate.builder().expect(DataComponents.BASE_COLOR, DyeColor.BLUE).build())
                 .build()
         ), List.of(
-                "Items:",
-                "  -> Tag: minecraft:axes",
-                "Component Predicates:",
-                "  -> Component: minecraft:base_color: blue"
+                "Match Tool:",
+                "  -> Items:",
+                "    -> Tag: minecraft:axes",
+                "  -> Component Predicates:",
+                "    -> minecraft:base_color: blue"
         ));
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, "ali.type.condition.match_tool", ItemPredicate.Builder.item()
                 .of(Items.CAKE, Items.NETHERITE_AXE)
@@ -552,8 +553,8 @@ public class GenericTooltipTest {
         ), List.of(
                 "Match Tool:",
                 "  -> Items:",
-                "    -> Item: Cake",
-                "    -> Item: Netherite Axe",
+                "    -> Cake",
+                "    -> Netherite Axe",
                 "  -> Count: 10-15",
                 "  -> Item Predicates:",
                 "    -> Damage:",
@@ -569,7 +570,7 @@ public class GenericTooltipTest {
                 "      -> Enchantment: Lure",
                 "        -> Level: ≥4",
                 "    -> Potions:",
-                "      -> Potion: minecraft:healing",
+                "      -> minecraft:healing",
                 "    -> Custom Data:",
                 "      -> Nbt: {healing:1b}"
         ));
