@@ -221,7 +221,7 @@ public class FunctionTooltipUtils {
         if (!fun.enchantments.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
             fun.enchantments.forEach((enchantment, value) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.enchantment", enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.null", enchantment, GenericTooltipUtils::getEnchantmentTooltip));
                 components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
             });
         }
