@@ -41,7 +41,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.copy_custom_data")));
         components.addAll(getBuiltInRegistryTooltip(utils, pad + 1, "ali.property.value.source", BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, fun.source.getType()));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.copy_operations", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.copy_operations", "ali.property.branch.operation", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
 
         return components;
     }
@@ -222,7 +222,7 @@ public class FunctionTooltipUtils {
         if (!fun.enchantments.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
             fun.enchantments.forEach((enchantment, value) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.enchantment", enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.null", enchantment, GenericTooltipUtils::getEnchantmentTooltip));
                 components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
             });
         }

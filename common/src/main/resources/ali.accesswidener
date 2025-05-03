@@ -115,6 +115,8 @@ accessible field net/minecraft/world/level/storage/loot/functions/SetOminousBott
 accessible field net/minecraft/world/level/storage/loot/functions/SetCustomModelDataFunction valueProvider Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/HolderGetter$Provider;)V
+accessible method net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate <init> (Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetItemFunction <init> (Ljava/util/List;Lnet/minecraft/core/Holder;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ModifyContainerContents <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
 accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/critereon/ItemPredicate;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V

@@ -31,6 +31,7 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -69,14 +70,20 @@ public class FunctionTooltipTest {
         ));
         assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.KILLER)
                 .copy("asdf", "jklo", CopyCustomDataFunction.MergeStrategy.MERGE)
+                .copy("qwer", "uiop", CopyCustomDataFunction.MergeStrategy.APPEND)
                 .build()
         ), List.of(
                 "Copy Custom Data:",
                 "  -> Source: minecraft:context",
                 "  -> Copy Operations:",
-                "    -> Source Path: asdf",
-                "    -> Target Path: jklo",
-                "    -> Merge Strategy: MERGE"
+                "    -> Operation:",
+                "      -> Source Path: asdf",
+                "      -> Target Path: jklo",
+                "      -> Merge Strategy: MERGE",
+                "    -> Operation:",
+                "      -> Source Path: qwer",
+                "      -> Target Path: uiop",
+                "      -> Merge Strategy: APPEND"
         ));
     }
 
@@ -206,6 +213,8 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlotGroup.CHEST)
                         .forSlot(EquipmentSlotGroup.LEGS)
                         .forSlot(EquipmentSlotGroup.FEET))
+                .withModifier(new SetAttributesFunction.ModifierBuilder("chest", Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, ConstantValue.exactly(3))
+                        .forSlot(EquipmentSlotGroup.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
                 "  -> Modifiers:",
@@ -219,6 +228,13 @@ public class FunctionTooltipTest {
                 "        -> LEGS",
                 "        -> CHEST",
                 "        -> HEAD",
+                "    -> Modifier:",
+                "      -> Name: chest",
+                "      -> Attribute: Armor Toughness",
+                "      -> Operation: ADD_MULTIPLIED_BASE",
+                "      -> Amount: 3",
+                "      -> Equipment Slots:",
+                "        -> MAINHAND",
                 "  -> Replace: false"
         ));
     }
@@ -239,7 +255,10 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER)
+                .withEntry(LootItem.lootTableItem(Items.BOOK))
+                .withEntry(LootItem.lootTableItem(Items.ENCHANTED_BOOK))
+                .build()), List.of(
                 "Set Contents:",
                 "  -> Component: minecraft:container"
         ));
@@ -271,11 +290,14 @@ public class FunctionTooltipTest {
         ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(Enchantments.CHANNELING, ConstantValue.exactly(1))
+                .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2))
                 .build()), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Channeling",
+                "    -> Channeling",
                 "      -> Levels: 1",
+                "    -> Mending",
+                "      -> Levels: 2",
                 "  -> Add: false"
         ));
     }

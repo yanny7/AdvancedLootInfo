@@ -542,12 +542,13 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getCopyOperationTooltip(IClientUtils utils, int pad, CopyCustomDataFunction.CopyOperation copyOperation) {
+    public static List<Component> getCopyOperationTooltip(IClientUtils utils, int pad, String key, CopyCustomDataFunction.CopyOperation copyOperation) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(GenericTooltipUtils.getNbtPathTooltip(utils, pad, "ali.property.value.source_path", copyOperation.sourcePath()));
-        components.addAll(GenericTooltipUtils.getNbtPathTooltip(utils, pad, "ali.property.value.target_path", copyOperation.targetPath()));
-        components.addAll(GenericTooltipUtils.getEnumTooltip(utils, pad, "ali.property.value.merge_strategy", copyOperation.op()));
+        components.add(pad(pad, translatable(key)));
+        components.addAll(GenericTooltipUtils.getNbtPathTooltip(utils, pad + 1, "ali.property.value.source_path", copyOperation.sourcePath()));
+        components.addAll(GenericTooltipUtils.getNbtPathTooltip(utils, pad + 1, "ali.property.value.target_path", copyOperation.targetPath()));
+        components.addAll(GenericTooltipUtils.getEnumTooltip(utils, pad + 1, "ali.property.value.merge_strategy", copyOperation.op()));
 
         return components;
     }

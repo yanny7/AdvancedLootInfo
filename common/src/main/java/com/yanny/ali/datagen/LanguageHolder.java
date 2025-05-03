@@ -157,6 +157,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.modifiers", "Modifiers:");
         TRANSLATION_MAP.put("ali.property.branch.offhand", "Offhand:");
         TRANSLATION_MAP.put("ali.property.branch.offset", "Offset:");
+        TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
         TRANSLATION_MAP.put("ali.property.branch.page", "Page:");
         TRANSLATION_MAP.put("ali.property.branch.pages", "Pages:");
         TRANSLATION_MAP.put("ali.property.branch.passenger", "Passenger:");
