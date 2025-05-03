@@ -104,6 +104,7 @@
   "ali.property.value.name": "Name: %s",
   "ali.property.value.nbt": "Nbt: %s",
   "ali.property.value.nbt_provider": "Nbt Provider: %s",
+  "ali.property.value.null": "%s",
   "ali.property.value.operation": "Operation: %s",
   "ali.property.value.options": "Options: %s",
   "ali.property.value.percent": "Percent: %s",
