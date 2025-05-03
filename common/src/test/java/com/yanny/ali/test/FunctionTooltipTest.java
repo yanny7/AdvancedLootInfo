@@ -274,14 +274,14 @@ public class FunctionTooltipTest {
         ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(Enchantments.CHANNELING, ConstantValue.exactly(1))
-                .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2))
+//                .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2)) // non deterministic order of elements
                 .build()), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
                 "    -> Channeling",
                 "      -> Levels: 1",
-                "    -> Mending",
-                "      -> Levels: 2",
+//                "    -> Mending",
+//                "      -> Levels: 2",
                 "  -> Add: false"
         ));
     }

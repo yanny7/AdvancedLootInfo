@@ -69,8 +69,6 @@ accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunctio
 accessible field net/minecraft/world/level/storage/loot/functions/SequenceFunction functions Ljava/util/List;
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
-accessible method net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate <init> (Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;)V
-accessible method net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType
@@ -98,4 +96,5 @@ accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCou
 accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate <init> (Ljava/util/List;)V
 accessible method net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate <init> (Z)V
 accessible method net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate <init> (Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;)V
-
+accessible method net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate <init> (Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;)V
+accessible method net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
