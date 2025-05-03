@@ -33,6 +33,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -40,13 +41,12 @@ import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.world.level.storage.loot.functions.SetAttributesFunction;
-import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -208,7 +208,7 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testBannerPatternTooltip() {
+    public void testBannerPatternsSlotsTooltip() {
         assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, "ali.property.value.banner_pattern", Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)), List.of(
                 "Banner Pattern: minecraft:base",
                 "  -> Color: WHITE"
@@ -216,27 +216,67 @@ public class GenericTooltipTest {
     }
 
     @Test
+    public void testBannerPatternTooltip() {
+        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, "ali.property.value.banner_pattern", Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.CREEPER))), List.of("Banner Pattern: minecraft:creeper"));
+    }
+
+    @Test
+    public void testBlockEntityTypeTooltip() {
+        assertTooltip(GenericTooltipUtils.getBlockEntityTypeTooltip(UTILS, 0, "ali.property.value.block_entity_type", BlockEntityType.BEACON), List.of("Block Entity Type: minecraft:beacon"));
+    }
+
+    @Test
+    public void testPotionTooltip() {
+        assertTooltip(GenericTooltipUtils.getPotionTooltip(UTILS, 0, "ali.property.value.potion", Potions.HEALING), List.of("Potion: minecraft:healing"));
+    }
+
+    @Test
+    public void testMobEffectTooltip() {
+        assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, "ali.property.value.mob_effect", MobEffects.BLINDNESS), List.of("Mob Effect: minecraft:blindness"));
+    }
+
+    @Test
     public void testStatePropertiesPredicateTooltip() {
         assertTooltip(GenericTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, 0, "ali.property.branch.state_properties_predicate", StatePropertiesPredicate.Builder.properties()
                 .hasProperty(BlockStateProperties.FACING, Direction.EAST)
+                .hasProperty(BlockStateProperties.LEVEL, 3)
                 .build().orElseThrow()
         ), List.of(
                 "State Properties:",
-                "  -> facing: east"
+                "  -> facing: east",
+                "  -> level: 3"
         ));
     }
+
+    @Disabled("internal function")
+    @Test
+    public void testPropertyMatcherTooltip() {}
 
     @Test
     void testDamageSourcePredicateTooltip() {
         assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.damage_source_predicate", DamageSourcePredicate.Builder.damageType()
                 .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                 .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
+                .source(EntityPredicate.Builder.entity().of(EntityType.BAT))
+                .direct(EntityPredicate.Builder.entity().of(EntityType.ARROW))
                 .build()), List.of(
                 "Damage Source:",
                 "  -> Tags:",
                 "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false"
+                "    -> minecraft:is_explosion: false",
+                "  -> Direct Entity:",
+                "    -> Entity Types:",
+                "      -> Arrow",
+                "  -> Source Entity:",
+                "    -> Entity Types:",
+                "      -> Bat"
         ));
+    }
+
+    @Test
+    public void testTagPredicateTooltip() {
+        assertTooltip(GenericTooltipUtils.getTagPredicateTooltip(UTILS, 0, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)), List.of("minecraft:bypasses_armor: true"));
+        assertTooltip(GenericTooltipUtils.getTagPredicateTooltip(UTILS, 0, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)), List.of("minecraft:bypasses_armor: false"));
     }
 
     @Test
@@ -244,7 +284,6 @@ public class GenericTooltipTest {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putInt("range", 5);
-
         assertTooltip(GenericTooltipUtils.getEntityPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", EntityPredicate.Builder.entity()
                 .entityType(EntityTypePredicate.of(EntityType.CAT))
                 .distance(new DistancePredicate(MinMaxBounds.Doubles.exactly(10), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
@@ -313,6 +352,11 @@ public class GenericTooltipTest {
     }
 
     @Test
+    public void testEntityTypeTooltip() {
+        assertTooltip(GenericTooltipUtils.getEntityTypeTooltip(UTILS, 0, "ali.property.value.entity_type", EntityType.SHEEP), List.of("Entity Type: Sheep"));
+    }
+
+    @Test
     public void testDistancePredicateTooltip() {
         assertTooltip(GenericTooltipUtils.getDistancePredicateTooltip(UTILS, 0, "ali.property.branch.distance_to_player", new DistancePredicate(
                 MinMaxBounds.Doubles.exactly(10),
@@ -361,6 +405,20 @@ public class GenericTooltipTest {
                 "      -> Cobblestone",
                 "  -> Fluid Predicate:",
                 "    -> Fluid: minecraft:lava"
+        ));
+    }
+
+    @Test
+    public void testPositionPredicateTooltip() {
+        assertTooltip(GenericTooltipUtils.getPositionPredicateTooltip(UTILS, 0, "ali.property.branch.position", new LocationPredicate.PositionPredicate(
+                MinMaxBounds.Doubles.atLeast(3),
+                MinMaxBounds.Doubles.between(1, 2),
+                MinMaxBounds.Doubles.atMost(4)
+        )), List.of(
+                "Position:",
+                "  -> X: ≥3.0",
+                "  -> Y: 1.0-2.0",
+                "  -> Z: ≤4.0"
         ));
     }
 
@@ -420,6 +478,11 @@ public class GenericTooltipTest {
                 "  -> State Properties:",
                 "    -> facing: east"
         ));
+    }
+
+    @Test
+    public void testFluidTooltip() {
+        assertTooltip(GenericTooltipUtils.getFluidTooltip(UTILS, 0, "ali.property.value.fluid", Fluids.WATER), List.of("Fluid: minecraft:water"));
     }
 
     @Test
@@ -571,6 +634,7 @@ public class GenericTooltipTest {
                 "Entity Sub Predicate:",
                 "  -> Is In Open Water: true"
         ));
+        //noinspection deprecation
         assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
                 .setGameType(GameType.SURVIVAL)
@@ -621,6 +685,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testStatTooltip() {
+        //noinspection deprecation
         PlayerPredicate.StatMatcher<?> statMatcher = new PlayerPredicate.StatMatcher<>(
                 Stats.BLOCK_MINED,
                 Blocks.COBBLESTONE.builtInRegistryHolder(),
@@ -674,6 +739,21 @@ public class GenericTooltipTest {
                 "  -> X: 10",
                 "  -> Y: 12",
                 "  -> Z: 14"
+        ));
+    }
+
+    @Disabled("internal function")
+    @Test
+    public void testCopyOperationTooltip() {}
+
+    @Test
+    public void testEffectEntryTooltip() {
+        assertTooltip(GenericTooltipUtils.getEffectEntryTooltip(UTILS, 0, "ali.property.value.mob_effect", new SetStewEffectFunction.EffectEntry(
+                Holder.direct(MobEffects.LUCK),
+                ConstantValue.exactly(3)
+        )), List.of(
+                "Mob Effect: minecraft:luck",
+                "  -> Duration: 3"
         ));
     }
 }
