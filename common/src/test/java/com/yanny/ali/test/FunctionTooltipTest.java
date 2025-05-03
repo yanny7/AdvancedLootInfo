@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -59,6 +61,7 @@ public class FunctionTooltipTest {
         ));
         assertTooltip(FunctionTooltipUtils.getCopyNbtTooltip(UTILS, 0, (CopyNbtFunction) CopyNbtFunction.copyData(LootContext.EntityTarget.KILLER)
                 .copy("asdf", "jklo", CopyNbtFunction.MergeStrategy.MERGE)
+                .copy("qwer", "uiop", CopyNbtFunction.MergeStrategy.APPEND)
                 .build()
         ), List.of(
                 "Copy Nbt:",
@@ -67,7 +70,11 @@ public class FunctionTooltipTest {
                 "    -> Operation:",
                 "      -> Source: asdf",
                 "      -> Target: jklo",
-                "      -> Merge Strategy: MERGE"
+                "      -> Merge Strategy: MERGE",
+                "    -> Operation:",
+                "      -> Source: qwer",
+                "      -> Target: uiop",
+                "      -> Merge Strategy: APPEND"
         ));
     }
 
@@ -177,6 +184,8 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlot.CHEST)
                         .forSlot(EquipmentSlot.LEGS)
                         .forSlot(EquipmentSlot.FEET))
+                .withModifier(new SetAttributesFunction.ModifierBuilder("chest", Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.MULTIPLY_BASE, ConstantValue.exactly(3))
+                        .forSlot(EquipmentSlot.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
                 "  -> Modifiers:",
@@ -189,7 +198,14 @@ public class FunctionTooltipTest {
                 "        -> FEET",
                 "        -> LEGS",
                 "        -> CHEST",
-                "        -> HEAD"
+                "        -> HEAD",
+                "    -> Modifier:",
+                "      -> Name: chest",
+                "      -> Attribute: Armor Toughness",
+                "      -> Operation: MULTIPLY_BASE",
+                "      -> Amount: 3",
+                "      -> Equipment Slots:",
+                "        -> MAINHAND"
         ));
     }
 
@@ -211,7 +227,10 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(BlockEntityType.BREWING_STAND).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(BlockEntityType.BREWING_STAND)
+                .withEntry(LootItem.lootTableItem(Items.BOOK))
+                .withEntry(LootItem.lootTableItem(Items.ENCHANTED_BOOK))
+                .build()), List.of(
                 "Set Contents:",
                 "  -> Block Entity Type: minecraft:brewing_stand"
         ));
@@ -243,11 +262,14 @@ public class FunctionTooltipTest {
         ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(Enchantments.CHANNELING, ConstantValue.exactly(1))
+                .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2))
                 .build()), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Channeling",
+                "    -> Channeling",
                 "      -> Levels: 1",
+                "    -> Mending",
+                "      -> Levels: 2",
                 "  -> Add: false"
         ));
     }
