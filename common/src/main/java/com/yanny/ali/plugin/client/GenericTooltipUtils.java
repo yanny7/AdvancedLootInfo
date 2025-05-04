@@ -35,6 +35,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
@@ -139,7 +140,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, String key, BannerPattern bannerPattern) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.banner_pattern", BuiltInRegistries.BANNER_PATTERN, bannerPattern);
+        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.BANNER_PATTERN, bannerPattern);
     }
 
     @Unmodifiable
@@ -158,6 +159,12 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getMobEffectTooltip(IClientUtils utils, int pad, String key, MobEffect mobEffect) {
         return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.MOB_EFFECT, mobEffect);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getLootNbtProviderTypeTooltip(IClientUtils utils, int pad, String key, LootNbtProviderType providerType) {
+        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, providerType);
     }
 
     @NotNull
