@@ -48,6 +48,7 @@ import net.minecraft.world.level.storage.loot.functions.SetAttributesFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.NbtProviders;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -236,6 +237,11 @@ public class GenericTooltipTest {
     @Test
     public void testMobEffectTooltip() {
         assertTooltip(GenericTooltipUtils.getMobEffectTooltip(UTILS, 0, "ali.property.value.mob_effect", MobEffects.BLINDNESS), List.of("Mob Effect: minecraft:blindness"));
+    }
+
+    @Test
+    public void testLootNbtProviderTypeTooltip() {
+        assertTooltip(GenericTooltipUtils.getLootNbtProviderTypeTooltip(UTILS, 0, "ali.property.value.nbt_provider", NbtProviders.CONTEXT), List.of("Nbt Provider: minecraft:context"));
     }
 
     @Test
