@@ -78,15 +78,16 @@ public class ItemSubPredicateTooltipTest {
     @Test
     public void testPotionsPredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemPotionsPredicateTooltip(UTILS, 0, (ItemPotionsPredicate) ItemPotionsPredicate.potions(
-                HolderSet.direct(Potions.HEALING)
+                HolderSet.direct(Potions.HEALING, Potions.INFESTED)
         )), List.of(
                 "Potions:",
-                "  -> Potion: minecraft:healing"
+                "  -> minecraft:healing",
+                "  -> minecraft:infested"
         ));
     }
 
     @Test
-    public void testMobEffectInstanceTooltip() {
+    public void testCustomDataPredicateTooltip() {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putInt("tst", 5);
@@ -106,12 +107,14 @@ public class ItemSubPredicateTooltipTest {
         )))), List.of(
                 "Container:",
                 "  -> Contains:",
-                "    -> Items:",
-                "      -> Item: Andesite",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Andesite",
                 "  -> Counts:",
-                "    -> Items:",
-                "      -> Tag: minecraft:arrows",
-                "    -> Count: 1-5",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Tag: minecraft:arrows",
+                "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -125,12 +128,14 @@ public class ItemSubPredicateTooltipTest {
         )))), List.of(
                 "Bundle:",
                 "  -> Contains:",
-                "    -> Items:",
-                "      -> Item: Andesite",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Andesite",
                 "  -> Counts:",
-                "    -> Items:",
-                "      -> Tag: minecraft:arrows",
-                "    -> Count: 1-5",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> Tag: minecraft:arrows",
+                "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -159,10 +164,12 @@ public class ItemSubPredicateTooltipTest {
                 "Fireworks:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Shape: BURST",
+                "      -> Predicate:",
+                "        -> Shape: BURST",
                 "    -> Counts:",
-                "      -> Shape: CREEPER",
-                "      -> Count: 1-5",
+                "      -> Predicate:",
+                "        -> Shape: CREEPER",
+                "        -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Flight Duration: 1-4"
         ));
@@ -176,13 +183,12 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Writable Book:",
-                "  -> Pages:",
-                "    -> Contains:",
-                "      -> Page: Hello",
-                "    -> Counts:",
-                "      -> Page: World",
+                "  -> Contains:",
+                "    -> Page: Hello",
+                "  -> Counts:",
+                "    -> Page: World",
                 "      -> Count: 1-5",
-                "    -> Size: ≥4"
+                "  -> Size: ≥4"
         ));
     }
 
@@ -199,7 +205,7 @@ public class ItemSubPredicateTooltipTest {
                 "      -> Page: Hello",
                 "    -> Counts:",
                 "      -> Page: World",
-                "      -> Count: 1-5",
+                "        -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Author: Yanny",
                 "  -> Title: Testing",
@@ -228,19 +234,20 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
         )))), List.of(
                 "Attribute Modifiers:",
-                "  -> Modifiers:",
-                "    -> Contains:",
+                "  -> Contains:",
+                "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Attribute: Armor",
+                "        -> Armor",
                 "      -> Id: minecraft:help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
                 "      -> Slot: ARMOR",
-                "    -> Counts:",
+                "  -> Counts:",
+                "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Attribute: Gravity",
+                "        -> Gravity",
                 "      -> Count: 1-5",
-                "    -> Size: ≥4"
+                "  -> Size: ≥4"
         ));
     }
 
@@ -252,9 +259,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Trim:",
                 "  -> Materials:",
-                "    -> Type: minecraft:gold",
+                "    -> minecraft:gold",
                 "  -> Patterns:",
-                "    -> Type: minecraft:eye"
+                "    -> minecraft:eye"
         ));
     }
 

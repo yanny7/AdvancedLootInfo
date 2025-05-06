@@ -88,7 +88,7 @@ public class ConditionTooltipTest {
                 "      -> minecraft:is_explosion: false",
                 "    -> Direct Entity:",
                 "      -> Entity Types:",
-                "        -> Entity Type: Warden",
+                "        -> Warden",
                 "    -> Source Entity:",
                 "      -> Team: Blue",
                 "    -> Is Direct: true"
@@ -179,8 +179,8 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, 0, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE)).build()), List.of(
                 "Match Tool:",
                 "  -> Items:",
-                "    -> Item: Andesite",
-                "    -> Item: Diorite"
+                "    -> Andesite",
+                "    -> Diorite"
         ));
     }
 
