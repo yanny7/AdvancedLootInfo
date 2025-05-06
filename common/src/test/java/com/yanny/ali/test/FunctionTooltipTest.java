@@ -32,11 +32,13 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,21 +66,27 @@ public class FunctionTooltipTest {
     }
 
     @Test
-    public void testCopyNbtTooltip() {
+    public void testCopyCustomDataTooltip() {
         assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.ATTACKER).build()), List.of(
                 "Copy Custom Data:",
                 "  -> Source: minecraft:context"
         ));
         assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.ATTACKER)
                 .copy("asdf", "jklo", CopyCustomDataFunction.MergeStrategy.MERGE)
+                .copy("qwer", "uiop", CopyCustomDataFunction.MergeStrategy.APPEND)
                 .build()
         ), List.of(
                 "Copy Custom Data:",
                 "  -> Source: minecraft:context",
                 "  -> Copy Operations:",
-                "    -> Source Path: asdf",
-                "    -> Target Path: jklo",
-                "    -> Merge Strategy: MERGE"
+                "    -> Operation:",
+                "      -> Source Path: asdf",
+                "      -> Target Path: jklo",
+                "      -> Merge Strategy: MERGE",
+                "    -> Operation:",
+                "      -> Source Path: qwer",
+                "      -> Target Path: uiop",
+                "      -> Merge Strategy: APPEND"
         ));
     }
 
@@ -92,8 +100,8 @@ public class FunctionTooltipTest {
                 "Copy State:",
                 "  -> Block: Furnace",
                 "  -> Properties:",
-                "    -> lit [true, false]",
-                "    -> facing [north, south, west, east]"
+                "    -> lit",
+                "    -> facing"
         ));
     }
 
@@ -105,7 +113,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Channeling",
+                "    -> Channeling",
                 "  -> Only Compatible: true"
         ));
     }
@@ -118,7 +126,7 @@ public class FunctionTooltipTest {
                 "Enchant With Levels:",
                 "  -> Levels: 1-3",
                 "  -> Options:",
-                "    -> Enchantment: Looting"
+                "    -> Looting"
         ));
     }
 
@@ -134,12 +142,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Exploration Map:",
                 "  -> Destination: minecraft:ruined_portal",
-                "  -> Map Decoration:",
-                "    -> Asset Id: minecraft:ocean_monument",
-                "    -> Color: 3830373",
-                "    -> Show On Item Frame: true",
-                "    -> Exploration Map Element: true",
-                "    -> Track Count: false",
+                "  -> Map Decoration: minecraft:monument",
                 "  -> Zoom: 2",
                 "  -> Search Radius: 50",
                 "  -> Skip Known Structures: true"
@@ -216,6 +219,8 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlotGroup.CHEST)
                         .forSlot(EquipmentSlotGroup.LEGS)
                         .forSlot(EquipmentSlotGroup.FEET))
+                .withModifier(new SetAttributesFunction.ModifierBuilder(ResourceLocation.withDefaultNamespace("chest"), Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, ConstantValue.exactly(3))
+                        .forSlot(EquipmentSlotGroup.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
                 "  -> Modifiers:",
@@ -229,6 +234,13 @@ public class FunctionTooltipTest {
                 "        -> LEGS",
                 "        -> CHEST",
                 "        -> HEAD",
+                "    -> Modifier:",
+                "      -> Attribute: Armor Toughness",
+                "      -> Operation: ADD_MULTIPLIED_BASE",
+                "      -> Amount: 3",
+                "      -> Id: minecraft:chest",
+                "      -> Equipment Slots:",
+                "        -> MAINHAND",
                 "  -> Replace: false"
         ));
     }
@@ -242,16 +254,19 @@ public class FunctionTooltipTest {
                 "Set Banner Pattern:",
                 "  -> Append: true",
                 "  -> Banner Patterns:",
-                "    -> Banner Pattern: Fully White Field",
-                "    -> Banner Pattern: Green Creeper Charge"
+                "    -> Fully White Field",
+                "    -> Green Creeper Charge"
         ));
     }
 
     @Test
     public void testSetContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER)
+                .withEntry(LootItem.lootTableItem(Items.BOOK))
+                .withEntry(LootItem.lootTableItem(Items.ENCHANTED_BOOK))
+                .build()), List.of(
                 "Set Contents:",
-                "  -> Type: minecraft:container"
+                "  -> Container: minecraft:container"
         ));
     }
 
@@ -281,11 +296,14 @@ public class FunctionTooltipTest {
         ));
         assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow(), ConstantValue.exactly(1))
+//                .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.MENDING).orElseThrow(), ConstantValue.exactly(2)) // non deterministic order of elements
                 .build()), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Channeling",
+                "    -> Channeling",
                 "      -> Levels: 1",
+//                "    -> Mending",
+//                "      -> Levels: 2",
                 "  -> Add: false"
         ));
     }
@@ -363,7 +381,7 @@ public class FunctionTooltipTest {
     }
 
     @Test
-    public void testSetNbtTooltip() {
+    public void testSetCustomDataTooltip() {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putBoolean("antlers", true);
@@ -418,7 +436,8 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Set Components:",
                 "  -> Components:",
-                "    -> Type: minecraft:damage"
+                "    -> minecraft:damage",
+                "      -> Value: 5"
         ));
     }
 
@@ -430,7 +449,7 @@ public class FunctionTooltipTest {
                 ApplyExplosionDecay.explosionDecay().build()
         )), List.of(
                 "Modify Contents:",
-                "  -> Type: minecraft:container",
+                "  -> Container: minecraft:container",
                 "  -> Modifier:",
                 "    -> Explosion Decay"
         ));
@@ -465,11 +484,11 @@ public class FunctionTooltipTest {
                 "Copy Components:",
                 "  -> Source: BLOCK_ENTITY",
                 "  -> Include:",
-                "    -> Type: minecraft:damage",
-                "    -> Type: minecraft:food",
+                "    -> minecraft:damage",
+                "    -> minecraft:food",
                 "  -> Exclude:",
-                "    -> Type: minecraft:bees",
-                "    -> Type: minecraft:dyed_color"
+                "    -> minecraft:bees",
+                "    -> minecraft:dyed_color"
         ));
     }
 
@@ -544,7 +563,10 @@ public class FunctionTooltipTest {
     public void testSetWrittenBookPagesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetWrittenBookPagesTooltip(UTILS, 0, new SetWrittenBookPagesFunction(
                 List.of(),
-                List.of(new Filterable<>(Component.literal("Hello"), Optional.of(Component.literal("World")))),
+                List.of(
+                        new Filterable<>(Component.literal("Hello"), Optional.of(Component.literal("World"))),
+                        new Filterable<>(Component.literal("Bye"), Optional.of(Component.literal("Ahoj")))
+                ),
                 new ListOperation.Insert(0)
         )), List.of(
                 "Set Written Book Pages:",
@@ -552,6 +574,9 @@ public class FunctionTooltipTest {
                 "    -> Page:",
                 "      -> Raw: Hello",
                 "      -> Filtered: World",
+                "    -> Page:",
+                "      -> Raw: Bye",
+                "      -> Filtered: Ahoj",
                 "  -> List Operation: INSERT",
                 "    -> Offset: 0"
         ));
@@ -561,7 +586,10 @@ public class FunctionTooltipTest {
     public void testSetWritableBookPagesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetWritableBookPagesTooltip(UTILS, 0, new SetWritableBookPagesFunction(
                 List.of(),
-                List.of(new Filterable<>("Hello", Optional.of("World")), new Filterable<>("Keep", Optional.of("Calm"))),
+                List.of(
+                        new Filterable<>("Hello", Optional.of("World")),
+                        new Filterable<>("Keep", Optional.of("Calm"))
+                ),
                 new ListOperation.ReplaceSection(1, Optional.of(4))
         )), List.of(
                 "Set Writable Book Pages:",
@@ -580,14 +608,18 @@ public class FunctionTooltipTest {
 
     @Test
     public void testToggleTooltipsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(
-                List.of(),
-                Map.of(new ToggleTooltips.ComponentToggle<>(DataComponents.BASE_COLOR, (dyeColor, b) -> DyeColor.BLACK), true)
-        )), List.of(
+        Map<ToggleTooltips.ComponentToggle<?>, Boolean> map = new LinkedHashMap<>();
+
+        map.put(new ToggleTooltips.ComponentToggle<>(DataComponents.BASE_COLOR, (dyeColor, b) -> DyeColor.BLACK), true);
+        map.put(new ToggleTooltips.ComponentToggle<>(DataComponents.DAMAGE, (damage, b) -> 5), false);
+
+        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(List.of(), map)), List.of(
                 "Toggle Tooltips:",
                 "  -> Values:",
                 "    -> Type: minecraft:base_color",
-                "      -> Value: true"
+                "      -> Value: true",
+                "    -> Type: minecraft:damage",
+                "      -> Value: false"
         ));
     }
 

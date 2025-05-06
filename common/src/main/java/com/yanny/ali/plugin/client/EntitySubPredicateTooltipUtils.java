@@ -23,7 +23,7 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.lightning_bolt")));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.blocks_on_fire", predicate.blocksSetOnFire()));
-        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.stuck_entity", predicate.entityStruck(), GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.stuck_entity", predicate.entityStruck(), GenericTooltipUtils::getEntityPredicateTooltip));
 
         return components;
     }
@@ -44,12 +44,12 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.player")));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
-        components.addAll(getGameTypeTooltip(utils, pad + 1, predicate.gameType()));
+        components.addAll(getGameTypePredicateTooltip(utils, pad + 1, "ali.property.branch.game_types", predicate.gameType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
-        components.addAll(getRecipesTooltip(utils, pad + 1, predicate.recipes()));
-        components.addAll(getAdvancementsTooltip(utils, pad + 1, predicate.advancements()));
-        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
-        components.addAll(getOptionalTooltip(utils, pad + 1, predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
+        components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
+        components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.input", predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
 
         return components;
     }
@@ -102,18 +102,12 @@ public class EntitySubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec()));
-        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", predicate.variants, (u, i, v) -> {
-            if (v instanceof CatVariant catVariant) {
-                return getBuiltInRegistryTooltip(u, i, "ali.property.value.variant", BuiltInRegistries.CAT_VARIANT, catVariant);
-            } else if (v instanceof PaintingVariant paintingVariant) {
-                return getRegistryTooltip(u, i, "ali.property.value.variant", Registries.PAINTING_VARIANT, paintingVariant);
-            } else if (v instanceof FrogVariant frogVariant) {
-                return getBuiltInRegistryTooltip(u, i, "ali.property.value.variant", BuiltInRegistries.FROG_VARIANT, frogVariant);
-            } else if (v instanceof WolfVariant wolfVariant) {
-                return getRegistryTooltip(u, i, "ali.property.value.variant", Registries.WOLF_VARIANT, wolfVariant);
-            }
-
-            return List.of();
+        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", "ali.property.value.variant", predicate.variants, (u, i, s, v) -> switch (v) {
+            case CatVariant catVariant -> getBuiltInRegistryTooltip(u, i, s, BuiltInRegistries.CAT_VARIANT, catVariant);
+            case PaintingVariant paintingVariant -> getRegistryTooltip(u, i, s, Registries.PAINTING_VARIANT, paintingVariant);
+            case FrogVariant frogVariant -> getBuiltInRegistryTooltip(u, i, s, BuiltInRegistries.FROG_VARIANT, frogVariant);
+            case WolfVariant wolfVariant -> getRegistryTooltip(u, i, s, Registries.WOLF_VARIANT, wolfVariant);
+            default -> List.of();
         }));
 
         return components;
