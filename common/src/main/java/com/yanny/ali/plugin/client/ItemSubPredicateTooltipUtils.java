@@ -24,12 +24,12 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static List<Component> getItemEnchantmentsPredicateTooltip(IClientUtils utils, int pad, ItemEnchantmentsPredicate.Enchantments predicate) {
-        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_enchantments", "ali.property.value.enchantment", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_enchantments", "ali.property.branch.enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
     public static List<Component> getItemStoredEnchantmentsPredicateTooltip(IClientUtils utils, int pad, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
-        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_stored_enchantments", "ali.property.value.enchantment", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_stored_enchantments", "ali.property.branch.enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
@@ -113,7 +113,7 @@ public class ItemSubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_jukebox_playable")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.songs", predicate.song(), GenericTooltipUtils::getJukeboxSongTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), GenericTooltipUtils::getJukeboxSongTooltip));
 
         return components;
     }

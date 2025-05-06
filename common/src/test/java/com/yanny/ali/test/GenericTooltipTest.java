@@ -293,7 +293,6 @@ public class GenericTooltipTest {
                 "  -> Source Entity:",
                 "    -> Entity Types:",
                 "      -> Bat",
-                "    -> minecraft:is_explosion: false",
                 "  -> Is Direct: false"
         ));
     }
@@ -336,11 +335,12 @@ public class GenericTooltipTest {
                 "  -> Distance to Player:",
                 "    -> X: =10.0",
                 "  -> Location:",
-                "    -> Position:",
-                "      -> X: ≥20.0",
-                "  -> Stepping on Location:",
-                "    -> Position:",
-                "      -> X: ≤30.0",
+                "    -> Located:",
+                "      -> Position:",
+                "        -> X: ≥20.0",
+                "    -> Stepping on Location:",
+                "      -> Position:",
+                "        -> X: ≤30.0",
                 "  -> Movement:",
                 "    -> X: 1.0-5.0",
                 "  -> Periodic Tick: 1000",
@@ -668,14 +668,18 @@ public class GenericTooltipTest {
                 "    -> Damage:",
                 "      -> Durability: ≤5",
                 "    -> Enchantments:",
-                "      -> Enchantment: Smite",
+                "      -> Enchantments:",
+                "        -> Smite",
                 "        -> Level: ≥1",
-                "      -> Enchantment: Mending",
+                "      -> Enchantments:",
+                "        -> Mending",
                 "        -> Level: 2-4",
                 "    -> Stored Enchantments:",
-                "      -> Enchantment: Depth Strider",
+                "      -> Enchantments:",
+                "        -> Depth Strider",
                 "        -> Level: ≤5",
-                "      -> Enchantment: Lure",
+                "      -> Enchantments:",
+                "        -> Lure",
                 "        -> Level: ≥4",
                 "    -> Potions:",
                 "      -> minecraft:healing",
@@ -686,8 +690,12 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, "ali.property.value.enchantment", new EnchantmentPredicate(Enchantments.FEATHER_FALLING, MinMaxBounds.Ints.atMost(2))), List.of(
-                "Enchantment: Feather Falling",
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, 0, "ali.property.branch.enchantments", new EnchantmentPredicate(
+                LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING),
+                MinMaxBounds.Ints.atMost(2))
+        ), List.of(
+                "Enchantments:",
+                "  -> Feather Falling",
                 "  -> Level: ≤2"
         ));
     }
@@ -701,7 +709,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, "ali.property.branch.game_types", GameTypePredicate.of(GameType.SPECTATOR)), List.of(
+        assertTooltip(GenericTooltipUtils.getGameTypePredicateTooltip(UTILS, 0, "ali.property.branch.game_types", GameTypePredicate.of(GameType.SPECTATOR)), List.of(
                 "Game Types:",
                 "  -> SPECTATOR"
         ));
@@ -872,8 +880,7 @@ public class GenericTooltipTest {
     public void testEntryPredicateTooltip() {
         assertTooltip(GenericTooltipUtils.getEntryPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", new ItemAttributeModifiersPredicate.EntryPredicate(
                 Optional.of(HolderSet.direct(Attributes.ARMOR, Attributes.GRAVITY)),
-                Optional.of(UUID.nameUUIDFromBytes(new byte[]{0, 1, 2, 3})),
-                Optional.of("test"),
+                Optional.of(ResourceLocation.withDefaultNamespace("test")),
                 MinMaxBounds.Doubles.between(1.5, 3.14),
                 Optional.of(AttributeModifier.Operation.ADD_VALUE),
                 Optional.of(EquipmentSlotGroup.ARMOR)
@@ -882,8 +889,7 @@ public class GenericTooltipTest {
                 "  -> Attributes:",
                 "    -> Armor",
                 "    -> Gravity",
-                "  -> UUID: 37b59afd-5927-35f9-b05e-484a5d7f5168",
-                "  -> Name: test",
+                "  -> Id: minecraft:test",
                 "  -> Amount: 1.5-3.1",
                 "  -> Operation: ADD_VALUE",
                 "  -> Slot: ARMOR"
@@ -949,8 +955,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getItemAttributeModifiersEntryTooltip(UTILS, 0, "ali.property.branch.modifier", new ItemAttributeModifiers.Entry(
                 Attributes.BLOCK_BREAK_SPEED,
                 new AttributeModifier(
-                        UUID.nameUUIDFromBytes(new byte[]{1, 2, 3, 4}),
-                        "Test",
+                        ResourceLocation.withDefaultNamespace("test"),
                         1.25,
                         AttributeModifier.Operation.ADD_VALUE
                 ),
@@ -959,8 +964,7 @@ public class GenericTooltipTest {
                 "Modifier:",
                 "  -> Attribute: Block Break Speed",
                 "  -> Attribute Modifier:",
-                "    -> UUID: 08d6c05a-2151-3a79-a1df-eb9d2a8f262f",
-                "    -> Name: Test",
+                "    -> Id: minecraft:test",
                 "    -> Amount: 1.25",
                 "    -> Operation: ADD_VALUE",
                 "  -> Slot: HEAD"
@@ -970,14 +974,12 @@ public class GenericTooltipTest {
     @Test
     public void testAttributeModifierTooltip() {
         assertTooltip(GenericTooltipUtils.getAttributeModifierTooltip(UTILS, 0, "ali.property.branch.attribute_modifier", new AttributeModifier(
-                UUID.nameUUIDFromBytes(new byte[]{1, 2, 3, 4}),
-                "Test",
+                ResourceLocation.withDefaultNamespace("test"),
                 1.25,
                 AttributeModifier.Operation.ADD_VALUE
         )), List.of(
                 "Attribute Modifier:",
-                "  -> UUID: 08d6c05a-2151-3a79-a1df-eb9d2a8f262f",
-                "  -> Name: Test",
+                "  -> Id: minecraft:test",
                 "  -> Amount: 1.25",
                 "  -> Operation: ADD_VALUE"
         ));
@@ -1233,7 +1235,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testMovementPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getMovementPredicateTooltip(UTILS, 0, new MovementPredicate(
+        assertTooltip(GenericTooltipUtils.getMovementPredicateTooltip(UTILS, 0, "ali.property.branch.movement", new MovementPredicate(
                 MinMaxBounds.Doubles.atMost(3),
                 MinMaxBounds.Doubles.between(1, 2),
                 MinMaxBounds.Doubles.atLeast(3),

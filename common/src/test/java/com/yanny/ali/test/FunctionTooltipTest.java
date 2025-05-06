@@ -126,7 +126,7 @@ public class FunctionTooltipTest {
                 "Enchant With Levels:",
                 "  -> Levels: 1-3",
                 "  -> Options:",
-                "    -> Enchantment: Looting"
+                "    -> Looting"
         ));
     }
 
@@ -219,7 +219,7 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlotGroup.CHEST)
                         .forSlot(EquipmentSlotGroup.LEGS)
                         .forSlot(EquipmentSlotGroup.FEET))
-                .withModifier(new SetAttributesFunction.ModifierBuilder("chest", Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, ConstantValue.exactly(3))
+                .withModifier(new SetAttributesFunction.ModifierBuilder(ResourceLocation.withDefaultNamespace("chest"), Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, ConstantValue.exactly(3))
                         .forSlot(EquipmentSlotGroup.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
@@ -235,10 +235,10 @@ public class FunctionTooltipTest {
                 "        -> CHEST",
                 "        -> HEAD",
                 "    -> Modifier:",
-                "      -> Name: chest",
                 "      -> Attribute: Armor Toughness",
                 "      -> Operation: ADD_MULTIPLIED_BASE",
                 "      -> Amount: 3",
+                "      -> Id: minecraft:chest",
                 "      -> Equipment Slots:",
                 "        -> MAINHAND",
                 "  -> Replace: false"

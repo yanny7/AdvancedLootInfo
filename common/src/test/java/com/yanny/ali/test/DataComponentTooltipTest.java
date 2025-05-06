@@ -1,6 +1,7 @@
 package com.yanny.ali.test;
 
 import com.mojang.authlib.properties.PropertyMap;
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.plugin.client.DataComponentTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -109,8 +110,8 @@ public class DataComponentTooltipTest {
     public void testItemEnchantmentsTooltip() {
         Object2IntOpenHashMap<Holder<Enchantment>> map = new Object2IntOpenHashMap<>();
 
-        map.put(Holder.direct(Enchantments.FORTUNE), 2);
-//        map.put(Holder.direct(Enchantments.MENDING), 1); // disabled because order is not deterministic
+        map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), 2);
+//        map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), 1); // disabled because order is not deterministic
 
         assertTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, 0, new ItemEnchantments(map, true)), List.of(
                 "Enchantments:",
@@ -154,8 +155,7 @@ public class DataComponentTooltipTest {
                         new ItemAttributeModifiers.Entry(
                                 Attributes.ARMOR,
                                 new AttributeModifier(
-                                        UUID.nameUUIDFromBytes(new byte[]{0, 1, 2, 3}),
-                                        "Hello",
+                                        ResourceLocation.withDefaultNamespace("hello"),
                                         0.5,
                                         AttributeModifier.Operation.ADD_VALUE
                                 ),
@@ -164,8 +164,7 @@ public class DataComponentTooltipTest {
                         new ItemAttributeModifiers.Entry(
                                 Attributes.ARMOR_TOUGHNESS,
                                 new AttributeModifier(
-                                        UUID.nameUUIDFromBytes(new byte[]{0, 1, 2, 0}),
-                                        "World",
+                                        ResourceLocation.withDefaultNamespace("world"),
                                         1.25,
                                         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
                                 ),
@@ -178,16 +177,14 @@ public class DataComponentTooltipTest {
                 "  -> Modifier:",
                 "    -> Attribute: Armor",
                 "    -> Attribute Modifier:",
-                "      -> UUID: 37b59afd-5927-35f9-b05e-484a5d7f5168",
-                "      -> Name: Hello",
+                "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
                 "      -> Operation: ADD_VALUE",
                 "    -> Slot: HEAD",
                 "  -> Modifier:",
                 "    -> Attribute: Armor Toughness",
                 "    -> Attribute Modifier:",
-                "      -> UUID: 0f0c725e-0250-36e9-85dc-2ed035406463",
-                "      -> Name: World",
+                "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
                 "      -> Operation: ADD_MULTIPLIED_TOTAL",
                 "    -> Slot: HAND",
@@ -217,6 +214,7 @@ public class DataComponentTooltipTest {
                 2.5f,
                 false,
                 3.5f,
+                Optional.of(new ItemStack(Holder.direct(Items.COAL), 5)),
                 List.of(
                         new FoodProperties.PossibleEffect(
                                 new MobEffectInstance(MobEffects.LUCK),
@@ -538,10 +536,28 @@ public class DataComponentTooltipTest {
     }
 
     @Test
+    public void testJukeboxPlayableTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayable(
+                EitherHolder.fromEither(Either.right(JukeboxSongs.PIGSTEP)),
+                true
+        )), List.of(
+                "Song: minecraft:pigstep",
+                "Show In Tooltip: true"
+        ));
+        assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayable(
+                EitherHolder.fromEither(Either.left(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP))),
+                true
+        )), List.of(
+                "Song: minecraft:pigstep",
+                "Show In Tooltip: true"
+        ));
+    }
+
+    @Test
     public void testRecipesTooltip() {
         assertTooltip(DataComponentTooltipUtils.getRecipesTooltip(UTILS, 0, List.of(
-                new ResourceLocation("recipe1"),
-                new ResourceLocation("recipe2")
+                ResourceLocation.withDefaultNamespace("recipe1"),
+                ResourceLocation.withDefaultNamespace("recipe2")
         )), List.of(
                 "Recipes:",
                 "  -> minecraft:recipe1",
@@ -636,7 +652,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testNoteBlockSoundTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getNoteBlockSoundTooltip(UTILS, 0, new ResourceLocation("test")), List.of("Id: minecraft:test"));
+        assertTooltip(DataComponentTooltipUtils.getNoteBlockSoundTooltip(UTILS, 0, ResourceLocation.withDefaultNamespace("test")), List.of("Id: minecraft:test"));
     }
 
     @Test
@@ -749,7 +765,7 @@ public class DataComponentTooltipTest {
     @Test
     public void testContainerLootTooltip() {
         assertTooltip(DataComponentTooltipUtils.getContainerLootTooltip(UTILS, 0, new SeededContainerLoot(
-                ResourceKey.create(Registries.LOOT_TABLE, new ResourceLocation("loot")),
+                ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.withDefaultNamespace("loot")),
                 12345L
         )), List.of(
                 "Loot Table: minecraft:loot",

@@ -265,14 +265,12 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
         TRANSLATION_MAP.put("ali.property.value.fraction", "Fraction: %s");
         TRANSLATION_MAP.put("ali.property.value.front", "Front: %s");
-        TRANSLATION_MAP.put("ali.property.value.game_type", "Game Type: %s");
         TRANSLATION_MAP.put("ali.property.value.generation", "Generation: %s");
         TRANSLATION_MAP.put("ali.property.value.has_raid", "Has Raid: %s");
         TRANSLATION_MAP.put("ali.property.value.has_trail", "Has Trail: %s");
         TRANSLATION_MAP.put("ali.property.value.has_twinkle", "Has Twinkle: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal_speed", "Horizontal Speed: %s");
-        TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
         TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");
@@ -304,8 +302,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.min_ticks_in_hive", "Min Ticks In Hive: %s");
         TRANSLATION_MAP.put("ali.property.value.min", "Min: %s");
         TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");
-        TRANSLATION_MAP.put("ali.property.value.multiplier", "Multiplier: %s");
-        TRANSLATION_MAP.put("ali.property.value.model_index", "Model Index: %s");
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
         TRANSLATION_MAP.put("ali.property.value.null", "%s");
@@ -317,7 +313,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.page", "Page: %s");
         TRANSLATION_MAP.put("ali.property.value.per_level", "Per Level: %s");
         TRANSLATION_MAP.put("ali.property.value.pattern", "Pattern: %s");
-        TRANSLATION_MAP.put("ali.property.value.percent", "Percent: %s");
         TRANSLATION_MAP.put("ali.property.value.period", "Period: %s");
         TRANSLATION_MAP.put("ali.property.value.periodic_tick", "Periodic Tick: %s");
         TRANSLATION_MAP.put("ali.property.value.potion", "Potion: %s");
@@ -365,6 +360,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.twinkle", "Twinkle: %s");
         TRANSLATION_MAP.put("ali.property.value.type", "Type: %s");
         TRANSLATION_MAP.put("ali.property.value.unenchanted_chance", "Unenchanted Chance: %s");
+        TRANSLATION_MAP.put("ali.property.value.uuid", "UUID: %s");
         TRANSLATION_MAP.put("ali.property.value.value", "Value: %s");
         TRANSLATION_MAP.put("ali.property.value.values", "Values: %s");
         TRANSLATION_MAP.put("ali.property.value.variant", "Variant: %s");

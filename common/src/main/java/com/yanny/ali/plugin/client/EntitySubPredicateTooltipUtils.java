@@ -44,7 +44,7 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.player")));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.game_type", predicate.gameType(), GenericTooltipUtils::getGameTypeTooltip));
+        components.addAll(getGameTypePredicateTooltip(utils, pad + 1, "ali.property.branch.game_types", predicate.gameType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
         components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
         components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));

@@ -8,10 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.AdventureModePredicate;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Instrument;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.*;
@@ -82,7 +79,7 @@ public class DataComponentTooltipUtils {
         if (!value.isEmpty()) {
             components.add(pad(pad, translatable("ali.property.branch.enchantments")));
             value.enchantments.forEach((enchantment, level) -> components.add(pad(pad + 1,
-                    translatable("ali.property.value.enchantment_with_level", Component.translatable(enchantment.value().getDescriptionId()), Component.translatable("enchantment.level." + level)))));
+                    translatable("ali.property.value.enchantment_with_level", enchantment.value().description(), Component.translatable("enchantment.level." + level)))));
             components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip));
         }
 
@@ -280,6 +277,18 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
+    public static List<Component> getJukeboxPlayableTooltip(IClientUtils utils, int pad, JukeboxPlayable value) {
+        List<Component> components = new LinkedList<>();
+
+        value.song().asEither()
+                .ifLeft((v) -> components.addAll(getJukeboxSongTooltip(utils, pad, "ali.property.value.song", v.value())))
+                .ifRight((k) -> components.addAll(getResourceKeyTooltip(utils, pad, "ali.property.value.song", k)));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip()));
+
+        return components;    }
+
+    @Unmodifiable
+    @NotNull
     public static List<Component> getRecipesTooltip(IClientUtils utils, int pad, List<ResourceLocation> value) {
         return getCollectionTooltip(utils, pad, "ali.property.branch.recipes", "ali.property.value.null", value, GenericTooltipUtils::getResourceLocationTooltip);
     }
@@ -322,7 +331,7 @@ public class DataComponentTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.name", value.name(), GenericTooltipUtils::getStringTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.id", value.id(), GenericTooltipUtils::getUUIDTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.uuid", value.id(), GenericTooltipUtils::getUUIDTooltip));
 
         if (!value.properties().isEmpty()) {
             components.add(pad(pad, translatable("ali.property.branch.properties")));

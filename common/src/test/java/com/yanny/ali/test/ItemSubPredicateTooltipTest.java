@@ -53,9 +53,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Enchantments:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Looting",
+                "    -> Looting",
                 "  -> Enchantments:",
-                "    -> Enchantment: Mending",
+                "    -> Mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -68,9 +68,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Stored Enchantments:",
                 "  -> Enchantments:",
-                "    -> Enchantment: Looting",
+                "    -> Looting",
                 "  -> Enchantments:",
-                "    -> Enchantment: Mending",
+                "    -> Mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -272,7 +272,7 @@ public class ItemSubPredicateTooltipTest {
         )), List.of(
                 "Jukebox Playable:",
                 "  -> Songs:",
-                "    -> Song: minecraft:pigstep"
+                "    -> minecraft:pigstep"
         ));
     }
 }

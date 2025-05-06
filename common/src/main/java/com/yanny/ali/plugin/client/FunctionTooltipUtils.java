@@ -73,7 +73,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.enchant_with_levels")));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.levels", fun.levels));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.options", fun.options, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.options", "ali.property.value.null", fun.options, GenericTooltipUtils::getEnchantmentTooltip));
 
         return components;
     }
@@ -129,7 +129,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchanted_count_increase")));
-        components.addAll(getHolderTooltip(utils, pad + 1, fun.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", fun.enchantment, GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.value", fun.value));
 
         if (fun.limit > 0) {

@@ -34,7 +34,6 @@ import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -133,6 +132,12 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getAttributeTooltip(IClientUtils ignoredUtils, int pad, String key, Attribute attribute) {
         return List.of(pad(pad, translatable(key, value(translatable(attribute.getDescriptionId())))));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getUUIDTooltip(IClientUtils ignoredUtils, int pad, String key, UUID uuid) {
+        return List.of(pad(pad, translatable(key, value(uuid))));
     }
 
     @NotNull
@@ -434,7 +439,7 @@ public class GenericTooltipUtils {
     public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, String key, EnchantmentPredicate enchantmentPredicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.enchantments", "ali.property.value.null", enchantmentPredicate.enchantments(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad, key, "ali.property.value.null", enchantmentPredicate.enchantments(), GenericTooltipUtils::getEnchantmentTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", enchantmentPredicate.level()));
 
         return components;
@@ -448,7 +453,7 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getGameTypeTooltip(IClientUtils utils, int pad, String key, GameTypePredicate gameType) {
+    public static List<Component> getGameTypePredicateTooltip(IClientUtils utils, int pad, String key, GameTypePredicate gameType) {
         return getCollectionTooltip(utils, pad, key, gameType.types(), GenericTooltipUtils::getEnumTooltip);
     }
 
@@ -749,15 +754,15 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getJukeboxSongTooltip(IClientUtils utils, int pad, JukeboxSong song) {
-        return getRegistryTooltip(utils, pad, "ali.property.value.song", Registries.JUKEBOX_SONG, song);
+    public static List<Component> getJukeboxSongTooltip(IClientUtils utils, int pad, String key, JukeboxSong song) {
+        return getRegistryTooltip(utils, pad, key, Registries.JUKEBOX_SONG, song);
     }
 
     @NotNull
-    public static List<Component> getMovementPredicateTooltip(IClientUtils utils, int pad, MovementPredicate predicate) {
+    public static List<Component> getMovementPredicateTooltip(IClientUtils utils, int pad, String key, MovementPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.property.branch.movement")));
+        components.add(pad(pad, translatable(key)));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.x", predicate.x()));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.y", predicate.y()));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.z", predicate.z()));
@@ -786,8 +791,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getUUIDTooltip(utils, pad + 1, "ali.property.value.id", modifier.id()));
-        components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.name", modifier.name()));
+        components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.id", modifier.id()));
         components.addAll(getDoubleTooltip(utils, pad + 1, "ali.property.value.amount", modifier.amount()));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.operation", modifier.operation()));
 
