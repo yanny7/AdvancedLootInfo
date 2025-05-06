@@ -39,7 +39,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.copy_custom_data")));
-        components.addAll(getLootNbtProviderTypeTooltip(utils, pad + 1, "ali.property.value.nbt_provider", fun.source.getType()));
+        components.addAll(getLootNbtProviderTypeTooltip(utils, pad + 1, "ali.property.value.source", fun.source.getType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.copy_operations", "ali.property.branch.operation", fun.operations, GenericTooltipUtils::getCopyOperationTooltip));
 
         return components;
@@ -83,7 +83,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
         components.addAll(getTagKeyTooltip(utils, pad + 1, "ali.property.value.destination", fun.destination));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.branch.map_decoration", fun.mapDecoration, GenericTooltipUtils::getMapDecorationTypeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.map_decoration", fun.mapDecoration, GenericTooltipUtils::getMapDecorationTypeTooltip));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.zoom", (int) fun.zoom));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.search_radius", fun.searchRadius));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.skip_known_structures", fun.skipKnownStructures));
@@ -184,7 +184,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_contents")));
-        components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, "ali.property.value.component", fun.component));
+        components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, "ali.property.value.container", fun.component));
         //TODO entries
 
         return components;
@@ -332,7 +332,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.modify_contents")));
-        components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, "ali.property.value.component", fun.component));
+        components.addAll(getContainerComponentManipulatorTooltip(utils, pad + 1, "ali.property.value.container", fun.component));
         components.add(pad(pad + 1, translatable("ali.property.branch.modifier")));
         components.addAll(utils.getFunctionTooltip(utils, pad + 2, fun.modifier));
 
@@ -435,7 +435,7 @@ public class FunctionTooltipUtils {
         if (!fun.values.isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.values")));
             fun.values.forEach((toggle, value) -> {
-                components.addAll(getBuiltInRegistryTooltip(utils, pad + 2, "ali.property.value.type", BuiltInRegistries.DATA_COMPONENT_TYPE, toggle.type()));
+                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, "ali.property.value.type", toggle.type()));
                 components.addAll(getBooleanTooltip(utils, pad + 3, "ali.property.value.value", value));
             });
         }

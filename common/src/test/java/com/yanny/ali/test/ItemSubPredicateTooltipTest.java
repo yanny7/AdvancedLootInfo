@@ -72,15 +72,16 @@ public class ItemSubPredicateTooltipTest {
     @Test
     public void testPotionsPredicateTooltip() {
         assertTooltip(ItemSubPredicateTooltipUtils.getItemPotionsPredicateTooltip(UTILS, 0, (ItemPotionsPredicate) ItemPotionsPredicate.potions(
-                HolderSet.direct(Potions.HEALING)
+                HolderSet.direct(Potions.HEALING, Potions.INFESTED)
         )), List.of(
                 "Potions:",
-                "  -> minecraft:healing"
+                "  -> minecraft:healing",
+                "  -> minecraft:infested"
         ));
     }
 
     @Test
-    public void testMobEffectInstanceTooltip() {
+    public void testCustomDataPredicateTooltip() {
         CompoundTag compoundTag = new CompoundTag();
 
         compoundTag.putInt("tst", 5);
@@ -107,7 +108,7 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Predicate:",
                 "      -> Items:",
                 "        -> Tag: minecraft:arrows",
-                "    -> Count: 1-5",
+                "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -128,7 +129,7 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Predicate:",
                 "      -> Items:",
                 "        -> Tag: minecraft:arrows",
-                "    -> Count: 1-5",
+                "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -162,7 +163,7 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Counts:",
                 "      -> Predicate:",
                 "        -> Shape: CREEPER",
-                "      -> Count: 1-5",
+                "        -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Flight Duration: 1-4"
         ));
@@ -180,7 +181,7 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Page: Hello",
                 "  -> Counts:",
                 "    -> Page: World",
-                "    -> Count: 1-5",
+                "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -198,7 +199,7 @@ public class ItemSubPredicateTooltipTest {
                 "      -> Page: Hello",
                 "    -> Counts:",
                 "      -> Page: World",
-                "      -> Count: 1-5",
+                "        -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Author: Yanny",
                 "  -> Title: Testing",
@@ -242,7 +243,7 @@ public class ItemSubPredicateTooltipTest {
                 "    -> Modifier:",
                 "      -> Attributes:",
                 "        -> Gravity",
-                "    -> Count: 1-5",
+                "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
