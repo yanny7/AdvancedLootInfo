@@ -42,6 +42,45 @@ public class TestUtils {
         Assertions.assertAll(executables);
     }
 
+    public static void assertUnorderedTooltip(List<Component> components, List<Object> expected) {
+        int cmpIndex = 0;
+        int expIndex = 0;
+
+        while (cmpIndex < components.size() && expIndex < expected.size()) {
+            Component component = components.get(cmpIndex);
+            Object object = expected.get(expIndex);
+
+            if (object instanceof String string) {
+                assertTooltip(component, string);
+                cmpIndex++;
+                expIndex++;
+            } else if (object instanceof List list) {
+                List<Object> mutableList = new LinkedList<Object>(list);
+
+                for (Object obj : list) {
+                    if (obj instanceof String) {
+                        Component com = components.get(cmpIndex);
+                        String cmp = componentToPlainString(com);
+
+                        if (mutableList.contains(cmp)) {
+                            assertTooltip(com, cmp);
+                            mutableList.remove(cmp);
+                            cmpIndex++;
+                        } else {
+                            Assertions.fail(String.format("String <%s> not found in expectation List %s", cmp, list));
+                        }
+                    } else {
+                        throw new IllegalStateException("Expected String class");
+                    }
+                }
+
+                expIndex++;
+            } else {
+                throw new IllegalStateException("Unexpected class " + object.getClass().getName());
+            }
+        }
+    }
+
     public static void assertTooltip(Component component, String expected, String message) {
         String translated = componentToPlainString(component);
 
@@ -138,6 +177,7 @@ public class TestUtils {
 
         return new Pair<>(language, notUsed);
     }
+
     @NotNull
     private static String componentToString(Component component, BiFunction<Style, String, String> formatter) {
         StringBuilder builder = new StringBuilder();
