@@ -34,6 +34,7 @@ import java.util.Objects;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class FunctionTooltipTest {
     @Test
@@ -260,16 +261,18 @@ public class FunctionTooltipTest {
                 "Set Enchantments:",
                 "  -> Add: true"
         ));
-        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
+        assertUnorderedTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(Enchantments.CHANNELING, ConstantValue.exactly(1))
-//                .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2)) // non deterministic order of elements
+                .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2))
                 .build()), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
-                "    -> Channeling",
-                "      -> Levels: 1",
-//                "    -> Mending",
-//                "      -> Levels: 2",
+                List.of(
+                        "    -> Channeling",
+                        "      -> Levels: 1",
+                        "    -> Mending",
+                        "      -> Levels: 2"
+                ),
                 "  -> Add: false"
         ));
     }
