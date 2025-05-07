@@ -46,6 +46,7 @@ import java.util.Optional;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class FunctionTooltipTest {
     @Test
@@ -294,16 +295,18 @@ public class FunctionTooltipTest {
                 "Set Enchantments:",
                 "  -> Add: true"
         ));
-        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
+        assertUnorderedTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow(), ConstantValue.exactly(1))
-//                .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.MENDING).orElseThrow(), ConstantValue.exactly(2)) // non deterministic order of elements
+                .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.MENDING).orElseThrow(), ConstantValue.exactly(2))
                 .build()), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
-                "    -> Channeling",
-                "      -> Levels: 1",
-//                "    -> Mending",
-//                "      -> Levels: 2",
+                List.of(
+                        "    -> Channeling",
+                        "      -> Levels: 1",
+                        "    -> Mending",
+                        "      -> Levels: 2"
+                ),
                 "  -> Add: false"
         ));
     }
