@@ -55,6 +55,7 @@ import java.util.*;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class DataComponentTooltipTest {
     @Test
@@ -111,12 +112,14 @@ public class DataComponentTooltipTest {
         Object2IntOpenHashMap<Holder<Enchantment>> map = new Object2IntOpenHashMap<>();
 
         map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), 2);
-//        map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), 1); // disabled because order is not deterministic
+        map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), 1);
 
-        assertTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, 0, new ItemEnchantments(map, true)), List.of(
+        assertUnorderedTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, 0, new ItemEnchantments(map, true)), List.of(
                 "Enchantments:",
-                "  -> Enchantment: Fortune II",
-//                "  -> Enchantment: Mending I",
+                List.of(
+                        "  -> Enchantment: Fortune II",
+                        "  -> Enchantment: Mending I"
+                ),
                 "Show In Tooltip: true"
         ));
     }
