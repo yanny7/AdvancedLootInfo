@@ -358,12 +358,11 @@ public class DataComponentTooltipUtils {
     public static List<Component> getJukeboxPlayableTooltip(IClientUtils utils, int pad, JukeboxPlayable value) {
         List<Component> components = new LinkedList<>();
 
-        value.song().asEither()
-                .ifLeft((v) -> components.addAll(getJukeboxSongTooltip(utils, pad, "ali.property.value.song", v.value())))
-                .ifRight((k) -> components.addAll(getResourceKeyTooltip(utils, pad, "ali.property.value.song", k)));
+        components.addAll(getEitherHolderTooltip(utils, pad, "ali.property.value.song", value.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip()));
 
-        return components;    }
+        return components;
+    }
 
     @Unmodifiable
     @NotNull
