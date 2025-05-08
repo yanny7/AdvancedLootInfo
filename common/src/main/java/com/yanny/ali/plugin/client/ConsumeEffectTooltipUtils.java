@@ -26,7 +26,7 @@ public class ConsumeEffectTooltipUtils {
 
     @NotNull
     public static List<Component> getRemoveEffectsTooltip(IClientUtils utils, int pad, RemoveStatusEffectsConsumeEffect effect) {
-        return getHolderSetTooltip(utils, pad, "ali.type.consume_effect.remove_effects", "ali.property.value.null", effect.effects(), GenericTooltipUtils::getMobEffectTooltip);
+        return getHolderSetTooltip(utils, pad, "ali.type.consume_effect.remove_effects", "ali.property.value.null", effect.effects(), RegistriesTooltipUtils::getMobEffectTooltip);
     }
 
     @Unmodifiable

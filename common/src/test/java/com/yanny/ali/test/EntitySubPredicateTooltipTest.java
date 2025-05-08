@@ -72,9 +72,9 @@ public class EntitySubPredicateTooltipTest {
                 "  -> Game Types:",
                 "    -> SURVIVAL",
                 "  -> Stats:",
-                "    -> Block: Cobblestone",
+                "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥100",
-                "    -> Item: Raw Chicken",
+                "    -> Item: minecraft:chicken",
                 "      -> Times Used: ≤10",
                 "  -> Recipes:",
                 "    -> minecraft:test: false",
@@ -85,7 +85,7 @@ public class EntitySubPredicateTooltipTest {
                 "      -> test: true",
                 "  -> Looking At:",
                 "    -> Entity Types:",
-                "      -> Warden",
+                "      -> minecraft:warden",
                 "  -> Input:",
                 "    -> Forward: true"
         ));
