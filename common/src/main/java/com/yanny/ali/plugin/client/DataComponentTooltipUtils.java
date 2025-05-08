@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
@@ -24,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
 
 public class DataComponentTooltipUtils {
     @Unmodifiable
@@ -211,7 +211,7 @@ public class DataComponentTooltipUtils {
     public static List<Component> getPotionContentsTooltip(IClientUtils utils, int pad, PotionContents value) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.potion", value.potion(), GenericTooltipUtils::getPotionTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.potion", value.potion(), RegistriesTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
 
@@ -272,7 +272,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getInstrumentTooltip(IClientUtils utils, int pad, Holder<Instrument> value) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.value", BuiltInRegistries.INSTRUMENT, value.value());
+        return RegistriesTooltipUtils.getInstrumentTooltip(utils, pad, "ali.property.value.value", value.value());
     }
 
     @Unmodifiable
@@ -366,10 +366,10 @@ public class DataComponentTooltipUtils {
     public static List<Component> getPotDecorationsTooltip(IClientUtils utils, int pad, PotDecorations value) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.back", value.back(), GenericTooltipUtils::getItemTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.left", value.left(), GenericTooltipUtils::getItemTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.right", value.right(), GenericTooltipUtils::getItemTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.front", value.front(), GenericTooltipUtils::getItemTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.back", value.back(), RegistriesTooltipUtils::getItemTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.left", value.left(), RegistriesTooltipUtils::getItemTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.right", value.right(), RegistriesTooltipUtils::getItemTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.front", value.front(), RegistriesTooltipUtils::getItemTooltip));
 
         return components;
     }

@@ -2,8 +2,6 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.FrogVariant;
@@ -15,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
 
 public class EntitySubPredicateTooltipUtils {
     @NotNull
@@ -76,7 +75,7 @@ public class EntitySubPredicateTooltipUtils {
 
     @NotNull
     public static <V> List<Component> getVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
-        List<Component> components = new LinkedList<>(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec()));
+        List<Component> components = new LinkedList<>(getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
 
         if (predicate.variant instanceof Enum<?> variant) {
             components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.variant", variant));
@@ -89,12 +88,12 @@ public class EntitySubPredicateTooltipUtils {
     public static <V> List<Component> getHolderVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec()));
+        components.addAll(getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
         components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", "ali.property.value.variant", predicate.variants, (u, i, s, v) -> switch (v) {
-            case CatVariant catVariant -> getBuiltInRegistryTooltip(u, i, s, BuiltInRegistries.CAT_VARIANT, catVariant);
-            case PaintingVariant paintingVariant -> getRegistryTooltip(u, i, s, Registries.PAINTING_VARIANT, paintingVariant);
-            case FrogVariant frogVariant -> getBuiltInRegistryTooltip(u, i, s, BuiltInRegistries.FROG_VARIANT, frogVariant);
-            case WolfVariant wolfVariant -> getRegistryTooltip(u, i, s, Registries.WOLF_VARIANT, wolfVariant);
+            case CatVariant catVariant -> getCatVariantTooltip(u, i, s, catVariant);
+            case PaintingVariant paintingVariant -> getPaintingVariantTooltip(u, i, s, paintingVariant);
+            case FrogVariant frogVariant -> getFrogVariantTooltip(u, i, s, frogVariant);
+            case WolfVariant wolfVariant -> getWolfVariantTooltip(u, i, s, wolfVariant);
             default -> List.of();
         }));
 
