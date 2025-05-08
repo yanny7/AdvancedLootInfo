@@ -28,6 +28,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
@@ -1147,6 +1148,11 @@ public class GenericTooltipUtils {
         });
 
         return components;
+    }
+
+    @NotNull
+    public static <T> List<Component> getEitherHolderTooltip(IClientUtils utils, int pad, String key, EitherHolder<T> holder, QuadFunction<IClientUtils, Integer, String, T, List<Component>> mapper) {
+        return holder.asEither().map((v) -> mapper.apply(utils, pad, key, v.value()), (k) -> getResourceKeyTooltip(utils, pad, key, k));
     }
 
     // PRIVATE
