@@ -34,7 +34,7 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static List<Component> getItemPotionsPredicateTooltip(IClientUtils utils, int pad, PotionsPredicate predicate) {
-        return getHolderSetTooltip(utils, pad, "ali.type.item_sub_predicate.item_potions", "ali.property.value.null", predicate.potions(), GenericTooltipUtils::getPotionTooltip);
+        return getHolderSetTooltip(utils, pad, "ali.type.item_sub_predicate.item_potions", "ali.property.value.null", predicate.potions(), RegistriesTooltipUtils::getPotionTooltip);
     }
 
     @NotNull
@@ -102,8 +102,8 @@ public class ItemSubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_trim")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.materials", "ali.property.value.null", predicate.material(), GenericTooltipUtils::getTrimMaterialTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.patterns", "ali.property.value.null", predicate.pattern(), GenericTooltipUtils::getTrimPatternTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.materials", "ali.property.value.null", predicate.material(), RegistriesTooltipUtils::getTrimMaterialTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.patterns", "ali.property.value.null", predicate.pattern(), RegistriesTooltipUtils::getTrimPatternTooltip));
 
         return components;
     }
@@ -113,7 +113,7 @@ public class ItemSubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_jukebox_playable")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), GenericTooltipUtils::getJukeboxSongTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
 
         return components;
     }

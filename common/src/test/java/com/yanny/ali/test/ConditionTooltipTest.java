@@ -60,12 +60,12 @@ public class ConditionTooltipTest {
     public void testBlockStatePropertyTooltip() {
         assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, 0, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.FURNACE).build()), List.of(
                 "Block State Property:",
-                "  -> Block: Furnace"
+                "  -> Block: minecraft:furnace"
         ));
         assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, 0, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.BAMBOO)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()), List.of(
                 "Block State Property:",
-                "  -> Block: Bamboo",
+                "  -> Block: minecraft:bamboo",
                 "  -> State Properties:",
                 "    -> facing: east"
         ));
@@ -88,7 +88,7 @@ public class ConditionTooltipTest {
                 "      -> minecraft:is_explosion: false",
                 "    -> Direct Entity:",
                 "      -> Entity Types:",
-                "        -> Warden",
+                "        -> minecraft:warden",
                 "    -> Source Entity:",
                 "      -> Team: Blue",
                 "    -> Is Direct: true"
@@ -179,8 +179,8 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, 0, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)).build()), List.of(
                 "Match Tool:",
                 "  -> Items:",
-                "    -> Andesite",
-                "    -> Diorite"
+                "    -> minecraft:andesite",
+                "    -> minecraft:diorite"
         ));
     }
 
@@ -201,7 +201,7 @@ public class ConditionTooltipTest {
                 "    -> Linear:",
                 "      -> Base: 5.25",
                 "      -> Per Level: 5.0",
-                "  -> Enchantment: Looting"
+                "  -> Enchantment: minecraft:looting"
         ));
     }
 
@@ -219,7 +219,7 @@ public class ConditionTooltipTest {
     public void testTableBonusTooltip() {
         assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, 0, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow(), 0.25F, 0.5555F, 0.99F).build()), List.of(
                 "Table Bonus:",
-                "  -> Enchantment: Looting",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Values: [0.25, 0.5555, 0.99]" //FIXME to 2 decimal places
         ));
     }

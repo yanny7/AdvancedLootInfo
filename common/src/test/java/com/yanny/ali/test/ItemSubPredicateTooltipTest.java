@@ -55,9 +55,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Enchantments:",
                 "  -> Enchantments:",
-                "    -> Looting",
+                "    -> minecraft:looting",
                 "  -> Enchantments:",
-                "    -> Mending",
+                "    -> minecraft:mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -70,9 +70,9 @@ public class ItemSubPredicateTooltipTest {
         ))), List.of(
                 "Stored Enchantments:",
                 "  -> Enchantments:",
-                "    -> Looting",
+                "    -> minecraft:looting",
                 "  -> Enchantments:",
-                "    -> Mending",
+                "    -> minecraft:mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -111,7 +111,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Predicate:",
                 "      -> Items:",
-                "        -> Andesite",
+                "        -> minecraft:andesite",
                 "  -> Counts:",
                 "    -> Predicate:",
                 "      -> Items:",
@@ -132,7 +132,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Predicate:",
                 "      -> Items:",
-                "        -> Andesite",
+                "        -> minecraft:andesite",
                 "  -> Counts:",
                 "    -> Predicate:",
                 "      -> Items:",
@@ -239,7 +239,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Armor",
+                "        -> minecraft:armor",
                 "      -> Id: minecraft:help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
@@ -247,7 +247,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Counts:",
                 "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Gravity",
+                "        -> minecraft:gravity",
                 "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
