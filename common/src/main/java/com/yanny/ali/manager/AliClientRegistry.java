@@ -10,6 +10,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
@@ -17,6 +19,7 @@ import net.minecraft.util.context.ContextKeySet;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -55,6 +58,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
     private final Map<DataComponentPredicate.Type<?>, TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, TriFunction<IClientUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
+    private final Map<DataComponentType<?>, TriFunction<IClientUtils, Integer, Object, List<Component>>> dataComponentTypeTooltipMap = new HashMap<>();
+    private final Map<ConsumeEffect.Type<?>, TriFunction<IClientUtils, Integer, ConsumeEffect, List<Component>>> consumeEffectTooltipMap = new HashMap<>();
     private final Map<LootItemConditionType, TriConsumer<IClientUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriConsumer<IClientUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
@@ -111,6 +116,18 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
         entitySubPredicateTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
+    }
+
+    @Override
+    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        dataComponentTypeTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
+    }
+
+    @Override
+    public <T extends ConsumeEffect> void registerConsumeEffectTooltip(ConsumeEffect.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
+        //noinspection unchecked
+        consumeEffectTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
     }
 
     @Override
@@ -240,6 +257,29 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             return List.of();
         }
     }
+
+    @Override
+    public List<Component> getDataComponentTypeTooltip(IClientUtils utils, int pad, DataComponentType<?> type, Object value) {
+        TriFunction<IClientUtils, Integer, Object, List<Component>> getter = dataComponentTypeTooltipMap.get(type);
+
+        if (getter != null) {
+            return getter.apply(utils, pad, value);
+        } else {
+            LOGGER.warn("DataComponentType tooltip for {} was not registered", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type));
+            return List.of();
+        }
+    }
+
+    @Override
+    public <T extends ConsumeEffect> List<Component> getConsumeEffectTooltip(IClientUtils utils, int pad, T effect) {
+        TriFunction<IClientUtils, Integer, ConsumeEffect, List<Component>> getter = consumeEffectTooltipMap.get(effect.getType());
+
+        if (getter != null) {
+            return getter.apply(utils, pad, effect);
+        } else {
+            LOGGER.warn("ConsumeEffect tooltip for {} was not registered", BuiltInRegistries.CONSUME_EFFECT_TYPE.getKey(effect.getType()));
+            return List.of();
+        }    }
 
     @Override
     public <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {

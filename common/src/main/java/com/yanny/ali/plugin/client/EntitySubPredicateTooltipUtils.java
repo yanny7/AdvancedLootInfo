@@ -17,7 +17,7 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.lightning_bolt")));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.blocks_on_fire", predicate.blocksSetOnFire()));
-        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.stuck_entity", predicate.entityStruck(), GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.stuck_entity", predicate.entityStruck(), GenericTooltipUtils::getEntityPredicateTooltip));
 
         return components;
     }
@@ -38,12 +38,12 @@ public class EntitySubPredicateTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.entity_sub_predicate.player")));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
-        components.addAll(getGameTypeTooltip(utils, pad + 1, predicate.gameType()));
+        components.addAll(getGameTypePredicateTooltip(utils, pad + 1, "ali.property.branch.game_types", predicate.gameType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
-        components.addAll(getRecipesTooltip(utils, pad + 1, predicate.recipes()));
-        components.addAll(getAdvancementsTooltip(utils, pad + 1, predicate.advancements()));
-        components.addAll(getComponentsTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
-        components.addAll(getOptionalTooltip(utils, pad + 1, predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
+        components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
+        components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.input", predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
 
         return components;
     }
@@ -81,7 +81,7 @@ public class EntitySubPredicateTooltipUtils {
 /*
     @NotNull
     public static <V> List<Component> getVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
-        List<Component> components = new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
+        List<Component> components = new LinkedList<>(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec()));
 
         if (predicate.variant instanceof Enum<?> variant) {
             components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.variant", variant));
@@ -94,43 +94,13 @@ public class EntitySubPredicateTooltipUtils {
     public static <V> List<Component> getHolderVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getResourceLocationTooltip(utils, pad, "ali.property.value.type", Objects.requireNonNull(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()))));
-        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", predicate.variants, (u, i, v) -> {
-            if (v instanceof CatVariant catVariant) {
-                return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.getKey(catVariant)));
-            } else if (v instanceof PaintingVariant paintingVariant) {
-                HolderLookup.Provider provider = utils.lookupProvider();
-
-                if (provider != null) {
-                    Optional<? extends HolderLookup.RegistryLookup<PaintingVariant>> lookup = provider.lookup(Registries.PAINTING_VARIANT);
-
-                    if (lookup.isPresent()) {
-                        Optional<Holder.Reference<PaintingVariant>> first = lookup.get().listElements().filter((l) -> l.value() == paintingVariant).findFirst();
-
-                        if (first.isPresent()) {
-                            return getResourceKeyTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(first.get().key()));
-                        }
-                    }
-                }
-            } else if (v instanceof FrogVariant frogVariant) {
-                return getResourceLocationTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.getKey(frogVariant)));
-            } else if (v instanceof WolfVariant wolfVariant) {
-                HolderLookup.Provider provider = utils.lookupProvider();
-
-                if (provider != null) {
-                    Optional<? extends HolderLookup.RegistryLookup<WolfVariant>> lookup = provider.lookup(Registries.WOLF_VARIANT);
-
-                    if (lookup.isPresent()) {
-                        Optional<Holder.Reference<WolfVariant>> first = lookup.get().listElements().filter((l) -> l.value() == wolfVariant).findFirst();
-
-                        if (first.isPresent()) {
-                            return getResourceKeyTooltip(u, i, "ali.property.value.variant", Objects.requireNonNull(first.get().key()));
-                        }
-                    }
-                }
-            }
-
-            return List.of();
+        components.addAll(getBuiltInRegistryTooltip(utils, pad, "ali.property.value.type", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec()));
+        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", "ali.property.value.variant", predicate.variants, (u, i, s, v) -> switch (v) {
+            case CatVariant catVariant -> getBuiltInRegistryTooltip(u, i, s, BuiltInRegistries.CAT_VARIANT, catVariant);
+            case PaintingVariant paintingVariant -> getRegistryTooltip(u, i, s, Registries.PAINTING_VARIANT, paintingVariant);
+            case FrogVariant frogVariant -> getBuiltInRegistryTooltip(u, i, s, BuiltInRegistries.FROG_VARIANT, frogVariant);
+            case WolfVariant wolfVariant -> getRegistryTooltip(u, i, s, Registries.WOLF_VARIANT, wolfVariant);
+            default -> List.of();
         }));
 
         return components;

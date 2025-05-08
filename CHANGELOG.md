@@ -1,3 +1,13 @@
+## []
+
+- Added components tooltip
+
+## [1.1.1]
+
+- Removed entity tooltip in REI
+- Fixed enchantment level coloring
+- Fixed double tooltip rendering in JEI
+
 ## [1.1.0]
 
 - Fixed gameplay sub-categories not showing on multiplayer
