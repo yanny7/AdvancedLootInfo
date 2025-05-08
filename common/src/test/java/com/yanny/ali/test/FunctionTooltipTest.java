@@ -53,7 +53,7 @@ public class FunctionTooltipTest {
     public void testApplyBonusCountTooltip() {
         assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(UTILS, 0, (ApplyBonusCount) ApplyBonusCount.addOreBonusCount(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow()).build()), List.of(
                 "Apply Bonus:",
-                "  -> Enchantment: Looting",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Formula: minecraft:ore_drops"
         ));
     }
@@ -99,7 +99,7 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Copy State:",
-                "  -> Block: Furnace",
+                "  -> Block: minecraft:furnace",
                 "  -> Properties:",
                 "    -> lit",
                 "    -> facing"
@@ -114,7 +114,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantments:",
-                "    -> Channeling",
+                "    -> minecraft:channeling",
                 "  -> Only Compatible: true"
         ));
     }
@@ -127,7 +127,7 @@ public class FunctionTooltipTest {
                 "Enchant With Levels:",
                 "  -> Levels: 1-3",
                 "  -> Options:",
-                "    -> Looting"
+                "    -> minecraft:looting"
         ));
     }
 
@@ -183,7 +183,7 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Enchanted Count Increase:",
-                "  -> Enchantment: Looting",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Value: 0-4",
                 "  -> Limit: 3"
         ));
@@ -226,7 +226,7 @@ public class FunctionTooltipTest {
                 "Set Attributes:",
                 "  -> Modifiers:",
                 "    -> Modifier:",
-                "      -> Attribute: Armor",
+                "      -> Attribute: minecraft:generic.armor",
                 "      -> Operation: ADD_MULTIPLIED_TOTAL",
                 "      -> Amount: 1-5",
                 "      -> Id: minecraft:armor",
@@ -236,7 +236,7 @@ public class FunctionTooltipTest {
                 "        -> CHEST",
                 "        -> HEAD",
                 "    -> Modifier:",
-                "      -> Attribute: Armor Toughness",
+                "      -> Attribute: minecraft:generic.armor_toughness",
                 "      -> Operation: ADD_MULTIPLIED_BASE",
                 "      -> Amount: 3",
                 "      -> Id: minecraft:chest",
@@ -302,9 +302,9 @@ public class FunctionTooltipTest {
                 "Set Enchantments:",
                 "  -> Enchantments:",
                 List.of(
-                        "    -> Channeling",
+                        "    -> minecraft:channeling",
                         "      -> Levels: 1",
-                        "    -> Mending",
+                        "    -> minecraft:mending",
                         "      -> Levels: 2"
                 ),
                 "  -> Add: false"
@@ -427,7 +427,7 @@ public class FunctionTooltipTest {
     public void testSetItemTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, 0, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))), List.of(
                 "Set Item:",
-                "  -> Item: Music Disc"
+                "  -> Item: minecraft:music_disc_mall"
         ));
     }
 

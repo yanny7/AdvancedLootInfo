@@ -153,7 +153,7 @@ public class DataComponentTooltipTest {
                 "      -> part: foot",
                 "  -> Predicate:",
                 "    -> Blocks:",
-                "      -> Bell",
+                "      -> minecraft:bell",
                 "Show In Tooltip: true"
         ));
     }
@@ -185,14 +185,14 @@ public class DataComponentTooltipTest {
         )), List.of(
                 "Modifiers:",
                 "  -> Modifier:",
-                "    -> Attribute: Armor",
+                "    -> Attribute: minecraft:generic.armor",
                 "    -> Attribute Modifier:",
                 "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
                 "      -> Operation: ADD_VALUE",
                 "    -> Slot: HEAD",
                 "  -> Modifier:",
-                "    -> Attribute: Armor Toughness",
+                "    -> Attribute: minecraft:generic.armor_toughness",
                 "    -> Attribute Modifier:",
                 "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
@@ -319,13 +319,13 @@ public class DataComponentTooltipTest {
                 "Rules:",
                 "  -> Rule:",
                 "    -> Blocks:",
-                "      -> Dirt",
-                "      -> Stone",
+                "      -> minecraft:dirt",
+                "      -> minecraft:stone",
                 "    -> Correct For Drops: true",
                 "    -> Speed: 2.5",
                 "  -> Rule:",
                 "    -> Blocks:",
-                "      -> Furnace",
+                "      -> minecraft:furnace",
                 "Default Mining Speed: 0.5",
                 "Damage Per Block: 10"
         ));
@@ -441,7 +441,7 @@ public class DataComponentTooltipTest {
         ))), List.of(
                 "Items:",
                 "  -> Item:",
-                "    -> Item: Arrow",
+                "    -> Item: minecraft:arrow",
                 "    -> Count: 25",
                 "    -> Components:",
                 List.of(
@@ -461,7 +461,7 @@ public class DataComponentTooltipTest {
                         "        -> Id: minecraft:arrow"
                 ),
                 "  -> Item:",
-                "    -> Item: Snowball",
+                "    -> Item: minecraft:snowball",
                 "    -> Count: 2",
                 "    -> Components:",
                 List.of(
@@ -491,7 +491,7 @@ public class DataComponentTooltipTest {
         ))), List.of(
                 "Items:",
                 "  -> Item:",
-                "    -> Item: Block of Coal",
+                "    -> Item: minecraft:coal_block",
                 "    -> Count: 1",
                 "    -> Components:",
                 List.of(
@@ -511,7 +511,7 @@ public class DataComponentTooltipTest {
                         "        -> Id: minecraft:coal_block"
                 ),
                 "  -> Item:",
-                "    -> Item: Diorite",
+                "    -> Item: minecraft:diorite",
                 "    -> Count: 1",
                 "    -> Components:",
                 List.of(
@@ -648,9 +648,9 @@ public class DataComponentTooltipTest {
 
         assertTooltip(DataComponentTooltipUtils.getDebugStickStateTooltip(UTILS, 0, new DebugStickState(map)), List.of(
                 "Properties:",
-                "  -> Block: Stone",
+                "  -> Block: minecraft:stone",
                 "    -> Property: vertical_direction",
-                "  -> Block: Furnace",
+                "  -> Block: minecraft:furnace",
                 "    -> Property: lit"
         ));
     }
@@ -811,10 +811,10 @@ public class DataComponentTooltipTest {
                 Items.ARMS_UP_POTTERY_SHERD,
                 Items.BLADE_POTTERY_SHERD
         )), List.of(
-                "Back: Shelter Pottery Sherd",
-                "Left: Sheaf Pottery Sherd",
-                "Right: Arms Up Pottery Sherd",
-                "Front: Blade Pottery Sherd"
+                "Back: minecraft:shelter_pottery_sherd",
+                "Left: minecraft:sheaf_pottery_sherd",
+                "Right: minecraft:arms_up_pottery_sherd",
+                "Front: minecraft:blade_pottery_sherd"
         ));
     }
 
@@ -826,7 +826,7 @@ public class DataComponentTooltipTest {
         ))), List.of(
                 "Items:",
                 "  -> Item:",
-                "    -> Item: Andesite",
+                "    -> Item: minecraft:andesite",
                 "    -> Count: 10",
                 "    -> Components:",
                 List.of(
@@ -846,7 +846,7 @@ public class DataComponentTooltipTest {
                         "        -> Id: minecraft:andesite"
                 ),
                 "  -> Item:",
-                "    -> Item: Diorite",
+                "    -> Item: minecraft:diorite",
                 "    -> Count: 1",
                 "    -> Components:",
                 List.of(
