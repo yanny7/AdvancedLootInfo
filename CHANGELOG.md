@@ -1,3 +1,7 @@
+## []
+
+- Added components tooltip
+
 ## [1.1.1]
 
 - Removed entity tooltip in REI
