@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getBlockTooltip;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getEnchantmentTooltip;
 
 public class ConditionTooltipUtils {
     @NotNull

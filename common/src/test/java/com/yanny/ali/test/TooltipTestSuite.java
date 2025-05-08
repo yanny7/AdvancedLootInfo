@@ -43,6 +43,7 @@ import java.util.concurrent.ExecutionException;
 @Suite
 @SelectClasses({
         GenericTooltipTest.class,
+        RegistriesTooltipTest.class,
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
         EntryTooltipTest.class,
