@@ -236,6 +236,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.amplifier", "Amplifier: %s");
         TRANSLATION_MAP.put("ali.property.value.animation", "Animation: %s");
         TRANSLATION_MAP.put("ali.property.value.append", "Append: %s");
+        TRANSLATION_MAP.put("ali.property.value.asset_id", "Asset Id: %s");
         TRANSLATION_MAP.put("ali.property.value.attribute", "Attribute: %s");
         TRANSLATION_MAP.put("ali.property.value.author", "Author: %s");
         TRANSLATION_MAP.put("ali.property.value.back", "Back: %s");
@@ -284,7 +285,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.fade_colors", "Fade Colors: %s");
         TRANSLATION_MAP.put("ali.property.value.fall_distance", "Fall Distance: %s");
         TRANSLATION_MAP.put("ali.property.value.filtered", "Filtered: %s");
+        TRANSLATION_MAP.put("ali.property.value.flags", "Flags: %s");
         TRANSLATION_MAP.put("ali.property.value.flight_duration", "Flight Duration: %s");
+        TRANSLATION_MAP.put("ali.property.value.floats", "Floats: %s");
         TRANSLATION_MAP.put("ali.property.value.fluid", "Fluid: %s");
         TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
         TRANSLATION_MAP.put("ali.property.value.forward", "Forward: %s");
@@ -329,7 +332,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.min", "Min: %s");
         TRANSLATION_MAP.put("ali.property.value.min_ticks_in_hive", "Min Ticks In Hive: %s");
         TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");
-        TRANSLATION_MAP.put("ali.property.value.model", "Model: %s");
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
         TRANSLATION_MAP.put("ali.property.value.null", "%s");
@@ -381,6 +383,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.source_path", "Source Path: %s");
         TRANSLATION_MAP.put("ali.property.value.speed", "Speed: %s");
         TRANSLATION_MAP.put("ali.property.value.sprint", "Sprint: %s");
+        TRANSLATION_MAP.put("ali.property.value.strings", "Strings: %s");
         TRANSLATION_MAP.put("ali.property.value.structure", "Structure: %s");
         TRANSLATION_MAP.put("ali.property.value.swappable", "Swappable: %s");
         TRANSLATION_MAP.put("ali.property.value.tag", "Tag: %s");

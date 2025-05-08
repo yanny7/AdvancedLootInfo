@@ -41,6 +41,7 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.TeleportRandomlyConsumeEffect;
 import net.minecraft.world.item.enchantment.*;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
@@ -204,7 +205,17 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testCustomModelDataTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCustomModelDataTooltip(UTILS, 0, new CustomModelData(5)), List.of("Value: 5"));
+        assertTooltip(DataComponentTooltipUtils.getCustomModelDataTooltip(UTILS, 0, new CustomModelData(
+                List.of(0.1f, 0.2f),
+                List.of(true, false),
+                List.of("hello", "world"),
+                List.of(1, 2)
+        )), List.of(
+                "Floats: [0.1, 0.2]",
+                "Flags: [true, false]",
+                "Strings: [hello, world]",
+                "Colors: [1, 2]"
+        ));
     }
 
     @Test
@@ -341,7 +352,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getEquipableTooltip(UTILS, 0, new Equippable(
                 EquipmentSlot.LEGS,
                 Holder.direct(SoundEvents.ANVIL_FALL),
-                Optional.of(ResourceLocation.withDefaultNamespace("anvil")),
+                Optional.of(ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.withDefaultNamespace("anvil"))),
                 Optional.of(ResourceLocation.withDefaultNamespace("camera")),
                 Optional.of(HolderSet.direct(Holder.direct(EntityType.ALLAY), Holder.direct(EntityType.ARMADILLO))),
                 true,
@@ -350,7 +361,7 @@ public class DataComponentTooltipTest {
         )), List.of(
                 "Equipment Slot: LEGS",
                 "Equip Sound: minecraft:block.anvil.fall",
-                "Model: minecraft:anvil",
+                "Asset Id: minecraft:anvil",
                 "Camera Overlay: minecraft:camera",
                 "Allowed Entities:",
                 "  -> Allay",

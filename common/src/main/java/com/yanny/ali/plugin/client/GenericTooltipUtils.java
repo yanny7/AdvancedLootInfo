@@ -971,7 +971,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getListOperationTooltip(utils, pad + 1, predicate.operation()));
+        components.addAll(getListOperationTooltip(utils, pad + 1, "ali.property.value.list_operation", predicate.operation()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.values", predicate.value(), (u, i, v) -> mapper.apply(u, i, "ali.property.value.value", v)));
 
         return components;
