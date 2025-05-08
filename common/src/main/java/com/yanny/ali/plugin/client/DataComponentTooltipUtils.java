@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -147,7 +146,7 @@ public class DataComponentTooltipUtils {
 
         components.addAll(getFloatTooltip(utils, pad, "ali.property.value.consume_seconds", consumable.consumeSeconds()));
         components.addAll(getEnumTooltip(utils, pad, "ali.property.value.animation", consumable.animation()));
-        components.addAll(getRegistryTooltip(utils, pad, "ali.property.value.sound", Registries.SOUND_EVENT, consumable.sound().value()));
+        components.addAll(getHolderTooltip(utils, pad, "ali.property.value.sound", consumable.sound(), RegistriesTooltipUtils::getSoundEventTooltip));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.has_custom_particles", consumable.hasConsumeParticles()));
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.on_consume_effects", consumable.onConsumeEffects(), utils::getConsumeEffectTooltip));
 
@@ -198,7 +197,7 @@ public class DataComponentTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getEnumTooltip(utils, pad, "ali.property.value.equipment_slot", equippable.slot()));
-        components.addAll(getRegistryTooltip(utils, pad, "ali.property.value.equip_sound", Registries.SOUND_EVENT, equippable.equipSound().value()));
+        components.addAll(getHolderTooltip(utils, pad, "ali.property.value.equip_sound", equippable.equipSound(), RegistriesTooltipUtils::getSoundEventTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.model", equippable.model(), GenericTooltipUtils::getResourceLocationTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.camera_overlay", equippable.cameraOverlay(), GenericTooltipUtils::getResourceLocationTooltip));
         components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.allowed_entities", "ali.property.value.null", equippable.allowedEntities(), RegistriesTooltipUtils::getEntityTypeTooltip));
@@ -345,7 +344,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getInstrumentTooltip(IClientUtils utils, int pad, Holder<Instrument> value) {
-        return getRegistryTooltip(utils, pad, "ali.property.value.value", Registries.INSTRUMENT, value.value());
+        return RegistriesTooltipUtils.getInstrumentTooltip(utils, pad, "ali.property.value.value", value.value());
     }
 
     @Unmodifiable

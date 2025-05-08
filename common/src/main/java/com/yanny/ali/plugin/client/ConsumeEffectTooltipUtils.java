@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.consume_effects.*;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +51,7 @@ public class ConsumeEffectTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.consume_effect.play_sound")));
-        components.addAll(getRegistryTooltip(utils, pad + 1, "ali.property.value.sound", Registries.SOUND_EVENT, effect.sound().value()));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.sound", effect.sound(), RegistriesTooltipUtils::getSoundEventTooltip));
 
         return components;
     }
