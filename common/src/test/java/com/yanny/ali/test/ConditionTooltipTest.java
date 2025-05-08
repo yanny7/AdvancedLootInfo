@@ -201,7 +201,7 @@ public class ConditionTooltipTest {
                 "    -> Linear:",
                 "      -> Base: 5.25",
                 "      -> Per Level: 5.0",
-                "  -> Enchantment: Looting"
+                "  -> Enchantment: minecraft:looting"
         ));
     }
 

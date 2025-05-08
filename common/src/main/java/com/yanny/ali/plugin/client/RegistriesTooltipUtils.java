@@ -15,6 +15,7 @@ import net.minecraft.world.entity.animal.WolfVariant;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimPattern;
@@ -93,7 +94,7 @@ public class RegistriesTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getEnchantmentTooltip(IClientUtils utils, int pad, String key, Enchantment enchantment) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.ENCHANTMENT, enchantment);
+        return getRegistryTooltip(utils, pad, key, Registries.ENCHANTMENT, enchantment);
     }
 
     @Unmodifiable
@@ -129,7 +130,7 @@ public class RegistriesTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getPaintingVariantTooltip(IClientUtils utils, int pad, String key, PaintingVariant paintingVariant) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.PAINTING_VARIANT, paintingVariant);
+        return getRegistryTooltip(utils, pad, key, Registries.PAINTING_VARIANT, paintingVariant);
     }
 
     @Unmodifiable
@@ -172,5 +173,11 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static List<Component> getTrimPatternTooltip(IClientUtils utils, int pad, String key, TrimPattern pattern) {
         return getRegistryTooltip(utils, pad, key, Registries.TRIM_PATTERN, pattern);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getJukeboxSongTooltip(IClientUtils utils, int pad, String key, JukeboxSong song) {
+        return getRegistryTooltip(utils, pad, key, Registries.JUKEBOX_SONG, song);
     }
 }

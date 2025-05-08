@@ -25,14 +25,8 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.JukeboxSong;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.component.*;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
@@ -680,12 +674,6 @@ public class GenericTooltipUtils {
         }
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getJukeboxSongTooltip(IClientUtils utils, int pad, String key, JukeboxSong song) {
-        return getRegistryTooltip(utils, pad, key, Registries.JUKEBOX_SONG, song);
     }
 
     @NotNull

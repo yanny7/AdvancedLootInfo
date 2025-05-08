@@ -113,7 +113,7 @@ public class ItemSubPredicateTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.item_sub_predicate.item_jukebox_playable")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), GenericTooltipUtils::getJukeboxSongTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
 
         return components;
     }

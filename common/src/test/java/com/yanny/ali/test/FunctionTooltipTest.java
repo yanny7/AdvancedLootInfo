@@ -127,7 +127,7 @@ public class FunctionTooltipTest {
                 "Enchant With Levels:",
                 "  -> Levels: 1-3",
                 "  -> Options:",
-                "    -> Looting"
+                "    -> minecraft:looting"
         ));
     }
 
@@ -183,7 +183,7 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Enchanted Count Increase:",
-                "  -> Enchantment: Looting",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Value: 0-4",
                 "  -> Limit: 3"
         ));

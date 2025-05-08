@@ -13,6 +13,7 @@ import net.minecraft.world.entity.animal.WolfVariants;
 import net.minecraft.world.entity.decoration.PaintingVariants;
 import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.JukeboxSongs;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.armortrim.TrimMaterials;
 import net.minecraft.world.item.armortrim.TrimPatterns;
@@ -81,7 +82,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testEnchantmentTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getEnchantmentTooltip(UTILS, 0, "ali.property.value.enchantment", Enchantments.AQUA_AFFINITY), List.of("Enchantment: minecraft:aqua_affinity"));
+        assertTooltip(RegistriesTooltipUtils.getEnchantmentTooltip(UTILS, 0, "ali.property.value.enchantment", LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.AQUA_AFFINITY).value()), List.of("Enchantment: minecraft:aqua_affinity"));
     }
 
     @Test
@@ -147,5 +148,10 @@ public class RegistriesTooltipTest {
     @Test
     public void testTrimPatternTooltip() {
         assertTooltip(RegistriesTooltipUtils.getTrimPatternTooltip(UTILS, 0, "ali.property.value.pattern", LOOKUP.lookupOrThrow(Registries.TRIM_PATTERN).getOrThrow(TrimPatterns.DUNE).value()), List.of("Pattern: minecraft:dune"));
+    }
+
+    @Test
+    public void testJukeboxSongTooltip() {
+        assertTooltip(RegistriesTooltipUtils.getJukeboxSongTooltip(UTILS, 0, "ali.property.value.song", LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.CAT).value()), List.of("Song: minecraft:cat"));
     }
 }

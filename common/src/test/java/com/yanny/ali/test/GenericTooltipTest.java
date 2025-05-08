@@ -70,6 +70,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -206,7 +207,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBannerPatternTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, "ali.property.value.banner_pattern", TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow().value(), DyeColor.WHITE), List.of(
+        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, 0, "ali.property.value.banner_pattern", LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow().value(), DyeColor.WHITE), List.of(
                 "Banner Pattern: Fully White Field"
         ));
     }
@@ -361,8 +362,8 @@ public class GenericTooltipTest {
                 .setX(MinMaxBounds.Doubles.exactly(10D))
                 .setY(MinMaxBounds.Doubles.atLeast(20D))
                 .setZ(MinMaxBounds.Doubles.atMost(30D))
-                .setBiomes(HolderSet.direct(TooltipTestSuite.LOOKUP.lookup(Registries.BIOME).orElseThrow().get(Biomes.PLAINS).orElseThrow()))
-                .setStructures(HolderSet.direct(TooltipTestSuite.LOOKUP.lookup(Registries.STRUCTURE).orElseThrow().get(BuiltinStructures.MINESHAFT).orElseThrow()))
+                .setBiomes(HolderSet.direct(LOOKUP.lookup(Registries.BIOME).orElseThrow().get(Biomes.PLAINS).orElseThrow()))
+                .setStructures(HolderSet.direct(LOOKUP.lookup(Registries.STRUCTURE).orElseThrow().get(BuiltinStructures.MINESHAFT).orElseThrow()))
                 .setDimension(Level.OVERWORLD)
                 .setSmokey(true)
                 .setLight(LightPredicate.Builder.light().setComposite(MinMaxBounds.Ints.between(10, 15)))

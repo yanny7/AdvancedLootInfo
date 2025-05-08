@@ -131,7 +131,7 @@ public class ConditionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.condition.random_chance_with_enchanted_bonus")));
         components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.unenchanted_chance", cond.unenchantedChance()));
         components.addAll(getLevelBasedValueTooltip(utils, pad + 1, "ali.property.branch.enchanted_chance", cond.enchantedChance()));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", cond.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", cond.enchantment(), RegistriesTooltipUtils::getEnchantmentTooltip));
 
         return components;
     }
