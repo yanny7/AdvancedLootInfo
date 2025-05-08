@@ -201,7 +201,7 @@ public class DataComponentTooltipUtils {
         components.addAll(getRegistryTooltip(utils, pad, "ali.property.value.equip_sound", Registries.SOUND_EVENT, equippable.equipSound().value()));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.model", equippable.model(), GenericTooltipUtils::getResourceLocationTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.camera_overlay", equippable.cameraOverlay(), GenericTooltipUtils::getResourceLocationTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.allowed_entities", "ali.property.value.null", equippable.allowedEntities(), GenericTooltipUtils::getEntityTypeTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.allowed_entities", "ali.property.value.null", equippable.allowedEntities(), RegistriesTooltipUtils::getEntityTypeTooltip));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.dispensable", equippable.dispensable()));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.swappable", equippable.swappable()));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.damage_on_hurt", equippable.damageOnHurt()));
@@ -212,7 +212,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getRepairableTooltip(IClientUtils utils, int pad, Repairable repairable) {
-        return getHolderSetTooltip(utils, pad, "ali.property.branch.items", "ali.property.value.null", repairable.items(), GenericTooltipUtils::getItemTooltip);
+        return getHolderSetTooltip(utils, pad, "ali.property.branch.items", "ali.property.value.null", repairable.items(), RegistriesTooltipUtils::getItemTooltip);
     }
 
     @Unmodifiable
@@ -340,6 +340,12 @@ public class DataComponentTooltipUtils {
         }
 
         return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getInstrumentTooltip(IClientUtils utils, int pad, Holder<Instrument> value) {
+        return getRegistryTooltip(utils, pad, "ali.property.value.value", Registries.INSTRUMENT, value.value());
     }
 
     @Unmodifiable

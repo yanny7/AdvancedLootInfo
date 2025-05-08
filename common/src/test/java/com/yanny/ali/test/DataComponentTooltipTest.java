@@ -185,14 +185,14 @@ public class DataComponentTooltipTest {
         )), List.of(
                 "Modifiers:",
                 "  -> Modifier:",
-                "    -> Attribute: minecraft:generic.armor",
+                "    -> Attribute: minecraft:armor",
                 "    -> Attribute Modifier:",
                 "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
                 "      -> Operation: ADD_VALUE",
                 "    -> Slot: HEAD",
                 "  -> Modifier:",
-                "    -> Attribute: minecraft:generic.armor_toughness",
+                "    -> Attribute: minecraft:armor_toughness",
                 "    -> Attribute Modifier:",
                 "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
@@ -259,7 +259,7 @@ public class DataComponentTooltipTest {
                 new ItemStack(Holder.direct(Items.ANDESITE), 10)
         )), List.of(
                 "Convert Into:",
-                "  -> Item: Andesite",
+                "  -> Item: minecraft:andesite",
                 "  -> Count: 10",
                 "  -> Components:",
                 List.of(
@@ -353,8 +353,8 @@ public class DataComponentTooltipTest {
                 "Model: minecraft:anvil",
                 "Camera Overlay: minecraft:camera",
                 "Allowed Entities:",
-                "  -> Allay",
-                "  -> Armadillo",
+                "  -> minecraft:allay",
+                "  -> minecraft:armadillo",
                 "Dispensable: true",
                 "Swappable: true",
                 "Damage On Hurt: false"
@@ -367,8 +367,8 @@ public class DataComponentTooltipTest {
                 HolderSet.direct(Holder.direct(Items.ANDESITE), Holder.direct(Items.DIORITE))
         )), List.of(
                 "Items:",
-                "  -> Andesite",
-                "  -> Diorite"
+                "  -> minecraft:andesite",
+                "  -> minecraft:diorite"
         ));
     }
 

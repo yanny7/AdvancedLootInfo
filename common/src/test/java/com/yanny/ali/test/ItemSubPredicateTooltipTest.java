@@ -237,7 +237,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> minecraft:generic.armor",
+                "        -> minecraft:armor",
                 "      -> Id: minecraft:help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
@@ -245,7 +245,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Counts:",
                 "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> minecraft:generic.gravity",
+                "        -> minecraft:gravity",
                 "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));

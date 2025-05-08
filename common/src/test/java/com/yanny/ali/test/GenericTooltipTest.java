@@ -41,8 +41,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
-import net.minecraft.world.item.equipment.trim.TrimMaterials;
-import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -197,7 +195,7 @@ public class GenericTooltipTest {
                         .forSlot(EquipmentSlotGroup.FEET)
                         .build()), List.of(
                 "Modifier:",
-                "  -> Attribute: minecraft:generic.armor",
+                "  -> Attribute: minecraft:armor",
                 "  -> Operation: ADD_MULTIPLIED_TOTAL",
                 "  -> Amount: 1-5",
                 "  -> Id: minecraft:armor",
@@ -830,8 +828,8 @@ public class GenericTooltipTest {
         )), List.of(
                 "Predicate:",
                 "  -> Attributes:",
-                "    -> minecraft:generic.armor",
-                "    -> minecraft:generic.gravity",
+                "    -> minecraft:armor",
+                "    -> minecraft:gravity",
                 "  -> Id: minecraft:test",
                 "  -> Amount: 1.5-3.1",
                 "  -> Operation: ADD_VALUE",
@@ -905,7 +903,7 @@ public class GenericTooltipTest {
                 EquipmentSlotGroup.HEAD
         )), List.of(
                 "Modifier:",
-                "  -> Attribute: minecraft:player.block_break_speed",
+                "  -> Attribute: minecraft:block_break_speed",
                 "  -> Attribute Modifier:",
                 "    -> Id: minecraft:test",
                 "    -> Amount: 1.25",

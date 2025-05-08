@@ -15,9 +15,9 @@ import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.JukeboxSongs;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.armortrim.TrimMaterials;
-import net.minecraft.world.item.armortrim.TrimPatterns;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
@@ -87,7 +87,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testAttributeTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getAttributeTooltip(UTILS, 0, "ali.property.value.attribute", Attributes.JUMP_STRENGTH.value()), List.of("Attribute: minecraft:generic.jump_strength"));
+        assertTooltip(RegistriesTooltipUtils.getAttributeTooltip(UTILS, 0, "ali.property.value.attribute", Attributes.JUMP_STRENGTH.value()), List.of("Attribute: minecraft:jump_strength"));
     }
 
     @Test

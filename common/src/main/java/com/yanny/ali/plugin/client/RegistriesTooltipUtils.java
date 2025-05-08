@@ -17,9 +17,9 @@ import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -112,7 +112,7 @@ public class RegistriesTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getInstrumentTooltip(IClientUtils utils, int pad, String key, Instrument value) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.INSTRUMENT, value);
+        return getRegistryTooltip(utils, pad, key, Registries.INSTRUMENT, value);
     }
 
     @Unmodifiable
