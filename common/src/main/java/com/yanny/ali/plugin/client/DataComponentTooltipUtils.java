@@ -2,17 +2,22 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.enchantment.Enchantable;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.item.enchantment.Repairable;
+import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
@@ -91,7 +96,6 @@ public class DataComponentTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.blocks", "ali.property.branch.predicate", value.predicates, GenericTooltipUtils::getBlockPredicateTooltip));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.tooltip", value.tooltip, (u, i, t) -> List.of(pad(i, t))));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip));
 
         return components;
@@ -132,10 +136,42 @@ public class DataComponentTooltipUtils {
         components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.nutrition", food.nutrition()));
         components.addAll(getFloatTooltip(utils, pad, "ali.property.value.saturation", food.saturation()));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.can_always_eat", food.canAlwaysEat()));
-        components.addAll(getFloatTooltip(utils, pad, "ali.property.value.eat_seconds", food.eatSeconds()));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", food.effects(), GenericTooltipUtils::getPossibleEffectTooltip));
 
         return components;
+    }
+
+    @NotNull
+    public static List<Component> getConsumableTooltip(IClientUtils utils, int pad, Consumable consumable) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getFloatTooltip(utils, pad, "ali.property.value.consume_seconds", consumable.consumeSeconds()));
+        components.addAll(getEnumTooltip(utils, pad, "ali.property.value.animation", consumable.animation()));
+        components.addAll(getRegistryTooltip(utils, pad, "ali.property.value.sound", Registries.SOUND_EVENT, consumable.sound().value()));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.has_custom_particles", consumable.hasConsumeParticles()));
+        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.on_consume_effects", consumable.onConsumeEffects(), utils::getConsumeEffectTooltip));
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getUseRemainderTooltip(IClientUtils utils, int pad, UseRemainder remainder) {
+        return getItemStackTooltip(utils, pad, "ali.property.branch.convert_into", remainder.convertInto());
+    }
+
+    @NotNull
+    public static List<Component> getUseCooldownTooltip(IClientUtils utils, int pad, UseCooldown cooldown) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getFloatTooltip(utils, pad, "ali.property.value.seconds", cooldown.seconds()));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.cooldown_group", cooldown.cooldownGroup(), GenericTooltipUtils::getResourceLocationTooltip));
+
+        return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getDamageResistantTooltip(IClientUtils utils, int pad, DamageResistant resistant) {
+        return getTagKeyTooltip(utils, pad, "ali.property.value.type", resistant.types());
     }
 
     @NotNull
@@ -147,6 +183,41 @@ public class DataComponentTooltipUtils {
         components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.damage_per_block", tool.damagePerBlock()));
 
         return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getEnchantableTooltip(IClientUtils utils, int pad, Enchantable enchantable) {
+        return getIntegerTooltip(utils, pad, "ali.property.value.value", enchantable.value());
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getEquipableTooltip(IClientUtils utils, int pad, Equippable equippable) {
+        List<Component> components = new LinkedList<>();
+
+        components.addAll(getEnumTooltip(utils, pad, "ali.property.value.equipment_slot", equippable.slot()));
+        components.addAll(getRegistryTooltip(utils, pad, "ali.property.value.equip_sound", Registries.SOUND_EVENT, equippable.equipSound().value()));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.model", equippable.model(), GenericTooltipUtils::getResourceLocationTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.camera_overlay", equippable.cameraOverlay(), GenericTooltipUtils::getResourceLocationTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad, "ali.property.branch.allowed_entities", "ali.property.value.null", equippable.allowedEntities(), GenericTooltipUtils::getEntityTypeTooltip));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.dispensable", equippable.dispensable()));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.swappable", equippable.swappable()));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.damage_on_hurt", equippable.damageOnHurt()));
+
+        return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getRepairableTooltip(IClientUtils utils, int pad, Repairable repairable) {
+        return getHolderSetTooltip(utils, pad, "ali.property.branch.items", "ali.property.value.null", repairable.items(), GenericTooltipUtils::getItemTooltip);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getDeathProtectionTooltip(IClientUtils utils, int pad, DeathProtection protection) {
+        return getCollectionTooltip(utils, pad, "ali.property.branch.death_effects", protection.deathEffects(), utils::getConsumeEffectTooltip);
     }
 
     @NotNull
@@ -214,6 +285,7 @@ public class DataComponentTooltipUtils {
         components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.potion", value.potion(), GenericTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_name", value.customName(), GenericTooltipUtils::getStringTooltip));
 
         return components;
     }
@@ -249,7 +321,7 @@ public class DataComponentTooltipUtils {
 
         components.addAll(getTrimMaterialTooltip(utils, pad, "ali.property.value.material", value.material().value()));
         components.addAll(getTrimPatternTooltip(utils, pad, "ali.property.value.pattern", value.pattern().value()));
-        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip));
+        components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip()));
 
         return components;
     }
@@ -272,7 +344,13 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getInstrumentTooltip(IClientUtils utils, int pad, Holder<Instrument> value) {
-        return getBuiltInRegistryTooltip(utils, pad, "ali.property.value.value", BuiltInRegistries.INSTRUMENT, value.value());
+        return getRegistryTooltip(utils, pad, "ali.property.value.value", Registries.INSTRUMENT, value.value());
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getOminousBottleAmplifierTooltip(IClientUtils utils, int pad, OminousBottleAmplifier value) {
+        return getIntegerTooltip(utils, pad, "ali.property.value.value", value.value());
     }
 
     @Unmodifiable
@@ -289,8 +367,8 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getRecipesTooltip(IClientUtils utils, int pad, List<ResourceLocation> value) {
-        return getCollectionTooltip(utils, pad, "ali.property.branch.recipes", "ali.property.value.null", value, GenericTooltipUtils::getResourceLocationTooltip);
+    public static List<Component> getRecipesTooltip(IClientUtils utils, int pad, List<ResourceKey<Recipe<?>>> value) {
+        return getCollectionTooltip(utils, pad, "ali.property.branch.recipes", "ali.property.value.null", value, GenericTooltipUtils::getResourceKeyTooltip);
     }
 
     @NotNull
@@ -346,8 +424,8 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getNoteBlockSoundTooltip(IClientUtils utils, int pad, ResourceLocation value) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.id", value);
+    public static List<Component> getResourceLocationTooltip(IClientUtils utils, int pad, ResourceLocation value) {
+        return GenericTooltipUtils.getResourceLocationTooltip(utils, pad, "ali.property.value.id", value);
     }
 
     @Unmodifiable
@@ -396,13 +474,11 @@ public class DataComponentTooltipUtils {
         return getCollectionTooltip(utils, pad, "ali.property.branch.bees", "ali.property.branch.occupant", properties, GenericTooltipUtils::getBeehiveBlockEntityOccupantTooltip);
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Component> getLockTooltip(IClientUtils utils, int pad, LockCode lockCode) {
-        return getStringTooltip(utils, pad, "ali.property.value.value", lockCode.key());
+        return getItemPredicateTooltip(utils, pad, "ali.property.branch.predicate", lockCode.predicate());
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Component> getContainerLootTooltip(IClientUtils utils, int pad, SeededContainerLoot value) {
         List<Component> components = new LinkedList<>();

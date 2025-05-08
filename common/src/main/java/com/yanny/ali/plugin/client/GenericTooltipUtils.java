@@ -23,7 +23,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +32,8 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -798,17 +799,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getPossibleEffectTooltip(IClientUtils utils, int pad, String key, FoodProperties.PossibleEffect effect) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable(key)));
-        components.addAll(getMobEffectInstanceTooltip(utils, pad + 1, "ali.property.branch.mob_effect", effect.effect()));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.probability", effect.probability()));
-
-        return components;
-    }
-
-    @NotNull
     public static List<Component> getMobEffectInstanceTooltip(IClientUtils utils, int pad, String key, MobEffectInstance effect) {
         List<Component> components = new LinkedList<>();
 
@@ -961,10 +951,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static List<Component> getInputPredicateTooltip(IClientUtils utils, int pad, InputPredicate predicate) {
+    public static List<Component> getInputPredicateTooltip(IClientUtils utils, int pad, String key, InputPredicate predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.add(pad(pad, translatable("ali.property.branch.input")));
+        components.add(pad(pad, translatable(key)));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.forward", predicate.forward(), GenericTooltipUtils::getBooleanTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.backward", predicate.backward(), GenericTooltipUtils::getBooleanTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.left", predicate.left(), GenericTooltipUtils::getBooleanTooltip));

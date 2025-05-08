@@ -7,6 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
@@ -37,6 +38,8 @@ public interface IClientRegistry {
     <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
 
     <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
+
+    <T extends ConsumeEffect> void registerConsumeEffectTooltip(ConsumeEffect.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter);
 
     <T extends LootItemFunction> void registerCountModifier(LootItemFunctionType<T> type, TriConsumer<IClientUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer);
 

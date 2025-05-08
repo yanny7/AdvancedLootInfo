@@ -32,7 +32,6 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -42,6 +41,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -77,6 +78,7 @@ import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class GenericTooltipTest {
     @Test
@@ -279,8 +281,8 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.damage_source_predicate", DamageSourcePredicate.Builder.damageType()
                 .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                 .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
-                .source(EntityPredicate.Builder.entity().of(EntityType.BAT))
-                .direct(EntityPredicate.Builder.entity().of(EntityType.ARROW))
+                .source(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.BAT))
+                .direct(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.ARROW))
                 .isDirect(false)
                 .build()), List.of(
                 "Damage Source:",
@@ -987,24 +989,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testPossibleEffectTooltip() {
-        assertTooltip(GenericTooltipUtils.getPossibleEffectTooltip(UTILS, 0, "ali.property.branch.effect", new FoodProperties.PossibleEffect(
-                new MobEffectInstance(MobEffects.LUCK, 1),
-                0.5f
-        )), List.of(
-                "Effect:",
-                "  -> Mob Effect:",
-                "    -> Mob Effect: minecraft:luck",
-                "    -> Duration: 1",
-                "    -> Amplifier: 0",
-                "    -> Ambient: false",
-                "    -> Is Visible: true",
-                "    -> Show Icon: true",
-                "  -> Probability: 0.5"
-        ));
-    }
-
-    @Test
     public void testMobEffectInstanceTooltip() {
         assertTooltip(GenericTooltipUtils.getMobEffectInstanceTooltip(UTILS, 0, "ali.property.branch.effect", new MobEffectInstance(
                 MobEffects.BAD_OMEN,
@@ -1065,30 +1049,30 @@ public class GenericTooltipTest {
 
     @Test
     public void testItemStackTooltip() {
-        assertTooltip(GenericTooltipUtils.getItemStackTooltip(UTILS, 0, "ali.property.branch.item", new ItemStack(
+        assertUnorderedTooltip(GenericTooltipUtils.getItemStackTooltip(UTILS, 0, "ali.property.branch.item", new ItemStack(
                 Holder.direct(Items.ANDESITE),
-                10,
-                DataComponentPatch.builder()
-                        .set(DataComponents.DAMAGE, 2)
-                        .remove(DataComponents.HIDE_TOOLTIP)
-                        .build()
+                10
         )), List.of(
                 "Item:",
                 "  -> Item: Andesite",
                 "  -> Count: 10",
                 "  -> Components:",
-                "    -> Type: minecraft:damage",
-                "      -> Value: 2",
-                "    -> Type: minecraft:max_stack_size",
-                "      -> Value: 64",
-                "    -> Type: minecraft:lore",
-                "    -> Type: minecraft:enchantments",
-                "    -> Type: minecraft:repair_cost",
-                "      -> Value: 0",
-                "    -> Type: minecraft:attribute_modifiers",
-                "      -> Show In Tooltip: true",
-                "    -> Type: minecraft:rarity",
-                "      -> Rarity: COMMON"
+                List.of(
+                        "    -> Type: minecraft:attribute_modifiers",
+                        "      -> Show In Tooltip: true",
+                        "    -> Type: minecraft:repair_cost",
+                        "      -> Value: 0",
+                        "    -> Type: minecraft:item_name",
+                        "      -> Item Name: Andesite",
+                        "    -> Type: minecraft:rarity",
+                        "      -> Rarity: COMMON",
+                        "    -> Type: minecraft:lore",
+                        "    -> Type: minecraft:max_stack_size",
+                        "      -> Value: 64",
+                        "    -> Type: minecraft:enchantments",
+                        "    -> Type: minecraft:item_model",
+                        "      -> Id: minecraft:andesite"
+                )
         ));
     }
 
@@ -1258,7 +1242,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testInputPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getInputPredicateTooltip(UTILS, 0, new InputPredicate(
+        assertTooltip(GenericTooltipUtils.getInputPredicateTooltip(UTILS, 0, "ali.property.branch.input", new InputPredicate(
                 Optional.of(true),
                 Optional.of(true),
                 Optional.of(false),

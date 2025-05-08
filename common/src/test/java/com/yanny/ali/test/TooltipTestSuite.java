@@ -54,6 +54,7 @@ import java.util.concurrent.ExecutionException;
         EntitySubPredicateTooltipTest.class,
         ItemSubPredicateTooltipTest.class,
         DataComponentTooltipTest.class,
+        ConsumeEffectTooltipTest.class,
         TooltipTest.class
 })
 public class TooltipTestSuite {

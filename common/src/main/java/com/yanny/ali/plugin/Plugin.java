@@ -7,6 +7,7 @@ import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import net.minecraft.advancements.critereon.EntitySubPredicates;
 import net.minecraft.advancements.critereon.ItemSubPredicates;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
@@ -130,6 +131,7 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.UNBREAKABLE, DataComponentTooltipUtils::getUnbreakableTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.CUSTOM_NAME, DataComponentTooltipUtils::getCustomNameTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.ITEM_NAME, DataComponentTooltipUtils::getItemNameTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.ITEM_MODEL, DataComponentTooltipUtils::getResourceLocationTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.LORE, DataComponentTooltipUtils::getItemLoreTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.RARITY, DataComponentTooltipUtils::getRarityTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.ENCHANTMENTS, DataComponentTooltipUtils::getItemEnchantmentsTooltip);
@@ -144,8 +146,17 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, DataComponentTooltipUtils::getBoolTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.INTANGIBLE_PROJECTILE, DataComponentTooltipUtils::getEmptyTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.FOOD, DataComponentTooltipUtils::getFoodTooltip);
-        registry.registerDataComponentTypeTooltip(DataComponents.FIRE_RESISTANT, DataComponentTooltipUtils::getEmptyTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.CONSUMABLE, DataComponentTooltipUtils::getConsumableTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.USE_REMAINDER, DataComponentTooltipUtils::getUseRemainderTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.USE_COOLDOWN, DataComponentTooltipUtils::getUseCooldownTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.DAMAGE_RESISTANT, DataComponentTooltipUtils::getDamageResistantTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.TOOL, DataComponentTooltipUtils::getToolTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.ENCHANTABLE, DataComponentTooltipUtils::getEnchantableTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.EQUIPPABLE, DataComponentTooltipUtils::getEquipableTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.REPAIRABLE, DataComponentTooltipUtils::getRepairableTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.GLIDER, DataComponentTooltipUtils::getEmptyTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.TOOLTIP_STYLE, DataComponentTooltipUtils::getResourceLocationTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.DEATH_PROTECTION, DataComponentTooltipUtils::getDeathProtectionTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.STORED_ENCHANTMENTS, DataComponentTooltipUtils::getItemEnchantmentsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DYED_COLOR, DataComponentTooltipUtils::getDyedColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_COLOR, DataComponentTooltipUtils::getMapColorTooltip);
@@ -164,14 +175,14 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.BUCKET_ENTITY_DATA, DataComponentTooltipUtils::getCustomDataTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BLOCK_ENTITY_DATA, DataComponentTooltipUtils::getCustomDataTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.INSTRUMENT, DataComponentTooltipUtils::getInstrumentTooltip);
-        registry.registerDataComponentTypeTooltip(DataComponents.OMINOUS_BOTTLE_AMPLIFIER, DataComponentTooltipUtils::getIntTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.OMINOUS_BOTTLE_AMPLIFIER, DataComponentTooltipUtils::getOminousBottleAmplifierTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.JUKEBOX_PLAYABLE, DataComponentTooltipUtils::getJukeboxPlayableTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.RECIPES, DataComponentTooltipUtils::getRecipesTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.LODESTONE_TRACKER, DataComponentTooltipUtils::getLodestoneTrackerTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.FIREWORK_EXPLOSION, DataComponentTooltipUtils::getFireworkExplosionTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.FIREWORKS, DataComponentTooltipUtils::getFireworksTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.PROFILE, DataComponentTooltipUtils::getProfileTooltip);
-        registry.registerDataComponentTypeTooltip(DataComponents.NOTE_BLOCK_SOUND, DataComponentTooltipUtils::getNoteBlockSoundTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.NOTE_BLOCK_SOUND, DataComponentTooltipUtils::getResourceLocationTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BANNER_PATTERNS, DataComponentTooltipUtils::getBannerPatternsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BASE_COLOR, DataComponentTooltipUtils::getBaseColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.POT_DECORATIONS, DataComponentTooltipUtils::getPotDecorationsTooltip);
@@ -180,6 +191,12 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.BEES, DataComponentTooltipUtils::getBeesTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.LOCK, DataComponentTooltipUtils::getLockTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.CONTAINER_LOOT, DataComponentTooltipUtils::getContainerLootTooltip);
+
+        registry.registerConsumeEffectTooltip(ConsumeEffect.Type.APPLY_EFFECTS, ConsumeEffectTooltipUtils::getApplyEffectsTooltip);
+        registry.registerConsumeEffectTooltip(ConsumeEffect.Type.REMOVE_EFFECTS, ConsumeEffectTooltipUtils::getRemoveEffectsTooltip);
+        registry.registerConsumeEffectTooltip(ConsumeEffect.Type.CLEAR_ALL_EFFECTS, ConsumeEffectTooltipUtils::getClearAllEffectsTooltip);
+        registry.registerConsumeEffectTooltip(ConsumeEffect.Type.TELEPORT_RANDOMLY, ConsumeEffectTooltipUtils::getTeleportRandomlyTooltip);
+        registry.registerConsumeEffectTooltip(ConsumeEffect.Type.PLAY_SOUND, ConsumeEffectTooltipUtils::getPlaySoundTooltip);
 
         registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS, TooltipUtils::applyRandomChanceWithLooting);
