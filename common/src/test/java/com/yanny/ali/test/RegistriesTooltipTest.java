@@ -34,7 +34,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testEntityTypeTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getEntityTypeTooltip(UTILS, 0, "ali.property.value.typee", EntityType.ALLAY), List.of("Type: minecraft:allay"));
+        assertTooltip(RegistriesTooltipUtils.getEntityTypeTooltip(UTILS, 0, "ali.property.value.entity_type", EntityType.ALLAY), List.of("Entity Type: minecraft:allay"));
     }
 
     @Test
