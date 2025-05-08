@@ -13,29 +13,20 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +34,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
+
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
 
 @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class GenericTooltipUtils {
@@ -84,20 +77,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getBlockTooltip(IClientUtils ignoredUtils, int pad, String key, Block block) {
-        return List.of(pad(pad, translatable(key, value(translatable(block.getDescriptionId())))));
-    }
-
-    @Unmodifiable
-    @NotNull
     public static List<Component> getPropertyTooltip(IClientUtils utils, int pad, String key, Property<?> property) {
         return getStringTooltip(utils, pad, key, property.getName());
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getEnchantmentTooltip(IClientUtils ignoredUtils, int pad, String key, Enchantment enchantment) {
-        return List.of(pad(pad, translatable(key, value(translatable(enchantment.getDescriptionId())))));
     }
 
     @NotNull
@@ -117,12 +98,6 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Component> getAttributeTooltip(IClientUtils ignoredUtils, int pad, String key, Attribute attribute) {
-        return List.of(pad(pad, translatable(key, value(translatable(attribute.getDescriptionId())))));
-    }
-
-    @Unmodifiable
-    @NotNull
     public static List<Component> getUUIDTooltip(IClientUtils utils, int pad, String key, UUID uuid) {
         return List.of(pad(pad, translatable("ali.property.value.uuid", value(uuid))));
     }
@@ -131,40 +106,10 @@ public class GenericTooltipUtils {
     public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, String key, Pair<Holder<BannerPattern>, DyeColor> pair) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, key, pair.getFirst(), GenericTooltipUtils::getBannerPatternTooltip));
+        components.addAll(getHolderTooltip(utils, pad, key, pair.getFirst(), RegistriesTooltipUtils::getBannerPatternTooltip));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.color", pair.getSecond()));
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBannerPatternTooltip(IClientUtils utils, int pad, String key, BannerPattern bannerPattern) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.BANNER_PATTERN, bannerPattern);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBlockEntityTypeTooltip(IClientUtils utils, int pad, String key, BlockEntityType<?> blockEntityType) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getPotionTooltip(IClientUtils utils, int pad, String key, Potion potion) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.POTION, potion);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getMobEffectTooltip(IClientUtils utils, int pad, String key, MobEffect mobEffect) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.MOB_EFFECT, mobEffect);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getLootNbtProviderTypeTooltip(IClientUtils utils, int pad, String key, LootNbtProviderType providerType) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, providerType);
     }
 
     @NotNull
@@ -244,7 +189,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static List<Component> getEntityTypePredicateTooltip(IClientUtils utils, int pad, String key, EntityTypePredicate entityTypePredicate) {
-        return getHolderSetTooltip(utils, pad, key, "ali.property.value.null", entityTypePredicate.types(), GenericTooltipUtils::getEntityTypeTooltip);
+        return getHolderSetTooltip(utils, pad, key, "ali.property.value.null", entityTypePredicate.types(), RegistriesTooltipUtils::getEntityTypeTooltip);
     }
 
     @Unmodifiable
@@ -307,7 +252,7 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable(key)));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", blockPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks(), GenericTooltipUtils::getBlockTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks(), RegistriesTooltipUtils::getBlockTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.branch.state_properties_predicate", blockPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.nbt", blockPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
 
@@ -326,16 +271,10 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable(key)));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", fluidPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
-        components.addAll(getOptionalHolderTooltip(utils, pad + 1, "ali.property.value.fluid", fluidPredicate.fluid(), GenericTooltipUtils::getFluidTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad + 1, "ali.property.value.fluid", fluidPredicate.fluid(), RegistriesTooltipUtils::getFluidTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.state_properties_predicate", fluidPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getFluidTooltip(IClientUtils utils, int pad, String key, Fluid fluid) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.FLUID, fluid);
     }
 
     @NotNull
@@ -403,7 +342,7 @@ public class GenericTooltipUtils {
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.durability", itemPredicate.durability()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.enchantment", itemPredicate.enchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", "ali.property.value.enchantment", itemPredicate.storedEnchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-        components.addAll(getOptionalHolderTooltip(utils, pad + 1, "ali.property.value.potion", itemPredicate.potion(), GenericTooltipUtils::getPotionTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad + 1, "ali.property.value.potion", itemPredicate.potion(), RegistriesTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.nbt", itemPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
 
         return components;
@@ -413,7 +352,7 @@ public class GenericTooltipUtils {
     public static List<Component> getEnchantmentPredicateTooltip(IClientUtils utils, int pad, String key, EnchantmentPredicate enchantmentPredicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getOptionalHolderTooltip(utils, pad, key, enchantmentPredicate.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderTooltip(utils, pad, key, enchantmentPredicate.enchantment(), RegistriesTooltipUtils::getEnchantmentTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", enchantmentPredicate.level()));
 
         return components;
@@ -454,12 +393,6 @@ public class GenericTooltipUtils {
         });
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getItemTooltip(IClientUtils ignoredUtils, int pad, String key, Item item) {
-        return List.of(pad(pad, translatable(key, value(translatable(item.getDescriptionId())))));
     }
 
     @Unmodifiable

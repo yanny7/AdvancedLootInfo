@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
 
 public class FunctionTooltipUtils {
     @NotNull
@@ -61,7 +62,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", fun.enchantments, GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip));
 
         return components;
     }
