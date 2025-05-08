@@ -41,7 +41,7 @@ public class FunctionTooltipTest {
     public void testApplyBonusCountTooltip() {
         assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(UTILS, 0, (ApplyBonusCount) ApplyBonusCount.addOreBonusCount(Enchantments.MOB_LOOTING).build()), List.of(
                 "Apply Bonus:",
-                "  -> Enchantment: Looting",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Formula: minecraft:ore_drops"
         ));
     }
@@ -87,7 +87,7 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Copy State:",
-                "  -> Block: Furnace",
+                "  -> Block: minecraft:furnace",
                 "  -> Properties:",
                 "    -> lit",
                 "    -> facing"
@@ -102,7 +102,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantments:",
-                "    -> Channeling"
+                "    -> minecraft:channeling"
         ));
     }
 
@@ -204,7 +204,7 @@ public class FunctionTooltipTest {
                 "  -> Modifiers:",
                 "    -> Modifier:",
                 "      -> Name: armor",
-                "      -> Attribute: Armor",
+                "      -> Attribute: minecraft:generic.armor",
                 "      -> Operation: MULTIPLY_TOTAL",
                 "      -> Amount: 1-5",
                 "      -> Equipment Slots:",
@@ -214,7 +214,7 @@ public class FunctionTooltipTest {
                 "        -> HEAD",
                 "    -> Modifier:",
                 "      -> Name: chest",
-                "      -> Attribute: Armor Toughness",
+                "      -> Attribute: minecraft:generic.armor_toughness",
                 "      -> Operation: MULTIPLY_BASE",
                 "      -> Amount: 3",
                 "      -> Equipment Slots:",
@@ -280,9 +280,9 @@ public class FunctionTooltipTest {
                 "Set Enchantments:",
                 "  -> Enchantments:",
                 List.of(
-                        "    -> Channeling",
+                        "    -> minecraft:channeling",
                         "      -> Levels: 1",
-                        "    -> Mending",
+                        "    -> minecraft:mending",
                         "      -> Levels: 2"
                 ),
                 "  -> Add: false"
