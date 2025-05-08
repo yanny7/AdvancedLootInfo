@@ -417,7 +417,7 @@ public class FunctionTooltipTest {
     public void testSetItemTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, 0, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))), List.of(
                 "Set Item:",
-                "  -> Item: Music Disc"
+                "  -> Item: minecraft:music_disc_mall"
         ));
     }
 

@@ -50,8 +50,8 @@ public class ItemSubPredicateTooltipTest {
                 new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
                 "Enchantments:",
-                "  -> Enchantment: Looting",
-                "  -> Enchantment: Mending",
+                "  -> Enchantment: minecraft:looting",
+                "  -> Enchantment: minecraft:mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -63,8 +63,8 @@ public class ItemSubPredicateTooltipTest {
                 new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
                 "Stored Enchantments:",
-                "  -> Enchantment: Looting",
-                "  -> Enchantment: Mending",
+                "  -> Enchantment: minecraft:looting",
+                "  -> Enchantment: minecraft:mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -103,7 +103,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Predicate:",
                 "      -> Items:",
-                "        -> Andesite",
+                "        -> minecraft:andesite",
                 "  -> Counts:",
                 "    -> Predicate:",
                 "      -> Items:",
@@ -124,7 +124,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Predicate:",
                 "      -> Items:",
-                "        -> Andesite",
+                "        -> minecraft:andesite",
                 "  -> Counts:",
                 "    -> Predicate:",
                 "      -> Items:",
@@ -233,7 +233,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Contains:",
                 "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Armor",
+                "        -> minecraft:generic.armor",
                 "      -> UUID: 08d6c05a-2151-3a79-a1df-eb9d2a8f262f",
                 "      -> Name: Help",
                 "      -> Amount: 1.0-4.0",
@@ -242,7 +242,7 @@ public class ItemSubPredicateTooltipTest {
                 "  -> Counts:",
                 "    -> Modifier:",
                 "      -> Attributes:",
-                "        -> Gravity",
+                "        -> minecraft:generic.gravity",
                 "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));

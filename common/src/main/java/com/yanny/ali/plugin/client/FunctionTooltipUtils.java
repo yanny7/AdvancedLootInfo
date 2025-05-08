@@ -10,7 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getDataComponentTypeTooltip;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getLootNbtProviderTypeTooltip;
 
 public class FunctionTooltipUtils {
     @NotNull
@@ -313,7 +314,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_item")));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.item", fun.item, GenericTooltipUtils::getItemTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.item", fun.item, RegistriesTooltipUtils::getItemTooltip));
 
         return components;
     }
@@ -358,8 +359,8 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.copy_components")));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.source", fun.source));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.include", "ali.property.value.null", fun.include, GenericTooltipUtils::getDataComponentTypeTooltip));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.exclude", "ali.property.value.null", fun.exclude, GenericTooltipUtils::getDataComponentTypeTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.include", "ali.property.value.null", fun.include, RegistriesTooltipUtils::getDataComponentTypeTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.exclude", "ali.property.value.null", fun.exclude, RegistriesTooltipUtils::getDataComponentTypeTooltip));
 
         return components;
     }

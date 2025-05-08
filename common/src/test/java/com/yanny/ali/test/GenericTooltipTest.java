@@ -36,8 +36,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.armortrim.TrimMaterials;
-import net.minecraft.world.item.armortrim.TrimPatterns;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -46,6 +44,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -66,10 +66,8 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
-import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
-import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class GenericTooltipTest {
     @Test
@@ -415,7 +413,7 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(Blocks.DIRT).build()), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
-                "    -> Dirt"
+                "    -> minecraft:dirt"
         ));
         assertTooltip(GenericTooltipUtils.getBlockPredicateTooltip(UTILS, 0, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(BlockTags.BEDS).build()), List.of(
                 "Block Predicate:",
@@ -805,8 +803,8 @@ public class GenericTooltipTest {
         )), List.of(
                 "Predicate:",
                 "  -> Attributes:",
-                "    -> Armor",
-                "    -> Gravity",
+                "    -> minecraft:generic.armor",
+                "    -> minecraft:generic.gravity",
                 "  -> UUID: 37b59afd-5927-35f9-b05e-484a5d7f5168",
                 "  -> Name: test",
                 "  -> Amount: 1.5-3.1",
@@ -882,7 +880,7 @@ public class GenericTooltipTest {
                 EquipmentSlotGroup.HEAD
         )), List.of(
                 "Modifier:",
-                "  -> Attribute: Block Break Speed",
+                "  -> Attribute: minecraft:player.block_break_speed",
                 "  -> Attribute Modifier:",
                 "    -> UUID: 08d6c05a-2151-3a79-a1df-eb9d2a8f262f",
                 "    -> Name: Test",
@@ -963,8 +961,8 @@ public class GenericTooltipTest {
         )), List.of(
                 "Rule:",
                 "  -> Blocks:",
-                "    -> Dirt",
-                "    -> Cobblestone",
+                "    -> minecraft:dirt",
+                "    -> minecraft:cobblestone",
                 "  -> Correct For Drops: true",
                 "  -> Speed: 0.25"
         ));
@@ -996,7 +994,7 @@ public class GenericTooltipTest {
                         .build()
         )), List.of(
                 "Item:",
-                "  -> Item: Andesite",
+                "  -> Item: minecraft:andesite",
                 "  -> Count: 10",
                 "  -> Components:",
                 "    -> Type: minecraft:damage",
@@ -1083,26 +1081,6 @@ public class GenericTooltipTest {
                 "Mob Effect: minecraft:luck",
                 "  -> Duration: 3"
         ));
-    }
-
-    @Test
-    public void testBiomeTooltip() {
-        assertTooltip(GenericTooltipUtils.getBiomeTooltip(UTILS, 0, "ali.property.value.biome", LOOKUP.lookup(Registries.BIOME).orElseThrow().get(Biomes.BADLANDS).orElseThrow().value()), List.of("Biome: minecraft:badlands"));
-    }
-
-    @Test
-    public void testStructureTooltip() {
-        assertTooltip(GenericTooltipUtils.getStructureTooltip(UTILS, 0, "ali.property.value.structure", LOOKUP.lookup(Registries.STRUCTURE).orElseThrow().get(BuiltinStructures.MINESHAFT).orElseThrow().value()), List.of("Structure: minecraft:mineshaft"));
-    }
-
-    @Test
-    public void testTrimMaterialTooltip() {
-        assertTooltip(GenericTooltipUtils.getTrimMaterialTooltip(UTILS, 0, "ali.property.value.material", LOOKUP.lookup(Registries.TRIM_MATERIAL).orElseThrow().get(TrimMaterials.AMETHYST).orElseThrow().value()), List.of("Material: minecraft:amethyst"));
-    }
-
-    @Test
-    public void testTrimPatternTooltip() {
-        assertTooltip(GenericTooltipUtils.getTrimPatternTooltip(UTILS, 0, "ali.property.value.pattern", LOOKUP.lookup(Registries.TRIM_PATTERN).orElseThrow().get(TrimPatterns.DUNE).orElseThrow().value()), List.of("Pattern: minecraft:dune"));
     }
 
     @Test

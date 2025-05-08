@@ -9,39 +9,29 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
-import net.minecraft.core.component.*;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.component.*;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -131,6 +121,12 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getBannerPatternLayerTooltip(IClientUtils utils, int pad, String key, BannerPatternLayers.Layer layer) {
         return getHolderTooltip(utils, pad, key, layer.pattern(), (u, p, s, b) -> getBannerPatternTooltip(u, p, s, b, layer.color()));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getBannerPatternTooltip(IClientUtils ignoredUtils, int pad, String key, BannerPattern bannerPattern, DyeColor color) {
+        return List.of(pad(pad, translatable(key, value(translatable(bannerPattern.translationKey() + "." + color.getName())))));
     }
 
     @NotNull
@@ -237,8 +233,8 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable(key)));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.position", locationPredicate.position(), GenericTooltipUtils::getPositionPredicateTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.biomes", "ali.property.value.null", locationPredicate.biomes(), GenericTooltipUtils::getBiomeTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.structures", "ali.property.value.null", locationPredicate.structures(), GenericTooltipUtils::getStructureTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.biomes", "ali.property.value.null", locationPredicate.biomes(), RegistriesTooltipUtils::getBiomeTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.structures", "ali.property.value.null", locationPredicate.structures(), RegistriesTooltipUtils::getStructureTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.dimension", locationPredicate.dimension(), GenericTooltipUtils::getResourceKeyTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.smokey", locationPredicate.smokey(), GenericTooltipUtils::getBooleanTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.light", locationPredicate.light(), GenericTooltipUtils::getLightPredicateTooltip));
@@ -353,7 +349,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), GenericTooltipUtils::getItemTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), RegistriesTooltipUtils::getItemTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.count", itemPredicate.count()));
         components.addAll(getDataComponentPredicateTooltip(utils, pad + 1, "ali.property.branch.component_predicates", itemPredicate.components()));
 
@@ -446,7 +442,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getMapDecorationTypeTooltip(IClientUtils utils, int pad, String key, MapDecorationType decorationType) {
-        return getRegistryTooltip(utils, pad, key, Registries.MAP_DECORATION_TYPE, decorationType);
+        return RegistriesTooltipUtils.getMapDecorationTypeTooltip(utils, pad, key, decorationType);
     }
 
     @NotNull
@@ -466,7 +462,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getContainerComponentManipulatorTooltip(IClientUtils utils, int pad, String key, ContainerComponentManipulator<?> component) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.DATA_COMPONENT_TYPE, component.type());
+        return getDataComponentTypeTooltip(utils, pad, key, component.type());
     }
 
     @NotNull
@@ -561,7 +557,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.attributes", "ali.property.value.null", predicate.attribute(), GenericTooltipUtils::getAttributeTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.attributes", "ali.property.value.null", predicate.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.id", predicate.id(), GenericTooltipUtils::getUUIDTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.name", predicate.name(), GenericTooltipUtils::getStringTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.amount", predicate.amount()));
@@ -627,7 +623,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.attribute", entry.attribute(), GenericTooltipUtils::getAttributeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.attribute", entry.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
         components.addAll(getAttributeModifierTooltip(utils, pad + 1, "ali.property.branch.attribute_modifier", entry.modifier()));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.slot", entry.slot()));
 
@@ -682,7 +678,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", rule.blocks(), GenericTooltipUtils::getBlockTooltip));
+        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", rule.blocks(), RegistriesTooltipUtils::getBlockTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.correct_for_drops", rule.correctForDrops(), GenericTooltipUtils::getBooleanTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.speed", rule.speed(), GenericTooltipUtils::getFloatTooltip));
 
@@ -770,30 +766,6 @@ public class GenericTooltipUtils {
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.duration", entry.duration()));
 
         return components;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getBiomeTooltip(IClientUtils utils, int pad, String key, Biome biome) {
-        return getRegistryTooltip(utils, pad, key, Registries.BIOME, biome);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getStructureTooltip(IClientUtils utils, int pad, String key, Structure structure) {
-        return getRegistryTooltip(utils, pad, key, Registries.STRUCTURE, structure);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getTrimMaterialTooltip(IClientUtils utils, int pad, String key, TrimMaterial material) {
-        return getRegistryTooltip(utils, pad, key, Registries.TRIM_MATERIAL, material);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getTrimPatternTooltip(IClientUtils utils, int pad, String key, TrimPattern pattern) {
-        return getRegistryTooltip(utils, pad, key, Registries.TRIM_PATTERN, pattern);
     }
 
     @NotNull
