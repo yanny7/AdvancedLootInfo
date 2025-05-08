@@ -43,6 +43,7 @@ import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,7 @@ import java.util.*;
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.pad;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class GenericTooltipTest {
     @Test
@@ -587,7 +589,7 @@ public class GenericTooltipTest {
                 "  -> Is In Open Water: true"
         ));
         //noinspection deprecation
-        assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", PlayerPredicate.Builder.player()
+        assertUnorderedTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
                 .setGameType(GameType.SURVIVAL)
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(4))
@@ -601,10 +603,12 @@ public class GenericTooltipTest {
                 "  -> Level: ≥3",
                 "  -> Game Type: Survival",
                 "  -> Stats:",
-                "    -> Item: minecraft:salmon",
-                "      -> Times Used: ≥5",
-                "    -> Block: minecraft:cobblestone",
-                "      -> Times Mined: ≥4",
+                List.of(
+                        "    -> Item: minecraft:salmon",
+                        "      -> Times Used: ≥5",
+                        "    -> Block: minecraft:cobblestone",
+                        "      -> Times Mined: ≥4"
+                ),
                 "  -> Recipes:",
                 "    -> minecraft:recipe1: true",
                 "    -> minecraft:recipe2: false",
@@ -641,7 +645,7 @@ public class GenericTooltipTest {
         );
 
         assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, 0, statMatcher), List.of(
-                "Block: minecraft:cobbleston",
+                "Block: minecraft:cobblestone",
                 "  -> Times Mined: ≥4"
         ));
     }

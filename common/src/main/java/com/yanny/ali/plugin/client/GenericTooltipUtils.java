@@ -87,7 +87,7 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable(key)));
         components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.name", modifier.name()));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.attribute", modifier.attribute(), GenericTooltipUtils::getAttributeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.attribute", modifier.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.operation", modifier.operation()));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.amount", modifier.amount()));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.uuid", modifier.id(), GenericTooltipUtils::getUUIDTooltip));
@@ -192,12 +192,6 @@ public class GenericTooltipUtils {
         return getHolderSetTooltip(utils, pad, key, "ali.property.value.null", entityTypePredicate.types(), RegistriesTooltipUtils::getEntityTypeTooltip);
     }
 
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getEntityTypeTooltip(IClientUtils utils, int pad, String key, EntityType<?> entityType) {
-        return getComponentTooltip(utils, pad, key, value(translatable(entityType.getDescriptionId())));
-    }
-
     @NotNull
     public static List<Component> getDistancePredicateTooltip(IClientUtils utils, int pad, String key, DistancePredicate distancePredicate) {
         List<Component> components = new LinkedList<>();
@@ -283,7 +277,7 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable("ali.property.branch.mob_effects")));
         mobEffectsPredicate.effectMap().forEach((effect, instancePredicate) -> {
-            components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.mob_effect", effect, GenericTooltipUtils::getMobEffectTooltip));
+            components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.mob_effect", effect, RegistriesTooltipUtils::getMobEffectTooltip));
             components.addAll(getMobEffectInstancePredicateTooltip(utils, pad + 2, instancePredicate));
         });
 
@@ -337,7 +331,7 @@ public class GenericTooltipUtils {
 
         components.add(pad(pad, translatable(key)));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", itemPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), GenericTooltipUtils::getItemTooltip));
+        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), RegistriesTooltipUtils::getItemTooltip));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.count", itemPredicate.count()));
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.durability", itemPredicate.durability()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.enchantment", itemPredicate.enchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
@@ -479,7 +473,7 @@ public class GenericTooltipUtils {
     public static List<Component> getEffectEntryTooltip(IClientUtils utils, int pad, String key, SetStewEffectFunction.EffectEntry entry) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getHolderTooltip(utils, pad, key, entry.effect(), GenericTooltipUtils::getMobEffectTooltip));
+        components.addAll(getHolderTooltip(utils, pad, key, entry.effect(), RegistriesTooltipUtils::getMobEffectTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.duration", entry.duration()));
 
         return components;

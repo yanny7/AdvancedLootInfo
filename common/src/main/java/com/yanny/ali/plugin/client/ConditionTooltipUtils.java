@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getBlockTooltip;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getEnchantmentTooltip;
 
 public class ConditionTooltipUtils {
     @NotNull
@@ -29,7 +27,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.block_state_property")));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.block", cond.block(), GenericTooltipUtils::getBlockTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.block", cond.block(), RegistriesTooltipUtils::getBlockTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.state_properties_predicate", cond.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return components;
@@ -143,7 +141,7 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.table_bonus")));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", cond.enchantment(), GenericTooltipUtils::getEnchantmentTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.enchantment", cond.enchantment(), RegistriesTooltipUtils::getEnchantmentTooltip));
         components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.values", cond.values().toString()));
 
         return components;
