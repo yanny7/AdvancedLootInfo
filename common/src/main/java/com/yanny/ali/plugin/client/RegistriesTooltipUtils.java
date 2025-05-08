@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -179,5 +180,11 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static List<Component> getJukeboxSongTooltip(IClientUtils utils, int pad, String key, JukeboxSong song) {
         return getRegistryTooltip(utils, pad, key, Registries.JUKEBOX_SONG, song);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getSoundEventTooltip(IClientUtils utils, int pad, String key, SoundEvent soundEvent) {
+        return getRegistryTooltip(utils, pad, key, Registries.SOUND_EVENT, soundEvent);
     }
 }
