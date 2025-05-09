@@ -1,3 +1,7 @@
+## []
+
+- Used compression for transferring loot tables
+
 ## [1.1.1]
 
 - Removed entity tooltip in REI
