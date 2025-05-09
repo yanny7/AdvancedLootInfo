@@ -21,18 +21,14 @@ accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lne
 
 accessible field net/minecraft/core/component/predicates/EnchantmentsPredicate enchantments Ljava/util/List;
 accessible field net/minecraft/world/item/AdventureModePredicate predicates Ljava/util/List;
-accessible field net/minecraft/world/item/AdventureModePredicate showInTooltip Z
-accessible field net/minecraft/world/item/AdventureModePredicate tooltip Ljava/util/List;
 accessible field net/minecraft/world/effect/MobEffectInstance hiddenEffect Lnet/minecraft/world/effect/MobEffectInstance;
 accessible field net/minecraft/world/item/component/BundleContents items Ljava/util/List;
-accessible field net/minecraft/world/item/armortrim/ArmorTrim showInTooltip Z
 accessible field net/minecraft/world/item/component/ItemContainerContents items Lnet/minecraft/core/NonNullList;
 accessible field net/minecraft/core/component/DataComponentExactPredicate expectedComponents Ljava/util/List;
 accessible field net/minecraft/world/item/enchantment/ItemEnchantments enchantments Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;
 
 accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms Ljava/util/List;
 
-accessible field net/minecraft/core/component/DataComponentPredicate expectedComponents Ljava/util/List;
 accessible field net/minecraft/core/component/DataComponentPatch map Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
 
 accessible field net/minecraft/world/level/storage/loot/functions/LootItemConditionalFunction predicates Ljava/util/List;
@@ -123,7 +119,6 @@ accessible method net/minecraft/world/level/storage/loot/functions/SetWrittenBoo
 accessible method net/minecraft/world/level/storage/loot/functions/SetWritableBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips <init> (Ljava/util/List;Ljava/util/Map;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
-accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle <init> (Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/level/storage/loot/functions/ToggleTooltips$TooltipWither;)V
 accessible method net/minecraft/world/item/enchantment/ItemEnchantments <init> (Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;)V
 accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStack;
 
@@ -133,8 +128,6 @@ accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible class net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction$CopyOperation
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
-accessible class net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle
-accessible class net/minecraft/world/level/storage/loot/functions/ToggleTooltips$TooltipWither
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher
 accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher
@@ -143,8 +136,6 @@ accessible class net/minecraft/advancements/critereon/PlayerPredicate$Advancemen
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate
 accessible class net/minecraft/advancements/critereon/PlayerPredicate$StatMatcher
 accessible class net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate
-accessible class net/minecraft/advancements/critereon/EntitySubPredicates$EntityVariantPredicateType$Instance
-accessible class net/minecraft/advancements/critereon/EntitySubPredicates$EntityHolderVariantPredicateType$Instance
 
 
 #########

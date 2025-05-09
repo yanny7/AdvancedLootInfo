@@ -3,7 +3,7 @@
   "package": "com.yanny.ali.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinBushBlock"
+    "MixinVegetationBlock"
   ],
   "refmap": "ali.refmap.json",
   "client": [

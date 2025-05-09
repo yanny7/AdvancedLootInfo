@@ -5,9 +5,9 @@
   "refmap": "ali.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinBushBlock",
     "MixinCanItemPerformAbility",
-    "MixinLootTableIdCondition"
+    "MixinLootTableIdCondition",
+    "MixinVegetationBlock"
   ],
   "injectors": {
     "defaultRequire": 1

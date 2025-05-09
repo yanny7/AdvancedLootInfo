@@ -2,7 +2,7 @@ package com.yanny.ali.compatibility.rei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yanny.ali.mixin.MixinBushBlock;
+import com.yanny.ali.mixin.MixinVegetationBlock;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -106,7 +106,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();
