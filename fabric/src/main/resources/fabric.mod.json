@@ -41,7 +41,7 @@
         "ali.fabric.mixins.json"
     ],
     "depends": {
-        "fabricloader": "${fabric_loader_version_range_fabric}",
+        "fabricloader": "*",
         "fabric": "*",
         "minecraft": "${minecraft_version}",
         "java": ">=17"

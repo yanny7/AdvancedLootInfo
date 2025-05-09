@@ -113,7 +113,6 @@ subprojects {
 
                 "fabric_version": fabric_version,
                 "fabric_loader_version": fabric_loader_version,
-                "fabric_loader_version_range_fabric": fabric_loader_version_range_fabric,
 
                 "emi_version": emi_version,
                 "emi_version_range": emi_version_range,

@@ -1,6 +1,7 @@
 ## []
 
 - Used compression for transferring loot tables
+- Removed forced fabric-loader version
 
 ## [1.1.1]
 
