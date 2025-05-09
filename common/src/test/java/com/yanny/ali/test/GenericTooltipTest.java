@@ -277,9 +277,9 @@ public class GenericTooltipTest {
                 "  -> Stepping on Location:",
                 "    -> X: ≤30.0",
                 "  -> Mob Effects:",
-                "    -> Mob Effect: minecraft:absorption",
+                "    -> minecraft:absorption",
                 "      -> Is Ambient: true",
-                "    -> Mob Effect: minecraft:blindness",
+                "    -> minecraft:blindness",
                 "      -> Is Visible: false",
                 "  -> Nbt: {range:5}",
                 "  -> Entity Flags:",
@@ -424,12 +424,12 @@ public class GenericTooltipTest {
                 .and(MobEffects.BLINDNESS, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.atLeast(5), MinMaxBounds.Ints.between(1, 2), null, null))
         ), List.of(
                 "Mob Effects:",
-                "  -> Mob Effect: minecraft:absorption",
+                "  -> minecraft:absorption",
                 "    -> Amplifier: 10-15",
                 "    -> Duration: ≤5",
                 "    -> Is Ambient: true",
                 "    -> Is Visible: false",
-                "  -> Mob Effect: minecraft:blindness",
+                "  -> minecraft:blindness",
                 "    -> Amplifier: ≥5",
                 "    -> Duration: 1-2"
         ));
@@ -658,11 +658,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testBlockPosTooltip() {
-        assertTooltip(GenericTooltipUtils.getBlockPosTooltip(UTILS, 0, "ali.property.branch.offset", new BlockPos(10, 12, 14)), List.of(
-                "Offset:",
-                "  -> X: 10",
-                "  -> Y: 12",
-                "  -> Z: 14"
+        assertTooltip(GenericTooltipUtils.getBlockPosTooltip(UTILS, 0, "ali.property.multi.offset", new BlockPos(10, 12, 14)), List.of(
+                "Offset: [X: 10, Y: 12, Z: 14]"
         ));
     }
 

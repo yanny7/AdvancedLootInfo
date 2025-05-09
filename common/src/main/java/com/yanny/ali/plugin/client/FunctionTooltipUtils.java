@@ -59,12 +59,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getEnchantRandomlyTooltip(IClientUtils utils, int pad, EnchantRandomlyFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip));
-
-        return components;
+        return getCollectionTooltip(utils, pad, "ali.type.function.enchant_randomly", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip);
     }
 
     @NotNull
@@ -150,12 +145,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetAttributesTooltip(IClientUtils utils, int pad, SetAttributesFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.set_attributes")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.modifiers", "ali.property.branch.modifier", fun.modifiers, GenericTooltipUtils::getModifierTooltip));
-
-        return components;
+        return getCollectionTooltip(utils, pad, "ali.type.function.set_attributes", "ali.property.branch.modifier", fun.modifiers, GenericTooltipUtils::getModifierTooltip);
     }
 
     @NotNull
@@ -293,10 +283,9 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
 
         if (!fun.effectDurationMap.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.mob_effects")));
             fun.effectDurationMap.forEach((effect, duration) -> {
-                components.addAll(getMobEffectTooltip(utils, pad + 2, "ali.property.value.mob_effect", effect));
-                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.duration", duration));
+                components.addAll(getMobEffectTooltip(utils, pad + 1, "ali.property.value.null", effect));
+                components.addAll(getNumberProviderTooltip(utils, pad + 2, "ali.property.value.duration", duration));
             });
         }
 

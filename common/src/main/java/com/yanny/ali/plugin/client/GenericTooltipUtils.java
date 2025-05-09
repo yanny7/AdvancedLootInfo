@@ -304,7 +304,7 @@ public class GenericTooltipUtils {
         if (mobEffectsPredicate != MobEffectsPredicate.ANY) {
             components.add(pad(pad, translatable(key)));
             mobEffectsPredicate.effects.forEach((effect, instancePredicate) -> {
-                components.addAll(getMobEffectTooltip(utils, pad + 1, "ali.property.value.mob_effect", effect));
+                components.addAll(getMobEffectTooltip(utils, pad + 1, "ali.property.value.null", effect));
                 components.addAll(getMobEffectInstancePredicateTooltip(utils, pad + 2, instancePredicate));
             });
         }
@@ -492,16 +492,10 @@ public class GenericTooltipUtils {
         return components;
     }
 
+    @Unmodifiable
     @NotNull
-    public static List<Component> getBlockPosTooltip(IClientUtils utils, int pad, String key, BlockPos pos) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable(key)));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.x", pos.getX()));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.y", pos.getY()));
-        components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.z", pos.getZ()));
-
-        return components;
+    public static List<Component> getBlockPosTooltip(IClientUtils ignoredUtils, int pad, String key, BlockPos pos) {
+        return List.of(pad(pad, translatable(key, pos.getX(), pos.getY(), pos.getZ())));
     }
 
     @NotNull
