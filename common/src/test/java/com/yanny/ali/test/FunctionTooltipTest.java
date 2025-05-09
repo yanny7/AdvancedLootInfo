@@ -219,9 +219,9 @@ public class FunctionTooltipTest {
                 "Set Banner Pattern:",
                 "  -> Append: true",
                 "  -> Banner Patterns:",
-                "    -> Banner Pattern: minecraft:base",
+                "    -> minecraft:base",
                 "      -> Color: WHITE",
-                "    -> Banner Pattern: minecraft:creeper",
+                "    -> minecraft:creeper",
                 "      -> Color: GREEN"
         ));
     }

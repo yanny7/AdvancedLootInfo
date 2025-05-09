@@ -372,8 +372,8 @@ public class GenericTooltipUtils {
 
             components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.count", itemPredicate.count));
             components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.durability", itemPredicate.durability));
-            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.enchantment", List.of(itemPredicate.enchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", "ali.property.value.enchantment", List.of(itemPredicate.storedEnchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
+            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", List.of(itemPredicate.enchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
+            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stored_enchantments", "ali.property.value.null", List.of(itemPredicate.storedEnchantments), GenericTooltipUtils::getEnchantmentPredicateTooltip));
             components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.potion", itemPredicate.potion, RegistriesTooltipUtils::getPotionTooltip));
             components.addAll(getNbtPredicateTooltip(utils, pad + 1, "ali.property.value.nbt", itemPredicate.nbt));
         }
