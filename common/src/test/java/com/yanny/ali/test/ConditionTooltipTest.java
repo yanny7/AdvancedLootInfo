@@ -63,7 +63,7 @@ public class ConditionTooltipTest {
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()), List.of(
                 "Block State Property:",
                 "  -> Block: minecraft:bamboo",
-                "  -> State Properties:",
+                "  -> Properties:",
                 "    -> facing: east"
         ));
     }
@@ -78,15 +78,14 @@ public class ConditionTooltipTest {
                         .source(EntityPredicate.Builder.entity().team("Blue"))
         ).build()), List.of(
                 "Damage Source Properties:",
-                "  -> Damage Source:",
-                "    -> Tags:",
-                "      -> minecraft:bypasses_armor: true",
-                "      -> minecraft:is_explosion: false",
-                "    -> Direct Entity:",
-                "      -> Entity Types:",
-                "        -> minecraft:warden",
-                "    -> Source Entity:",
-                "      -> Team: Blue"
+                "  -> Tags:",
+                "    -> minecraft:bypasses_armor: true",
+                "    -> minecraft:is_explosion: false",
+                "  -> Direct Entity:",
+                "    -> Entity Types:",
+                "      -> minecraft:warden",
+                "  -> Source Entity:",
+                "    -> Team: Blue"
         ));
     }
 
@@ -117,9 +116,9 @@ public class ConditionTooltipTest {
                 "Entity Scores:",
                 "  -> Target: DIRECT_KILLER",
                 "  -> Scores:",
-                "    -> Score: single",
+                "    -> single",
                 "      -> Limit: 2 - 5",
-                "    -> Score: double",
+                "    -> double",
                 "      -> Limit: 1 - 7"
         ));
     }
@@ -150,10 +149,7 @@ public class ConditionTooltipTest {
                 "Location Check:",
                 "  -> Location:",
                 "    -> Smokey: true",
-                "  -> Offset:",
-                "    -> X: 2",
-                "    -> Y: 4",
-                "    -> Z: 6"
+                "  -> Offset: [X: 2, Y: 4, Z: 6]"
         ));
     }
 

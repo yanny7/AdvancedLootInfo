@@ -103,9 +103,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.mainhand", "Main Hand:");
         TRANSLATION_MAP.put("ali.property.branch.mob_effects", "Mob Effects:");
         TRANSLATION_MAP.put("ali.property.branch.modifier", "Modifier:");
-        TRANSLATION_MAP.put("ali.property.branch.modifiers", "Modifiers:");
         TRANSLATION_MAP.put("ali.property.branch.offhand", "Offhand:");
-        TRANSLATION_MAP.put("ali.property.branch.offset", "Offset:");
         TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
         TRANSLATION_MAP.put("ali.property.branch.operations", "Operations:");
         TRANSLATION_MAP.put("ali.property.branch.passenger", "Passenger:");
@@ -189,7 +187,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.ranged_property_lte", "%s: ≤%s");
         TRANSLATION_MAP.put("ali.property.value.replace", "Replace: %s");
         TRANSLATION_MAP.put("ali.property.value.resolution_context", "Resolution Context: %s");
-        TRANSLATION_MAP.put("ali.property.value.score", "Score: %s");
         TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
         TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
         TRANSLATION_MAP.put("ali.property.value.size", "Size: %s");
@@ -209,6 +206,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.y", "Y: %s");
         TRANSLATION_MAP.put("ali.property.value.z", "Z: %s");
         TRANSLATION_MAP.put("ali.property.value.zoom", "Zoom: %s");
+
+        TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
 
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values", "%s%s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values_with_space", "%s %s");

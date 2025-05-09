@@ -28,19 +28,14 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.block_state_property")));
         components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.block", cond.block(), RegistriesTooltipUtils::getBlockTooltip));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.state_properties_predicate", cond.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.properties", cond.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return components;
     }
 
     @NotNull
     public static List<Component> getDamageSourcePropertiesTooltip(IClientUtils utils, int pad, DamageSourceCondition cond) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.condition.damage_source_properties")));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.damage_source_predicate", cond.predicate(), GenericTooltipUtils::getDamageSourcePredicateTooltip));
-
-        return components;
+        return getOptionalTooltip(utils, pad + 1, "ali.type.condition.damage_source_properties", cond.predicate(), GenericTooltipUtils::getDamageSourcePredicateTooltip);
     }
 
     @NotNull
@@ -64,7 +59,7 @@ public class ConditionTooltipUtils {
         if (!cond.scores().isEmpty()) {
             components.add(pad(pad + 1, translatable("ali.property.branch.scores")));
             cond.scores().forEach((score, range) -> {
-                components.add(pad(pad + 2, translatable("ali.property.value.score", score)));
+                components.add(pad(pad + 2, translatable("ali.property.value.null", score)));
                 components.addAll(getIntRangeTooltip(utils, pad + 3, "ali.property.value.limit", range));
             });
         }
@@ -94,7 +89,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate(), GenericTooltipUtils::getLocationPredicateTooltip));
-        components.addAll(getBlockPosTooltip(utils, pad + 1, "ali.property.branch.offset", cond.offset()));
+        components.addAll(getBlockPosTooltip(utils, pad + 1, "ali.property.multi.offset", cond.offset()));
 
         return components;
     }

@@ -101,8 +101,7 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Enchant Randomly:",
-                "  -> Enchantments:",
-                "    -> minecraft:channeling"
+                "  -> minecraft:channeling"
         ));
     }
 
@@ -201,24 +200,23 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlot.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
-                "  -> Modifiers:",
-                "    -> Modifier:",
-                "      -> Name: armor",
-                "      -> Attribute: minecraft:generic.armor",
-                "      -> Operation: MULTIPLY_TOTAL",
-                "      -> Amount: 1-5",
-                "      -> Equipment Slots:",
-                "        -> FEET",
-                "        -> LEGS",
-                "        -> CHEST",
-                "        -> HEAD",
-                "    -> Modifier:",
-                "      -> Name: chest",
-                "      -> Attribute: minecraft:generic.armor_toughness",
-                "      -> Operation: MULTIPLY_BASE",
-                "      -> Amount: 3",
-                "      -> Equipment Slots:",
-                "        -> MAINHAND"
+                "  -> Modifier:",
+                "    -> Name: armor",
+                "    -> Attribute: minecraft:generic.armor",
+                "    -> Operation: MULTIPLY_TOTAL",
+                "    -> Amount: 1-5",
+                "    -> Equipment Slots:",
+                "      -> FEET",
+                "      -> LEGS",
+                "      -> CHEST",
+                "      -> HEAD",
+                "  -> Modifier:",
+                "    -> Name: chest",
+                "    -> Attribute: minecraft:generic.armor_toughness",
+                "    -> Operation: MULTIPLY_BASE",
+                "    -> Amount: 3",
+                "    -> Equipment Slots:",
+                "      -> MAINHAND"
         ));
     }
 
@@ -387,11 +385,10 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Set Stew Effect:",
-                "  -> Mob Effects:",
-                "    -> Mob Effect: minecraft:luck",
-                "      -> Duration: 1-5",
-                "    -> Mob Effect: minecraft:unluck",
-                "      -> Duration: 3-4"
+                "  -> minecraft:luck",
+                "    -> Duration: 1-5",
+                "  -> minecraft:unluck",
+                "    -> Duration: 3-4"
         ));
     }
 }
