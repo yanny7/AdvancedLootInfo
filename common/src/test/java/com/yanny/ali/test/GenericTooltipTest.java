@@ -546,14 +546,14 @@ public class GenericTooltipTest {
                 "  -> Count: 10-15",
                 "  -> Durability: ≤5",
                 "  -> Enchantments:",
-                "    -> Enchantment: minecraft:smite",
+                "    -> minecraft:smite",
                 "      -> Level: ≥1",
-                "    -> Enchantment: minecraft:mending",
+                "    -> minecraft:mending",
                 "      -> Level: 2-4",
                 "  -> Stored Enchantments:",
-                "    -> Enchantment: minecraft:depth_strider",
+                "    -> minecraft:depth_strider",
                 "      -> Level: ≤5",
-                "    -> Enchantment: minecraft:lure",
+                "    -> minecraft:lure",
                 "      -> Level: ≥4",
                 "  -> Potion: minecraft:healing",
                 "  -> Nbt: {healing:1b}"
@@ -601,7 +601,7 @@ public class GenericTooltipTest {
                 .build()), List.of(
                 "Entity Sub Predicate:",
                 "  -> Level: ≥3",
-                "  -> Game Type: Survival",
+                "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
                 List.of(
                         "    -> Item: minecraft:salmon",
@@ -625,13 +625,6 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", EntitySubPredicate.Types.FROG.createPredicate(FrogVariant.COLD)), List.of(
                 "Entity Sub Predicate:",
                 "  -> Variant: minecraft:cold"
-        ));
-    }
-
-    @Test
-    public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, "ali.property.value.game_type", GameType.SPECTATOR), List.of(
-                "Game Type: Spectator"
         ));
     }
 

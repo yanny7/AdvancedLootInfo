@@ -151,6 +151,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
         TRANSLATION_MAP.put("ali.property.value.game_type", "Game Type: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
+        TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
         TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");
         TRANSLATION_MAP.put("ali.property.value.is_baby", "Is Baby: %s");
@@ -221,6 +222,16 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.8", "                ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.9", "                  ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.10", "                    ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.11", "                      ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.12", "                        ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.13", "                          ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.14", "                            ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.15", "                              ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.16", "                                ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.17", "                                  ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.18", "                                    ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.19", "                                      ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.20", "                                        ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");

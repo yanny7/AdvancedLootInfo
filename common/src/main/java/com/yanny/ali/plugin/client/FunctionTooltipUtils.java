@@ -174,7 +174,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_banner_pattern")));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.append", fun.append));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.banner_patterns", "ali.property.value.banner_pattern", fun.patterns, GenericTooltipUtils::getBannerPatternTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.banner_patterns", "ali.property.value.null", fun.patterns, GenericTooltipUtils::getBannerPatternTooltip));
 
         return components;
     }
