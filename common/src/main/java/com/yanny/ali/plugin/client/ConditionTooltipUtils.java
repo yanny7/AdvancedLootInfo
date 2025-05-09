@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.IClientUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
@@ -92,7 +93,10 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.location_check")));
         components.addAll(getLocationPredicateTooltip(utils, pad + 1, "ali.property.branch.location", cond.predicate));
-        components.addAll(getBlockPosTooltip(utils, pad + 1, "ali.property.multi.offset", cond.offset));
+
+        if (!cond.offset.equals(BlockPos.ZERO)) {
+            components.addAll(getBlockPosTooltip(utils, pad + 1, "ali.property.multi.offset", cond.offset));
+        }
 
         return components;
     }

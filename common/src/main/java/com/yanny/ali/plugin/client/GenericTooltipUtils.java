@@ -495,7 +495,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getBlockPosTooltip(IClientUtils ignoredUtils, int pad, String key, BlockPos pos) {
-        return List.of(pad(pad, translatable(key, pos.getX(), pos.getY(), pos.getZ())));
+        return List.of(pad(pad, translatable(key, value(pos.getX()), value(pos.getY()), value(pos.getZ()))));
     }
 
     @NotNull
