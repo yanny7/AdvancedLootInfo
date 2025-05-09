@@ -1,5 +1,6 @@
 package com.yanny.ali.network;
 
+import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -34,7 +35,7 @@ public class InfoSyncLootTableMessage {
 
     public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
         location = buf.readResourceLocation();
-        lootTable = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, decompressString(buf.readUtf())).get().orThrow();
+        lootTable = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, JsonParser.parseString(decompressString(buf.readUtf()))).get().orThrow();
         items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
     }
 

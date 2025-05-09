@@ -371,7 +371,7 @@ public class GenericTooltipUtils {
                 components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
                 components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
                 components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));
-                components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt()));
+                components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
             } else if (entitySubPredicate instanceof SlimePredicate predicate) {
                 components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.size", predicate.size()));
             } else {

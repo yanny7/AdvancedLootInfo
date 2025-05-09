@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getLootNbtProviderTypeTooltip;
 
 public class FunctionTooltipUtils {
     @NotNull
@@ -59,7 +59,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getEnchantRandomlyTooltip(IClientUtils utils, int pad, EnchantRandomlyFunction fun) {
-        if (!fun.enchantments.isEmpty()) {
+        if (fun.enchantments.isPresent() && fun.enchantments.get().size() > 0) {
             return getOptionalHolderSetTooltip(utils, pad, "ali.type.function.enchant_randomly", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip);
         } else {
             return List.of(pad(pad, translatable("ali.type.function.enchant_randomly")));
@@ -292,6 +292,6 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetStewEffectTooltip(IClientUtils utils, int pad, SetStewEffectFunction fun) {
-        return getCollectionTooltip(utils, pad + 1, "ali.type.function.set_stew_effect", "ali.property.value.null", fun.effects, GenericTooltipUtils::getEffectEntryTooltip);
+        return getCollectionTooltip(utils, pad, "ali.type.function.set_stew_effect", "ali.property.value.null", fun.effects, GenericTooltipUtils::getEffectEntryTooltip);
     }
 }

@@ -36,7 +36,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static List<Component> getDamageSourcePropertiesTooltip(IClientUtils utils, int pad, DamageSourceCondition cond) {
-        return getOptionalTooltip(utils, pad + 1, "ali.type.condition.damage_source_properties", cond.predicate(), GenericTooltipUtils::getDamageSourcePredicateTooltip);
+        return getOptionalTooltip(utils, pad, "ali.type.condition.damage_source_properties", cond.predicate(), GenericTooltipUtils::getDamageSourcePredicateTooltip);
     }
 
     @NotNull
@@ -94,6 +94,7 @@ public class ConditionTooltipUtils {
         if (!cond.offset().equals(BlockPos.ZERO)) {
             components.addAll(getBlockPosTooltip(utils, pad + 1, "ali.property.multi.offset", cond.offset()));
         }
+
         return components;
     }
 
