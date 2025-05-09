@@ -59,7 +59,11 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getEnchantRandomlyTooltip(IClientUtils utils, int pad, EnchantRandomlyFunction fun) {
-        return getOptionalHolderSetTooltip(utils, pad + 1, "ali.type.function.enchant_randomly", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip);
+        if (!fun.enchantments.isEmpty()) {
+            return getOptionalHolderSetTooltip(utils, pad, "ali.type.function.enchant_randomly", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip);
+        } else {
+            return List.of(pad(pad, translatable("ali.type.function.enchant_randomly")));
+        }
     }
 
     @NotNull
