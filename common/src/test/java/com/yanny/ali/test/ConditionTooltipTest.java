@@ -151,6 +151,13 @@ public class ConditionTooltipTest {
                 "    -> Smokey: true",
                 "  -> Offset: [X: 2, Y: 4, Z: 6]"
         ));
+        assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(UTILS, 0, (LocationCheck) LocationCheck.checkLocation(
+                LocationPredicate.Builder.location().setSmokey(true)
+        ).build()), List.of(
+                "Location Check:",
+                "  -> Location:",
+                "    -> Smokey: true"
+        ));
     }
 
     @Test

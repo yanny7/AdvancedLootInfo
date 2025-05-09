@@ -33,7 +33,7 @@ public class LootCategoryProvider implements DataProvider {
 
     public void generate() {
         addGameplayCategory("chest_loot", Items.CHEST, List.of(Pattern.compile("^chests/.*$")));
-        addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("^gameplay/fishing/.*$")));
+        addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("^gameplay/fishing.*$")));
         addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("^archaeology/.*$")));
         addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("^gameplay/hero_of_the_village/.*$")));
     }
