@@ -1,15 +1,17 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.client.RegistriesTooltipUtils;
-import net.minecraft.advancements.critereon.EntitySubPredicates;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.LightningBoltPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.entity.animal.FrogVariant;
-import net.minecraft.world.entity.animal.WolfVariants;
+import net.minecraft.world.entity.animal.CatVariants;
+import net.minecraft.world.entity.animal.frog.FrogVariants;
+import net.minecraft.world.entity.animal.wolf.WolfVariants;
 import net.minecraft.world.entity.decoration.PaintingVariants;
 import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Items;
@@ -29,6 +31,7 @@ import net.minecraft.world.level.storage.loot.providers.nbt.NbtProviders;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -102,12 +105,15 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testEntitySubPredicateTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.value.variant", EntitySubPredicates.catVariant(LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariant.CALICO))), List.of("Variant: minecraft:cat"));
+        assertTooltip(RegistriesTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.value.variant", new LightningBoltPredicate(
+                MinMaxBounds.Ints.between(1, 2),
+                Optional.of(EntityPredicate.Builder.entity().team("white").build())
+        )), List.of("Variant: minecraft:lightning"));
     }
 
     @Test
     public void testCatVariantTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getCatVariantTooltip(UTILS, 0, "ali.property.value.variant", LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariant.CALICO).value()), List.of("Variant: minecraft:calico"));
+        assertTooltip(RegistriesTooltipUtils.getCatVariantTooltip(UTILS, 0, "ali.property.value.variant", LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.CALICO).value()), List.of("Variant: minecraft:calico"));
     }
 
     @Test
@@ -117,7 +123,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testFrogVariantTooltip() {
-    assertTooltip(RegistriesTooltipUtils.getFrogVariantTooltip(UTILS, 0, "ali.property.value.variant", LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariant.TEMPERATE).value()), List.of("Variant: minecraft:temperate"));
+    assertTooltip(RegistriesTooltipUtils.getFrogVariantTooltip(UTILS, 0, "ali.property.value.variant", LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariants.TEMPERATE).value()), List.of("Variant: minecraft:temperate"));
     }
 
     @Test

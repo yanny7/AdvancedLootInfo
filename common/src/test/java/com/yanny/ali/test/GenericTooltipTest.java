@@ -9,12 +9,9 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentExactPredicate;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.commands.arguments.NbtPathArgument;
+import net.minecraft.core.*;
+import net.minecraft.core.component.*;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
@@ -29,6 +26,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Unit;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -39,7 +37,6 @@ import net.minecraft.world.entity.animal.CatVariants;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -51,7 +48,6 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
@@ -321,9 +317,8 @@ public class GenericTooltipTest {
                 "        -> minecraft:andesite",
                 "        -> minecraft:diorite",
                 "  -> Entity Sub Predicate:",
-                "    -> Type: minecraft:cat",
-                "      -> Variants:",
-                "        -> Variant: minecraft:persian",
+                "    -> Lightning Bolt:",
+                "      -> Blocks On Fire: ≤10",
                 "  -> Vehicle:",
                 "    -> Team: blue",
                 "  -> Passenger:",
@@ -549,7 +544,8 @@ public class GenericTooltipTest {
                 .feet(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(1, 2)))
                 .mainhand(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(0, 64)))
                 .offhand(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(32)))
-                .build()), List.of(
+                .build()
+        ), List.of(
             "Entity Equipment:",
             "  -> Head:",
             "    -> Count: 10-15",
@@ -580,24 +576,16 @@ public class GenericTooltipTest {
                 "Match Tool:",
                 "  -> Items:",
                 "    -> Tag: minecraft:axes",
-                "  -> Component Predicates:",
-                "    -> Component: minecraft:base_color",
-                "      -> Color: BLUE"
+                "  -> Data Component Matchers:",
+                "    -> Expected Components:",
+                "      -> minecraft:base_color",
+                "        -> Color: BLUE"
         ));
         assertTooltip(GenericTooltipUtils.getItemPredicateTooltip(UTILS, 0, "ali.type.condition.match_tool", ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.CAKE, Items.NETHERITE_AXE)
                 .withCount(MinMaxBounds.Ints.between(10, 15))
                 .withComponents(DataComponentMatchers.Builder.components()
                         .partial(DataComponentPredicates.DAMAGE, DamagePredicate.durability(MinMaxBounds.Ints.atMost(5)))
-                        .partial(DataComponentPredicates.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
-                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.SMITE).orElseThrow(), MinMaxBounds.Ints.atLeast(1)),
-                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(2, 4))
-                        )))
-                        .partial(DataComponentPredicates.STORED_ENCHANTMENTS, EnchantmentsPredicate.storedEnchantments(List.of(
-                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.DEPTH_STRIDER).orElseThrow(), MinMaxBounds.Ints.atLeast(1)),
-                                new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LURE).orElseThrow(), MinMaxBounds.Ints.between(2, 4))
-                        )))
-                        .partial(DataComponentPredicates.POTIONS, new PotionsPredicate(HolderSet.direct(Potions.HEALING)))
                         .partial(DataComponentPredicates.CUSTOM_DATA, new CustomDataPredicate(new NbtPredicate(compoundTag)))
                         .build()
                 )
@@ -608,35 +596,12 @@ public class GenericTooltipTest {
                 "    -> minecraft:cake",
                 "    -> minecraft:netherite_axe",
                 "  -> Count: 10-15",
-                "  -> Component Predicates:",
-                "    -> Component: minecraft:damage",
-                "      -> Value: 5",
-                "    -> Component: minecraft:pot_decorations",
-                "      -> Back: minecraft:andesite",
-                "      -> Left: minecraft:diorite",
-                "      -> Right: minecraft:granite",
-                "      -> Front: minecraft:stone",
-                "  -> Item Predicates:",
-                "    -> Damage:",
-                "      -> Durability: ≤5",
-                "    -> Enchantments:",
-                "      -> Enchantments:",
-                "        -> minecraft:smite",
-                "        -> Level: ≥1",
-                "      -> Enchantments:",
-                "        -> minecraft:mending",
-                "        -> Level: 2-4",
-                "    -> Stored Enchantments:",
-                "      -> Enchantments:",
-                "        -> minecraft:depth_strider",
-                "        -> Level: ≤5",
-                "      -> Enchantments:",
-                "        -> minecraft:lure",
-                "        -> Level: ≥4",
-                "    -> Potions:",
-                "      -> minecraft:healing",
-                "    -> Custom Data:",
-                "      -> Nbt: {healing:1b}"
+                "  -> Data Component Matchers:",
+                "    -> Partial Matchers:",
+                "      -> minecraft:damage",
+                "        -> Durability: ≤5",
+                "      -> minecraft:custom_data",
+                "        -> Nbt: {healing:1b}"
         ));
     }
 
@@ -752,20 +717,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testDataComponentPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getDataComponentPredicateTooltip(UTILS, 0, "ali.property.branch.component_predicates", DataComponentPredicate.builder()
-                .expect(DataComponents.DAMAGE, 3)
-                .expect(DataComponents.MAX_DAMAGE, 8).build()
-        ), List.of(
-                "Component Predicates:",
-                "  -> Component: minecraft:damage",
-                "    -> Value: 3",
-                "  -> Component: minecraft:max_damage",
-                "    -> Value: 8"
-        ));
-    }
-
-    @Test
     public void testTypedDataComponentTooltip() {
         assertTooltip(GenericTooltipUtils.getTypedDataComponentTooltip(UTILS, 0, "ali.property.value.component", new TypedDataComponent<>(DataComponents.DAMAGE, 3)), List.of(
                 "Component: minecraft:damage",
@@ -778,12 +729,12 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getCollectionPredicateTooltip(UTILS, 0, "ali.property.branch.pages", "ali.property.value.null", Optional.of(
                 new CollectionPredicate<>(
                         Optional.of(CollectionContentsPredicate.of(
-                                new ItemWritableBookPredicate.PagePredicate("Hello"),
-                                new ItemWritableBookPredicate.PagePredicate("World")
+                                new WritableBookPredicate.PagePredicate("Hello"),
+                                new WritableBookPredicate.PagePredicate("World")
                         )),
                         Optional.of(CollectionCountsPredicate.of(
-                                new CollectionCountsPredicate.Entry<>(new ItemWritableBookPredicate.PagePredicate("Star"), MinMaxBounds.Ints.between(1, 5)),
-                                new CollectionCountsPredicate.Entry<>(new ItemWritableBookPredicate.PagePredicate("Wars"), MinMaxBounds.Ints.atLeast(3))
+                                new CollectionCountsPredicate.Entry<>(new WritableBookPredicate.PagePredicate("Star"), MinMaxBounds.Ints.between(1, 5)),
+                                new CollectionCountsPredicate.Entry<>(new WritableBookPredicate.PagePredicate("Wars"), MinMaxBounds.Ints.atLeast(3))
                         )),
                         Optional.of(MinMaxBounds.Ints.atLeast(4))
                 )
@@ -803,7 +754,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testFireworkPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getFireworkPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", new ItemFireworkExplosionPredicate.FireworkPredicate(
+        assertTooltip(GenericTooltipUtils.getFireworkPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", new FireworkExplosionPredicate.FireworkPredicate(
                 Optional.of(FireworkExplosion.Shape.CREEPER),
                 Optional.of(true),
                 Optional.of(false)
@@ -817,13 +768,13 @@ public class GenericTooltipTest {
 
     @Test
     public void testPagePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getPagePredicateTooltip(UTILS, 0, "ali.property.value.page", new ItemWritableBookPredicate.PagePredicate("asdf")), List.of("Page: asdf"));
-        assertTooltip(GenericTooltipUtils.getPagePredicateTooltip(UTILS, 0, "ali.property.value.page", new ItemWrittenBookPredicate.PagePredicate(Component.literal("asdf"))), List.of("Page: asdf"));
+        assertTooltip(GenericTooltipUtils.getPagePredicateTooltip(UTILS, 0, "ali.property.value.page", new WritableBookPredicate.PagePredicate("asdf")), List.of("Page: asdf"));
+        assertTooltip(GenericTooltipUtils.getPagePredicateTooltip(UTILS, 0, "ali.property.value.page", new WrittenBookPredicate.PagePredicate(Component.literal("asdf"))), List.of("Page: asdf"));
     }
 
     @Test
     public void testEntryPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getEntryPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", new ItemAttributeModifiersPredicate.EntryPredicate(
+        assertTooltip(GenericTooltipUtils.getEntryPredicateTooltip(UTILS, 0, "ali.property.branch.predicate", new AttributeModifiersPredicate.EntryPredicate(
                 Optional.of(HolderSet.direct(Attributes.ARMOR, Attributes.GRAVITY)),
                 Optional.of(ResourceLocation.withDefaultNamespace("test")),
                 MinMaxBounds.Doubles.between(1.5, 3.14),
@@ -847,7 +798,7 @@ public class GenericTooltipTest {
                 .remove(DataComponents.DAMAGE)
                 .remove(DataComponents.MAX_DAMAGE)
                 .set(DataComponents.BASE_COLOR, DyeColor.BLUE)
-                .set(DataComponents.HIDE_TOOLTIP, Unit.INSTANCE)
+                .set(DataComponents.GLIDER, Unit.INSTANCE)
                 .set(new TypedDataComponent<>(DataComponents.CUSTOM_NAME, Component.literal("Hello"))).build()
         ), List.of(
                 "Components:",
@@ -857,7 +808,7 @@ public class GenericTooltipTest {
                 "    -> REMOVED",
                 "  -> minecraft:base_color",
                 "    -> Color: BLUE",
-                "  -> minecraft:hide_tooltip",
+                "  -> minecraft:glider",
                 "  -> minecraft:custom_name",
                 "    -> Custom Name: Hello"
         ));
@@ -1001,7 +952,6 @@ public class GenericTooltipTest {
                 "  -> Components:",
                 List.of(
                         "    -> Type: minecraft:attribute_modifiers",
-                        "      -> Show In Tooltip: true",
                         "    -> Type: minecraft:repair_cost",
                         "      -> Value: 0",
                         "    -> Type: minecraft:item_name",
@@ -1013,7 +963,11 @@ public class GenericTooltipTest {
                         "      -> Value: 64",
                         "    -> Type: minecraft:enchantments",
                         "    -> Type: minecraft:item_model",
-                        "      -> Id: minecraft:andesite"
+                        "      -> Id: minecraft:andesite",
+                        "    -> Type: minecraft:tooltip_display",
+                        "      -> Hide Tooltip: false",
+                        "    -> Type: minecraft:break_sound",
+                        "      -> Sound: minecraft:entity.item.break"
                 )
         ));
     }
@@ -1036,7 +990,7 @@ public class GenericTooltipTest {
     @Test
     public void testSuspiciousStewEffectEntryTooltip() {
         assertTooltip(GenericTooltipUtils.getSuspiciousStewEffectEntryTooltip(UTILS, 0, "ali.property.branch.effect", new SuspiciousStewEffects.Entry(
-                MobEffects.DAMAGE_BOOST,
+                MobEffects.STRENGTH,
                 5
         )), List.of(
                 "Effect:",
@@ -1181,6 +1135,54 @@ public class GenericTooltipTest {
                 "  -> Jump: false",
                 "  -> Sneak: true",
                 "  -> Sprint: true"
+        ));
+    }
+
+    @Test
+    public void testStandaloneListOperationTooltip() {
+        assertTooltip(GenericTooltipUtils.getStandaloneListOperationTooltip(UTILS, 0, "ali.property.branch.strings", new ListOperation.StandAlone<>(
+                List.of("asdf", "jklo"),
+                new ListOperation.Insert(2)
+        ), GenericTooltipUtils::getStringTooltip), List.of(
+                "Strings:",
+                "  -> List Operation: INSERT",
+                "    -> Offset: 2",
+                "  -> Values:",
+                "    -> asdf",
+                "    -> jklo"
+        ));
+    }
+
+    @Test
+    public void testDamageReductionTooltip() {
+        assertTooltip(GenericTooltipUtils.getDamageReductionTooltip(UTILS, 0, "ali.property.branch.damage_reduction", new BlocksAttacks.DamageReduction(
+               2.5f,
+               Optional.of(HolderSet.direct(
+                       LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.ARROW),
+                       LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CACTUS)
+               )),
+               0.1f,
+               3.2f
+        )), List.of(
+                "Damage Reduction:",
+                "  -> Horizontal Blocking Angle: 2.5",
+                "  -> Damage Types:",
+                "    -> minecraft:arrow",
+                "    -> minecraft:cactus",
+                "  -> Base: 0.1",
+                "  -> Factor: 3.2"
+        ));
+    }
+
+    @Test
+    public void testItemDamageTooltip() {
+        assertTooltip(GenericTooltipUtils.getItemDamageTooltip(UTILS, 0, "ali.property.branch.item_damage", new BlocksAttacks.ItemDamageFunction(
+               1.2f, 3.5f, 2.4f
+        )), List.of(
+                "Item Damage:",
+                "  -> Threshold: 1.2",
+                "  -> Base: 3.5",
+                "  -> Factor: 2.4"
         ));
     }
 }

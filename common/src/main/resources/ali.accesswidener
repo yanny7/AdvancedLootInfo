@@ -27,6 +27,8 @@ accessible field net/minecraft/world/effect/MobEffectInstance hiddenEffect Lnet/
 accessible field net/minecraft/world/item/component/BundleContents items Ljava/util/List;
 accessible field net/minecraft/world/item/armortrim/ArmorTrim showInTooltip Z
 accessible field net/minecraft/world/item/component/ItemContainerContents items Lnet/minecraft/core/NonNullList;
+accessible field net/minecraft/core/component/DataComponentExactPredicate expectedComponents Ljava/util/List;
+accessible field net/minecraft/world/item/enchantment/ItemEnchantments enchantments Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;
 
 accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms Ljava/util/List;
 
@@ -122,7 +124,7 @@ accessible method net/minecraft/world/level/storage/loot/functions/SetWritableBo
 accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips <init> (Ljava/util/List;Ljava/util/Map;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltips$ComponentToggle <init> (Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/level/storage/loot/functions/ToggleTooltips$TooltipWither;)V
-accessible method net/minecraft/world/item/enchantment/ItemEnchantments <init> (Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;Z)V
+accessible method net/minecraft/world/item/enchantment/ItemEnchantments <init> (Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;)V
 accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStack;
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

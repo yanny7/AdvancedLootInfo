@@ -3,17 +3,24 @@ package com.yanny.ali.plugin.client;
 import com.yanny.ali.api.IClientUtils;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.entity.animal.FrogVariant;
-import net.minecraft.world.entity.animal.WolfVariant;
+import net.minecraft.world.entity.animal.ChickenVariant;
+import net.minecraft.world.entity.animal.CowVariant;
+import net.minecraft.world.entity.animal.PigVariant;
+import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.decoration.PaintingVariant;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.JukeboxSong;
@@ -125,7 +132,7 @@ public class RegistriesTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getCatVariantTooltip(IClientUtils utils, int pad, String key, CatVariant catVariant) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.CAT_VARIANT, catVariant);
+        return getRegistryTooltip(utils, pad, key, Registries.CAT_VARIANT, catVariant);
     }
 
     @Unmodifiable
@@ -137,7 +144,7 @@ public class RegistriesTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getFrogVariantTooltip(IClientUtils utils, int pad, String key, FrogVariant frogVariant) {
-        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.FROG_VARIANT, frogVariant);
+        return getRegistryTooltip(utils, pad, key, Registries.FROG_VARIANT, frogVariant);
     }
 
     @Unmodifiable
@@ -186,5 +193,47 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static List<Component> getSoundEventTooltip(IClientUtils utils, int pad, String key, SoundEvent soundEvent) {
         return getRegistryTooltip(utils, pad, key, Registries.SOUND_EVENT, soundEvent);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getDamageTypeTooltip(IClientUtils utils, int pad, String key, DamageType damageType) {
+        return getRegistryTooltip(utils, pad, key, Registries.DAMAGE_TYPE, damageType);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getVillagerTypeTooltip(IClientUtils utils, int pad, String key, VillagerType villagerType) {
+        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.VILLAGER_TYPE, villagerType);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getWolfSoundVariantTooltip(IClientUtils utils, int pad, String key, WolfSoundVariant wolfSoundVariant) {
+        return getRegistryTooltip(utils, pad, key, Registries.WOLF_SOUND_VARIANT, wolfSoundVariant);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getPigVariantTooltip(IClientUtils utils, int pad, String key, PigVariant pigVariant) {
+        return getRegistryTooltip(utils, pad, key, Registries.PIG_VARIANT, pigVariant);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getCowVariantTooltip(IClientUtils utils, int pad, String key, CowVariant cowVariant) {
+        return getRegistryTooltip(utils, pad, key, Registries.COW_VARIANT, cowVariant);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getChickenVariantTooltip(IClientUtils utils, int pad, String key, ChickenVariant chickenVariant) {
+        return getRegistryTooltip(utils, pad, key, Registries.CHICKEN_VARIANT, chickenVariant);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getDataComponentPredicateTypeTooltip(IClientUtils utils, int pad, String key, DataComponentPredicate.Type<?> type) {
+        return getBuiltInRegistryTooltip(utils, pad, key, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, type);
     }
 }

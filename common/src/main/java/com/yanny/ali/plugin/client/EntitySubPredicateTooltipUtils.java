@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
 
 public class EntitySubPredicateTooltipUtils {
     @NotNull
@@ -79,31 +78,4 @@ public class EntitySubPredicateTooltipUtils {
 
         return components;
     }
-/*
-    @NotNull
-    public static <V> List<Component> getVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
-        List<Component> components = new LinkedList<>(getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
-
-        if (predicate.variant instanceof Enum<?> variant) {
-            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.variant", variant));
-        }
-
-        return components;
-    }
-
-    @NotNull
-    public static <V> List<Component> getHolderVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
-        List<Component> components = new LinkedList<>();
-
-        components.addAll(getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
-        components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", "ali.property.value.variant", predicate.variants, (u, i, s, v) -> switch (v) {
-            case CatVariant catVariant -> getCatVariantTooltip(u, i, s, catVariant);
-            case PaintingVariant paintingVariant -> getPaintingVariantTooltip(u, i, s, paintingVariant);
-            case FrogVariant frogVariant -> getFrogVariantTooltip(u, i, s, frogVariant);
-            case WolfVariant wolfVariant -> getWolfVariantTooltip(u, i, s, wolfVariant);
-            default -> List.of();
-        }));
-
-        return components;
-    }*/
 }

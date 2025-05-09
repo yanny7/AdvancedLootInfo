@@ -72,6 +72,10 @@ public class TestUtils {
                     } else {
                         throw new IllegalStateException("Expected String class");
                     }
+
+                    if (cmpIndex >= components.size() && !mutableList.isEmpty()) {
+                        Assertions.fail(String.format("More items than expected: %s", mutableList));
+                    }
                 }
 
                 expIndex++;

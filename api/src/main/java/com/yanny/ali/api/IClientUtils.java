@@ -32,7 +32,7 @@ public interface IClientUtils extends ICommonUtils {
 
     <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function);
 
-    <T extends DataComponentPredicate> List<Component> getDataComponenetPredicateTooltip(IClientUtils utils, int pad, DataComponentPredicate.Type<?> type, T predicate);
+    <T extends DataComponentPredicate> List<Component> getDataComponentPredicateTooltip(IClientUtils utils, int pad, DataComponentPredicate.Type<?> type, T predicate);
 
     <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IClientUtils utils, int pad, T predicate);
 

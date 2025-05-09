@@ -19,7 +19,7 @@ public class ConsumeEffectTooltipTest {
         assertTooltip(ConsumeEffectTooltipUtils.getApplyEffectsTooltip(UTILS, 0, new ApplyStatusEffectsConsumeEffect(
                 List.of(
                         new MobEffectInstance(MobEffects.BAD_OMEN),
-                        new MobEffectInstance(MobEffects.CONFUSION)
+                        new MobEffectInstance(MobEffects.NAUSEA)
                 )
         )), List.of(
                 "Apply Effects:",
@@ -45,7 +45,7 @@ public class ConsumeEffectTooltipTest {
     @Test
     public void testRemoveEffectTooltip() {
         assertTooltip(ConsumeEffectTooltipUtils.getRemoveEffectsTooltip(UTILS, 0, new RemoveStatusEffectsConsumeEffect(
-                HolderSet.direct(MobEffects.BLINDNESS, MobEffects.DIG_SPEED)
+                HolderSet.direct(MobEffects.BLINDNESS, MobEffects.HASTE)
         )), List.of(
                 "Remove Effects:",
                 "  -> minecraft:blindness",

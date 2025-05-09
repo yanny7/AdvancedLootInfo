@@ -5,15 +5,13 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.ali.plugin.client.DataComponentTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.advancements.critereon.BlockPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +20,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BannerPatternTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Unit;
@@ -33,6 +32,12 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.frog.FrogVariants;
+import net.minecraft.world.entity.animal.wolf.WolfSoundVariants;
+import net.minecraft.world.entity.animal.wolf.WolfVariants;
+import net.minecraft.world.entity.decoration.PaintingVariants;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -83,11 +88,6 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testUnbreakableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getUnbreakableTooltip(UTILS, 0, new Unbreakable(true)), List.of("Show In Tooltip: true"));
-    }
-
-    @Test
     public void testCustomNameTooltip() {
         assertTooltip(DataComponentTooltipUtils.getCustomNameTooltip(UTILS, 0, Component.literal("Hello")), List.of("Custom Name: Hello"));
     }
@@ -124,13 +124,12 @@ public class DataComponentTooltipTest {
         map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), 2);
         map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), 1);
 
-        assertUnorderedTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, 0, new ItemEnchantments(map, true)), List.of(
+        assertUnorderedTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, 0, new ItemEnchantments(map)), List.of(
                 "Enchantments:",
                 List.of(
                         "  -> Enchantment: Fortune II",
                         "  -> Enchantment: Mending I"
-                ),
-                "Show In Tooltip: true"
+                )
         ));
     }
 
@@ -143,8 +142,7 @@ public class DataComponentTooltipTest {
                                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.BED_PART, BedPart.FOOT)).build(),
                         BlockPredicate.Builder.block()
                                 .of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.BELL).build()
-                ),
-                true
+                )
         )), List.of(
                 "Blocks:",
                 "  -> Predicate:",
@@ -154,8 +152,7 @@ public class DataComponentTooltipTest {
                 "      -> part: foot",
                 "  -> Predicate:",
                 "    -> Blocks:",
-                "      -> minecraft:bell",
-                "Show In Tooltip: true"
+                "      -> minecraft:bell"
         ));
     }
 
@@ -181,8 +178,7 @@ public class DataComponentTooltipTest {
                                 ),
                                 EquipmentSlotGroup.HAND
                         )
-                ),
-                false
+                )
         )), List.of(
                 "Modifiers:",
                 "  -> Modifier:",
@@ -198,8 +194,7 @@ public class DataComponentTooltipTest {
                 "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
                 "      -> Operation: ADD_MULTIPLIED_TOTAL",
-                "    -> Slot: HAND",
-                "Show In Tooltip: false"
+                "    -> Slot: HAND"
         ));
     }
 
@@ -215,6 +210,22 @@ public class DataComponentTooltipTest {
                 "Flags: [true, false]",
                 "Strings: [hello, world]",
                 "Colors: [1, 2]"
+        ));
+    }
+
+    @Test
+    public void testTooltipDisplayTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getTooltipDisplayTooltip(UTILS, 0, new TooltipDisplay(
+                true,
+                new ReferenceLinkedOpenHashSet<>(List.of(
+                        DataComponents.DAMAGE,
+                        DataComponents.MAX_STACK_SIZE
+                ))
+        )), List.of(
+                "Hide Tooltip: true",
+                "Hidden Components:",
+                "  -> minecraft:damage",
+                "  -> minecraft:max_stack_size"
         ));
     }
 
@@ -275,7 +286,6 @@ public class DataComponentTooltipTest {
                 "  -> Components:",
                 List.of(
                         "    -> Type: minecraft:attribute_modifiers",
-                        "      -> Show In Tooltip: true",
                         "    -> Type: minecraft:repair_cost",
                         "      -> Value: 0",
                         "    -> Type: minecraft:item_name",
@@ -287,7 +297,11 @@ public class DataComponentTooltipTest {
                         "      -> Value: 64",
                         "    -> Type: minecraft:enchantments",
                         "    -> Type: minecraft:item_model",
-                        "      -> Id: minecraft:andesite"
+                        "      -> Id: minecraft:andesite",
+                        "    -> Type: minecraft:break_sound",
+                        "      -> Sound: minecraft:entity.item.break",
+                        "    -> Type: minecraft:tooltip_display",
+                        "      -> Hide Tooltip: false"
                 )
         ));
     }
@@ -325,7 +339,8 @@ public class DataComponentTooltipTest {
                         )
                 ),
                 0.5f,
-                10
+                10,
+                true
         )), List.of(
                 "Rules:",
                 "  -> Rule:",
@@ -338,7 +353,19 @@ public class DataComponentTooltipTest {
                 "    -> Blocks:",
                 "      -> minecraft:furnace",
                 "Default Mining Speed: 0.5",
-                "Damage Per Block: 10"
+                "Damage Per Block: 10",
+                "Can Destroy Blocks In Creative: true"
+        ));
+    }
+
+    @Test
+    public void testWeaponTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getWeaponTooltip(UTILS, 0, new Weapon(
+                5,
+                3.5f
+        )), List.of(
+                "Item Damage Per Attack: 5",
+                "Disable Blocking For Seconds: 3.5"
         ));
     }
 
@@ -357,7 +384,8 @@ public class DataComponentTooltipTest {
                 Optional.of(HolderSet.direct(Holder.direct(EntityType.ALLAY), Holder.direct(EntityType.ARMADILLO))),
                 true,
                 true,
-                false
+                false,
+                true
         )), List.of(
                 "Equipment Slot: LEGS",
                 "Equip Sound: minecraft:block.anvil.fall",
@@ -368,7 +396,8 @@ public class DataComponentTooltipTest {
                 "  -> minecraft:armadillo",
                 "Dispensable: true",
                 "Swappable: true",
-                "Damage On Hurt: false"
+                "Damage On Hurt: false",
+                "Equip On Interact: true"
         ));
     }
 
@@ -397,14 +426,43 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testDyedColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getDyedColorTooltip(UTILS, 0, new DyedItemColor(
-                12345,
-                true
+    public void testBlockAttacksTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getBlockAttacksTooltip(UTILS, 0, new BlocksAttacks(
+                3.5f,
+                2.5f,
+                List.of(
+                        new BlocksAttacks.DamageReduction(1.2f, Optional.empty(), 1.8f, 3.12f),
+                        new BlocksAttacks.DamageReduction(1.3f, Optional.empty(), 1.2f, 3.14f)
+                ),
+                new BlocksAttacks.ItemDamageFunction(1.24f, 3.15f, 5.24f),
+                Optional.of(DamageTypeTags.IS_EXPLOSION),
+                Optional.of(SoundEvents.AMBIENT_CAVE),
+                Optional.of(SoundEvents.AMBIENT_CRIMSON_FOREST_MOOD)
         )), List.of(
-                "RGB: 12345",
-                "Show In Tooltip: true"
+                "Block Delay Seconds: 3.5",
+                "Disable Cooldown Scale: 2.5",
+                "Damage Reductions:",
+                "  -> Damage Reduction:",
+                "    -> Horizontal Blocking Angle: 1.2",
+                "    -> Base: 1.8",
+                "    -> Factor: 3.12",
+                "  -> Damage Reduction:",
+                "    -> Horizontal Blocking Angle: 1.3",
+                "    -> Base: 1.2",
+                "    -> Factor: 3.14",
+                "Item Damage:",
+                "  -> Threshold: 1.24",
+                "  -> Base: 3.15",
+                "  -> Factor: 5.24",
+                "Bypassed By: minecraft:is_explosion",
+                "Block Sound: minecraft:ambient.cave",
+                "Disable Sound: minecraft:ambient.crimson_forest.mood"
         ));
+    }
+
+    @Test
+    public void testDyedColorTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getDyedColorTooltip(UTILS, 0, new DyedItemColor(12345)), List.of("RGB: 12345"));
     }
 
     @Test
@@ -457,7 +515,6 @@ public class DataComponentTooltipTest {
                 "    -> Components:",
                 List.of(
                         "      -> Type: minecraft:attribute_modifiers",
-                        "        -> Show In Tooltip: true",
                         "      -> Type: minecraft:repair_cost",
                         "        -> Value: 0",
                         "      -> Type: minecraft:item_name",
@@ -469,7 +526,11 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> Type: minecraft:enchantments",
                         "      -> Type: minecraft:item_model",
-                        "        -> Id: minecraft:arrow"
+                        "        -> Id: minecraft:arrow",
+                        "      -> Type: minecraft:break_sound",
+                        "        -> Sound: minecraft:entity.item.break",
+                        "      -> Type: minecraft:tooltip_display",
+                        "        -> Hide Tooltip: false"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:snowball",
@@ -477,7 +538,6 @@ public class DataComponentTooltipTest {
                 "    -> Components:",
                 List.of(
                         "      -> Type: minecraft:attribute_modifiers",
-                        "        -> Show In Tooltip: true",
                         "      -> Type: minecraft:repair_cost",
                         "        -> Value: 0",
                         "      -> Type: minecraft:item_name",
@@ -489,7 +549,11 @@ public class DataComponentTooltipTest {
                         "        -> Value: 16",
                         "      -> Type: minecraft:enchantments",
                         "      -> Type: minecraft:item_model",
-                        "        -> Id: minecraft:snowball"
+                        "        -> Id: minecraft:snowball",
+                        "      -> Type: minecraft:break_sound",
+                        "        -> Sound: minecraft:entity.item.break",
+                        "      -> Type: minecraft:tooltip_display",
+                        "        -> Hide Tooltip: false"
                 )
         ));
     }
@@ -507,7 +571,6 @@ public class DataComponentTooltipTest {
                 "    -> Components:",
                 List.of(
                         "      -> Type: minecraft:attribute_modifiers",
-                        "        -> Show In Tooltip: true",
                         "      -> Type: minecraft:repair_cost",
                         "        -> Value: 0",
                         "      -> Type: minecraft:item_name",
@@ -519,7 +582,11 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> Type: minecraft:enchantments",
                         "      -> Type: minecraft:item_model",
-                        "        -> Id: minecraft:coal_block"
+                        "        -> Id: minecraft:coal_block",
+                        "      -> Type: minecraft:break_sound",
+                        "        -> Sound: minecraft:entity.item.break",
+                        "      -> Type: minecraft:tooltip_display",
+                        "        -> Hide Tooltip: false"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -527,7 +594,6 @@ public class DataComponentTooltipTest {
                 "    -> Components:",
                 List.of(
                         "      -> Type: minecraft:attribute_modifiers",
-                        "        -> Show In Tooltip: true",
                         "      -> Type: minecraft:repair_cost",
                         "        -> Value: 0",
                         "      -> Type: minecraft:item_name",
@@ -539,7 +605,11 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> Type: minecraft:enchantments",
                         "      -> Type: minecraft:item_model",
-                        "        -> Id: minecraft:diorite"
+                        "        -> Id: minecraft:diorite",
+                        "      -> Type: minecraft:break_sound",
+                        "        -> Sound: minecraft:entity.item.break",
+                        "      -> Type: minecraft:tooltip_display",
+                        "        -> Hide Tooltip: false"
                 ),
                 "Fraction: 1/32"
         ));
@@ -575,6 +645,11 @@ public class DataComponentTooltipTest {
                 "    -> Show Icon: true",
                 "Custom Name: Hello"
         ));
+    }
+
+    @Test
+    public void testFloatValueTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getFloatValueTooltip(UTILS, 0, 3.2f), List.of("Value: 3.2"));
     }
 
     @Test
@@ -641,12 +716,10 @@ public class DataComponentTooltipTest {
     public void testTrimTooltip() {
         assertTooltip(DataComponentTooltipUtils.getTrimTooltip(UTILS, 0, new ArmorTrim(
                 LOOKUP.lookupOrThrow(Registries.TRIM_MATERIAL).getOrThrow(TrimMaterials.NETHERITE),
-                LOOKUP.lookupOrThrow(Registries.TRIM_PATTERN).getOrThrow(TrimPatterns.SILENCE),
-                true
+                LOOKUP.lookupOrThrow(Registries.TRIM_PATTERN).getOrThrow(TrimPatterns.SILENCE)
         )), List.of(
                 "Material: minecraft:netherite",
-                "Pattern: minecraft:silence",
-                "Show In Tooltip: true"
+                "Pattern: minecraft:silence"
         ));
     }
 
@@ -668,8 +741,15 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testInstrumentTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getInstrumentTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.INSTRUMENT)
-                .getOrThrow(Instruments.SING_GOAT_HORN)), List.of("Value: minecraft:sing_goat_horn"));
+        assertTooltip(DataComponentTooltipUtils.getInstrumentTooltip(UTILS, 0, new InstrumentComponent(LOOKUP.lookupOrThrow(Registries.INSTRUMENT)
+                .getOrThrow(Instruments.SING_GOAT_HORN))), List.of("Value: minecraft:sing_goat_horn"));
+    }
+
+    @Test
+    public void testProvidesTrimMaterialTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getProvidesTrimMaterialTooltip(UTILS, 0, new ProvidesTrimMaterial(
+                LOOKUP.lookupOrThrow(Registries.TRIM_MATERIAL).getOrThrow(TrimMaterials.GOLD)
+        )), List.of("Material: minecraft:gold"));
     }
 
     @Test
@@ -680,19 +760,16 @@ public class DataComponentTooltipTest {
     @Test
     public void testJukeboxPlayableTooltip() {
         assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayable(
-                EitherHolder.fromEither(Either.right(JukeboxSongs.PIGSTEP)),
-                true
-        )), List.of(
-                "Song: minecraft:pigstep",
-                "Show In Tooltip: true"
-        ));
+                new EitherHolder<>(Either.right(JukeboxSongs.PIGSTEP))
+        )), List.of("Song: minecraft:pigstep"));
         assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayable(
-                EitherHolder.fromEither(Either.left(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP))),
-                true
-        )), List.of(
-                "Song: minecraft:pigstep",
-                "Show In Tooltip: true"
-        ));
+                new EitherHolder<>(Either.left(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP)))
+        )), List.of("Song: minecraft:pigstep"));
+    }
+
+    @Test
+    public void testProvidesBannerPatternsTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getProvidesBannerPatternsTooltip(UTILS, 0, BannerPatternTags.PATTERN_ITEM_FLOWER), List.of("Banner Pattern: minecraft:pattern_item/flower"));
     }
 
     @Test
@@ -810,8 +887,8 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testBaseColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBaseColorTooltip(UTILS, 0, DyeColor.CYAN), List.of("Color: CYAN"));
+    public void testDyeColorTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getDyeColorTooltip(UTILS, 0, DyeColor.CYAN), List.of("Color: CYAN"));
     }
 
     @Test
@@ -842,7 +919,6 @@ public class DataComponentTooltipTest {
                 "    -> Components:",
                 List.of(
                         "      -> Type: minecraft:attribute_modifiers",
-                        "        -> Show In Tooltip: true",
                         "      -> Type: minecraft:repair_cost",
                         "        -> Value: 0",
                         "      -> Type: minecraft:item_name",
@@ -854,7 +930,11 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> Type: minecraft:enchantments",
                         "      -> Type: minecraft:item_model",
-                        "        -> Id: minecraft:andesite"
+                        "        -> Id: minecraft:andesite",
+                        "      -> Type: minecraft:break_sound",
+                        "        -> Sound: minecraft:entity.item.break",
+                        "      -> Type: minecraft:tooltip_display",
+                        "        -> Hide Tooltip: false"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -862,7 +942,6 @@ public class DataComponentTooltipTest {
                 "    -> Components:",
                 List.of(
                         "      -> Type: minecraft:attribute_modifiers",
-                        "        -> Show In Tooltip: true",
                         "      -> Type: minecraft:repair_cost",
                         "        -> Value: 0",
                         "      -> Type: minecraft:item_name",
@@ -874,7 +953,11 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> Type: minecraft:enchantments",
                         "      -> Type: minecraft:item_model",
-                        "        -> Id: minecraft:diorite"
+                        "        -> Id: minecraft:diorite",
+                        "      -> Type: minecraft:break_sound",
+                        "        -> Sound: minecraft:entity.item.break",
+                        "      -> Type: minecraft:tooltip_display",
+                        "        -> Hide Tooltip: false"
                 )
         ));
     }
@@ -895,10 +978,10 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testBeesTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBeesTooltip(UTILS, 0, List.of(
+        assertTooltip(DataComponentTooltipUtils.getBeesTooltip(UTILS, 0, new Bees(List.of(
                 new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 100, 20),
                 new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 1000, 30)
-        )), List.of(
+        ))), List.of(
                 "Bees:",
                 "  -> Occupant:",
                 "    -> Entity Data: {}",
@@ -916,18 +999,19 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getLockTooltip(UTILS, 0, new LockCode(new ItemPredicate(
                 Optional.empty(),
                 MinMaxBounds.Ints.atLeast(5),
-                DataComponentPredicate.builder()
-                        .expect(DataComponents.DAMAGE, 3)
-                        .expect(DataComponents.MAX_STACK_SIZE, 16).build(),
-                Map.of()
+                DataComponentMatchers.Builder.components()
+                        .exact(DataComponentExactPredicate.builder()
+                                .expect(DataComponents.DAMAGE, 3)
+                                .expect(DataComponents.MAX_STACK_SIZE, 16).build()).build()
         ))), List.of(
                 "Predicate:",
                 "  -> Count: ≥5",
-                "  -> Component Predicates:",
-                "    -> Component: minecraft:damage",
-                "      -> Value: 3",
-                "    -> Component: minecraft:max_stack_size",
-                "      -> Value: 16"
+                "  -> Data Component Matchers:",
+                "    -> Expected Components:",
+                "      -> minecraft:damage",
+                "        -> Value: 3",
+                "      -> minecraft:max_stack_size",
+                "        -> Value: 16"
         ));
     }
 
@@ -940,5 +1024,70 @@ public class DataComponentTooltipTest {
                 "Loot Table: minecraft:loot",
                 "Seed: 12345"
         ));
+    }
+
+    @Test
+    public void testBreakSoundTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getBreakSoundTooltip(UTILS, 0, Holder.direct(SoundEvents.BASALT_BREAK)), List.of("Sound: minecraft:block.basalt.break"));
+    }
+
+    @Test
+    public void testVillagerVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getVillagerVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.VILLAGER_TYPE).getOrThrow(VillagerType.JUNGLE)),
+                List.of("Type: minecraft:jungle"));
+    }
+
+    @Test
+    public void testWolfVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getWolfVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).getOrThrow(WolfVariants.PALE)),
+                List.of("Type: minecraft:pale"));
+    }
+
+    @Test
+    public void testWolfSoundVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getWolfSoundVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.WOLF_SOUND_VARIANT).getOrThrow(WolfSoundVariants.CUTE)),
+                List.of("Type: minecraft:cute"));
+    }
+
+    @Test
+    public void testEnumTypeTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getEnumTypeTooltip(UTILS, 0, Rabbit.Variant.EVIL),
+                List.of("Type: EVIL"));
+    }
+
+    @Test
+    public void testPigVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getPigVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.PIG_VARIANT).getOrThrow(PigVariants.COLD)),
+                List.of("Type: minecraft:cold"));
+    }
+
+    @Test
+    public void testCowVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getCowVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.COW_VARIANT).getOrThrow(CowVariants.COLD)),
+                List.of("Type: minecraft:cold"));
+    }
+
+    @Test
+    public void testChickenVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getChickenVariantTooltip(UTILS, 0, new EitherHolder<>(ChickenVariants.COLD)),
+                List.of("Type: minecraft:cold"));
+    }
+
+    @Test
+    public void testFrogVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getFrogVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariants.COLD)),
+                List.of("Type: minecraft:cold"));
+    }
+
+    @Test
+    public void testPaintingVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getPaintingVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.PAINTING_VARIANT).getOrThrow(PaintingVariants.BUST)),
+                List.of("Type: minecraft:bust"));
+    }
+
+    @Test
+    public void testCatVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getCatVariantTooltip(UTILS, 0, LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.JELLIE)),
+                List.of("Type: minecraft:jellie"));
     }
 }

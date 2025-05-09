@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -611,9 +612,14 @@ public class FunctionTooltipTest {
 
     @Test
     public void testToggleTooltipsTooltip() {
+        Map<DataComponentType<?>, Boolean> map = new LinkedHashMap<>();
+
+        map.put(DataComponents.BASE_COLOR, true);
+        map.put(DataComponents.DAMAGE, false);
+
         assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(
                 List.of(),
-                Map.of(DataComponents.BASE_COLOR, true)
+                map
         )), List.of(
                 "Toggle Tooltips:",
                 "  -> Values:",
@@ -648,19 +654,19 @@ public class FunctionTooltipTest {
                 "  -> Floats:",
                 "    -> List Operation: REPLACE_ALL",
                 "    -> Values:",
-                "      -> Value: 3.14",
+                "      -> 3.14",
                 "  -> Colors:",
                 "    -> List Operation: REPLACE_ALL",
                 "    -> Values:",
-                "      -> Value: 25",
+                "      -> 25",
                 "  -> Flags:",
                 "    -> List Operation: REPLACE_ALL",
                 "    -> Values:",
-                "      -> Value: true",
+                "      -> true",
                 "  -> Strings:",
                 "    -> List Operation: REPLACE_ALL",
                 "    -> Values:",
-                "      -> Value: test"
+                "      -> test"
         ));
     }
 }

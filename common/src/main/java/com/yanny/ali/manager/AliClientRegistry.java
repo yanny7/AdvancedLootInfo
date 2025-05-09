@@ -56,7 +56,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<LootNumberProviderType, BiFunction<IClientUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
     private final Map<LootItemConditionType, TriFunction<IClientUtils, Integer, LootItemCondition, List<Component>>> conditionTooltipMap = new HashMap<>();
     private final Map<LootItemFunctionType<?>, TriFunction<IClientUtils, Integer, LootItemFunction, List<Component>>> functionTooltipMap = new HashMap<>();
-    private final Map<DataComponentPredicate.Type<?>, TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>>> itemSubPredicateTooltipMap = new HashMap<>();
+    private final Map<DataComponentPredicate.Type<?>, TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>>> dataComponentPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, TriFunction<IClientUtils, Integer, EntitySubPredicate, List<Component>>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<DataComponentType<?>, TriFunction<IClientUtils, Integer, Object, List<Component>>> dataComponentTypeTooltipMap = new HashMap<>();
     private final Map<ConsumeEffect.Type<?>, TriFunction<IClientUtils, Integer, ConsumeEffect, List<Component>>> consumeEffectTooltipMap = new HashMap<>();
@@ -107,9 +107,9 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends DataComponentPredicate> void registerItemSubPredicateTooltip(DataComponentPredicate.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
+    public <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(DataComponentPredicate.Type<T> type, TriFunction<IClientUtils, Integer, T, List<Component>> getter) {
         //noinspection unchecked
-        itemSubPredicateTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
+        dataComponentPredicateTooltipMap.put(type, (u, i, f) -> getter.apply(u, i, (T) f));
     }
 
     @Override
@@ -235,8 +235,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends DataComponentPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, DataComponentPredicate.Type<?> type, T predicate) {
-        TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>> entryTooltipGetter = itemSubPredicateTooltipMap.get(type);
+    public <T extends DataComponentPredicate> List<Component> getDataComponentPredicateTooltip(IClientUtils utils, int pad, DataComponentPredicate.Type<?> type, T predicate) {
+        TriFunction<IClientUtils, Integer, DataComponentPredicate, List<Component>> entryTooltipGetter = dataComponentPredicateTooltipMap.get(type);
 
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, pad, predicate);

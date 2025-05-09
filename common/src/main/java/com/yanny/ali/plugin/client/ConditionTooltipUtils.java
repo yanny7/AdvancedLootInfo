@@ -111,7 +111,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static List<Component> getMatchToolTooltip(IClientUtils utils, int pad, MatchTool cond) {
-        return new LinkedList<>(getOptionalTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate(), GenericTooltipUtils::getItemPredicateTooltip));
+        return getOptionalTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate(), GenericTooltipUtils::getItemPredicateTooltip);
     }
 
     @NotNull
