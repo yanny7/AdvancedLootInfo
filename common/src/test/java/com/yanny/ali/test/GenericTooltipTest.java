@@ -574,7 +574,7 @@ public class GenericTooltipTest {
                 .build()), List.of(
                 "Entity Sub Predicate:",
                 "  -> Level: ≥3",
-                "  -> Game Type: Survival",
+                "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
                 "    -> Item: minecraft:salmon",
                 "      -> Times Used: ≥5",
@@ -600,19 +600,13 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypeTooltip(UTILS, 0, "ali.property.value.game_type", GameType.SPECTATOR), List.of(
-                "Game Type: Spectator"
-        ));
-    }
-
-    @Test
     public void testStatsTooltip() {
         Map<Stat<?>, MinMaxBounds.Ints> statMap = new LinkedHashMap<>();
 
         statMap.put(Stats.BLOCK_MINED.get(Blocks.COBBLESTONE), MinMaxBounds.Ints.atLeast(2));
         statMap.put(Stats.ITEM_USED.get(Items.SALMON), MinMaxBounds.Ints.atLeast(3));
         statMap.put(Stats.ENTITY_KILLED.get(EntityType.BAT), MinMaxBounds.Ints.atLeast(5));
+        statMap.put(Stats.CUSTOM.get(Stats.LEAVE_GAME), MinMaxBounds.Ints.between(1, 10));
 
         assertTooltip(GenericTooltipUtils.getStatsTooltip(UTILS, 0, "ali.property.branch.stats", Map.of()), List.of());
         assertTooltip(GenericTooltipUtils.getStatsTooltip(UTILS, 0, "ali.property.branch.stats", statMap), List.of(
@@ -621,8 +615,10 @@ public class GenericTooltipTest {
                 "    -> Times Mined: ≥2",
                 "  -> Item: minecraft:salmon",
                 "    -> Times Used: ≥3",
-                "  -> entity.minecraft.bat",
-                "    -> You killed %s %s: ≥5" //FIXME this should be fixed
+                "  -> Entity Type: minecraft:bat",
+                "    -> You killed %s %s: ≥5", //FIXME this should be fixed
+                "  -> Id: minecraft:leave_game",
+                "    -> Games Quit: 1-10"
         ));
     }
 

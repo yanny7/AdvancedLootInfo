@@ -250,10 +250,7 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.replace", fun.replace));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", "ali.property.value.null", fun.lore, GenericTooltipUtils::getComponentTooltip));
-
-        if (fun.resolutionContext != null) {
-            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext));
-        }
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext, GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }
@@ -264,10 +261,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_name")));
         components.addAll(getComponentTooltip(utils, pad + 1, "ali.property.value.name", fun.name));
-
-        if (fun.resolutionContext != null) {
-            components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext));
-        }
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext, GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }

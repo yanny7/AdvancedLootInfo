@@ -177,14 +177,8 @@ public class ConditionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.condition.weather_check")));
-
-        if (cond.isRaining != null) {
-            components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_raining", cond.isRaining));
-        }
-
-        if (cond.isThundering != null) {
-            components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.is_thundering", cond.isThundering));
-        }
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.is_raining", cond.isRaining, GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.is_thundering", cond.isThundering, GenericTooltipUtils::getBooleanTooltip));
 
         return components;
     }

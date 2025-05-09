@@ -16,9 +16,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -196,7 +196,7 @@ public class GenericTooltipUtils {
                 components.addAll(getEntityTypeTooltip(utils, pad, key, typePredicate.type));
             }
             if (entityTypePredicate instanceof EntityTypePredicate.TagPredicate tagPredicate) {
-                components.addAll(getComponentTooltip(utils, pad, key, value(tagPredicate.tag.location())));
+                components.addAll(getTagKeyTooltip(utils, pad, key, tagPredicate.tag));
             }
         }
 
@@ -303,7 +303,6 @@ public class GenericTooltipUtils {
 
         if (mobEffectsPredicate != MobEffectsPredicate.ANY) {
             components.add(pad(pad, translatable(key)));
-
             mobEffectsPredicate.effects.forEach((effect, instancePredicate) -> {
                 components.addAll(getMobEffectTooltip(utils, pad + 1, "ali.property.value.mob_effect", effect));
                 components.addAll(getMobEffectInstancePredicateTooltip(utils, pad + 2, instancePredicate));
@@ -410,10 +409,11 @@ public class GenericTooltipUtils {
                     components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.in_open_water", fishingHookPredicate.inOpenWater));
                 } else if (entitySubPredicate instanceof PlayerPredicate playerPredicate) {
                     components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", playerPredicate.level));
-                    components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.game_type", playerPredicate.gameType, GenericTooltipUtils::getGameTypeTooltip));
+                    components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.game_type", playerPredicate.gameType, GenericTooltipUtils::getEnumTooltip));
                     components.addAll(getStatsTooltip(utils, pad + 1, "ali.property.branch.stats", playerPredicate.stats));
                     components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", playerPredicate.recipes));
                     components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", playerPredicate.advancements));
+                    components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.looking_at", playerPredicate.lookingAt));
                 } else if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
                     components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.size", slimePredicate.size));
                 } else {
@@ -431,12 +431,6 @@ public class GenericTooltipUtils {
         return components;
     }
 
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getGameTypeTooltip(IClientUtils utils, int pad, String key, GameType gameType) {
-        return List.of(pad(pad, value(translatable(key, gameType.getShortDisplayName()))));
-    }
-
     @NotNull
     public static List<Component> getStatsTooltip(IClientUtils utils, int pad, String key, Map<Stat<?>, MinMaxBounds.Ints> statIntsMap) {
         List<Component> components = new LinkedList<>();
@@ -448,13 +442,18 @@ public class GenericTooltipUtils {
 
                 if (value instanceof Item item) {
                     components.addAll(getItemTooltip(utils, pad + 1, "ali.property.value.item", item));
+                    components.add(pad(pad + 2, keyValue(stat.getType().getDisplayName(), toString(ints))));
                 } else if (value instanceof Block block) {
                     components.addAll(getBlockTooltip(utils, pad + 1, "ali.property.value.block", block));
-                } else {
-                    components.add(pad(pad + 1, value));
+                    components.add(pad(pad + 2, keyValue(stat.getType().getDisplayName(), toString(ints))));
+                } else if (value instanceof EntityType<?> entityType) {
+                    components.addAll(getEntityTypeTooltip(utils, pad + 1, "ali.property.value.entity_type", entityType));
+                    components.add(pad(pad + 2, keyValue(stat.getType().getDisplayName(), toString(ints))));
+                } else if (value instanceof ResourceLocation resourceLocation) {
+                    components.addAll(getResourceLocationTooltip(utils, pad + 1, "ali.property.value.id", resourceLocation));
+                    components.add(pad(pad + 2, keyValue(translatable(getTranslationKey(resourceLocation)), toString(ints))));
                 }
 
-                components.add(pad(pad + 2, keyValue(stat.getType().getDisplayName(), toString(ints))));
             });
         }
 
@@ -756,6 +755,11 @@ public class GenericTooltipUtils {
         } else {
             return Component.literal("null");
         }
+    }
+
+    @NotNull
+    private static String getTranslationKey(ResourceLocation location) {
+        return "stat." + location.toString().replace(':', '.');
     }
 
     @FunctionalInterface
