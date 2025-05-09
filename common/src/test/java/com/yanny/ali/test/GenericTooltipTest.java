@@ -203,12 +203,12 @@ public class GenericTooltipTest {
 
     @Test
     public void testStatePropertiesPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, 0, "ali.property.branch.state_properties_predicate", StatePropertiesPredicate.Builder.properties()
+        assertTooltip(GenericTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, 0, "ali.property.branch.properties", StatePropertiesPredicate.Builder.properties()
                 .hasProperty(BlockStateProperties.FACING, Direction.EAST)
                 .hasProperty(BlockStateProperties.LEVEL, 3)
                 .build()
         ), List.of(
-                "State Properties:",
+                "Properties:",
                 "  -> facing: east",
                 "  -> level: 3"
         ));
@@ -220,14 +220,14 @@ public class GenericTooltipTest {
 
     @Test
     void testDamageSourcePredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.damage_source_predicate", DamageSourcePredicate.ANY), List.of());
-        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.damage_source_predicate", DamageSourcePredicate.Builder.damageType()
+        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.predicate", DamageSourcePredicate.ANY), List.of());
+        assertTooltip(GenericTooltipUtils.getDamageSourcePredicateTooltip(UTILS, 0, "ali.property.branch.predicate", DamageSourcePredicate.Builder.damageType()
                 .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                 .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
                 .source(EntityPredicate.Builder.entity().of(EntityType.BAT))
                 .direct(EntityPredicate.Builder.entity().of(EntityType.ARROW))
                 .build()), List.of(
-                "Damage Source:",
+                "Predicate:",
                 "  -> Tags:",
                 "    -> minecraft:bypasses_armor: true",
                 "    -> minecraft:is_explosion: false",
@@ -387,7 +387,7 @@ public class GenericTooltipTest {
                 "  -> Blocks:",
                 "    -> minecraft:stone",
                 "    -> minecraft:cobblestone",
-                "State Properties:",
+                "Properties:",
                 "  -> facing: east",
                 "Nbt: {test:3.0f}"
         ));
@@ -412,7 +412,7 @@ public class GenericTooltipTest {
         ), List.of(
                 "Fluid Predicate:",
                 "  -> Tag: minecraft:water",
-                "  -> State Properties:",
+                "  -> Properties:",
                 "    -> facing: east"
         ));
     }

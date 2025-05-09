@@ -149,7 +149,7 @@ public class GenericTooltipUtils {
 
         if (damagePredicate != DamageSourcePredicate.ANY) {
             components.add(pad(pad, translatable(key)));
-            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.tag_predicates", damagePredicate.tags, GenericTooltipUtils::getTagPredicateTooltip));
+            components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.tags", damagePredicate.tags, GenericTooltipUtils::getTagPredicateTooltip));
             components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.direct_entity", damagePredicate.directEntity));
             components.addAll(getEntityPredicateTooltip(utils, pad + 1, "ali.property.branch.source_entity", damagePredicate.sourceEntity));
         }
@@ -263,7 +263,7 @@ public class GenericTooltipUtils {
                 components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks, RegistriesTooltipUtils::getBlockTooltip));
             }
 
-            components.addAll(getStatePropertiesPredicateTooltip(utils, pad, "ali.property.branch.state_properties_predicate", blockPredicate.properties));
+            components.addAll(getStatePropertiesPredicateTooltip(utils, pad, "ali.property.branch.properties", blockPredicate.properties));
             components.addAll(getNbtPredicateTooltip(utils, pad, "ali.property.value.nbt", blockPredicate.nbt));
         }
 
@@ -291,7 +291,7 @@ public class GenericTooltipUtils {
             components.add(pad(pad, translatable(key)));
             components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", fluidPredicate.tag, GenericTooltipUtils::getTagKeyTooltip));
             components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.fluid", fluidPredicate.fluid, RegistriesTooltipUtils::getFluidTooltip));
-            components.addAll(getStatePropertiesPredicateTooltip(utils, pad + 1, "ali.property.branch.state_properties_predicate", fluidPredicate.properties));
+            components.addAll(getStatePropertiesPredicateTooltip(utils, pad + 1, "ali.property.branch.properties", fluidPredicate.properties));
         }
 
         return components;
