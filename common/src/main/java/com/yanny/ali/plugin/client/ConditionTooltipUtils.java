@@ -99,7 +99,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static List<Component> getMatchToolTooltip(IClientUtils utils, int pad, MatchTool cond) {
-        return new LinkedList<>(getItemPredicateTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate));
+        return getItemPredicateTooltip(utils, pad, "ali.type.condition.match_tool", cond.predicate);
     }
 
     @NotNull
@@ -123,9 +123,10 @@ public class ConditionTooltipUtils {
         return components;
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Component> getReferenceTooltip(IClientUtils utils, int pad, ConditionReference cond) {
-        return new LinkedList<>(getResourceLocationTooltip(utils, pad, "ali.type.condition.reference", cond.name));
+        return getResourceLocationTooltip(utils, pad, "ali.type.condition.reference", cond.name);
     }
 
     @Unmodifiable
