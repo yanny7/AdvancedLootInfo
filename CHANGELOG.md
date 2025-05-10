@@ -1,5 +1,8 @@
 ## []
 
+- Used compression for transferring loot tables
+- Removed forced fabric-loader version
+- Added missing tooltips
 - Added components tooltip
 
 ## [1.1.1]
