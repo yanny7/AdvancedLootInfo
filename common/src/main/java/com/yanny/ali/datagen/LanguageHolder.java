@@ -147,7 +147,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
         TRANSLATION_MAP.put("ali.property.value.game_type", "Game Type: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
-        TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
         TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");
         TRANSLATION_MAP.put("ali.property.value.is_baby", "Is Baby: %s");
