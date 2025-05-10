@@ -34,6 +34,7 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.CatVariants;
+import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -278,7 +279,11 @@ public class GenericTooltipTest {
                 .periodicTick(1000)
                 .moving(new MovementPredicate(MinMaxBounds.Doubles.between(1, 5), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .team("orange")
-                .slots(new SlotsPredicate(Map.of(SlotRange.of("test", IntList.of(1, 2)), ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.GRANITE).build()))).build()
+                .slots(new SlotsPredicate(Map.of(SlotRange.of("test", IntList.of(1, 2)), ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.GRANITE).build())))
+                .components(DataComponentMatchers.Builder.components()
+                        .exact(DataComponentExactPredicate.builder().expect(DataComponents.DAMAGE, 3).build())
+                        .partial(DataComponentPredicates.DAMAGE, DamagePredicate.durability(MinMaxBounds.Ints.between(1, 8))).build())
+                .build()
         ), List.of(
                 "Predicate:",
                 "  -> Entity Types:",
@@ -322,7 +327,14 @@ public class GenericTooltipTest {
                 "    -> [1, 2]",
                 "      -> Predicate:",
                 "        -> Items:",
-                "          -> minecraft:granite"
+                "          -> minecraft:granite",
+                "  -> Components:",
+                "    -> Expected Components:",
+                "      -> minecraft:damage",
+                "        -> Value: 3",
+                "    -> Partial Matchers:",
+                "      -> minecraft:damage",
+                "        -> Durability: 1-8"
         ));
     }
 
@@ -434,6 +446,9 @@ public class GenericTooltipTest {
                 .of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.STONE, Blocks.COBBLESTONE)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST))
                 .hasNbt(compoundTag)
+                .components(DataComponentMatchers.Builder.components()
+                        .exact(DataComponentExactPredicate.builder().expect(DataComponents.DAMAGE, 3).build())
+                        .partial(DataComponentPredicates.DAMAGE, DamagePredicate.durability(MinMaxBounds.Ints.between(1, 8))).build())
                 .build()
         ), List.of(
                 "Block Predicate:",
@@ -442,7 +457,14 @@ public class GenericTooltipTest {
                 "    -> minecraft:cobblestone",
                 "  -> Properties:",
                 "    -> facing: east",
-                "  -> Nbt: {test:3.0f}"
+                "  -> Nbt: {test:3.0f}",
+                "  -> Components:",
+                "    -> Expected Components:",
+                "      -> minecraft:damage",
+                "        -> Value: 3",
+                "    -> Partial Matchers:",
+                "      -> minecraft:damage",
+                "        -> Durability: 1-8"
         ));
     }
 
@@ -576,8 +598,8 @@ public class GenericTooltipTest {
                 "Match Tool:",
                 "  -> Items:",
                 "    -> Tag: minecraft:axes",
-                "  -> Data Component Matchers:",
-                "    -> Components:",
+                "  -> Components:",
+                "    -> Expected Components:",
                 "      -> minecraft:base_color",
                 "        -> Color: BLUE"
         ));
@@ -596,7 +618,7 @@ public class GenericTooltipTest {
                 "    -> minecraft:cake",
                 "    -> minecraft:netherite_axe",
                 "  -> Count: 10-15",
-                "  -> Data Component Matchers:",
+                "  -> Components:",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
                 "        -> Durability: ≤5",

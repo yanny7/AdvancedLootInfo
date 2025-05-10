@@ -1001,8 +1001,8 @@ public class DataComponentTooltipTest {
         ))), List.of(
                 "Predicate:",
                 "  -> Count: ≥5",
-                "  -> Data Component Matchers:",
-                "    -> Components:",
+                "  -> Components:",
+                "    -> Expected Components:",
                 "      -> minecraft:damage",
                 "        -> Value: 3",
                 "      -> minecraft:max_stack_size",
