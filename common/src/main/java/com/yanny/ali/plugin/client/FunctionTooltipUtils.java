@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getDataComponentTypeTooltip;
 import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getLootNbtProviderTypeTooltip;
 
 public class FunctionTooltipUtils {
@@ -314,12 +315,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetComponentsTooltip(IClientUtils utils, int pad, SetComponentsFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.set_components")));
-        components.addAll(getDataComponentPatchTooltip(utils, pad + 1, "ali.property.branch.components", fun.components));
-
-        return components;
+        return getDataComponentPatchTooltip(utils, pad, "ali.type.function.set_components", fun.components);
     }
 
     @NotNull
@@ -428,9 +424,9 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.toggle_tooltips")));
 
         if (!fun.values.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.values")));
+            components.add(pad(pad + 1, translatable("ali.property.branch.components")));
             fun.values.forEach((toggle, value) -> {
-                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, "ali.property.value.type", toggle.type()));
+                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, "ali.property.value.null", toggle.type()));
                 components.addAll(getBooleanTooltip(utils, pad + 3, "ali.property.value.value", value));
             });
         }

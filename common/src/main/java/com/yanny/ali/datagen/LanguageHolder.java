@@ -146,7 +146,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.fluids", "Fluids:");
         TRANSLATION_MAP.put("ali.property.branch.global_pos", "Global Position:");
         TRANSLATION_MAP.put("ali.property.branch.head", "Head:");
-        TRANSLATION_MAP.put("ali.property.branch.hidden_effect", "Hidden Effect:");
         TRANSLATION_MAP.put("ali.property.branch.include", "Include:");
         TRANSLATION_MAP.put("ali.property.branch.item", "Item:");
         TRANSLATION_MAP.put("ali.property.branch.item_predicates", "Item Predicates:");
@@ -161,6 +160,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.mob_effect", "Mob Effect:");
         TRANSLATION_MAP.put("ali.property.branch.mob_effects", "Mob Effects:");
         TRANSLATION_MAP.put("ali.property.branch.modifier", "Modifier:");
+        TRANSLATION_MAP.put("ali.property.branch.modifiers", "Modifiers:");
         TRANSLATION_MAP.put("ali.property.branch.occupant", "Occupant:");
         TRANSLATION_MAP.put("ali.property.branch.offhand", "Offhand:");
         TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
@@ -223,6 +223,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.durability", "Durability: %s");
         TRANSLATION_MAP.put("ali.property.value.duration", "Duration: %s");
         TRANSLATION_MAP.put("ali.property.value.eat_seconds", "Eat Seconds: %s");
+        TRANSLATION_MAP.put("ali.property.value.effect", "Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.enchantment", "Enchantment: %s");
         TRANSLATION_MAP.put("ali.property.value.enchantment_with_level", "Enchantment: %s %s");
         TRANSLATION_MAP.put("ali.property.value.entity_data", "Entity Data: %s");
@@ -240,6 +241,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.has_raid", "Has Raid: %s");
         TRANSLATION_MAP.put("ali.property.value.has_trail", "Has Trail: %s");
         TRANSLATION_MAP.put("ali.property.value.has_twinkle", "Has Twinkle: %s");
+        TRANSLATION_MAP.put("ali.property.value.hidden_effect", "Hidden Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
         TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
@@ -332,6 +334,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.zoom", "Zoom: %s");
 
         TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
+        TRANSLATION_MAP.put("ali.property.multi.position", "Position: [X: %s, Y: %s, Z: %s]");
 
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values", "%s%s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values_with_space", "%s %s");

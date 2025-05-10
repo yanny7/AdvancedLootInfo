@@ -214,23 +214,24 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlotGroup.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
-                "  -> Modifier:",
-                "    -> Name: armor",
-                "    -> Attribute: minecraft:generic.armor",
-                "    -> Operation: ADD_MULTIPLIED_TOTAL",
-                "    -> Amount: 1-5",
-                "    -> Equipment Slots:",
-                "      -> FEET",
-                "      -> LEGS",
-                "      -> CHEST",
-                "      -> HEAD",
-                "  -> Modifier:",
-                "    -> Name: chest",
-                "    -> Attribute: minecraft:generic.armor_toughness",
-                "    -> Operation: ADD_MULTIPLIED_BASE",
-                "    -> Amount: 3",
-                "    -> Equipment Slots:",
-                "      -> MAINHAND",
+                "  -> Modifiers:",
+                "    -> Modifier:",
+                "      -> Name: armor",
+                "      -> Attribute: minecraft:generic.armor",
+                "      -> Operation: ADD_MULTIPLIED_TOTAL",
+                "      -> Amount: 1-5",
+                "      -> Equipment Slots:",
+                "        -> FEET",
+                "        -> LEGS",
+                "        -> CHEST",
+                "        -> HEAD",
+                "    -> Modifier:",
+                "      -> Name: chest",
+                "      -> Attribute: minecraft:generic.armor_toughness",
+                "      -> Operation: ADD_MULTIPLIED_BASE",
+                "      -> Amount: 3",
+                "      -> Equipment Slots:",
+                "        -> MAINHAND",
                 "  -> Replace: false"
         ));
     }
@@ -426,9 +427,8 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Set Components:",
-                "  -> Components:",
-                "    -> minecraft:damage",
-                "      -> Value: 5"
+                "  -> minecraft:damage",
+                "    -> Value: 5"
         ));
     }
 
@@ -606,10 +606,10 @@ public class FunctionTooltipTest {
 
         assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(List.of(), map)), List.of(
                 "Toggle Tooltips:",
-                "  -> Values:",
-                "    -> Type: minecraft:base_color",
+                "  -> Components:",
+                "    -> minecraft:base_color",
                 "      -> Value: true",
-                "    -> Type: minecraft:damage",
+                "    -> minecraft:damage",
                 "      -> Value: false"
         ));
     }

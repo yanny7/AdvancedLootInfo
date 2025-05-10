@@ -50,8 +50,8 @@ public class ItemSubPredicateTooltipTest {
                 new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
                 "Enchantments:",
-                "  -> Enchantment: minecraft:looting",
-                "  -> Enchantment: minecraft:mending",
+                "  -> minecraft:looting",
+                "  -> minecraft:mending",
                 "    -> Level: 1-5"
         ));
     }
@@ -63,8 +63,8 @@ public class ItemSubPredicateTooltipTest {
                 new EnchantmentPredicate(Enchantments.MENDING, MinMaxBounds.Ints.between(1, 5))
         ))), List.of(
                 "Stored Enchantments:",
-                "  -> Enchantment: minecraft:looting",
-                "  -> Enchantment: minecraft:mending",
+                "  -> minecraft:looting",
+                "  -> minecraft:mending",
                 "    -> Level: 1-5"
         ));
     }

@@ -182,7 +182,7 @@ public class DataComponentTooltipUtils {
             components.add(pad(pad, translatable("ali.property.branch.decorations")));
             value.decorations().forEach((string, entry) -> {
                 components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.decoration", string));
-                components.addAll(getMapDecorationEntryTooltip(utils, pad + 2, entry));
+                components.addAll(getMapDecorationEntryTooltip(utils, pad + 2, "ali.property.value.null", entry));
             });
         }
 
@@ -216,14 +216,14 @@ public class DataComponentTooltipUtils {
 
         components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.potion", value.potion(), RegistriesTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
+        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
 
         return components;
     }
 
     @NotNull
     public static List<Component> getSuspiciousStewEffectsTooltip(IClientUtils utils, int pad, SuspiciousStewEffects value) {
-        return getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", value.effects(), GenericTooltipUtils::getSuspiciousStewEffectEntryTooltip);
+        return getCollectionTooltip(utils, pad, "ali.property.branch.effects", value.effects(), GenericTooltipUtils::getSuspiciousStewEffectEntryTooltip);
     }
 
     @NotNull

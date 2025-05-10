@@ -68,7 +68,7 @@ public class EntitySubPredicateTooltipTest {
                 .setGameType(GameType.SURVIVAL)
                 .build()), List.of(
                 "Player:",
-                "  -> Game Type: Survival",
+                "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
                 "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥100",

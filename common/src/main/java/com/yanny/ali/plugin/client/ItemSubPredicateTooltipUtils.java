@@ -24,12 +24,12 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static List<Component> getItemEnchantmentsPredicateTooltip(IClientUtils utils, int pad, ItemEnchantmentsPredicate.Enchantments predicate) {
-        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_enchantments", "ali.property.value.enchantment", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_enchantments", "ali.property.value.null", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
     public static List<Component> getItemStoredEnchantmentsPredicateTooltip(IClientUtils utils, int pad, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
-        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_stored_enchantments", "ali.property.value.enchantment", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, pad, "ali.type.item_sub_predicate.item_stored_enchantments", "ali.property.value.null", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
