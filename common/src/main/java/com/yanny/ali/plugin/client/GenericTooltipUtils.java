@@ -103,7 +103,7 @@ public class GenericTooltipUtils {
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.operation", modifier.operation()));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.amount", modifier.amount()));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.uuid", modifier.id(), GenericTooltipUtils::getUUIDTooltip));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.equipment_slots", modifier.slots(), GenericTooltipUtils::getEnumTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.equipment_slots", "ali.property.value.null", modifier.slots(), GenericTooltipUtils::getEnumTooltip));
 
         return components;
     }
@@ -167,7 +167,7 @@ public class GenericTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable(key)));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.tags", damagePredicate.tags(), GenericTooltipUtils::getTagPredicateTooltip));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.tags", "ali.property.value.null", damagePredicate.tags(), GenericTooltipUtils::getTagPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.direct_entity", damagePredicate.directEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.source_entity", damagePredicate.sourceEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
 
@@ -176,8 +176,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static <T> List<Component> getTagPredicateTooltip(IClientUtils utils, int pad, TagPredicate<T> tagPredicate) {
-        return List.of(pad(pad, keyValue(tagPredicate.tag().location(), tagPredicate.expected())));
+    public static <T> List<Component> getTagPredicateTooltip(IClientUtils utils, int pad, String key, TagPredicate<T> tagPredicate) {
+        return List.of(pad(pad, translatable(key, keyValue(tagPredicate.tag().location(), tagPredicate.expected()))));
     }
 
     @NotNull
@@ -864,12 +864,6 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getEnumTooltip(IClientUtils ignoredUtils, int pad, String key, Enum<?> value) {
         return List.of(pad(pad, translatable(key, value(value.name()))));
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getEnumTooltip(IClientUtils utils, int pad, Enum<?> value) {
-        return List.of(pad(pad, value(value.name())));
     }
 
     @Unmodifiable
