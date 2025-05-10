@@ -247,8 +247,8 @@ public class GenericTooltipUtils {
         components.add(pad(pad, translatable(key)));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.tag", blockPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
         components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks(), RegistriesTooltipUtils::getBlockTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.branch.properties", blockPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
-        components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.nbt", blockPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.properties", blockPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.nbt", blockPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
 
         return components;
     }
