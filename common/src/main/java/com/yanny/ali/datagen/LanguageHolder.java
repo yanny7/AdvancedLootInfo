@@ -149,7 +149,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.denominator", "Denominator:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
         TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
-        TRANSLATION_MAP.put("ali.property.branch.effect", "Effect:");
         TRANSLATION_MAP.put("ali.property.branch.effects", "Effects:");
         TRANSLATION_MAP.put("ali.property.branch.enchanted_chance", "Enchanted Chance:");
         TRANSLATION_MAP.put("ali.property.branch.enchantments", "Enchantments:");
@@ -222,6 +221,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");
         TRANSLATION_MAP.put("ali.property.branch.title", "Title:");
         TRANSLATION_MAP.put("ali.property.branch.value", "Value:");
+        TRANSLATION_MAP.put("ali.property.branch.values", "Values:");
         TRANSLATION_MAP.put("ali.property.branch.variants", "Variants:");
         TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");
 
@@ -331,8 +331,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.merge_strategy", "Merge Strategy: %s");
         TRANSLATION_MAP.put("ali.property.value.min", "Min: %s");
         TRANSLATION_MAP.put("ali.property.value.min_ticks_in_hive", "Min Ticks In Hive: %s");
-        TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");
-        TRANSLATION_MAP.put("ali.property.value.model", "Model: %s");
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
         TRANSLATION_MAP.put("ali.property.value.null", "%s");
