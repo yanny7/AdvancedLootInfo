@@ -263,8 +263,8 @@ public class GenericTooltipUtils {
                 components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks, RegistriesTooltipUtils::getBlockTooltip));
             }
 
-            components.addAll(getStatePropertiesPredicateTooltip(utils, pad, "ali.property.branch.properties", blockPredicate.properties));
-            components.addAll(getNbtPredicateTooltip(utils, pad, "ali.property.value.nbt", blockPredicate.nbt));
+            components.addAll(getStatePropertiesPredicateTooltip(utils, pad + 1, "ali.property.branch.properties", blockPredicate.properties));
+            components.addAll(getNbtPredicateTooltip(utils, pad + 1, "ali.property.value.nbt", blockPredicate.nbt));
         }
 
         return components;
