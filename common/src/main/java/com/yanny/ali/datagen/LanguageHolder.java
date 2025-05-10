@@ -148,7 +148,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.denominator", "Denominator:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
         TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
-        TRANSLATION_MAP.put("ali.property.branch.effect", "Effect:");
         TRANSLATION_MAP.put("ali.property.branch.effects", "Effects:");
         TRANSLATION_MAP.put("ali.property.branch.enchanted_chance", "Enchanted Chance:");
         TRANSLATION_MAP.put("ali.property.branch.enchantments", "Enchantments:");
