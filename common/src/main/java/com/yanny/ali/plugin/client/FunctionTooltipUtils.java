@@ -201,15 +201,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
-
-        if (!fun.enchantments.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
-            fun.enchantments.forEach((enchantment, value) -> {
-                components.addAll(getEnchantmentTooltip(utils, pad + 2, "ali.property.value.null", enchantment));
-                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
-            });
-        }
-
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", "ali.property.value.levels", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip, GenericTooltipUtils::getNumberProviderTooltip));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
@@ -282,17 +274,6 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetStewEffectTooltip(IClientUtils utils, int pad, SetStewEffectFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
-
-        if (!fun.effectDurationMap.isEmpty()) {
-            fun.effectDurationMap.forEach((effect, duration) -> {
-                components.addAll(getMobEffectTooltip(utils, pad + 1, "ali.property.value.null", effect));
-                components.addAll(getNumberProviderTooltip(utils, pad + 2, "ali.property.value.duration", duration));
-            });
-        }
-
-        return components;
+        return getMapTooltip(utils, pad, "ali.type.function.set_stew_effect", "ali.property.value.null", "ali.property.value.duration", fun.effectDurationMap, RegistriesTooltipUtils::getMobEffectTooltip, GenericTooltipUtils::getNumberProviderTooltip);
     }
 }

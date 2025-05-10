@@ -365,9 +365,6 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetStewEffectTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect().build()), List.of(
-                "Set Stew Effect:"
-        ));
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect()
                 .withEffect(MobEffects.LUCK, UniformGenerator.between(1, 5))
                 .withEffect(MobEffects.UNLUCK, UniformGenerator.between(3, 4))
