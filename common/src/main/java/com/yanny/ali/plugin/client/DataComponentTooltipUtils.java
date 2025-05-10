@@ -250,7 +250,7 @@ public class DataComponentTooltipUtils {
             components.add(pad(pad, translatable("ali.property.branch.decorations")));
             value.decorations().forEach((string, entry) -> {
                 components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.decoration", string));
-                components.addAll(getMapDecorationEntryTooltip(utils, pad + 2, entry));
+                components.addAll(getMapDecorationEntryTooltip(utils, pad + 2, "ali.property.value.null", entry));
             });
         }
 
@@ -284,7 +284,7 @@ public class DataComponentTooltipUtils {
 
         components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.potion", value.potion(), RegistriesTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
+        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.custom_effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_name", value.customName(), GenericTooltipUtils::getStringTooltip));
 
         return components;
@@ -292,7 +292,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getSuspiciousStewEffectsTooltip(IClientUtils utils, int pad, SuspiciousStewEffects value) {
-        return getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", value.effects(), GenericTooltipUtils::getSuspiciousStewEffectEntryTooltip);
+        return getCollectionTooltip(utils, pad, "ali.property.branch.effects", value.effects(), GenericTooltipUtils::getSuspiciousStewEffectEntryTooltip);
     }
 
     @NotNull
@@ -424,7 +424,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getResourceLocationTooltip(IClientUtils utils, int pad, ResourceLocation value) {
-        return GenericTooltipUtils.getResourceLocationTooltip(utils, pad, "ali.property.value.id", value);
+        return GenericTooltipUtils.getResourceLocationTooltip(utils, pad, "ali.property.value.value", value);
     }
 
     @Unmodifiable

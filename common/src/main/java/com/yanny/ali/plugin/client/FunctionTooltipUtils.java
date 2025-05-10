@@ -86,7 +86,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
         components.addAll(getTagKeyTooltip(utils, pad + 1, "ali.property.value.destination", fun.destination));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.map_decoration", fun.mapDecoration, GenericTooltipUtils::getMapDecorationTypeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.map_decoration", fun.mapDecoration, RegistriesTooltipUtils::getMapDecorationTypeTooltip));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.zoom", (int) fun.zoom));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.search_radius", fun.searchRadius));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.skip_known_structures", fun.skipKnownStructures));
@@ -303,12 +303,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetStewEffectTooltip(IClientUtils utils, int pad, SetStewEffectFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.mob_effects", "ali.property.value.mob_effect", fun.effects, GenericTooltipUtils::getEffectEntryTooltip));
-
-        return components;
+        return getCollectionTooltip(utils, pad, "ali.type.function.set_stew_effect", "ali.property.value.null", fun.effects, GenericTooltipUtils::getEffectEntryTooltip);
     }
 
     @NotNull
@@ -323,12 +318,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetComponentsTooltip(IClientUtils utils, int pad, SetComponentsFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.set_components")));
-        components.addAll(getDataComponentPatchTooltip(utils, pad + 1, "ali.property.branch.components", fun.components));
-
-        return components;
+        return getDataComponentPatchTooltip(utils, pad, "ali.type.function.set_components", fun.components);
     }
 
     @NotNull
@@ -437,9 +427,9 @@ public class FunctionTooltipUtils {
         components.add(pad(pad, translatable("ali.type.function.toggle_tooltips")));
 
         if (!fun.values.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.values")));
+            components.add(pad(pad + 1, translatable("ali.property.branch.components")));
             fun.values.forEach((toggle, value) -> {
-                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, "ali.property.value.type", toggle.type()));
+                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, "ali.property.value.null", toggle.type()));
                 components.addAll(getBooleanTooltip(utils, pad + 3, "ali.property.value.value", value));
             });
         }

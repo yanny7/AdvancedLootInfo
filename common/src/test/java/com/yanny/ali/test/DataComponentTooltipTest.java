@@ -149,7 +149,7 @@ public class DataComponentTooltipTest {
                 "  -> Predicate:",
                 "    -> Blocks:",
                 "      -> Tag: minecraft:beds",
-                "    -> State Properties:",
+                "    -> Properties:",
                 "      -> part: foot",
                 "  -> Predicate:",
                 "    -> Blocks:",
@@ -186,14 +186,14 @@ public class DataComponentTooltipTest {
                 "Modifiers:",
                 "  -> Modifier:",
                 "    -> Attribute: minecraft:armor",
-                "    -> Attribute Modifier:",
+                "    -> Modifier:",
                 "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
                 "      -> Operation: ADD_VALUE",
                 "    -> Slot: HEAD",
                 "  -> Modifier:",
                 "    -> Attribute: minecraft:armor_toughness",
-                "    -> Attribute Modifier:",
+                "    -> Modifier:",
                 "      -> Id: minecraft:world",
                 "      -> Amount: 1.25",
                 "      -> Operation: ADD_MULTIPLIED_TOTAL",
@@ -263,19 +263,19 @@ public class DataComponentTooltipTest {
                 "  -> Count: 10",
                 "  -> Components:",
                 List.of(
-                        "    -> Type: minecraft:attribute_modifiers",
+                        "    -> minecraft:attribute_modifiers",
                         "      -> Show In Tooltip: true",
-                        "    -> Type: minecraft:repair_cost",
+                        "    -> minecraft:repair_cost",
                         "      -> Value: 0",
-                        "    -> Type: minecraft:item_name",
+                        "    -> minecraft:item_name",
                         "      -> Item Name: Andesite",
-                        "    -> Type: minecraft:rarity",
+                        "    -> minecraft:rarity",
                         "      -> Rarity: COMMON",
-                        "    -> Type: minecraft:lore",
-                        "    -> Type: minecraft:max_stack_size",
+                        "    -> minecraft:lore",
+                        "    -> minecraft:max_stack_size",
                         "      -> Value: 64",
-                        "    -> Type: minecraft:enchantments",
-                        "    -> Type: minecraft:item_model",
+                        "    -> minecraft:enchantments",
+                        "    -> minecraft:item_model",
                         "      -> Id: minecraft:andesite"
                 )
         ));
@@ -416,12 +416,12 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getMapDecorationsTooltip(UTILS, 0, new MapDecorations(map)), List.of(
                 "Decorations:",
                 "  -> Decoration: Village",
-                "    -> Type: minecraft:village_desert",
+                "    -> minecraft:village_desert",
                 "      -> X: 100.0",
                 "      -> Z: 200.0",
                 "      -> Rotation: 25.5",
                 "  -> Decoration: Player",
-                "    -> Type: minecraft:player",
+                "    -> minecraft:player",
                 "      -> X: 10.0",
                 "      -> Z: 20.0",
                 "      -> Rotation: 90.0"
@@ -445,19 +445,19 @@ public class DataComponentTooltipTest {
                 "    -> Count: 25",
                 "    -> Components:",
                 List.of(
-                        "      -> Type: minecraft:attribute_modifiers",
+                        "      -> minecraft:attribute_modifiers",
                         "        -> Show In Tooltip: true",
-                        "      -> Type: minecraft:repair_cost",
+                        "      -> minecraft:repair_cost",
                         "        -> Value: 0",
-                        "      -> Type: minecraft:item_name",
+                        "      -> minecraft:item_name",
                         "        -> Item Name: Arrow",
-                        "      -> Type: minecraft:rarity",
+                        "      -> minecraft:rarity",
                         "        -> Rarity: COMMON",
-                        "      -> Type: minecraft:lore",
-                        "      -> Type: minecraft:max_stack_size",
+                        "      -> minecraft:lore",
+                        "      -> minecraft:max_stack_size",
                         "        -> Value: 64",
-                        "      -> Type: minecraft:enchantments",
-                        "      -> Type: minecraft:item_model",
+                        "      -> minecraft:enchantments",
+                        "      -> minecraft:item_model",
                         "        -> Id: minecraft:arrow"
                 ),
                 "  -> Item:",
@@ -465,19 +465,19 @@ public class DataComponentTooltipTest {
                 "    -> Count: 2",
                 "    -> Components:",
                 List.of(
-                        "      -> Type: minecraft:attribute_modifiers",
+                        "      -> minecraft:attribute_modifiers",
                         "        -> Show In Tooltip: true",
-                        "      -> Type: minecraft:repair_cost",
+                        "      -> minecraft:repair_cost",
                         "        -> Value: 0",
-                        "      -> Type: minecraft:item_name",
+                        "      -> minecraft:item_name",
                         "        -> Item Name: Snowball",
-                        "      -> Type: minecraft:rarity",
+                        "      -> minecraft:rarity",
                         "        -> Rarity: COMMON",
-                        "      -> Type: minecraft:lore",
-                        "      -> Type: minecraft:max_stack_size",
+                        "      -> minecraft:lore",
+                        "      -> minecraft:max_stack_size",
                         "        -> Value: 16",
-                        "      -> Type: minecraft:enchantments",
-                        "      -> Type: minecraft:item_model",
+                        "      -> minecraft:enchantments",
+                        "      -> minecraft:item_model",
                         "        -> Id: minecraft:snowball"
                 )
         ));
@@ -495,19 +495,19 @@ public class DataComponentTooltipTest {
                 "    -> Count: 1",
                 "    -> Components:",
                 List.of(
-                        "      -> Type: minecraft:attribute_modifiers",
+                        "      -> minecraft:attribute_modifiers",
                         "        -> Show In Tooltip: true",
-                        "      -> Type: minecraft:repair_cost",
+                        "      -> minecraft:repair_cost",
                         "        -> Value: 0",
-                        "      -> Type: minecraft:item_name",
+                        "      -> minecraft:item_name",
                         "        -> Item Name: Block of Coal",
-                        "      -> Type: minecraft:rarity",
+                        "      -> minecraft:rarity",
                         "        -> Rarity: COMMON",
-                        "      -> Type: minecraft:lore",
-                        "      -> Type: minecraft:max_stack_size",
+                        "      -> minecraft:lore",
+                        "      -> minecraft:max_stack_size",
                         "        -> Value: 64",
-                        "      -> Type: minecraft:enchantments",
-                        "      -> Type: minecraft:item_model",
+                        "      -> minecraft:enchantments",
+                        "      -> minecraft:item_model",
                         "        -> Id: minecraft:coal_block"
                 ),
                 "  -> Item:",
@@ -515,19 +515,19 @@ public class DataComponentTooltipTest {
                 "    -> Count: 1",
                 "    -> Components:",
                 List.of(
-                        "      -> Type: minecraft:attribute_modifiers",
+                        "      -> minecraft:attribute_modifiers",
                         "        -> Show In Tooltip: true",
-                        "      -> Type: minecraft:repair_cost",
+                        "      -> minecraft:repair_cost",
                         "        -> Value: 0",
-                        "      -> Type: minecraft:item_name",
+                        "      -> minecraft:item_name",
                         "        -> Item Name: Diorite",
-                        "      -> Type: minecraft:rarity",
+                        "      -> minecraft:rarity",
                         "        -> Rarity: COMMON",
-                        "      -> Type: minecraft:lore",
-                        "      -> Type: minecraft:max_stack_size",
+                        "      -> minecraft:lore",
+                        "      -> minecraft:max_stack_size",
                         "        -> Value: 64",
-                        "      -> Type: minecraft:enchantments",
-                        "      -> Type: minecraft:item_model",
+                        "      -> minecraft:enchantments",
+                        "      -> minecraft:item_model",
                         "        -> Id: minecraft:diorite"
                 ),
                 "Fraction: 1/32"
@@ -547,16 +547,14 @@ public class DataComponentTooltipTest {
         )), List.of(
                 "Potion: minecraft:harming",
                 "Custom Color: 5",
-                "Effects:",
-                "  -> Effect:",
-                "    -> Mob Effect: minecraft:blindness",
+                "Custom Effects:",
+                "  -> minecraft:blindness",
                 "    -> Duration: 5",
                 "    -> Amplifier: 2",
                 "    -> Ambient: false",
                 "    -> Is Visible: true",
                 "    -> Show Icon: true",
-                "  -> Effect:",
-                "    -> Mob Effect: minecraft:absorption",
+                "  -> minecraft:absorption",
                 "    -> Duration: 0",
                 "    -> Amplifier: 0",
                 "    -> Ambient: false",
@@ -573,11 +571,9 @@ public class DataComponentTooltipTest {
                 new SuspiciousStewEffects.Entry(MobEffects.LUCK, 3)
         ))), List.of(
                 "Effects:",
-                "  -> Effect:",
-                "    -> Type: minecraft:absorption",
+                "  -> minecraft:absorption",
                 "    -> Duration: 2",
-                "  -> Effect:",
-                "    -> Type: minecraft:luck",
+                "  -> minecraft:luck",
                 "    -> Duration: 3"
         ));
     }
@@ -704,10 +700,7 @@ public class DataComponentTooltipTest {
         )), List.of(
                 "Global Position:",
                 "  -> Dimension: minecraft:the_end",
-                "  -> Position:",
-                "    -> X: 1",
-                "    -> Y: 2",
-                "    -> Z: 3",
+                "  -> Position: [X: 1, Y: 2, Z: 3]",
                 "Tracked: true"
         ));
     }
@@ -783,7 +776,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testResourceLocationTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getResourceLocationTooltip(UTILS, 0, ResourceLocation.withDefaultNamespace("test")), List.of("Id: minecraft:test"));
+        assertTooltip(DataComponentTooltipUtils.getResourceLocationTooltip(UTILS, 0, ResourceLocation.withDefaultNamespace("test")), List.of("Value: minecraft:test"));
     }
 
     @Test
@@ -793,8 +786,10 @@ public class DataComponentTooltipTest {
                 new BannerPatternLayers.Layer(LOOKUP.lookupOrThrow(Registries.BANNER_PATTERN).getOrThrow(BannerPatterns.BORDER), DyeColor.RED)
         ))), List.of(
                 "Banner Patterns:",
-                "  -> Fully Blue Field",
-                "  -> Red Bordure"
+                "  -> minecraft:base",
+                "    -> Color: BLUE",
+                "  -> minecraft:border",
+                "    -> Color: RED"
         ));
     }
 
@@ -830,19 +825,19 @@ public class DataComponentTooltipTest {
                 "    -> Count: 10",
                 "    -> Components:",
                 List.of(
-                        "      -> Type: minecraft:attribute_modifiers",
+                        "      -> minecraft:attribute_modifiers",
                         "        -> Show In Tooltip: true",
-                        "      -> Type: minecraft:repair_cost",
+                        "      -> minecraft:repair_cost",
                         "        -> Value: 0",
-                        "      -> Type: minecraft:item_name",
+                        "      -> minecraft:item_name",
                         "        -> Item Name: Andesite",
-                        "      -> Type: minecraft:rarity",
+                        "      -> minecraft:rarity",
                         "        -> Rarity: COMMON",
-                        "      -> Type: minecraft:lore",
-                        "      -> Type: minecraft:max_stack_size",
+                        "      -> minecraft:lore",
+                        "      -> minecraft:max_stack_size",
                         "        -> Value: 64",
-                        "      -> Type: minecraft:enchantments",
-                        "      -> Type: minecraft:item_model",
+                        "      -> minecraft:enchantments",
+                        "      -> minecraft:item_model",
                         "        -> Id: minecraft:andesite"
                 ),
                 "  -> Item:",
@@ -850,19 +845,19 @@ public class DataComponentTooltipTest {
                 "    -> Count: 1",
                 "    -> Components:",
                 List.of(
-                        "      -> Type: minecraft:attribute_modifiers",
+                        "      -> minecraft:attribute_modifiers",
                         "        -> Show In Tooltip: true",
-                        "      -> Type: minecraft:repair_cost",
+                        "      -> minecraft:repair_cost",
                         "        -> Value: 0",
-                        "      -> Type: minecraft:item_name",
+                        "      -> minecraft:item_name",
                         "        -> Item Name: Diorite",
-                        "      -> Type: minecraft:rarity",
+                        "      -> minecraft:rarity",
                         "        -> Rarity: COMMON",
-                        "      -> Type: minecraft:lore",
-                        "      -> Type: minecraft:max_stack_size",
+                        "      -> minecraft:lore",
+                        "      -> minecraft:max_stack_size",
                         "        -> Value: 64",
-                        "      -> Type: minecraft:enchantments",
-                        "      -> Type: minecraft:item_model",
+                        "      -> minecraft:enchantments",
+                        "      -> minecraft:item_model",
                         "        -> Id: minecraft:diorite"
                 )
         ));
