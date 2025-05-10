@@ -157,7 +157,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.lore", "Lore:");
         TRANSLATION_MAP.put("ali.property.branch.mainhand", "Main Hand:");
         TRANSLATION_MAP.put("ali.property.branch.materials", "Materials:");
-        TRANSLATION_MAP.put("ali.property.branch.mob_effect", "Mob Effect:");
         TRANSLATION_MAP.put("ali.property.branch.mob_effects", "Mob Effects:");
         TRANSLATION_MAP.put("ali.property.branch.modifier", "Modifier:");
         TRANSLATION_MAP.put("ali.property.branch.modifiers", "Modifiers:");
