@@ -17,8 +17,8 @@ public class ConsumeEffectTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.consume_effect.apply_effects")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.effects", "ali.property.branch.effect", effect.effects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
-        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.seed", effect.probability()));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.effects", "ali.property.value.null", effect.effects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
+        components.addAll(getFloatTooltip(utils, pad + 1, "ali.property.value.probability", effect.probability()));
 
         return components;
     }

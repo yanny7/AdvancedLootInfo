@@ -276,7 +276,7 @@ public class DataComponentTooltipTest {
                         "      -> Value: 64",
                         "    -> minecraft:enchantments",
                         "    -> minecraft:item_model",
-                        "      -> Id: minecraft:andesite"
+                        "      -> Value: minecraft:andesite"
                 )
         ));
     }
@@ -458,7 +458,7 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> minecraft:enchantments",
                         "      -> minecraft:item_model",
-                        "        -> Id: minecraft:arrow"
+                        "        -> Value: minecraft:arrow"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:snowball",
@@ -478,7 +478,7 @@ public class DataComponentTooltipTest {
                         "        -> Value: 16",
                         "      -> minecraft:enchantments",
                         "      -> minecraft:item_model",
-                        "        -> Id: minecraft:snowball"
+                        "        -> Value: minecraft:snowball"
                 )
         ));
     }
@@ -508,7 +508,7 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> minecraft:enchantments",
                         "      -> minecraft:item_model",
-                        "        -> Id: minecraft:coal_block"
+                        "        -> Value: minecraft:coal_block"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -528,7 +528,7 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> minecraft:enchantments",
                         "      -> minecraft:item_model",
-                        "        -> Id: minecraft:diorite"
+                        "        -> Value: minecraft:diorite"
                 ),
                 "Fraction: 1/32"
         ));
@@ -838,7 +838,7 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> minecraft:enchantments",
                         "      -> minecraft:item_model",
-                        "        -> Id: minecraft:andesite"
+                        "        -> Value: minecraft:andesite"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -858,7 +858,7 @@ public class DataComponentTooltipTest {
                         "        -> Value: 64",
                         "      -> minecraft:enchantments",
                         "      -> minecraft:item_model",
-                        "        -> Id: minecraft:diorite"
+                        "        -> Value: minecraft:diorite"
                 )
         ));
     }
@@ -907,10 +907,10 @@ public class DataComponentTooltipTest {
         ))), List.of(
                 "Predicate:",
                 "  -> Count: ≥5",
-                "  -> Component Predicates:",
-                "    -> Component: minecraft:damage",
+                "  -> Components:",
+                "    -> minecraft:damage",
                 "      -> Value: 3",
-                "    -> Component: minecraft:max_stack_size",
+                "    -> minecraft:max_stack_size",
                 "      -> Value: 16"
         ));
     }

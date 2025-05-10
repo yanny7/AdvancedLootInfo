@@ -278,7 +278,7 @@ public class GenericTooltipTest {
                 .periodicTick(1000)
                 .moving(new MovementPredicate(MinMaxBounds.Doubles.between(1, 5), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .team("orange")
-                .slots(new SlotsPredicate(Map.of(SlotRange.of("test", IntList.of(1, 2)), ItemPredicate.Builder.item().of(Items.GRANITE).build()))).build()
+                .slots(new SlotsPredicate(Map.of(SlotRange.of("test", IntList.of(1, 2)), ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.GRANITE).build()))).build()
         ), List.of(
                 "Predicate:",
                 "  -> Entity Types:",
@@ -1000,7 +1000,7 @@ public class GenericTooltipTest {
                         "      -> Value: 64",
                         "    -> minecraft:enchantments",
                         "    -> minecraft:item_model",
-                        "      -> Id: minecraft:andesite"
+                        "      -> Value: minecraft:andesite"
                 )
         ));
     }
@@ -1149,8 +1149,8 @@ public class GenericTooltipTest {
     public void testSlotPredicateTooltip() {
         Map<SlotRange, ItemPredicate> map = new LinkedHashMap<>();
 
-        map.put(SlotRange.of("test", IntList.of(1, 2, 3)), ItemPredicate.Builder.item().of(Items.ANDESITE).build());
-        map.put(SlotRange.of("help", IntList.of(2, 1, 0)), ItemPredicate.Builder.item().of(Items.DIORITE, Items.GRANITE).build());
+        map.put(SlotRange.of("test", IntList.of(1, 2, 3)), ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build());
+        map.put(SlotRange.of("help", IntList.of(2, 1, 0)), ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIORITE, Items.GRANITE).build());
 
         assertTooltip(GenericTooltipUtils.getSlotPredicateTooltip(UTILS, 0, "ali.property.branch.slots", new SlotsPredicate(map)), List.of(
                 "Slots:",
