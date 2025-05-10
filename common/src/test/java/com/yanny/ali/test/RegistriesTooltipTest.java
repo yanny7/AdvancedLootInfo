@@ -70,7 +70,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testMobEffectTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getMobEffectTooltip(UTILS, 0, "ali.property.value.mob_effect", MobEffects.BLINDNESS.value()), List.of("Mob Effect: minecraft:blindness"));
+        assertTooltip(RegistriesTooltipUtils.getMobEffectTooltip(UTILS, 0, "ali.property.value.effect", MobEffects.BLINDNESS.value()), List.of("Effect: minecraft:blindness"));
     }
 
     @Test

@@ -24,21 +24,19 @@ public class ConsumeEffectTooltipTest {
         )), List.of(
                 "Apply Effects:",
                 "  -> Effects:",
-                "    -> Effect:",
-                "      -> Mob Effect: minecraft:bad_omen",
+                "    -> minecraft:bad_omen",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
                 "      -> Ambient: false",
                 "      -> Is Visible: true",
                 "      -> Show Icon: true",
-                "    -> Effect:",
-                "      -> Mob Effect: minecraft:nausea",
+                "    -> minecraft:nausea",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
                 "      -> Ambient: false",
                 "      -> Is Visible: true",
                 "      -> Show Icon: true",
-                "  -> Seed: 1.0"
+                "  -> Probability: 1.0"
         ));
     }
 
