@@ -84,7 +84,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
-        TRANSLATION_MAP.put("ali.property.branch.damage_source_predicate", "Damage Source:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
         TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
         TRANSLATION_MAP.put("ali.property.branch.enchantments", "Enchantments:");
@@ -103,9 +102,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.mainhand", "Main Hand:");
         TRANSLATION_MAP.put("ali.property.branch.mob_effects", "Mob Effects:");
         TRANSLATION_MAP.put("ali.property.branch.modifier", "Modifier:");
-        TRANSLATION_MAP.put("ali.property.branch.modifiers", "Modifiers:");
         TRANSLATION_MAP.put("ali.property.branch.offhand", "Offhand:");
-        TRANSLATION_MAP.put("ali.property.branch.offset", "Offset:");
         TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
         TRANSLATION_MAP.put("ali.property.branch.operations", "Operations:");
         TRANSLATION_MAP.put("ali.property.branch.passenger", "Passenger:");
@@ -115,12 +112,11 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.recipes", "Recipes:");
         TRANSLATION_MAP.put("ali.property.branch.scores", "Scores:");
         TRANSLATION_MAP.put("ali.property.branch.source_entity", "Source Entity:");
-        TRANSLATION_MAP.put("ali.property.branch.state_properties_predicate", "State Properties:");
         TRANSLATION_MAP.put("ali.property.branch.stats", "Stats:");
         TRANSLATION_MAP.put("ali.property.branch.stepping_on_location", "Stepping on Location:");
         TRANSLATION_MAP.put("ali.property.branch.stored_enchantments", "Stored Enchantments:");
         TRANSLATION_MAP.put("ali.property.branch.stuck_entity", "Stuck Entity:");
-        TRANSLATION_MAP.put("ali.property.branch.tag_predicates", "Tags:");
+        TRANSLATION_MAP.put("ali.property.branch.tags", "Tags:");
         TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");
         TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");
 
@@ -151,6 +147,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
         TRANSLATION_MAP.put("ali.property.value.game_type", "Game Type: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
+        TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
         TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");
         TRANSLATION_MAP.put("ali.property.value.is_baby", "Is Baby: %s");
@@ -188,7 +185,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.ranged_property_lte", "%s: ≤%s");
         TRANSLATION_MAP.put("ali.property.value.replace", "Replace: %s");
         TRANSLATION_MAP.put("ali.property.value.resolution_context", "Resolution Context: %s");
-        TRANSLATION_MAP.put("ali.property.value.score", "Score: %s");
         TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
         TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
         TRANSLATION_MAP.put("ali.property.value.size", "Size: %s");
@@ -209,6 +205,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.z", "Z: %s");
         TRANSLATION_MAP.put("ali.property.value.zoom", "Zoom: %s");
 
+        TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
+
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values", "%s%s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values_with_space", "%s %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.1", "  ->");
@@ -221,6 +219,16 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.8", "                ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.9", "                  ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.10", "                    ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.11", "                      ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.12", "                        ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.13", "                          ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.14", "                            ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.15", "                              ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.16", "                                ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.17", "                                  ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.18", "                                    ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.19", "                                      ->");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.20", "                                        ->");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");

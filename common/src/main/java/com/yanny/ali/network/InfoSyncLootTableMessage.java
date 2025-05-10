@@ -1,21 +1,31 @@
 package com.yanny.ali.network;
 
+import com.google.gson.JsonParser;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.Utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
+import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.slf4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 public class InfoSyncLootTableMessage implements CustomPacketPayload {
     public static final ResourceLocation ID = Utils.modLoc("loot_table_sync");
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     public final ResourceLocation location;
     public final LootTable lootTable;
@@ -29,14 +39,14 @@ public class InfoSyncLootTableMessage implements CustomPacketPayload {
 
     public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
         location = buf.readResourceLocation();
-        lootTable = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, buf.readJsonWithCodec(ExtraCodecs.JSON)).get().orThrow();
+        lootTable = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, JsonParser.parseString(decompressString(buf.readUtf()))).get().orThrow();
         items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeResourceLocation(location);
-        buf.writeJsonWithCodec(ExtraCodecs.JSON, LootDataType.TABLE.codec.encodeStart(JsonOps.INSTANCE, lootTable).get().orThrow());
+        buf.writeUtf(compressString(LootDataType.TABLE.codec.encodeStart(JsonOps.INSTANCE, lootTable).get().orThrow().toString()));
         buf.writeCollection(items, (b, item) -> buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
     }
 
@@ -44,5 +54,38 @@ public class InfoSyncLootTableMessage implements CustomPacketPayload {
     @Override
     public ResourceLocation id() {
         return ID;
+    }
+
+    public static String compressString(String input) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try (GzipCompressorOutputStream gzipOut = new GzipCompressorOutputStream(baos)) {
+            gzipOut.write(input.getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            LOGGER.error("Failed to compress loot table with error: {}", e.getMessage());
+            throw new RuntimeException();
+        }
+
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+
+    public static String decompressString(String compressedBase64) {
+        byte[] compressedBytes = Base64.getDecoder().decode(compressedBase64);
+        ByteArrayInputStream bais = new ByteArrayInputStream(compressedBytes);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try (GzipCompressorInputStream gzipIn = new GzipCompressorInputStream(bais)) {
+            byte[] buffer = new byte[1024];
+            int len;
+
+            while ((len = gzipIn.read(buffer)) > 0) {
+                baos.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Failed to decompress loot table with error: {}", e.getMessage());
+            throw new RuntimeException();
+        }
+
+        return baos.toString(StandardCharsets.UTF_8);
     }
 }
