@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getDataComponentTypeTooltip;
 import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getLootNbtProviderTypeTooltip;
 
 public class FunctionTooltipUtils {
@@ -60,12 +59,11 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getEnchantRandomlyTooltip(IClientUtils utils, int pad, EnchantRandomlyFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.enchant_randomly")));
-        components.addAll(getOptionalHolderSetTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip));
-
-        return components;
+        if (fun.enchantments.isPresent() && fun.enchantments.get().size() > 0) {
+            return getOptionalHolderSetTooltip(utils, pad, "ali.type.function.enchant_randomly", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip);
+        } else {
+            return List.of(pad(pad, translatable("ali.type.function.enchant_randomly")));
+        }
     }
 
     @NotNull
@@ -301,12 +299,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetStewEffectTooltip(IClientUtils utils, int pad, SetStewEffectFunction fun) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable("ali.type.function.set_stew_effect")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.mob_effects", "ali.property.value.mob_effect", fun.effects, GenericTooltipUtils::getEffectEntryTooltip));
-
-        return components;
+        return getCollectionTooltip(utils, pad, "ali.type.function.set_stew_effect", "ali.property.value.null", fun.effects, GenericTooltipUtils::getEffectEntryTooltip);
     }
 
     @NotNull

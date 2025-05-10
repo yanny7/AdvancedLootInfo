@@ -106,13 +106,13 @@ public class FunctionTooltipTest {
 
     @Test
     public void testEnchantRandomlyTooltip() {
+        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomApplicableEnchantment().build()), List.of("Enchant Randomly:"));
         assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomEnchantment()
                 .withEnchantment(Enchantments.CHANNELING)
                 .build()
         ), List.of(
                 "Enchant Randomly:",
-                "  -> Enchantments:",
-                "    -> minecraft:channeling"
+                "  -> minecraft:channeling"
         ));
     }
 
@@ -214,24 +214,23 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlotGroup.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
-                "  -> Modifiers:",
-                "    -> Modifier:",
-                "      -> Name: armor",
-                "      -> Attribute: minecraft:generic.armor",
-                "      -> Operation: ADD_MULTIPLIED_TOTAL",
-                "      -> Amount: 1-5",
-                "      -> Equipment Slots:",
-                "        -> FEET",
-                "        -> LEGS",
-                "        -> CHEST",
-                "        -> HEAD",
-                "    -> Modifier:",
-                "      -> Name: chest",
-                "      -> Attribute: minecraft:generic.armor_toughness",
-                "      -> Operation: ADD_MULTIPLIED_BASE",
-                "      -> Amount: 3",
-                "      -> Equipment Slots:",
-                "        -> MAINHAND",
+                "  -> Modifier:",
+                "    -> Name: armor",
+                "    -> Attribute: minecraft:generic.armor",
+                "    -> Operation: ADD_MULTIPLIED_TOTAL",
+                "    -> Amount: 1-5",
+                "    -> Equipment Slots:",
+                "      -> FEET",
+                "      -> LEGS",
+                "      -> CHEST",
+                "      -> HEAD",
+                "  -> Modifier:",
+                "    -> Name: chest",
+                "    -> Attribute: minecraft:generic.armor_toughness",
+                "    -> Operation: ADD_MULTIPLIED_BASE",
+                "    -> Amount: 3",
+                "    -> Equipment Slots:",
+                "      -> MAINHAND",
                 "  -> Replace: false"
         ));
     }
@@ -245,8 +244,10 @@ public class FunctionTooltipTest {
                 "Set Banner Pattern:",
                 "  -> Append: true",
                 "  -> Banner Patterns:",
-                "    -> Fully White Field",
-                "    -> Green Creeper Charge"
+                "    -> minecraft:base",
+                "      -> Color: WHITE",
+                "    -> minecraft:creeper",
+                "      -> Color: GREEN"
         ));
     }
 
@@ -396,20 +397,17 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetStewEffectTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect().build()), List.of(
-                "Set Stew Effect:"
-        ));
+        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect().build()), List.of());
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect()
                 .withEffect(MobEffects.LUCK, UniformGenerator.between(1, 5))
                 .withEffect(MobEffects.UNLUCK, UniformGenerator.between(3, 4))
                 .build()
         ), List.of(
                 "Set Stew Effect:",
-                "  -> Mob Effects:",
-                "    -> Mob Effect: minecraft:luck",
-                "      -> Duration: 1-5",
-                "    -> Mob Effect: minecraft:unluck",
-                "      -> Duration: 3-4"
+                "  -> minecraft:luck",
+                "    -> Duration: 1-5",
+                "  -> minecraft:unluck",
+                "    -> Duration: 3-4"
         ));
     }
 
