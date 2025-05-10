@@ -338,7 +338,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getNoteBlockSoundTooltip(IClientUtils utils, int pad, ResourceLocation value) {
-        return getResourceLocationTooltip(utils, pad, "ali.property.value.id", value);
+        return getResourceLocationTooltip(utils, pad, "ali.property.value.value", value);
     }
 
     @Unmodifiable

@@ -185,7 +185,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");
         TRANSLATION_MAP.put("ali.property.branch.title", "Title:");
         TRANSLATION_MAP.put("ali.property.branch.tooltip", "Tooltip:");
-        TRANSLATION_MAP.put("ali.property.branch.values", "Values:");
         TRANSLATION_MAP.put("ali.property.branch.variants", "Variants:");
         TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");
 
@@ -243,7 +242,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.has_twinkle", "Has Twinkle: %s");
         TRANSLATION_MAP.put("ali.property.value.hidden_effect", "Hidden Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
-        TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
         TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");
         TRANSLATION_MAP.put("ali.property.value.is_baby", "Is Baby: %s");
@@ -268,7 +266,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.material", "Material: %s");
         TRANSLATION_MAP.put("ali.property.value.merge_strategy", "Merge Strategy: %s");
         TRANSLATION_MAP.put("ali.property.value.min_ticks_in_hive", "Min Ticks In Hive: %s");
-        TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.multiplier", "Multiplier: %s");
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");

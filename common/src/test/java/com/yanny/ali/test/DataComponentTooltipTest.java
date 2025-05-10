@@ -630,7 +630,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testNoteBlockSoundTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getNoteBlockSoundTooltip(UTILS, 0, new ResourceLocation("test")), List.of("Id: minecraft:test"));
+        assertTooltip(DataComponentTooltipUtils.getNoteBlockSoundTooltip(UTILS, 0, new ResourceLocation("test")), List.of("Value: minecraft:test"));
     }
 
     @Test
