@@ -430,9 +430,9 @@ public class GenericTooltipTest {
                 "  -> Blocks:",
                 "    -> minecraft:stone",
                 "    -> minecraft:cobblestone",
-                "Properties:",
-                "  -> facing: east",
-                "Nbt: {test:3.0f}"
+                "  -> Properties:",
+                "    -> facing: east",
+                "  -> Nbt: {test:3.0f}"
         ));
     }
 
