@@ -123,6 +123,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.biomes", "Biomes:");
         TRANSLATION_MAP.put("ali.property.branch.block_predicate", "Block Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
+        TRANSLATION_MAP.put("ali.property.branch.body", "Body:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.branch.clamped", "Clamped:");
         TRANSLATION_MAP.put("ali.property.branch.component_predicates", "Component Predicates:");
@@ -131,6 +132,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.contains", "Contains:");
         TRANSLATION_MAP.put("ali.property.branch.copy_operations", "Copy Operations:");
         TRANSLATION_MAP.put("ali.property.branch.counts", "Counts:");
+        TRANSLATION_MAP.put("ali.property.branch.custom_effects", "Custom Effects:");
         TRANSLATION_MAP.put("ali.property.branch.decorations", "Decorations:");
         TRANSLATION_MAP.put("ali.property.branch.denominator", "Denominator:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
@@ -192,6 +194,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.rule", "Rule:");
         TRANSLATION_MAP.put("ali.property.branch.rules", "Rules:");
         TRANSLATION_MAP.put("ali.property.branch.scores", "Scores:");
+        TRANSLATION_MAP.put("ali.property.branch.slots", "Slots:");
         TRANSLATION_MAP.put("ali.property.branch.songs", "Songs:");
         TRANSLATION_MAP.put("ali.property.branch.source_entity", "Source Entity:");
         TRANSLATION_MAP.put("ali.property.branch.stats", "Stats:");
@@ -203,6 +206,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");
         TRANSLATION_MAP.put("ali.property.branch.title", "Title:");
         TRANSLATION_MAP.put("ali.property.branch.tooltip", "Tooltip:");
+        TRANSLATION_MAP.put("ali.property.branch.using_converts_to", "Using Converts To:");
         TRANSLATION_MAP.put("ali.property.branch.value", "Value:");
         TRANSLATION_MAP.put("ali.property.branch.variants", "Variants:");
         TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");

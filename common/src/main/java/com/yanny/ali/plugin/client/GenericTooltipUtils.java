@@ -23,7 +23,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -204,6 +203,7 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.passenger", entityPredicate.passenger(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.targeted_entity", entityPredicate.targetedEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.team", entityPredicate.team(), GenericTooltipUtils::getStringTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.slots", entityPredicate.slots(), GenericTooltipUtils::getSlotPredicateTooltip));
 
         return components;
     }
@@ -341,6 +341,7 @@ public class GenericTooltipUtils {
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.chest", entityEquipmentPredicate.chest(), GenericTooltipUtils::getItemPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.legs", entityEquipmentPredicate.legs(), GenericTooltipUtils::getItemPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.feet", entityEquipmentPredicate.feet(), GenericTooltipUtils::getItemPredicateTooltip));
+        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.body", entityEquipmentPredicate.body(), GenericTooltipUtils::getItemPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.mainhand", entityEquipmentPredicate.mainhand(), GenericTooltipUtils::getItemPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.offhand", entityEquipmentPredicate.offhand(), GenericTooltipUtils::getItemPredicateTooltip));
 
@@ -377,7 +378,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getGameTypePredicateTooltip(IClientUtils utils, int pad, String key, GameTypePredicate gameType) {
-        return getCollectionTooltip(utils, pad, key, gameType.types(), GenericTooltipUtils::getEnumTooltip);
+        return getCollectionTooltip(utils, pad, key, "ali.property.value.null", gameType.types(), GenericTooltipUtils::getEnumTooltip);
     }
 
     @NotNull
@@ -840,6 +841,21 @@ public class GenericTooltipUtils {
 
         if (property.signature() != null) {
             components.addAll(getStringTooltip(utils, pad, "ali.property.value.signature", property.signature()));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static List<Component> getSlotPredicateTooltip(IClientUtils utils, int pad, String key, SlotsPredicate predicate) {
+        List<Component> components = new LinkedList<>();
+
+        if (!predicate.slots().isEmpty()) {
+            components.add(pad(pad, translatable("ali.property.branch.slots")));
+            predicate.slots().forEach((range, itemPredicate) -> {
+                components.addAll(getIntListTooltip(utils, pad + 1, "ali.property.value.null", range.slots()));
+                components.addAll(getItemPredicateTooltip(utils, pad + 2, "ali.property.branch.predicate", itemPredicate));
+            });
         }
 
         return components;

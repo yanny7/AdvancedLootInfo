@@ -32,6 +32,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,6 +41,7 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
@@ -273,7 +275,7 @@ public class GenericTooltipTest {
                 .periodicTick(1000)
                 .moving(new MovementPredicate(MinMaxBounds.Doubles.between(1, 5), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .team("orange")
-                .build()
+                .slots(new SlotsPredicate(Map.of(SlotRange.of("test", IntList.of(1, 2)), ItemPredicate.Builder.item().of(Items.GRANITE).build()))).build()
         ), List.of(
                 "Predicate:",
                 "  -> Entity Types:",
@@ -313,7 +315,12 @@ public class GenericTooltipTest {
                 "    -> Team: white",
                 "  -> Targeted Entity:",
                 "    -> Team: red",
-                "  -> Team: orange"
+                "  -> Team: orange",
+                "  -> Slots:",
+                "    -> [1, 2]",
+                "      -> Predicate:",
+                "        -> Items:",
+                "          -> minecraft:granite"
         ));
     }
 
@@ -530,6 +537,7 @@ public class GenericTooltipTest {
                 .chest(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atMost(5)))
                 .legs(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(5)))
                 .feet(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(1, 2)))
+                .body(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(1, 3)))
                 .mainhand(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(0, 64)))
                 .offhand(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.atLeast(32)))
                 .build()), List.of(
@@ -542,6 +550,8 @@ public class GenericTooltipTest {
             "    -> Count: ≥5",
             "  -> Feet:",
             "    -> Count: 1-2",
+            "  -> Body:",
+            "    -> Count: 1-3",
             "  -> Main Hand:",
             "    -> Count: 0-64",
             "  -> Offhand:",
@@ -1146,6 +1156,27 @@ public class GenericTooltipTest {
                 "  -> Horizontal Speed: ≥1.5",
                 "  -> Vertical Speed: ≥0.5",
                 "  -> Fall Distance: ≥10.0"
+        ));
+    }
+
+    @Test
+    public void testSlotPredicateTooltip() {
+        Map<SlotRange, ItemPredicate> map = new LinkedHashMap<>();
+
+        map.put(SlotRange.of("test", IntList.of(1, 2, 3)), ItemPredicate.Builder.item().of(Items.ANDESITE).build());
+        map.put(SlotRange.of("help", IntList.of(2, 1, 0)), ItemPredicate.Builder.item().of(Items.DIORITE, Items.GRANITE).build());
+
+        assertTooltip(GenericTooltipUtils.getSlotPredicateTooltip(UTILS, 0, "ali.property.branch.slots", new SlotsPredicate(map)), List.of(
+                "Slots:",
+                "  -> [1, 2, 3]",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> minecraft:andesite",
+                "  -> [2, 1, 0]",
+                "    -> Predicate:",
+                "      -> Items:",
+                "        -> minecraft:diorite",
+                "        -> minecraft:granite"
         ));
     }
 }

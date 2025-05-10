@@ -133,6 +133,7 @@ public class DataComponentTooltipUtils {
         components.addAll(getFloatTooltip(utils, pad, "ali.property.value.saturation", food.saturation()));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.can_always_eat", food.canAlwaysEat()));
         components.addAll(getFloatTooltip(utils, pad, "ali.property.value.eat_seconds", food.eatSeconds()));
+        components.addAll(getOptionalTooltip(utils, pad, "ali.property.branch.using_converts_to", food.usingConvertsTo(), GenericTooltipUtils::getItemStackTooltip));
         components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.branch.effect", food.effects(), GenericTooltipUtils::getPossibleEffectTooltip));
 
         return components;
@@ -213,7 +214,7 @@ public class DataComponentTooltipUtils {
 
         components.addAll(getOptionalHolderTooltip(utils, pad, "ali.property.value.potion", value.potion(), RegistriesTooltipUtils::getPotionTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
+        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.custom_effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
 
         return components;
     }

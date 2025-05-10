@@ -108,7 +108,12 @@ public class FunctionTooltipTest {
 
     @Test
     public void testEnchantRandomlyTooltip() {
-        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomApplicableEnchantment().build()), List.of("Enchant Randomly:"));
+        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomApplicableEnchantment(LOOKUP).build()), List.of(
+                "Enchant Randomly:",
+                "  -> Enchantments:",
+                "    -> Tag: minecraft:on_random_loot",
+                "  -> Only Compatible: true"
+        ));
         assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomEnchantment()
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow())
                 .build()
