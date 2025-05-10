@@ -671,11 +671,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testMapDecorationTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getMapDecorationTypeTooltip(UTILS, 0, "ali.property.value.map_decoration", MapDecorationTypes.OCEAN_MONUMENT.value()), List.of("Map Decoration: minecraft:monument"));
-    }
-
-    @Test
     public void testListOperationTooltip() {
         assertTooltip(GenericTooltipUtils.getListOperationTooltip(UTILS, 0, "ali.property.value.list_operation", new ListOperation.Insert(1)), List.of(
                 "List Operation: INSERT",
@@ -1048,11 +1043,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testEffectEntryTooltip() {
-        assertTooltip(GenericTooltipUtils.getEffectEntryTooltip(UTILS, 0, "ali.property.value.mob_effect", new SetStewEffectFunction.EffectEntry(
+        assertTooltip(GenericTooltipUtils.getEffectEntryTooltip(UTILS, 0, "ali.property.value.effect", new SetStewEffectFunction.EffectEntry(
                 MobEffects.LUCK,
                 ConstantValue.exactly(3)
         )), List.of(
-                "Mob Effect: minecraft:luck",
+                "Effect: minecraft:luck",
                 "  -> Duration: 3"
         ));
     }

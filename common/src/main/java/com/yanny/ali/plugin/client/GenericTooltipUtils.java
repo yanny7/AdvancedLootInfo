@@ -30,7 +30,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
@@ -427,12 +426,6 @@ public class GenericTooltipUtils {
     @NotNull
     public static List<Component> getBlockPosTooltip(IClientUtils ignoredUtils, int pad, String key, BlockPos pos) {
         return List.of(pad(pad, translatable(key, value(pos.getX()), value(pos.getY()), value(pos.getZ()))));
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Component> getMapDecorationTypeTooltip(IClientUtils utils, int pad, String key, MapDecorationType decorationType) {
-        return RegistriesTooltipUtils.getMapDecorationTypeTooltip(utils, pad, key, decorationType);
     }
 
     @NotNull

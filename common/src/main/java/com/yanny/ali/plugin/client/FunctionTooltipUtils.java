@@ -84,7 +84,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.exploration_map")));
         components.addAll(getTagKeyTooltip(utils, pad + 1, "ali.property.value.destination", fun.destination));
-        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.map_decoration", fun.mapDecoration, GenericTooltipUtils::getMapDecorationTypeTooltip));
+        components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.map_decoration", fun.mapDecoration, RegistriesTooltipUtils::getMapDecorationTypeTooltip));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.zoom", (int) fun.zoom));
         components.addAll(getIntegerTooltip(utils, pad + 1, "ali.property.value.search_radius", fun.searchRadius));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.skip_known_structures", fun.skipKnownStructures));
