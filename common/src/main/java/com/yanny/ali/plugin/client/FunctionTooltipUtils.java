@@ -211,7 +211,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
-        components.addAll(getHolderMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", "ali.property.value.levels", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip, GenericTooltipUtils::getNumberProviderTooltip));
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.enchantments, GenericTooltipUtils::getEnchantmentLevelsEntryTooltip));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
