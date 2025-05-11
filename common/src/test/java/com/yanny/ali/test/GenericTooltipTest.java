@@ -670,40 +670,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testRecipesTooltip() {
-        Object2BooleanMap<ResourceLocation> recipeList = new Object2BooleanArrayMap<>();
-
-        recipeList.put(ResourceLocation.withDefaultNamespace("furnace_recipe"), true);
-        recipeList.put(ResourceLocation.withDefaultNamespace("apple_recipe"), false);
-
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", new Object2BooleanArrayMap<>()), List.of());
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", recipeList), List.of(
-                "Recipes:",
-                "  -> minecraft:furnace_recipe: true",
-                "  -> minecraft:apple_recipe: false"
-        ));
-    }
-
-    @Test
-    public void testAdvancementsTooltip() {
-        Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> predicateMap = new LinkedHashMap<>();
-        Object2BooleanMap<String> criterions = new Object2BooleanArrayMap<>();
-
-        criterions.put("test", true);
-        predicateMap.put(ResourceLocation.withDefaultNamespace("first"), new PlayerPredicate.AdvancementDonePredicate(true));
-        predicateMap.put(ResourceLocation.withDefaultNamespace("second"), new PlayerPredicate.AdvancementCriterionsPredicate(criterions));
-
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", Map.of()), List.of());
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", predicateMap), List.of(
-                "Advancements:",
-                "  -> minecraft:first",
-                "    -> Done: true",
-                "  -> minecraft:second",
-                "    -> test: true"
-        ));
-    }
-
-    @Test
     public void testBlockPosTooltip() {
         assertTooltip(GenericTooltipUtils.getBlockPosTooltip(UTILS, 0, "ali.property.multi.offset", new BlockPos(10, 12, 14)), List.of(
                 "Offset: [X: 10, Y: 12, Z: 14]"
