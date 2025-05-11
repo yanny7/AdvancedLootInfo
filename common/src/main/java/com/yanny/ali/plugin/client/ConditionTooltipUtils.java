@@ -59,7 +59,7 @@ public class ConditionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.condition.entity_scores")));
         components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.target", cond.entityTarget));
-        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.scores", "ali.property.value.null", "ali.property.value.limit", cond.scores, GenericTooltipUtils::getIntRangeTooltip));
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.scores", cond.scores, GenericTooltipUtils::getIntRangeEntryTooltip));
 
         return components;
     }

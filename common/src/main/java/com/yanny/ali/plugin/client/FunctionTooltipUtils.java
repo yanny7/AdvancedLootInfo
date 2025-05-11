@@ -201,7 +201,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
-        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", "ali.property.value.null", "ali.property.value.levels", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip, GenericTooltipUtils::getNumberProviderTooltip));
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.enchantments, GenericTooltipUtils::getEnchantmentLevelsEntryTooltip));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
@@ -274,6 +274,6 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static List<Component> getSetStewEffectTooltip(IClientUtils utils, int pad, SetStewEffectFunction fun) {
-        return getMapTooltip(utils, pad, "ali.type.function.set_stew_effect", "ali.property.value.null", "ali.property.value.duration", fun.effectDurationMap, RegistriesTooltipUtils::getMobEffectTooltip, GenericTooltipUtils::getNumberProviderTooltip);
+        return getMapTooltip(utils, pad, "ali.type.function.set_stew_effect", fun.effectDurationMap, GenericTooltipUtils::getMobEffectDurationEntryTooltip);
     }
 }
