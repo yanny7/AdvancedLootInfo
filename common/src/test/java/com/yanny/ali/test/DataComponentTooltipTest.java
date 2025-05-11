@@ -116,8 +116,10 @@ public class DataComponentTooltipTest {
         assertUnorderedTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, 0, new ItemEnchantments(map, true)), List.of(
                 "Enchantments:",
                 List.of(
-                        "  -> Enchantment: Fortune II",
-                        "  -> Enchantment: Mending I"
+                        "  -> minecraft:mending",
+                        "    -> Level: 1",
+                        "  -> minecraft:fortune",
+                        "    -> Level: 2"
                 ),
                 "Show In Tooltip: true"
         ));
