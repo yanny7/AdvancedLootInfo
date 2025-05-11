@@ -4,8 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import com.yanny.ali.plugin.client.GenericTooltipUtils;
-import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -597,7 +595,7 @@ public class GenericTooltipTest {
                 .addRecipe(new ResourceLocation("recipe1"), true)
                 .addRecipe(new ResourceLocation("recipe2"), false)
                 .checkAdvancementDone(new ResourceLocation("first"), true)
-                .checkAdvancementDone(new ResourceLocation("second"), false)
+                .checkAdvancementCriterions(new ResourceLocation("second"), Map.of("test", false))
                 .build()), List.of(
                 "Entity Sub Predicate:",
                 "  -> Level: ≥3",
@@ -616,7 +614,7 @@ public class GenericTooltipTest {
                 "    -> minecraft:first",
                 "      -> Done: true",
                 "    -> minecraft:second",
-                "      -> Done: false"
+                "      -> test: false"
         ));
         assertTooltip(GenericTooltipUtils.getEntitySubPredicateTooltip(UTILS, 0, "ali.property.branch.entity_sub_predicate", SlimePredicate.sized(MinMaxBounds.Ints.atLeast(1))), List.of(
                 "Entity Sub Predicate:",
@@ -640,40 +638,6 @@ public class GenericTooltipTest {
         assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, 0, statMatcher), List.of(
                 "Block: minecraft:cobblestone",
                 "  -> Times Mined: ≥4"
-        ));
-    }
-
-    @Test
-    public void testRecipesTooltip() {
-        Object2BooleanMap<ResourceLocation> recipeList = new Object2BooleanArrayMap<>();
-
-        recipeList.put(new ResourceLocation("furnace_recipe"), true);
-        recipeList.put(new ResourceLocation("apple_recipe"), false);
-
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", new Object2BooleanArrayMap<>()), List.of());
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", recipeList), List.of(
-                "Recipes:",
-                "  -> minecraft:furnace_recipe: true",
-                "  -> minecraft:apple_recipe: false"
-        ));
-    }
-
-    @Test
-    public void testAdvancementsTooltip() {
-        Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> predicateMap = new LinkedHashMap<>();
-        Object2BooleanMap<String> criterions = new Object2BooleanArrayMap<>();
-
-        criterions.put("test", true);
-        predicateMap.put(new ResourceLocation("first"), new PlayerPredicate.AdvancementDonePredicate(true));
-        predicateMap.put(new ResourceLocation("second"), new PlayerPredicate.AdvancementCriterionsPredicate(criterions));
-
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", Map.of()), List.of());
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", predicateMap), List.of(
-                "Advancements:",
-                "  -> minecraft:first",
-                "    -> Done: true",
-                "  -> minecraft:second",
-                "    -> test: true"
         ));
     }
 

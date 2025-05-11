@@ -6,13 +6,13 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.RangeValue;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -256,7 +256,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static List<Component> getNbtPredicateTooltip(IClientUtils utils, int pad, String key, NbtPredicate nbtPredicate) {
-        return List.of(pad(pad, translatable(key, value(nbtPredicate.tag()))));
+        return getCompoundTagTooltip(utils, pad, key, nbtPredicate.tag());
     }
 
     @NotNull
@@ -273,15 +273,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static List<Component> getMobEffectPredicateTooltip(IClientUtils utils, int pad, String key, MobEffectsPredicate mobEffectsPredicate) {
-        List<Component> components = new LinkedList<>();
-
-        components.add(pad(pad, translatable(key)));
-        mobEffectsPredicate.effectMap().forEach((effect, instancePredicate) -> {
-            components.addAll(getHolderTooltip(utils, pad + 1, "ali.property.value.null", effect, RegistriesTooltipUtils::getMobEffectTooltip));
-            components.addAll(getMobEffectInstancePredicateTooltip(utils, pad + 2, instancePredicate));
-        });
-
-        return components;
+        return getHolderMapTooltip(utils, pad, key, "ali.property.value.null", mobEffectsPredicate.effectMap(), RegistriesTooltipUtils::getMobEffectTooltip, GenericTooltipUtils::getMobEffectInstancePredicateTooltip);
     }
 
     @NotNull
@@ -369,8 +361,8 @@ public class GenericTooltipUtils {
                 components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
                 components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.game_type", predicate.gameType(), GenericTooltipUtils::getEnumTooltip));
                 components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
-                components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
-                components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));
+                components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
+                components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.advancements", "ali.property.value.null", "ali.property.value.done", predicate.advancements(), GenericTooltipUtils::getResourceLocationTooltip, GenericTooltipUtils::getAdvancementPredicateTooltip));
                 components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
             } else if (entitySubPredicate instanceof SlimePredicate predicate) {
                 components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.size", predicate.size()));
@@ -413,38 +405,6 @@ public class GenericTooltipUtils {
         return components;
     }
 
-    @NotNull
-    public static List<Component> getRecipesTooltip(IClientUtils ignoredUtils, int pad, String key, Object2BooleanMap<ResourceLocation> recipes) {
-        List<Component> components = new LinkedList<>();
-
-        if (!recipes.isEmpty()) {
-            components.add(pad(pad, translatable(key)));
-            recipes.forEach((recipe, required) -> components.add(pad(pad + 1, keyValue(recipe.toString(), required))));
-        }
-
-        return components;
-    }
-
-    @NotNull
-    public static List<Component> getAdvancementsTooltip(IClientUtils ignoredUtils, int pad, String key, Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> predicateMap) {
-        List<Component> components = new LinkedList<>();
-
-        if (!predicateMap.isEmpty()) {
-            components.add(pad(pad, translatable(key)));
-            predicateMap.forEach((advancement, predicate) -> {
-                components.add(pad(pad + 1, advancement.toString()));
-
-                if (predicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
-                    components.add(pad(pad + 2, translatable("ali.property.value.done", donePredicate.state())));
-                } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
-                    criterionsPredicate.criterions().forEach((criterion, state) -> components.add(pad(pad + 2, keyValue(criterion, state))));
-                }
-            });
-        }
-
-        return components;
-    }
-
     @Unmodifiable
     @NotNull
     public static List<Component> getBlockPosTooltip(IClientUtils ignoredUtils, int pad, String key, BlockPos pos) {
@@ -469,6 +429,25 @@ public class GenericTooltipUtils {
 
         components.addAll(getHolderTooltip(utils, pad, key, entry.effect(), RegistriesTooltipUtils::getMobEffectTooltip));
         components.addAll(getNumberProviderTooltip(utils, pad + 1, "ali.property.value.duration", entry.duration()));
+
+        return components;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getCompoundTagTooltip(IClientUtils ignoredUtils, int pad, String key, CompoundTag tag) {
+        return List.of(pad(pad, translatable(key, value(tag.toString()))));
+    }
+
+    @NotNull
+    public static List<Component> getAdvancementPredicateTooltip(IClientUtils utils, int pad, String key, PlayerPredicate.AdvancementPredicate predicate) {
+        List<Component> components = new LinkedList<>();
+
+        if (predicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
+            components.add(pad(pad, translatable(key, donePredicate.state())));
+        } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
+            components.addAll(getMapTooltip(utils, pad, criterionsPredicate.criterions()));
+        }
 
         return components;
     }
@@ -669,6 +648,92 @@ public class GenericTooltipUtils {
         if (!values.isEmpty()) {
             components.add(pad(pad, translatable(key)));
             values.forEach((v) -> components.addAll(mapper.apply(utils, pad + 1, value, v)));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static <K, V> List<Component> getMapTooltip(IClientUtils ignoredUtils, int pad, Map<K, V> values) {
+        List<Component> components = new LinkedList<>();
+
+        if (!values.isEmpty()) {
+            values.forEach((k, v) -> components.add(pad(pad, keyValue(k, v))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static <K, V> List<Component> getMapTooltip(IClientUtils ignoredUtils, int pad, String key, Map<K, V> values) {
+        List<Component> components = new LinkedList<>();
+
+        if (!values.isEmpty()) {
+            components.add(pad(pad, translatable(key)));
+            values.forEach((k, v) -> components.add(pad(pad + 1, keyValue(k, v))));
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static <K, V> List<Component> getMapTooltip(IClientUtils utils, int pad, String key, String kValue, String vValue, Map<K, V> values, QuadFunction<IClientUtils, Integer, String, V, List<Component>> mapper) {
+        List<Component> components = new LinkedList<>();
+
+        if (!values.isEmpty()) {
+            components.add(pad(pad, translatable(key)));
+            values.forEach((k, v) -> {
+                components.add(pad(pad + 1, translatable(kValue, value(k))));
+                components.addAll(mapper.apply(utils, pad + 2, vValue, v));
+            });
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static <K, V> List<Component> getMapTooltip(IClientUtils utils, int pad, String key, String kValue, String vValue, Map<K, V> values, QuadFunction<IClientUtils, Integer, String, K, List<Component>> kMapper,
+                                                       QuadFunction<IClientUtils, Integer, String, V, List<Component>> vMapper) {
+        List<Component> components = new LinkedList<>();
+
+        if (!values.isEmpty()) {
+            components.add(pad(pad, translatable(key)));
+            values.forEach((k, v) -> {
+                components.addAll(kMapper.apply(utils, pad + 1, kValue, k));
+                components.addAll(vMapper.apply(utils, pad + 2, vValue, v));
+            });
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static <K, V> List<Component> getHolderMapTooltip(IClientUtils utils, int pad, String key, String kValue, String vValue, Map<Holder<K>, V> values, QuadFunction<IClientUtils, Integer, String, K, List<Component>> kMapper,
+                                                             QuadFunction<IClientUtils, Integer, String, V, List<Component>> vMapper) {
+        List<Component> components = new LinkedList<>();
+
+        if (!values.isEmpty()) {
+            components.add(pad(pad, translatable(key)));
+            values.forEach((k, v) -> {
+                components.addAll(getHolderTooltip(utils, pad + 1, kValue, k, kMapper));
+                components.addAll(vMapper.apply(utils, pad + 2, vValue, v));
+            });
+        }
+
+        return components;
+    }
+
+    @NotNull
+    public static <K, V> List<Component> getHolderMapTooltip(IClientUtils utils, int pad, String key, String kValue, Map<Holder<K>, V> values, QuadFunction<IClientUtils, Integer, String, K, List<Component>> kMapper,
+                                                             TriFunction<IClientUtils, Integer, V, List<Component>> vMapper) {
+        List<Component> components = new LinkedList<>();
+
+        if (!values.isEmpty()) {
+            components.add(pad(pad, translatable(key)));
+            values.forEach((k, v) -> {
+                components.addAll(getHolderTooltip(utils, pad + 1, kValue, k, kMapper));
+                components.addAll(vMapper.apply(utils, pad + 2, v));
+            });
         }
 
         return components;
