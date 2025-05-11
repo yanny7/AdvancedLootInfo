@@ -218,15 +218,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
-
-        if (!fun.enchantments.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
-            fun.enchantments.forEach((enchantment, value) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.null", enchantment, RegistriesTooltipUtils::getEnchantmentTooltip));
-                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
-            });
-        }
-
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.enchantments, GenericTooltipUtils::getEnchantmentLevelsEntryTooltip));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
