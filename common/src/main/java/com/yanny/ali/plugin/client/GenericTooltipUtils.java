@@ -990,23 +990,23 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static <K, V> List<Component> getMapTooltip(IClientUtils ignoredUtils, int pad, Map<K, V> values, TriFunction<IClientUtils, Integer, Map.Entry<K, V>, List<Component>> mapper) {
+    public static <K, V> List<Component> getMapTooltip(IClientUtils utils, int pad, Map<K, V> values, TriFunction<IClientUtils, Integer, Map.Entry<K, V>, List<Component>> mapper) {
         List<Component> components = new LinkedList<>();
 
         if (!values.isEmpty()) {
-            values.entrySet().forEach((e) -> components.addAll(mapper.apply(ignoredUtils, pad, e)));
+            values.entrySet().forEach((e) -> components.addAll(mapper.apply(utils, pad, e)));
         }
 
         return components;
     }
 
     @NotNull
-    public static <K, V> List<Component> getMapTooltip(IClientUtils ignoredUtils, int pad, String key, Map<K, V> values, TriFunction<IClientUtils, Integer, Map.Entry<K, V>, List<Component>> mapper) {
+    public static <K, V> List<Component> getMapTooltip(IClientUtils utils, int pad, String key, Map<K, V> values, TriFunction<IClientUtils, Integer, Map.Entry<K, V>, List<Component>> mapper) {
         List<Component> components = new LinkedList<>();
 
         if (!values.isEmpty()) {
             components.add(pad(pad, translatable(key)));
-            values.entrySet().forEach((e) -> components.addAll(mapper.apply(ignoredUtils, pad + 1, e)));
+            values.entrySet().forEach((e) -> components.addAll(mapper.apply(utils, pad + 1, e)));
         }
 
         return components;
