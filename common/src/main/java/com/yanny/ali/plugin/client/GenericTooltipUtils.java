@@ -1277,7 +1277,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static <T> List<Component> getSlotRangePredicateEntryTooltip(IClientUtils utils, int pad, Map.Entry<SlotRange, ItemPredicate> entry) {
+    public static List<Component> getSlotRangePredicateEntryTooltip(IClientUtils utils, int pad, Map.Entry<SlotRange, ItemPredicate> entry) {
         List<Component> components = new LinkedList<>();
 
         components.addAll(getIntListTooltip(utils, pad, "ali.property.value.null", entry.getKey().slots()));
