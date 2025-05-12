@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getDataComponentTypeTooltip;
 import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getLootNbtProviderTypeTooltip;
 
 public class FunctionTooltipUtils {
@@ -221,15 +220,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_enchantments")));
-
-        if (!fun.enchantments.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.enchantments")));
-            fun.enchantments.forEach((enchantment, value) -> {
-                components.addAll(getHolderTooltip(utils, pad + 2, "ali.property.value.null", enchantment, RegistriesTooltipUtils::getEnchantmentTooltip));
-                components.addAll(getNumberProviderTooltip(utils, pad + 3, "ali.property.value.levels", value));
-            });
-        }
-
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.enchantments", fun.enchantments, GenericTooltipUtils::getEnchantmentLevelsEntryTooltip));
         components.addAll(getBooleanTooltip(utils, pad + 1, "ali.property.value.add", fun.add));
 
         return components;
@@ -263,7 +254,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_lore")));
         components.addAll(getListOperationTooltip(utils, pad + 1, "ali.property.value.list_operation", fun.mode));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", fun.lore, (u, p, c) -> List.of(pad(pad + 2, c))));
+        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.lore", "ali.property.value.null", fun.lore, GenericTooltipUtils::getComponentTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.resolution_context", fun.resolutionContext, GenericTooltipUtils::getEnumTooltip));
 
         return components;
@@ -362,8 +353,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_fireworks")));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.explosions", fun.explosions,
-                (u, i, s, l) -> getCollectionTooltip(u, i, s, "ali.property.branch.explosion", l.value(), GenericTooltipUtils::getFireworkExplosionTooltip)));
+        components.addAll(getStandaloneTooltip(utils, pad + 1, "ali.property.branch.explosions", "ali.property.branch.explosion", fun.explosions, GenericTooltipUtils::getFireworkExplosionTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.flight_duration", fun.flightDuration, GenericTooltipUtils::getIntegerTooltip));
 
         return components;
@@ -389,8 +379,7 @@ public class FunctionTooltipUtils {
 
         components.add(pad(pad, translatable("ali.type.function.set_book_cover")));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.author", fun.author, GenericTooltipUtils::getStringTooltip));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.title", fun.title,
-                (u, i, s, v) -> getFilterableTooltip(u, i, s, v, GenericTooltipUtils::getStringTooltip)));
+        components.addAll(getFilterableTooltip(utils, pad + 1, "ali.property.branch.title", fun.title, GenericTooltipUtils::getStringTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.generation", fun.generation, GenericTooltipUtils::getIntegerTooltip));
 
         return components;
@@ -401,8 +390,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_written_book_pages")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.pages", fun.pages,
-                (u, i, v) -> getFilterableTooltip(u, i, "ali.property.branch.page", v, GenericTooltipUtils::getComponentTooltip)));
+        components.addAll(getFilterableTooltip(utils, pad + 1, "ali.property.branch.pages", "ali.property.branch.page", fun.pages, GenericTooltipUtils::getComponentTooltip));
         components.addAll(getListOperationTooltip(utils, pad + 1, "ali.property.value.list_operation", fun.pageOperation));
 
         return components;
@@ -413,8 +401,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_writable_book_pages")));
-        components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.pages", fun.pages,
-                (u, i, v) -> getFilterableTooltip(u, i, "ali.property.branch.page", v, GenericTooltipUtils::getStringTooltip)));
+        components.addAll(getFilterableTooltip(utils, pad + 1, "ali.property.branch.pages", "ali.property.branch.page", fun.pages, GenericTooltipUtils::getStringTooltip));
         components.addAll(getListOperationTooltip(utils, pad + 1, "ali.property.value.list_operation", fun.pageOperation));
 
         return components;
@@ -425,14 +412,7 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.toggle_tooltips")));
-
-        if (!fun.values.isEmpty()) {
-            components.add(pad(pad + 1, translatable("ali.property.branch.components")));
-            fun.values.forEach((toggle, value) -> {
-                components.addAll(getDataComponentTypeTooltip(utils, pad + 2, "ali.property.value.null", toggle));
-                components.addAll(getBooleanTooltip(utils, pad + 3, "ali.property.value.value", value));
-            });
-        }
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.components", fun.values, GenericTooltipUtils::getDataComponentEntryTooltip));
 
         return components;
     }
@@ -452,14 +432,10 @@ public class FunctionTooltipUtils {
         List<Component> components = new LinkedList<>();
 
         components.add(pad(pad, translatable("ali.type.function.set_custom_model_data")));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.floats", fun.floats,
-                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getNumberProviderTooltip)));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.colors", fun.colors,
-                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getNumberProviderTooltip)));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.flags", fun.flags,
-                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getBooleanTooltip)));
-        components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.strings", fun.strings,
-                (u, p, k, s) -> GenericTooltipUtils.getStandaloneListOperationTooltip(u, p, k, s, GenericTooltipUtils::getStringTooltip)));
+        components.addAll(getStandaloneTooltip(utils, pad + 1, "ali.property.branch.floats", "ali.property.value.null", fun.floats, GenericTooltipUtils::getNumberProviderTooltip));
+        components.addAll(getStandaloneTooltip(utils, pad + 1, "ali.property.branch.colors", "ali.property.value.null", fun.colors, GenericTooltipUtils::getNumberProviderTooltip));
+        components.addAll(getStandaloneTooltip(utils, pad + 1, "ali.property.branch.flags", "ali.property.value.null", fun.flags, GenericTooltipUtils::getBooleanTooltip));
+        components.addAll(getStandaloneTooltip(utils, pad + 1, "ali.property.branch.strings", "ali.property.value.null", fun.strings, GenericTooltipUtils::getStringTooltip));
 
         return components;
     }

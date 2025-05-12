@@ -273,7 +273,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.duration", "Duration: %s");
         TRANSLATION_MAP.put("ali.property.value.effect", "Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.enchantment", "Enchantment: %s");
-        TRANSLATION_MAP.put("ali.property.value.enchantment_with_level", "Enchantment: %s %s");
         TRANSLATION_MAP.put("ali.property.value.entity_data", "Entity Data: %s");
         TRANSLATION_MAP.put("ali.property.value.entity_type", "Entity Type: %s");
         TRANSLATION_MAP.put("ali.property.value.equip_on_interact", "Equip On Interact: %s");

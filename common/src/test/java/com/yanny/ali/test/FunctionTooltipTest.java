@@ -415,7 +415,6 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetStewEffectTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect().build()), List.of());
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect()
                 .withEffect(MobEffects.LUCK, UniformGenerator.between(1, 5))
                 .withEffect(MobEffects.UNLUCK, UniformGenerator.between(3, 4))
@@ -515,18 +514,21 @@ public class FunctionTooltipTest {
         )), List.of(
                 "Set Fireworks:",
                 "  -> Explosions:",
-                "    -> Explosion:",
-                "      -> Shape: SMALL_BALL",
-                "      -> Colors: []",
-                "      -> Fade Colors: []",
-                "      -> Has Trail: false",
-                "      -> Has Twinkle: false",
-                "    -> Explosion:",
-                "      -> Shape: STAR",
-                "      -> Colors: [1]",
-                "      -> Fade Colors: [2]",
-                "      -> Has Trail: true",
-                "      -> Has Twinkle: false",
+                "    -> Values:",
+                "      -> Explosion:",
+                "        -> Shape: SMALL_BALL",
+                "        -> Colors: []",
+                "        -> Fade Colors: []",
+                "        -> Has Trail: false",
+                "        -> Has Twinkle: false",
+                "      -> Explosion:",
+                "        -> Shape: STAR",
+                "        -> Colors: [1]",
+                "        -> Fade Colors: [2]",
+                "        -> Has Trail: true",
+                "        -> Has Twinkle: false",
+                "    -> List Operation: INSERT",
+                "      -> Offset: 0",
                 "  -> Flight Duration: 10"
         ));
     }
@@ -656,21 +658,21 @@ public class FunctionTooltipTest {
         )), List.of(
                 "Set Custom Model Data:",
                 "  -> Floats:",
-                "    -> List Operation: REPLACE_ALL",
                 "    -> Values:",
                 "      -> 3.14",
-                "  -> Colors:",
                 "    -> List Operation: REPLACE_ALL",
+                "  -> Colors:",
                 "    -> Values:",
                 "      -> 25",
-                "  -> Flags:",
                 "    -> List Operation: REPLACE_ALL",
+                "  -> Flags:",
                 "    -> Values:",
                 "      -> true",
-                "  -> Strings:",
                 "    -> List Operation: REPLACE_ALL",
+                "  -> Strings:",
                 "    -> Values:",
-                "      -> test"
+                "      -> test",
+                "    -> List Operation: REPLACE_ALL"
         ));
     }
 }

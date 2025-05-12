@@ -6,8 +6,6 @@ import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import com.yanny.ali.plugin.client.GenericTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
@@ -17,7 +15,6 @@ import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.stats.Stats;
@@ -39,7 +36,6 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.*;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -663,40 +659,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testRecipesTooltip() {
-        Object2BooleanMap<ResourceKey<Recipe<?>>> recipeList = new Object2BooleanArrayMap<>();
-
-        recipeList.put(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("furnace_recipe")), true);
-        recipeList.put(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("apple_recipe")), false);
-
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", new Object2BooleanArrayMap<>()), List.of());
-        assertTooltip(GenericTooltipUtils.getRecipesTooltip(UTILS, 0, "ali.property.branch.recipes", recipeList), List.of(
-                "Recipes:",
-                "  -> minecraft:furnace_recipe: true",
-                "  -> minecraft:apple_recipe: false"
-        ));
-    }
-
-    @Test
-    public void testAdvancementsTooltip() {
-        Map<ResourceLocation, PlayerPredicate.AdvancementPredicate> predicateMap = new LinkedHashMap<>();
-        Object2BooleanMap<String> criterions = new Object2BooleanArrayMap<>();
-
-        criterions.put("test", true);
-        predicateMap.put(ResourceLocation.withDefaultNamespace("first"), new PlayerPredicate.AdvancementDonePredicate(true));
-        predicateMap.put(ResourceLocation.withDefaultNamespace("second"), new PlayerPredicate.AdvancementCriterionsPredicate(criterions));
-
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", Map.of()), List.of());
-        assertTooltip(GenericTooltipUtils.getAdvancementsTooltip(UTILS, 0, "ali.property.branch.advancements", predicateMap), List.of(
-                "Advancements:",
-                "  -> minecraft:first",
-                "    -> Done: true",
-                "  -> minecraft:second",
-                "    -> test: true"
-        ));
-    }
-
-    @Test
     public void testBlockPosTooltip() {
         assertTooltip(GenericTooltipUtils.getBlockPosTooltip(UTILS, 0, "ali.property.multi.offset", new BlockPos(10, 12, 14)), List.of(
                 "Offset: [X: 10, Y: 12, Z: 14]"
@@ -1168,8 +1130,8 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testStandaloneListOperationTooltip() {
-        assertTooltip(GenericTooltipUtils.getStandaloneListOperationTooltip(UTILS, 0, "ali.property.branch.strings", new ListOperation.StandAlone<>(
+    public void testStandaloneTooltip() {
+        assertTooltip(GenericTooltipUtils.getStandaloneTooltip(UTILS, 0, "ali.property.branch.strings", new ListOperation.StandAlone<>(
                 List.of("asdf", "jklo"),
                 new ListOperation.Insert(2)
         ), GenericTooltipUtils::getStringTooltip), List.of(
