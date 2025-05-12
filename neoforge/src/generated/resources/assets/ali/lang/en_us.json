@@ -163,7 +163,6 @@
   "ali.property.value.duration": "Duration: %s",
   "ali.property.value.effect": "Effect: %s",
   "ali.property.value.enchantment": "Enchantment: %s",
-  "ali.property.value.enchantment_with_level": "Enchantment: %s %s",
   "ali.property.value.entity_data": "Entity Data: %s",
   "ali.property.value.entity_type": "Entity Type: %s",
   "ali.property.value.equip_sound": "Equip Sound: %s",
