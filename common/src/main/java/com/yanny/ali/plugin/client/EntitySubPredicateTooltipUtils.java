@@ -45,8 +45,8 @@ public class EntitySubPredicateTooltipUtils {
         components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
         components.addAll(getGameTypePredicateTooltip(utils, pad + 1, "ali.property.branch.game_types", predicate.gameType()));
         components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
-        components.addAll(getRecipesTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes()));
-        components.addAll(getAdvancementsTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements()));
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes(), GenericTooltipUtils::getKeyValueEntryTooltip));
+        components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
         components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.input", predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
 
@@ -87,7 +87,7 @@ public class EntitySubPredicateTooltipUtils {
 
     @NotNull
     public static <V> List<Component> getVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
-        List<Component> components = new LinkedList<>(getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
+        List<Component> components = new LinkedList<>(RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
 
         if (predicate.variant instanceof Enum<?> variant) {
             components.addAll(getEnumTooltip(utils, pad + 1, "ali.property.value.variant", variant));
@@ -100,7 +100,7 @@ public class EntitySubPredicateTooltipUtils {
     public static <V> List<Component> getHolderVariantPredicateTooltip(IClientUtils utils, int pad, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
+        components.addAll(RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, pad, "ali.property.value.type", predicate));
         components.addAll(getHolderSetTooltip(utils, pad + 1, "ali.property.branch.variants", "ali.property.value.variant", predicate.variants, (u, i, s, v) -> switch (v) {
             case CatVariant catVariant -> getCatVariantTooltip(u, i, s, catVariant);
             case PaintingVariant paintingVariant -> getPaintingVariantTooltip(u, i, s, paintingVariant);

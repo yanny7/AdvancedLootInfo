@@ -28,7 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.client.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.*;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getTrimMaterialTooltip;
+import static com.yanny.ali.plugin.client.RegistriesTooltipUtils.getTrimPatternTooltip;
 
 public class DataComponentTooltipUtils {
     @Unmodifiable
@@ -65,8 +66,8 @@ public class DataComponentTooltipUtils {
     public static List<Component> getItemLoreTooltip(IClientUtils utils, int pad, ItemLore value) {
         List<Component> components = new LinkedList<>();
 
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.lines", value.lines(), (u, i, c) -> List.of(pad(i, c))));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.styled_lines", value.styledLines(), (u, i, c) -> List.of(pad(i, c))));
+        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.lines", "ali.property.value.null", value.lines(), GenericTooltipUtils::getComponentTooltip));
+        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.styled_lines", "ali.property.value.null", value.styledLines(), GenericTooltipUtils::getComponentTooltip));
 
         return components;
     }
@@ -79,16 +80,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getItemEnchantmentsTooltip(IClientUtils utils, int pad, ItemEnchantments value) {
-        List<Component> components = new LinkedList<>();
-
-        if (!value.isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.branch.enchantments")));
-            value.enchantments.forEach((enchantment, level) -> components.add(pad(pad + 1,
-                    translatable("ali.property.value.enchantment_with_level", enchantment.value().description(), Component.translatable("enchantment.level." + level)))));
-            components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.show_in_tooltip", value.showInTooltip));
-        }
-
-        return components;
+        return getMapTooltip(utils, pad, "ali.property.branch.enchantments", value.enchantments, GenericTooltipUtils::getEnchantmentLevelEntryTooltip);
     }
 
     @NotNull
@@ -244,17 +236,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getMapDecorationsTooltip(IClientUtils utils, int pad, MapDecorations value) {
-        List<Component> components = new LinkedList<>();
-
-        if (!value.decorations().isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.branch.decorations")));
-            value.decorations().forEach((string, entry) -> {
-                components.addAll(getStringTooltip(utils, pad + 1, "ali.property.value.decoration", string));
-                components.addAll(getMapDecorationEntryTooltip(utils, pad + 2, "ali.property.value.null", entry));
-            });
-        }
-
-        return components;
+        return getMapTooltip(utils, pad, "ali.property.branch.decorations", value.decorations(), GenericTooltipUtils::getMapDecorationEntryTooltip);
     }
 
     @Unmodifiable
@@ -297,8 +279,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getWritableBookContentTooltip(IClientUtils utils, int pad, WritableBookContent value) {
-        return getCollectionTooltip(utils, pad, "ali.property.branch.pages", value.pages(),
-                (u, i, p) -> getFilterableTooltip(u, i, "ali.property.branch.page", p, GenericTooltipUtils::getStringTooltip));
+        return getFilterableTooltip(utils, pad, "ali.property.branch.pages", "ali.property.branch.page", value.pages(), GenericTooltipUtils::getStringTooltip);
     }
 
     @NotNull
@@ -308,8 +289,7 @@ public class DataComponentTooltipUtils {
         components.addAll(getFilterableTooltip(utils, pad, "ali.property.branch.title", value.title(), GenericTooltipUtils::getStringTooltip));
         components.addAll(getStringTooltip(utils, pad, "ali.property.value.author", value.author()));
         components.addAll(getIntegerTooltip(utils, pad, "ali.property.value.generation", value.generation()));
-        components.addAll(getCollectionTooltip(utils, pad, "ali.property.branch.pages", value.pages(),
-                (u, i, p) -> getFilterableTooltip(u, i, "ali.property.branch.page", p, GenericTooltipUtils::getComponentTooltip)));
+        components.addAll(getFilterableTooltip(utils, pad, "ali.property.branch.pages", "ali.property.branch.page", value.pages(), GenericTooltipUtils::getComponentTooltip));
         components.addAll(getBooleanTooltip(utils, pad, "ali.property.value.resolved", value.resolved()));
 
         return components;
@@ -328,17 +308,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getDebugStickStateTooltip(IClientUtils utils, int pad, DebugStickState value) {
-        List<Component> components = new LinkedList<>();
-
-        if (!value.properties().isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.branch.properties")));
-            value.properties().forEach((block, property) -> {
-                components.addAll(getBlockTooltip(utils, pad + 1, "ali.property.value.block", block.value()));
-                components.addAll(getPropertyTooltip(utils, pad + 2, "ali.property.value.property", property));
-            });
-        }
-
-        return components;
+        return getMapTooltip(utils, pad, "ali.property.branch.properties", value.properties(), GenericTooltipUtils::getBlockPropertyEntryTooltip);
     }
 
     @Unmodifiable
@@ -409,14 +379,7 @@ public class DataComponentTooltipUtils {
 
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.name", value.name(), GenericTooltipUtils::getStringTooltip));
         components.addAll(getOptionalTooltip(utils, pad, "ali.property.value.uuid", value.id(), GenericTooltipUtils::getUUIDTooltip));
-
-        if (!value.properties().isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.branch.properties")));
-            value.properties().forEach((name, property) -> {
-                components.add(pad(pad + 1, value(name)));
-                components.addAll(getPropertyTooltip(utils, pad + 2, property));
-            });
-        }
+        components.addAll(getMapTooltip(utils, pad, "ali.property.branch.properties", value.properties().asMap(), GenericTooltipUtils::getPropertiesEntryTooltip));
 
         return components;
     }
@@ -458,14 +421,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getBlockStateTooltip(IClientUtils ignoredUtils, int pad, BlockItemStateProperties properties) {
-        List<Component> components = new LinkedList<>();
-
-        if (!properties.properties().isEmpty()) {
-            components.add(pad(pad, translatable("ali.property.branch.properties")));
-            properties.properties().forEach((property, value) -> components.add(pad(pad + 1, keyValue(property, value))));
-        }
-
-        return components;
+        return getMapTooltip(ignoredUtils, pad, "ali.property.branch.properties", properties.properties(), GenericTooltipUtils::getKeyValueEntryTooltip);
     }
 
     @NotNull

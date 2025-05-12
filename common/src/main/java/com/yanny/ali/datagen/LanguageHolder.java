@@ -217,6 +217,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");
         TRANSLATION_MAP.put("ali.property.branch.title", "Title:");
         TRANSLATION_MAP.put("ali.property.branch.value", "Value:");
+        TRANSLATION_MAP.put("ali.property.branch.values", "Values:");
         TRANSLATION_MAP.put("ali.property.branch.variants", "Variants:");
         TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");
 
@@ -269,7 +270,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.duration", "Duration: %s");
         TRANSLATION_MAP.put("ali.property.value.effect", "Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.enchantment", "Enchantment: %s");
-        TRANSLATION_MAP.put("ali.property.value.enchantment_with_level", "Enchantment: %s %s");
         TRANSLATION_MAP.put("ali.property.value.entity_data", "Entity Data: %s");
         TRANSLATION_MAP.put("ali.property.value.entity_type", "Entity Type: %s");
         TRANSLATION_MAP.put("ali.property.value.equip_sound", "Equip Sound: %s");
