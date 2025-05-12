@@ -749,7 +749,7 @@ public class GenericTooltipUtils {
         if (predicate instanceof PlayerPredicate.AdvancementDonePredicate(boolean state)) {
             components.add(pad(pad, translatable(key, state)));
         } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate(Object2BooleanMap<String> criterions)) {
-            components.addAll(getMapTooltip(utils, pad, criterions, GenericTooltipUtils::getKeyValueEntryTooltip));
+            components.addAll(getMapTooltip(utils, pad, criterions, GenericTooltipUtils::getCriterionEntryTooltip));
         }
 
         return components;
@@ -1065,7 +1065,19 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static <K, V> List<Component> getKeyValueEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<K, V> entry) {
+    public static List<Component> getRecipeEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<ResourceLocation, Boolean> entry) {
+        return List.of(pad(pad, keyValue(entry.getKey(), entry.getValue())));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getCriterionEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<String, Boolean> entry) {
+        return List.of(pad(pad, keyValue(entry.getKey(), entry.getValue())));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getStringEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<String, String> entry) {
         return List.of(pad(pad, keyValue(entry.getKey(), entry.getValue())));
     }
 
