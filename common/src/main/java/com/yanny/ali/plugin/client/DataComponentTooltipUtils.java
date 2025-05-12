@@ -421,7 +421,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static List<Component> getBlockStateTooltip(IClientUtils ignoredUtils, int pad, BlockItemStateProperties properties) {
-        return getMapTooltip(ignoredUtils, pad, "ali.property.branch.properties", properties.properties(), GenericTooltipUtils::getKeyValueEntryTooltip);
+        return getMapTooltip(ignoredUtils, pad, "ali.property.branch.properties", properties.properties(), GenericTooltipUtils::getStringEntryTooltip);
     }
 
     @NotNull
