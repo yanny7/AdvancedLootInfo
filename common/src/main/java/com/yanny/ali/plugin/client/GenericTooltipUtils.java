@@ -363,7 +363,7 @@ public class GenericTooltipUtils {
                 components.addAll(getMinMaxBoundsTooltip(utils, pad + 1, "ali.property.value.level", predicate.level()));
                 components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.value.game_type", predicate.gameType(), GenericTooltipUtils::getEnumTooltip));
                 components.addAll(getCollectionTooltip(utils, pad + 1, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
-                components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes(), GenericTooltipUtils::getKeyValueEntryTooltip));
+                components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.recipes", predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip));
                 components.addAll(getMapTooltip(utils, pad + 1, "ali.property.branch.advancements", predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip));
                 components.addAll(getOptionalTooltip(utils, pad + 1, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
             } else if (entitySubPredicate instanceof SlimePredicate predicate) {
@@ -448,7 +448,7 @@ public class GenericTooltipUtils {
         if (predicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
             components.add(pad(pad, translatable(key, donePredicate.state())));
         } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
-            components.addAll(getMapTooltip(utils, pad, criterionsPredicate.criterions(), GenericTooltipUtils::getKeyValueEntryTooltip));
+            components.addAll(getMapTooltip(utils, pad, criterionsPredicate.criterions(), GenericTooltipUtils::getCriterionEntryTooltip));
         }
 
         return components;
@@ -682,7 +682,13 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static <K, V> List<Component> getKeyValueEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<K, V> entry) {
+    public static List<Component> getRecipeEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<ResourceLocation, Boolean> entry) {
+        return List.of(pad(pad, keyValue(entry.getKey(), entry.getValue())));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Component> getCriterionEntryTooltip(IClientUtils ignoredUtils, int pad, Map.Entry<String, Boolean> entry) {
         return List.of(pad(pad, keyValue(entry.getKey(), entry.getValue())));
     }
 
