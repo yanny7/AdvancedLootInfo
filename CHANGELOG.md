@@ -1,3 +1,8 @@
+## [1.1.3]
+
+- Fixed crash when used on standalone server
+- Fixed crash when failed to encode loot table
+
 ## [1.1.2]
 
 - Used compression for transferring loot tables
