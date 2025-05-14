@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash when used on standalone server
+
 ## [1.1.2]
 
 - Used compression for transferring loot tables
