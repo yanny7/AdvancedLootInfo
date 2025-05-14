@@ -41,10 +41,12 @@ public class NetworkUtils {
         channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
                 .encoder(InfoSyncLootTableMessage::encode)
                 .decoder(InfoSyncLootTableMessage::new)
+                .consumerNetworkThread((msg, context) -> {})
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)
                 .decoder(ClearMessage::new)
+                .consumerNetworkThread((msg, context) -> {})
                 .add();
         return new DistHolder<>(null, server);
     }
