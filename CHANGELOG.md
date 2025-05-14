@@ -1,6 +1,7 @@
 ## []
 
 - Fixed crash when used on standalone server
+- Fixed crash when failed to encode loot table
 
 ## [1.1.2]
 
