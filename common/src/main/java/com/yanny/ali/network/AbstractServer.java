@@ -53,7 +53,7 @@ public abstract class AbstractServer {
                 try {
                     sendSyncMessage(serverPlayer, message);
                 } catch (Throwable e) {
-                    LOGGER.warn("Failed to send message with loot table {}", message.location);
+                    LOGGER.warn("Failed to send message for loot table {} with error: {}", message.location, e.getMessage());
                 }
             }
         }
