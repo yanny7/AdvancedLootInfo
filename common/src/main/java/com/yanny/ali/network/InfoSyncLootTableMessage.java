@@ -7,8 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
@@ -17,6 +15,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class InfoSyncLootTableMessage {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -46,7 +46,7 @@ public class InfoSyncLootTableMessage {
     public static String compressString(String input) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (GzipCompressorOutputStream gzipOut = new GzipCompressorOutputStream(baos)) {
+        try (GZIPOutputStream gzipOut = new GZIPOutputStream(baos)) {
             gzipOut.write(input.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             LOGGER.error("Failed to compress loot table with error: {}", e.getMessage());
@@ -61,7 +61,7 @@ public class InfoSyncLootTableMessage {
         ByteArrayInputStream bais = new ByteArrayInputStream(compressedBytes);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (GzipCompressorInputStream gzipIn = new GzipCompressorInputStream(bais)) {
+        try (GZIPInputStream gzipIn = new GZIPInputStream(bais)) {
             byte[] buffer = new byte[1024];
             int len;
 

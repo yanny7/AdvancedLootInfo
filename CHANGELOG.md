@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash when used on standalone server
+
 ## [1.1.3]
 
 - Fixed crash when used on standalone server
