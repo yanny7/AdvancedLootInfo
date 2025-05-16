@@ -12,6 +12,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
@@ -20,6 +21,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity> {
+    private static final int WIDGET_SIZE = 36;
+    private static final int TEXT_OFFSET = 10;
+    private static final int OFFSET = TEXT_OFFSET + WIDGET_SIZE + PADDING;
+
     private final CategoryIdentifier<ReiEntityDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
@@ -31,40 +36,44 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
         this.icon = lootCategory.getIcon();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public List<Widget> setupDisplay(ReiEntityDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
-        int WIDGET_SIZE = 36;
         Rect rect = new Rect(0, 0, WIDGET_SIZE, WIDGET_SIZE);
+        Component entityLabel = display.getEntity().getDisplayName();
         SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntity().getType());
-        Rectangle entityRect = new Rectangle(bounds.getCenterX() - 18, bounds.getY() + 14, 36, 36);
+        int textWidth = Minecraft.getInstance().font.width(entityLabel);
+        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, OFFSET);
+        int with = Mth.clamp(Math.max(holder.bounds().width(), textWidth), WIDGET_SIZE + (SLOT_SIZE + PADDING) * 2, bounds.width);
+        int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
+        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().height() + OFFSET);
+        int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
+        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
+        List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
-        widgets.add(Widgets.createCategoryBase(bounds));
-        widgets.addAll(getBaseWidget(display, bounds, 0, 48));
 
         if (spawnEgg != null) {
-            widgets.add(Widgets.createSlot(new Point(bounds.getX() + 4, bounds.getY() + 4))
-                    .entry(EntryStacks.of(spawnEgg)).markInput());
+            innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getX() + 1, innerBounds.getY() + TEXT_OFFSET + 1)).entry(EntryStacks.of(spawnEgg)).markInput());
         }
 
-        widgets.add(Widgets.wrapRenderer(
-                entityRect,
-                (graphics, bounds1, mouseX, mouseY, delta) -> {
-                    graphics.pose().pushPose();
-                    graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-                    GenericUtils.renderEntity(display.getEntity(), rect, 9 * 18, graphics, mouseX - bounds.getX(), mouseY - bounds.getY());
-                    graphics.pose().popPose();
-                }
-        ));
-        widgets.add(Widgets.wrapRenderer(
-                new Rectangle(bounds.getCenterX() - Minecraft.getInstance().font.width(display.getEntity().getDisplayName()) / 2, bounds.getY() + 4, bounds.getWidth(), 8),
-                (graphics, bounds1, mouseX, mouseY, delta) -> {
-                    graphics.pose().pushPose();
-                    graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-                    graphics.drawString(Minecraft.getInstance().font, display.getEntity().getDisplayName(), 0, 0, 0, false);
-                    graphics.pose().popPose();
-                }
-        ));
+        innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
+            graphics.pose().pushPose();
+            graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
+            GenericUtils.renderEntity(display.getEntity(), rect, 9 * 18, graphics, mouseX + innerBounds.width / 2, mouseY);
+            graphics.pose().popPose();
+        }));
+        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntity().getDisplayName()));
+        fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
+        widgets.add(Widgets.createCategoryBase(fullBounds));
+
+        if (bounds.height >= innerBounds.height + 8) {
+            innerBounds.move(bounds.getCenterX() - innerBounds.width / 2, bounds.y + 2 * PADDING);
+            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING, 0));
+        } else {
+            Rectangle overflowBounds = new Rectangle(fullBounds.x + PADDING, fullBounds.y + PADDING, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING);
+            widgets.add(Widgets.overflowed(overflowBounds, Widgets.concatWithBounds(innerBounds, innerWidgets)));
+        }
 
         return widgets;
     }
