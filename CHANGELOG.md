@@ -1,6 +1,7 @@
 ## []
 
 - Fixed loot overflow in REI
+- Fixed loot overflow in JEI
 
 ## [1.1.4]
 

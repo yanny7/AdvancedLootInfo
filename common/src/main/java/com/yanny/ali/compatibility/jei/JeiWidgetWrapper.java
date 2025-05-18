@@ -14,10 +14,10 @@ import java.util.List;
 public class JeiWidgetWrapper implements IRecipeWidget {
     private final IWidget widget;
     private final ScreenPosition position;
+    private final Rect rect;
 
     public JeiWidgetWrapper(IWidget widget) {
-        Rect rect = widget.getRect();
-
+        this.rect = widget.getRect();
         this.widget = widget;
         position = new ScreenPosition(0, 0);
     }
@@ -40,5 +40,9 @@ public class JeiWidgetWrapper implements IRecipeWidget {
     @Override
     public ScreenPosition getPosition() {
         return position;
+    }
+
+    public Rect getRect() {
+        return rect;
     }
 }

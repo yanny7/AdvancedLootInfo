@@ -5,9 +5,9 @@ import com.mojang.math.Axis;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.mixin.MixinBushBlock;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
+import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
 import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
-import mezz.jei.api.helpers.IGuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
@@ -15,7 +15,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
@@ -30,11 +30,11 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
     private final boolean isPlant;
     private final ScreenPosition position;
     private final Rect rect;
-    private final IGuiHelper guiHelper;
     private final ClientLevel level;
+    private final IRecipeSlotDrawable slotDrawable;
 
-    public JeiBlockSlotWidget(IGuiHelper guiHelper, Block block, int x, int y) {
-        this.guiHelper = guiHelper;
+    public JeiBlockSlotWidget(IRecipeSlotDrawable slotDrawable, Block block, int x, int y) {
+        this.slotDrawable = slotDrawable;
         this.block = block;
         blockState = block.defaultBlockState();
         isPlant = block instanceof BushBlock;
@@ -57,47 +57,53 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
 
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiHelper.getOutputSlot().draw(guiGraphics, -5, -5);
-
-        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
         PoseStack poseStack = guiGraphics.pose();
+        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 
         poseStack.pushPose();
+        slotDrawable.draw(guiGraphics);
 
-        if (isPlant) {
-            poseStack.translate(14, 8, 100);
-            poseStack.scale(9, -9, 9);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+        if (block.asItem() == Items.AIR) {
+            poseStack.translate(rect.x(), rect.y(), 0);
 
-            BlockState base;
-            BlockState farmland = Blocks.FARMLAND.defaultBlockState();
+            if (isPlant) {
+                poseStack.translate(18, 10, 100);
+                poseStack.scale(9, -9, 9);
+                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
+                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
 
-            if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
-                base = farmland;
+                BlockState base;
+                BlockState farmland = Blocks.FARMLAND.defaultBlockState();
+
+                if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                    base = farmland;
+                } else {
+                    base = Blocks.GRASS_BLOCK.defaultBlockState();
+                }
+
+                poseStack.translate(0, -1, 0);
+                blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
             } else {
-                base = Blocks.GRASS_BLOCK.defaultBlockState();
+                poseStack.translate(25.5, 21, 100);
+                poseStack.scale(18, -18, 18);
+                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
+                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+                poseStack.translate(0, -1, 0);
             }
-
-            poseStack.translate(0, -1, 0);
-            blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
-        } else {
-            poseStack.translate(25.5, 21, 100);
-            poseStack.scale(18, -18, 18);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
-            poseStack.translate(0, -1, 0);
         }
 
         poseStack.popPose();
     }
 
-    @Override
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
-        if (rect.contains((int) mouseX + position.x(), (int) mouseY + position.y())) {
-            tooltip.add(Component.translatable(block.getDescriptionId()));
+        if (slotDrawable.isMouseOver(mouseX, mouseY)) {
+            if (isPlant) {
+                tooltip.add(block.getName());
+            } else {
+                slotDrawable.getTooltip(tooltip);
+            }
         }
     }
 }
