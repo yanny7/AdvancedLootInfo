@@ -91,6 +91,7 @@ dependencies {
 
     // EMI
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
+    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
 //    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
 
     // JEI

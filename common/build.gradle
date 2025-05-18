@@ -48,6 +48,7 @@ dependencies {
     compileOnly project(":api")
 
     compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}:api"
+    compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}"
 
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
 

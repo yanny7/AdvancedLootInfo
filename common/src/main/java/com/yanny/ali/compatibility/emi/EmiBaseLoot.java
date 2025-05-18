@@ -42,11 +42,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        widgetHolder.add(widget);
+        Rect rect = new Rect(0, 0, 9 * 18 + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), Math.min(getDisplayHeight(), widgetHolder.getHeight()));
+        List<Widget> widgets = new LinkedList<>(slotWidgets);
 
-        for (Widget slotWidget : slotWidgets) {
-            widgetHolder.add(slotWidget);
-        }
+        widgets.addAll(getAdditionalWidgets(widgetHolder));
+        widgets.add(widget);
+        widgetHolder.add(new EmiScrollWidget(rect, getDisplayHeight(), widgets));
     }
 
     @Override
@@ -61,6 +62,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     protected int getItemsHeight() {
         return widget.getBounds().height();
+    }
+
+    protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
+        return List.of();
     }
 
     @NotNull
