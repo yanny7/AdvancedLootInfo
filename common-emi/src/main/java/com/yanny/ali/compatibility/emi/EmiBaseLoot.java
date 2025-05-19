@@ -33,22 +33,24 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
+    static final int CATEGORY_WIDTH = 9 * 18 - EmiScrollWidget.getScrollBoxScrollbarExtraWidth();
     private final Widget widget;
     private final List<Widget> slotWidgets = new LinkedList<>();
 
     public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable, int widgetX, int widgetY, List<Item> items) {
-        super(category, id, 9 * 18, 1024);
-        widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, widgetX, widgetY));
+        super(category, id, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
+        widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, widgetX, widgetY, CATEGORY_WIDTH));
         outputs.addAll(items.stream().map(EmiStack::of).toList());
     }
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        widgetHolder.add(widget);
+        Rect rect = new Rect(0, 0, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), Math.min(getDisplayHeight(), widgetHolder.getHeight()));
+        List<Widget> widgets = new LinkedList<>(slotWidgets);
 
-        for (Widget slotWidget : slotWidgets) {
-            widgetHolder.add(slotWidget);
-        }
+        widgets.addAll(getAdditionalWidgets(widgetHolder));
+        widgets.add(widget);
+        widgetHolder.add(new EmiScrollWidget(rect, getDisplayHeight(), widgets));
     }
 
     @Override
@@ -63,6 +65,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     protected int getItemsHeight() {
         return widget.getBounds().height();
+    }
+
+    protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
+        return List.of();
     }
 
     @NotNull

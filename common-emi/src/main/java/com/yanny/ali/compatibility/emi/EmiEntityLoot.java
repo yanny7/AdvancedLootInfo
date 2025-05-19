@@ -4,9 +4,7 @@ import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.Widget;
-import dev.emi.emi.api.widget.WidgetHolder;
+import dev.emi.emi.api.widget.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -16,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.storage.loot.LootTable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class EmiEntityLoot extends EmiBaseLoot {
@@ -33,13 +32,19 @@ public class EmiEntityLoot extends EmiBaseLoot {
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgetHolder) {
+    public int getDisplayHeight() {
+        return 48 + getItemsHeight();
+    }
+
+    @Override
+    protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
+        List<Widget> widgets = new LinkedList<>();
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level != null) {
             int length = Minecraft.getInstance().font.width(entity.getDisplayName());
 
-            widgetHolder.add(new Widget() {
+            widgets.add(new Widget() {
                 private static final int WIDGET_SIZE = 36;
                 final Bounds bounds = new Bounds((widgetHolder.getWidth() - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
                 final Rect rect = new Rect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
@@ -54,15 +59,10 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     GenericUtils.renderEntity(entity, rect, widgetHolder.getWidth(), guiGraphics, mouseX, mouseY);
                 }
             });
-            widgetHolder.addText(entity.getDisplayName(), (widgetHolder.getWidth() - length) / 2, 0, 0, false);
-            super.addWidgets(widgetHolder);
+            widgets.add(new TextWidget(entity.getDisplayName().getVisualOrderText(), (widgetHolder.getWidth() - length) / 2, 0, 0, false));
         }
 
-        catalysts.forEach((catalyst) -> widgetHolder.addSlot(catalyst, 0, 0));
-    }
-
-    @Override
-    public int getDisplayHeight() {
-        return 48 + getItemsHeight();
+        catalysts.forEach((catalyst) -> widgets.add(new SlotWidget(catalyst, 0, 0)));
+        return widgets;
     }
 }
