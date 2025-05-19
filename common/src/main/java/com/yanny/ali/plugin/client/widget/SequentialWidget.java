@@ -9,9 +9,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class SequentialWidget extends CompositeWidget {
-    public SequentialWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+    public SequentialWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
                             List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        super(utils, entry, x, y, sumWeight, functions, conditions);
+        super(utils, entry, x, y, maxWidth, sumWeight, functions, conditions);
         widgets.add(WidgetUtils.getSequentialWidget(x, y));
     }
 }

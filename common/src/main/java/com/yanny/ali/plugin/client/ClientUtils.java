@@ -27,8 +27,8 @@ import java.util.Map;
 
 public abstract class ClientUtils implements IWidgetUtils {
     @Override
-    public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return PluginManager.CLIENT_REGISTRY.createWidgets(registry, entries, x, y, functions, conditions);
+    public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return PluginManager.CLIENT_REGISTRY.createWidgets(registry, entries, x, y, maxWidth, functions, conditions);
     }
 
     @Override
@@ -72,8 +72,8 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y) {
-        return PluginManager.CLIENT_REGISTRY.getBounds(registry, entries, x, y);
+    public Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth) {
+        return PluginManager.CLIENT_REGISTRY.getBounds(registry, entries, x, y, maxWidth);
     }
 
     @Override

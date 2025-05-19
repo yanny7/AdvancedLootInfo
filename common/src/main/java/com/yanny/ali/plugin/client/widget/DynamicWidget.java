@@ -21,7 +21,7 @@ public class DynamicWidget implements IEntryWidget {
     private final IWidget widget;
     private final LootPoolEntryContainer entry;
 
-    public DynamicWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+    public DynamicWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
                          List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         widget = WidgetUtils.getDynamicWidget(x, y, (DynamicLoot) entry, sumWeight);
         bounds = widget.getRect();
@@ -61,7 +61,7 @@ public class DynamicWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
         return new Rect(x, y, 7, 18);
     }
 }

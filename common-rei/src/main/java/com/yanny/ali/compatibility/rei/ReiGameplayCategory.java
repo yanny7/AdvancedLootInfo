@@ -1,6 +1,7 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.yanny.ali.registries.LootCategory;
+import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
@@ -9,12 +10,15 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, String> {
+    private static final int OFFSET = 10;
+
     private final CategoryIdentifier<ReiGameplayDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
@@ -26,22 +30,31 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Str
         this.icon = lootCategory.getIcon();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public List<Widget> setupDisplay(ReiGameplayDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
         Component lootName = Component.translatableWithFallback("ali/loot_table/" + display.getId().substring(1), display.getId());
+        int textWidth = Minecraft.getInstance().font.width(lootName);
+        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, OFFSET);
+        int with = Mth.clamp(holder.bounds().width(), textWidth, bounds.width);
+        int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
+        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().height() + OFFSET);
+        int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
+        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
+        List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
-        widgets.add(Widgets.createCategoryBase(bounds));
-        widgets.addAll(getBaseWidget(display, bounds, 0, 10));
-        widgets.add(Widgets.wrapRenderer(
-                new Rectangle(bounds.getX() + 4, bounds.getY() + 4, bounds.getWidth(), 8),
-                (graphics, bounds1, mouseX, mouseY, delta) -> {
-                    graphics.pose().pushPose();
-                    graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-                    graphics.drawString(Minecraft.getInstance().font, lootName, 0, 0, 0, false);
-                    graphics.pose().popPose();
-                }
-        ));
+        fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
+        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName));
+        widgets.add(Widgets.createCategoryBase(fullBounds));
+
+        if (bounds.height >= innerBounds.height + 8) {
+            innerBounds.move(bounds.getCenterX() - innerBounds.width / 2, bounds.y + 2 * PADDING);
+            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING, 0));
+        } else {
+            Rectangle overflowBounds = new Rectangle(fullBounds.x + PADDING, fullBounds.y + PADDING, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING);
+            widgets.add(Widgets.overflowed(overflowBounds, Widgets.concatWithBounds(innerBounds, innerWidgets)));
+        }
 
         return widgets;
     }
