@@ -2,6 +2,8 @@ package com.yanny.ali.compatibility.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.SlotWidget;
+import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -24,18 +26,16 @@ public class EmiBlockLoot extends EmiBaseLoot {
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgetHolder) {
-        if (isSpecial) {
-            widgetHolder.add(new EmiBlockSlotWidget(block, 4 * 18 - 4, 0));
-        } else {
-            widgetHolder.addSlot(inputs.get(0), 4 * 18, 0);
-        }
-
-        super.addWidgets(widgetHolder);
+    public int getDisplayHeight() {
+        return (isSpecial ? 30 : 22) + getItemsHeight();
     }
 
     @Override
-    public int getDisplayHeight() {
-        return (isSpecial ? 30 : 22) + getItemsHeight();
+    protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
+        if (isSpecial) {
+            return List.of(new EmiBlockSlotWidget(block, CATEGORY_WIDTH / 2 - 13, 0));
+        } else {
+            return List.of(new SlotWidget(inputs.get(0), CATEGORY_WIDTH / 2 - 9, 0));
+        }
     }
 }

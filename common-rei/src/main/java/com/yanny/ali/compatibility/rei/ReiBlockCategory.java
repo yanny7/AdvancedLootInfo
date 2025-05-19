@@ -40,20 +40,36 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         this.icon = lootCategory.getIcon();
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     @Override
     public List<Widget> setupDisplay(ReiBlockDisplay display, Rectangle bounds) {
         boolean isSpecial = display.getBlock() instanceof BushBlock || display.getBlock().asItem() == Items.AIR;
+        int offset = isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING;
         List<Widget> widgets = new LinkedList<>();
-
-        widgets.add(Widgets.createCategoryBase(bounds));
-        widgets.addAll(getBaseWidget(display, bounds, 0, isSpecial ? 30 : 22));
+        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, offset);
+        int width = holder.bounds().width() % 2 == 0 ? holder.bounds().width() : holder.bounds().width() + 1;
+        Rectangle innerBounds = new Rectangle(0, 0, width, holder.bounds().height() + offset);
+        int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
+        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
+        List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
         if (isSpecial) {
-            widgets.add(Widgets.createResultSlotBackground(new Point(bounds.getCenterX() - 8, bounds.getY() + 9)));
-            widgets.add(Widgets.wrapRenderer(new Rectangle(bounds.getCenterX() - 12, bounds.getY() + 4, 24, 24), new BlockSlotRenderer(display.getBlock())));
+            innerWidgets.add(Widgets.createResultSlotBackground(new Point(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY() + OUT_SLOT_OFFSET)));
+            innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY(), OUT_SLOT_SIZE, OUT_SLOT_SIZE), new BlockSlotRenderer(display.getBlock())));
         } else {
-            widgets.add(Widgets.createSlot(new Point(bounds.getCenterX() - 8, bounds.getY() + 5))
-                    .entry(EntryStacks.of(display.getBlock())).markInput());
+            innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY() + SLOT_OFFSET)).entry(EntryStacks.of(display.getBlock())).markInput());
+        }
+
+        fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
+
+        widgets.add(Widgets.createCategoryBase(fullBounds));
+
+        if (bounds.height >= innerBounds.height + 8) {
+            innerBounds.move(bounds.getCenterX() - innerBounds.width / 2, bounds.y + 2 * PADDING);
+            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING, 0));
+        } else {
+            Rectangle overflowBounds = new Rectangle(fullBounds.x + PADDING, fullBounds.y + PADDING, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING);
+            widgets.add(Widgets.overflowed(overflowBounds, Widgets.concatWithBounds(innerBounds, innerWidgets)));
         }
 
         return widgets;

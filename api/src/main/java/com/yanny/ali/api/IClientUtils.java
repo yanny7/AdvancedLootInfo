@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IClientUtils extends ICommonUtils {
-    Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y,
+    Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth,
                                                  List<LootItemFunction> functions, List<LootItemCondition> conditions);
 
     <T extends LootItemCondition> List<Component> getConditionTooltip(IClientUtils utils, int pad, T condition);
@@ -46,7 +46,7 @@ public interface IClientUtils extends ICommonUtils {
 
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IClientUtils utils, T function, ItemStack itemStack);
 
-    Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y);
+    Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth);
 
     @Nullable
     WidgetDirection getWidgetDirection(LootPoolEntryContainer entry);
