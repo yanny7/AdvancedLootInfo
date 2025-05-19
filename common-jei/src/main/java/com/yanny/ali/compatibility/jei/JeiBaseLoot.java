@@ -81,7 +81,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         List<ISlotParams> slotParams = new LinkedList<>();
         IWidgetUtils utils = getJeiUtils(slotParams);
 
-        widgets.put(recipe, new Pair<>(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe)), slotParams));
+        widgets.put(recipe, new Pair<>(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe), 9 * 18), slotParams));
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);

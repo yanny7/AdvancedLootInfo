@@ -9,9 +9,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class AlternativesWidget extends CompositeWidget {
-    public AlternativesWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+    public AlternativesWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
                               List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        super(utils, entry, x, y, sumWeight, functions, conditions);
+        super(utils, entry, x, y, maxWidth, sumWeight, functions, conditions);
         widgets.add(WidgetUtils.getAlternativesWidget(x, y));
     }
 }
