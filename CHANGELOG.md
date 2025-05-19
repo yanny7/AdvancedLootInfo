@@ -2,6 +2,7 @@
 
 - Fixed loot overflow in REI
 - Fixed loot overflow in JEI
+- Fixed crash when starting server
 
 ## [1.1.4]
 
