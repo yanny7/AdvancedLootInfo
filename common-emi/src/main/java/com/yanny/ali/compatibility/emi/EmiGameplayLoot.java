@@ -1,6 +1,8 @@
 package com.yanny.ali.compatibility.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.widget.TextWidget;
+import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,13 +17,13 @@ public class EmiGameplayLoot extends EmiBaseLoot {
     }
 
     @Override
-    public void addWidgets(WidgetHolder widgetHolder) {
-        widgetHolder.addText(Component.translatableWithFallback("ali/loot_table/" + id.getPath().substring(1), id.getPath()), 0, 0, 0, false);
-        super.addWidgets(widgetHolder);
+    public int getDisplayHeight() {
+        return 10 + getItemsHeight();
     }
 
     @Override
-    public int getDisplayHeight() {
-        return 10 + getItemsHeight();
+    protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
+        Component component = Component.translatableWithFallback("ali/loot_table/" + id.getPath().substring(1), id.getPath());
+        return List.of(new TextWidget(component.getVisualOrderText(), 0, 0, 0, false));
     }
 }

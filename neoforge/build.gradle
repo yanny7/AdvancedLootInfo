@@ -49,6 +49,7 @@ dependencies {
 
     // EMI
 //    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
+//    compileOnly "dev.emi:emi-neoforge:${emi_version}"
 //    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
 
     // JEI
