@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'fabric-loom' version '1.10-SNAPSHOT'
 }
 
 base {
@@ -23,6 +23,7 @@ dependencies {
     implementation project(":common")
 
     modCompileOnlyApi "dev.emi:emi-fabric:${emi_version}:api"
+    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
 //    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
     modCompileOnlyApi("mezz.jei:jei-${minecraft_version}-fabric-api:${jei_version}")

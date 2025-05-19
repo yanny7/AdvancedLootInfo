@@ -40,6 +40,15 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements DisplayCategory<T> {
+    static final int CATEGORY_WIDTH = 9 * 18;
+    static final int CATEGORY_HEIGHT = 8 * 18;
+    static final int PADDING = 4;
+    static final int ITEM_SIZE = 16;
+    static final int SLOT_SIZE = 18;
+    static final int OUT_SLOT_SIZE = 26;
+    static final int SLOT_OFFSET = (SLOT_SIZE - ITEM_SIZE) / 2;
+    static final int OUT_SLOT_OFFSET = (OUT_SLOT_SIZE - ITEM_SIZE) / 2;
+
     private final LootCategory<U> lootCategory;
 
     public ReiBaseCategory(LootCategory<U> lootCategory) {
@@ -51,27 +60,28 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
     @Override
     public int getDisplayWidth(T display) {
-        return 9 * 18 + 8;
+        return CATEGORY_WIDTH;
     }
 
     @Override
     public int getDisplayHeight() {
-        return 8 * 18;
+        return CATEGORY_HEIGHT;
     }
 
     public LootCategory<U> getLootCategory() {
         return lootCategory;
     }
 
-    protected List<Widget> getBaseWidget(T display, Rectangle bounds, int x, int y) {
+    protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int x, int y) {
         List<Widget> slotWidgets = new LinkedList<>();
         List<Widget> widgets = new LinkedList<>();
-        ReiWidgetWrapper widget = new ReiWidgetWrapper(new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootEntry(), x + 4, y + 4), bounds);
+        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootEntry(), x, y, CATEGORY_WIDTH);
+        ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget, bounds);
 
-        widgets.add(Widgets.createTooltip(widget::getTooltip));
-        widgets.add(widget);
+        widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
+        widgets.add(widgetWrapper);
         widgets.addAll(slotWidgets);
-        return widgets;
+        return new WidgetHolder(widgets, widget.getRect());
     }
 
     @NotNull
@@ -139,4 +149,6 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             }
         }
     }
+
+    protected record WidgetHolder(List<Widget> widgets, Rect bounds){}
 }

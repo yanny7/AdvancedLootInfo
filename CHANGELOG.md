@@ -1,3 +1,8 @@
+## []
+
+- Fixed loot overflow in REI
+- Fixed loot overflow in JEI
+
 ## [1.1.4]
 
 - Fixed crash when used on standalone server
