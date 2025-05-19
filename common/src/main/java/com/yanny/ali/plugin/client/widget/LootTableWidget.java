@@ -22,11 +22,11 @@ public class LootTableWidget implements IWidget {
     private final List<IWidget> widgets;
     private final Rect bounds;
 
-    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y) {
-        this(utils, lootTable, x, y, 0, 100, List.of(), List.of());
+    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int maxWidth) {
+        this(utils, lootTable, x, y, maxWidth, 0, 100, List.of(), List.of());
     }
 
-    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int maxWidth, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
@@ -37,7 +37,7 @@ public class LootTableWidget implements IWidget {
         widgets.add(getLootTableTypeWidget(x, y, quality, chance));
 
         for (LootPool pool : lootTable.pools) {
-            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, List.copyOf(allFunctions), List.copyOf(conditions));
+            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, maxWidth, List.copyOf(allFunctions), List.copyOf(conditions));
             Rect bound = widget.getRect();
 
             width = Math.max(width, bound.width());
@@ -106,12 +106,12 @@ public class LootTableWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootTable lootTable, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootTable lootTable, int x, int y, int maxWidth) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
         for (LootPool pool : lootTable.pools) {
-            Rect bound = LootPoolWidget.getBounds(utils, pool, posX, posY);
+            Rect bound = LootPoolWidget.getBounds(utils, pool, posX, posY, maxWidth);
 
             width = Math.max(width, bound.width());
             height += bound.height() + VERTICAL_OFFSET;

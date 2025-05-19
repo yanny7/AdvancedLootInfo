@@ -20,7 +20,7 @@ public class ItemWidget implements IEntryWidget {
     private final Rect bounds;
     private final LootPoolEntryContainer entry;
 
-    public ItemWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+    public ItemWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
                       List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         LootItem itemEntry = (LootItem) entry;
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
@@ -52,7 +52,7 @@ public class ItemWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
         return new Rect(x, y, 18, 18);
     }
 }

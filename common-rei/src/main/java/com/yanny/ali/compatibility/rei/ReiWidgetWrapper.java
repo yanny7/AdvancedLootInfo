@@ -31,7 +31,7 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
 
     @Nullable
     public Tooltip getTooltip(Point point) {
-        if (bounds.contains(point)) {
+        if (point.x >= bounds.getMinX() && point.x <= bounds.getMaxX() && point.y >= bounds.getMinY()) {
             return Tooltip.create(widget.getTooltipComponents(point.getX() - bounds.getX(), point.getY() - bounds.getY()));
         } else {
             return null;

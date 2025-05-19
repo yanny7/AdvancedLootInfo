@@ -51,7 +51,11 @@ public abstract class AbstractServer {
             sendClearMessage(serverPlayer, new ClearMessage());
 
             for (InfoSyncLootTableMessage message : messages) {
-                sendSyncMessage(serverPlayer, message);
+                try {
+                    sendSyncMessage(serverPlayer, message);
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to send message for loot table {} with error: {}", message.location().location(), e.getMessage());
+                }
             }
         }
     }
