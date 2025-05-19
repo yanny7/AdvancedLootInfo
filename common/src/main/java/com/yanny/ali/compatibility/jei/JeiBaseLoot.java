@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
+    static final int CATEGORY_WIDTH = 9 * 18;
+    static final int CATEGORY_HEIGHT = 7 * 18;
     private static final Map<IType, Pair<JeiWidgetWrapper, List<ISlotParams>>> widgets = new HashMap<>();
 
     protected final IGuiHelper guiHelper;
@@ -80,7 +82,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         List<ISlotParams> slotParams = new LinkedList<>();
         IWidgetUtils utils = getJeiUtils(slotParams);
 
-        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe))), slotParams));
+        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe), CATEGORY_WIDTH)), slotParams));
 
         for (int i = 0; i < slotParams.size(); i++) {
             ISlotParams p = slotParams.get(i);
@@ -130,7 +132,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             });
         }
 
-        Rect renderRect = new Rect(0, 0, 9 * 18 + JeiScrollWidget.getScrollBoxScrollbarExtraWidth(), 7 * 18);
+        Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollBoxScrollbarExtraWidth(), CATEGORY_HEIGHT);
         JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, pair.getA().getRect().height() + getYOffset(recipe), scrollWidgets);
 
         builder.addSlottedWidget(scrollWidget, slotDrawables);
@@ -139,12 +141,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public int getWidth() {
-        return 9 * 18 + JeiScrollWidget.getScrollBoxScrollbarExtraWidth();
+        return CATEGORY_WIDTH + JeiScrollWidget.getScrollBoxScrollbarExtraWidth();
     }
 
     @Override
     public int getHeight() {
-        return 7 * 18;
+        return CATEGORY_HEIGHT;
     }
 
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, T recipe);
@@ -156,7 +158,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         return guiHelper.createWidgetFromDrawable(new IDrawable() {
             @Override
             public int getWidth() {
-                return 9 * 18;
+                return CATEGORY_WIDTH;
             }
 
             @Override

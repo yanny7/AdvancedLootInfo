@@ -19,7 +19,7 @@ public class ReferenceWidget implements IEntryWidget {
     private final IWidget widget;
     private final LootPoolEntryContainer entry;
 
-    public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+    public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         LootTableReference reference = (LootTableReference) entry;
         LootTable tableEntry = utils.getLootTable(reference.name);
@@ -30,7 +30,7 @@ public class ReferenceWidget implements IEntryWidget {
         allConditions.addAll(Arrays.asList(reference.conditions));
 
         if (tableEntry != null) {
-            widget = new LootTableWidget(utils, tableEntry, x, y, ((LootTableReference) entry).quality, (float) reference.weight / sumWeight * 100, allFunctions, allConditions);
+            widget = new LootTableWidget(utils, tableEntry, x, y, maxWidth, ((LootTableReference) entry).quality, (float) reference.weight / sumWeight * 100, allFunctions, allConditions);
         } else {
             widget = new IWidget() {
                 @Override
@@ -75,13 +75,13 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
         LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
 
         if (lootTable != null) {
-            return LootTableWidget.getBounds(utils, lootTable, x, y);
+            return LootTableWidget.getBounds(utils, lootTable, x, y, maxWidth);
         } else {
-            return new Rect(x, y, 0, 18);
+            return new Rect(x, y, 0, 18); // FIXME
         }
     }
 }

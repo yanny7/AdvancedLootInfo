@@ -33,9 +33,9 @@ public class EmiBlockLoot extends EmiBaseLoot {
     @Override
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
         if (isSpecial) {
-            return List.of(new EmiBlockSlotWidget(block, 4 * 18 - 4, 0));
+            return List.of(new EmiBlockSlotWidget(block, CATEGORY_WIDTH / 2 - 13, 0));
         } else {
-            return List.of(new SlotWidget(inputs.get(0), 4 * 18, 0));
+            return List.of(new SlotWidget(inputs.get(0), CATEGORY_WIDTH / 2 - 9, 0));
         }
     }
 }

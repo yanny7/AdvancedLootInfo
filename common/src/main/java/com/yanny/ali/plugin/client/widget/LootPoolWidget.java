@@ -21,14 +21,14 @@ public class LootPoolWidget implements IWidget {
     private final Rect bounds;
     private final IClientUtils utils;
 
-    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, int maxWidth, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = new LinkedList<>(functions);
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
         allFunctions.addAll(Arrays.asList(entry.functions));
         allConditions.addAll(Arrays.asList(entry.conditions));
 
-        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, Arrays.asList(entry.entries), x, y, List.copyOf(allFunctions), List.copyOf(allConditions));
+        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, Arrays.asList(entry.entries), x, y, maxWidth, List.copyOf(allFunctions), List.copyOf(allConditions));
 
         widgets = new LinkedList<>(info.getFirst());
         widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)));
@@ -110,7 +110,7 @@ public class LootPoolWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils registry, LootPool entry, int x, int y) {
-        return registry.getBounds(registry, Arrays.asList(entry.entries), x, y);
+    public static Rect getBounds(IClientUtils registry, LootPool entry, int x, int y, int maxWidth) {
+        return registry.getBounds(registry, Arrays.asList(entry.entries), x, y, maxWidth);
     }
 }

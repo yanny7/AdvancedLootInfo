@@ -32,9 +32,9 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
         IRecipeSlotBuilder slotBuilder = builder.addInputSlot().setSlotName("block");
 
         if (recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR) {
-            slotBuilder.setPosition((9 * 18) / 2 - 9, 5).setOutputSlotBackground();
+            slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 5).setOutputSlotBackground();
         } else {
-            slotBuilder.setPosition((9 * 18) / 2 - 9, 0).setStandardSlotBackground();
+            slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 0).setStandardSlotBackground();
         }
 
         slotBuilder.addItemLike(recipe.block());
@@ -47,10 +47,10 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
 
         builder.getRecipeSlots().findSlotByName("block").ifPresent((slotDrawable -> {
             if (recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR) {
-                widgets.add(new JeiBlockSlotWidget(slotDrawable, recipe.block(), (9 * 18) / 2 - 9, 5));
+                widgets.add(new JeiBlockSlotWidget(slotDrawable, recipe.block(), CATEGORY_WIDTH / 2 - 9, 5));
                 slotDrawables.add(slotDrawable);
             } else {
-                widgets.add(new JeiLootSlotWidget(slotDrawable, (9 * 18) / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
+                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
                 slotDrawables.add(slotDrawable);
             }
         }));

@@ -35,12 +35,12 @@ public interface IClientRegistry {
 
     @FunctionalInterface
     interface IBoundsGetter {
-        Rect apply(IClientUtils utils, LootPoolEntryContainer entry, int x, int y);
+        Rect apply(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth);
     }
 
     @FunctionalInterface
     interface IWidgetFactory {
-        IEntryWidget create(IWidgetUtils registry, LootPoolEntryContainer entry, int x, int y, int totalWeight,
+        IEntryWidget create(IWidgetUtils registry, LootPoolEntryContainer entry, int x, int y, int maxWidth, int totalWeight,
                             List<LootItemFunction> functions, List<LootItemCondition> conditions);
     }
 }

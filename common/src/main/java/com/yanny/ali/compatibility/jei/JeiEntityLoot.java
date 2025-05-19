@@ -47,18 +47,18 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>();
 
         builder.getRecipeSlots().findSlotByName("spawn_egg").ifPresent((slotDrawable -> {
-            widgets.add(new JeiLootSlotWidget(slotDrawable, (9 * 18) / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
+            widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
             slotDrawables.add(slotDrawable);
         }));
-        widgets.add(createTextWidget(recipe.entity().getDisplayName(), (9 * 18) / 2, 0, true));
+        widgets.add(createTextWidget(recipe.entity().getDisplayName(), CATEGORY_WIDTH / 2, 0, true));
         widgets.add(new IRecipeWidget() {
             private static final int WIDGET_SIZE = 36;
-            final Rect rect = new Rect((9 * 18 - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
+            final Rect rect = new Rect((CATEGORY_WIDTH - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
             final ScreenPosition position = new ScreenPosition(0, 0);
 
             @Override
             public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-                GenericUtils.renderEntity(recipe.entity(), rect, 9 * 18, guiGraphics, (int) mouseX, (int) mouseY);
+                GenericUtils.renderEntity(recipe.entity(), rect, CATEGORY_WIDTH, guiGraphics, (int) mouseX, (int) mouseY);
             }
 
             @NotNull

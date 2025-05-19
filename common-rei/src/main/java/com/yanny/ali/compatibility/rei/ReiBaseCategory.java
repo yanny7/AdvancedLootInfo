@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements DisplayCategory<T> {
+    static final int CATEGORY_WIDTH = 9 * 18;
+    static final int CATEGORY_HEIGHT = 8 * 18;
     static final int PADDING = 4;
     static final int ITEM_SIZE = 16;
     static final int SLOT_SIZE = 18;
@@ -56,12 +58,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
     @Override
     public int getDisplayWidth(T display) {
-        return 9 * 18 + 8;
+        return CATEGORY_WIDTH;
     }
 
     @Override
     public int getDisplayHeight() {
-        return 8 * 18;
+        return CATEGORY_HEIGHT;
     }
 
     public LootCategory<U> getLootCategory() {
@@ -71,7 +73,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int x, int y) {
         List<Widget> slotWidgets = new LinkedList<>();
         List<Widget> widgets = new LinkedList<>();
-        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootEntry(), x, y);
+        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootEntry(), x, y, CATEGORY_WIDTH);
         ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget, bounds);
 
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));

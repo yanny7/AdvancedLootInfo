@@ -22,14 +22,14 @@ public class CompositeWidget implements IEntryWidget {
     private final LootPoolEntryContainer entry;
     private final IClientUtils utils;
 
-    public CompositeWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int sumWeight,
+    public CompositeWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
                            List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         CompositeEntryBase compositeEntry = (CompositeEntryBase) entry;
         List<LootItemCondition> allConditions = new LinkedList<>(conditions);
 
         allConditions.addAll(Arrays.asList(compositeEntry.conditions));
 
-        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, Arrays.asList(compositeEntry.children), x, y, List.copyOf(functions), allConditions);
+        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, Arrays.asList(compositeEntry.children), x, y, maxWidth, List.copyOf(functions), allConditions);
 
         widgets = new LinkedList<>(pair.getFirst());
         bounds = pair.getSecond();
@@ -116,7 +116,7 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y) {
-        return utils.getBounds(utils, Arrays.asList(((CompositeEntryBase) entry).children), x, y);
+    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
+        return utils.getBounds(utils, Arrays.asList(((CompositeEntryBase) entry).children), x, y, maxWidth);
     }
 }

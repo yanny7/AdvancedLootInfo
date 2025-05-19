@@ -110,7 +110,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils utils, List<LootPoolEntryContainer> entries, int x, int y,
+    public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils utils, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth,
                                                         List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
@@ -135,15 +135,15 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                     posY = y + height + VERTICAL_OFFSET;
                 }
 
-                Rect bound = bounds.apply(utils, entry, posX, posY);
+                Rect bound = bounds.apply(utils, entry, posX, posY, maxWidth);
 
-                if (bound.right() > 9 * 18) {
+                if (bound.right() > maxWidth) {
                     posX = x + GROUP_WIDGET_WIDTH;
                     posY += bound.height();
-                    bound = bounds.apply(utils, entry, posX, posY);
+                    bound = bounds.apply(utils, entry, posX, posY, maxWidth);
                 }
 
-                IEntryWidget widget = widgetFactory.create(utils, entry, posX, posY, sumWeight, List.copyOf(functions), List.copyOf(conditions));
+                IEntryWidget widget = widgetFactory.create(utils, entry, posX, posY, maxWidth, sumWeight, List.copyOf(functions), List.copyOf(conditions));
                 width = Math.max(width, bound.right() - x);
                 height = Math.max(height, bound.bottom() - y);
 
@@ -225,7 +225,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public Rect getBounds(IClientUtils utils, List<LootPoolEntryContainer> entries, int x, int y) {
+    public Rect getBounds(IClientUtils utils, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
         WidgetDirection lastDirection = null;
@@ -241,12 +241,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                     posY = y + height + VERTICAL_OFFSET;
                 }
 
-                Rect bound = bounds.apply(utils, entry, posX, posY);
+                Rect bound = bounds.apply(utils, entry, posX, posY, maxWidth);
 
-                if (bound.right() > 9 * 18) {
+                if (bound.right() > maxWidth) {
                     posX = x + GROUP_WIDGET_WIDTH;
                     posY += bound.height();
-                    bound = bounds.apply(utils, entry, posX, posY);
+                    bound = bounds.apply(utils, entry, posX, posY, maxWidth);
                 }
 
                 width = Math.max(width, bound.right() - x);
