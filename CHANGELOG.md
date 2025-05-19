@@ -1,7 +1,8 @@
-## []
+## [1.1.5]
 
 - Fixed loot overflow in REI
 - Fixed loot overflow in JEI
+- Fixed loot overflow in EMI
 
 ## [1.1.4]
 
