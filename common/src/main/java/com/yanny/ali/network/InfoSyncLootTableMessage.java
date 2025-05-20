@@ -1,5 +1,6 @@
 package com.yanny.ali.network;
 
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -12,14 +13,29 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.List;
 
 public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTable lootTable, List<Item> items) implements CustomPacketPayload {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     public static final Type<InfoSyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
     public static final StreamCodec<RegistryFriendlyByteBuf, InfoSyncLootTableMessage> CODEC = StreamCodec.composite(
             ResourceKey.streamCodec(Registries.LOOT_TABLE), (l) -> l.location,
-            ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()), (l) -> l.lootTable,
+            StreamCodec.of(
+                    (b, l) -> {
+                        int fallbackIndex = b.writerIndex();
+                        try {
+                            ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, l);
+                        } catch (Throwable e) {
+                            LOGGER.error("Failed to compress loot table with error: {}", e.getMessage());
+                            b.writerIndex(fallbackIndex);
+                            ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, LootTable.EMPTY);
+                        }
+                    },
+                    (b) -> ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).decode(b)),
+            (l) -> l.lootTable,
             StreamCodec.of(
                     (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
                     (b) -> b.readList((a) -> BuiltInRegistries.ITEM.get(a.readResourceLocation()))

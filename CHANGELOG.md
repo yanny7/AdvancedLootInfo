@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash when encoding loot table
+
 ## [1.1.5]
 
 - Fixed loot overflow in REI
