@@ -1,3 +1,8 @@
+## [1.1.6]
+
+- Changed mod load ordering to prevent random crash
+- Fixed crash when used with EMI
+
 ## [1.1.5]
 
 - Fixed loot overflow in REI

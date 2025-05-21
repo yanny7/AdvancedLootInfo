@@ -68,19 +68,19 @@ side="BOTH"
 modId="emi"
 mandatory=false
 versionRange="${emi_version_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.ali]]
 modId="jei"
 mandatory=false
 versionRange="${jei_version_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.ali]]
 modId="rei"
 mandatory=false
 versionRange="${rei_version_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
