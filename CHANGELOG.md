@@ -1,6 +1,7 @@
 ## []
 
 - Changed mod load ordering to prevent random crash
+- Fixed crash when used with EMI
 
 ## [1.1.5]
 
