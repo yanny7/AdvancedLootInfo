@@ -1,3 +1,7 @@
+## []
+
+- Changed mod load ordering to prevent random crash
+
 ## [1.1.5]
 
 - Fixed loot overflow in REI
