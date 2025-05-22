@@ -1,5 +1,7 @@
-## []
+## [1.1.6]
 
+- Changed mod load ordering to prevent random crash
+- Fixed crash when used with EMI
 - Fixed crash when encoding loot table
 
 ## [1.1.5]
