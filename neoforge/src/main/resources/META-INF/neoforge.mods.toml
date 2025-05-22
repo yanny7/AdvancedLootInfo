@@ -24,33 +24,33 @@ config = "${mod_id}.neoforge.mixins.json"
 modId = "neoforge" #mandatory
 type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange = "${neoforge_loader_version_range}" #mandatory
-ordering = "NONE" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
+ordering = "AFTER" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
 side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
 
 [[dependencies.ali]]
 modId = "minecraft"
 type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange = "${minecraft_version_range}"
-ordering = "NONE"
+ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.ali]]
 modId="emi"
 type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange="${emi_version_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.ali]]
 modId="jei"
 type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange="${jei_version_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
 
 [[dependencies.ali]]
 modId="rei"
 type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange="${rei_version_range}"
-ordering="NONE"
+ordering="AFTER"
 side="BOTH"
