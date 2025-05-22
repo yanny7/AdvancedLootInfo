@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @SuppressWarnings("UnusedMixin") // Not needed in common
-@Mixin(value = RecipeScreen.class, remap = false)
+@Mixin(RecipeScreen.class)
 public class MixinRecipeScreen {
     @Shadow
     private List<WidgetGroup> currentPage;
