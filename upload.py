@@ -147,7 +147,7 @@ def upload_to_modrinth(api_token, project_id, version_number, mod_file_path, loa
 
     print(f"\n--- Uploading to Modrinth ---")
     print(f"Uploading file '{mod_file_path}'")
-    print(f"Metadata: {json.dumps(metadata, indent=2)}")
+    # print(f"Metadata: {json.dumps(metadata, indent=2)}")
     print("Do you want to proceed?")
     yes_no = input()
 
@@ -215,7 +215,7 @@ def upload_to_curseforge(api_token, project_id, version_number, mod_file_path, l
 
     print(f"\n--- Uploading to CurseForge ---")
     print(f"File: {mod_file_path}")
-    print(f"Metadata: {json.dumps(metadata, indent=2)}")
+    # print(f"Metadata: {json.dumps(metadata, indent=2)}")
     print("Do you want to proceed?")
     yes_no = input()
 
