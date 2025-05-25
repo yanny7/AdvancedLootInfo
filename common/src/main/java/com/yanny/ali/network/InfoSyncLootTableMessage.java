@@ -38,16 +38,36 @@ public class InfoSyncLootTableMessage implements CustomPacketPayload {
     }
 
     public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
+        String rawLootTable = buf.readUtf();
+        LootTable table;
+
         location = buf.readResourceLocation();
-        lootTable = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, JsonParser.parseString(decompressString(buf.readUtf()))).get().orThrow();
         items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
+
+        try {
+            table = LootDataType.TABLE.codec.parse(JsonOps.INSTANCE, JsonParser.parseString(decompressString(rawLootTable))).get().orThrow();
+        } catch (Throwable e) {
+            LOGGER.error("Failed to decode loot table with error: {}", e.getMessage());
+            table = LootTable.EMPTY;
+        }
+
+        lootTable = table;
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
+        String rawLootTable;
+
+        try {
+            rawLootTable = compressString(LootDataType.TABLE.codec.encodeStart(JsonOps.INSTANCE, lootTable).get().orThrow().toString());
+        } catch (Throwable e) {
+            LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
+            rawLootTable = compressString(LootDataType.TABLE.codec.encodeStart(JsonOps.INSTANCE, LootTable.EMPTY).toString());
+        }
+
+        buf.writeUtf(rawLootTable);
         buf.writeResourceLocation(location);
-        buf.writeUtf(compressString(LootDataType.TABLE.codec.encodeStart(JsonOps.INSTANCE, lootTable).get().orThrow().toString()));
-        buf.writeCollection(items, (b, item) -> buf.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
+        buf.writeCollection(items, (b, item) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
     }
 
     @NotNull
