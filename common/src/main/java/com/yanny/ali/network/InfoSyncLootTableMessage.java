@@ -29,12 +29,19 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
                         try {
                             ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, l);
                         } catch (Throwable e) {
-                            LOGGER.error("Failed to compress loot table with error: {}", e.getMessage());
+                            LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
                             b.writerIndex(fallbackIndex);
                             ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, LootTable.EMPTY);
                         }
                     },
-                    (b) -> ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).decode(b)),
+                    (b) -> {
+                        try {
+                            return ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).decode(b);
+                        } catch (Throwable e) {
+                            LOGGER.error("Failed to decode loot table with error: {}", e.getMessage());
+                            return LootTable.EMPTY;
+                        }
+                    }),
             (l) -> l.lootTable,
             StreamCodec.of(
                     (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
