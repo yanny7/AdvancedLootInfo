@@ -1,3 +1,7 @@
+## []
+
+- Fixed view usages in EMI not working
+
 ## [1.1.7]
 
 - Fixed crash when decoding loot table
