@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility.rei;
 
+import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -34,7 +35,9 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Str
     @Override
     public List<Widget> setupDisplay(ReiGameplayDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
-        Component lootName = Component.translatableWithFallback("ali/loot_table/" + display.getId().substring(1), display.getId());
+        String key = "ali/loot_table/" + display.getId().substring(1);
+        Component lootName = GenericUtils.ellipsis( key, display.getId(), bounds.width);
+        Component fullText = Component.translatableWithFallback(key, display.getId());
         int textWidth = Minecraft.getInstance().font.width(lootName);
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, OFFSET);
         int with = Mth.clamp(holder.bounds().width(), textWidth, bounds.width);
@@ -45,7 +48,7 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Str
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
-        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName));
+        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName).noShadow().color(0).tooltip(fullText));
         widgets.add(Widgets.createCategoryBase(fullBounds));
 
         if (bounds.height >= innerBounds.height + 8) {
