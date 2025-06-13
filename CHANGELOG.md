@@ -1,6 +1,8 @@
 ## []
 
 - Fixed view usages in EMI not working
+- Used black text in REI loot name
+- Ellipsis loot name when too long and added tooltip
 
 ## [1.1.7]
 

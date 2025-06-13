@@ -6,8 +6,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -25,6 +28,7 @@ import java.util.Map;
 public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
+    private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
 
     public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -91,5 +95,23 @@ public class GenericUtils {
     @NotNull
     public static List<Item> getItems(ResourceLocation location) {
         return PluginManager.CLIENT_REGISTRY.getItems(location);
+    }
+
+    public static Component ellipsis(String text, String fallback, int maxWidth) {
+        Font font = Minecraft.getInstance().font;
+
+        text = Language.getInstance().getOrDefault(text, fallback);
+
+        if (font.width(text) > maxWidth) {
+            int index = 20;
+
+            while (font.width(text.substring(0, index + 1) + DOTS_WIDTH) <= maxWidth) {
+                index += 1;
+            }
+
+            return Component.literal(text.substring(0, index) + "...");
+        }
+
+        return Component.literal(text);
     }
 }
