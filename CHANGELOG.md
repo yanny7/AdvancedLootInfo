@@ -1,4 +1,4 @@
-## []
+## [1.1.8]
 
 - Fixed view usages in EMI not working
 - Used black text in REI loot name
