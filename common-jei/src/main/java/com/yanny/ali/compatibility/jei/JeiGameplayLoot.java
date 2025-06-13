@@ -1,6 +1,8 @@
 package com.yanny.ali.compatibility.jei;
 
+import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.GameplayLootType;
+import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -25,9 +27,16 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
     @Override
     public void draw(GameplayLootType recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
-        Component component = Component.translatableWithFallback("ali/loot_table/" + recipe.id().substring(1), recipe.id());
+        String key = "ali/loot_table/" + recipe.id().substring(1);
+        Component text = GenericUtils.ellipsis(key, recipe.id(), 9 * 18);
+        Component fullText = Component.translatableWithFallback(key, recipe.id());
+        Rect rect = new Rect(0, 0, 9 * 18, 8);
 
-        guiGraphics.drawString(Minecraft.getInstance().font, component, 0, 0, 0, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, text, 0, 0, 0, false);
+
+        if (rect.contains((int) mouseX, (int) mouseY)) {
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, fullText, (int) mouseX, (int) mouseY);
+        }
     }
 
     @Override
