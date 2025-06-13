@@ -242,7 +242,7 @@ def upload_to_curseforge(api_token, api_key, project_id, version_number, mod_fil
     metadata = {
         "changelog": changelog,
         "changelogType": "markdown",
-        "displayName": version_name,
+        "displayName": os.path.basename(mod_file_path),
         "fileName": os.path.basename(mod_file_path),
         "gameVersions": cf_game_version_ids,
         "modLoaders": loaders,
