@@ -26,6 +26,26 @@ def prepare_dependency(dep_id):
     }
 
 @functools.lru_cache(maxsize=1)
+def get_curseforge_game_version_types_mapping(api_key):
+    print("CurseForge: Loading minecraft version mappings...")
+    url = "https://api.curseforge.com/v1/games/432/version-types/"
+    headers = {
+        "x-api-key": api_key,
+        "User-Agent": CURSEFORGE_USER_AGENT
+    }
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        versions_data = response.json()["data"]
+
+        version_map = {item['name']: item['id'] for item in versions_data}
+        print(f"CurseForge: Loaded mapping for {len(version_map)} game versions.")
+        return version_map
+    except requests.exceptions.RequestException as e:
+        print(f"CurseForge Error while reading game versions: {e}")
+        return {}
+
+@functools.lru_cache(maxsize=1)
 def get_curseforge_game_versions_mapping(api_token):
     print("CurseForge: Loading minecraft version mappings...")
     url = "https://minecraft.curseforge.com/api/game/versions"
@@ -38,7 +58,6 @@ def get_curseforge_game_versions_mapping(api_token):
         response.raise_for_status()
         versions_data = response.json()
 
-        # version_map = {item['name']: item['id'] for item in versions_data}
         print(f"CurseForge: Loaded mapping for {len(versions_data)} game versions.")
         return list(versions_data)
     except requests.exceptions.RequestException as e:
@@ -181,7 +200,7 @@ def upload_to_modrinth(api_token, project_id, version_number, mod_file_path, loa
     except Exception as e:
         print(f"Other Error: {e}")
 
-def upload_to_curseforge(api_token, project_id, version_number, mod_file_path, loaders, game_versions, release_type, changelog, version_name):
+def upload_to_curseforge(api_token, api_key, project_id, version_number, mod_file_path, loaders, game_versions, release_type, changelog, version_name):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
         return
@@ -193,20 +212,37 @@ def upload_to_curseforge(api_token, project_id, version_number, mod_file_path, l
     }
 
     cf_game_version_ids = []
-    for loader in loaders:
-        mapping = get_curseforge_game_versions_mapping(api_token)
+    mapping = get_curseforge_game_versions_mapping(api_token)
 
-        gv_id = list(filter(lambda x: x["name"] == game_versions[0], mapping))
+    # get loader versions
+    for loader in loaders:
+        gv_id = list(filter(lambda x: x["slug"] == loader, mapping))
         if gv_id:
-            cf_game_version_ids.append(gv_id)
+            cf_game_version_ids.append(gv_id[0]["id"])
         else:
             print(f"CurseForge warning: Missing mapping for '{loader}'.")
             return
 
+    # get minecraft version
+    type_mapping = get_curseforge_game_version_types_mapping(api_key)
+    mc_group = re.search(r'\d+\.\d+', game_versions[0]).group()
+    tv_id = type_mapping[f"Minecraft {mc_group}"]
+    if tv_id:
+        gv_id = list(filter(lambda x: x["name"] == game_versions[0] and x["gameVersionTypeID"] == tv_id, mapping))
+
+        if gv_id:
+            cf_game_version_ids.append(gv_id[0]["id"])
+        else:
+            print(f"CurseForge warning: Missing game version for '{mc_group}'.")
+            return
+    else:
+        print(f"CurseForge warning: Missing mapping for '{mc_group}'.")
+        return
+
     metadata = {
         "changelog": changelog,
         "changelogType": "markdown",
-        "displayName": version_name,
+        "displayName": os.path.basename(mod_file_path),
         "fileName": os.path.basename(mod_file_path),
         "gameVersions": cf_game_version_ids,
         "modLoaders": loaders,
@@ -257,6 +293,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Upload mod to Modrinth.")
     parser.add_argument("--modrinth-api-token", required=True, help="Modrinth API Token")
     parser.add_argument("--curseforge-api-token", required=True, help="CurseForge API Token")
+    parser.add_argument("--curseforge-api-key", required=True, help="CurseForge API Key")
     parser.add_argument("--release-type", required=True, help="Mod release type (release|beta|alpha)")
 
     args = parser.parse_args()
@@ -289,6 +326,7 @@ if __name__ == "__main__":
 
         upload_to_curseforge(
             api_token=args.curseforge_api_token,
+            api_key=args.curseforge_api_key,
             project_id="1205426",
             version_number=version,
             mod_file_path=file_path,
