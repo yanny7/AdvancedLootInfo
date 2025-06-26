@@ -77,6 +77,26 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
+    public static List<ITooltipNode> getEmptyTooltip(IServerUtils utils, LootPoolSingletonContainer entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<ITooltipNode> tooltip = new ArrayList<>();
+        List<LootItemFunction> allFunctions = new ArrayList<>(functions);
+        List<LootItemCondition> allConditions = new ArrayList<>(conditions);
+
+        allFunctions.addAll(Arrays.asList(entry.functions));
+        allConditions.addAll(Arrays.asList(entry.conditions));
+
+        float rawChance = chance * entry.weight / sumWeight;
+        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, allConditions, rawChance);
+
+        tooltip.add(new TooltipNode(Component.translatable("ali.enum.group_type.empty")));
+        tooltip.add(getQualityTooltip(entry.quality));
+        tooltip.add(getChanceTooltip(chanceMap));
+        tooltip.addAll(GenericTooltipUtils.getConditionsTooltip(utils, allConditions));
+        tooltip.addAll(GenericTooltipUtils.getFunctionsTooltip(utils, allFunctions));
+        return tooltip;
+    }
+
+    @NotNull
     public static List<ITooltipNode> getSingletonTooltip(IServerUtils utils, LootPoolSingletonContainer entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = new ArrayList<>(functions);
         List<LootItemCondition> allConditions = new ArrayList<>(conditions);
@@ -184,7 +204,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    private static ITooltipNode getRolls(RangeValue rolls, RangeValue bonusRolls) {
+    public static ITooltipNode getRolls(RangeValue rolls, RangeValue bonusRolls) {
         return new TooltipNode(translatable("ali.description.rolls", value(getTotalRolls(rolls, bonusRolls).toIntString(), "x")));
     }
 

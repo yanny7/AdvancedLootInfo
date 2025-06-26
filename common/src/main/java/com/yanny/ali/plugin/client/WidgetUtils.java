@@ -14,7 +14,7 @@ public class WidgetUtils {
     public static final int GROUP_WIDGET_HEIGHT = 18;
 
     @NotNull
-    public static IWidget getLootTableTypeWidget(int x, int y, IDataNode node) {
+    public static IWidget getAllWidget(int x, int y, IDataNode node) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
@@ -22,7 +22,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static IWidget getLootPoolTypeWidget(int x, int y, IDataNode node) {
+    public static IWidget getRandomWidget(int x, int y, IDataNode node) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
@@ -30,7 +30,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static IWidget getAlternativesWidget(int x, int y, IDataNode node) {
+    public static IWidget getSequentialWidget(int x, int y, IDataNode node) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
@@ -38,16 +38,8 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static IWidget getSequentialWidget(int x, int y, IDataNode node) {
+    public static IWidget getAlternativesWidget(int x, int y, IDataNode node) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
-
-        widget.tooltipText(node.getTooltip());
-        return widget;
-    }
-
-    @NotNull
-    public static IWidget getGroupWidget(int x, int y, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
         return widget;

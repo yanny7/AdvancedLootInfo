@@ -1,14 +1,10 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.TagNode;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -181,7 +177,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         return new ClientUtils() {
             @Override
             public Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y) {
-                slotParams.add(new ItemSlotParams(item, entry, x, y, ((ItemNode) entry).getCount()));
+                slotParams.add(new ItemSlotParams(item, entry, x, y, ((ISlotNode) entry).getCount()));
                 return new Rect(x, y, 18, 18);
             }
 

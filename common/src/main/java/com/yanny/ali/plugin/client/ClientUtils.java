@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class ClientUtils implements IWidgetUtils {
     @Override
-    public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<IDataNode> entries, int x, int y, int maxWidth) {
+    public Pair<List<IWidget>, Rect> createWidgets(IWidgetUtils registry, List<IDataNode> entries, int x, int y, int maxWidth) {
         return PluginManager.CLIENT_REGISTRY.createWidgets(registry, entries, x, y, maxWidth);
     }
 

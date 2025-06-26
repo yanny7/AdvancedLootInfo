@@ -16,8 +16,8 @@ public class VanillaPlugin extends Plugin {
     @Override
     public void registerServer(IServerRegistry registry) {
         super.registerServer(registry);
-        registry.registerConditionTooltip(CanToolPerformAction.LOOT_CONDITION_TYPE, VanillaPlugin::getCanToolPerformActionTooltip);
-        registry.registerConditionTooltip(LootTableIdCondition.LOOT_TABLE_ID, VanillaPlugin::getLootTableIdTooltip);
+        registry.registerConditionTooltip(CanToolPerformAction.class, VanillaPlugin::getCanToolPerformActionTooltip);
+        registry.registerConditionTooltip(LootTableIdCondition.class, VanillaPlugin::getLootTableIdTooltip);
     }
 
     @Unmodifiable

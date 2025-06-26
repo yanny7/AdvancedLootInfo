@@ -8,5 +8,4 @@ public interface IWidgetUtils extends IClientUtils {
     Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y);
 
     Rect addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y);
-
 }

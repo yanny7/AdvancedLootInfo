@@ -18,7 +18,7 @@ public class EmptyNode extends ListNode {
     private final List<ITooltipNode> tooltip;
 
     public EmptyNode(List<ILootModifier<?>> modifiers, IServerUtils utils, EmptyLootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);
+        tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry, chance, sumWeight, functions, conditions);
     }
 
     public EmptyNode(IClientUtils utils, FriendlyByteBuf buf) {

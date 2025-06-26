@@ -29,7 +29,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -74,6 +73,7 @@ public class TooltipTestSuite {
 
         PluginManager.registerCommonEvent();
         PluginManager.registerClientEvent();
+        PluginManager.registerServerEvent();
         UTILS = new IServerUtils() {
             @Override
             public List<LootPool> getLootPools(LootTable lootTable) {
@@ -91,7 +91,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, LootPoolEntryType type) {
+            public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
                 return PluginManager.SERVER_REGISTRY.getEntryFactory(utils, type);
             }
 

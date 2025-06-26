@@ -19,6 +19,9 @@ public class PluginManager {
 
     public static void registerCommonEvent() {
         PLUGINS = Services.PLATFORM.getPlugins();
+    }
+
+    public static void registerServerEvent() {
         registerServerData();
     }
 

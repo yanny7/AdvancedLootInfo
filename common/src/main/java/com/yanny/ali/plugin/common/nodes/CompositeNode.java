@@ -19,7 +19,7 @@ public abstract class CompositeNode extends ListNode {
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
 
         for (LootPoolEntryContainer child : entry.children) {
-            addChildren(modifiers, utils.getEntryFactory(utils, child.getType()).create(modifiers, utils, child, chance, sumWeight, functions, allConditions));
+            addChildren(modifiers, utils.getEntryFactory(utils, child).create(modifiers, utils, child, chance, sumWeight, functions, allConditions));
         }
     }
 

@@ -44,6 +44,7 @@ public abstract class AbstractServer {
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.Type.BLOCK, Collections.emptyList());
         List<ILootModifier<?>> entityLootModifiers = groupedTypes.getOrDefault(ILootModifier.Type.ENTITY, Collections.emptyList());
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.Type.LOOT_TABLE, Collections.emptyList());
+        List<ILootModifier<?>> typeLootModifiers = groupedTypes.getOrDefault(ILootModifier.Type.TYPE, Collections.emptyList());
 
         serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable);
@@ -51,9 +52,9 @@ public abstract class AbstractServer {
         messages.clear();
 
         // apply modifiers
-        lootNodes.putAll(processBlocks(serverRegistry, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, level, unprocessedLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processLootTables(serverRegistry, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processBlocks(serverRegistry, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, typeLootModifiers, lootTableItems));
+        lootNodes.putAll(processEntities(serverRegistry, level, unprocessedLootTables, entityLootModifiers, lootTableLootModifiers, typeLootModifiers, lootTableItems));
+        lootNodes.putAll(processLootTables(serverRegistry, unprocessedLootTables, lootTableLootModifiers, typeLootModifiers, lootTableItems));
 
         lootTables = removeEmptyLootTable(lootTables, lootTableItems);
         lootTables.forEach((location, lootTable) -> messages.add(new InfoSyncLootTableMessage(location, lootTableItems.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
@@ -109,7 +110,7 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processBlocks(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
                                                                   List<ILootModifier<?>> blockLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                  Map<ResourceLocation, List<Item>> lootTableItems) {
+                                                                  List<ILootModifier<?>> tableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (Block block : BuiltInRegistries.BLOCK) {
@@ -120,7 +121,10 @@ public abstract class AbstractServer {
             if (lootTable != null) {
                 List<ILootModifier<?>> lootModifiers = Stream.concat(
                         blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
-                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, block, items))
+                        Stream.concat(
+                                tableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)),
+                                lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                        )
                 ).toList();
 
                 lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
@@ -135,7 +139,7 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
                                                                     List<ILootModifier<?>> entityLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                    Map<ResourceLocation, List<Item>> lootTableItems) {
+                                                                    List<ILootModifier<?>> tableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
@@ -193,7 +197,10 @@ public abstract class AbstractServer {
                     if (lootTable != null) {
                         List<ILootModifier<?>> lootModifiers = Stream.concat(
                                 entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
-                                lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items))
+                                Stream.concat(
+                                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)),
+                                        tableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                                )
                         ).toList();
 
                         lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
@@ -209,14 +216,18 @@ public abstract class AbstractServer {
 
     @NotNull
     private static Map<ResourceLocation, IDataNode> processLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
-                                                                      List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
+                                                                      List<ILootModifier<?>> lootTableLootModifiers, List<ILootModifier<?>> tableLootModifiers,
+                                                                      Map<ResourceLocation, List<Item>> lootTableItems) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
             ResourceLocation location = entry.getKey();
             LootTable lootTable = entry.getValue();
             List<Item> items = lootTableItems.get(location);
-            List<ILootModifier<?>> lootModifiers = lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)).toList();
+            List<ILootModifier<?>> lootModifiers = Stream.concat(
+                    lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)),
+                    tableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+            ).toList();
 
             lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
         }

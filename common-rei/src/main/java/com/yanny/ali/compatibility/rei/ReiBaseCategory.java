@@ -1,14 +1,10 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.TagNode;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
@@ -88,7 +84,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
                 stack.tooltip(NodeUtils.toComponents(entry.getTooltip(), 0));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entry(stack).markOutput());
-                widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(((ItemNode) entry).getCount())));
+                widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(((ISlotNode) entry).getCount())));
                 return new Rect(x, y, 18, 18);
             }
 

@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.platform.Services;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -13,7 +14,6 @@ import org.slf4j.Logger;
 
 import java.util.*;
 
-import static com.yanny.ali.plugin.client.WidgetUtils.GROUP_WIDGET_WIDTH;
 import static com.yanny.ali.plugin.client.WidgetUtils.VERTICAL_OFFSET;
 
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
@@ -53,54 +53,52 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils utils, List<IDataNode> entries, int x, int y, int maxWidth) {
-        int posX = x + GROUP_WIDGET_WIDTH, posY = y;
+    public Pair<List<IWidget>, Rect> createWidgets(IWidgetUtils utils, List<IDataNode> entries, int x, int y, int maxWidth) {
+        int posX = x, posY = y;
         int width = 0, height = 0;
-        List<IEntryWidget> widgets = new LinkedList<>();
+        List<IWidget> widgets = new LinkedList<>();
         WidgetDirection lastDirection = null;
 
         for (IDataNode entry : entries) {
-            WidgetDirection direction = widgetDirectionMap.get(entry.getId());
-            IWidgetFactory widgetFactory = widgetMap.get(entry.getId());
-            IBoundsGetter bounds = widgetBoundsMap.get(entry.getId());
+            WidgetDirection direction = widgetDirectionMap.getOrDefault(entry.getId(), widgetDirectionMap.get(MissingNode.ID));
+            IWidgetFactory widgetFactory = widgetMap.getOrDefault(entry.getId(), widgetMap.get(MissingNode.ID));
+            IBoundsGetter bounds = widgetBoundsMap.getOrDefault(entry.getId(), widgetBoundsMap.get(MissingNode.ID));
 
-            if (direction != null && widgetFactory != null && bounds != null) {
-                if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY = y + height + VERTICAL_OFFSET;
-                }
-
-                Rect bound = bounds.apply(utils, entry, posX, posY, maxWidth);
-
-                if (bound.right() > maxWidth) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY += bound.height();
-                    bound = bounds.apply(utils, entry, posX, posY, maxWidth);
-                }
-
-                IEntryWidget widget = widgetFactory.create(utils, entry, posX, posY, maxWidth);
-                width = Math.max(width, bound.right() - x);
-                height = Math.max(height, bound.bottom() - y);
-
-                if (lastDirection != null) {
-                    if (lastDirection != direction) {
-                        posX = x + GROUP_WIDGET_WIDTH;
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    } else if (direction == WidgetDirection.HORIZONTAL) {
-                        posX += bound.width();
-                    } else if (direction == WidgetDirection.VERTICAL) {
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                } else {
-                    switch (direction) {
-                        case HORIZONTAL -> posX += bound.width();
-                        case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                }
-
-                widgets.add(widget);
-                lastDirection = direction;
+            if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
+                posX = x;
+                posY = y + height + VERTICAL_OFFSET;
             }
+
+            Rect bound = bounds.apply(utils, entry, posX, posY, maxWidth);
+
+            if (bound.right() > maxWidth) {
+                posX = x;
+                posY += bound.height();
+                bound = bounds.apply(utils, entry, posX, posY, maxWidth);
+            }
+
+            IWidget widget = widgetFactory.create(utils, entry, posX, posY, maxWidth);
+            width = Math.max(width, bound.right() - x);
+            height = Math.max(height, bound.bottom() - y);
+
+            if (lastDirection != null) {
+                if (lastDirection != direction) {
+                    posX = x;
+                    posY += bound.height() + VERTICAL_OFFSET;
+                } else if (direction == WidgetDirection.HORIZONTAL) {
+                    posX += bound.width();
+                } else if (direction == WidgetDirection.VERTICAL) {
+                    posY += bound.height() + VERTICAL_OFFSET;
+                }
+            } else {
+                switch (direction) {
+                    case HORIZONTAL -> posX += bound.width();
+                    case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
+                }
+            }
+
+            widgets.add(widget);
+            lastDirection = direction;
         }
 
         return new Pair<>(widgets, new Rect(x, y, width, height));
@@ -118,50 +116,47 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     @Override
     public Rect getBounds(IClientUtils utils, List<IDataNode> entries, int x, int y, int maxWidth) {
-        int posX = x + GROUP_WIDGET_WIDTH, posY = y;
+        int posX = x, posY = y;
         int width = 0, height = 0;
         WidgetDirection lastDirection = null;
 
         for (IDataNode entry : entries) {
-            WidgetDirection direction = widgetDirectionMap.get(entry.getId());
-            IWidgetFactory widgetFactory = widgetMap.get(entry.getId());
-            IBoundsGetter bounds = widgetBoundsMap.get(entry.getId());
+            WidgetDirection direction = widgetDirectionMap.getOrDefault(entry.getId(), widgetDirectionMap.get(MissingNode.ID));
+            IBoundsGetter bounds = widgetBoundsMap.getOrDefault(entry.getId(), widgetBoundsMap.get(MissingNode.ID));
 
-            if (direction != null && widgetFactory != null && bounds != null) {
-                if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY = y + height + VERTICAL_OFFSET;
-                }
-
-                Rect bound = bounds.apply(utils, entry, posX, posY, maxWidth);
-
-                if (bound.right() > maxWidth) {
-                    posX = x + GROUP_WIDGET_WIDTH;
-                    posY += bound.height();
-                    bound = bounds.apply(utils, entry, posX, posY, maxWidth);
-                }
-
-                width = Math.max(width, bound.right() - x);
-                height = Math.max(height, bound.bottom() - y);
-
-                if (lastDirection != null) {
-                    if (lastDirection != direction) {
-                        posX = x + GROUP_WIDGET_WIDTH;
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    } else if (direction == WidgetDirection.HORIZONTAL) {
-                        posX += bound.width();
-                    } else if (direction == WidgetDirection.VERTICAL) {
-                        posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                } else {
-                    switch (direction) {
-                        case HORIZONTAL -> posX += bound.width();
-                        case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
-                    }
-                }
-
-                lastDirection = direction;
+            if (lastDirection != null && direction != lastDirection && direction == WidgetDirection.VERTICAL) {
+                posX = x;
+                posY = y + height + VERTICAL_OFFSET;
             }
+
+            Rect bound = bounds.apply(utils, entry, posX, posY, maxWidth);
+
+            if (bound.right() > maxWidth) {
+                posX = x;
+                posY += bound.height();
+                bound = bounds.apply(utils, entry, posX, posY, maxWidth);
+            }
+
+            width = Math.max(width, bound.right() - x);
+            height = Math.max(height, bound.bottom() - y);
+
+            if (lastDirection != null) {
+                if (lastDirection != direction) {
+                    posX = x;
+                    posY += bound.height() + VERTICAL_OFFSET;
+                } else if (direction == WidgetDirection.HORIZONTAL) {
+                    posX += bound.width();
+                } else if (direction == WidgetDirection.VERTICAL) {
+                    posY += bound.height() + VERTICAL_OFFSET;
+                }
+            } else {
+                switch (direction) {
+                    case HORIZONTAL -> posX += bound.width();
+                    case VERTICAL -> posY += bound.height() + VERTICAL_OFFSET;
+                }
+            }
+
+            lastDirection = direction;
         }
 
         return new Rect(x, y, width, height);
@@ -188,7 +183,5 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Registered {} node factories", nodeFactoryMap.size());
         LOGGER.info("Registered {} widget directions", widgetDirectionMap.size());
         LOGGER.info("Registered {} widget bounds", widgetBoundsMap.size());
-        LOGGER.info("Registered {} loot items", lootItemMap.size());
-        LOGGER.info("Registered {} loot nodes", lootNodeMap.size());
     }
 }

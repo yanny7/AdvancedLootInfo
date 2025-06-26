@@ -8,23 +8,29 @@ import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.level.storage.loot.entries.*;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
-import net.minecraft.world.level.storage.loot.providers.number.*;
+import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.predicates.*;
+import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.ScoreboardValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public void registerClient(IClientRegistry registry) {
+        registry.registerWidget(LootTableNode.ID, WidgetDirection.VERTICAL, LootTableWidget::new, LootTableWidget::getBounds);
+        registry.registerWidget(LootPoolNode.ID, WidgetDirection.VERTICAL, LootPoolWidget::new, LootPoolWidget::getBounds);
         registry.registerWidget(ItemNode.ID, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
         registry.registerWidget(EmptyNode.ID, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
         registry.registerWidget(ReferenceNode.ID, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
         registry.registerWidget(DynamicNode.ID, WidgetDirection.VERTICAL, DynamicWidget::new, DynamicWidget::getBounds);
         registry.registerWidget(TagNode.ID, WidgetDirection.HORIZONTAL, TagWidget::new, TagWidget::getBounds);
-        registry.registerWidget(AlternativesNode.ID, WidgetDirection.VERTICAL, AlternativesWidget::new, CompositeWidget::getBounds);
-        registry.registerWidget(SequenceNode.ID, WidgetDirection.VERTICAL, SequentialWidget::new, CompositeWidget::getBounds);
-        registry.registerWidget(GroupNode.ID, WidgetDirection.VERTICAL, GroupWidget::new, CompositeWidget::getBounds);
+        registry.registerWidget(AlternativesNode.ID, WidgetDirection.VERTICAL, AlternativesWidget::new, AlternativesWidget::getBounds);
+        registry.registerWidget(SequenceNode.ID, WidgetDirection.VERTICAL, SequentialWidget::new, SequentialWidget::getBounds);
+        registry.registerWidget(GroupNode.ID, WidgetDirection.VERTICAL, GroupWidget::new, GroupWidget::getBounds);
+        registry.registerWidget(MissingNode.ID, WidgetDirection.VERTICAL, MissingWidget::new, MissingWidget::getBounds);
 
         registry.registerNode(LootTableNode.ID, LootTableNode::new);
         registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
@@ -41,93 +47,93 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerItemCollector(LootPoolEntries.ITEM, ItemCollectorUtils::collectItems);
-        registry.registerItemCollector(LootPoolEntries.TAG, ItemCollectorUtils::collectTags);
-        registry.registerItemCollector(LootPoolEntries.ALTERNATIVES, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.GROUP, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.SEQUENCE, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.EMPTY, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(LootPoolEntries.DYNAMIC, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(LootPoolEntries.REFERENCE, ItemCollectorUtils::collectReference);
+        registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
+        registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
+        registry.registerItemCollector(AlternativesEntry.class, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(EntryGroup.class, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(SequentialEntry.class, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(EmptyLootItem.class, ItemCollectorUtils::collectSingleton);
+        registry.registerItemCollector(DynamicLoot.class, ItemCollectorUtils::collectSingleton);
+        registry.registerItemCollector(LootTableReference.class, ItemCollectorUtils::collectReference);
 
-        registry.registerItemCollector(LootItemFunctions.FURNACE_SMELT, ItemCollectorUtils::collectFurnaceSmelt);
+        registry.registerItemCollector(SmeltItemFunction.class, ItemCollectorUtils::collectFurnaceSmelt);
 
-        registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
-        registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
-        registry.registerNumberProvider(NumberProviders.BINOMIAL, Plugin::convertBinomial);
-        registry.registerNumberProvider(NumberProviders.SCORE, Plugin::convertScore);
+        registry.registerNumberProvider(ConstantValue.class, Plugin::convertConstant);
+        registry.registerNumberProvider(UniformGenerator.class, Plugin::convertUniform);
+        registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
+        registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore);
 
-        registry.<LootItem>registerEntry(LootPoolEntries.ITEM, ItemNode::new);
-        registry.<TagEntry>registerEntry(LootPoolEntries.TAG, TagNode::new);
-        registry.<AlternativesEntry>registerEntry(LootPoolEntries.ALTERNATIVES, AlternativesNode::new);
-        registry.<SequentialEntry>registerEntry(LootPoolEntries.SEQUENCE, SequenceNode::new);
-        registry.<EntryGroup>registerEntry(LootPoolEntries.GROUP, GroupNode::new);
-        registry.<EmptyLootItem>registerEntry(LootPoolEntries.EMPTY, EmptyNode::new);
-        registry.<DynamicLoot>registerEntry(LootPoolEntries.DYNAMIC, DynamicNode::new);
-        registry.<LootTableReference>registerEntry(LootPoolEntries.REFERENCE, ReferenceNode::new);
+        registry.registerEntry(LootItem.class, ItemNode::new);
+        registry.registerEntry(TagEntry.class, TagNode::new);
+        registry.registerEntry(AlternativesEntry.class, AlternativesNode::new);
+        registry.registerEntry(SequentialEntry.class, SequenceNode::new);
+        registry.registerEntry(EntryGroup.class, GroupNode::new);
+        registry.registerEntry(EmptyLootItem.class, EmptyNode::new);
+        registry.registerEntry(DynamicLoot.class, DynamicNode::new);
+        registry.registerEntry(LootTableReference.class, ReferenceNode::new);
 
-        registry.registerConditionTooltip(LootItemConditions.ALL_OF, ConditionTooltipUtils::getAllOfTooltip);
-        registry.registerConditionTooltip(LootItemConditions.ANY_OF, ConditionTooltipUtils::getAnyOfTooltip);
-        registry.registerConditionTooltip(LootItemConditions.BLOCK_STATE_PROPERTY, ConditionTooltipUtils::getBlockStatePropertyTooltip);
-        registry.registerConditionTooltip(LootItemConditions.DAMAGE_SOURCE_PROPERTIES, ConditionTooltipUtils::getDamageSourcePropertiesTooltip);
-        registry.registerConditionTooltip(LootItemConditions.ENTITY_PROPERTIES, ConditionTooltipUtils::getEntityPropertiesTooltip);
-        registry.registerConditionTooltip(LootItemConditions.ENTITY_SCORES, ConditionTooltipUtils::getEntityScoresTooltip);
-        registry.registerConditionTooltip(LootItemConditions.INVERTED, ConditionTooltipUtils::getInvertedTooltip);
-        registry.registerConditionTooltip(LootItemConditions.KILLED_BY_PLAYER, ConditionTooltipUtils::getKilledByPlayerTooltip);
-        registry.registerConditionTooltip(LootItemConditions.LOCATION_CHECK, ConditionTooltipUtils::getLocationCheckTooltip);
-        registry.registerConditionTooltip(LootItemConditions.MATCH_TOOL, ConditionTooltipUtils::getMatchToolTooltip);
-        registry.registerConditionTooltip(LootItemConditions.RANDOM_CHANCE, ConditionTooltipUtils::getRandomChanceTooltip);
-        registry.registerConditionTooltip(LootItemConditions.RANDOM_CHANCE_WITH_LOOTING, ConditionTooltipUtils::getRandomChanceWithLootingTooltip);
-        registry.registerConditionTooltip(LootItemConditions.REFERENCE, ConditionTooltipUtils::getReferenceTooltip);
-        registry.registerConditionTooltip(LootItemConditions.SURVIVES_EXPLOSION, ConditionTooltipUtils::getSurvivesExplosionTooltip);
-        registry.registerConditionTooltip(LootItemConditions.TABLE_BONUS, ConditionTooltipUtils::getTableBonusTooltip);
-        registry.registerConditionTooltip(LootItemConditions.TIME_CHECK, ConditionTooltipUtils::getTimeCheckTooltip);
-        registry.registerConditionTooltip(LootItemConditions.VALUE_CHECK, ConditionTooltipUtils::getValueCheckTooltip);
-        registry.registerConditionTooltip(LootItemConditions.WEATHER_CHECK, ConditionTooltipUtils::getWeatherCheckTooltip);
+        registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
+        registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
+        registry.registerConditionTooltip(LootItemBlockStatePropertyCondition.class, ConditionTooltipUtils::getBlockStatePropertyTooltip);
+        registry.registerConditionTooltip(DamageSourceCondition.class, ConditionTooltipUtils::getDamageSourcePropertiesTooltip);
+        registry.registerConditionTooltip(LootItemEntityPropertyCondition.class, ConditionTooltipUtils::getEntityPropertiesTooltip);
+        registry.registerConditionTooltip(EntityHasScoreCondition.class, ConditionTooltipUtils::getEntityScoresTooltip);
+        registry.registerConditionTooltip(InvertedLootItemCondition.class, ConditionTooltipUtils::getInvertedTooltip);
+        registry.registerConditionTooltip(LootItemKilledByPlayerCondition.class, ConditionTooltipUtils::getKilledByPlayerTooltip);
+        registry.registerConditionTooltip(LocationCheck.class, ConditionTooltipUtils::getLocationCheckTooltip);
+        registry.registerConditionTooltip(MatchTool.class, ConditionTooltipUtils::getMatchToolTooltip);
+        registry.registerConditionTooltip(LootItemRandomChanceCondition.class, ConditionTooltipUtils::getRandomChanceTooltip);
+        registry.registerConditionTooltip(LootItemRandomChanceWithLootingCondition.class, ConditionTooltipUtils::getRandomChanceWithLootingTooltip);
+        registry.registerConditionTooltip(ConditionReference.class, ConditionTooltipUtils::getReferenceTooltip);
+        registry.registerConditionTooltip(ExplosionCondition.class, ConditionTooltipUtils::getSurvivesExplosionTooltip);
+        registry.registerConditionTooltip(BonusLevelTableCondition.class, ConditionTooltipUtils::getTableBonusTooltip);
+        registry.registerConditionTooltip(TimeCheck.class, ConditionTooltipUtils::getTimeCheckTooltip);
+        registry.registerConditionTooltip(ValueCheckCondition.class, ConditionTooltipUtils::getValueCheckTooltip);
+        registry.registerConditionTooltip(WeatherCheck.class, ConditionTooltipUtils::getWeatherCheckTooltip);
 
-        registry.registerFunctionTooltip(LootItemFunctions.APPLY_BONUS, FunctionTooltipUtils::getApplyBonusTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.COPY_NAME, FunctionTooltipUtils::getCopyNameTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.COPY_NBT, FunctionTooltipUtils::getCopyNbtTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.COPY_STATE, FunctionTooltipUtils::getCopyStateTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.ENCHANT_RANDOMLY, FunctionTooltipUtils::getEnchantRandomlyTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.ENCHANT_WITH_LEVELS, FunctionTooltipUtils::getEnchantWithLevelsTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.EXPLORATION_MAP, FunctionTooltipUtils::getExplorationMapTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.EXPLOSION_DECAY, FunctionTooltipUtils::getExplosionDecayTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.FILL_PLAYER_HEAD, FunctionTooltipUtils::getFillPlayerHeadTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.FURNACE_SMELT, FunctionTooltipUtils::getFurnaceSmeltTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.LIMIT_COUNT, FunctionTooltipUtils::getLimitCountTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.LOOTING_ENCHANT, FunctionTooltipUtils::getLootingEnchantTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.REFERENCE, FunctionTooltipUtils::getReferenceTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_ATTRIBUTES, FunctionTooltipUtils::getSetAttributesTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_BANNER_PATTERN, FunctionTooltipUtils::getSetBannerPatternTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_CONTENTS, FunctionTooltipUtils::getSetContentsTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_COUNT, FunctionTooltipUtils::getSetCountTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_DAMAGE, FunctionTooltipUtils::getSetDamageTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_ENCHANTMENTS, FunctionTooltipUtils::getSetEnchantmentsTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_INSTRUMENT, FunctionTooltipUtils::getSetInstrumentTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_LOOT_TABLE, FunctionTooltipUtils::getSetLootTableTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_LORE, FunctionTooltipUtils::getSetLoreTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_NAME, FunctionTooltipUtils::getSetNameTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_NBT, FunctionTooltipUtils::getSetNbtTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_POTION, FunctionTooltipUtils::getSetPotionTooltip);
-        registry.registerFunctionTooltip(LootItemFunctions.SET_STEW_EFFECT, FunctionTooltipUtils::getSetStewEffectTooltip);
+        registry.registerFunctionTooltip(ApplyBonusCount.class, FunctionTooltipUtils::getApplyBonusTooltip);
+        registry.registerFunctionTooltip(CopyNameFunction.class, FunctionTooltipUtils::getCopyNameTooltip);
+        registry.registerFunctionTooltip(CopyNbtFunction.class, FunctionTooltipUtils::getCopyNbtTooltip);
+        registry.registerFunctionTooltip(CopyBlockState.class, FunctionTooltipUtils::getCopyStateTooltip);
+        registry.registerFunctionTooltip(EnchantRandomlyFunction.class, FunctionTooltipUtils::getEnchantRandomlyTooltip);
+        registry.registerFunctionTooltip(EnchantWithLevelsFunction.class, FunctionTooltipUtils::getEnchantWithLevelsTooltip);
+        registry.registerFunctionTooltip(ExplorationMapFunction.class, FunctionTooltipUtils::getExplorationMapTooltip);
+        registry.registerFunctionTooltip(ApplyExplosionDecay.class, FunctionTooltipUtils::getExplosionDecayTooltip);
+        registry.registerFunctionTooltip(FillPlayerHead.class, FunctionTooltipUtils::getFillPlayerHeadTooltip);
+        registry.registerFunctionTooltip(SmeltItemFunction.class, FunctionTooltipUtils::getFurnaceSmeltTooltip);
+        registry.registerFunctionTooltip(LimitCount.class, FunctionTooltipUtils::getLimitCountTooltip);
+        registry.registerFunctionTooltip(LootingEnchantFunction.class, FunctionTooltipUtils::getLootingEnchantTooltip);
+        registry.registerFunctionTooltip(FunctionReference.class, FunctionTooltipUtils::getReferenceTooltip);
+        registry.registerFunctionTooltip(SetAttributesFunction.class, FunctionTooltipUtils::getSetAttributesTooltip);
+        registry.registerFunctionTooltip(SetBannerPatternFunction.class, FunctionTooltipUtils::getSetBannerPatternTooltip);
+        registry.registerFunctionTooltip(SetContainerContents.class, FunctionTooltipUtils::getSetContentsTooltip);
+        registry.registerFunctionTooltip(SetItemCountFunction.class, FunctionTooltipUtils::getSetCountTooltip);
+        registry.registerFunctionTooltip(SetItemDamageFunction.class, FunctionTooltipUtils::getSetDamageTooltip);
+        registry.registerFunctionTooltip(SetEnchantmentsFunction.class, FunctionTooltipUtils::getSetEnchantmentsTooltip);
+        registry.registerFunctionTooltip(SetInstrumentFunction.class, FunctionTooltipUtils::getSetInstrumentTooltip);
+        registry.registerFunctionTooltip(SetContainerLootTable.class, FunctionTooltipUtils::getSetLootTableTooltip);
+        registry.registerFunctionTooltip(SetLoreFunction.class, FunctionTooltipUtils::getSetLoreTooltip);
+        registry.registerFunctionTooltip(SetNameFunction.class, FunctionTooltipUtils::getSetNameTooltip);
+        registry.registerFunctionTooltip(SetNbtFunction.class, FunctionTooltipUtils::getSetNbtTooltip);
+        registry.registerFunctionTooltip(SetPotionFunction.class, FunctionTooltipUtils::getSetPotionTooltip);
+        registry.registerFunctionTooltip(SetStewEffectFunction.class, FunctionTooltipUtils::getSetStewEffectTooltip);
 
-        registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE, TooltipUtils::applyRandomChance);
-        registry.registerChanceModifier(LootItemConditions.RANDOM_CHANCE_WITH_LOOTING, TooltipUtils::applyRandomChanceWithLooting);
-        registry.registerChanceModifier(LootItemConditions.TABLE_BONUS, TooltipUtils::applyTableBonus);
+        registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
+        registry.registerChanceModifier(LootItemRandomChanceWithLootingCondition.class, TooltipUtils::applyRandomChanceWithLooting);
+        registry.registerChanceModifier(BonusLevelTableCondition.class, TooltipUtils::applyTableBonus);
 
-        registry.registerCountModifier(LootItemFunctions.SET_COUNT, TooltipUtils::applySetCount);
-        registry.registerCountModifier(LootItemFunctions.APPLY_BONUS, TooltipUtils::applyBonus);
-        registry.registerCountModifier(LootItemFunctions.LIMIT_COUNT, TooltipUtils::applyLimitCount);
-        registry.registerCountModifier(LootItemFunctions.LOOTING_ENCHANT, TooltipUtils::applyLootingEnchant);
+        registry.registerCountModifier(SetItemCountFunction.class, TooltipUtils::applySetCount);
+        registry.registerCountModifier(ApplyBonusCount.class, TooltipUtils::applyBonus);
+        registry.registerCountModifier(LimitCount.class, TooltipUtils::applyLimitCount);
+        registry.registerCountModifier(LootingEnchantFunction.class, TooltipUtils::applyLootingEnchant);
 
-        registry.registerItemStackModifier(LootItemFunctions.ENCHANT_RANDOMLY, TooltipUtils::applyEnchantRandomlyItemStackModifier);
-        registry.registerItemStackModifier(LootItemFunctions.ENCHANT_WITH_LEVELS, TooltipUtils::applyEnchantWithLevelsItemStackModifier);
-        registry.registerItemStackModifier(LootItemFunctions.SET_ATTRIBUTES, TooltipUtils::applySetAttributesItemStackModifier);
-        registry.registerItemStackModifier(LootItemFunctions.SET_BANNER_PATTERN, TooltipUtils::applyItemStackModifier);
-        registry.registerItemStackModifier(LootItemFunctions.SET_NAME, TooltipUtils::applySetNameItemStackModifier);
-        registry.registerItemStackModifier(LootItemFunctions.SET_NBT, TooltipUtils::applyItemStackModifier);
-        registry.registerItemStackModifier(LootItemFunctions.SET_POTION, TooltipUtils::applyItemStackModifier);
+        registry.registerItemStackModifier(EnchantRandomlyFunction.class, TooltipUtils::applyEnchantRandomlyItemStackModifier);
+        registry.registerItemStackModifier(EnchantWithLevelsFunction.class, TooltipUtils::applyEnchantWithLevelsItemStackModifier);
+        registry.registerItemStackModifier(SetAttributesFunction.class, TooltipUtils::applySetAttributesItemStackModifier);
+        registry.registerItemStackModifier(SetBannerPatternFunction.class, TooltipUtils::applyItemStackModifier);
+        registry.registerItemStackModifier(SetNameFunction.class, TooltipUtils::applySetNameItemStackModifier);
+        registry.registerItemStackModifier(SetNbtFunction.class, TooltipUtils::applyItemStackModifier);
+        registry.registerItemStackModifier(SetPotionFunction.class, TooltipUtils::applyItemStackModifier);
     }
 
     @NotNull

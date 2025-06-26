@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public interface IClientUtils extends ICommonUtils {
-    Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<IDataNode> entries, int x, int y, int maxWidth);
+    Pair<List<IWidget>, Rect> createWidgets(IWidgetUtils registry, List<IDataNode> entries, int x, int y, int maxWidth);
 
     <T extends IDataNode> IClientRegistry.NodeFactory<T> getNodeFactory(ResourceLocation id);
 

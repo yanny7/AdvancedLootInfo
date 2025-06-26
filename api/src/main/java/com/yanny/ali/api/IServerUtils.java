@@ -8,7 +8,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -22,7 +21,7 @@ public interface IServerUtils extends ICommonUtils {
 
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
 
-    <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, LootPoolEntryType type);
+    <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
 

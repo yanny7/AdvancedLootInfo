@@ -3,28 +3,21 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class TagWidget implements IEntryWidget {
+public class TagWidget extends IWidget {
     private final Rect bounds;
-    private final ResourceLocation id;
 
     public TagWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        super(entry.getId());
         TagNode tagEntry = (TagNode) entry;
 
         bounds = utils.addSlotWidget(tagEntry.getTag(), tagEntry, x, y);
-        this.id = entry.getId();
     }
 
     @Override
     public Rect getRect() {
         return bounds;
-    }
-
-    @Override
-    public ResourceLocation getNodeId() {
-        return id;
     }
 
     @Override

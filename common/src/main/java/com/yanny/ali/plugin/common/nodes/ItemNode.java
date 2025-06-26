@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemNode extends ListNode {
+public class ItemNode extends ListNode implements ISlotNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item");
 
     private final List<ITooltipNode> tooltip;
@@ -38,12 +38,13 @@ public class ItemNode extends ListNode {
         count = new RangeValue(buf);
     }
 
-    public RangeValue getCount() {
-        return count;
-    }
-
     public ItemStack getModifiedItem() {
         return itemStack;
+    }
+
+    @Override
+    public RangeValue getCount() {
+        return count;
     }
 
     @Override

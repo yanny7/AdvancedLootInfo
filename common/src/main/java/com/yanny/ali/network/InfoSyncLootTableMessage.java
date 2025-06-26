@@ -46,7 +46,7 @@ public class InfoSyncLootTableMessage {
             IClientUtils utils = PluginManager.CLIENT_REGISTRY;
             dataNode = utils.getNodeFactory(LootTableNode.ID).create(utils, buf);
         } catch (Throwable e) {
-            LOGGER.error("Failed to decode node with error: {}", e.getMessage());
+            LOGGER.error("Failed to decode node for loot table {} with error: {}", location, e.getMessage());
             dataNode = new MissingNode();
         }
 

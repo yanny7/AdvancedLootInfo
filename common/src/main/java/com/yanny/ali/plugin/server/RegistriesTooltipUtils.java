@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
@@ -20,6 +22,17 @@ import org.jetbrains.annotations.Unmodifiable;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getBuiltInRegistryTooltip;
 
 public class RegistriesTooltipUtils {
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getFunctionTypeTooltip(IServerUtils utils, String key, LootItemFunctionType type) {
+        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.LOOT_FUNCTION_TYPE, type);
+    }
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getConditionTypeTooltip(IServerUtils utils, String key, LootItemConditionType type) {
+        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.LOOT_CONDITION_TYPE, type);
+    }
+
     @Unmodifiable
     @NotNull
     public static ITooltipNode getBlockTooltip(IServerUtils utils, String key, Block block) {

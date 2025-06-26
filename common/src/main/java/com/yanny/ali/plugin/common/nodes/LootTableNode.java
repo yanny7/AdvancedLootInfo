@@ -11,6 +11,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -26,12 +27,28 @@ public class LootTableNode extends ListNode {
     }
 
     public LootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable lootTable, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<ILootModifier<?>> filteredModifiers = new ArrayList<>();
+        List<ILootModifier<?>> addModifiers = new ArrayList<>();
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootTable.functions)).toList();
+
+        for (ILootModifier<?> modifier : modifiers) {
+            if (modifier.getOperation() == ILootModifier.Operation.ADD) {
+                addModifiers.add(modifier);
+            } else {
+                filteredModifiers.add(modifier);
+            }
+        }
 
         tooltip = EntryTooltipUtils.getLootTableTooltip();
 
         for (LootPool lootPool : utils.getLootPools(lootTable)) {
-            addChildren(modifiers, new LootPoolNode(modifiers, utils, lootPool, chance, allFunctions, conditions));
+            addChildren(filteredModifiers, new LootPoolNode(filteredModifiers, utils, lootPool, chance, allFunctions, conditions));
+        }
+
+        for (ILootModifier<?> modifier : addModifiers) {
+            if (modifier.getOperation() == ILootModifier.Operation.ADD) {
+                addChildren(Collections.emptyList(), modifier.getNode());
+            }
         }
     }
 

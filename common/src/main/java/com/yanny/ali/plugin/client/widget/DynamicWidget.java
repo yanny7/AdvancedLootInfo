@@ -5,33 +5,26 @@ import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class DynamicWidget implements IEntryWidget {
+public class DynamicWidget extends IWidget {
     private final List<Component> components;
     private final Rect bounds;
     private final IWidget widget;
-    private final ResourceLocation id;
 
     public DynamicWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        super(entry.getId());
         widget = WidgetUtils.getDynamicWidget(x, y, entry);
         bounds = widget.getRect();
-        id = entry.getId();
         components = NodeUtils.toComponents(entry.getTooltip(), 0);
     }
 
     @Override
     public Rect getRect() {
         return bounds;
-    }
-
-    @Override
-    public ResourceLocation getNodeId() {
-        return id;
     }
 
     @Override

@@ -1,11 +1,11 @@
 package com.yanny.ali.compatibility.emi;
 
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.ISlotNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.TagNode;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -69,7 +69,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         return new ClientUtils() {
             @Override
             public Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(item), x, y, ((ItemNode) entry).getCount());
+                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(item), x, y, ((ISlotNode) entry).getCount());
 
                 widget.recipeContext(recipe);
                 slotWidgets.add(widget);

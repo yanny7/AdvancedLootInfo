@@ -47,6 +47,18 @@ public class GenericTooltipUtils {
     private static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
     private static final ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getMissingFunction(IServerUtils utils, LootItemFunction function) {
+        return getFunctionTypeTooltip(utils, "ali.type.function.missing", function.getType());
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getMissingCondition(IServerUtils utils, LootItemCondition condition) {
+        return getConditionTypeTooltip(utils, "ali.type.condition.missing", condition.getType());
+    }
+
     @NotNull
     public static List<ITooltipNode> getConditionListTooltip(IServerUtils utils, List<LootItemCondition> conditions) {
         return conditions.stream().map((condition) -> utils.getConditionTooltip(utils, condition)).toList();

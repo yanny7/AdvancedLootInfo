@@ -15,7 +15,7 @@ public interface IClientRegistry {
 
     @FunctionalInterface
     interface IWidgetFactory {
-        IEntryWidget create(IWidgetUtils registry, IDataNode entry, int x, int y, int maxWidth);
+        IWidget create(IWidgetUtils registry, IDataNode entry, int x, int y, int maxWidth);
     }
 
     @FunctionalInterface

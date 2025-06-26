@@ -3,27 +3,20 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemWidget implements IEntryWidget {
+public class ItemWidget extends IWidget {
     private final Rect bounds;
-    private final ResourceLocation id;
 
     public ItemWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        super(entry.getId());
         ItemNode node = (ItemNode) entry;
-        bounds = utils.addSlotWidget(node.getModifiedItem(), entry, x, y);
-        this.id = entry.getId();
+        bounds = utils.addSlotWidget(node.getModifiedItem(), node, x, y);
     }
 
     @Override
     public Rect getRect() {
         return bounds;
-    }
-
-    @Override
-    public ResourceLocation getNodeId() {
-        return id;
     }
 
     @Override
