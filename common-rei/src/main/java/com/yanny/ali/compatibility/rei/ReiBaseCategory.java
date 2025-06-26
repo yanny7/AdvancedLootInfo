@@ -1,13 +1,15 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
-import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
+import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.TagNode;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -26,16 +28,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements DisplayCategory<T> {
     static final int CATEGORY_WIDTH = 9 * 18;
@@ -73,7 +70,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int x, int y) {
         List<Widget> slotWidgets = new LinkedList<>();
         List<Widget> widgets = new LinkedList<>();
-        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootEntry(), x, y, CATEGORY_WIDTH);
+        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootData(), x, y, CATEGORY_WIDTH);
         ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget, bounds);
 
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
@@ -86,25 +83,22 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     private IWidgetUtils getUtils(List<Widget> widgets, Rectangle bounds) {
         return new ClientUtils() {
             @Override
-            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
-                                      Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                ItemStack itemStack = TooltipUtils.getItemStack(this, entry, item);
-                EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
+            public Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y) {
+                EntryStack<ItemStack> stack = EntryStacks.of(item);
 
-                stack.tooltip(EntryTooltipUtils.getTooltip(this, entry, chance, count, allFunctions, allConditions));
+                stack.tooltip(NodeUtils.toComponents(entry.getTooltip(), 0));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entry(stack).markOutput());
-                widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(count.get(null).get(0))));
+                widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(((ItemNode) entry).getCount())));
                 return new Rect(x, y, 18, 18);
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
-                                      Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
+            public Rect addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y) {
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(item);
 
-                ingredient.map((stack) -> stack.tooltip(EntryTooltipUtils.getTooltip(this, entry, chance, count, allFunctions, allConditions)));
+                ingredient.map((stack) -> stack.tooltip(NodeUtils.toComponents(entry.getTooltip(), 0)));
                 widgets.add(Widgets.createSlot(new Point(x + bounds.getX() + 1, y + bounds.getY() + 1)).entries(ingredient).markOutput());
-                widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(count.get(null).get(0))));
+                widgets.add(Widgets.wrapRenderer(new Rectangle(x + bounds.getX(), y + bounds.getY(), 18, 18), new SlotCountRenderer(((TagNode) entry).getCount())));
                 return new Rect(x, y, 18, 18);
             }
         };

@@ -2,6 +2,7 @@ package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
@@ -25,7 +26,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -48,7 +48,7 @@ public class EmiCompatibility implements EmiPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceLocation, IDataNode> map = GenericUtils.getLootData();
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategoryMap = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
@@ -78,7 +78,7 @@ public class EmiCompatibility implements EmiPlugin {
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
-                LootTable lootEntry = map.get(location);
+                IDataNode lootEntry = map.get(location);
 
                 if (lootEntry != null) {
                     EmiRecipeCategory category = null;
@@ -151,7 +151,7 @@ public class EmiCompatibility implements EmiPlugin {
                 entityList.forEach((entity) -> {
                     if (entity instanceof Mob mob) {
                         ResourceLocation location = mob.getLootTable();
-                        LootTable lootEntry = map.get(location);
+                        IDataNode lootEntry = map.get(location);
 
                         if (lootEntry != null) {
                             EmiRecipeCategory category = null;
@@ -173,7 +173,7 @@ public class EmiCompatibility implements EmiPlugin {
                 });
             }
 
-            for (Map.Entry<ResourceLocation, LootTable> entry : map.entrySet()) {
+            for (Map.Entry<ResourceLocation, IDataNode> entry : map.entrySet()) {
                 ResourceLocation location = entry.getKey();
                 EmiRecipeCategory category = null;
 

@@ -1,16 +1,12 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import org.junit.jupiter.api.Test;
@@ -25,16 +21,14 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class EntryTooltipTest {
     @Test
     public void testLootTableTooltip() {
-        assertTooltip(EntryTooltipUtils.getLootTableTooltip(0, -2, 2.5F), List.of(
-                "Selects all entries",
-                "Quality: -2",
-                "Chance: 2.50%"
+        assertTooltip(EntryTooltipUtils.getLootTableTooltip(), List.of(
+                "Selects all entries"
         ));
     }
 
     @Test
     public void testLootPoolTooltip() {
-        assertTooltip(EntryTooltipUtils.getLootPoolTooltip(0, new RangeValue(2, 3), new RangeValue(1, 2)), List.of(
+        assertTooltip(EntryTooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)), List.of(
                 "Selects random entry",
                 "Rolls: 3-5x"
         ));
@@ -42,14 +36,14 @@ public class EntryTooltipTest {
 
     @Test
     public void testAlternativesTooltip() {
-        assertTooltip(EntryTooltipUtils.getAlternativesTooltip(0), List.of(
+        assertTooltip(EntryTooltipUtils.getAlternativesTooltip(), List.of(
                 "Selects only first successful entry"
         ));
     }
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(EntryTooltipUtils.getDynamicTooltip(0, (DynamicLoot) DynamicLoot.dynamicEntry(new ResourceLocation("test")).setWeight(3).setQuality(10).build(), 10), List.of(
+        assertTooltip(EntryTooltipUtils.getDynamicTooltip((DynamicLoot) DynamicLoot.dynamicEntry(new ResourceLocation("test")).setWeight(3).setQuality(10).build(), 1, 10), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
@@ -58,9 +52,10 @@ public class EntryTooltipTest {
 
     @Test
     public void testEmptyTooltip() {
-        assertTooltip(EntryTooltipUtils.getEmptyTooltip(
+        assertTooltip(EntryTooltipUtils.getSingletonTooltip(
                 UTILS,
                 (EmptyLootItem) EmptyLootItem.emptyItem().setQuality(1).setWeight(1).build(),
+                1,
                 2,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
@@ -77,14 +72,14 @@ public class EntryTooltipTest {
 
     @Test
     public void testGroupTooltip() {
-        assertTooltip(EntryTooltipUtils.getGroupTooltip(0), List.of(
+        assertTooltip(EntryTooltipUtils.getGroupTooltip(), List.of(
                 "Selects all entries"
         ));
     }
 
     @Test
     public void testSequentialTooltip() {
-        assertTooltip(EntryTooltipUtils.getSequentialTooltip(0), List.of(
+        assertTooltip(EntryTooltipUtils.getSequentialTooltip(), List.of(
                 "Selects entries sequentially until first failed"
         ));
     }
@@ -105,7 +100,7 @@ public class EntryTooltipTest {
 
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
-                LootItem.lootTableItem(Items.ANDESITE).setQuality(3).setWeight(1).build(),
+                3,
                 chanceMap,
                 countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
@@ -125,7 +120,7 @@ public class EntryTooltipTest {
         ));
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
-                TagEntry.expandTag(ItemTags.LOGS).setQuality(3).setWeight(1).build(),
+                3,
                 chanceMap,
                 countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),

@@ -1,7 +1,9 @@
 package com.yanny.ali.plugin.client.widget;
 
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -48,8 +50,8 @@ public class TextureWidget implements IWidget {
         return rect;
     }
 
-    public void tooltipText(List<Component> components) {
-        this.components.addAll(components);
+    public void tooltipText(List<ITooltipNode> tooltip) {
+        this.components.addAll(NodeUtils.toComponents(tooltip, 0));
     }
 
     @Override

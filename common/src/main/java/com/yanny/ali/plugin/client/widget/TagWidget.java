@@ -1,39 +1,20 @@
 package com.yanny.ali.plugin.client.widget;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.client.TooltipUtils;
+import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.TagEntry;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class TagWidget implements IEntryWidget {
     private final Rect bounds;
-    private final LootPoolEntryContainer entry;
+    private final ResourceLocation id;
 
-    public TagWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
-                     List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        TagEntry tagEntry = (TagEntry) entry;
-        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
-        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
+    public TagWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        TagNode tagEntry = (TagNode) entry;
 
-        allFunctions.addAll(Arrays.asList(tagEntry.functions));
-        allConditions.addAll(Arrays.asList(tagEntry.conditions));
-
-        float rawChance = (float) tagEntry.weight / sumWeight;
-        Map<Enchantment, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, allConditions, rawChance);
-        Map<Enchantment, Map<Integer, RangeValue>> count = TooltipUtils.getCount(utils, allFunctions);
-
-        bounds = utils.addSlotWidget(tagEntry.tag, tagEntry, x, y, chance, count, allFunctions, allConditions);
-        this.entry = entry;
+        bounds = utils.addSlotWidget(tagEntry.getTag(), tagEntry, x, y);
+        this.id = entry.getId();
     }
 
     @Override
@@ -42,8 +23,8 @@ public class TagWidget implements IEntryWidget {
     }
 
     @Override
-    public LootPoolEntryContainer getLootEntry() {
-        return entry;
+    public ResourceLocation getNodeId() {
+        return id;
     }
 
     @Override
@@ -51,7 +32,7 @@ public class TagWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
+    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
         return new Rect(x, y, 18, 18);
     }
 }

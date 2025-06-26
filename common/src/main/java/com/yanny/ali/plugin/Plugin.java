@@ -1,12 +1,13 @@
 package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.client.ConditionTooltipUtils;
-import com.yanny.ali.plugin.client.FunctionTooltipUtils;
-import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.*;
+import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.server.ConditionTooltipUtils;
+import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
+import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditions;
 import net.minecraft.world.level.storage.loot.providers.number.*;
@@ -16,14 +17,54 @@ import org.jetbrains.annotations.NotNull;
 public class Plugin implements IPlugin {
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerWidget(LootPoolEntries.ITEM, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.EMPTY, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.REFERENCE, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.DYNAMIC, WidgetDirection.VERTICAL, DynamicWidget::new, DynamicWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.TAG, WidgetDirection.HORIZONTAL, TagWidget::new, TagWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.ALTERNATIVES, WidgetDirection.VERTICAL, AlternativesWidget::new, CompositeWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.SEQUENCE, WidgetDirection.VERTICAL, SequentialWidget::new, CompositeWidget::getBounds);
-        registry.registerWidget(LootPoolEntries.GROUP, WidgetDirection.VERTICAL, GroupWidget::new, CompositeWidget::getBounds);
+        registry.registerWidget(ItemNode.ID, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
+        registry.registerWidget(EmptyNode.ID, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
+        registry.registerWidget(ReferenceNode.ID, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
+        registry.registerWidget(DynamicNode.ID, WidgetDirection.VERTICAL, DynamicWidget::new, DynamicWidget::getBounds);
+        registry.registerWidget(TagNode.ID, WidgetDirection.HORIZONTAL, TagWidget::new, TagWidget::getBounds);
+        registry.registerWidget(AlternativesNode.ID, WidgetDirection.VERTICAL, AlternativesWidget::new, CompositeWidget::getBounds);
+        registry.registerWidget(SequenceNode.ID, WidgetDirection.VERTICAL, SequentialWidget::new, CompositeWidget::getBounds);
+        registry.registerWidget(GroupNode.ID, WidgetDirection.VERTICAL, GroupWidget::new, CompositeWidget::getBounds);
+
+        registry.registerNode(LootTableNode.ID, LootTableNode::new);
+        registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
+        registry.registerNode(ItemNode.ID, ItemNode::new);
+        registry.registerNode(TagNode.ID, TagNode::new);
+        registry.registerNode(AlternativesNode.ID, AlternativesNode::new);
+        registry.registerNode(SequenceNode.ID, SequenceNode::new);
+        registry.registerNode(GroupNode.ID, GroupNode::new);
+        registry.registerNode(EmptyNode.ID, EmptyNode::new);
+        registry.registerNode(DynamicNode.ID, DynamicNode::new);
+        registry.registerNode(ReferenceNode.ID, ReferenceNode::new);
+        registry.registerNode(MissingNode.ID, MissingNode::new);
+    }
+
+    @Override
+    public void registerServer(IServerRegistry registry) {
+        registry.registerItemCollector(LootPoolEntries.ITEM, ItemCollectorUtils::collectItems);
+        registry.registerItemCollector(LootPoolEntries.TAG, ItemCollectorUtils::collectTags);
+        registry.registerItemCollector(LootPoolEntries.ALTERNATIVES, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(LootPoolEntries.GROUP, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(LootPoolEntries.SEQUENCE, ItemCollectorUtils::collectComposite);
+        registry.registerItemCollector(LootPoolEntries.EMPTY, ItemCollectorUtils::collectSingleton);
+        registry.registerItemCollector(LootPoolEntries.DYNAMIC, ItemCollectorUtils::collectSingleton);
+        registry.registerItemCollector(LootPoolEntries.REFERENCE, ItemCollectorUtils::collectReference);
+
+        registry.registerItemCollector(LootItemFunctions.FURNACE_SMELT, ItemCollectorUtils::collectFurnaceSmelt);
+
+        registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
+        registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
+        registry.registerNumberProvider(NumberProviders.BINOMIAL, Plugin::convertBinomial);
+        registry.registerNumberProvider(NumberProviders.SCORE, Plugin::convertScore);
+
+        registry.<LootItem>registerEntry(LootPoolEntries.ITEM, ItemNode::new);
+        registry.<TagEntry>registerEntry(LootPoolEntries.TAG, TagNode::new);
+        registry.<AlternativesEntry>registerEntry(LootPoolEntries.ALTERNATIVES, AlternativesNode::new);
+        registry.<SequentialEntry>registerEntry(LootPoolEntries.SEQUENCE, SequenceNode::new);
+        registry.<EntryGroup>registerEntry(LootPoolEntries.GROUP, GroupNode::new);
+        registry.<EmptyLootItem>registerEntry(LootPoolEntries.EMPTY, EmptyNode::new);
+        registry.<DynamicLoot>registerEntry(LootPoolEntries.DYNAMIC, DynamicNode::new);
+        registry.<LootTableReference>registerEntry(LootPoolEntries.REFERENCE, ReferenceNode::new);
 
         registry.registerConditionTooltip(LootItemConditions.ALL_OF, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(LootItemConditions.ANY_OF, ConditionTooltipUtils::getAnyOfTooltip);
@@ -87,45 +128,26 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(LootItemFunctions.SET_NAME, TooltipUtils::applySetNameItemStackModifier);
         registry.registerItemStackModifier(LootItemFunctions.SET_NBT, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(LootItemFunctions.SET_POTION, TooltipUtils::applyItemStackModifier);
-
-        registry.registerNumberProvider(NumberProviders.CONSTANT, Plugin::convertConstant);
-        registry.registerNumberProvider(NumberProviders.UNIFORM, Plugin::convertUniform);
-        registry.registerNumberProvider(NumberProviders.BINOMIAL, Plugin::convertBinomial);
-        registry.registerNumberProvider(NumberProviders.SCORE, Plugin::convertScore);
-    }
-
-    @Override
-    public void registerServer(IServerRegistry registry) {
-        registry.registerItemCollector(LootPoolEntries.ITEM, ItemCollectorUtils::collectItems);
-        registry.registerItemCollector(LootPoolEntries.TAG, ItemCollectorUtils::collectTags);
-        registry.registerItemCollector(LootPoolEntries.ALTERNATIVES, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.GROUP, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.SEQUENCE, ItemCollectorUtils::collectComposite);
-        registry.registerItemCollector(LootPoolEntries.EMPTY, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(LootPoolEntries.DYNAMIC, ItemCollectorUtils::collectSingleton);
-        registry.registerItemCollector(LootPoolEntries.REFERENCE, ItemCollectorUtils::collectReference);
-
-        registry.registerItemCollector(LootItemFunctions.FURNACE_SMELT, ItemCollectorUtils::collectFurnaceSmelt);
     }
 
     @NotNull
-    private static RangeValue convertConstant(IClientUtils utils, ConstantValue numberProvider) {
+    private static RangeValue convertConstant(IServerUtils utils, ConstantValue numberProvider) {
         return new RangeValue(numberProvider.getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static RangeValue convertUniform(IClientUtils utils, UniformGenerator numberProvider) {
+    private static RangeValue convertUniform(IServerUtils utils, UniformGenerator numberProvider) {
         return new RangeValue(utils.convertNumber(utils, numberProvider.min).min(),
                 utils.convertNumber(utils, numberProvider.max).max());
     }
 
     @NotNull
-    private static RangeValue convertBinomial(IClientUtils utils, BinomialDistributionGenerator numberProvider) {
+    private static RangeValue convertBinomial(IServerUtils utils, BinomialDistributionGenerator numberProvider) {
         return new RangeValue(0, numberProvider.n.getFloat(utils.getLootContext()));
     }
 
     @NotNull
-    private static RangeValue convertScore(IClientUtils utils, ScoreboardValue numberProvider) {
+    private static RangeValue convertScore(IServerUtils utils, ScoreboardValue numberProvider) {
         return new RangeValue(true, false);
     }
 }

@@ -1,18 +1,11 @@
 package com.yanny.ali.plugin.client.widget;
 
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,28 +15,27 @@ public class LootTableWidget implements IWidget {
     private final List<IWidget> widgets;
     private final Rect bounds;
 
-    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int maxWidth) {
-        this(utils, lootTable, x, y, maxWidth, 0, 100, List.of(), List.of());
+    public LootTableWidget(IWidgetUtils utils, IDataNode node, int x, int y, int maxWidth) {
+        this(utils, node, x, y, maxWidth, node);
     }
 
-    public LootTableWidget(IWidgetUtils utils, LootTable lootTable, int x, int y, int maxWidth, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public LootTableWidget(IWidgetUtils utils, IDataNode node, int x, int y, int maxWidth, IDataNode tooltipNode) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
-        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
-
-        allFunctions.addAll(Arrays.asList(lootTable.functions));
 
         widgets = new LinkedList<>();
-        widgets.add(getLootTableTypeWidget(x, y, quality, chance));
+        widgets.add(getLootTableTypeWidget(x, y, tooltipNode));
 
-        for (LootPool pool : utils.getLootPools(lootTable)) {
-            IWidget widget = new LootPoolWidget(utils, pool, posX, posY, maxWidth, List.copyOf(allFunctions), List.copyOf(conditions));
-            Rect bound = widget.getRect();
+        if (node instanceof ListNode listNode) {
+            for (IDataNode pool : listNode.nodes()) {
+                IWidget widget = new LootPoolWidget(utils, pool, posX, posY, maxWidth);
+                Rect bound = widget.getRect();
 
-            width = Math.max(width, bound.width());
-            height += bound.height() + VERTICAL_OFFSET;
-            posY += bound.height() + VERTICAL_OFFSET;
-            widgets.add(widget);
+                width = Math.max(width, bound.width());
+                height += bound.height() + VERTICAL_OFFSET;
+                posY += bound.height() + VERTICAL_OFFSET;
+                widgets.add(widget);
+            }
         }
 
         bounds = new Rect(x, y, width + 7, height);
@@ -106,11 +98,11 @@ public class LootTableWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootTable lootTable, int x, int y, int maxWidth) {
+    public static Rect getBounds(IClientUtils utils, IDataNode node, int x, int y, int maxWidth) {
         int posX = x + GROUP_WIDGET_WIDTH, posY = y;
         int width = 0, height = 0;
 
-        for (LootPool pool : utils.getLootPools(lootTable)) {
+        for (IDataNode pool : ((LootTableNode) node).nodes()) {
             Rect bound = LootPoolWidget.getBounds(utils, pool, posX, posY, maxWidth);
 
             width = Math.max(width, bound.width());

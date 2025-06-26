@@ -1,6 +1,6 @@
-package com.yanny.ali.plugin.client;
+package com.yanny.ali.plugin.server;
 
-import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.RangeValue;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -29,10 +27,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class TooltipUtils {
-    private TooltipUtils() {}
-
     @NotNull
-    public static Map<Enchantment, Map<Integer, RangeValue>> getChance(IClientUtils utils, List<LootItemCondition> conditions, float rawChance) {
+    public static Map<Enchantment, Map<Integer, RangeValue>> getChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
         Map<Enchantment, Map<Integer, RangeValue>> chance = new LinkedHashMap<>();
 
         chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
@@ -45,7 +41,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static Map<Enchantment, Map<Integer, RangeValue>> getCount(IClientUtils utils, List<LootItemFunction> functions) {
+    public static Map<Enchantment, Map<Integer, RangeValue>> getCount(IServerUtils utils, List<LootItemFunction> functions) {
         Map<Enchantment, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
 
         count.put(null, Map.of(0, new RangeValue()));
@@ -57,19 +53,17 @@ public class TooltipUtils {
         return count;
     }
 
-    public static ItemStack getItemStack(IClientUtils utils, LootPoolEntryContainer entry, Item item) {
+    public static ItemStack getItemStack(IServerUtils utils, Item item, List<LootItemFunction> functions) {
         ItemStack itemStack = item.getDefaultInstance();
 
-        if (entry.conditions.length == 0 && entry instanceof LootPoolSingletonContainer container) {
-            for (LootItemFunction function : container.functions) {
-                itemStack = utils.applyItemStackModifier(utils, function, itemStack);
-            }
+        for (LootItemFunction function : functions) {
+            itemStack = utils.applyItemStackModifier(utils, function, itemStack);
         }
 
         return itemStack;
     }
 
-    public static void applyRandomChance(IClientUtils utils, LootItemRandomChanceCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public static void applyRandomChance(IServerUtils utils, LootItemRandomChanceCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : chance.entrySet()) {
             for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
                 levelEntry.getValue().multiply(condition.probability);
@@ -77,7 +71,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyRandomChanceWithLooting(IClientUtils utils, LootItemRandomChanceWithLootingCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public static void applyRandomChanceWithLooting(IServerUtils utils, LootItemRandomChanceWithLootingCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         Enchantment enchantment = Enchantments.MOB_LOOTING;
 
         if (chance.containsKey(enchantment)) {
@@ -99,7 +93,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyTableBonus(IClientUtils utils, BonusLevelTableCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public static void applyTableBonus(IServerUtils utils, BonusLevelTableCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         Enchantment enchantment = condition.enchantment;
 
         if (condition.values.length > 0) {
@@ -129,7 +123,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applySetCount(IClientUtils utils, SetItemCountFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+    public static void applySetCount(IServerUtils utils, SetItemCountFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
         if (function.predicates.length == 0) {
             for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : count.entrySet()) {
                 for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
@@ -143,7 +137,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyBonus(IClientUtils utils, ApplyBonusCount function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+    public static void applyBonus(IServerUtils utils, ApplyBonusCount function, Map<Enchantment, Map<Integer, RangeValue>> count) {
         if (function.predicates.length == 0) {
             Enchantment enchantment = function.enchantment;
 
@@ -170,7 +164,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyLimitCount(IClientUtils utils, LimitCount function, Map<Enchantment, Map<Integer, RangeValue>> bonusCount) {
+    public static void applyLimitCount(IServerUtils utils, LimitCount function, Map<Enchantment, Map<Integer, RangeValue>> bonusCount) {
         if (function.predicates.length == 0) {
             for (Map.Entry<Enchantment, Map<Integer, RangeValue>> entry : bonusCount.entrySet()) {
                 for (Map.Entry<Integer, RangeValue> mapEntry : entry.getValue().entrySet()) {
@@ -181,7 +175,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyLootingEnchant(IClientUtils utils, LootingEnchantFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+    public static void applyLootingEnchant(IServerUtils utils, LootingEnchantFunction function, Map<Enchantment, Map<Integer, RangeValue>> count) {
         if (function.predicates.length == 0) {
             Enchantment enchantment = Enchantments.MOB_LOOTING;
 
@@ -215,7 +209,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static ItemStack applyEnchantRandomlyItemStackModifier(IClientUtils utils, EnchantRandomlyFunction function, ItemStack itemStack) {
+    public static ItemStack applyEnchantRandomlyItemStackModifier(IServerUtils utils, EnchantRandomlyFunction function, ItemStack itemStack) {
         if (itemStack.isEnchantable() && function.predicates.length == 0) {
             boolean isBook = itemStack.is(Items.BOOK);
             ItemStack finalItemStack = itemStack;
@@ -236,7 +230,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static ItemStack applyEnchantWithLevelsItemStackModifier(IClientUtils utils, EnchantWithLevelsFunction function, ItemStack itemStack) {
+    public static ItemStack applyEnchantWithLevelsItemStackModifier(IServerUtils utils, EnchantWithLevelsFunction function, ItemStack itemStack) {
         if (itemStack.isEnchantable() && function.predicates.length == 0) {
             if (itemStack.is(Items.BOOK)) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
@@ -246,7 +240,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static ItemStack applySetAttributesItemStackModifier(IClientUtils utils, SetAttributesFunction function, ItemStack itemStack) {
+    public static ItemStack applySetAttributesItemStackModifier(IServerUtils utils, SetAttributesFunction function, ItemStack itemStack) {
         if (function.predicates.length == 0) {
             for (SetAttributesFunction.Modifier modifier : function.modifiers) {
                 UUID id = modifier.id;
@@ -267,7 +261,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static ItemStack applySetNameItemStackModifier(IClientUtils utils, SetNameFunction function, ItemStack itemStack) {
+    public static ItemStack applySetNameItemStackModifier(IServerUtils utils, SetNameFunction function, ItemStack itemStack) {
         if (function.predicates.length == 0) {
             itemStack.setHoverName(function.name);
         }
@@ -275,7 +269,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static ItemStack applyItemStackModifier(IClientUtils utils, LootItemFunction function, ItemStack itemStack) {
+    public static ItemStack applyItemStackModifier(IServerUtils utils, LootItemFunction function, ItemStack itemStack) {
         if (function instanceof LootItemConditionalFunction conditional && conditional.predicates.length > 0) {
             return itemStack;
         }

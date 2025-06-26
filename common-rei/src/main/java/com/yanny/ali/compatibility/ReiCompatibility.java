@@ -2,6 +2,7 @@ package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GameplayLootType;
@@ -26,7 +27,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -88,19 +88,19 @@ public class ReiCompatibility implements REIClientPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceLocation, IDataNode> map = GenericUtils.getLootData();
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
-                LootTable lootEntry = map.get(location);
+                IDataNode node = map.get(location);
 
-                if (lootEntry != null) {
+                if (node != null) {
                     for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
                         if (holder.category.getLootCategory().validate(block)) {
-                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, GenericUtils.getItems(location)));
+                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, GenericUtils.getItems(location)));
                             break;
                         }
                     }
@@ -158,12 +158,12 @@ public class ReiCompatibility implements REIClientPlugin {
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
                         ResourceLocation location = mob.getLootTable();
-                        LootTable lootEntry = map.get(location);
+                        IDataNode node = map.get(location);
 
-                        if (lootEntry != null) {
+                        if (node != null) {
                             for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
                                 if (holder.category.getLootCategory().validate(entity)) {
-                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, GenericUtils.getItems(location)));
+                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, GenericUtils.getItems(location)));
                                     break;
                                 }
                             }
@@ -174,7 +174,7 @@ public class ReiCompatibility implements REIClientPlugin {
                 }
             }
 
-            for (Map.Entry<ResourceLocation, LootTable> entry : new HashMap<>(map).entrySet()) {
+            for (Map.Entry<ResourceLocation, IDataNode> entry : new HashMap<>(map).entrySet()) {
                 ResourceLocation location = entry.getKey();
 
                 for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {

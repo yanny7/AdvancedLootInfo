@@ -1,12 +1,16 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootDataType;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
@@ -22,45 +26,45 @@ public class InfoSyncLootTableMessage {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public final ResourceLocation location;
-    public final LootTable lootTable;
     public final List<Item> items;
 
-    public InfoSyncLootTableMessage(ResourceLocation location, LootTable lootTable, List<Item> items) {
+    public final IDataNode node;
+
+    public InfoSyncLootTableMessage(ResourceLocation location, List<Item> items, IDataNode node) {
         this.location = location;
-        this.lootTable = lootTable;
         this.items = items;
+        this.node = node;
     }
 
     public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
-        String rawLootTable = buf.readUtf();
-        LootTable table;
+        IDataNode dataNode;
 
         location = buf.readResourceLocation();
         items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
 
         try {
-            table = LootDataType.TABLE.parser().fromJson(decompressString(rawLootTable), LootTable.class);
+            IClientUtils utils = PluginManager.CLIENT_REGISTRY;
+            dataNode = utils.getNodeFactory(LootTableNode.ID).create(utils, buf);
         } catch (Throwable e) {
-            LOGGER.error("Failed to decode loot table with error: {}", e.getMessage());
-            table = LootTable.EMPTY;
+            LOGGER.error("Failed to decode node with error: {}", e.getMessage());
+            dataNode = new MissingNode();
         }
 
-        lootTable = table;
+        node = dataNode;
     }
 
     public void encode(FriendlyByteBuf buf) {
-        String rawLootTable;
-
-        try {
-            rawLootTable = compressString(LootDataType.TABLE.parser().toJsonTree(lootTable).toString());
-        } catch (Throwable e) {
-            LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
-            rawLootTable = compressString(LootDataType.TABLE.parser().toJsonTree(LootTable.EMPTY).toString());
-        }
-
-        buf.writeUtf(rawLootTable);
         buf.writeResourceLocation(location);
         buf.writeCollection(items, (b, item) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
+
+        IServerUtils utils = PluginManager.SERVER_REGISTRY;
+
+        try {
+            node.encode(utils, buf);
+        } catch (Throwable e) {
+            LOGGER.error("Failed to encode node with error: {}", e.getMessage());
+            new MissingNode().encode(utils, buf);
+        }
     }
 
     public static String compressString(String input) {

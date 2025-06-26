@@ -12,11 +12,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
 
 public class JeiLootSlotWidget implements ISlottedRecipeWidget {
@@ -26,10 +24,10 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     private Component count;
     private boolean isRange = false;
 
-    public JeiLootSlotWidget(IRecipeSlotDrawable slotDrawable, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> count) {
+    public JeiLootSlotWidget(IRecipeSlotDrawable slotDrawable, int x, int y, RangeValue count) {
         this.slotDrawable = slotDrawable;
         rect = new Rect(x, y, 18, 18);
-        setCount(count.get(null).get(0));
+        setCount(count);
     }
 
     @NotNull

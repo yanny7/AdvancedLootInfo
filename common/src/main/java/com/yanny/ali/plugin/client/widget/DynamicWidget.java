@@ -1,34 +1,27 @@
 package com.yanny.ali.plugin.client.widget;
 
-import com.google.common.collect.Lists;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
+import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class DynamicWidget implements IEntryWidget {
-    private final List<Component> components = Lists.newArrayList();
+    private final List<Component> components;
     private final Rect bounds;
     private final IWidget widget;
-    private final LootPoolEntryContainer entry;
+    private final ResourceLocation id;
 
-    public DynamicWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
-                         List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        widget = WidgetUtils.getDynamicWidget(x, y, (DynamicLoot) entry, sumWeight);
+    public DynamicWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        widget = WidgetUtils.getDynamicWidget(x, y, entry);
         bounds = widget.getRect();
-        this.entry = entry;
-    }
-
-    public void appendTooltip(Component text) {
-        this.components.add(text);
+        id = entry.getId();
+        components = NodeUtils.toComponents(entry.getTooltip(), 0);
     }
 
     @Override
@@ -37,8 +30,8 @@ public class DynamicWidget implements IEntryWidget {
     }
 
     @Override
-    public LootPoolEntryContainer getLootEntry() {
-        return entry;
+    public ResourceLocation getNodeId() {
+        return id;
     }
 
     @Override
@@ -60,7 +53,7 @@ public class DynamicWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
+    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
         return new Rect(x, y, 7, 18);
     }
 }

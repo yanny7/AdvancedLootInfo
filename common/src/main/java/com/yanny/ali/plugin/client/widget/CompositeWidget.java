@@ -2,15 +2,12 @@ package com.yanny.ali.plugin.client.widget;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.nodes.CompositeNode;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,21 +16,16 @@ import static com.yanny.ali.plugin.client.WidgetUtils.TEXTURE_LOC;
 public class CompositeWidget implements IEntryWidget {
     private final Rect bounds;
     protected final List<IWidget> widgets;
-    private final LootPoolEntryContainer entry;
+    private final ResourceLocation id;
     private final IClientUtils utils;
 
-    public CompositeWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
-                           List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        CompositeEntryBase compositeEntry = (CompositeEntryBase) entry;
-        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
-
-        allConditions.addAll(Arrays.asList(compositeEntry.conditions));
-
-        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, Arrays.asList(compositeEntry.children), x, y, maxWidth, List.copyOf(functions), allConditions);
+    public CompositeWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        CompositeNode compositeEntry = (CompositeNode) entry;
+        Pair<List<IEntryWidget>, Rect> pair = utils.createWidgets(utils, compositeEntry.nodes(), x, y, maxWidth);
 
         widgets = new LinkedList<>(pair.getFirst());
         bounds = pair.getSecond();
-        this.entry = entry;
+        id = entry.getId();
         this.utils = utils;
     }
 
@@ -43,8 +35,8 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @Override
-    public LootPoolEntryContainer getLootEntry() {
-        return entry;
+    public ResourceLocation getNodeId() {
+        return id;
     }
 
     @Override
@@ -56,7 +48,7 @@ public class CompositeWidget implements IEntryWidget {
             widget.render(guiGraphics, mouseX, mouseY);
 
             if (widget instanceof IEntryWidget entryWidget) {
-                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getNodeId());
 
                 if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
                     lastY = Math.max(lastY, widget.getRect().y());
@@ -74,7 +66,7 @@ public class CompositeWidget implements IEntryWidget {
 
         for (IWidget widget : widgets) {
             if (widget instanceof IEntryWidget entryWidget) {
-                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getNodeId());
 
                 if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().y() > bounds.y() + 18) {
                     guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
@@ -116,7 +108,7 @@ public class CompositeWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
-        return utils.getBounds(utils, Arrays.asList(((CompositeEntryBase) entry).children), x, y, maxWidth);
+    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        return utils.getBounds(utils, ((CompositeNode) entry).nodes(), x, y, maxWidth);
     }
 }

@@ -41,7 +41,6 @@ public class ItemCollectorUtils {
             result.addAll(utils.collectItems(utils, entry));
         }
 
-        result.addAll(Arrays.stream(pool.conditions).map((c) -> utils.collectItems(utils, List.copyOf(result), c)).flatMap(Collection::stream).toList());
         result.addAll(Arrays.stream(pool.functions).map((f) -> utils.collectItems(utils, List.copyOf(result), f)).flatMap(Collection::stream).toList());
 
         return result;
@@ -104,7 +103,7 @@ public class ItemCollectorUtils {
         if (level != null) {
             return items.stream().map((i) -> level.getRecipeManager()
                     .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.getResultItem(null).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
+                    .map((l) -> List.of(l.getResultItem(utils.getServerLevel().registryAccess()).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
         }
 
         return List.of();

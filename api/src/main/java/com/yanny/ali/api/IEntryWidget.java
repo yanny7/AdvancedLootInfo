@@ -1,7 +1,7 @@
 package com.yanny.ali.api;
 
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.resources.ResourceLocation;
 
 public interface IEntryWidget extends IWidget {
-    LootPoolEntryContainer getLootEntry();
+    ResourceLocation getNodeId();
 }

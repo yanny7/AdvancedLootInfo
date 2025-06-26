@@ -3,36 +3,21 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.ali.api.*;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class ReferenceWidget implements IEntryWidget {
     private final Rect bounds;
     private final IWidget widget;
-    private final LootPoolEntryContainer entry;
+    private final ResourceLocation id;
 
-    public ReferenceWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
-                           List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        LootTableReference reference = (LootTableReference) entry;
-        LootTable tableEntry = utils.getLootTable(reference.name);
-        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
-        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
-
-        allFunctions.addAll(Arrays.asList(reference.functions));
-        allConditions.addAll(Arrays.asList(reference.conditions));
-
-        if (tableEntry != null) {
-            widget = new LootTableWidget(utils, tableEntry, x, y, maxWidth, ((LootTableReference) entry).quality, (float) reference.weight / sumWeight * 100, allFunctions, allConditions);
+    public ReferenceWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        if (entry instanceof ListNode listNode && !listNode.nodes().isEmpty()) {
+            widget = new LootTableWidget(utils, listNode.nodes().get(0), x, y, maxWidth, entry);
         } else {
-            widget = new IWidget() {
+            widget = new IWidget() { //FIXME
                 @Override
                 public Rect getRect() {
                     return new Rect(0, 0, 0, 0);
@@ -46,7 +31,7 @@ public class ReferenceWidget implements IEntryWidget {
         }
 
         bounds = widget.getRect();
-        this.entry = entry;
+        id = entry.getId();
     }
 
     @Override
@@ -55,8 +40,8 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @Override
-    public LootPoolEntryContainer getLootEntry() {
-        return entry;
+    public ResourceLocation getNodeId() {
+        return id;
     }
 
     @Override
@@ -75,11 +60,9 @@ public class ReferenceWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
-        LootTable lootTable = utils.getLootTable(((LootTableReference) entry).name);
-
-        if (lootTable != null) {
-            return LootTableWidget.getBounds(utils, lootTable, x, y, maxWidth);
+    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        if (entry instanceof ListNode listNode && !listNode.nodes().isEmpty()) {
+            return LootTableWidget.getBounds(utils, listNode.nodes().get(0), x, y, maxWidth);
         } else {
             return new Rect(x, y, 0, 18); // FIXME
         }

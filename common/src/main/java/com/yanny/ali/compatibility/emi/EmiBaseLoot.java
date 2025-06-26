@@ -1,11 +1,12 @@
 package com.yanny.ali.compatibility.emi;
 
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.TagNode;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -19,23 +20,17 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     static final int CATEGORY_WIDTH = 9 * 18 - EmiScrollWidget.getScrollBoxScrollbarExtraWidth();
     private final Widget widget;
     private final List<Widget> slotWidgets = new LinkedList<>();
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable, int widgetX, int widgetY, List<Item> items) {
+    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<Item> items) {
         super(category, id, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
         widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, widgetX, widgetY, CATEGORY_WIDTH));
         outputs.addAll(items.stream().map(EmiStack::of).toList());
@@ -73,10 +68,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
         return new ClientUtils() {
             @Override
-            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
-                                      Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                ItemStack itemStack = TooltipUtils.getItemStack(this, entry, item);
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(itemStack), x, y, chance, count, allFunctions, allConditions);
+            public Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y) {
+                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(item), x, y, ((ItemNode) entry).getCount());
 
                 widget.recipeContext(recipe);
                 slotWidgets.add(widget);
@@ -86,9 +79,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, Map<Enchantment, Map<Integer, RangeValue>> chance,
-                                      Map<Enchantment, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiIngredient.of(item), x, y, chance, count, allFunctions, allConditions);
+            public Rect addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y) {
+                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiIngredient.of(item), x, y, ((TagNode) entry).getCount());
 
                 widget.recipeContext(recipe);
                 slotWidgets.add(widget);

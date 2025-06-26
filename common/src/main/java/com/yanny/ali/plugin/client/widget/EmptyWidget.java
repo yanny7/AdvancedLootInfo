@@ -1,19 +1,12 @@
 package com.yanny.ali.plugin.client.widget;
 
-import com.google.common.collect.Lists;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IEntryWidget;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.Rect;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -21,19 +14,14 @@ import java.util.List;
 public class EmptyWidget implements IEntryWidget {
     private static final ItemStack STACK = Items.BARRIER.getDefaultInstance();
 
-    private final List<Component> components = Lists.newArrayList();
+    private final List<Component> components;
     private final Rect bounds;
-    private final LootPoolEntryContainer entry;
+    private final ResourceLocation id;
 
-    public EmptyWidget(IWidgetUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth, int sumWeight,
-                       List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public EmptyWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
         bounds = getBounds(utils, entry, x, y, maxWidth);
-        this.entry = entry;
-        EntryTooltipUtils.getEmptyTooltip(utils, (EmptyLootItem) entry, sumWeight, functions, conditions).forEach(this::appendTooltip);
-    }
-
-    public void appendTooltip(Component text) {
-        this.components.add(text);
+        id = entry.getId();
+        components = NodeUtils.toComponents(entry.getTooltip(), 0);
     }
 
     @Override
@@ -42,8 +30,8 @@ public class EmptyWidget implements IEntryWidget {
     }
 
     @Override
-    public LootPoolEntryContainer getLootEntry() {
-        return entry;
+    public ResourceLocation getNodeId() {
+        return id;
     }
 
     @Override
@@ -57,7 +45,7 @@ public class EmptyWidget implements IEntryWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils utils, LootPoolEntryContainer entry, int x, int y, int maxWidth) {
+    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
         return new Rect(x, y, 18, 18);
     }
 }

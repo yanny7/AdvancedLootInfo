@@ -3,14 +3,11 @@ package com.yanny.ali.plugin.client.widget;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
+import com.yanny.ali.plugin.common.nodes.LootPoolNode;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,17 +18,11 @@ public class LootPoolWidget implements IWidget {
     private final Rect bounds;
     private final IClientUtils utils;
 
-    public LootPoolWidget(IWidgetUtils utils, LootPool entry, int x, int y, int maxWidth, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = new LinkedList<>(functions);
-        List<LootItemCondition> allConditions = new LinkedList<>(conditions);
-
-        allFunctions.addAll(Arrays.asList(entry.functions));
-        allConditions.addAll(Arrays.asList(entry.conditions));
-
-        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, Arrays.asList(entry.entries), x, y, maxWidth, List.copyOf(allFunctions), List.copyOf(allConditions));
+    public LootPoolWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+        Pair<List<IEntryWidget>, Rect> info = utils.createWidgets(utils, ((LootPoolNode) entry).nodes(), x, y, maxWidth);
 
         widgets = new LinkedList<>(info.getFirst());
-        widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls)));
+        widgets.add(WidgetUtils.getLootPoolTypeWidget(x, y, entry));
         bounds = info.getSecond();
         this.utils = utils;
     }
@@ -50,7 +41,7 @@ public class LootPoolWidget implements IWidget {
             widget.render(guiGraphics, mouseX, mouseY);
 
             if (widget instanceof IEntryWidget entryWidget) {
-                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getNodeId());
 
                 if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
                     lastY = Math.max(lastY, widget.getRect().y());
@@ -68,7 +59,7 @@ public class LootPoolWidget implements IWidget {
 
         for (IWidget widget : widgets) {
             if (widget instanceof IEntryWidget entryWidget) {
-                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getLootEntry());
+                WidgetDirection direction = utils.getWidgetDirection(entryWidget.getNodeId());
 
                 if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().y() > bounds.y() + 18) {
                     guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
@@ -110,7 +101,7 @@ public class LootPoolWidget implements IWidget {
     }
 
     @NotNull
-    public static Rect getBounds(IClientUtils registry, LootPool entry, int x, int y, int maxWidth) {
-        return registry.getBounds(registry, Arrays.asList(entry.entries), x, y, maxWidth);
+    public static Rect getBounds(IClientUtils registry, IDataNode entry, int x, int y, int maxWidth) {
+        return registry.getBounds(registry, ((LootPoolNode) entry).nodes(), x, y, maxWidth);
     }
 }

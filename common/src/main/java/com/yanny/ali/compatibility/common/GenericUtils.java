@@ -3,6 +3,7 @@ package com.yanny.ali.compatibility.common;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.client.Minecraft;
@@ -16,7 +17,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -88,8 +88,8 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Map<ResourceLocation, LootTable> getLootTables() {
-        return new HashMap<>(PluginManager.CLIENT_REGISTRY.getLootTables());
+    public static Map<ResourceLocation, IDataNode> getLootData() {
+        return new HashMap<>(PluginManager.CLIENT_REGISTRY.getLootData());
     }
 
     @NotNull
@@ -97,6 +97,7 @@ public class GenericUtils {
         return PluginManager.CLIENT_REGISTRY.getItems(location);
     }
 
+    @NotNull
     public static Component ellipsis(String text, String fallback, int maxWidth) {
         Font font = Minecraft.getInstance().font;
 

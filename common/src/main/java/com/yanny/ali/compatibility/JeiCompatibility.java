@@ -2,6 +2,7 @@ package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GameplayLootType;
@@ -29,7 +30,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -81,14 +81,14 @@ public class JeiCompatibility implements IModPlugin {
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level != null) {
-            Map<ResourceLocation, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceLocation, IDataNode> map = GenericUtils.getLootData();
             Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
-                LootTable lootEntry = map.get(location);
+                IDataNode lootEntry = map.get(location);
 
                 if (lootEntry != null) {
                     RecipeType<BlockLootType> recipeType = null;
@@ -157,7 +157,7 @@ public class JeiCompatibility implements IModPlugin {
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
                         ResourceLocation location = mob.getLootTable();
-                        LootTable lootEntry = map.get(location);
+                        IDataNode lootEntry = map.get(location);
 
                         if (lootEntry != null) {
                             RecipeType<EntityLootType> recipeType = null;
@@ -179,7 +179,7 @@ public class JeiCompatibility implements IModPlugin {
                 }
             }
 
-            for (Map.Entry<ResourceLocation, LootTable> entry : map.entrySet()) {
+            for (Map.Entry<ResourceLocation, IDataNode> entry : map.entrySet()) {
                 ResourceLocation location = entry.getKey();
                 RecipeType<GameplayLootType> recipeType = null;
 
