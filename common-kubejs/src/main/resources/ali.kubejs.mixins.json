@@ -1,0 +1,38 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.yanny.ali.mixin",
+  "refmap": "ali.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinAbstractLootModification",
+    "MixinAddLootAction",
+    "MixinAndCondition",
+    "MixinAnyDimension",
+    "MixinBiomeCheck",
+    "MixinCompositeLootAction",
+    "MixinContainsLootCondition",
+    "MixinIsLightLevel",
+    "MixinLootEntry",
+    "MixinLootItemConditionWrapper",
+    "MixinLootModificationByBlock",
+    "MixinLootModificationByEntity",
+    "MixinLootModificationByTable",
+    "MixinLootModificationByType",
+    "MixinLootModificationsAPI",
+    "MixinMainHandTableBonus",
+    "MixinMatchEquipmentSlot",
+    "MixinMatchFluid",
+    "MixinMatchKillerDistance",
+    "MixinMatchPlayer",
+    "MixinNotCondition",
+    "MixinOrCondition",
+    "MixinPlayerParamPredicate",
+    "MixinWeightedAddLootAction",
+    "MixinWeightedRandomList",
+    "MixinWrappedDamageSourceCondition"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
