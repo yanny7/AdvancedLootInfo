@@ -15,7 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.Collections;
 import java.util.List;
 
 public class AddLootNode extends ListNode {
@@ -39,7 +38,7 @@ public class AddLootNode extends ListNode {
         }
 
         for (LootEntry entry : mixinAddLootAction.getEntries()) {
-            addChildren(Collections.emptyList(), new LootEntryNode(utils, entry, sumWeight, conditions));
+            addChildren(new LootEntryNode(utils, entry, sumWeight, conditions));
         }
 
         addType = mixinAddLootAction.getType();

@@ -1,13 +1,12 @@
 package com.yanny.ali.plugin.common;
 
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -17,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class NodeUtils {
     public static void encodeTooltipNodes(IServerUtils ignoredUtils, FriendlyByteBuf buf, List<ITooltipNode> nodes) {
@@ -80,5 +80,31 @@ public class NodeUtils {
         }
 
         return components;
+    }
+
+    public static void processLootModifier(ILootModifier<?> modifier, LootTableNode node) {
+        List<IOperation> operations = modifier.getOperations();
+
+        for (IOperation operation : operations) {
+            if (operation instanceof IOperation.AddOperation addOperation) {
+                node.addChildren(addOperation.node());
+            } else if (operation instanceof IOperation.RemoveOperation removeOperation) {
+                removeItem(node, removeOperation.predicate());
+            }
+        }
+    }
+
+    private static void removeItem(IDataNode node, Predicate<ItemStack> predicate) {
+        if (node instanceof ListNode listNode) {
+            listNode.nodes().removeIf((n) -> {
+                if (n instanceof IItemNode itemNode) {
+                    return predicate.test(itemNode.getModifiedItem());
+                } else {
+                    removeItem(n, predicate);
+                }
+
+                return false;
+            });
+        }
     }
 }

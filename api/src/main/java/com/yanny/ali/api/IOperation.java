@@ -1,0 +1,18 @@
+package com.yanny.ali.api;
+
+import net.minecraft.world.item.ItemStack;
+
+import java.util.function.Predicate;
+
+sealed public interface IOperation permits IOperation.AddOperation, IOperation.RemoveOperation, IOperation.ReplaceOperation {
+    record AddOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {
+    }
+
+    record RemoveOperation(Predicate<ItemStack> predicate) implements IOperation {
+    }
+
+    record ReplaceOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {
+    }
+
+    Predicate<ItemStack> predicate();
+}

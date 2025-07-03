@@ -33,7 +33,7 @@ public class LootEntryNode extends ListNode {
         allConditions.addAll(mixinLootEntry.getConditions());
 
         for (IDataNode node : getNodes(utils, mixinLootEntry.getWeight(), sumWeight, mixinLootEntry.getGenerator(), mixinLootEntry.getPostModifications(), allConditions)) {
-            addChildren(Collections.emptyList(), node);
+            addChildren(node);
         }
 
         isRandom = mixinLootEntry.getGenerator() instanceof LootEntry.RandomIngredientGenerator;

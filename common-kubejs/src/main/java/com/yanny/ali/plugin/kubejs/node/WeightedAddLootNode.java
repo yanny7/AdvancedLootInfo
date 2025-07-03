@@ -15,7 +15,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
@@ -34,7 +33,7 @@ public class WeightedAddLootNode extends ListNode {
         tooltip = getTooltip(utils, action);
 
         for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getItems()) {
-            addChildren(Collections.emptyList(), new LootEntryNode(utils, wrapper.getData(), sumWeight, conditions));
+            addChildren(new LootEntryNode(utils, wrapper.getData(), sumWeight, conditions));
         }
     }
 

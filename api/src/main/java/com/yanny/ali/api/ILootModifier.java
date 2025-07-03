@@ -2,26 +2,18 @@ package com.yanny.ali.api;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
-import java.util.function.Predicate;
+import java.util.List;
 
 public interface ILootModifier<T> {
     boolean predicate(T value);
 
-    IOperation getOperation();
+    List<IOperation> getOperations();
 
     IType<T> getType();
 
-    enum Operation {
-        ADD,
-        REPLACE,
-        MODIFY,
-        REMOVE
-    }
-
-    sealed interface IType<T> {
+    sealed interface IType<T> permits IType.BlockType, IType.EntityType, IType.LootTableType {
         IType<Block> BLOCK = new BlockType();
         IType<Entity> ENTITY = new EntityType();
         IType<ResourceLocation> LOOT_TABLE = new LootTableType();
@@ -31,11 +23,4 @@ public interface ILootModifier<T> {
         final class LootTableType implements IType<ResourceLocation> {}
     }
 
-    sealed interface IOperation {
-        record AddOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {}
-        record RemoveOperation(Predicate<ItemStack> predicate) implements IOperation {}
-        record ReplaceOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {}
-
-        Predicate<ItemStack> predicate();
-    }
 }

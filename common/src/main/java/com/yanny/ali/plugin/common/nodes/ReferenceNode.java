@@ -26,9 +26,9 @@ public class ReferenceNode extends ListNode {
         LootTable lootTable = utils.getLootTable(entry.name);
 
         if (lootTable != null) {
-            addChildren(modifiers, new LootTableNode(modifiers, utils, lootTable, chance * entry.weight / sumWeight, allFunctions, allConditions));
+            addChildren(new LootTableNode(modifiers, utils, lootTable, chance * entry.weight / sumWeight, allFunctions, allConditions));
         } else {
-            addChildren(modifiers, new MissingNode());
+            addChildren(new MissingNode());
         }
 
         tooltip = EntryTooltipUtils.getReferenceTooltip(entry, chance, sumWeight);

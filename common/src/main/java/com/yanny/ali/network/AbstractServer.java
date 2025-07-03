@@ -226,6 +226,10 @@ public abstract class AbstractServer {
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
         //noinspection unchecked
-        return ((ILootModifier<T>) modifier).predicate(value) && items.stream().anyMatch((i) -> modifier.getOperation().predicate().test(i.getDefaultInstance()));
+        return ((ILootModifier<T>) modifier).predicate(value) && predicateItem(modifier, items);
+    }
+
+    private static boolean predicateItem(ILootModifier<?> modifier, List<Item> items) { //FIXME ItemStack!
+        return items.stream().anyMatch((i) -> modifier.getOperations().stream().anyMatch(o -> o.predicate().test(i.getDefaultInstance())));
     }
 }

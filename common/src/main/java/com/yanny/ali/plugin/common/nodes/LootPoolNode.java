@@ -28,7 +28,7 @@ public class LootPoolNode extends ListNode {
         tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, lootPool.rolls), utils.convertNumber(utils, lootPool.bonusRolls));
 
         for (LootPoolEntryContainer entry : lootPool.entries) {
-            addChildren(modifiers, utils.getEntryFactory(utils, entry).create(modifiers, utils, entry, chance, sumWeight, allFunctions, allConditions));
+            addChildren(utils.getEntryFactory(utils, entry).create(modifiers, utils, entry, chance, sumWeight, allFunctions, allConditions));
         }
     }
 
