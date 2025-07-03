@@ -18,7 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemStackNode extends ListNode implements ISlotNode {
+public class ItemStackNode extends ListNode implements ISlotNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation(KubeJsPlugin.ID, "item_stack");
 
     private final List<ITooltipNode> tooltip;
@@ -38,6 +38,7 @@ public class ItemStackNode extends ListNode implements ISlotNode {
         count = new RangeValue(buf);
     }
 
+    @Override
     public ItemStack getModifiedItem() {
         return itemStack;
     }

@@ -28,12 +28,9 @@ public abstract class ListNode implements IDataNode {
 
     public void addChildren(List<ILootModifier<?>> modifiers, IDataNode node) {
         for (ILootModifier<?> modifier : modifiers) {
-            switch (modifier.getOperation()) {
-                case REPLACE -> {
-                }
-                case MODIFY -> {
-                }
-                case REMOVE -> {
+            if (modifier.getOperation() instanceof ILootModifier.IOperation.RemoveOperation removeOperation && node instanceof IItemNode itemNode) {
+                if (removeOperation.predicate().test(itemNode.getModifiedItem())) {
+                    return;
                 }
             }
         }

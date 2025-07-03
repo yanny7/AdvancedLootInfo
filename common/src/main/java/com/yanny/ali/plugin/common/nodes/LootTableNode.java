@@ -32,7 +32,7 @@ public class LootTableNode extends ListNode {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootTable.functions)).toList();
 
         for (ILootModifier<?> modifier : modifiers) {
-            if (modifier.getOperation() == ILootModifier.Operation.ADD) {
+            if (modifier.getOperation() instanceof ILootModifier.IOperation.AddOperation) {
                 addModifiers.add(modifier);
             } else {
                 filteredModifiers.add(modifier);
@@ -46,8 +46,8 @@ public class LootTableNode extends ListNode {
         }
 
         for (ILootModifier<?> modifier : addModifiers) {
-            if (modifier.getOperation() == ILootModifier.Operation.ADD) {
-                addChildren(Collections.emptyList(), modifier.getNode());
+            if (modifier.getOperation() instanceof ILootModifier.IOperation.AddOperation addOperation) {
+                addChildren(Collections.emptyList(), addOperation.node());
             }
         }
     }

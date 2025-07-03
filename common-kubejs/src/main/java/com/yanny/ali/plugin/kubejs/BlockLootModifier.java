@@ -35,7 +35,7 @@ public class BlockLootModifier extends LootModifier<Block> {
     }
 
     @Override
-    public Type<Block> getType() {
-        return Type.BLOCK;
+    public IType<Block> getType() {
+        return IType.BLOCK;
     }
 }

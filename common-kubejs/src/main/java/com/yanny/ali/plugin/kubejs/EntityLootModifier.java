@@ -22,7 +22,7 @@ public class EntityLootModifier extends LootModifier<Entity> {
     }
 
     @Override
-    public Type<Entity> getType() {
-        return Type.ENTITY;
+    public IType<Entity> getType() {
+        return IType.ENTITY;
     }
 }

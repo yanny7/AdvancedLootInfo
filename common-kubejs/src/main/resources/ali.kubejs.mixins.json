@@ -28,6 +28,8 @@
     "MixinNotCondition",
     "MixinOrCondition",
     "MixinPlayerParamPredicate",
+    "MixinRemoveLootAction",
+    "MixinReplaceLootAction",
     "MixinWeightedAddLootAction",
     "MixinWeightedRandomList",
     "MixinWrappedDamageSourceCondition"

@@ -50,7 +50,7 @@ public class TypeLootModifier extends LootModifier<ResourceLocation> {
     }
 
     @Override
-    public Type<ResourceLocation> getType() {
-        return Type.TYPE;
+    public IType<ResourceLocation> getType() {
+        return IType.LOOT_TABLE;
     }
 }

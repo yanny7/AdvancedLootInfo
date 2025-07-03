@@ -5,16 +5,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
+import java.util.function.Predicate;
+
 public interface ILootModifier<T> {
     boolean predicate(T value);
 
-    boolean itemPredicate(ItemStack item);
+    IOperation getOperation();
 
-    Operation getOperation();
-
-    IDataNode getNode();
-
-    Type<T> getType();
+    IType<T> getType();
 
     enum Operation {
         ADD,
@@ -23,15 +21,21 @@ public interface ILootModifier<T> {
         REMOVE
     }
 
-    sealed interface Type<T> {
-        Type<Block> BLOCK = new BlockType();
-        Type<Entity> ENTITY = new EntityType();
-        Type<ResourceLocation> LOOT_TABLE = new LootTableType();
-        Type<ResourceLocation> TYPE = new TableType();
+    sealed interface IType<T> {
+        IType<Block> BLOCK = new BlockType();
+        IType<Entity> ENTITY = new EntityType();
+        IType<ResourceLocation> LOOT_TABLE = new LootTableType();
 
-        final class BlockType implements Type<Block> {}
-        final class EntityType implements Type<Entity> {}
-        final class LootTableType implements Type<ResourceLocation> {}
-        final class TableType implements Type<ResourceLocation> {}
+        final class BlockType implements IType<Block> {}
+        final class EntityType implements IType<Entity> {}
+        final class LootTableType implements IType<ResourceLocation> {}
+    }
+
+    sealed interface IOperation {
+        record AddOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {}
+        record RemoveOperation(Predicate<ItemStack> predicate) implements IOperation {}
+        record ReplaceOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {}
+
+        Predicate<ItemStack> predicate();
     }
 }
