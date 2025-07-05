@@ -13,6 +13,7 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class AddLootNode extends ListNode {
     private final List<ITooltipNode> tooltip;
     private final AddLootAction.AddType addType;
 
-    public AddLootNode(IServerUtils utils, AddLootAction lootAction, List<LootItemCondition> conditions) {
+    public AddLootNode(IServerUtils utils, AddLootAction lootAction, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinAddLootAction mixinAddLootAction = (MixinAddLootAction) lootAction;
         int sumWeight;
 
@@ -38,7 +39,7 @@ public class AddLootNode extends ListNode {
         }
 
         for (LootEntry entry : mixinAddLootAction.getEntries()) {
-            addChildren(new LootEntryNode(utils, entry, sumWeight, conditions));
+            addChildren(new LootEntryNode(utils, entry, sumWeight, functions, conditions));
         }
 
         addType = mixinAddLootAction.getType();

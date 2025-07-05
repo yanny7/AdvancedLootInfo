@@ -35,7 +35,7 @@ public class LootTableNode extends ListNode {
         }
 
         for (ILootModifier<?> modifier : modifiers) {
-            NodeUtils.processLootModifier(modifier, this);
+            NodeUtils.processLootModifier(utils, modifier, this);
         }
     }
 

@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
@@ -26,13 +27,12 @@ public class LootEntryNode extends ListNode {
     private final List<ITooltipNode> tooltip;
     private final boolean isRandom;
 
-    public LootEntryNode(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = new ArrayList<>(conditions);
+    public LootEntryNode(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinLootEntry mixinLootEntry = (MixinLootEntry) entry;
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), mixinLootEntry.getPostModifications().stream()).toList();
+        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), mixinLootEntry.getConditions().stream()).toList();
 
-        allConditions.addAll(mixinLootEntry.getConditions());
-
-        for (IDataNode node : getNodes(utils, mixinLootEntry.getWeight(), sumWeight, mixinLootEntry.getGenerator(), mixinLootEntry.getPostModifications(), allConditions)) {
+        for (IDataNode node : getNodes(utils, mixinLootEntry.getWeight(), sumWeight, mixinLootEntry.getGenerator(), allFunctions, allConditions)) {
             addChildren(node);
         }
 

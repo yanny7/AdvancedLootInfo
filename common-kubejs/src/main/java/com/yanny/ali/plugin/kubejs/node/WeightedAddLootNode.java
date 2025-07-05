@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,7 @@ public class WeightedAddLootNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public WeightedAddLootNode(IServerUtils utils, WeightedAddLootAction lootAction, List<LootItemCondition> conditions) {
+    public WeightedAddLootNode(IServerUtils utils, WeightedAddLootAction lootAction, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinWeightedAddLootAction action = (MixinWeightedAddLootAction) lootAction;
         //noinspection unchecked
         MixinWeightedRandomList<WeightedEntry.Wrapper<LootEntry>> weightedList = (MixinWeightedRandomList<WeightedEntry.Wrapper<LootEntry>>) action.getWeightedRandomList();
@@ -33,7 +34,7 @@ public class WeightedAddLootNode extends ListNode {
         tooltip = getTooltip(utils, action);
 
         for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getItems()) {
-            addChildren(new LootEntryNode(utils, wrapper.getData(), sumWeight, conditions));
+            addChildren(new LootEntryNode(utils, wrapper.getData(), sumWeight, functions, conditions));
         }
     }
 

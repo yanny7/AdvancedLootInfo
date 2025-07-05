@@ -39,6 +39,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
+    private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
     private ServerLevel serverLevel;
@@ -46,6 +47,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
+    }
+
+    public void prepareLootModifiers() {
+        for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
+            lootModifierMap.addAll(lootModifierGetter.apply(this));
+        }
     }
 
     public List<ILootModifier<?>> getLootModifiers() {
@@ -117,7 +124,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter) {
-        lootModifierMap.addAll(getter.apply(this));
+        lootModifierGetters.add(getter);
     }
 
     @Override

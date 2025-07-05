@@ -125,7 +125,7 @@ public abstract class AbstractServer {
 
                 lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
             } else {
-                LOGGER.warn("Missing block loot table for {}", block);
+                LOGGER.debug("Missing block loot table for {}", block);
             }
         }
 
@@ -198,7 +198,7 @@ public abstract class AbstractServer {
 
                         lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
                     } else {
-                        LOGGER.warn("Missing entity loot table for {}", entity);
+                        LOGGER.debug("Missing entity loot table for {}", entity);
                     }
                 }
             }

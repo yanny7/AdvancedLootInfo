@@ -53,6 +53,7 @@ public class PluginManager {
             }
         }
 
+        SERVER_REGISTRY.prepareLootModifiers();
         SERVER_REGISTRY.printServerInfo();
         LOGGER.info("Registering server plugin data finished");
     }

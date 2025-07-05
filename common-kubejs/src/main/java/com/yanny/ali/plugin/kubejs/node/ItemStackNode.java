@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,12 @@ public class ItemStackNode extends ListNode implements ISlotNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation(KubeJsPlugin.ID, "item_stack");
 
     private final List<ITooltipNode> tooltip;
+    private final List<LootItemCondition> conditions;
     private final ItemStack itemStack;
     private final RangeValue count;
 
     public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this.conditions = conditions;
         this.itemStack = itemStack.copyWithCount(1);
         tooltip = getItemTooltip(utils, itemStack.getCount(), chance, functions, conditions);
         count = getCount(utils, itemStack.getCount(), functions).get(null).get(0);
@@ -35,12 +38,18 @@ public class ItemStackNode extends ListNode implements ISlotNode, IItemNode {
         super(utils, buf);
         itemStack = buf.readItem();
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        conditions = Collections.emptyList();
         count = new RangeValue(buf);
     }
 
     @Override
     public ItemStack getModifiedItem() {
         return itemStack;
+    }
+
+    @Override
+    public List<LootItemCondition> getConditions() {
+        return conditions;
     }
 
     @Override

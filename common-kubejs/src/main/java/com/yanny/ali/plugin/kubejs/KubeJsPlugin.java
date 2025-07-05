@@ -6,15 +6,9 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinAbstractLootModification;
 import com.yanny.ali.mixin.MixinLootModificationsAPI;
-import com.yanny.ali.plugin.kubejs.node.AddLootNode;
-import com.yanny.ali.plugin.kubejs.node.ItemStackNode;
-import com.yanny.ali.plugin.kubejs.node.LootEntryNode;
-import com.yanny.ali.plugin.kubejs.node.WeightedAddLootNode;
+import com.yanny.ali.plugin.kubejs.node.*;
 import com.yanny.ali.plugin.kubejs.server.KubeJsConditionTooltipUtils;
-import com.yanny.ali.plugin.kubejs.widget.AddLootWidget;
-import com.yanny.ali.plugin.kubejs.widget.ItemStackWidget;
-import com.yanny.ali.plugin.kubejs.widget.LootEntryWidget;
-import com.yanny.ali.plugin.kubejs.widget.WeightedAddLootWidget;
+import com.yanny.ali.plugin.kubejs.widget.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -65,11 +59,13 @@ public class KubeJsPlugin implements IPlugin {
         registry.registerNode(WeightedAddLootNode.ID, WeightedAddLootNode::new);
         registry.registerNode(LootEntryNode.ID, LootEntryNode::new);
         registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerNode(GroupLootNode.ID, GroupLootNode::new);
 
         registry.registerWidget(AddLootNode.ID, WidgetDirection.VERTICAL, AddLootWidget::new, AddLootWidget::getBounds);
         registry.registerWidget(WeightedAddLootNode.ID, WidgetDirection.VERTICAL, WeightedAddLootWidget::new, WeightedAddLootWidget::getBounds);
         registry.registerWidget(LootEntryNode.ID, WidgetDirection.VERTICAL, LootEntryWidget::new, LootEntryWidget::getBounds);
         registry.registerWidget(ItemStackNode.ID, WidgetDirection.HORIZONTAL, ItemStackWidget::new, ItemStackWidget::getBounds);
+        registry.registerWidget(GroupLootNode.ID, WidgetDirection.VERTICAL, GroupedLootWidget::new, GroupedLootWidget::getBounds);
     }
 
     @Override
@@ -92,7 +88,6 @@ public class KubeJsPlugin implements IPlugin {
         registry.registerConditionTooltip(PlayerParamPredicate.class, KubeJsConditionTooltipUtils::playerParamPredicateTooltip);
         registry.registerConditionTooltip(WrappedDamageSourceCondition.class, KubeJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
 
-        //FIXME !!! must be after other registries (accessing tooltips...)
         registry.registerLootModifiers(KubeJsPlugin::registerModifiers);
     }
 }

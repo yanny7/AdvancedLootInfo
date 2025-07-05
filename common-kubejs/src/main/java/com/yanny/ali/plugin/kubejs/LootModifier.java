@@ -3,20 +3,18 @@ package com.yanny.ali.plugin.kubejs;
 import com.almostreliable.lootjs.core.AbstractLootModification;
 import com.almostreliable.lootjs.core.ILootAction;
 import com.almostreliable.lootjs.core.ILootHandler;
-import com.almostreliable.lootjs.loot.action.AddLootAction;
-import com.almostreliable.lootjs.loot.action.RemoveLootAction;
-import com.almostreliable.lootjs.loot.action.ReplaceLootAction;
-import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
+import com.almostreliable.lootjs.loot.action.*;
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.ILootModifier;
-import com.yanny.ali.api.IOperation;
-import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinCompositeLootAction;
+import com.yanny.ali.mixin.MixinModifyLootAction;
 import com.yanny.ali.mixin.MixinRemoveLootAction;
 import com.yanny.ali.mixin.MixinReplaceLootAction;
 import com.yanny.ali.plugin.kubejs.node.AddLootNode;
+import com.yanny.ali.plugin.kubejs.node.GroupLootNode;
 import com.yanny.ali.plugin.kubejs.node.LootEntryNode;
 import com.yanny.ali.plugin.kubejs.node.WeightedAddLootNode;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.slf4j.Logger;
 
@@ -24,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 public abstract class LootModifier<T> implements ILootModifier<T> {
     protected static final Logger LOGGER = LogUtils.getLogger();
@@ -33,11 +33,14 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
     public LootModifier(IServerUtils utils, AbstractLootModification byBlock) {
         Collection<ILootHandler> handlers = ((MixinCompositeLootAction) byBlock).getHandlers();
         List<LootItemCondition> conditions = new LinkedList<>();
+        List<LootItemFunction> functions = new LinkedList<>(); //TODO add functions from LootItemFunctionWrapperAction
         List<ILootAction> actions = new LinkedList<>();
 
         for (ILootHandler handler : handlers) {
             if (handler instanceof LootItemCondition lootItemCondition) {
                 conditions.add(lootItemCondition);
+            } else if (handler instanceof LootItemFunctionWrapperAction lootFunctionAction) {
+                functions.add(lootFunctionAction.getLootItemFunction());
             } else if (handler instanceof ILootAction lootAction) {
                 actions.add(lootAction);
             } else {
@@ -48,17 +51,30 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
         if (!actions.isEmpty()) {
             for (ILootAction action : actions) {
                 if (action instanceof AddLootAction addLootAction) {
-                    operations.add(new IOperation.AddOperation((itemStack) -> true, new AddLootNode(utils, addLootAction, conditions)));
+                    operations.add(new IOperation.AddOperation((itemStack) -> true, new AddLootNode(utils, addLootAction, functions, conditions)));
                 } else if (action instanceof WeightedAddLootAction addLootAction) {
-                    operations.add(new IOperation.AddOperation((itemStack) -> true, new WeightedAddLootNode(utils, addLootAction, conditions)));
+                    operations.add(new IOperation.AddOperation((itemStack) -> true, new WeightedAddLootNode(utils, addLootAction, functions, conditions)));
                 } else if (action instanceof RemoveLootAction removeLootAction) {
                     operations.add(new IOperation.RemoveOperation(((MixinRemoveLootAction) removeLootAction).getPredicate()));
                 } else if (action instanceof ReplaceLootAction replaceLootAction) {
                     MixinReplaceLootAction lootAction = (MixinReplaceLootAction) replaceLootAction;
+                    Function<IDataNode, IDataNode> factory = (c) -> {
+                        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), ((IItemNode)c).getConditions().stream()).toList(); //TODO preserve count?
+                        return new LootEntryNode(utils, lootAction.getLootEntry(), 1, functions, allConditions);
+                    };
 
-                    operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), new LootEntryNode(utils, lootAction.getLootEntry(), 1, conditions)));
+                    operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), factory));
+                } else if (action instanceof ModifyLootAction modifyLootAction) {
+                    MixinModifyLootAction lootAction = (MixinModifyLootAction) modifyLootAction;
+                    Function<IDataNode, IDataNode> factory = (c) -> {
+                        return c; //TODO wrap with icon saying that it's loot was modified by JS
+                    };
+
+                    operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), factory));
+                } else if (action instanceof GroupedLootAction groupedLootAction) {
+                    operations.add(new IOperation.AddOperation((itemStack) -> true, new GroupLootNode(utils, groupedLootAction, functions, conditions)));
                 } else {
-                    throw new IllegalStateException("Unexpected loot action " + action.getClass().getCanonicalName());
+                    LOGGER.warn("Skipping unexpected loot action {}", action.getClass().getCanonicalName());
                 }
             }
         } else {

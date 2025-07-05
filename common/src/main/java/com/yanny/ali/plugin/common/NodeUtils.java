@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class NodeUtils {
@@ -82,7 +83,7 @@ public class NodeUtils {
         return components;
     }
 
-    public static void processLootModifier(ILootModifier<?> modifier, LootTableNode node) {
+    public static void processLootModifier(IServerUtils utils, ILootModifier<?> modifier, LootTableNode node) {
         List<IOperation> operations = modifier.getOperations();
 
         for (IOperation operation : operations) {
@@ -90,6 +91,8 @@ public class NodeUtils {
                 node.addChildren(addOperation.node());
             } else if (operation instanceof IOperation.RemoveOperation removeOperation) {
                 removeItem(node, removeOperation.predicate());
+            } else if (operation instanceof IOperation.ReplaceOperation replaceOperation) {
+                replaceItem(utils, node, replaceOperation.factory(), replaceOperation.predicate());
             }
         }
     }
@@ -105,6 +108,35 @@ public class NodeUtils {
 
                 return false;
             });
+            removeEmptyNodes(node);
+        }
+    }
+
+    private static void replaceItem(IServerUtils utils, IDataNode node, Function<IDataNode, IDataNode> factory, Predicate<ItemStack> predicate) {
+        if (node instanceof ListNode listNode) {
+            listNode.nodes().replaceAll((n) -> {
+                if (n instanceof IItemNode itemNode && predicate.test(itemNode.getModifiedItem())) {
+                    return factory.apply(n); //TODO preserve count!
+                } else if (n instanceof ListNode l) {
+                    replaceItem(utils, l, factory, predicate);
+                }
+
+                return n;
+            });
+        }
+    }
+
+    private static boolean hasItems(IDataNode node) {
+        if (node instanceof ListNode listNode) {
+            return listNode.nodes().stream().anyMatch(NodeUtils::hasItems);
+        } else {
+            return node instanceof IItemNode itemNode;
+        }
+    }
+
+    private static void removeEmptyNodes(IDataNode node) {
+        if (node instanceof ListNode listNode) {
+            listNode.nodes().removeIf((n) -> !hasItems(n));
         }
     }
 }
