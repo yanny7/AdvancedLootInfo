@@ -1,3 +1,9 @@
+## []
+
+- Changed API
+- Added API support for loot modifiers
+- Displaying loot changes made by LootJS
+
 ## [1.1.8]
 
 - Fixed view usages in EMI not working

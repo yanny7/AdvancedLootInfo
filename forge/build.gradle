@@ -105,7 +105,7 @@ dependencies {
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
-    // ForgeGradle
+    // KubeJS
     implementation fg.deobf("curse.maven:kubejs-238086:5853326")
     implementation fg.deobf("curse.maven:rhino-416294:6186971")
     implementation fg.deobf("curse.maven:lootjs-570630:5404565")

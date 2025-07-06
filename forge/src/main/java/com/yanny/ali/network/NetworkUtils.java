@@ -21,7 +21,7 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, client::onLootInfo);
+        channel.registerMessage(getMessageId(), SyncLootTableMessage.class, SyncLootTableMessage::encode, SyncLootTableMessage::new, client::onLootInfo);
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, client::onClear);
         return new DistHolder<>(client, server);
     }
@@ -30,7 +30,7 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), InfoSyncLootTableMessage.class, InfoSyncLootTableMessage::encode, InfoSyncLootTableMessage::new, (m, c) -> {});
+        channel.registerMessage(getMessageId(), SyncLootTableMessage.class, SyncLootTableMessage::encode, SyncLootTableMessage::new, (m, c) -> {});
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, (m, c) -> {});
         return new DistHolder<>(null, server);
     }

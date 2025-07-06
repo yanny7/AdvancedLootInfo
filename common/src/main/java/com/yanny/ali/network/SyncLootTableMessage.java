@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class InfoSyncLootTableMessage {
+public class SyncLootTableMessage {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public final ResourceLocation location;
@@ -30,13 +30,13 @@ public class InfoSyncLootTableMessage {
 
     public final IDataNode node;
 
-    public InfoSyncLootTableMessage(ResourceLocation location, List<Item> items, IDataNode node) {
+    public SyncLootTableMessage(ResourceLocation location, List<Item> items, IDataNode node) {
         this.location = location;
         this.items = items;
         this.node = node;
     }
 
-    public InfoSyncLootTableMessage(FriendlyByteBuf buf) {
+    public SyncLootTableMessage(FriendlyByteBuf buf) {
         IDataNode dataNode;
 
         location = buf.readResourceLocation();

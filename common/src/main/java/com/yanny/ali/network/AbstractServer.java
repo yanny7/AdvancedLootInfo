@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 public abstract class AbstractServer {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final List<InfoSyncLootTableMessage> messages = new LinkedList<>();
+    private final List<SyncLootTableMessage> messages = new LinkedList<>();
 
     public final void readLootTables(LootDataManager manager, ServerLevel level) {
         AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
@@ -56,7 +56,7 @@ public abstract class AbstractServer {
         lootNodes.putAll(processLootTables(serverRegistry, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
 
         lootTables = removeEmptyLootTable(lootTables, lootTableItems);
-        lootTables.forEach((location, lootTable) -> messages.add(new InfoSyncLootTableMessage(location, lootTableItems.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+        lootTables.forEach((location, lootTable) -> messages.add(new SyncLootTableMessage(location, lootTableItems.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
 
         LOGGER.info("Prepared {} loot tables", messages.size());
     }
@@ -65,7 +65,7 @@ public abstract class AbstractServer {
         if (player instanceof ServerPlayer serverPlayer) {
             sendClearMessage(serverPlayer, new ClearMessage());
 
-            for (InfoSyncLootTableMessage message : messages) {
+            for (SyncLootTableMessage message : messages) {
                 try {
                     sendSyncMessage(serverPlayer, message);
                 } catch (Throwable e) {
@@ -77,7 +77,7 @@ public abstract class AbstractServer {
 
     protected abstract void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message);
 
-    protected abstract void sendSyncMessage(ServerPlayer serverPlayer, InfoSyncLootTableMessage message);
+    protected abstract void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message);
 
     @NotNull
     private static List<Item> getItems(Map.Entry<ResourceLocation, LootTable> lootTableMap) {

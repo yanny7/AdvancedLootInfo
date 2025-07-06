@@ -1,9 +1,6 @@
 package com.yanny.ali.plugin;
 
-import com.yanny.ali.api.AliEntrypoint;
-import com.yanny.ali.api.IServerRegistry;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraftforge.common.loot.CanToolPerformAction;
@@ -12,12 +9,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 @AliEntrypoint
-public class VanillaPlugin extends Plugin {
+public class ForgePlugin implements IPlugin {
     @Override
     public void registerServer(IServerRegistry registry) {
-        super.registerServer(registry);
-        registry.registerConditionTooltip(CanToolPerformAction.class, VanillaPlugin::getCanToolPerformActionTooltip);
-        registry.registerConditionTooltip(LootTableIdCondition.class, VanillaPlugin::getLootTableIdTooltip);
+        registry.registerConditionTooltip(CanToolPerformAction.class, ForgePlugin::getCanToolPerformActionTooltip);
+        registry.registerConditionTooltip(LootTableIdCondition.class, ForgePlugin::getLootTableIdTooltip);
     }
 
     @Unmodifiable

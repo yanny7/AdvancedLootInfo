@@ -5,7 +5,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(InfoSyncLootTableMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    public void onLootInfo(SyncLootTableMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
         super.onLootInfo(msg);
         contextSupplier.get().setPacketHandled(true);
     }

@@ -8,14 +8,17 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Arrays;
+import java.text.DecimalFormat;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getBlockTooltip;
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getEnchantmentTooltip;
 
 public class ConditionTooltipUtils {
+    private static final DecimalFormat FLOAT_FORMAT = new DecimalFormat("0.###");
+
     @NotNull
     public static ITooltipNode getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
         return getCollectionTooltip(utils, "ali.type.condition.all_of", List.of(cond.terms), utils::getConditionTooltip);
@@ -128,9 +131,10 @@ public class ConditionTooltipUtils {
     @NotNull
     public static ITooltipNode getTableBonusTooltip(IServerUtils utils, BonusLevelTableCondition cond) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.table_bonus"));
+        List<String> list = IntStream.range(0, cond.values.length).mapToDouble(i -> cond.values[i]).mapToObj(FLOAT_FORMAT::format).toList();
 
         tooltip.add(getEnchantmentTooltip(utils, "ali.property.value.enchantment", cond.enchantment));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.values", Arrays.toString(cond.values)));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.values", list.toString()));
 
         return tooltip;
     }

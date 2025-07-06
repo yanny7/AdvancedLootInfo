@@ -8,13 +8,13 @@ import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MissingNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "missing");
 
     public MissingNode() {
-
     }
 
     public MissingNode(IClientUtils utils, FriendlyByteBuf buf) {
@@ -22,7 +22,7 @@ public class MissingNode implements IDataNode {
 
     @Override
     public List<ITooltipNode> getTooltip() {
-        return List.of(); //FIXME
+        return Collections.emptyList();
     }
 
     @Override

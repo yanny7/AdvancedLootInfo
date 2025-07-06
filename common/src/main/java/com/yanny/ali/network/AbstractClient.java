@@ -3,7 +3,7 @@ package com.yanny.ali.network;
 import com.yanny.ali.manager.PluginManager;
 
 public abstract class AbstractClient {
-    protected void onLootInfo(InfoSyncLootTableMessage msg) {
+    protected void onLootInfo(SyncLootTableMessage msg) {
         PluginManager.CLIENT_REGISTRY.addLootData(msg.location, msg.node, msg.items);
     }
 
