@@ -10,6 +10,10 @@ import com.yanny.ali.mixin.MixinCompositeLootAction;
 import com.yanny.ali.mixin.MixinModifyLootAction;
 import com.yanny.ali.mixin.MixinRemoveLootAction;
 import com.yanny.ali.mixin.MixinReplaceLootAction;
+import com.yanny.ali.plugin.kubejs.modifier.CustomPlayerFunction;
+import com.yanny.ali.plugin.kubejs.modifier.DropExperienceFunction;
+import com.yanny.ali.plugin.kubejs.modifier.ExplodeFunction;
+import com.yanny.ali.plugin.kubejs.modifier.LightningStrikeFunction;
 import com.yanny.ali.plugin.kubejs.node.AddLootNode;
 import com.yanny.ali.plugin.kubejs.node.GroupLootNode;
 import com.yanny.ali.plugin.kubejs.node.LootEntryNode;
@@ -33,7 +37,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
     public LootModifier(IServerUtils utils, AbstractLootModification byBlock) {
         Collection<ILootHandler> handlers = ((MixinCompositeLootAction) byBlock).getHandlers();
         List<LootItemCondition> conditions = new LinkedList<>();
-        List<LootItemFunction> functions = new LinkedList<>(); //TODO add functions from LootItemFunctionWrapperAction
+        List<LootItemFunction> functions = new LinkedList<>();
         List<ILootAction> actions = new LinkedList<>();
 
         for (ILootHandler handler : handlers) {
@@ -41,10 +45,18 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                 conditions.add(lootItemCondition);
             } else if (handler instanceof LootItemFunctionWrapperAction lootFunctionAction) {
                 functions.add(lootFunctionAction.getLootItemFunction());
+            } else if (handler instanceof CustomPlayerAction customPlayerAction) {
+                functions.add(new CustomPlayerFunction(customPlayerAction));
+            } else if (handler instanceof DropExperienceAction dropExperienceAction) {
+                functions.add(new DropExperienceFunction(dropExperienceAction));
+            } else if (handler instanceof ExplodeAction explodeAction) {
+                functions.add(new ExplodeFunction(explodeAction));
+            } else if (handler instanceof LightningStrikeAction lightningStrikeAction) {
+                functions.add(new LightningStrikeFunction(lightningStrikeAction));
             } else if (handler instanceof ILootAction lootAction) {
-                actions.add(lootAction);
+                actions.add(lootAction); // must be last - functions are also instances of ILootAction
             } else {
-                LOGGER.warn("Invalid handler: {} [{}]", handler, handler.getClass().getCanonicalName());
+                LOGGER.warn("Unhandled handler: {} [{}]", handler, handler.getClass().getCanonicalName());
             }
         }
 
@@ -54,6 +66,8 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                     operations.add(new IOperation.AddOperation((itemStack) -> true, new AddLootNode(utils, addLootAction, functions, conditions)));
                 } else if (action instanceof WeightedAddLootAction addLootAction) {
                     operations.add(new IOperation.AddOperation((itemStack) -> true, new WeightedAddLootNode(utils, addLootAction, functions, conditions)));
+                } else if (action instanceof GroupedLootAction groupedLootAction) {
+                    operations.add(new IOperation.AddOperation((itemStack) -> true, new GroupLootNode(utils, groupedLootAction, functions, conditions)));
                 } else if (action instanceof RemoveLootAction removeLootAction) {
                     operations.add(new IOperation.RemoveOperation(((MixinRemoveLootAction) removeLootAction).getPredicate()));
                 } else if (action instanceof ReplaceLootAction replaceLootAction) {
@@ -71,8 +85,6 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                     };
 
                     operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), factory));
-                } else if (action instanceof GroupedLootAction groupedLootAction) {
-                    operations.add(new IOperation.AddOperation((itemStack) -> true, new GroupLootNode(utils, groupedLootAction, functions, conditions)));
                 } else {
                     LOGGER.warn("Skipping unexpected loot action {}", action.getClass().getCanonicalName());
                 }

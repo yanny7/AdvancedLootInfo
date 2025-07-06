@@ -6,9 +6,12 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.TooltipNode;
 import com.yanny.ali.plugin.kubejs.Utils;
+import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.IntRange;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -106,9 +109,35 @@ public class KubeJsGenericTooltipUtils {
                     return tooltip;
                 }
             }
+
+            List<Ingredient> ingredient = Utils.getCapturedInstances(predicate, Ingredient.class);
+
+            if (ingredient.size() == 1) {
+                Ingredient i = ingredient.get(0);
+
+                if (!i.isEmpty()) {
+                    ITooltipNode tooltip = new TooltipNode(translatable(key, value("INGREDIENT")));
+
+                    for (Ingredient.Value value : i.values) {
+                        if (value instanceof Ingredient.ItemValue itemValue) {
+                            tooltip.add(getItemStackTooltip(utils, "ali.property.value.item", itemValue.item));
+                        } else if (value instanceof Ingredient.TagValue tagValue) {
+                            tooltip.add(getTagKeyTooltip(utils, "ali.property.value.tag", tagValue.tag));
+                        }
+                    }
+
+                    return tooltip;
+                }
+            }
         }
 
 
         return new TooltipNode(translatable(key, value("UNKNOWN")));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getItemStackTooltip(IServerUtils utils, String key, ItemStack itemStack) {
+        return RegistriesTooltipUtils.getItemTooltip(utils, key, itemStack.getItem());
     }
 }

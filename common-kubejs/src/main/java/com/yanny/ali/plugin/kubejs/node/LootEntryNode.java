@@ -32,6 +32,7 @@ public class LootEntryNode extends ListNode {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), mixinLootEntry.getPostModifications().stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), mixinLootEntry.getConditions().stream()).toList();
 
+        //FIXME replace generated items as children of loot entry by multiple entries
         for (IDataNode node : getNodes(utils, mixinLootEntry.getWeight(), sumWeight, mixinLootEntry.getGenerator(), allFunctions, allConditions)) {
             addChildren(node);
         }
@@ -76,7 +77,7 @@ public class LootEntryNode extends ListNode {
             LootPoolEntryContainer entry = lootEntry.entry();
             items.add(utils.getEntryFactory(utils, entry).create(Collections.emptyList(), utils, entry, 1, sumWeight, functions, conditions));
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
-            for (ItemStack item : ingredientGenerator.ingredient().getItems()) {
+            for (ItemStack item : ingredientGenerator.ingredient().getItems()) { //FIXME ingredient value (itemStack/tag node)
                 items.add(new ItemStackNode(utils, item, (float) weight / sumWeight, functions, conditions));
             }
         }

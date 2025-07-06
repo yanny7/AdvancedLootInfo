@@ -6,8 +6,13 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinAbstractLootModification;
 import com.yanny.ali.mixin.MixinLootModificationsAPI;
+import com.yanny.ali.plugin.kubejs.modifier.CustomPlayerFunction;
+import com.yanny.ali.plugin.kubejs.modifier.DropExperienceFunction;
+import com.yanny.ali.plugin.kubejs.modifier.ExplodeFunction;
+import com.yanny.ali.plugin.kubejs.modifier.LightningStrikeFunction;
 import com.yanny.ali.plugin.kubejs.node.*;
 import com.yanny.ali.plugin.kubejs.server.KubeJsConditionTooltipUtils;
+import com.yanny.ali.plugin.kubejs.server.KubeJsFunctionTooltipUtils;
 import com.yanny.ali.plugin.kubejs.widget.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -40,8 +45,6 @@ public class KubeJsPlugin implements IPlugin {
                     } else {
                         LOGGER.error("Skipping unexpected modification type {}", lootModification.getClass().getCanonicalName());
                     }
-
-                    LOGGER.info("Processed loot modification {}", ((MixinAbstractLootModification) lootModification).getName());
                 } catch (Throwable e) {
                     LOGGER.error("Failed to process loot modification {}: {}", ((MixinAbstractLootModification) lootModification).getName(), e.getMessage());
                 }
@@ -87,6 +90,11 @@ public class KubeJsPlugin implements IPlugin {
         registry.registerConditionTooltip(OrCondition.class, KubeJsConditionTooltipUtils::orConditionTooltip);
         registry.registerConditionTooltip(PlayerParamPredicate.class, KubeJsConditionTooltipUtils::playerParamPredicateTooltip);
         registry.registerConditionTooltip(WrappedDamageSourceCondition.class, KubeJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
+
+        registry.registerFunctionTooltip(CustomPlayerFunction.class, KubeJsFunctionTooltipUtils::customPlayerTooltip);
+        registry.registerFunctionTooltip(DropExperienceFunction.class, KubeJsFunctionTooltipUtils::dropExperienceTooltip);
+        registry.registerFunctionTooltip(ExplodeFunction.class, KubeJsFunctionTooltipUtils::explodeTooltip);
+        registry.registerFunctionTooltip(LightningStrikeFunction.class, KubeJsFunctionTooltipUtils::lightningStrikeTooltip);
 
         registry.registerLootModifiers(KubeJsPlugin::registerModifiers);
     }
