@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class DynamicNode extends ListNode {
+public class DynamicNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "dynamic");
 
     private final List<ITooltipNode> tooltip;
@@ -27,12 +27,11 @@ public class DynamicNode extends ListNode {
     }
 
     public DynamicNode(IClientUtils utils, FriendlyByteBuf buf) {
-        super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 

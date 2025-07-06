@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 
-public class EmptyNode extends ListNode {
+public class EmptyNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "empty");
 
     private final List<ITooltipNode> tooltip;
@@ -22,12 +22,11 @@ public class EmptyNode extends ListNode {
     }
 
     public EmptyNode(IClientUtils utils, FriendlyByteBuf buf) {
-        super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 

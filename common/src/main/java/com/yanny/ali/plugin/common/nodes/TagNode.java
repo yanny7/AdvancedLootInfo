@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class TagNode extends ListNode {
+public class TagNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "tag");
 
     private final List<ITooltipNode> tooltip;
@@ -34,7 +34,6 @@ public class TagNode extends ListNode {
     }
 
     public TagNode(IClientUtils utils, FriendlyByteBuf buf) {
-        super(utils, buf);
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
@@ -49,7 +48,7 @@ public class TagNode extends ListNode {
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);

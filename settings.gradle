@@ -25,6 +25,6 @@ rootProject.name = 'MultiLoader-AdvancedLootInfo'
 include("api")
 include("common")
 include("common-rei")
-include("common-kubejs")
+include("common-lootjs")
 include("fabric")
 include("forge")
