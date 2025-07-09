@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -14,21 +13,27 @@ public class MissingWidget extends IWidget {
     private static final ItemStack STACK = Items.COMMAND_BLOCK.getDefaultInstance();
 
     private final List<Component> components;
-    private final Rect bounds;
+    private final RelativeRect bounds;
 
-    public MissingWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
-        this(x, y);
+    public MissingWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        this(rect);
     }
 
-    public MissingWidget(int x, int y) {
+    public MissingWidget(RelativeRect rect) {
         super(MissingNode.ID);
-        bounds = getBounds(x, y);
+        bounds = rect;
+        bounds.setDimensions(18, 18);
         components = List.of(Component.translatable("ali.enum.group_type.missing"));
     }
 
     @Override
-    public Rect getRect() {
+    public RelativeRect getRect() {
         return bounds;
+    }
+
+    @Override
+    public WidgetDirection getDirection() {
+        return WidgetDirection.HORIZONTAL;
     }
 
     @Override
@@ -38,16 +43,6 @@ public class MissingWidget extends IWidget {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        guiGraphics.renderItem(STACK, bounds.x() + 1, bounds.y() + 1);
-    }
-
-    @NotNull
-    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
-        return getBounds(x, y);
-    }
-
-    @NotNull
-    public static Rect getBounds(int x, int y) {
-        return new Rect(x, y, 18, 18);
+        guiGraphics.renderItem(STACK, bounds.getX() + 1, bounds.getY() + 1);
     }
 }

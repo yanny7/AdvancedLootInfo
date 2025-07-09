@@ -1,31 +1,33 @@
 package com.yanny.ali.plugin.client.widget;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.client.gui.GuiGraphics;
-import org.jetbrains.annotations.NotNull;
 
 public class TagWidget extends IWidget {
-    private final Rect bounds;
+    private final RelativeRect bounds;
 
-    public TagWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+    public TagWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(entry.getId());
         TagNode tagEntry = (TagNode) entry;
 
-        bounds = utils.addSlotWidget(tagEntry.getTag(), tagEntry, x, y);
+        utils.addSlotWidget(Either.right(tagEntry.getTag()), tagEntry, rect);
+        bounds = rect;
+        bounds.setDimensions(18, 18);
     }
 
     @Override
-    public Rect getRect() {
+    public RelativeRect getRect() {
         return bounds;
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public WidgetDirection getDirection() {
+        return WidgetDirection.HORIZONTAL;
     }
 
-    @NotNull
-    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
-        return new Rect(x, y, 18, 18);
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     }
 }

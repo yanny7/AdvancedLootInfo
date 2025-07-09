@@ -2,6 +2,7 @@ package com.yanny.ali.compatibility.jei;
 
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.RelativeRect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,7 +15,7 @@ import java.util.List;
 public class JeiWidgetWrapper implements IRecipeWidget {
     private final IWidget widget;
     private final ScreenPosition position;
-    private final Rect rect;
+    private final RelativeRect rect;
 
     public JeiWidgetWrapper(IWidget widget) {
         this.rect = widget.getRect();
@@ -43,6 +44,6 @@ public class JeiWidgetWrapper implements IRecipeWidget {
     }
 
     public Rect getRect() {
-        return rect;
+        return new Rect(rect.getX(), rect.getY(), rect.width, rect.height);
     }
 }

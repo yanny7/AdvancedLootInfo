@@ -1,9 +1,10 @@
 package com.yanny.ali.compatibility.emi;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ISlotNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.RelativeRect;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.plugin.common.nodes.TagNode;
@@ -12,7 +13,6 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
@@ -22,25 +22,47 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     static final int CATEGORY_WIDTH = 9 * 18 - EmiScrollWidget.getScrollBoxScrollbarExtraWidth();
     private final Widget widget;
-    private final List<Widget> slotWidgets = new LinkedList<>();
+    private final List<Holder> slotWidgets = new LinkedList<>();
 
     public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<Item> items) {
         super(category, id, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
-        widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, widgetX, widgetY, CATEGORY_WIDTH));
+        RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
+        widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
         outputs.addAll(items.stream().map(EmiStack::of).toList());
     }
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
         Rect rect = new Rect(0, 0, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), Math.min(getDisplayHeight(), widgetHolder.getHeight()));
-        List<Widget> widgets = new LinkedList<>(slotWidgets);
+        List<Widget> widgets = new ArrayList<>();
 
+        widgets.addAll(slotWidgets.stream().map((h) -> {
+            Optional<ItemStack> left = h.item.left();
+            Optional<TagKey<Item>> right = h.item.right();
+            EmiLootSlotWidget widget;
+
+            if (left.isPresent()) {
+                ItemStack itemStack = left.get();
+                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiStack.of(itemStack), h.rect.getX(), h.rect.getY(), ((TagNode) h.entry).getCount());
+
+            } else if (right.isPresent()) {
+                TagKey<Item> tagKey = right.get();
+                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiIngredient.of(tagKey), h.rect.getX(), h.rect.getY(), ((TagNode) h.entry).getCount());
+            } else {
+                throw new IllegalStateException("Unreachable code");
+            }
+
+            widget.recipeContext(h.recipe);
+            return (Widget) widget;
+        }).toList());
         widgets.addAll(getAdditionalWidgets(widgetHolder));
         widgets.add(widget);
         widgetHolder.add(new EmiScrollWidget(rect, getDisplayHeight(), widgets));
@@ -68,26 +90,19 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
         return new ClientUtils() {
             @Override
-            public Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiStack.of(item), x, y, ((ISlotNode) entry).getCount());
-
-                widget.recipeContext(recipe);
-                slotWidgets.add(widget);
-
-                Bounds bounds = widget.getBounds();
-                return new Rect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
+            public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+                slotWidgets.add(new Holder(this, item, entry, rect, recipe));
             }
-
-            @Override
-            public Rect addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y) {
-                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiIngredient.of(item), x, y, ((TagNode) entry).getCount());
-
-                widget.recipeContext(recipe);
-                slotWidgets.add(widget);
-
-                Bounds bounds = widget.getBounds();
-                return new Rect(bounds.x(), bounds.y(), bounds.width(), bounds.height());
-            }
+//
+//            @Override
+//            public void addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y) {
+//                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiIngredient.of(item), x, y, ((TagNode) entry).getCount());
+//
+//                widget.recipeContext(recipe);
+//                slotWidgets.add(widget);
+//            }
         };
     }
+
+    private record Holder(IWidgetUtils utils, Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
 }

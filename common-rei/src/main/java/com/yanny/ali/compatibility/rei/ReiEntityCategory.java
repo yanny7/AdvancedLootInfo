@@ -45,9 +45,9 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
         SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntity().getType());
         int textWidth = Minecraft.getInstance().font.width(entityLabel);
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, OFFSET);
-        int with = Mth.clamp(Math.max(holder.bounds().width(), textWidth), WIDGET_SIZE + (SLOT_SIZE + PADDING) * 2, bounds.width);
+        int with = Mth.clamp(Math.max(holder.bounds().width, textWidth), WIDGET_SIZE + (SLOT_SIZE + PADDING) * 2, bounds.width);
         int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
-        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().height() + OFFSET);
+        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().height + OFFSET);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
         Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());

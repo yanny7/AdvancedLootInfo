@@ -1,11 +1,10 @@
 package com.yanny.ali.api;
 
+import com.mojang.datafixers.util.Either;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 public interface IWidgetUtils extends IClientUtils {
-    Rect addSlotWidget(ItemStack item, IDataNode entry, int x, int y);
-
-    Rect addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y);
+    void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect);
 }

@@ -1,18 +1,15 @@
 package com.yanny.ali.plugin.lootjs.widget;
 
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.ListWidget;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
 
 public class WeightedAddLootWidget extends ListWidget {
-    public WeightedAddLootWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
-        super(utils, entry, x, y, maxWidth);
+    public WeightedAddLootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        super(utils, entry, rect, maxWidth);
     }
 
     @Override
-    public IWidget getLootGroupWidget(int x, int y, IDataNode entry) {
-        return WidgetUtils.getRandomWidget(x, y, entry);
+    public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
+        return WidgetUtils.getRandomWidget(rect, entry);
     }
 }

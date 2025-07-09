@@ -20,17 +20,17 @@ import org.jetbrains.annotations.NotNull;
 public class Plugin implements IPlugin {
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerWidget(LootTableNode.ID, WidgetDirection.VERTICAL, LootTableWidget::new, LootTableWidget::getBounds);
-        registry.registerWidget(LootPoolNode.ID, WidgetDirection.VERTICAL, LootPoolWidget::new, LootPoolWidget::getBounds);
-        registry.registerWidget(ItemNode.ID, WidgetDirection.HORIZONTAL, ItemWidget::new, ItemWidget::getBounds);
-        registry.registerWidget(EmptyNode.ID, WidgetDirection.HORIZONTAL, EmptyWidget::new, EmptyWidget::getBounds);
-        registry.registerWidget(ReferenceNode.ID, WidgetDirection.VERTICAL, ReferenceWidget::new, ReferenceWidget::getBounds);
-        registry.registerWidget(DynamicNode.ID, WidgetDirection.VERTICAL, DynamicWidget::new, DynamicWidget::getBounds);
-        registry.registerWidget(TagNode.ID, WidgetDirection.HORIZONTAL, TagWidget::new, TagWidget::getBounds);
-        registry.registerWidget(AlternativesNode.ID, WidgetDirection.VERTICAL, AlternativesWidget::new, AlternativesWidget::getBounds);
-        registry.registerWidget(SequenceNode.ID, WidgetDirection.VERTICAL, SequentialWidget::new, SequentialWidget::getBounds);
-        registry.registerWidget(GroupNode.ID, WidgetDirection.VERTICAL, GroupWidget::new, GroupWidget::getBounds);
-        registry.registerWidget(MissingNode.ID, WidgetDirection.VERTICAL, MissingWidget::new, MissingWidget::getBounds);
+        registry.registerWidget(LootTableNode.ID, LootTableWidget::new);
+        registry.registerWidget(LootPoolNode.ID, LootPoolWidget::new);
+        registry.registerWidget(ItemNode.ID, ItemWidget::new);
+        registry.registerWidget(EmptyNode.ID, EmptyWidget::new);
+        registry.registerWidget(ReferenceNode.ID, ReferenceWidget::new);
+        registry.registerWidget(DynamicNode.ID, DynamicWidget::new);
+        registry.registerWidget(TagNode.ID, TagWidget::new);
+        registry.registerWidget(AlternativesNode.ID, AlternativesWidget::new);
+        registry.registerWidget(SequenceNode.ID, SequentialWidget::new);
+        registry.registerWidget(GroupNode.ID, GroupWidget::new);
+        registry.registerWidget(MissingNode.ID, MissingWidget::new);
 
         registry.registerNode(LootTableNode.ID, LootTableNode::new);
         registry.registerNode(LootPoolNode.ID, LootPoolNode::new);

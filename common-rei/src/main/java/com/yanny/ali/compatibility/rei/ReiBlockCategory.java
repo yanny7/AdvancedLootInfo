@@ -47,8 +47,8 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         int offset = isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING;
         List<Widget> widgets = new LinkedList<>();
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, offset);
-        int width = holder.bounds().width() % 2 == 0 ? holder.bounds().width() : holder.bounds().width() + 1;
-        Rectangle innerBounds = new Rectangle(0, 0, width, holder.bounds().height() + offset);
+        int width = holder.bounds().width % 2 == 0 ? holder.bounds().width : holder.bounds().width + 1;
+        Rectangle innerBounds = new Rectangle(0, 0, width, holder.bounds().height + offset);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
         Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());

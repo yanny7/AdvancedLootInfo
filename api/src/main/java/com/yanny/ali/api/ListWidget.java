@@ -1,10 +1,8 @@
 package com.yanny.ali.api;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -18,42 +16,47 @@ public abstract class ListWidget extends IWidget {
     public static final int GROUP_WIDGET_HEIGHT = 18;
 
     private final List<IWidget> widgets;
-    private final Rect bounds;
-    private final IClientUtils utils;
+    private final RelativeRect bounds;
 
-    public ListWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
-        this(utils, entry, x, y, maxWidth, entry);
+    public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        this(utils, entry, rect, maxWidth, entry);
     }
 
-    public ListWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth, IDataNode tooltipNode) {
+    public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth, IDataNode tooltipNode) {
         super(entry.getId());
-        IWidget groupWidget = getLootGroupWidget(x, y, tooltipNode);
+        IWidget groupWidget = getLootGroupWidget(rect, tooltipNode);
         boolean hasGroupWidget = groupWidget != null;
         int xOffset = hasGroupWidget ? GROUP_WIDGET_WIDTH : 0;
 
         widgets = new ArrayList<>();
-        this.utils = utils;
+        bounds = rect;
 
         if (hasGroupWidget) {
             widgets.add(groupWidget);
         }
 
         if (entry instanceof ListNode listNode) {
-            Pair<List<IWidget>, Rect> info = utils.createWidgets(utils, listNode.nodes(), x + xOffset, y, maxWidth);
+            RelativeRect subRect = new RelativeRect(xOffset, 0, rect.width - GROUP_WIDGET_WIDTH, 0, rect);
+            List<IWidget> group = utils.createWidgets(utils, listNode.nodes(), subRect, maxWidth);
 
-            widgets.addAll(new LinkedList<>(info.getFirst()));
-            bounds = new Rect(x, y, info.getSecond().width() + xOffset, info.getSecond().height());
+            widgets.addAll(utils.createWidgets(utils, listNode.nodes(), subRect, maxWidth));
+            bounds.setDimensions(subRect.width + GROUP_WIDGET_WIDTH, subRect.height);
         } else {
-            bounds = new Rect(x, y, GROUP_WIDGET_WIDTH, 18);
+            bounds.setDimensions(GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         }
     }
 
     @Nullable
-    public abstract IWidget getLootGroupWidget(int x, int y, IDataNode entry);
+    public abstract IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry);
 
     @Override
-    public Rect getRect() {
+    public RelativeRect getRect() {
         return bounds;
+    }
+
+    @Override
+    public WidgetDirection getDirection() {
+        return WidgetDirection.VERTICAL;
     }
 
     @Override
@@ -64,26 +67,26 @@ public abstract class ListWidget extends IWidget {
         for (IWidget widget : widgets) {
             widget.render(guiGraphics, mouseX, mouseY);
 
-            WidgetDirection direction = utils.getWidgetDirection(widget.getNodeId());
+            WidgetDirection direction = widget.getDirection();
 
             if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
-                lastY = Math.max(lastY, widget.getRect().y());
+                lastY = Math.max(lastY, widget.getRect().getY());
             }
 
             lastDirection = direction;
         }
 
-        int top = bounds.y() + 18;
-        int height = lastY - bounds.y() - 9;
+        int top = bounds.getY() + 18;
+        int height = lastY - bounds.getY() - 9;
 
-        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 3, top, 2, height, 0, 0, 2, 18);
+        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.getX() + 3, top, 2, height, 0, 0, 2, 18);
         lastDirection = null;
 
         for (IWidget widget : widgets) {
-            WidgetDirection direction = utils.getWidgetDirection(widget.getNodeId());
+            WidgetDirection direction = widget.getDirection();
 
-            if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().y() > bounds.y() + 18) {
-                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.x() + 4, widget.getRect().y() + 8, 3, 2, 2, 0, 18, 2);
+            if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().offsetY > 0) {
+                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.getX() + 4, widget.getRect().getY() + 8, 3, 2, 2, 0, 18, 2);
             }
 
             lastDirection = direction;
@@ -95,7 +98,7 @@ public abstract class ListWidget extends IWidget {
         List<Component> components = new LinkedList<>();
 
         for (IWidget widget : widgets) {
-            Rect b = widget.getRect();
+            RelativeRect b = widget.getRect();
 
             if (b.contains(mouseX, mouseY)) {
                 components.addAll(widget.getTooltipComponents(mouseX, mouseY));
@@ -110,7 +113,7 @@ public abstract class ListWidget extends IWidget {
         boolean clicked = false;
 
         for (IWidget widget : widgets) {
-            Rect b = widget.getRect();
+            RelativeRect b = widget.getRect();
 
             if (b.contains(mouseX, mouseY)) {
                 clicked |= widget.mouseClicked(mouseX, mouseY, button);
@@ -118,15 +121,5 @@ public abstract class ListWidget extends IWidget {
         }
 
         return clicked;
-    }
-
-    @NotNull
-    public static Rect getBounds(IClientUtils registry, IDataNode entry, int x, int y, int maxWidth) {
-        if (entry instanceof ListNode listNode) {
-            Rect rect = registry.getBounds(registry, listNode.nodes(), x + GROUP_WIDGET_WIDTH, y, maxWidth);
-            return new Rect(x, y, rect.width() + GROUP_WIDGET_WIDTH, rect.height());
-        } else {
-            return new Rect(x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
-        }
     }
 }

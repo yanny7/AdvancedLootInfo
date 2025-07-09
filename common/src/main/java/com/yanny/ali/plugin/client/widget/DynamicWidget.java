@@ -5,26 +5,30 @@ import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class DynamicWidget extends IWidget {
     private final List<Component> components;
-    private final Rect bounds;
+    private final RelativeRect bounds;
     private final IWidget widget;
 
-    public DynamicWidget(IWidgetUtils utils, IDataNode entry, int x, int y, int maxWidth) {
+    public DynamicWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(entry.getId());
-        widget = WidgetUtils.getDynamicWidget(x, y, entry);
+        widget = WidgetUtils.getDynamicWidget(rect, entry);
         bounds = widget.getRect();
         components = NodeUtils.toComponents(entry.getTooltip(), 0);
     }
 
     @Override
-    public Rect getRect() {
+    public RelativeRect getRect() {
         return bounds;
+    }
+
+    @Override
+    public WidgetDirection getDirection() {
+        return WidgetDirection.HORIZONTAL;
     }
 
     @Override
@@ -43,10 +47,5 @@ public class DynamicWidget extends IWidget {
     @Override
     public boolean mouseClicked(int mouseX, int mouseY, int button) {
         return widget.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @NotNull
-    public static Rect getBounds(IClientUtils utils, IDataNode entry, int x, int y, int maxWidth) {
-        return new Rect(x, y, 7, 18);
     }
 }

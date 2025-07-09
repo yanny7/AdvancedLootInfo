@@ -13,7 +13,9 @@ public abstract class IWidget {
         this.id = id;
     }
 
-    public abstract Rect getRect();
+    public abstract RelativeRect getRect();
+
+    public abstract WidgetDirection getDirection();
 
     public ResourceLocation getNodeId() {
         return id;
