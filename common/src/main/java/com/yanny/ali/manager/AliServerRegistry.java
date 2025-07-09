@@ -9,9 +9,12 @@ import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -41,9 +44,14 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
+    private final ICommonUtils utils;
 
     private ServerLevel serverLevel;
     private LootContext lootContext;
+
+    public AliServerRegistry(ICommonUtils utils) {
+        this.utils = utils;
+    }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
@@ -266,6 +274,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {
         return new LootTableNode(modifiers, this, lootTable);
+    }
+
+    @Override
+    public List<Entity> createEntities(EntityType<?> type, Level level) {
+        return utils.createEntities(type, level);
     }
 
     public void printServerInfo() {

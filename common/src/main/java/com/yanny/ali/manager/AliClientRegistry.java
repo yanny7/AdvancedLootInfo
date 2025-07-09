@@ -2,12 +2,12 @@ package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.Level;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -20,6 +20,11 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
     private final Map<ResourceLocation, List<Item>> lootItemMap = new HashMap<>();
     private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
+    private final ICommonUtils utils;
+
+    public AliClientRegistry(ICommonUtils utils) {
+        this.utils = utils;
+    }
 
     public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<Item> items) {
         lootItemMap.put(resourceLocation, items);
@@ -119,8 +124,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public List<LootPool> getLootPools(LootTable lootTable) {
-        return Services.PLATFORM.getLootPools(lootTable);
+    public List<Entity> createEntities(EntityType<?> type, Level level) {
+        return utils.createEntities(type, level);
     }
 
     public void printClientInfo() {

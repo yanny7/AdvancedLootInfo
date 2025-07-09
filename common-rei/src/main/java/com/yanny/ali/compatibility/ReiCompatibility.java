@@ -6,8 +6,9 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GameplayLootType;
-import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.rei.*;
+import com.yanny.ali.manager.AliClientRegistry;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategories;
@@ -24,8 +25,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
@@ -84,11 +83,12 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
+        AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
         if (client != null && level != null) {
-            Map<ResourceLocation, IDataNode> map = GenericUtils.getLootData();
+            Map<ResourceLocation, IDataNode> map = clientRegistry.getLootData();
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
@@ -100,7 +100,7 @@ public class ReiCompatibility implements REIClientPlugin {
                 if (node != null) {
                     for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
                         if (holder.category.getLootCategory().validate(block)) {
-                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, GenericUtils.getItems(location)));
+                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, clientRegistry.getItems(location)));
                             break;
                         }
                     }
@@ -110,50 +110,7 @@ public class ReiCompatibility implements REIClientPlugin {
             }
 
             for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-                List<Entity> entityList = new LinkedList<>();
-
-                if (entityType == EntityType.SHEEP) {
-                    for (DyeColor color : DyeColor.values()) {
-                        Sheep sheep;
-
-                        try {
-                            sheep = (Sheep) entityType.create(level);
-                        } catch (Throwable e) {
-                            LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
-                            continue;
-                        }
-
-                        if (sheep != null) {
-                            sheep.setColor(color);
-                            entityList.add(sheep);
-                        }
-                    }
-
-                    Sheep sheep;
-
-                    try {
-                        sheep = (Sheep) entityType.create(level);
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to create sheep: {}", e.getMessage());
-                        continue;
-                    }
-
-                    if (sheep != null) {
-                        sheep.setSheared(true);
-                        entityList.add(sheep);
-                    }
-                } else {
-                    Entity entity;
-
-                    try {
-                        entity = entityType.create(level);
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
-                        continue;
-                    }
-
-                    entityList.add(entity);
-                }
+                List<Entity> entityList = clientRegistry.createEntities(entityType, level);
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
@@ -163,7 +120,7 @@ public class ReiCompatibility implements REIClientPlugin {
                         if (node != null) {
                             for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
                                 if (holder.category.getLootCategory().validate(entity)) {
-                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, GenericUtils.getItems(location)));
+                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, clientRegistry.getItems(location)));
                                     break;
                                 }
                             }
@@ -179,7 +136,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
                 for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
                     if (holder.category.getLootCategory().validate(location.getPath())) {
-                        gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath(), GenericUtils.getItems(location)));
+                        gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.getPath(), clientRegistry.getItems(location)));
                         break;
                     }
                 }

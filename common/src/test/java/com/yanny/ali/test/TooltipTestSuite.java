@@ -22,9 +22,12 @@ import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -75,6 +78,11 @@ public class TooltipTestSuite {
         PluginManager.registerClientEvent();
         PluginManager.registerServerEvent();
         UTILS = new IServerUtils() {
+            @Override
+            public List<Entity> createEntities(EntityType<?> type, Level level) {
+                return PluginManager.SERVER_REGISTRY.createEntities(type, level);
+            }
+
             @Override
             public List<LootPool> getLootPools(LootTable lootTable) {
                 return PluginManager.SERVER_REGISTRY.getLootPools(lootTable);

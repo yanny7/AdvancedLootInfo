@@ -2,11 +2,13 @@ package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
+import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.server.ConditionTooltipUtils;
 import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
@@ -18,6 +20,11 @@ import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @Override
+    public void registerCommon(ICommonRegistry registry) {
+        registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
+    }
+
     @Override
     public void registerClient(IClientRegistry registry) {
         registry.registerWidget(LootTableNode.ID, LootTableWidget::new);

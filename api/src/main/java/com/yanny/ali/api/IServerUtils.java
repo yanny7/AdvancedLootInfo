@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -41,6 +42,8 @@ public interface IServerUtils extends ICommonUtils {
     LootContext getLootContext();
 
     LootTable getLootTable(ResourceLocation location);
+
+    List<LootPool> getLootPools(LootTable lootTable);
 
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {

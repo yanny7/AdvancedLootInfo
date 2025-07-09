@@ -13,9 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootDataManager;
@@ -139,50 +137,7 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-            List<Entity> entityList = new LinkedList<>();
-
-            if (entityType == EntityType.SHEEP) { //TODO add API
-                for (DyeColor color : DyeColor.values()) {
-                    Sheep sheep;
-
-                    try {
-                        sheep = (Sheep) entityType.create(level);
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
-                        continue;
-                    }
-
-                    if (sheep != null) {
-                        sheep.setColor(color);
-                        entityList.add(sheep);
-                    }
-                }
-
-                Sheep sheep;
-
-                try {
-                    sheep = (Sheep) entityType.create(level);
-                } catch (Throwable e) {
-                    LOGGER.warn("Failed to create sheep: {}", e.getMessage());
-                    continue;
-                }
-
-                if (sheep != null) {
-                    sheep.setSheared(true);
-                    entityList.add(sheep);
-                }
-            } else {
-                Entity entity;
-
-                try {
-                    entity = entityType.create(level);
-                } catch (Throwable e) {
-                    LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
-                    continue;
-                }
-
-                entityList.add(entity);
-            }
+            List<Entity> entityList = serverRegistry.createEntities(entityType, level);
 
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
