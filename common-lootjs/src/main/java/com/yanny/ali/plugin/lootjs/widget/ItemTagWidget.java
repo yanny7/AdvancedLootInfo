@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.lootjs.widget;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
-import net.minecraft.client.gui.GuiGraphics;
 
 public class ItemTagWidget extends IWidget {
     private final RelativeRect bounds;
@@ -24,9 +23,5 @@ public class ItemTagWidget extends IWidget {
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.HORIZONTAL;
-    }
-
-    @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     }
 }

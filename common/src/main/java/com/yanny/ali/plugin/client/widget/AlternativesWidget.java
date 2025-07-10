@@ -12,5 +12,4 @@ public class AlternativesWidget extends ListWidget {
     public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
         return WidgetUtils.getAlternativesWidget(rect, entry);
     }
-
 }

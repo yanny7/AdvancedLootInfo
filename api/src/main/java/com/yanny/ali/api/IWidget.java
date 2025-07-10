@@ -21,7 +21,8 @@ public abstract class IWidget {
         return id;
     }
 
-    public abstract void render(GuiGraphics guiGraphics, int mouseX, int mouseY);
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    }
 
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return List.of();
