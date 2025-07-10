@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -27,6 +28,8 @@ public interface IServerUtils extends ICommonUtils {
     <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
 
     <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition);
+
+    <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count);
 

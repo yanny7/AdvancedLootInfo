@@ -22,7 +22,7 @@ import java.util.List;
 
 @AliEntrypoint
 public class LootJsPlugin implements IPlugin {
-    public static final String ID = "kubejs";
+    public static final String ID = "lootjs";
 
     private static final Logger LOGGER = LogUtils.getLogger();
 

@@ -4,11 +4,9 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.nodes.*;
-import com.yanny.ali.plugin.server.ConditionTooltipUtils;
-import com.yanny.ali.plugin.server.FunctionTooltipUtils;
-import com.yanny.ali.plugin.server.ItemCollectorUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
+import com.yanny.ali.plugin.server.*;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
@@ -124,6 +122,8 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(SetNbtFunction.class, FunctionTooltipUtils::getSetNbtTooltip);
         registry.registerFunctionTooltip(SetPotionFunction.class, FunctionTooltipUtils::getSetPotionTooltip);
         registry.registerFunctionTooltip(SetStewEffectFunction.class, FunctionTooltipUtils::getSetStewEffectTooltip);
+
+        registry.registerIngredientTooltip(Ingredient.class, IngredientTooltipUtils::getIngredientTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithLootingCondition.class, TooltipUtils::applyRandomChanceWithLooting);

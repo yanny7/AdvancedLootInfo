@@ -51,7 +51,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
         TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
         TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
-        TRANSLATION_MAP.put("ali.type.condition.missing", "Not implemented: %s");
         TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
         TRANSLATION_MAP.put("ali.type.condition.random_chance_with_looting", "Random Chance With Looting:");
         TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
@@ -77,7 +76,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.lightning_strike", "Creates Lightning Strike:");
         TRANSLATION_MAP.put("ali.type.function.limit_count", "Limit Count:");
         TRANSLATION_MAP.put("ali.type.function.looting_enchant", "Looting Enchant:");
-        TRANSLATION_MAP.put("ali.type.function.missing", "Not implemented: %s");
         TRANSLATION_MAP.put("ali.type.function.reference", "Reference:");
         TRANSLATION_MAP.put("ali.type.function.set_attributes", "Set Attributes:");
         TRANSLATION_MAP.put("ali.type.function.set_banner_pattern", "Set Banner Pattern:");
@@ -102,10 +100,12 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
 
         TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");
+        TRANSLATION_MAP.put("ali.property.branch.all", "All:");
+        TRANSLATION_MAP.put("ali.property.branch.any", "Any:");
         TRANSLATION_MAP.put("ali.property.branch.banner_patterns", "Banner Patterns:");
+        TRANSLATION_MAP.put("ali.property.branch.biomes", "Biomes:");
         TRANSLATION_MAP.put("ali.property.branch.block_predicate", "Block Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
-        TRANSLATION_MAP.put("ali.property.branch.biomes", "Biomes:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
@@ -239,6 +239,7 @@ public class LanguageHolder {
 
         TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
 
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.missing", "Not implemented: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values", "%s%s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values_with_space", "%s %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.1", "  ->");

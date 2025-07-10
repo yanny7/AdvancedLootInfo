@@ -13,6 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
@@ -38,6 +39,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, EntryFactory<?>> entryFactoryMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
@@ -104,6 +106,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     public <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
         conditionTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+    }
+
+    @Override
+    public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+        //noinspection unchecked
+        ingredientTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
@@ -178,7 +186,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 return GenericTooltipUtils.getMissingFunction(utils, function);
             } catch (Throwable e) {
                 LOGGER.warn("Function type {} was not registered", function.getClass().getCanonicalName());
-                return GenericTooltipUtils.getStringTooltip(utils, "ali.type.function.missing", function.getClass().getSimpleName());
+                return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", function.getClass().getSimpleName());
             }
         }
     }
@@ -196,8 +204,20 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 return GenericTooltipUtils.getMissingCondition(utils, condition);
             } catch (Throwable e) {
                 LOGGER.warn("Condition type for {} was not registered", condition.getClass().getCanonicalName());
-                return GenericTooltipUtils.getStringTooltip(utils, "ali.type.condition.missing", condition.getClass().getSimpleName());
+                return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", condition.getClass().getSimpleName());
             }
+        }
+    }
+
+    @Override
+    public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+        BiFunction<IServerUtils, Ingredient, ITooltipNode> ingredientTooltipGetter = ingredientTooltipMap.get(ingredient.getClass());
+
+        if (ingredientTooltipGetter != null) {
+            return ingredientTooltipGetter.apply(utils, ingredient);
+        } else {
+            LOGGER.warn("Ingredient tooltip for {} was not registered", ingredient.getClass().getCanonicalName());
+            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", ingredient.getClass().getSimpleName());
         }
     }
 
@@ -288,6 +308,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} entry factories", entryFactoryMap.size());
         LOGGER.info("Registered {} function tooltips", functionTooltipMap.size());
         LOGGER.info("Registered {} condition tooltips", conditionTooltipMap.size());
+        LOGGER.info("Registered {} ingredient tooltips", ingredientTooltipMap.size());
         LOGGER.info("Registered {} chance modifiers", chanceModifierMap.size());
         LOGGER.info("Registered {} count modifiers", countModifierMap.size());
         LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());

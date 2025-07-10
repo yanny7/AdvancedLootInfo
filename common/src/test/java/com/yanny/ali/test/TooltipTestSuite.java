@@ -26,6 +26,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -111,6 +112,11 @@ public class TooltipTestSuite {
             @Override
             public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
                 return PluginManager.SERVER_REGISTRY.getConditionTooltip(utils, condition);
+            }
+
+            @Override
+            public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+                return PluginManager.SERVER_REGISTRY.getIngredientTooltip(utils, ingredient);
             }
 
             @Override

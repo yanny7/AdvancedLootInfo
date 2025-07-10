@@ -196,6 +196,13 @@ accessible field net/minecraft/advancements/critereon/SlimePredicate size Lnet/m
 accessible field net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate criterions Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;
 accessible field net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate state Z
 
+accessible field net/minecraft/world/item/crafting/Ingredient values [Lnet/minecraft/world/item/crafting/Ingredient$Value;
+accessible class net/minecraft/world/item/crafting/Ingredient$Value
+accessible class net/minecraft/world/item/crafting/Ingredient$ItemValue
+accessible field net/minecraft/world/item/crafting/Ingredient$ItemValue item Lnet/minecraft/world/item/ItemStack;
+accessible class net/minecraft/world/item/crafting/Ingredient$TagValue
+accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/minecraft/tags/TagKey;
+
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
 accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
 
@@ -218,12 +225,3 @@ accessible class net/minecraft/advancements/critereon/PlayerPredicate$Advancemen
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
 accessible method net/minecraft/advancements/critereon/LighthingBoltPredicate <init> (Lnet/minecraft/advancements/critereon/MinMaxBounds$Ints;Lnet/minecraft/advancements/critereon/EntityPredicate;)V
 accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate <init> (Ljava/util/List;)V
-
-##########
-# KUBEJS #
-##########
-
-accessible class net/minecraft/world/item/crafting/Ingredient$ItemValue
-accessible field net/minecraft/world/item/crafting/Ingredient$ItemValue item Lnet/minecraft/world/item/ItemStack;
-accessible class net/minecraft/world/item/crafting/Ingredient$TagValue
-accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/minecraft/tags/TagKey;

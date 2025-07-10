@@ -22,6 +22,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -50,13 +51,13 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getMissingFunction(IServerUtils utils, LootItemFunction function) {
-        return getFunctionTypeTooltip(utils, "ali.type.function.missing", function.getType());
+        return getFunctionTypeTooltip(utils, "ali.util.advanced_loot_info.missing", function.getType());
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getMissingCondition(IServerUtils utils, LootItemCondition condition) {
-        return getConditionTypeTooltip(utils, "ali.type.condition.missing", condition.getType());
+        return getConditionTypeTooltip(utils, "ali.util.advanced_loot_info.missing", condition.getType());
     }
 
     @NotNull
@@ -527,6 +528,12 @@ public class GenericTooltipUtils {
         }
 
         return TooltipNode.EMPTY;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getItemStackTooltip(IServerUtils utils, String key, ItemStack itemStack) {
+        return getItemTooltip(utils, key, itemStack.getItem());
     }
 
     // HELPERS
