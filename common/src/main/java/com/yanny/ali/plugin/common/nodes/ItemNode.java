@@ -28,7 +28,7 @@ public class ItemNode implements IDataNode, IItemNode {
     private final ItemStack itemStack;
     private final RangeValue count;
 
-    public ItemNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(IServerUtils utils, LootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
 
         this.conditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();

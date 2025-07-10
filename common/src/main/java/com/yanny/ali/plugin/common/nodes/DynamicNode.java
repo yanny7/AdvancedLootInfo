@@ -1,7 +1,10 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -19,7 +22,7 @@ public class DynamicNode implements IDataNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public DynamicNode(List<ILootModifier<?>> modifiers, IServerUtils utils, DynamicLoot entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public DynamicNode(IServerUtils utils, DynamicLoot entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
 

@@ -23,7 +23,7 @@ public interface IServerUtils extends ICommonUtils {
 
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
 
-    <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
+    <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
 
@@ -47,9 +47,4 @@ public interface IServerUtils extends ICommonUtils {
     LootTable getLootTable(ResourceLocation location);
 
     List<LootPool> getLootPools(LootTable lootTable);
-
-    @FunctionalInterface
-    interface EntryFactory<T extends LootPoolEntryContainer> {
-        IDataNode create(List<ILootModifier<?>> modifiers, IServerUtils utils, T entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions);
-    }
 }

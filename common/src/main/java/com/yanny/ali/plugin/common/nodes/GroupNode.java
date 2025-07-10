@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -20,8 +19,8 @@ public class GroupNode extends CompositeNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public GroupNode(List<ILootModifier<?>> modifiers, IServerUtils utils, EntryGroup entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        super(modifiers, utils, entry, chance, sumWeight, functions, conditions);
+    public GroupNode(IServerUtils utils, EntryGroup entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        super(utils, entry, chance, sumWeight, functions, conditions);
         tooltip = EntryTooltipUtils.getGroupTooltip();
     }
 

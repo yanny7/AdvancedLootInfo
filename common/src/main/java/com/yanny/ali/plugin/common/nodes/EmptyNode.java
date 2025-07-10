@@ -1,7 +1,10 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -17,7 +20,7 @@ public class EmptyNode implements IDataNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public EmptyNode(List<ILootModifier<?>> modifiers, IServerUtils utils, EmptyLootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public EmptyNode(IServerUtils utils, EmptyLootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry, chance, sumWeight, functions, conditions);
     }
 

@@ -25,6 +25,10 @@ public class LootTableNode extends ListNode {
         this(modifiers, utils, lootTable, 1, Collections.emptyList(), Collections.emptyList());
     }
 
+    public LootTableNode(IServerUtils utils, LootTable lootTable, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this(Collections.emptyList(), utils, lootTable, chance, functions, conditions);
+    }
+
     public LootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable lootTable, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootTable.functions)).toList();
 

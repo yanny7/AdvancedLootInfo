@@ -1,6 +1,7 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
@@ -100,7 +101,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
+            public <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
                 return PluginManager.SERVER_REGISTRY.getEntryFactory(utils, type);
             }
 

@@ -170,7 +170,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         //noinspection unchecked
         EntryFactory<T> entryFactory = (EntryFactory<T>) entryFactoryMap.get(type.getClass());
 
-        return Objects.requireNonNullElseGet(entryFactory, () -> (modifiers, utils1, entry, chance, sumWeight, functions, conditions) -> new MissingNode());
+        return Objects.requireNonNullElseGet(entryFactory, () -> (utils1, entry, chance, sumWeight, functions, conditions) -> new MissingNode());
     }
 
     @Override

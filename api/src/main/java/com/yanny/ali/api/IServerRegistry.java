@@ -21,7 +21,7 @@ public interface IServerRegistry {
 
     <T extends LootItemFunction> void registerItemCollector(Class<T> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier);
 
-    <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, IServerUtils.EntryFactory<T> entryFactory);
+    <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entryFactory);
 
     <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
 
@@ -38,4 +38,9 @@ public interface IServerRegistry {
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
+
+    @FunctionalInterface
+    interface EntryFactory<T extends LootPoolEntryContainer> {
+        IDataNode create(IServerUtils utils, T entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions);
+    }
 }

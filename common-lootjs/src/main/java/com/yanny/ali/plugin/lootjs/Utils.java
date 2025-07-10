@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -55,7 +54,7 @@ public class Utils {
             return new ItemStackNode(utils, itemGenerator.item(), (float) weight / sumWeight, allFunctions, allConditions);
         } else if (generator instanceof LootEntry.VanillaWrappedLootEntry lootEntry) {
             LootPoolEntryContainer entryContainer = lootEntry.entry();
-            return utils.getEntryFactory(utils, entryContainer).create(Collections.emptyList(), utils, entryContainer, 1, sumWeight, allFunctions, allConditions);
+            return utils.getEntryFactory(utils, entryContainer).create(utils, entryContainer, 1, sumWeight, allFunctions, allConditions);
         } else if (generator instanceof LootEntry.RandomIngredientGenerator ingredientGenerator) {
             Ingredient ingredient = ingredientGenerator.ingredient();
 
