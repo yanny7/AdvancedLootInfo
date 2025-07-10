@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -7,6 +8,8 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -17,7 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class ItemNode implements IDataNode, ISlotNode, IItemNode {
+public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item");
 
     private final List<ITooltipNode> tooltip;
@@ -42,8 +45,8 @@ public class ItemNode implements IDataNode, ISlotNode, IItemNode {
     }
 
     @Override
-    public ItemStack getModifiedItem() {
-        return itemStack;
+    public Either<ItemStack, TagKey<Item>> getModifiedItem() {
+        return Either.left(itemStack);
     }
 
     @Override

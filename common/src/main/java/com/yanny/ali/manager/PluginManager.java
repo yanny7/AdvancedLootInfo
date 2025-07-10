@@ -19,8 +19,9 @@ public class PluginManager {
     }
 
     public static void registerCommonEvent() {
-        LOGGER.info("Registering common plugin data...");
         PLUGINS = Services.PLATFORM.getPlugins();
+
+        LOGGER.info("Registering common plugin data...");
         COMMON_REGISTRY = new AliCommonRegistry();
 
         for (PluginHolder plugin : PLUGINS) {

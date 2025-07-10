@@ -101,7 +101,7 @@ public class NodeUtils {
         if (node instanceof ListNode listNode) {
             listNode.nodes().removeIf((n) -> {
                 if (n instanceof IItemNode itemNode) {
-                    return predicate.test(itemNode.getModifiedItem());
+                    return itemNode.getModifiedItem().left().map(predicate::test).orElse(false); //TODO for now skipping tags...
                 } else {
                     removeItem(n, predicate);
                 }
@@ -115,7 +115,8 @@ public class NodeUtils {
     private static void replaceItem(IServerUtils utils, IDataNode node, Function<IDataNode, IDataNode> factory, Predicate<ItemStack> predicate) {
         if (node instanceof ListNode listNode) {
             listNode.nodes().replaceAll((n) -> {
-                if (n instanceof IItemNode itemNode && predicate.test(itemNode.getModifiedItem())) {
+
+                if (n instanceof IItemNode itemNode && itemNode.getModifiedItem().left().map(predicate::test).orElse(false)) { //TODO for now skipping tags...
                     return factory.apply(n); //TODO preserve count!
                 } else if (n instanceof ListNode l) {
                     replaceItem(utils, l, factory, predicate);

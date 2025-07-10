@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.lootjs.widget;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,7 +11,7 @@ public class ItemStackWidget extends IWidget {
         super(entry.getId());
         ItemStackNode node = (ItemStackNode) entry;
 
-        utils.addSlotWidget(Either.left(node.getModifiedItem()), node, rect);
+        utils.addSlotWidget(node.getModifiedItem(), node, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
     }

@@ -1,13 +1,9 @@
 package com.yanny.ali.compatibility.emi;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.Rect;
-import com.yanny.ali.api.RelativeRect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
-import com.yanny.ali.plugin.common.nodes.TagNode;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -51,11 +47,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
             if (left.isPresent()) {
                 ItemStack itemStack = left.get();
-                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiStack.of(itemStack), h.rect.getX(), h.rect.getY(), ((TagNode) h.entry).getCount());
-
+                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiStack.of(itemStack), h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount()); //FIXME move either inside
             } else if (right.isPresent()) {
                 TagKey<Item> tagKey = right.get();
-                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiIngredient.of(tagKey), h.rect.getX(), h.rect.getY(), ((TagNode) h.entry).getCount());
+                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiIngredient.of(tagKey), h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount());
             } else {
                 throw new IllegalStateException("Unreachable code");
             }

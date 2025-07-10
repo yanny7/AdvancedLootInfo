@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.client.widget;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,7 +10,7 @@ public class ItemWidget extends IWidget {
     public ItemWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(entry.getId());
         ItemNode node = (ItemNode) entry;
-        utils.addSlotWidget(Either.left(node.getModifiedItem()), node, rect);
+        utils.addSlotWidget(node.getModifiedItem(), node, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
     }
@@ -27,6 +26,6 @@ public class ItemWidget extends IWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) { //FIXME default value
     }
 }

@@ -113,7 +113,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             Holder h = slotParams.get(i);
 
             builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent((slotDrawable) -> {
-                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), ((ISlotNode) h.entry).getCount()));
+                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount()));
                 slotDrawables.add(slotDrawable);
             });
         }

@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.client.widget;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,7 +11,7 @@ public class TagWidget extends IWidget {
         super(entry.getId());
         TagNode tagEntry = (TagNode) entry;
 
-        utils.addSlotWidget(Either.right(tagEntry.getTag()), tagEntry, rect);
+        utils.addSlotWidget(tagEntry.getModifiedItem(), tagEntry, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
     }
