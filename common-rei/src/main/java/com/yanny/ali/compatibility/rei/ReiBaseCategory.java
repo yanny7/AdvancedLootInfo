@@ -64,10 +64,10 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         return lootCategory;
     }
 
-    protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int x, int y) {
+    protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int y) {
         List<Holder> slotWidgets = new LinkedList<>();
         List<Widget> widgets = new LinkedList<>();
-        RelativeRect rect = new RelativeRect(x, y, CATEGORY_WIDTH, 0);
+        RelativeRect rect = new RelativeRect(0, y, CATEGORY_WIDTH, 0);
         LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootData(), rect, CATEGORY_WIDTH);
         ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget, bounds);
 
@@ -83,15 +83,15 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
                 stack.tooltip(NodeUtils.toComponents(h.entry.getTooltip(), 0));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
-                widgets.add(Widgets.wrapRenderer(new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), 18, 18), new SlotCountRenderer(((IItemNode) h.entry).getCount()))); //FIXME move either inside
             } else if (right.isPresent()) {
                 TagKey<Item> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
                 ingredient.map((stack) -> stack.tooltip(NodeUtils.toComponents(h.entry.getTooltip(), 0)));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entries(ingredient).markOutput());
-                widgets.add(Widgets.wrapRenderer(new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), 18, 18), new SlotCountRenderer(((IItemNode) h.entry).getCount())));
             }
+
+            widgets.add(Widgets.wrapRenderer(new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), 18, 18), new SlotCountRenderer(((IItemNode) h.entry).getCount())));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }

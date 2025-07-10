@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     static final int CATEGORY_WIDTH = 9 * 18 - EmiScrollWidget.getScrollBoxScrollbarExtraWidth();
@@ -41,19 +40,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Widget> widgets = new ArrayList<>();
 
         widgets.addAll(slotWidgets.stream().map((h) -> {
-            Optional<ItemStack> left = h.item.left();
-            Optional<TagKey<Item>> right = h.item.right();
-            EmiLootSlotWidget widget;
-
-            if (left.isPresent()) {
-                ItemStack itemStack = left.get();
-                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiStack.of(itemStack), h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount()); //FIXME move either inside
-            } else if (right.isPresent()) {
-                TagKey<Item> tagKey = right.get();
-                widget = new EmiLootSlotWidget(h.utils, h.entry, EmiIngredient.of(tagKey), h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount());
-            } else {
-                throw new IllegalStateException("Unreachable code");
-            }
+            EmiIngredient ingredient = h.item.map(EmiStack::of, EmiIngredient::of);
+            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.utils, h.entry, ingredient, h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount());
 
             widget.recipeContext(h.recipe);
             return (Widget) widget;
@@ -88,14 +76,6 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
                 slotWidgets.add(new Holder(this, item, entry, rect, recipe));
             }
-//
-//            @Override
-//            public void addSlotWidget(TagKey<Item> item, IDataNode entry, int x, int y) {
-//                EmiLootSlotWidget widget = new EmiLootSlotWidget(this, entry, EmiIngredient.of(item), x, y, ((TagNode) entry).getCount());
-//
-//                widget.recipeContext(recipe);
-//                slotWidgets.add(widget);
-//            }
         };
     }
 

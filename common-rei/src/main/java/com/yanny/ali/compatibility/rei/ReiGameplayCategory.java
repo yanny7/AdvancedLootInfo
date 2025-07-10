@@ -39,7 +39,7 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Str
         Component lootName = GenericUtils.ellipsis( key, display.getId(), bounds.width);
         Component fullText = Component.translatableWithFallback(key, display.getId());
         int textWidth = Minecraft.getInstance().font.width(lootName);
-        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, OFFSET);
+        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), OFFSET);
         int with = Mth.clamp(holder.bounds().width, textWidth, bounds.width);
         int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
         Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().height + OFFSET);

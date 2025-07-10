@@ -46,7 +46,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         boolean isSpecial = display.getBlock() instanceof BushBlock || display.getBlock().asItem() == Items.AIR;
         int offset = isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING;
         List<Widget> widgets = new LinkedList<>();
-        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), 0, offset);
+        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), offset);
         int width = holder.bounds().width % 2 == 0 ? holder.bounds().width : holder.bounds().width + 1;
         Rectangle innerBounds = new Rectangle(0, 0, width, holder.bounds().height + offset);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
