@@ -9,6 +9,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.mixin.MixinAddLootAction;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.lootjs.LootJsPlugin;
+import com.yanny.ali.plugin.lootjs.Utils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +40,7 @@ public class AddLootNode extends ListNode {
         }
 
         for (LootEntry entry : mixinAddLootAction.getEntries()) {
-            addChildren(new LootEntryNode(utils, entry, sumWeight, functions, conditions));
+            addChildren(Utils.getEntry(utils, entry, sumWeight, functions, conditions));
         }
 
         addType = mixinAddLootAction.getType();

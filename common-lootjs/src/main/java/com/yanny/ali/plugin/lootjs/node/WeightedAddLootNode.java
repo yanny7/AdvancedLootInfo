@@ -7,6 +7,7 @@ import com.yanny.ali.mixin.MixinWeightedAddLootAction;
 import com.yanny.ali.mixin.MixinWeightedRandomList;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.lootjs.LootJsPlugin;
+import com.yanny.ali.plugin.lootjs.Utils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +35,7 @@ public class WeightedAddLootNode extends ListNode {
         tooltip = getTooltip(utils, action);
 
         for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getItems()) {
-            addChildren(new LootEntryNode(utils, wrapper.getData(), sumWeight, functions, conditions));
+            addChildren(Utils.getEntry(utils, wrapper.getData(), sumWeight, functions, conditions));
         }
     }
 

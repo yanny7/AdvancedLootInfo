@@ -60,14 +60,14 @@ public class LootJsPlugin implements IPlugin {
     public void registerClient(IClientRegistry registry) {
         registry.registerNode(AddLootNode.ID, AddLootNode::new);
         registry.registerNode(WeightedAddLootNode.ID, WeightedAddLootNode::new);
-        registry.registerNode(LootEntryNode.ID, LootEntryNode::new);
         registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerNode(ItemTagNode.ID, ItemTagNode::new);
         registry.registerNode(GroupLootNode.ID, GroupLootNode::new);
 
         registry.registerWidget(AddLootNode.ID, AddLootWidget::new);
         registry.registerWidget(WeightedAddLootNode.ID, WeightedAddLootWidget::new);
-        registry.registerWidget(LootEntryNode.ID, LootEntryWidget::new);
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
+        registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);
         registry.registerWidget(GroupLootNode.ID, GroupedLootWidget::new);
     }
 

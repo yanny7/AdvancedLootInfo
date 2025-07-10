@@ -85,8 +85,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                     if (direction == lastDirection) {
                         posY += bounds.height + PADDING;
                     } else {
-                        posY += widgets.get(widgets.size() - 1).getRect().height + bounds.height + PADDING;
-                        bounds.setOffset(0, widgets.get(widgets.size() - 1).getRect().height);
+                        posY += widgets.get(widgets.size() - 1).getRect().height + bounds.height + 2 * PADDING;
+                        bounds.setOffset(0, widgets.get(widgets.size() - 1).getRect().height + PADDING);
                     }
                 }
             }

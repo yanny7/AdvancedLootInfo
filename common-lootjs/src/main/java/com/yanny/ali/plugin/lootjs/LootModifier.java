@@ -16,7 +16,6 @@ import com.yanny.ali.plugin.lootjs.modifier.ExplodeFunction;
 import com.yanny.ali.plugin.lootjs.modifier.LightningStrikeFunction;
 import com.yanny.ali.plugin.lootjs.node.AddLootNode;
 import com.yanny.ali.plugin.lootjs.node.GroupLootNode;
-import com.yanny.ali.plugin.lootjs.node.LootEntryNode;
 import com.yanny.ali.plugin.lootjs.node.WeightedAddLootNode;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -74,7 +73,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                     MixinReplaceLootAction lootAction = (MixinReplaceLootAction) replaceLootAction;
                     Function<IDataNode, IDataNode> factory = (c) -> {
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), ((IItemNode)c).getConditions().stream()).toList(); //TODO preserve count?
-                        return new LootEntryNode(utils, lootAction.getLootEntry(), 1, functions, allConditions);
+                        return Utils.getEntry(utils, lootAction.getLootEntry(), 1, functions, allConditions);
                     };
 
                     operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), factory));

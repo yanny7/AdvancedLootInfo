@@ -30,6 +30,7 @@ public class TagNode implements IDataNode, IItemNode {
     private final TagKey<Item> tag;
     private final RangeValue count;
 
+    //FIXME remove modifiers
     public TagNode(List<ILootModifier<?>> modifiers, IServerUtils utils, TagEntry entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
 
