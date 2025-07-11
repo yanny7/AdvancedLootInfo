@@ -53,7 +53,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     @Override
     public List<IWidget> createWidgets(IWidgetUtils utils, List<IDataNode> entries, RelativeRect parent, int maxWidth) {
         int posX = 0, posY = 0;
-        int newLines = 0;
         List<IWidget> widgets = new LinkedList<>();
         WidgetDirection lastDirection = null;
 
@@ -80,14 +79,16 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                     }
                 } else {
                     posX = 0;
-                    newLines++;
 
-                    if (direction == lastDirection) {
-                        posY += bounds.height + PADDING;
-                    } else {
-                        posY += widgets.get(widgets.size() - 1).getRect().height + bounds.height + 2 * PADDING;
-                        bounds.setOffset(0, widgets.get(widgets.size() - 1).getRect().height + PADDING);
+                    if (direction != lastDirection) {
+                        if (lastDirection == WidgetDirection.HORIZONTAL) {
+                            posY += widgets.get(widgets.size() - 1).getRect().height + PADDING;
+                        }
+
+                        bounds.setOffset(posX, posY);
                     }
+
+                    posY += bounds.height + PADDING;
                 }
             }
 

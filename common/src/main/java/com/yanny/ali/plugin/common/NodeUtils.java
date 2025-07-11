@@ -112,18 +112,28 @@ public class NodeUtils {
         }
     }
 
-    private static void replaceItem(IServerUtils utils, IDataNode node, Function<IDataNode, IDataNode> factory, Predicate<ItemStack> predicate) {
+    private static void replaceItem(IServerUtils utils, IDataNode node, Function<IDataNode, List<IDataNode>> factory, Predicate<ItemStack> predicate) {
         if (node instanceof ListNode listNode) {
+            List<IDataNode> nodes = new ArrayList<>();
+
             listNode.nodes().replaceAll((n) -> {
 
                 if (n instanceof IItemNode itemNode && itemNode.getModifiedItem().left().map(predicate::test).orElse(false)) { //TODO for now skipping tags...
-                    return factory.apply(n); //TODO preserve count!
+                    List<IDataNode> result = factory.apply(n); //TODO preserve count!
+
+                    if (result.size() > 1) {
+                        nodes.addAll(result.subList(1, result.size()));
+                    }
+
+                    return result.get(0);
                 } else if (n instanceof ListNode l) {
                     replaceItem(utils, l, factory, predicate);
                 }
 
                 return n;
             });
+
+            nodes.forEach(listNode::addChildren);
         }
     }
 

@@ -4,27 +4,23 @@ import com.almostreliable.lootjs.core.AbstractLootModification;
 import com.almostreliable.lootjs.core.ILootAction;
 import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.loot.action.*;
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinCompositeLootAction;
 import com.yanny.ali.mixin.MixinModifyLootAction;
 import com.yanny.ali.mixin.MixinRemoveLootAction;
 import com.yanny.ali.mixin.MixinReplaceLootAction;
-import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
-import com.yanny.ali.plugin.lootjs.modifier.DropExperienceFunction;
-import com.yanny.ali.plugin.lootjs.modifier.ExplodeFunction;
-import com.yanny.ali.plugin.lootjs.modifier.LightningStrikeFunction;
-import com.yanny.ali.plugin.lootjs.node.AddLootNode;
-import com.yanny.ali.plugin.lootjs.node.GroupLootNode;
-import com.yanny.ali.plugin.lootjs.node.WeightedAddLootNode;
+import com.yanny.ali.plugin.lootjs.modifier.*;
+import com.yanny.ali.plugin.lootjs.node.*;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -71,16 +67,49 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                     operations.add(new IOperation.RemoveOperation(((MixinRemoveLootAction) removeLootAction).getPredicate()));
                 } else if (action instanceof ReplaceLootAction replaceLootAction) {
                     MixinReplaceLootAction lootAction = (MixinReplaceLootAction) replaceLootAction;
-                    Function<IDataNode, IDataNode> factory = (c) -> {
-                        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), ((IItemNode)c).getConditions().stream()).toList(); //TODO preserve count?
-                        return Utils.getEntry(utils, lootAction.getLootEntry(), 1, functions, allConditions);
+                    Function<IDataNode, List<IDataNode>> factory = (c) -> {
+                        if (c instanceof ItemStackNode || c instanceof ItemTagNode || c instanceof ModifiedNode) {
+                            return Collections.singletonList(c); // do not replace self!
+                        }
+
+                        List<IDataNode> nodes = new ArrayList<>();
+                        IItemNode node = (IItemNode) c;
+                        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList(); //TODO preserve count?
+                        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
+
+                        if (!conditions.isEmpty()) {
+                            nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, lootAction.getLootEntry(), 1, allFunctions, allConditions)));
+                        } else {
+                            nodes.add(Utils.getEntry(utils, lootAction.getLootEntry(), 1, allFunctions, allConditions));
+                        }
+
+                        return nodes;
                     };
 
                     operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), factory));
                 } else if (action instanceof ModifyLootAction modifyLootAction) {
                     MixinModifyLootAction lootAction = (MixinModifyLootAction) modifyLootAction;
-                    Function<IDataNode, IDataNode> factory = (c) -> {
-                        return c; //TODO wrap with icon saying that it's loot was modified by JS
+                    Function<IDataNode, List<IDataNode>> factory = (c) -> {
+                        if (c instanceof ItemStackNode || c instanceof ItemTagNode || c instanceof ModifiedNode) {
+                            return Collections.singletonList(c); // do not modify self!
+                        }
+
+                        List<IDataNode> nodes = new ArrayList<>();
+                        IItemNode node = (IItemNode) c;
+                        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
+                        List<LootItemFunction> allFunctions = new ArrayList<>();
+                        Either<ItemStack, TagKey<Item>> either = node.getModifiedItem();
+
+                        allFunctions.add(new ModifiedItemFunction());
+                        allFunctions.addAll(Stream.concat(functions.stream(), node.getFunctions().stream()).toList());
+
+                        if (!conditions.isEmpty()) {
+                            nodes.add(new ModifiedNode(utils, c, constructEither(utils, either, node.getChance(), allFunctions, allConditions)));
+                        } else {
+                            nodes.add(constructEither(utils, either, node.getChance(), allFunctions, allConditions));
+                        }
+
+                        return nodes;
                     };
 
                     operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate(), factory));
@@ -96,5 +125,12 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
     @Override
     public List<IOperation> getOperations() {
         return operations;
+    }
+
+    private IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<Item>> either, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return either.map(
+                (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions),
+                (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions)
+        );
     }
 }

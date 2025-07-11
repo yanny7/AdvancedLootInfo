@@ -9,6 +9,6 @@ import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 public class FabricLootJsPlugin implements IPlugin {
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerIngredientTooltip(CustomIngredientImpl.class, KubeJsIngredientTooltipUtils::getCustomIngredientTooltip);
+        registry.registerIngredientTooltip(CustomIngredientImpl.class, LootJsIngredientTooltipUtils::getCustomIngredientTooltip);
     }
 }

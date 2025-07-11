@@ -6,13 +6,10 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinAbstractLootModification;
 import com.yanny.ali.mixin.MixinLootModificationsAPI;
-import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
-import com.yanny.ali.plugin.lootjs.modifier.DropExperienceFunction;
-import com.yanny.ali.plugin.lootjs.modifier.ExplodeFunction;
-import com.yanny.ali.plugin.lootjs.modifier.LightningStrikeFunction;
+import com.yanny.ali.plugin.lootjs.modifier.*;
 import com.yanny.ali.plugin.lootjs.node.*;
-import com.yanny.ali.plugin.lootjs.server.KubeJsConditionTooltipUtils;
-import com.yanny.ali.plugin.lootjs.server.KubeJsFunctionTooltipUtils;
+import com.yanny.ali.plugin.lootjs.server.LootJsConditionTooltipUtils;
+import com.yanny.ali.plugin.lootjs.server.LootJsFunctionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.widget.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -63,38 +60,41 @@ public class LootJsPlugin implements IPlugin {
         registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
         registry.registerNode(ItemTagNode.ID, ItemTagNode::new);
         registry.registerNode(GroupLootNode.ID, GroupLootNode::new);
+        registry.registerNode(ModifiedNode.ID, ModifiedNode::new);
 
         registry.registerWidget(AddLootNode.ID, AddLootWidget::new);
         registry.registerWidget(WeightedAddLootNode.ID, WeightedAddLootWidget::new);
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);
         registry.registerWidget(GroupLootNode.ID, GroupedLootWidget::new);
+        registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerConditionTooltip(AndCondition.class, KubeJsConditionTooltipUtils::andConditionTooltip);
-        registry.registerConditionTooltip(AnyBiomeCheck.class, KubeJsConditionTooltipUtils::anyBiomeCheckTooltip);
-        registry.registerConditionTooltip(AnyDimension.class, KubeJsConditionTooltipUtils::anyDimensionTooltip);
-        registry.registerConditionTooltip(BiomeCheck.class, KubeJsConditionTooltipUtils::biomeCheckTooltip);
-        registry.registerConditionTooltip(ContainsLootCondition.class, KubeJsConditionTooltipUtils::containsLootConditionTooltip);
-        registry.registerConditionTooltip(CustomParamPredicate.class, KubeJsConditionTooltipUtils::customParamPredicateTooltip);
-        registry.registerConditionTooltip(IsLightLevel.class, KubeJsConditionTooltipUtils::isLightLevelTooltip);
-        registry.registerConditionTooltip(LootItemConditionWrapper.class, KubeJsConditionTooltipUtils::lootItemConditionWrapperTooltip);
-        registry.registerConditionTooltip(MainHandTableBonus.class, KubeJsConditionTooltipUtils::mainHandTableBonusTooltip);
-        registry.registerConditionTooltip(MatchEquipmentSlot.class, KubeJsConditionTooltipUtils::getMatchEquipmentSlotTooltip);
-        registry.registerConditionTooltip(MatchFluid.class, KubeJsConditionTooltipUtils::matchFluidTooltip);
-        registry.registerConditionTooltip(MatchKillerDistance.class, KubeJsConditionTooltipUtils::matchKillerDistanceTooltip);
-        registry.registerConditionTooltip(MatchPlayer.class, KubeJsConditionTooltipUtils::matchPlayerTooltip);
-        registry.registerConditionTooltip(NotCondition.class, KubeJsConditionTooltipUtils::notConditionTooltip);
-        registry.registerConditionTooltip(OrCondition.class, KubeJsConditionTooltipUtils::orConditionTooltip);
-        registry.registerConditionTooltip(PlayerParamPredicate.class, KubeJsConditionTooltipUtils::playerParamPredicateTooltip);
-        registry.registerConditionTooltip(WrappedDamageSourceCondition.class, KubeJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
+        registry.registerConditionTooltip(AndCondition.class, LootJsConditionTooltipUtils::andConditionTooltip);
+        registry.registerConditionTooltip(AnyBiomeCheck.class, LootJsConditionTooltipUtils::anyBiomeCheckTooltip);
+        registry.registerConditionTooltip(AnyDimension.class, LootJsConditionTooltipUtils::anyDimensionTooltip);
+        registry.registerConditionTooltip(BiomeCheck.class, LootJsConditionTooltipUtils::biomeCheckTooltip);
+        registry.registerConditionTooltip(ContainsLootCondition.class, LootJsConditionTooltipUtils::containsLootConditionTooltip);
+        registry.registerConditionTooltip(CustomParamPredicate.class, LootJsConditionTooltipUtils::customParamPredicateTooltip);
+        registry.registerConditionTooltip(IsLightLevel.class, LootJsConditionTooltipUtils::isLightLevelTooltip);
+        registry.registerConditionTooltip(LootItemConditionWrapper.class, LootJsConditionTooltipUtils::lootItemConditionWrapperTooltip);
+        registry.registerConditionTooltip(MainHandTableBonus.class, LootJsConditionTooltipUtils::mainHandTableBonusTooltip);
+        registry.registerConditionTooltip(MatchEquipmentSlot.class, LootJsConditionTooltipUtils::getMatchEquipmentSlotTooltip);
+        registry.registerConditionTooltip(MatchFluid.class, LootJsConditionTooltipUtils::matchFluidTooltip);
+        registry.registerConditionTooltip(MatchKillerDistance.class, LootJsConditionTooltipUtils::matchKillerDistanceTooltip);
+        registry.registerConditionTooltip(MatchPlayer.class, LootJsConditionTooltipUtils::matchPlayerTooltip);
+        registry.registerConditionTooltip(NotCondition.class, LootJsConditionTooltipUtils::notConditionTooltip);
+        registry.registerConditionTooltip(OrCondition.class, LootJsConditionTooltipUtils::orConditionTooltip);
+        registry.registerConditionTooltip(PlayerParamPredicate.class, LootJsConditionTooltipUtils::playerParamPredicateTooltip);
+        registry.registerConditionTooltip(WrappedDamageSourceCondition.class, LootJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
 
-        registry.registerFunctionTooltip(CustomPlayerFunction.class, KubeJsFunctionTooltipUtils::customPlayerTooltip);
-        registry.registerFunctionTooltip(DropExperienceFunction.class, KubeJsFunctionTooltipUtils::dropExperienceTooltip);
-        registry.registerFunctionTooltip(ExplodeFunction.class, KubeJsFunctionTooltipUtils::explodeTooltip);
-        registry.registerFunctionTooltip(LightningStrikeFunction.class, KubeJsFunctionTooltipUtils::lightningStrikeTooltip);
+        registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
+        registry.registerFunctionTooltip(DropExperienceFunction.class, LootJsFunctionTooltipUtils::dropExperienceTooltip);
+        registry.registerFunctionTooltip(ExplodeFunction.class, LootJsFunctionTooltipUtils::explodeTooltip);
+        registry.registerFunctionTooltip(LightningStrikeFunction.class, LootJsFunctionTooltipUtils::lightningStrikeTooltip);
+        registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);
     }

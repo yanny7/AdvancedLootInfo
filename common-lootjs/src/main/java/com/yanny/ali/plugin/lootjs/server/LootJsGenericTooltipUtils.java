@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
-public class KubeJsGenericTooltipUtils {
+public class LootJsGenericTooltipUtils {
     @NotNull
     public static ITooltipNode getItemFilterTooltip(IServerUtils utils, String key, Predicate<ItemStack> predicate) {
         if (predicate instanceof ItemFilter) {

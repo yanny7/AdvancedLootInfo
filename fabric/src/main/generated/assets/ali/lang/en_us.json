@@ -201,6 +201,7 @@
   "ali.type.function.lightning_strike": "Creates Lightning Strike:",
   "ali.type.function.limit_count": "Limit Count:",
   "ali.type.function.looting_enchant": "Looting Enchant:",
+  "ali.type.function.modified_item": "Item modified dynamically! UNKNOWN RESULT!",
   "ali.type.function.reference": "Reference:",
   "ali.type.function.set_attributes": "Set Attributes:",
   "ali.type.function.set_banner_pattern": "Set Banner Pattern:",

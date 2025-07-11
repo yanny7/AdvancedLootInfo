@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
-public class KubeJsConditionTooltipUtils {
+public class LootJsConditionTooltipUtils {
     @NotNull
     public static ITooltipNode andConditionTooltip(IServerUtils utils, AndCondition condition) {
         //noinspection unchecked
@@ -62,7 +62,7 @@ public class KubeJsConditionTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.contains_loot"));
         MixinContainsLootCondition cond = (MixinContainsLootCondition) condition;
 
-        tooltip.add(KubeJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.branch.predicate", cond.getPredicate()));
+        tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.branch.predicate", cond.getPredicate()));
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.exact", cond.getExact()));
 
         return tooltip;
@@ -108,7 +108,7 @@ public class KubeJsConditionTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_equipment_slot"));
         MixinMatchEquipmentSlot cond = (MixinMatchEquipmentSlot) condition;
 
-        tooltip.add(KubeJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", cond.getPredicate()));
+        tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", cond.getPredicate()));
         tooltip.add(GenericTooltipUtils.getEnumTooltip(utils, "ali.property.value.slot", cond.getSlot()));
 
         return tooltip;

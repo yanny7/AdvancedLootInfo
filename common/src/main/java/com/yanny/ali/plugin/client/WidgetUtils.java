@@ -53,4 +53,22 @@ public class WidgetUtils {
         widget.tooltipText(node.getTooltip());
         return widget;
     }
+
+    @NotNull
+    public static IWidget getUnknownWidget(RelativeRect rect, IDataNode node) {
+        return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 30, 0);
+    }
+
+    @NotNull
+    public static IWidget getMissingWidget(RelativeRect rect) {
+        return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 48, 0);
+    }
+
+    @NotNull
+    public static IWidget getEmptyWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 66, 0);
+
+        widget.tooltipText(node.getTooltip());
+        return widget;
+    }
 }

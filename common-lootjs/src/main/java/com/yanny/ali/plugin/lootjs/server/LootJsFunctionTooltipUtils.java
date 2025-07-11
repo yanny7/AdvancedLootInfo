@@ -3,15 +3,14 @@ package com.yanny.ali.plugin.lootjs.server;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.TooltipNode;
-import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
-import com.yanny.ali.plugin.lootjs.modifier.DropExperienceFunction;
-import com.yanny.ali.plugin.lootjs.modifier.ExplodeFunction;
-import com.yanny.ali.plugin.lootjs.modifier.LightningStrikeFunction;
+import com.yanny.ali.plugin.lootjs.modifier.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
-public class KubeJsFunctionTooltipUtils {
+public class LootJsFunctionTooltipUtils {
     @NotNull
     public static ITooltipNode customPlayerTooltip(IServerUtils utils, CustomPlayerFunction function) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.custom_player"));
@@ -48,5 +47,10 @@ public class KubeJsFunctionTooltipUtils {
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.should_damage_entity", function.shouldDamageEntity));
 
         return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode modifiedItemTooltip(IServerUtils utils, ModifiedItemFunction function) {
+        return new TooltipNode(Component.translatable("ali.type.function.modified_item").withStyle(ChatFormatting.DARK_RED, ChatFormatting.BOLD));
     }
 }

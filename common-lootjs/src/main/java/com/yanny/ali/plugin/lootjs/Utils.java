@@ -64,7 +64,7 @@ public class Utils {
                 if (value instanceof Ingredient.ItemValue itemValue) {
                     return new ItemStackNode(utils, itemValue.item, (float) weight / sumWeight, allFunctions, allConditions);
                 } else if (value instanceof Ingredient.TagValue tagValue) {
-                    return new ItemTagNode(utils, tagValue.tag, (float) weight / sumWeight, sumWeight, allFunctions, allConditions);
+                    return new ItemTagNode(utils, tagValue.tag, (float) weight / sumWeight, allFunctions, allConditions);
                 } else {
                     throw new IllegalStateException("Invalid ingredient type: " + value.getClass().getCanonicalName());
                 }

@@ -25,23 +25,28 @@ public class ItemNode implements IDataNode, IItemNode {
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;
+    private final List<LootItemFunction> functions;
     private final ItemStack itemStack;
     private final RangeValue count;
+    private final float chance;
 
     public ItemNode(IServerUtils utils, LootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
-
         this.conditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
-        itemStack = TooltipUtils.getItemStack(utils, entry.item, allFunctions);
+        this.functions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
+        this.chance = chance * entry.weight / sumWeight;
+        itemStack = TooltipUtils.getItemStack(utils, entry.item, this.functions);
         tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);
-        count = TooltipUtils.getCount(utils, allFunctions).get(null).get(0);
+        count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
     }
 
     public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
-        conditions = Collections.emptyList();
         count = new RangeValue(buf);
+
+        conditions = Collections.emptyList();
+        functions = Collections.emptyList();
+        chance = 1;
     }
 
     @Override
@@ -55,8 +60,18 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     @Override
+    public List<LootItemFunction> getFunctions() {
+        return functions;
+    }
+
+    @Override
     public RangeValue getCount() {
         return count;
+    }
+
+    @Override
+    public float getChance() {
+        return chance;
     }
 
     @Override

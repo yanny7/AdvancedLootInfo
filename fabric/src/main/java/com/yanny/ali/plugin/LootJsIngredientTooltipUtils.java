@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class KubeJsIngredientTooltipUtils {
+public class LootJsIngredientTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull

@@ -28,12 +28,22 @@ public class ItemTagNode implements IDataNode, IItemNode {
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;
+    private final List<LootItemFunction> functions;
     private final TagKey<Item> tag;
     private final RangeValue count;
+    private final float chance;
+    private final boolean modified;
 
-    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this(utils, entry, chance, false, functions, conditions);
+    }
+
+    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this.conditions = conditions;
+        this.functions = functions;
         this.tag = entry;
+        this.chance = chance;
+        this.modified = modified;
         tooltip = getItemTooltip(utils, chance, functions, conditions);
         count = getCount(utils, 1, functions).get(null).get(0);
     }
@@ -41,8 +51,16 @@ public class ItemTagNode implements IDataNode, IItemNode {
     public ItemTagNode(IClientUtils utils, FriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
-        conditions = Collections.emptyList();
         count = new RangeValue(buf);
+        modified = buf.readBoolean();
+
+        conditions = Collections.emptyList();
+        functions = Collections.emptyList();
+        chance = 1;
+    }
+
+    public boolean isModified() {
+        return modified;
     }
 
     @Override
@@ -52,7 +70,12 @@ public class ItemTagNode implements IDataNode, IItemNode {
 
     @Override
     public List<LootItemCondition> getConditions() {
-        return List.of();
+        return conditions;
+    }
+
+    @Override
+    public List<LootItemFunction> getFunctions() {
+        return functions;
     }
 
     @NotNull
@@ -61,10 +84,16 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     @Override
+    public float getChance() {
+        return chance;
+    }
+
+    @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
+        buf.writeBoolean(modified);
     }
 
     @Override

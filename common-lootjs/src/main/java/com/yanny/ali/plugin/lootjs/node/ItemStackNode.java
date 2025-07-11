@@ -27,12 +27,22 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;
+    private final List<LootItemFunction> functions;
     private final ItemStack itemStack;
     private final RangeValue count;
+    private final float chance;
+    private final boolean modified;
 
     public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+       this(utils, itemStack, chance, false, functions, conditions);
+    }
+
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this.conditions = conditions;
+        this.functions = functions;
         this.itemStack = itemStack.copyWithCount(1);
+        this.chance = chance;
+        this.modified = modified;
         tooltip = getItemTooltip(utils, itemStack.getCount(), chance, functions, conditions);
         count = getCount(utils, itemStack.getCount(), functions).get(null).get(0);
     }
@@ -40,8 +50,16 @@ public class ItemStackNode implements IDataNode, IItemNode {
     public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
-        conditions = Collections.emptyList();
         count = new RangeValue(buf);
+        modified = buf.readBoolean();
+
+        conditions = Collections.emptyList();
+        functions = Collections.emptyList();
+        chance = 1;
+    }
+
+    public boolean isModified() {
+        return modified;
     }
 
     @Override
@@ -55,8 +73,18 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @Override
+    public List<LootItemFunction> getFunctions() {
+        return functions;
+    }
+
+    @Override
     public RangeValue getCount() {
         return count;
+    }
+
+    @Override
+    public float getChance() {
+        return chance;
     }
 
     @Override
@@ -64,6 +92,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
         buf.writeItem(itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
+        buf.writeBoolean(modified);
     }
 
     @Override

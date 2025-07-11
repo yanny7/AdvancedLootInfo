@@ -4,11 +4,11 @@ import com.almostreliable.lootjs.core.ILootHandler;
 import com.almostreliable.lootjs.loot.action.AddLootAction;
 import com.almostreliable.lootjs.loot.action.GroupedLootAction;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
-import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinCompositeLootAction;
 import com.yanny.ali.mixin.MixinGroupedLootAction;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class GroupLootNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "grouped_loot");
+    public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "grouped_loot");
 
     private final List<ITooltipNode> tooltip;
 

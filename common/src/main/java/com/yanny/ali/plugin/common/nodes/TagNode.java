@@ -27,23 +27,28 @@ public class TagNode implements IDataNode, IItemNode {
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;
+    private final List<LootItemFunction> functions;
     private final TagKey<Item> tag;
     private final RangeValue count;
+    private final float chance;
 
     public TagNode(IServerUtils utils, TagEntry entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
-
         this.conditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
+        this.functions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
+        this.chance = chance * entry.weight / sumWeight;
         tag = entry.tag;
         tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);
-        count = TooltipUtils.getCount(utils, allFunctions).get(null).get(0);
+        count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
     }
 
     public TagNode(IClientUtils utils, FriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
-        conditions = Collections.emptyList();
         count = new RangeValue(buf);
+
+        conditions = Collections.emptyList();
+        functions = Collections.emptyList();
+        chance = 1;
     }
 
     @Override
@@ -53,12 +58,22 @@ public class TagNode implements IDataNode, IItemNode {
 
     @Override
     public List<LootItemCondition> getConditions() {
-        return List.of();
+        return conditions;
+    }
+
+    @Override
+    public List<LootItemFunction> getFunctions() {
+        return functions;
     }
 
     @NotNull
     public RangeValue getCount() {
         return count;
+    }
+
+    @Override
+    public float getChance() {
+        return chance;
     }
 
     @Override
