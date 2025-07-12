@@ -1,4 +1,4 @@
-## []
+## [1.2.0]
 
 - Changed API
 - Added API support for loot modifiers
