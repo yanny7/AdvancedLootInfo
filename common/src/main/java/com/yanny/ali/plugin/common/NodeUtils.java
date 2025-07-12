@@ -3,9 +3,12 @@ package com.yanny.ali.plugin.common;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
@@ -18,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class NodeUtils {
     public static void encodeTooltipNodes(IServerUtils ignoredUtils, FriendlyByteBuf buf, List<ITooltipNode> nodes) {
@@ -101,7 +105,7 @@ public class NodeUtils {
         if (node instanceof ListNode listNode) {
             listNode.nodes().removeIf((n) -> {
                 if (n instanceof IItemNode itemNode) {
-                    return itemNode.getModifiedItem().left().map(predicate::test).orElse(false); //TODO for now skipping tags...
+                    return predicateEither(itemNode, predicate);
                 } else {
                     removeItem(n, predicate);
                 }
@@ -117,8 +121,7 @@ public class NodeUtils {
             List<IDataNode> nodes = new ArrayList<>();
 
             listNode.nodes().replaceAll((n) -> {
-
-                if (n instanceof IItemNode itemNode && itemNode.getModifiedItem().left().map(predicate::test).orElse(false)) { //TODO for now skipping tags...
+                if (n instanceof IItemNode itemNode && predicateEither(itemNode, predicate)) {
                     List<IDataNode> result = factory.apply(n); //TODO preserve count!
 
                     if (result.size() > 1) {
@@ -149,5 +152,16 @@ public class NodeUtils {
         if (node instanceof ListNode listNode) {
             listNode.nodes().removeIf((n) -> !hasItems(n));
         }
+    }
+
+    private static boolean predicateEither(IItemNode itemNode, Predicate<ItemStack> predicate) {
+        return itemNode.getModifiedItem().map(
+                predicate::test,
+                (tagKey) -> BuiltInRegistries.ITEM
+                        .getTag(tagKey)
+                        .map((holders) -> holders.stream().map(Holder::value))
+                        .orElse(Stream.of())
+                        .map(Item::getDefaultInstance)
+                        .allMatch(predicate));
     }
 }
