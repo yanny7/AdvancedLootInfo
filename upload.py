@@ -301,7 +301,7 @@ if __name__ == "__main__":
     version_changelog = read_changelog()
 
     mod_loaders = [["forge", "neoforge"], ["fabric"]]
-    mod_dependencies = list(map(prepare_dependency, ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA"])) # EMI JEI REI
+    mod_dependencies = list(map(prepare_dependency, ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"])) # EMI JEI REI LOOTJS
 
     for mod_loader in mod_loaders:
         print (f"processing {mod_loader} launcher")
