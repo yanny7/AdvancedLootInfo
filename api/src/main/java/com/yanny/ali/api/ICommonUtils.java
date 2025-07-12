@@ -1,10 +1,9 @@
 package com.yanny.ali.api;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTable;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 
 public interface ICommonUtils {
-    @Nullable
-    LootTable getLootTable(ResourceLocation resourceLocation);
+    List<Entity> createEntities(EntityType<?> type, Level level);
 }

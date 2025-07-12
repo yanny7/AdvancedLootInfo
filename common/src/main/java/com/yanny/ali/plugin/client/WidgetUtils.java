@@ -2,13 +2,13 @@ package com.yanny.ali.plugin.client;
 
 import com.mojang.math.Divisor;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.RelativeRect;
 import com.yanny.ali.plugin.client.widget.TextureWidget;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,50 +19,60 @@ public class WidgetUtils {
     public static final int GROUP_WIDGET_HEIGHT = 18;
 
     @NotNull
-    public static IWidget getLootTableTypeWidget(int x, int y, int quality, float chance) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
+    public static IWidget getAllWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 0, GROUP_WIDGET_HEIGHT);
 
-        widget.tooltipText(EntryTooltipUtils.getLootTableTooltip(0, quality, chance));
+        widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getLootPoolTypeWidget(int x, int y, RangeValue rolls, RangeValue bonusRolls) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getRandomWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
-        widget.tooltipText(EntryTooltipUtils.getLootPoolTooltip(0, rolls, bonusRolls));
+        widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getAlternativesWidget(int x, int y) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getSequentialWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
-        widget.tooltipText(EntryTooltipUtils.getAlternativesTooltip(0));
+        widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getSequentialWidget(int x, int y) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getAlternativesWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
-        widget.tooltipText(EntryTooltipUtils.getSequentialTooltip(0));
+        widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getGroupWidget(int x, int y) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 0, GROUP_WIDGET_HEIGHT);
+    public static IWidget getDynamicWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
-        widget.tooltipText(EntryTooltipUtils.getGroupTooltip(0));
+        widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getDynamicWidget(int x, int y, DynamicLoot entry, int sumWeight) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, x, y, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getUnknownWidget(RelativeRect rect, IDataNode node) {
+        return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 30, 0);
+    }
 
-        widget.tooltipText(EntryTooltipUtils.getDynamicTooltip(0, entry, sumWeight));
+    @NotNull
+    public static IWidget getMissingWidget(RelativeRect rect) {
+        return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 48, 0);
+    }
+
+    @NotNull
+    public static IWidget getEmptyWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 66, 0);
+
+        widget.tooltipText(node.getTooltip());
         return widget;
     }
 

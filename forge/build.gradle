@@ -12,6 +12,7 @@ mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
     config("${mod_id}.mixins.json")
+    config("${mod_id}.lootjs.mixins.json")
     config("${mod_id}.forge.mixins.json")
 }
 
@@ -39,7 +40,6 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-//                    source project(":common-rei").sourceSets.main
                 }
             }
         }
@@ -55,7 +55,6 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-//                    source project(":common-rei").sourceSets.main
                 }
             }
         }
@@ -72,7 +71,6 @@ minecraft {
                     source sourceSets.main
                     source project(":api").sourceSets.main
                     source project(":common").sourceSets.main
-//                    source project(":common-rei").sourceSets.main
                 }
             }
         }
@@ -88,6 +86,7 @@ dependencies {
     compileOnly project(":api")
     compileOnly project(":common")
     compileOnly project(":common-rei")
+    compileOnly project(":common-lootjs")
 
     // EMI
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
@@ -106,15 +105,14 @@ dependencies {
     implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
+    // LootJS
+    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
+    implementation fg.deobf("curse.maven:rhino-416294:6186971")
+    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
 
-    // Only for testing
-    // ForgeGradle
-//    runtimeOnly fg.deobf("dev.latvian.mods:kubejs-forge:2001.6.5-build.14")
-
-    // these two are unfortunately needed since fg.deobf doesn't respect transitive dependencies yet
-//    runtimeOnly fg.deobf("dev.latvian.mods:rhino-forge:2001.2.3-build.6")
-
-//    runtimeOnly fg.deobf("curse.maven:lootjs-570630:5404565")
+//    implementation fg.deobf("curse.maven:botania-225643:6366547")
+//    implementation fg.deobf("curse.maven:curios-309927:6418456")
+//    implementation fg.deobf("curse.maven:patchouli-306770:6164575")
 }
 
 tasks.named('compileTestJava') {
@@ -131,6 +129,7 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
+    source(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -139,6 +138,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
+    from(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named('compileTestJava') {
@@ -154,6 +154,7 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
+    from project(":common-lootjs").sourceSets.main.resources
 }
 
 jar.finalizedBy('reobfJar')

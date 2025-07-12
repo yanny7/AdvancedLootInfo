@@ -103,7 +103,7 @@ public class ItemCollectorUtils {
         if (level != null) {
             return items.stream().map((i) -> level.getRecipeManager()
                     .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.value().getResultItem(null).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
+                    .map((l) -> List.of(l.value().getResultItem(utils.getServerLevel().registryAccess()).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
         }
 
         return List.of();

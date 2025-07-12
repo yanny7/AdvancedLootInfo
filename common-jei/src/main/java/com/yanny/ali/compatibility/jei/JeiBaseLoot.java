@@ -1,17 +1,14 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.Rect;
+import com.mojang.datafixers.util.Either;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
-import com.yanny.ali.plugin.client.TooltipUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -28,17 +25,15 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
-    private static final Map<IType, Pair<IWidget, List<ISlotParams>>> widgets = new HashMap<>();
+    static final int CATEGORY_WIDTH = 9 * 18;
+    static final int CATEGORY_HEIGHT = 7 * 18;
+    private static final Map<IType, Pair<JeiWidgetWrapper, List<Holder>>> widgets = new HashMap<>();
 
     private final RecipeType<T> recipeType;
     private final LootCategory<V> lootCategory;
@@ -78,75 +73,51 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup iFocusGroup) {
-        List<ISlotParams> slotParams = new LinkedList<>();
+        List<Holder> slotParams = new LinkedList<>();
         IWidgetUtils utils = getJeiUtils(slotParams);
+        RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
 
-        widgets.put(recipe, new Pair<>(new LootTableWidget(utils, recipe.entry(), 0, getYOffset(recipe), 9 * 18), slotParams));
+        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH)), slotParams));
 
         for (int i = 0; i < slotParams.size(); i++) {
-            ISlotParams p = slotParams.get(i);
+            Holder h = slotParams.get(i);
+            IRecipeSlotBuilder slotBuilder = builder.addOutputSlot()
+                    .setStandardSlotBackground()
+                    .setSlotName(String.valueOf(i))
+                    .setPosition(h.rect.getX(), h.rect.getY())
+                    .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
+                            -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0)));
+            Optional<ItemStack> left = h.item.left();
+            Optional<TagKey<Item>> right = h.item.right();
 
-            if (p instanceof ItemSlotParams itemSlotParams) {
-                builder.addSlot(RecipeIngredientRole.OUTPUT, itemSlotParams.x + 1, itemSlotParams.y + 1)
-                        .setSlotName(String.valueOf(i))
-                        .addTooltipCallback((iRecipeSlotView, components)
-                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.count(), p.allFunctions(), p.allConditions())))
-                        .addItemStack(itemSlotParams.item);
-            } else if (p instanceof TagSlotParams tagSlotParams) {
-                builder.addSlot(RecipeIngredientRole.OUTPUT, tagSlotParams.x + 1, tagSlotParams.y + 1)
-                        .setSlotName(String.valueOf(i))
-                        .addTooltipCallback((iRecipeSlotView, components)
-                                -> components.addAll(EntryTooltipUtils.getTooltip(utils, p.entry(), p.chance(), p.count(), p.allFunctions(), p.allConditions())))
-                        .addIngredients(Ingredient.of(tagSlotParams.item));
-            }
+            left.ifPresent(slotBuilder::addItemStack);
+            right.ifPresent((t) -> slotBuilder.addIngredients(Ingredient.of(t)));
         }
     }
 
     @Override
-    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        Pair<IWidget, List<ISlotParams>> pair = widgets.get(recipe);
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, T recipe, IFocusGroup focuses) {
+        Pair<JeiWidgetWrapper, List<Holder>> pair = widgets.remove(recipe);
 
         if (pair == null) {
             return;
         }
 
-        IWidget widget = pair.getA();
-        List<ISlotParams> slotParams = pair.getB();
+        Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> additionalWidgets = getWidgets(builder, recipe);
+        JeiWidgetWrapper widgetWrapper = pair.getA();
+        List<Holder> slotParams = pair.getB();
+        List<IRecipeWidget> scrollWidgets = new LinkedList<>(additionalWidgets.getA());
+        List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>(additionalWidgets.getB());
 
         widget.render(guiGraphics, (int) mouseX, (int) mouseY);
         guiGraphics.renderTooltip(Minecraft.getInstance().font, widget.getTooltipComponents((int) mouseX, (int) mouseY), Optional.empty(), (int) mouseX, (int) mouseY);
 
         for (int i = 0; i < slotParams.size(); i++) {
-            ISlotParams p = slotParams.get(i);
+            Holder h = slotParams.get(i);
 
-            guiHelper.getSlotDrawable().draw(guiGraphics, p.x(), p.y());
-
-            recipeSlotsView.findSlotByName(String.valueOf(i)).ifPresent((slotView) -> {
-                RangeValue value = p.count().get(null).get(0);
-
-                if (value.isRange() || value.min() > 1) {
-                    Component count = Component.literal(value.toIntString());
-                    boolean isRange = value.isRange();
-                    Font font = Minecraft.getInstance().font;
-                    PoseStack stack = guiGraphics.pose();
-
-                    stack.pushPose();
-                    stack.translate(p.x(), p.y(), 0);
-
-                    if (isRange) {
-                        stack.translate(17, 13, 200);
-                        stack.pushPose();
-                        stack.scale(0.5f, 0.5f, 0.5f);
-                        //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                        guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
-                        stack.popPose();
-                    } else {
-                        stack.translate(18, 10, 200);
-                        guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
-                    }
-
-                    stack.popPose();
-                }
+            builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent((slotDrawable) -> {
+                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount()));
+                slotDrawables.add(slotDrawable);
             });
         }
     }
@@ -164,54 +135,14 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     abstract int getYOffset(T recipe);
 
     @NotNull
-    private IWidgetUtils getJeiUtils(List<ISlotParams> slotParams) {
+    private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
             @Override
-            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
-                                      Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                ItemStack itemStack = TooltipUtils.getItemStack(this, entry, item);
-                slotParams.add(new ItemSlotParams(itemStack, entry, x, y, chance, count, allFunctions, allConditions));
-                return new Rect(x, y, 18, 18);
-            }
-
-            @Override
-            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
-                                      Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                slotParams.add(new TagSlotParams(item, entry, x, y, chance, count, allFunctions, allConditions));
-                return new Rect(x, y, 18, 18);
+            public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+                slotParams.add(new Holder(item, entry, rect));
             }
         };
     }
 
-    private interface ISlotParams {
-        LootPoolEntryContainer entry();
-        int x();
-        int y();
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance();
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> count();
-        List<LootItemFunction> allFunctions();
-        List<LootItemCondition> allConditions();
-    }
-
-    private record ItemSlotParams (
-            ItemStack item,
-            LootPoolEntryContainer entry,
-            int x,
-            int y,
-            Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
-            Map<Holder<Enchantment>, Map<Integer, RangeValue>> count,
-            List<LootItemFunction> allFunctions,
-            List<LootItemCondition> allConditions
-    ) implements ISlotParams {}
-
-    private record TagSlotParams (
-            TagKey<Item> item,
-            LootPoolEntryContainer entry,
-            int x,
-            int y,
-            Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
-            Map<Holder<Enchantment>, Map<Integer, RangeValue>> count,
-            List<LootItemFunction> allFunctions,
-            List<LootItemCondition> allConditions
-    ) implements ISlotParams {}
+    private record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {}
 }

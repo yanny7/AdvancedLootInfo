@@ -24,7 +24,9 @@
             "com.yanny.ali.datagen.DataGeneration"
         ],
         "ali": [
-          "com.yanny.ali.plugin.Plugin"
+            "com.yanny.ali.plugin.Plugin",
+            "com.yanny.ali.plugin.lootjs.LootJsPlugin",
+            "com.yanny.ali.plugin.FabricLootJsPlugin"
         ],
         "emi": [
             "com.yanny.ali.compatibility.EmiCompatibility"
@@ -38,6 +40,7 @@
     },
     "mixins": [
         "ali.mixins.json",
+        "ali.lootjs.mixins.json",
         "ali.fabric.mixins.json"
     ],
     "depends": {

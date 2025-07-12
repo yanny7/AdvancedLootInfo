@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.manager.PluginManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -15,15 +14,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
@@ -91,15 +84,6 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Map<ResourceLocation, LootTable> getLootTables() {
-        return new HashMap<>(PluginManager.CLIENT_REGISTRY.getLootTables());
-    }
-
-    @NotNull
-    public static List<Item> getItems(ResourceLocation location) {
-        return PluginManager.CLIENT_REGISTRY.getItems(location);
-    }
-
     public static Component ellipsis(String text, String fallback, int maxWidth) {
         Font font = Minecraft.getInstance().font;
 
