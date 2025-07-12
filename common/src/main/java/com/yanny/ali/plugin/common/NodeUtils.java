@@ -122,7 +122,7 @@ public class NodeUtils {
 
             listNode.nodes().replaceAll((n) -> {
                 if (n instanceof IItemNode itemNode && predicateEither(itemNode, predicate)) {
-                    List<IDataNode> result = factory.apply(n); //TODO preserve count!
+                    List<IDataNode> result = factory.apply(n);
 
                     if (result.size() > 1) {
                         nodes.addAll(result.subList(1, result.size()));

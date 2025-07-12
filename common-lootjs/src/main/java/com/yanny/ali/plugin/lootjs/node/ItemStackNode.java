@@ -33,18 +33,24 @@ public class ItemStackNode implements IDataNode, IItemNode {
     private final float chance;
     private final boolean modified;
 
-    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-       this(utils, itemStack, chance, false, functions, conditions);
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
+       this(utils, itemStack, chance, false, functions, conditions, preserveCount);
     }
 
-    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
         this.conditions = conditions;
         this.functions = functions;
         this.itemStack = itemStack.copyWithCount(1);
         this.chance = chance;
         this.modified = modified;
-        tooltip = getItemTooltip(utils, itemStack.getCount(), chance, functions, conditions);
-        count = getCount(utils, itemStack.getCount(), functions).get(null).get(0);
+
+        if (preserveCount) {
+            tooltip = getItemTooltip(utils, 1, chance, functions, conditions);
+            count = getCount(utils, 1, functions).get(null).get(0);
+        } else {
+            tooltip = getItemTooltip(utils, itemStack.getCount(), chance, Collections.emptyList(), Collections.emptyList());
+            count = getCount(utils, itemStack.getCount(), Collections.emptyList()).get(null).get(0);
+        }
     }
 
     public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {

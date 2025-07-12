@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.lootjs;
 import com.almostreliable.lootjs.core.AbstractLootModification;
 import com.almostreliable.lootjs.core.ILootAction;
 import com.almostreliable.lootjs.core.ILootHandler;
+import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
@@ -74,13 +75,15 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
 
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
-                        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList(); //TODO preserve count?
+                        LootEntry entry = lootAction.getLootEntry();
+                        boolean preserveCount = lootAction.getPreserveCount();
+                        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
                         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
 
                         if (!conditions.isEmpty()) {
-                            nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, lootAction.getLootEntry(), 1, allFunctions, allConditions)));
+                            nodes.add(new ModifiedNode(utils, c, Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preserveCount)));
                         } else {
-                            nodes.add(Utils.getEntry(utils, lootAction.getLootEntry(), 1, allFunctions, allConditions));
+                            nodes.add(Utils.getEntry(utils, entry, 1, allFunctions, allConditions, preserveCount));
                         }
 
                         return nodes;
@@ -127,10 +130,10 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
         return operations;
     }
 
-    private IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<Item>> either, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<Item>> either, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return either.map(
-                (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions),
-                (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions)
+                (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions, true),
+                (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions, true)
         );
     }
 }

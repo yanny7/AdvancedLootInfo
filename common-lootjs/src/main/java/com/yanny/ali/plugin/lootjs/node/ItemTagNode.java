@@ -34,18 +34,24 @@ public class ItemTagNode implements IDataNode, IItemNode {
     private final float chance;
     private final boolean modified;
 
-    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        this(utils, entry, chance, false, functions, conditions);
+    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
+        this(utils, entry, chance, false, functions, conditions, preserveCount);
     }
 
-    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
         this.conditions = conditions;
         this.functions = functions;
         this.tag = entry;
         this.chance = chance;
         this.modified = modified;
-        tooltip = getItemTooltip(utils, chance, functions, conditions);
-        count = getCount(utils, 1, functions).get(null).get(0);
+
+        if (preserveCount) {
+            tooltip = getItemTooltip(utils, chance, functions, conditions);
+            count = getCount(utils, 1, functions).get(null).get(0);
+        } else {
+            tooltip = getItemTooltip(utils, chance, Collections.emptyList(), Collections.emptyList());
+            count = getCount(utils, 1, Collections.emptyList()).get(null).get(0);
+        }
     }
 
     public ItemTagNode(IClientUtils utils, FriendlyByteBuf buf) {
