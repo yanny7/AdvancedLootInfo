@@ -39,7 +39,6 @@
     },
     "mixins": [
         "ali.mixins.json",
-        "ali.lootjs.mixins.json",
         "ali.fabric.mixins.json"
     ],
     "depends": {
