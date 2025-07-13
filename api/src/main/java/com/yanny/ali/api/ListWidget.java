@@ -37,7 +37,6 @@ public abstract class ListWidget extends IWidget {
 
         if (entry instanceof ListNode listNode) {
             RelativeRect subRect = new RelativeRect(xOffset, 0, rect.width - GROUP_WIDGET_WIDTH, 0, rect);
-            List<IWidget> group = utils.createWidgets(utils, listNode.nodes(), subRect, maxWidth);
 
             widgets.addAll(utils.createWidgets(utils, listNode.nodes(), subRect, maxWidth));
             bounds.setDimensions(subRect.width + GROUP_WIDGET_WIDTH, subRect.height);

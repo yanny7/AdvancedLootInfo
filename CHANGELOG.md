@@ -1,3 +1,7 @@
+## []
+
+- Fixed duplicating slots
+
 ## [1.2.0]
 
 - Changed API
