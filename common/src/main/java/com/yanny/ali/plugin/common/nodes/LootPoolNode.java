@@ -11,7 +11,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,9 +20,9 @@ public class LootPoolNode extends ListNode {
     private final List<ITooltipNode> tooltip;
 
     public LootPoolNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootPool lootPool, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootPool.functions)).toList();
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(lootPool.conditions)).toList();
-        int sumWeight = NodeUtils.getTotalWeight(Arrays.asList(lootPool.entries));
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), lootPool.functions.stream()).toList();
+        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), lootPool.conditions.stream()).toList();
+        int sumWeight = NodeUtils.getTotalWeight(lootPool.entries);
 
         tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, lootPool.rolls), utils.convertNumber(utils, lootPool.bonusRolls));
 

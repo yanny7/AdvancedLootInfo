@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -33,8 +32,8 @@ public class TagNode implements IDataNode, IItemNode {
     private final float chance;
 
     public TagNode(IServerUtils utils, TagEntry entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        this.conditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
-        this.functions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
+        this.conditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
+        this.functions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
         this.chance = chance * entry.weight / sumWeight;
         tag = entry.tag;
         tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);

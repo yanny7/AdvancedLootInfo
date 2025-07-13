@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility.jei;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
@@ -19,7 +20,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -33,7 +33,7 @@ import java.util.*;
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
     static final int CATEGORY_WIDTH = 9 * 18;
     static final int CATEGORY_HEIGHT = 7 * 18;
-    private static final Map<IType, Pair<JeiWidgetWrapper, List<Holder>>> widgets = new HashMap<>();
+    private static final Map<IType, Pair<IWidget, List<Holder>>> widgets = new HashMap<>();
 
     private final RecipeType<T> recipeType;
     private final LootCategory<V> lootCategory;
@@ -77,15 +77,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         IWidgetUtils utils = getJeiUtils(slotParams);
         RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
 
-        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH)), slotParams));
+        widgets.put(recipe, new Pair<>(new LootTableWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH), slotParams));
 
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
-            IRecipeSlotBuilder slotBuilder = builder.addOutputSlot()
-                    .setStandardSlotBackground()
+            IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, h.rect.getX() + 1, h.rect.getY() + 1)
                     .setSlotName(String.valueOf(i))
-                    .setPosition(h.rect.getX(), h.rect.getY())
-                    .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
+                    .addTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0)));
             Optional<ItemStack> left = h.item.left();
             Optional<TagKey<Item>> right = h.item.right();
@@ -96,18 +94,15 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @Override
-    public void createRecipeExtras(IRecipeExtrasBuilder builder, T recipe, IFocusGroup focuses) {
-        Pair<JeiWidgetWrapper, List<Holder>> pair = widgets.remove(recipe);
+    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        Pair<IWidget, List<Holder>> pair = widgets.get(recipe);
 
         if (pair == null) {
             return;
         }
 
-        Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> additionalWidgets = getWidgets(builder, recipe);
-        JeiWidgetWrapper widgetWrapper = pair.getA();
+        IWidget widget = pair.getA();
         List<Holder> slotParams = pair.getB();
-        List<IRecipeWidget> scrollWidgets = new LinkedList<>(additionalWidgets.getA());
-        List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>(additionalWidgets.getB());
 
         widget.render(guiGraphics, (int) mouseX, (int) mouseY);
         guiGraphics.renderTooltip(Minecraft.getInstance().font, widget.getTooltipComponents((int) mouseX, (int) mouseY), Optional.empty(), (int) mouseX, (int) mouseY);
@@ -115,16 +110,41 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
 
-            builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent((slotDrawable) -> {
-                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount()));
-                slotDrawables.add(slotDrawable);
+            guiHelper.getSlotDrawable().draw(guiGraphics, h.rect.getX(), h.rect.getY());
+
+            recipeSlotsView.findSlotByName(String.valueOf(i)).ifPresent((slotView) -> {
+                RangeValue value = ((IItemNode) h.entry).getCount();
+
+                if (value.isRange() || value.min() > 1) {
+                    Component count = Component.literal(value.toIntString());
+                    boolean isRange = value.isRange();
+                    Font font = Minecraft.getInstance().font;
+                    PoseStack stack = guiGraphics.pose();
+
+                    stack.pushPose();
+                    stack.translate(h.rect.getX(), h.rect.getY(), 0);
+
+                    if (isRange) {
+                        stack.translate(17, 13, 200);
+                        stack.pushPose();
+                        stack.scale(0.5f, 0.5f, 0.5f);
+                        //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
+                        guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
+                        stack.popPose();
+                    } else {
+                        stack.translate(18, 10, 200);
+                        guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
+                    }
+
+                    stack.popPose();
+                }
             });
         }
     }
 
     @Override
     public int getWidth() {
-        return 9 * 18;
+        return CATEGORY_WIDTH;
     }
 
     @Override

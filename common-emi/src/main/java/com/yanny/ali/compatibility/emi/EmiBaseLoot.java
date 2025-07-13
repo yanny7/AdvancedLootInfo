@@ -11,19 +11,16 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
     static final int CATEGORY_WIDTH = 9 * 18 - EmiScrollWidget.getScrollBoxScrollbarExtraWidth();
@@ -77,7 +74,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         return new ClientUtils() {
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
-                slotWidgets.add(new Holder(this, item, entry, rect, recipe));
+                slotWidgets.add(new EmiBaseLoot.Holder(this, item, entry, rect, recipe));
             }
         };
     }

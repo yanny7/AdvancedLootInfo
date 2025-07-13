@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.client.widget.TextureWidget;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class WidgetUtils {

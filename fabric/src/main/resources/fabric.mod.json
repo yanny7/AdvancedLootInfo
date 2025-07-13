@@ -25,8 +25,7 @@
         ],
         "ali": [
             "com.yanny.ali.plugin.Plugin",
-            "com.yanny.ali.plugin.lootjs.LootJsPlugin",
-            "com.yanny.ali.plugin.FabricLootJsPlugin"
+            "com.yanny.ali.plugin.lootjs.LootJsPlugin"
         ],
         "emi": [
             "com.yanny.ali.compatibility.EmiCompatibility"

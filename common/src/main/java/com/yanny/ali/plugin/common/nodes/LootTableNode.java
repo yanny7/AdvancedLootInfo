@@ -11,7 +11,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -30,11 +29,11 @@ public class LootTableNode extends ListNode {
     }
 
     public LootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable lootTable, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootTable.functions)).toList();
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), lootTable.functions.stream()).toList();
 
         tooltip = EntryTooltipUtils.getLootTableTooltip();
 
-        for (LootPool lootPool : utils.getLootPools(lootTable)) {
+        for (LootPool lootPool : lootTable.pools) {
             addChildren(new LootPoolNode(Collections.emptyList(), utils, lootPool, chance, allFunctions, conditions));
         }
 

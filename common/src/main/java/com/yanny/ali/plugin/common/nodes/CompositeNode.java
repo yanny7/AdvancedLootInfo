@@ -9,13 +9,12 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 public abstract class CompositeNode extends ListNode {
     public CompositeNode(IServerUtils utils, CompositeEntryBase entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
+        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
 
         for (LootPoolEntryContainer child : entry.children) {
             addChildren(utils.getEntryFactory(utils, child).create(utils, child, chance, sumWeight, functions, allConditions));

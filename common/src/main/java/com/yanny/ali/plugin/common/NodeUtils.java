@@ -17,7 +17,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -54,7 +53,7 @@ public class NodeUtils {
                 if (entry instanceof AlternativesEntry) {
                     sum += LootPoolSingletonContainer.DEFAULT_WEIGHT;
                 } else {
-                    sum += getTotalWeight(Arrays.asList(compositeEntryBase.children));
+                    sum += getTotalWeight(compositeEntryBase.children);
                 }
             }
         }

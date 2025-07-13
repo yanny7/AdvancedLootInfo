@@ -52,13 +52,11 @@ public class TooltipUtils {
         return count;
     }
 
-    public static ItemStack getItemStack(IServerUtils utils, Item item, List<LootItemFunction> functions) {
-        ItemStack itemStack = item.getDefaultInstance();
+    public static ItemStack getItemStack(IServerUtils utils, Holder<Item> item, List<LootItemFunction> functions) {
+        ItemStack itemStack = item.value().getDefaultInstance();
 
-        if (entry.conditions.isEmpty() && entry instanceof LootPoolSingletonContainer container) {
-            for (LootItemFunction function : container.functions) {
-                itemStack = utils.applyItemStackModifier(utils, function, itemStack);
-            }
+        for (LootItemFunction function : functions) {
+            itemStack = utils.applyItemStackModifier(utils, function, itemStack);
         }
 
         return itemStack;

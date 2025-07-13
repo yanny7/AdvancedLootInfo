@@ -36,10 +36,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.world.level.storage.loot.functions.SetAttributesFunction;
-import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -192,7 +189,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBannerPatternsSlotsTooltip() {
-        assertTooltip(GenericTooltipUtils.getBannerPatternTooltip(UTILS, "ali.property.value.banner_pattern", Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)), List.of(
+        assertTooltip(GenericTooltipUtils.getBannerPatternsTooltip(UTILS, "ali.property.value.banner_pattern", Pair.of(Holder.direct(Objects.requireNonNull(BuiltInRegistries.BANNER_PATTERN.get(BannerPatterns.BASE))), DyeColor.WHITE)), List.of(
                 "Banner Pattern: minecraft:base",
                 "  -> Color: WHITE"
         ));
@@ -368,7 +365,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testPositionPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getPositionPredicateTooltip(UTILS, 0, "ali.property.branch.position", new LocationPredicate.PositionPredicate(
+        assertTooltip(GenericTooltipUtils.getPositionPredicateTooltip(UTILS, "ali.property.branch.position", new LocationPredicate.PositionPredicate(
                 MinMaxBounds.Doubles.atLeast(3),
                 MinMaxBounds.Doubles.between(1, 2),
                 MinMaxBounds.Doubles.atMost(4)
@@ -655,7 +652,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testEffectEntryTooltip() {
-        assertTooltip(GenericTooltipUtils.getEffectEntryTooltip(UTILS, 0, "ali.property.value.mob_effect", new SetStewEffectFunction.EffectEntry(
+        assertTooltip(GenericTooltipUtils.getEffectEntryTooltip(UTILS, "ali.property.value.mob_effect", new SetStewEffectFunction.EffectEntry(
                 Holder.direct(MobEffects.LUCK),
                 ConstantValue.exactly(3)
         )), List.of(

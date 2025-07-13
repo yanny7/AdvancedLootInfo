@@ -12,7 +12,7 @@ mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
     config("${mod_id}.mixins.json")
-    config("${mod_id}.lootjs.mixins.json")
+//    config("${mod_id}.lootjs.mixins.json")
     config("${mod_id}.forge.mixins.json")
 }
 
@@ -86,17 +86,17 @@ dependencies {
     compileOnly project(":api")
     compileOnly project(":common")
     compileOnly project(":common-rei")
-    compileOnly project(":common-lootjs")
+//    compileOnly project(":common-lootjs")
 
     // EMI
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
     compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
-    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+//    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
 
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-//    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
     // REI
     compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
@@ -106,9 +106,9 @@ dependencies {
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     // LootJS
-    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
-    implementation fg.deobf("curse.maven:rhino-416294:6186971")
-    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
+//    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
+//    implementation fg.deobf("curse.maven:rhino-416294:6186971")
+//    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
 
 //    implementation fg.deobf("curse.maven:botania-225643:6366547")
 //    implementation fg.deobf("curse.maven:curios-309927:6418456")
@@ -129,7 +129,7 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
-    source(project(":common-lootjs").sourceSets.main.allSource)
+//    source(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -138,7 +138,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
-    from(project(":common-lootjs").sourceSets.main.allSource)
+//    from(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named('compileTestJava') {
@@ -154,7 +154,7 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
-    from project(":common-lootjs").sourceSets.main.resources
+//    from project(":common-lootjs").sourceSets.main.resources
 }
 
 jar.finalizedBy('reobfJar')

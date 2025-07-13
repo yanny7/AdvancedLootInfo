@@ -2,6 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;

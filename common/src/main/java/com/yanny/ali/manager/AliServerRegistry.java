@@ -2,10 +2,10 @@ package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -40,8 +40,8 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
-    private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
-    private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
+    private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
+    private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
@@ -121,13 +121,13 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer) {
+    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
         countModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer) {
+    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
         //noinspection unchecked
         chanceModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
     }
@@ -222,8 +222,8 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-        TriConsumer<IServerUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getClass());
+    public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+        TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getClass());
 
         if (bonusCountConsumer != null) {
             bonusCountConsumer.accept(utils, function, count);
@@ -231,8 +231,8 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
-        TriConsumer<IServerUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceModifierMap.get(condition.getClass());
+    public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+        TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceModifierMap.get(condition.getClass());
 
         if (bonusChanceConsumer != null) {
             bonusChanceConsumer.accept(utils, condition, chance);
@@ -285,11 +285,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     @Override
     public LootTable getLootTable(ResourceLocation resourceLocation) {
         return lootTableMap.get(resourceLocation);
-    }
-
-    @Override
-    public List<LootPool> getLootPools(LootTable lootTable) {
-        return Services.PLATFORM.getLootPools(lootTable);
     }
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {

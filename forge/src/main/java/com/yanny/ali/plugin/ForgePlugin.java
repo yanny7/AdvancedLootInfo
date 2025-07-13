@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.common.loot.LootTableIdCondition;
@@ -25,6 +24,6 @@ public class ForgePlugin implements IPlugin {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
-        return GenericTooltipUtils.getResourceLocationTooltip(utils, "ali.type.condition.loot_table_id", ((MixinLootTableIdCondition) cond).getTargetLootTableId());
+        return GenericTooltipUtils.getResourceLocationTooltip(utils, "ali.type.condition.loot_table_id", cond.id());
     }
 }

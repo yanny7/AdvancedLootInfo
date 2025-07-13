@@ -179,7 +179,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSequenceTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, 0, SequenceFunction.of(List.of(
+        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, SequenceFunction.of(List.of(
                 ApplyExplosionDecay.explosionDecay().build(),
                 SmeltItemFunction.smelted().build()
         ))), List.of(
