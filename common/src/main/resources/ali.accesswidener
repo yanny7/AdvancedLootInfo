@@ -68,6 +68,13 @@ accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunctio
 accessible field net/minecraft/world/level/storage/loot/functions/CopyNbtFunction source Lnet/minecraft/world/level/storage/loot/providers/nbt/NbtProvider;
 accessible field net/minecraft/world/level/storage/loot/functions/SequenceFunction functions Ljava/util/List;
 
+accessible field net/minecraft/world/item/crafting/Ingredient values [Lnet/minecraft/world/item/crafting/Ingredient$Value;
+accessible class net/minecraft/world/item/crafting/Ingredient$Value
+accessible class net/minecraft/world/item/crafting/Ingredient$ItemValue
+accessible field net/minecraft/world/item/crafting/Ingredient$ItemValue item Lnet/minecraft/world/item/ItemStack;
+accessible class net/minecraft/world/item/crafting/Ingredient$TagValue
+accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/minecraft/tags/TagKey;
+
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

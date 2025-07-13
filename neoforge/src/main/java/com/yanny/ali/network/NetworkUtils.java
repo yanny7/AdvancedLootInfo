@@ -22,8 +22,8 @@ public class NetworkUtils {
         Server server = new Server();
 
         registrar.play(
-                InfoSyncLootTableMessage.ID,
-                InfoSyncLootTableMessage::new,
+                SyncLootTableMessage.ID,
+                SyncLootTableMessage::new,
                 (handler) ->
                         handler.client(client::onLootInfo).server((msg, ctx) -> {})
         );
@@ -41,8 +41,8 @@ public class NetworkUtils {
         Server server = new Server();
 
         registrar.play(
-                InfoSyncLootTableMessage.ID,
-                InfoSyncLootTableMessage::new,
+                SyncLootTableMessage.ID,
+                SyncLootTableMessage::new,
                 (handler) -> {}
         );
         registrar.play(

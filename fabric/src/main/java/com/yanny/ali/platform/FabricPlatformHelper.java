@@ -24,13 +24,16 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
         for (EntrypointContainer<IPlugin> container : FabricLoader.getInstance().getEntrypointContainers("ali", IPlugin.class)) {
             try {
-                plugins.add(new PluginHolder(container.getProvider().getMetadata().getId(), container.getEntrypoint()));
+                IPlugin plugin = container.getEntrypoint();
+
+                plugins.add(new PluginHolder(container.getProvider().getMetadata().getId(), plugin));
+                LOGGER.info("Registered plugin {}", plugin.getClass().getCanonicalName());
             } catch (Throwable t) {
                 LOGGER.warn("Failed to load plugin with error: {}", t.getMessage());
             }
         }
 
-        LOGGER.info("Found {} plugin(s", plugins.size());
+        LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
     }
 

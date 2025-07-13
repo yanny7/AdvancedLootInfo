@@ -3,7 +3,7 @@ package com.yanny.ali.network;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(InfoSyncLootTableMessage msg, CustomPayloadEvent.Context contextSupplier) {
+    public void onLootInfo(SyncLootTableMessage msg, CustomPayloadEvent.Context contextSupplier) {
         super.onLootInfo(msg);
         contextSupplier.setPacketHandled(true);
     }

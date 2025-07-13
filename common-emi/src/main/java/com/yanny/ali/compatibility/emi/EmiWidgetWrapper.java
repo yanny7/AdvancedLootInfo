@@ -1,7 +1,7 @@
 package com.yanny.ali.compatibility.emi;
 
 import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.RelativeRect;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphics;
@@ -14,10 +14,10 @@ public class EmiWidgetWrapper extends Widget {
     private final Bounds bounds;
 
     public EmiWidgetWrapper(IWidget widget) {
-        Rect rect = widget.getRect();
+        RelativeRect rect = widget.getRect();
 
         this.widget = widget;
-        bounds = new Bounds(rect.x(), rect.y(), rect.width(), rect.height());
+        bounds = new Bounds(rect.getX(), rect.getY(), rect.width, rect.height);
     }
 
     @Override

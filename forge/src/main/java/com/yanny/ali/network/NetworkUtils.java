@@ -24,10 +24,10 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::write)
-                .decoder(InfoSyncLootTableMessage::new)
-                .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
+                .encoder(SyncLootTableMessage::write)
+                .decoder(SyncLootTableMessage::new)
+                .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::write)
@@ -41,9 +41,9 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .encoder(InfoSyncLootTableMessage::write)
-                .decoder(InfoSyncLootTableMessage::new)
+        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
+                .encoder(SyncLootTableMessage::write)
+                .decoder(SyncLootTableMessage::new)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::write)
