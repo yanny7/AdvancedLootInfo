@@ -26,9 +26,9 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, InfoSyncLootTableMessage>)(Object) InfoSyncLootTableMessage.CODEC)
-                .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
@@ -41,8 +41,8 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, InfoSyncLootTableMessage>)(Object) InfoSyncLootTableMessage.CODEC)
+        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)

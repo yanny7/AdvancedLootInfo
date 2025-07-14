@@ -1,58 +1,14 @@
 package com.yanny.ali.api;
 
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IClientUtils extends ICommonUtils {
-    Pair<List<IEntryWidget>, Rect> createWidgets(IWidgetUtils registry, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth,
-                                                 List<LootItemFunction> functions, List<LootItemCondition> conditions);
+    List<IWidget> createWidgets(IWidgetUtils registry, List<IDataNode> entries, RelativeRect parent, int maxWidth);
 
-    <T extends LootItemCondition> List<Component> getConditionTooltip(IClientUtils utils, int pad, T condition);
+    <T extends IDataNode> IClientRegistry.NodeFactory<T> getNodeFactory(ResourceLocation id);
 
-    <T extends LootItemFunction> List<Component> getFunctionTooltip(IClientUtils utils, int pad, T function);
-
-    <T extends ItemSubPredicate> List<Component> getItemSubPredicateTooltip(IClientUtils utils, int pad, ItemSubPredicate.Type<?> type, T predicate);
-
-    <T extends EntitySubPredicate> List<Component> getEntitySubPredicateTooltip(IClientUtils utils, int pad, T predicate);
-
-    List<Component> getDataComponentTypeTooltip(IClientUtils utils, int pad, DataComponentType<?> type, Object value);
-
-    <T extends LootItemFunction> void applyCountModifier(IClientUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
-
-    <T extends LootItemCondition> void applyChanceModifier(IClientUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
-
-    <T extends LootItemFunction> ItemStack applyItemStackModifier(IClientUtils utils, T function, ItemStack itemStack);
-
-    Rect getBounds(IClientUtils registry, List<LootPoolEntryContainer> entries, int x, int y, int maxWidth);
-
-    @Nullable
-    WidgetDirection getWidgetDirection(LootPoolEntryContainer entry);
-
-    LootContext getLootContext();
-
-    List<Item> getItems(ResourceKey<LootTable> location);
-
-    RangeValue convertNumber(IClientUtils utils, @Nullable NumberProvider numberProvider);
-
-    @Nullable
-    HolderLookup.Provider lookupProvider();
+    List<Item> getItems(ResourceLocation location);
 }

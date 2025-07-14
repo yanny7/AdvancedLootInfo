@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility.emi;
 
+import com.yanny.ali.api.IDataNode;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final Block block;
     private final boolean isSpecial;
 
-    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, LootTable lootTable, List<Item> items) {
+    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, IDataNode lootTable, List<Item> items) {
         super(category, id, lootTable, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22, items);
         this.block = block;
         isSpecial = block instanceof BushBlock || block.asItem() == Items.AIR;

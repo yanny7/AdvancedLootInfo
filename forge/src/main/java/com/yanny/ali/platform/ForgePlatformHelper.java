@@ -37,6 +37,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
                             String modId = scanData.getIModInfoData().get(0).getMods().get(0).getModId();
 
                             plugins.add(new PluginHolder(modId, plugin));
+                            LOGGER.info("Registered plugin {}", plugin.getClass().getCanonicalName());
                         } else {
                             LOGGER.warn("{} doesn't implement {}", annotationData.memberName(), IPlugin.class.getName());
                         }
@@ -47,7 +48,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
             }
         }
 
-        LOGGER.info("Found {} plugin(s", plugins.size());
+        LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
     }
 

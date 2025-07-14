@@ -1,11 +1,11 @@
 package com.yanny.ali.api;
 
-import com.mojang.datafixers.util.Either;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.storage.loot.LootTable;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+
+import java.util.List;
 
 public interface ICommonUtils {
-    @Nullable
-    LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either);
+    List<Entity> createEntities(EntityType<?> type, Level level);
 }

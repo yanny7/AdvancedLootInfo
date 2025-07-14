@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTable lootTable, List<Item> items) implements CustomPacketPayload {
+public record SyncLootTableMessage(ResourceKey<LootTable> location, IDataNode node, List<Item> items) implements CustomPacketPayload {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final Type<InfoSyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
@@ -56,3 +56,37 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
         return TYPE;
     }
 }
+
+/*
+    public SyncLootTableMessage(FriendlyByteBuf buf) {
+        IDataNode dataNode;
+
+        location = buf.readResourceLocation();
+        items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
+
+        try {
+            IClientUtils utils = PluginManager.CLIENT_REGISTRY;
+            dataNode = utils.getNodeFactory(LootTableNode.ID).create(utils, buf);
+        } catch (Throwable e) {
+            LOGGER.error("Failed to decode node for loot table {} with error: {}", location, e.getMessage());
+            dataNode = new MissingNode();
+        }
+
+        node = dataNode;
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeResourceLocation(location);
+        buf.writeCollection(items, (b, item) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
+
+        IServerUtils utils = PluginManager.SERVER_REGISTRY;
+
+        try {
+            node.encode(utils, buf);
+        } catch (Throwable e) {
+            LOGGER.error("Failed to encode node with error: {}", e.getMessage());
+            new MissingNode().encode(utils, buf);
+        }
+    }
+ */

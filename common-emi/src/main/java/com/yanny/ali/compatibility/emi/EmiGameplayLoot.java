@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility.emi;
 
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.*;
@@ -7,14 +8,13 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
 public class EmiGameplayLoot extends EmiBaseLoot {
-    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, LootTable lootTable, List<Item> items) {
+    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, List<Item> items) {
         super(category, id, lootTable, 0, 10, items);
     }
 
