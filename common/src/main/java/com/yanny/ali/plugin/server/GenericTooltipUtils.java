@@ -532,8 +532,14 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getItemStackTooltip(IServerUtils utils, String key, ItemStack itemStack) {
-        return getItemTooltip(utils, key, itemStack.getItem());
+    public static ITooltipNode getItemStackTooltip(IServerUtils utils, String key, ItemStack item) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getItemTooltip(utils, "ali.property.value.item", item.getItem()));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.count", item.getCount()));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.tag", item.getTag(), GenericTooltipUtils::getCompoundTagTooltip));
+
+        return tooltip;
     }
 
     // HELPERS
