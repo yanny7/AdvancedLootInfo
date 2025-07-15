@@ -2,11 +2,13 @@ package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.List;
 
@@ -29,11 +31,5 @@ public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public List<Item> getItems(ResourceKey<LootTable> location) {
         return PluginManager.CLIENT_REGISTRY.getItems(location);
-    }
-
-    @Nullable
-    @Override
-    public HolderLookup.Provider lookupProvider() {
-        return PluginManager.CLIENT_REGISTRY.lookupProvider();
     }
 }

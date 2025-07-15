@@ -6,7 +6,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -38,8 +38,8 @@ public class ItemNode implements IDataNode, IItemNode {
         count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
     }
 
-    public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
-        itemStack = buf.readItem();
+    public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
+        itemStack = ItemStack.STREAM_CODEC.decode(buf);;
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
 
@@ -74,8 +74,8 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeItem(itemStack);
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
+        ItemStack.STREAM_CODEC.encode(buf, itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
     }

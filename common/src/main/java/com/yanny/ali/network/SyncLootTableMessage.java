@@ -2,6 +2,12 @@ package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -17,17 +23,22 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public record SyncLootTableMessage(ResourceKey<LootTable> location, IDataNode node, List<Item> items) implements CustomPacketPayload {
+public record SyncLootTableMessage(ResourceKey<LootTable> location, List<Item> items, IDataNode node) implements CustomPacketPayload {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Type<InfoSyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
-    public static final StreamCodec<RegistryFriendlyByteBuf, InfoSyncLootTableMessage> CODEC = StreamCodec.composite(
+    public static final Type<SyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, SyncLootTableMessage> CODEC = StreamCodec.composite(
             ResourceKey.streamCodec(Registries.LOOT_TABLE), (l) -> l.location,
+            StreamCodec.of(
+                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
+                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.get(a.readResourceLocation()))
+            ), (l) -> l.items,
             StreamCodec.of(
                     (b, l) -> {
                         int fallbackIndex = b.writerIndex();
                         try {
-                            ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, l);
+                            IServerUtils utils = PluginManager.SERVER_REGISTRY;
+                            l.encode(utils, b);;
                         } catch (Throwable e) {
                             LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
                             b.writerIndex(fallbackIndex);
@@ -36,18 +47,15 @@ public record SyncLootTableMessage(ResourceKey<LootTable> location, IDataNode no
                     },
                     (b) -> {
                         try {
-                            return ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).decode(b);
+                            IClientUtils utils = PluginManager.CLIENT_REGISTRY;
+                            return new LootTableNode(utils, b);
                         } catch (Throwable e) {
                             LOGGER.error("Failed to decode loot table with error: {}", e.getMessage());
-                            return LootTable.EMPTY;
+                            return new MissingNode();
                         }
-                    }),
-            (l) -> l.lootTable,
-            StreamCodec.of(
-                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
-                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.get(a.readResourceLocation()))
-            ), (l) -> l.items,
-            InfoSyncLootTableMessage::new
+                    }
+            ), (l) -> l.node,
+            SyncLootTableMessage::new
     );
 
     @NotNull

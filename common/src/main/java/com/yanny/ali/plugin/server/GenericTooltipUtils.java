@@ -1,34 +1,38 @@
 package com.yanny.ali.plugin.server;
 
-import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
-import com.mojang.datafixers.util.Pair;
-import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.TooltipNode;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.commands.arguments.NbtPathArgument;
+import net.minecraft.core.*;
+import net.minecraft.core.component.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BannerPatternLayers;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -40,6 +44,7 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
@@ -118,11 +123,11 @@ public class GenericTooltipUtils {
     public static ITooltipNode getFormulaTooltip(IServerUtils utils, String key, ApplyBonusCount.Formula formula) {
         ITooltipNode tooltip = getResourceLocationTooltip(utils, key, formula.getType().id());
 
-        if (formula instanceof ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount) {
-            tooltip.add(getIntegerTooltip(utils, "ali.property.value.extra_rounds", binomialWithBonusCount.extraRounds()));
-            tooltip.add(getFloatTooltip(utils, "ali.property.value.probability", binomialWithBonusCount.probability()));
-        } else if (formula instanceof ApplyBonusCount.UniformBonusCount uniformBonusCount) {
-            tooltip.add(getIntegerTooltip(utils, "ali.property.value.bonus_multiplier", uniformBonusCount.bonusMultiplier()));
+        if (formula instanceof ApplyBonusCount.BinomialWithBonusCount(int extraRounds, float probability)) {
+            tooltip.add(getIntegerTooltip(utils, "ali.property.value.extra_rounds", extraRounds));
+            tooltip.add(getFloatTooltip(utils, "ali.property.value.probability", probability));
+        } else if (formula instanceof ApplyBonusCount.UniformBonusCount(int bonusMultiplier)) {
+            tooltip.add(getIntegerTooltip(utils, "ali.property.value.bonus_multiplier", bonusMultiplier));
         }
 
         return tooltip;
@@ -154,10 +159,15 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getBannerPatternsTooltip(IServerUtils utils, String key, Pair<Holder<BannerPattern>, DyeColor> pair) {
-        ITooltipNode tooltip = getHolderTooltip(utils, key, pair.getFirst(), RegistriesTooltipUtils::getBannerPatternTooltip);
+    public static ITooltipNode getBannerPatternLayersTooltip(IServerUtils utils, String key, BannerPatternLayers bannerPatternLayers) {
+        return getCollectionTooltip(utils, key, "ali.property.value.null", bannerPatternLayers.layers(), GenericTooltipUtils::getBannerPatternLayerTooltip);
+    }
 
-        tooltip.add(getEnumTooltip(utils, "ali.property.value.color", pair.getSecond()));
+    @NotNull
+    public static ITooltipNode getBannerPatternLayerTooltip(IServerUtils utils, String key, BannerPatternLayers.Layer layer) {
+        ITooltipNode tooltip = getHolderTooltip(utils, key, layer.pattern(), RegistriesTooltipUtils::getBannerPatternTooltip);
+
+        tooltip.add(getEnumTooltip(utils, "ali.property.value.color", layer.color()));
 
         return tooltip;
     }
@@ -171,22 +181,20 @@ public class GenericTooltipUtils {
     public static ITooltipNode getPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
         String name = propertyMatcher.name();
 
-        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
-            return new TooltipNode(keyValue(name, matcher.value()));
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher(String value)) {
+            return new TooltipNode(keyValue(name, value));
         }
-        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
-            Optional<String> min = matcher.minValue();
-            Optional<String> max = matcher.maxValue();
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> minValue, Optional<String> maxValue)) {
 
-            if (min.isPresent()) {
-                if (max.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, min.get(), max.get())));
+            if (minValue.isPresent()) {
+                if (maxValue.isPresent()) {
+                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, minValue.get(), maxValue.get())));
                 } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, min.get())));
+                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, minValue.get())));
                 }
             } else {
-                if (max.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, max.get())));
+                if (maxValue.isPresent()) {
+                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, maxValue.get())));
                 } else {
                     return new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)));
                 }
@@ -258,8 +266,8 @@ public class GenericTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.position", locationPredicate.position(), GenericTooltipUtils::getPositionPredicateTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.biome", locationPredicate.biome(), GenericTooltipUtils::getResourceKeyTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.structure", locationPredicate.structure(), GenericTooltipUtils::getResourceKeyTooltip));
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.biomes", "ali.property.value.null", locationPredicate.biomes(), RegistriesTooltipUtils::getBiomeTooltip));
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.structures", "ali.property.value.null", locationPredicate.structures(), RegistriesTooltipUtils::getStructureTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.dimension", locationPredicate.dimension(), GenericTooltipUtils::getResourceKeyTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.smokey", locationPredicate.smokey(), GenericTooltipUtils::getBooleanTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.light", locationPredicate.light(), GenericTooltipUtils::getLightPredicateTooltip));
@@ -289,7 +297,6 @@ public class GenericTooltipUtils {
     public static ITooltipNode getBlockPredicateTooltip(IServerUtils utils, String key, BlockPredicate blockPredicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.tag", blockPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks(), RegistriesTooltipUtils::getBlockTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.properties", blockPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.nbt", blockPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
@@ -306,8 +313,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getFluidPredicateTooltip(IServerUtils utils, String key, FluidPredicate fluidPredicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.tag", fluidPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
-        tooltip.add(getOptionalHolderTooltip(utils, "ali.property.value.fluid", fluidPredicate.fluid(), RegistriesTooltipUtils::getFluidTooltip));
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.fluids", "ali.property.value.null", fluidPredicate.fluids(), RegistriesTooltipUtils::getFluidTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.properties", fluidPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
 
         return tooltip;
@@ -349,14 +355,10 @@ public class GenericTooltipUtils {
     public static ITooltipNode getItemPredicateTooltip(IServerUtils utils, String key, ItemPredicate itemPredicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.tag", itemPredicate.tag(), GenericTooltipUtils::getTagKeyTooltip));
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), RegistriesTooltipUtils::getItemTooltip));
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.count", itemPredicate.count()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.durability", itemPredicate.durability()));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.enchantments", "ali.property.value.null", itemPredicate.enchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.stored_enchantments", "ali.property.value.null", itemPredicate.storedEnchantments(), GenericTooltipUtils::getEnchantmentPredicateTooltip));
-        tooltip.add(getOptionalHolderTooltip(utils, "ali.property.value.potion", itemPredicate.potion(), RegistriesTooltipUtils::getPotionTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.nbt", itemPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
+        tooltip.add(getDataComponentPredicateTooltip(utils, "ali.property.branch.components", itemPredicate.components()));
+        tooltip.add(getMapTooltip(utils, "ali.property.branch.item_predicates", itemPredicate.subPredicates(), GenericTooltipUtils::getItemSubPredicateEntryTooltip));
 
         return tooltip;
     }
@@ -368,43 +370,6 @@ public class GenericTooltipUtils {
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.level", enchantmentPredicate.level()));
 
         return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, String key, EntitySubPredicate entitySubPredicate) {
-        Optional<Map.Entry<String, EntitySubPredicate.Type>> optional = EntitySubPredicate.Types.TYPES.entrySet().stream().filter((p) -> p.getValue() == entitySubPredicate.type()).findFirst();
-
-        return optional.map((entry) -> {
-            ITooltipNode tooltip = new TooltipNode(translatable(key, entry.getKey()));
-
-            if (entitySubPredicate instanceof LightningBoltPredicate predicate) {
-                tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.blocks_on_fire", predicate.blocksSetOnFire()));
-                tooltip.add(getOptionalTooltip(utils, "ali.property.branch.stuck_entity", predicate.entityStruck(), GenericTooltipUtils::getEntityPredicateTooltip));
-            } else if (entitySubPredicate instanceof FishingHookPredicate predicate) {
-                tooltip.add(getOptionalTooltip(utils, "ali.property.value.in_open_water", predicate.inOpenWater(), GenericTooltipUtils::getBooleanTooltip));
-            } else if (entitySubPredicate instanceof PlayerPredicate predicate) {
-                tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.level", predicate.level()));
-                tooltip.add(getOptionalTooltip(utils, "ali.property.value.game_type", predicate.gameType(), GenericTooltipUtils::getEnumTooltip));
-                tooltip.add(getCollectionTooltip(utils, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
-                tooltip.add(getMapTooltip(utils, "ali.property.branch.recipes", predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip));
-                tooltip.add(getMapTooltip(utils, "ali.property.branch.advancements", predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip));
-                tooltip.add(getOptionalTooltip(utils, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
-            } else if (entitySubPredicate instanceof SlimePredicate predicate) {
-                tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.size", predicate.size()));
-            } else {
-                EntitySubPredicate.CODEC.encodeStart(JsonOps.INSTANCE, entitySubPredicate).result().ifPresent((element) -> {
-                    JsonObject jsonObject = element.getAsJsonObject();
-
-                    if (jsonObject.has("variant")) {
-                        tooltip.add(new TooltipNode(translatable("ali.property.value.variant", jsonObject.getAsJsonPrimitive("variant").getAsString())));
-                    } else {
-                        tooltip.add(new TooltipNode(translatable("ali.property.value.variant", jsonObject.toString())));
-                    }
-                });
-            }
-
-            return tooltip;
-        }).orElse(TooltipNode.EMPTY);
     }
 
     @NotNull
@@ -438,12 +403,326 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getCopyOperationTooltip(IServerUtils utils, String key, CopyNbtFunction.CopyOperation copyOperation) {
+    public static ITooltipNode getListOperationTooltip(IServerUtils utils, String key, ListOperation operation) {
+        ITooltipNode tooltip = getEnumTooltip(utils, key, operation.mode());
+
+        if (operation instanceof ListOperation.Insert(int offset)) {
+            tooltip.add(getIntegerTooltip(utils, "ali.property.value.offset", offset));
+        } else if (operation instanceof ListOperation.ReplaceSection(int offset, Optional<Integer> size)) {
+            tooltip.add(getIntegerTooltip(utils, "ali.property.value.offset", offset));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.value.size", size, GenericTooltipUtils::getIntegerTooltip));
+        }
+
+        return tooltip;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getContainerComponentManipulatorTooltip(IServerUtils utils, String key, ContainerComponentManipulator<?> component) {
+        return getDataComponentTypeTooltip(utils, key, component.type());
+    }
+
+    @NotNull
+    public static ITooltipNode getCopyOperationTooltip(IServerUtils utils, String key, CopyCustomDataFunction.CopyOperation copyOperation) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getStringTooltip(utils, "ali.property.value.source", copyOperation.sourcePath().string()));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.target", copyOperation.targetPath().string()));
+        tooltip.add(getNbtPathTooltip(utils, "ali.property.value.source_path", copyOperation.sourcePath()));
+        tooltip.add(getNbtPathTooltip(utils, "ali.property.value.target_path", copyOperation.targetPath()));
         tooltip.add(getEnumTooltip(utils, "ali.property.value.merge_strategy", copyOperation.op()));
+
+        return tooltip;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getNbtPathTooltip(IServerUtils utils, String key, NbtPathArgument.NbtPath provider) {
+        return getStringTooltip(utils, key, provider.asString());
+    }
+
+    @NotNull
+    public static ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, String key, DataComponentPredicate dataComponentPredicate) {
+        if (dataComponentPredicate != DataComponentPredicate.EMPTY) {
+            return getCollectionTooltip(utils, key, "ali.property.value.null", dataComponentPredicate.expectedComponents, GenericTooltipUtils::getTypedDataComponentTooltip);
+        } else {
+            return TooltipNode.EMPTY;
+        }
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getTypedDataComponentTooltip(IServerUtils utils, String key, TypedDataComponent<?> typedDataComponent) {
+        ITooltipNode tooltip = getDataComponentTypeTooltip(utils, key, typedDataComponent.type());
+        
+        tooltip.add(utils.getDataComponentTypeTooltip(utils, typedDataComponent.type(), typedDataComponent.value()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static <A, B extends Predicate<A>> ITooltipNode getCollectionPredicateTooltip(IServerUtils utils, String key, String value, Optional<CollectionPredicate<A, B>> optional,
+                                                                                            TriFunction<IServerUtils, String, B, ITooltipNode> subPredicate) {
+        if (optional.isPresent()) {
+            ITooltipNode tooltip = new TooltipNode(translatable(key));
+            CollectionPredicate<A, B> predicate = optional.get();
+
+            tooltip.add(getCollectionContentsPredicateTooltip(utils, "ali.property.branch.contains", value, predicate.contains(), subPredicate));
+            tooltip.add(getCollectionCountsPredicateTooltip(utils, "ali.property.branch.counts", value, predicate.counts(), (u1, v1, s1) -> {
+                ITooltipNode comps = subPredicate.apply(u1, v1, s1.test());
+
+                comps.add(getMinMaxBoundsTooltip(u1, "ali.property.value.count", s1.count()));
+
+                return comps;
+            }));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.value.size", predicate.size(), GenericTooltipUtils::getMinMaxBoundsTooltip));
+
+            return tooltip;
+        }
+
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static <A, B extends Predicate<A>> ITooltipNode getCollectionContentsPredicateTooltip(IServerUtils utils, String key, String value, Optional<CollectionContentsPredicate<A, B>> predicate,
+                                                                                                    TriFunction<IServerUtils, String, B, ITooltipNode> mapper) {
+        return predicate.map((p) -> getCollectionTooltip(utils, key, value, p.unpack(), mapper)).orElse(TooltipNode.EMPTY);
+    }
+
+    @NotNull
+    public static <A, B extends Predicate<A>> ITooltipNode getCollectionCountsPredicateTooltip(IServerUtils utils, String key, String value, Optional<CollectionCountsPredicate<A, B>> predicate,
+                                                                                                  TriFunction<IServerUtils, String, CollectionCountsPredicate.Entry<A, B>, ITooltipNode> mapper) {
+        return predicate.map((p) -> getCollectionTooltip(utils, key, value, p.unpack(), mapper)).orElse(TooltipNode.EMPTY);
+    }
+
+    @NotNull
+    public static ITooltipNode getFireworkPredicateTooltip(IServerUtils utils, String key, ItemFireworkExplosionPredicate.FireworkPredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.shape", predicate.shape(), GenericTooltipUtils::getEnumTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.trail", predicate.trail(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.twinkle", predicate.twinkle(), GenericTooltipUtils::getBooleanTooltip));
+
+        return tooltip;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, String key, ItemWritableBookPredicate.PagePredicate predicate) {
+        return new TooltipNode(translatable(key, value(predicate.contents())));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, String key, ItemWrittenBookPredicate.PagePredicate predicate) {
+        return new TooltipNode(translatable(key, value(predicate.contents())));
+    }
+
+    @NotNull
+    public static ITooltipNode getEntryPredicateTooltip(IServerUtils utils, String key, ItemAttributeModifiersPredicate.EntryPredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.attributes", "ali.property.value.null", predicate.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.id", predicate.id(), GenericTooltipUtils::getUUIDTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.name", predicate.name(), GenericTooltipUtils::getStringTooltip));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.amount", predicate.amount()));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.operation", predicate.operation(), GenericTooltipUtils::getEnumTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.slot", predicate.slot(), GenericTooltipUtils::getEnumTooltip));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getDataComponentPatchTooltip(IServerUtils utils, String key, DataComponentPatch data) {
+        return getMapTooltip(utils, key, data.map, GenericTooltipUtils::getDataComponentPatchEntryTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getFireworkExplosionTooltip(IServerUtils utils, String key, FireworkExplosion data) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getEnumTooltip(utils, "ali.property.value.shape", data.shape()));
+        tooltip.add(getIntListTooltip(utils, "ali.property.value.colors", data.colors()));
+        tooltip.add(getIntListTooltip(utils, "ali.property.value.fade_colors", data.fadeColors()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.has_trail", data.hasTrail()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.has_twinkle", data.hasTwinkle()));
+
+        return tooltip;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getIntListTooltip(IServerUtils utils, String key, IntList data) {
+        return getStringTooltip(utils, key, data.toString());
+    }
+
+    @NotNull
+    public static <T> ITooltipNode getFilterableTooltip(IServerUtils utils, String key, Filterable<T> data,
+                                                           TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(mapper.apply(utils, "ali.property.value.raw", data.raw()));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.filtered", data.filtered(), mapper));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static <T> ITooltipNode getFilterableTooltip(IServerUtils utils, String key, Optional<Filterable<T>> data,
+                                                           TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        if (data.isPresent()) {
+            ITooltipNode tooltip = new TooltipNode(translatable(key));
+            Filterable<T> d = data.get();
+
+            tooltip.add(mapper.apply(utils, "ali.property.value.raw", d.raw()));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.value.filtered", d.filtered(), mapper));
+
+            return tooltip;
+        }
+        
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static <T> ITooltipNode getFilterableTooltip(IServerUtils utils, String key, String value, Collection<Filterable<T>> data,
+                                                           TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        ITooltipNode tooltips = new TooltipNode(translatable(key));
+
+        for (Filterable<T> d : data) {
+            ITooltipNode tooltip = new TooltipNode(translatable(value));
+
+            tooltip.add(mapper.apply(utils, "ali.property.value.raw", d.raw()));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.value.filtered", d.filtered(), mapper));
+            tooltips.add(tooltip);
+        }
+
+        return tooltips;
+    }
+
+    @NotNull
+    public static ITooltipNode getItemAttributeModifiersEntryTooltip(IServerUtils utils, String key, ItemAttributeModifiers.Entry entry) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getHolderTooltip(utils, "ali.property.value.attribute", entry.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
+        tooltip.add(getAttributeModifierTooltip(utils, "ali.property.branch.modifier", entry.modifier()));
+        tooltip.add(getEnumTooltip(utils, "ali.property.value.slot", entry.slot()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getAttributeModifierTooltip(IServerUtils utils, String key, AttributeModifier modifier) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getUUIDTooltip(utils, "ali.property.value.id", modifier.id()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.name", modifier.name()));
+        tooltip.add(getDoubleTooltip(utils, "ali.property.value.amount", modifier.amount()));
+        tooltip.add(getEnumTooltip(utils, "ali.property.value.operation", modifier.operation()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getPossibleEffectTooltip(IServerUtils utils, String key, FoodProperties.PossibleEffect effect) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getMobEffectInstanceTooltip(utils, "ali.property.value.effect", effect.effect()));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.probability", effect.probability()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getMobEffectInstanceTooltip(IServerUtils utils, String key, MobEffectInstance effect) {
+        ITooltipNode tooltip = getHolderTooltip(utils, key, effect.getEffect(), RegistriesTooltipUtils::getMobEffectTooltip);
+
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.duration", effect.getDuration()));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.amplifier", effect.getAmplifier()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.ambient", effect.isAmbient()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.is_visible", effect.isVisible()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_icon", effect.showIcon()));
+
+        if (effect.hiddenEffect != null) {
+            tooltip.add(getMobEffectInstanceTooltip(utils, "ali.property.value.hidden_effect", effect.hiddenEffect));
+        }
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getRuleTooltip(IServerUtils utils, String key, Tool.Rule rule) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getHolderSetTooltip(utils, "ali.property.branch.blocks", "ali.property.value.null", rule.blocks(), RegistriesTooltipUtils::getBlockTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.correct_for_drops", rule.correctForDrops(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.speed", rule.speed(), GenericTooltipUtils::getFloatTooltip));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getMapDecorationEntryTooltip(IServerUtils utils, String key, MapDecorations.Entry entry) {
+        ITooltipNode tooltip = getHolderTooltip(utils, key, entry.type(), RegistriesTooltipUtils::getMapDecorationTypeTooltip);
+
+        tooltip.add(getDoubleTooltip(utils, "ali.property.value.x", entry.x()));
+        tooltip.add(getDoubleTooltip(utils, "ali.property.value.z", entry.z()));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.rotation", entry.rotation()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getItemStackTooltip(IServerUtils utils, String key, ItemStack item) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getItemTooltip(utils, "ali.property.value.item", item.getItem()));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.count", item.getCount()));
+        tooltip.add(getDataComponentMapTooltip(utils, "ali.property.branch.components", item.getComponents()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getDataComponentMapTooltip(IServerUtils utils, String key, DataComponentMap map) {
+        if (!map.isEmpty()) {
+            ITooltipNode tooltip = new TooltipNode(translatable(key));
+            map.forEach((action) -> {
+                ITooltipNode t = getDataComponentTypeTooltip(utils, "ali.property.value.null", action.type());
+
+                t.add(utils.getDataComponentTypeTooltip(utils, action.type(), action.value()));
+                tooltip.add(t);
+            });
+
+            return tooltip;
+        }
+
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static ITooltipNode getSuspiciousStewEffectEntryTooltip(IServerUtils utils, SuspiciousStewEffects.Entry entry) {
+        ITooltipNode tooltip = getHolderTooltip(utils, "ali.property.value.null", entry.effect(), RegistriesTooltipUtils::getMobEffectTooltip);
+
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.duration", entry.duration()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getGlobalPosTooltip(IServerUtils utils, String key, GlobalPos globalPos) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getResourceKeyTooltip(utils, "ali.property.value.dimension", globalPos.dimension()));
+        tooltip.add(getBlockPosTooltip(utils, "ali.property.multi.position", globalPos.pos()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getBeehiveBlockEntityOccupantTooltip(IServerUtils utils, String key, BeehiveBlockEntity.Occupant occupant) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getStringTooltip(utils, "ali.property.value.entity_data", occupant.entityData().copyTag().getAsString()));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.ticks_in_hive", occupant.ticksInHive()));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.min_ticks_in_hive", occupant.minTicksInHive()));
 
         return tooltip;
     }
@@ -457,6 +736,20 @@ public class GenericTooltipUtils {
         return tooltip;
     }
 
+    @NotNull
+    public static ITooltipNode getAuthPropertyTooltip(IServerUtils utils, com.mojang.authlib.properties.Property property) {
+        ITooltipNode tooltip = new TooltipNode();
+
+        tooltip.add(getStringTooltip(utils, "ali.property.value.name", property.name()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.value", property.value()));
+
+        if (property.signature() != null) {
+            tooltip.add(getStringTooltip(utils, "ali.property.value.signature", property.signature()));
+        }
+
+        return tooltip;
+    }
+
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCompoundTagTooltip(IServerUtils ignoredUtils, String key, CompoundTag tag) {
@@ -465,10 +758,10 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getAdvancementPredicateTooltip(IServerUtils utils, String key, PlayerPredicate.AdvancementPredicate predicate) {
-        if (predicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
-            return new TooltipNode(translatable(key, donePredicate.state()));
-        } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate criterionsPredicate) {
-            return getMapTooltip(utils, criterionsPredicate.criterions(), GenericTooltipUtils::getCriterionEntryTooltip);
+        if (predicate instanceof PlayerPredicate.AdvancementDonePredicate(boolean state)) {
+            return new TooltipNode(translatable(key, state));
+        } else if (predicate instanceof PlayerPredicate.AdvancementCriterionsPredicate(Object2BooleanMap<String> criterions)) {
+            return getMapTooltip(utils, criterions, GenericTooltipUtils::getCriterionEntryTooltip);
         }
 
         return TooltipNode.EMPTY;
@@ -476,8 +769,29 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getItemStackTooltip(IServerUtils utils, String key, ItemStack itemStack) {
-        return getItemTooltip(utils, key, itemStack.getItem());
+    public static <T> ITooltipNode getStandaloneTooltip(IServerUtils utils, String key, String value, Optional<ListOperation.StandAlone<T>> standalone,
+                                                        TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        if (standalone.isPresent()) {
+            ITooltipNode tooltip = new TooltipNode(translatable(key));
+            ListOperation.StandAlone<T> s = standalone.get();
+
+            tooltip.add(getCollectionTooltip(utils, "ali.property.branch.values", value, s.value(), mapper));
+            tooltip.add(getListOperationTooltip(utils, "ali.property.value.list_operation", s.operation()));
+            
+            return tooltip;
+        }
+        
+        return TooltipNode.EMPTY;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, String key, EntitySubPredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(utils.getEntitySubPredicateTooltip(utils, predicate));
+
+        return tooltip;
     }
 
     // HELPERS
@@ -560,6 +874,12 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
+    public static ITooltipNode getDoubleTooltip(IServerUtils ignoredUtils, String key, Double value) {
+        return new TooltipNode(translatable(key, value(value)));
+    }
+
+    @Unmodifiable
+    @NotNull
     public static ITooltipNode getEnumTooltip(IServerUtils ignoredUtils, String key, Enum<?> value) {
         return new TooltipNode(translatable(key, value(value.name())));
     }
@@ -574,6 +894,26 @@ public class GenericTooltipUtils {
     @NotNull
     public static <T> ITooltipNode getBuiltInRegistryTooltip(IServerUtils utils, String key, Registry<T> registry, T value) {
         return getResourceLocationTooltip(utils, key, Objects.requireNonNull(registry.getKey(value)));
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static <V, T extends Registry<V>> ITooltipNode getRegistryTooltip(IServerUtils utils, String key, ResourceKey<T> registry, V value) {
+        HolderLookup.Provider provider = utils.lookupProvider();
+
+        if (provider != null) {
+            Optional<HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
+
+            if (lookup.isPresent()) {
+                Optional<Holder.Reference<V>> first = lookup.get().listElements().filter((l) -> l.value() == value).findFirst();
+
+                if (first.isPresent()) {
+                    return getResourceKeyTooltip(utils, key, Objects.requireNonNull(first.get().key()));
+                }
+            }
+        }
+
+        return TooltipNode.EMPTY;
     }
 
     @Unmodifiable
@@ -610,6 +950,11 @@ public class GenericTooltipUtils {
         }
 
         return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static <T> ITooltipNode getOptionalTooltip(IServerUtils utils, Optional<T> optional, BiFunction<IServerUtils, T, ITooltipNode> mapper) {
+        return optional.map((value) -> mapper.apply(utils, value)).orElse(TooltipNode.EMPTY);
     }
 
     @NotNull
@@ -656,6 +1001,19 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
+    public static <T> ITooltipNode getCollectionTooltip(IServerUtils utils, Collection<T> values, BiFunction<IServerUtils, T, ITooltipNode> mapper) {
+        if (!values.isEmpty()) {
+            ITooltipNode tooltip = new TooltipNode();
+
+            values.forEach((value) -> tooltip.add(mapper.apply(utils, value)));
+
+            return tooltip;
+        }
+
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
     public static <T> ITooltipNode getCollectionTooltip(IServerUtils utils, String key, Collection<T> values, BiFunction<IServerUtils, T, ITooltipNode> mapper) {
         if (!values.isEmpty()) {
             ITooltipNode tooltip = new TooltipNode(translatable(key));
@@ -676,6 +1034,23 @@ public class GenericTooltipUtils {
             values.forEach((v) -> tooltip.add(mapper.apply(utils, value, v)));
 
             return tooltip;
+        }
+
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static <T, P extends Collection<T>> ITooltipNode getCollectionTooltip(IServerUtils utils, String key, String value, Optional<P> values, TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        if (values.isPresent()) {
+            P v = values.get();
+
+            if (!v.isEmpty()) {
+                ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+                v.forEach((val) -> tooltip.add(mapper.apply(utils, value, val)));
+
+                return tooltip;
+            }
         }
 
         return TooltipNode.EMPTY;
@@ -721,6 +1096,12 @@ public class GenericTooltipUtils {
         return new TooltipNode(keyValue(entry.getKey(), entry.getValue()));
     }
 
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getStringEntryTooltip(IServerUtils ignoredUtils, Map.Entry<String, String> entry) {
+        return new TooltipNode(keyValue(entry.getKey(), entry.getValue()));
+    }
+
     @NotNull
     public static ITooltipNode getIntRangeEntryTooltip(IServerUtils utils, Map.Entry<String, IntRange> entry) {
         ITooltipNode tooltip = new TooltipNode(value(entry.getKey()));
@@ -752,21 +1133,75 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getMobEffectDurationEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, NumberProvider> entry) {
-        ITooltipNode tooltip = getMobEffectTooltip(utils, "ali.property.value.null", entry.getKey());
-
-        tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.duration", entry.getValue()));
-
-        return tooltip;
-    }
-
-    @NotNull
     public static ITooltipNode getAdvancementEntryTooltip(IServerUtils utils, Map.Entry<ResourceLocation, PlayerPredicate.AdvancementPredicate> entry) {
         ITooltipNode tooltip = getResourceLocationTooltip(utils, "ali.property.value.null", entry.getKey());
 
         tooltip.add(getAdvancementPredicateTooltip(utils, "ali.property.value.done", entry.getValue()));
 
         return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getMapDecorationEntryTooltip(IServerUtils utils, Map.Entry<String, MapDecorations.Entry> entry) {
+        ITooltipNode tooltip = getStringTooltip(utils, "ali.property.value.decoration", entry.getKey());
+        
+        tooltip.add(getMapDecorationEntryTooltip(utils, "ali.property.value.null", entry.getValue()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getBlockPropertyEntryTooltip(IServerUtils utils, Map.Entry<Holder<Block>, Property<?>> entry) {
+        ITooltipNode tooltip = getHolderTooltip(utils, "ali.property.value.block", entry.getKey(), RegistriesTooltipUtils::getBlockTooltip);
+        
+        tooltip.add(getPropertyTooltip(utils, "ali.property.value.property", entry.getValue()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getPropertiesEntryTooltip(IServerUtils utils, Map.Entry<String, Collection<com.mojang.authlib.properties.Property>> entry) {
+        ITooltipNode tooltip = getStringTooltip(utils, "ali.property.value.null", entry.getKey());
+        
+        tooltip.add(getCollectionTooltip(utils, entry.getValue(), GenericTooltipUtils::getAuthPropertyTooltip));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getEnchantmentLevelEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, Integer> entry) {
+        ITooltipNode tooltip = getHolderTooltip(utils, "ali.property.value.null", entry.getKey(), RegistriesTooltipUtils::getEnchantmentTooltip);
+        
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.level", entry.getValue()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getToggleEntryTooltip(IServerUtils utils, Map.Entry<ToggleTooltips.ComponentToggle<?>, Boolean> entry) {
+        ITooltipNode tooltip = getDataComponentTypeTooltip(utils, "ali.property.value.null", entry.getKey().type());
+        
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.value", entry.getValue()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getDataComponentPatchEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Optional<?>> entry) {
+        ITooltipNode tooltip = getDataComponentTypeTooltip(utils, "ali.property.value.null", entry.getKey());
+        
+        tooltip.add(getOptionalTooltip(utils, entry.getValue(), (u, v) -> u.getDataComponentTypeTooltip(u, entry.getKey(), v)));
+
+        if (entry.getValue().isEmpty()) {
+            tooltip.add(new TooltipNode(translatable("ali.util.advanced_loot_info.removed")));
+        }
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getItemSubPredicateEntryTooltip(IServerUtils utils, Map.Entry<ItemSubPredicate.Type<?>, ItemSubPredicate> entry) {
+        return utils.getItemSubPredicateTooltip(utils, entry.getValue());
     }
 
     // PRIVATE

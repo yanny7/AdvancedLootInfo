@@ -116,7 +116,7 @@ public class ConditionTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getReferenceTooltip(IServerUtils utils, ConditionReference cond) {
-        return getResourceLocationTooltip(utils, "ali.type.condition.reference", cond.name());
+        return getResourceKeyTooltip(utils, "ali.type.condition.reference", cond.name());
     }
 
     @Unmodifiable

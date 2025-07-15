@@ -97,7 +97,7 @@ public class ItemCollectorUtils {
     }
 
     @NotNull
-    public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction function) {
+    public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction ignoredFunction) {
         ServerLevel level = utils.getServerLevel();
 
         if (level != null) {
@@ -111,7 +111,7 @@ public class ItemCollectorUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Item> collectSetItem(IServerUtils utils, List<Item> items, SetItemFunction function) {
+    public static List<Item> collectSetItem(IServerUtils ignoredUtils, List<Item> ignoredItems, SetItemFunction function) {
         return List.of(function.item.value());
     }
 }

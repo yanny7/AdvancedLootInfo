@@ -1,11 +1,10 @@
 package com.yanny.ali.network;
 
 import com.yanny.ali.manager.PluginManager;
-import net.minecraft.world.level.storage.loot.LootTable;
 
 public abstract class AbstractClient {
     protected void onLootInfo(SyncLootTableMessage msg) {
-        PluginManager.CLIENT_REGISTRY.addLootTable(msg.location(), msg.lootTable(), msg.items());
+        PluginManager.CLIENT_REGISTRY.addLootData(msg.location(), msg.node(), msg.items());
     }
 
     protected void onClear(ClearMessage msg) {

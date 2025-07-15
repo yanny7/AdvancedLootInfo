@@ -1,6 +1,6 @@
 package com.yanny.ali.api;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ public abstract class ListNode implements IDataNode {
         nodes = new ArrayList<>();
     }
 
-    public ListNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public ListNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         int count = buf.readInt();
 
         nodes = new ArrayList<>(count);
@@ -30,10 +30,10 @@ public abstract class ListNode implements IDataNode {
         nodes.add(node);
     }
 
-    public abstract void encodeNode(IServerUtils utils, FriendlyByteBuf buf);
+    public abstract void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf);
 
     @Override
-    public final void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public final void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeInt(nodes.size());
 
         for (IDataNode node : nodes) {

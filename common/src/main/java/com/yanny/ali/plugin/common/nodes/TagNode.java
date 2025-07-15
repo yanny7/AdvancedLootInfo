@@ -7,7 +7,7 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -40,7 +40,7 @@ public class TagNode implements IDataNode, IItemNode {
         count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
     }
 
-    public TagNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public TagNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
@@ -76,7 +76,7 @@ public class TagNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);

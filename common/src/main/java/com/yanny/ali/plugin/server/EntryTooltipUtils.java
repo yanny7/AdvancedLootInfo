@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +31,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static List<ITooltipNode> getReferenceTooltip(LootTableReference entry, float chance, int sumWeight) {
+    public static List<ITooltipNode> getReferenceTooltip(NestedLootTable entry, float chance, int sumWeight) {
         List<ITooltipNode> tooltip = new ArrayList<>();
 
         tooltip.add(new TooltipNode(translatable("ali.enum.group_type.all")));

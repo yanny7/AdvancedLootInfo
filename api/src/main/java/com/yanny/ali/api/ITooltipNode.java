@@ -1,6 +1,6 @@
 package com.yanny.ali.api;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -12,5 +12,5 @@ public interface ITooltipNode {
 
     Component getContent();
 
-    void encode(FriendlyByteBuf buf);
+    void encode(RegistryFriendlyByteBuf buf);
 }

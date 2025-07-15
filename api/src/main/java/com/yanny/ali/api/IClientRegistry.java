@@ -1,6 +1,6 @@
 package com.yanny.ali.api;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public interface IClientRegistry {
@@ -15,11 +15,6 @@ public interface IClientRegistry {
 
     @FunctionalInterface
     interface NodeFactory<T extends IDataNode> {
-        T create(IClientUtils utils, FriendlyByteBuf buf);
-    }
-
-    @FunctionalInterface
-    interface QuadFunction<A, B, C, D, R> {
-        R apply(A a, B b, C c, D d);
+        T create(IClientUtils utils, RegistryFriendlyByteBuf buf);
     }
 }

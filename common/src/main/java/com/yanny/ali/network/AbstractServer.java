@@ -7,7 +7,8 @@ import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,8 +18,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootDataManager;
-import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -34,10 +33,10 @@ public abstract class AbstractServer {
 
     public final void readLootTables(ReloadableServerRegistries.Holder manager, ServerLevel level) {
         AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
-        Map<ResourceLocation, LootTable> lootTables = collectLootTables(manager);
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
-        Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
-        Map<ResourceLocation, List<Item>> lootTableItems;
+        Map<ResourceKey<LootTable>, LootTable> lootTables = collectLootTables(manager);
+        Map<ResourceKey<LootTable>, IDataNode> lootNodes = new HashMap<>();
+        Map<ResourceKey<LootTable>, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
+        Map<ResourceKey<LootTable>, List<Item>> lootTableItems;
         List<ILootModifier<?>> lootModifiers = serverRegistry.getLootModifiers();
         Map<ILootModifier.IType<?>, List<ILootModifier<?>>> groupedTypes = lootModifiers.stream().collect(Collectors.groupingBy(ILootModifier::getType));
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.BLOCK, Collections.emptyList());
@@ -79,15 +78,15 @@ public abstract class AbstractServer {
     protected abstract void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message);
 
     @NotNull
-    private static List<Item> getItems(Map.Entry<ResourceLocation, LootTable> lootTableMap) {
+    private static List<Item> getItems(Map.Entry<ResourceKey<LootTable>, LootTable> lootTableMap) {
         return ItemCollectorUtils.collectLootTable(PluginManager.SERVER_REGISTRY, lootTableMap.getValue());
     }
 
     @NotNull
-    private static Map<ResourceLocation, LootTable> removeEmptyLootTable(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<Item>> items) {
-        Map<ResourceLocation, LootTable> result = new HashMap<>();
+    private static Map<ResourceKey<LootTable>, LootTable> removeEmptyLootTable(Map<ResourceKey<LootTable>, LootTable> lootTables, Map<ResourceKey<LootTable>, List<Item>> items) {
+        Map<ResourceKey<LootTable>, LootTable> result = new HashMap<>();
 
-        for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
+        for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : lootTables.entrySet()) {
             if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
                 result.put(entry.getKey(), entry.getValue());
             } else {
@@ -99,42 +98,23 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, LootTable> collectLootTables(ReloadableServerRegistries.Holder manager) {
-        Map<ResourceLocation, LootTable> lootTables = new HashMap<>();
-        manager.getKeys(LootDataType.TABLE).forEach((location) -> lootTables.put(location, manager.getLootTable(location)));
+    private static Map<ResourceKey<LootTable>, LootTable> collectLootTables(ReloadableServerRegistries.Holder manager) {
+        Map<ResourceKey<LootTable>, LootTable> lootTables = new HashMap<>();
+
+        manager.get().lookup(Registries.LOOT_TABLE).ifPresent(
+                (lookup) -> lookup.listElements().forEach((reference) -> lootTables.put(reference.key(), reference.value()))
+        );
         return lootTables;
-        /*
-
-        manager.get().lookup(Registries.LOOT_TABLE).ifPresent((lookup) -> {
-            lookup.listElements().forEach((reference) -> PluginManager.SERVER_REGISTRY.addLootTable(reference.key(), reference.value()));
-            lookup.listElements().forEach((reference) -> {
-                ResourceKey<LootTable> location = reference.key();
-                LootTable table = reference.value();
-
-                if (table != LootTable.EMPTY) {
-                    List<Item> items = ItemCollectorUtils.collectLootTable(PluginManager.SERVER_REGISTRY, table);
-
-                    if (!items.isEmpty()) {
-                        messages.add(new InfoSyncLootTableMessage(location, table, items));
-                    } else {
-                        LOGGER.info("LootTable {} has no items", location);
-                    }
-                } else {
-                    LOGGER.warn("Ignoring {} LootTable, because it's empty or null", location);
-                }
-            });
-        });
-         */
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processBlocks(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<ResourceKey<LootTable>, IDataNode> processBlocks(AliServerRegistry serverRegistry, Map<ResourceKey<LootTable>, LootTable> lootTables,
                                                                   List<ILootModifier<?>> blockLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                  Map<ResourceLocation, List<Item>> lootTableItems) {
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+                                                                  Map<ResourceKey<LootTable>, List<Item>> lootTableItems) {
+        Map<ResourceKey<LootTable>, IDataNode> lootNodes = new HashMap<>();
 
         for (Block block : BuiltInRegistries.BLOCK) {
-            ResourceLocation location = block.getLootTable();
+            ResourceKey<LootTable> location = block.getLootTable();
             LootTable lootTable = lootTables.remove(location);
             List<Item> items = lootTableItems.get(location);
 
@@ -154,17 +134,17 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<ResourceKey<LootTable>, IDataNode> processEntities(AliServerRegistry serverRegistry, ServerLevel level, Map<ResourceKey<LootTable>, LootTable> lootTables,
                                                                     List<ILootModifier<?>> entityLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                    Map<ResourceLocation, List<Item>> lootTableItems) {
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+                                                                    Map<ResourceKey<LootTable>, List<Item>> lootTableItems) {
+        Map<ResourceKey<LootTable>, IDataNode> lootNodes = new HashMap<>();
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             List<Entity> entityList = serverRegistry.createEntities(entityType, level);
 
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
-                    ResourceLocation location = mob.getLootTable();
+                    ResourceKey<LootTable> location = mob.getLootTable();
                     LootTable lootTable = lootTables.remove(location);
                     List<Item> items = lootTableItems.get(location);
 
@@ -186,12 +166,12 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
-                                                                      List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+    private static Map<ResourceKey<LootTable>, IDataNode> processLootTables(AliServerRegistry serverRegistry, Map<ResourceKey<LootTable>, LootTable> lootTables,
+                                                                      List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceKey<LootTable>, List<Item>> lootTableItems) {
+        Map<ResourceKey<LootTable>, IDataNode> lootNodes = new HashMap<>();
 
-        for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
-            ResourceLocation location = entry.getKey();
+        for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : lootTables.entrySet()) {
+            ResourceKey<LootTable> location = entry.getKey();
             LootTable lootTable = entry.getValue();
             List<Item> items = lootTableItems.get(location);
             List<ILootModifier<?>> lootModifiers = lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)).toList();

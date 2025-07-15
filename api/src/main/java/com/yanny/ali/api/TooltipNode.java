@@ -1,7 +1,8 @@
 package com.yanny.ali.api;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +13,11 @@ public final class TooltipNode implements ITooltipNode {
     private final List<ITooltipNode> children;
     private final Component component;
 
-    public TooltipNode(FriendlyByteBuf buf) {
+    public TooltipNode(RegistryFriendlyByteBuf buf) {
         int count = buf.readInt();
 
         children = new ArrayList<>(count);
-        component = buf.readComponent();
+        component = ComponentSerialization.STREAM_CODEC.decode(buf);
 
         for (int i = 0; i < count; i++) {
             children.add(new TooltipNode(buf));
@@ -49,9 +50,9 @@ public final class TooltipNode implements ITooltipNode {
     }
 
     @Override
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(RegistryFriendlyByteBuf buf) {
         buf.writeInt(children.size());
-        buf.writeComponent(component);
+        ComponentSerialization.STREAM_CODEC.encode(buf, component);
 
         for (ITooltipNode child : children) {
             child.encode(buf);

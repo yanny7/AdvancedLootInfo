@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common.nodes;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -21,7 +21,7 @@ public abstract class CompositeNode extends ListNode {
         }
     }
 
-    public CompositeNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public CompositeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
     }
 }

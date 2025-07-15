@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -10,13 +11,16 @@ import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackResources;
@@ -124,6 +128,21 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
+                return PluginManager.SERVER_REGISTRY.getItemSubPredicateTooltip(utils, predicate);
+            }
+
+            @Override
+            public <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+                return PluginManager.SERVER_REGISTRY.getEntitySubPredicateTooltip(utils, predicate);
+            }
+
+            @Override
+            public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+                return PluginManager.SERVER_REGISTRY.getDataComponentTypeTooltip(utils, type, value);
+            }
+
+            @Override
             public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
                 PluginManager.SERVER_REGISTRY.applyCountModifier(utils, function, count);
             }
@@ -154,7 +173,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public LootTable getLootTable(ResourceLocation location) {
+            public LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> location) {
                 return PluginManager.SERVER_REGISTRY.getLootTable(location);
             }
 

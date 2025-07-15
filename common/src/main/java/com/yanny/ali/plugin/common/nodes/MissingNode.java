@@ -5,7 +5,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Collections;
@@ -17,7 +17,7 @@ public class MissingNode implements IDataNode {
     public MissingNode() {
     }
 
-    public MissingNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public MissingNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MissingNode implements IDataNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
 
     }
 }

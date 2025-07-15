@@ -1,14 +1,15 @@
 package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -19,20 +20,20 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
-    private final Map<ResourceLocation, List<Item>> lootItemMap = new HashMap<>();
-    private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
+    private final Map<ResourceKey<LootTable>, List<Item>> lootItemMap = new HashMap<>();
+    private final Map<ResourceKey<LootTable>, IDataNode> lootNodeMap = new HashMap<>();
     private final ICommonUtils utils;
 
     public AliClientRegistry(ICommonUtils utils) {
         this.utils = utils;
     }
 
-    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<Item> items) {
+    public void addLootData(ResourceKey<LootTable> resourceLocation, IDataNode node, List<Item> items) {
         lootItemMap.put(resourceLocation, items);
         lootNodeMap.put(resourceLocation, node);
     }
 
-    public Map<ResourceLocation, IDataNode> getLootData() {
+    public Map<ResourceKey<LootTable>, IDataNode> getLootData() {
         return lootNodeMap;
     }
 
@@ -128,14 +129,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return utils.createEntities(type, level);
-    }
-
-    @Nullable
-    @Override
-    public HolderLookup.Provider lookupProvider() {
-        Level level = Minecraft.getInstance().level;
-
-        return level != null ? level.registryAccess() : null;
     }
 
     public void printClientInfo() {

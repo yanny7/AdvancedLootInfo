@@ -1,7 +1,12 @@
 package com.yanny.ali.api;
 
+import com.mojang.datafixers.util.Either;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +36,12 @@ public interface IServerUtils extends ICommonUtils {
 
     <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
+    <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate);
+
+    <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
+
+    ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
+
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
 
     <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
@@ -44,5 +55,8 @@ public interface IServerUtils extends ICommonUtils {
 
     LootContext getLootContext();
 
-    LootTable getLootTable(ResourceLocation location);
+    LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either);
+
+    @Nullable
+    HolderLookup.Provider lookupProvider();
 }

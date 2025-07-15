@@ -2,12 +2,17 @@ package com.yanny.ali.manager;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +22,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.*;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -41,10 +48,13 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode>> itemSubPredicateTooltipMap = new HashMap<>();
+    private final Map<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltipMap = new HashMap<>();
+    private final Map<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltipMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
-    private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
+    private final Map<ResourceKey<LootTable>, LootTable> lootTableMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
     private final ICommonUtils utils;
@@ -72,12 +82,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     public void setServerLevel(ServerLevel serverLevel) {
         this.serverLevel = serverLevel;
-        this.lootContext = new LootContext(new LootParams(serverLevel, Map.of(), Map.of(), 0F), RandomSource.create(), new LootDataResolver() {
-            @Override
-            public @Nullable <T> T getElement(LootDataId<T> lootDataId) {
-                return null;
-            }
-        });
+        this.lootContext = new LootContext(new LootParams(serverLevel, Map.of(), Map.of(), 0F), RandomSource.create(), null); //FIXME
     }
 
     @Override
@@ -113,6 +118,24 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
         ingredientTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+    }
+
+    @Override
+    public <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+        //noinspection unchecked
+        itemSubPredicateTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+    }
+
+    @Override
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+        //noinspection unchecked
+        entitySubPredicateTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+    }
+
+    @Override
+    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+        //noinspection unchecked
+        dataComponentTypeTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
@@ -223,6 +246,42 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
+    public <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
+        BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode> itemSubPredicateTooltipGetter = itemSubPredicateTooltipMap.get(predicate.getClass());
+
+        if (itemSubPredicateTooltipGetter != null) {
+            return itemSubPredicateTooltipGetter.apply(utils, predicate);
+        } else {
+            LOGGER.warn("Item sub predicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
+        }
+    }
+
+    @Override
+    public <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+        BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode> entitySubPredicateTooltipGetter = entitySubPredicateTooltipMap.get(predicate.codec());
+
+        if (entitySubPredicateTooltipGetter != null) {
+            return entitySubPredicateTooltipGetter.apply(utils, predicate);
+        } else {
+            LOGGER.warn("Entity sub predicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
+        }
+    }
+
+    @Override
+    public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+        BiFunction<IServerUtils, Object, ITooltipNode> dataComponentTypeTooltipGetter = dataComponentTypeTooltipMap.get(type);
+
+        if (dataComponentTypeTooltipGetter != null) {
+            return dataComponentTypeTooltipGetter.apply(utils, value);
+        } else {
+            LOGGER.warn("Data component type tooltip for {} was not registered", type.getClass().getCanonicalName());
+            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", type.getClass().getSimpleName());
+        }
+    }
+
+    @Override
     public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
         TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getClass());
 
@@ -288,6 +347,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return either.map(lootTableMap::get, lootTable -> lootTable);
     }
 
+    @Nullable
+    @Override
+    public HolderLookup.Provider lookupProvider() {
+        return serverLevel != null ? serverLevel.registryAccess() : null;
+    }
+
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {
         return new LootTableNode(modifiers, this, lootTable);
     }
@@ -305,6 +370,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} function tooltips", functionTooltipMap.size());
         LOGGER.info("Registered {} condition tooltips", conditionTooltipMap.size());
         LOGGER.info("Registered {} ingredient tooltips", ingredientTooltipMap.size());
+        LOGGER.info("Registered {} item sub predicate tooltips", itemSubPredicateTooltipMap.size());
+        LOGGER.info("Registered {} entity sub predicate tooltips", entitySubPredicateTooltipMap.size());
+        LOGGER.info("Registered {} data component type tooltips", dataComponentTypeTooltipMap.size());
         LOGGER.info("Registered {} chance modifiers", chanceModifierMap.size());
         LOGGER.info("Registered {} count modifiers", countModifierMap.size());
         LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());

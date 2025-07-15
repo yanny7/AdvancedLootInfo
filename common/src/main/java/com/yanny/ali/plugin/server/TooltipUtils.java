@@ -276,7 +276,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static ItemStack applySetEnchantmentsItemStackModifier(IClientUtils utils, SetEnchantmentsFunction function, ItemStack itemStack) {
+    public static ItemStack applySetEnchantmentsItemStackModifier(IServerUtils utils, SetEnchantmentsFunction function, ItemStack itemStack) {
         if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
             if (itemStack.is(Items.BOOK)) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
