@@ -46,6 +46,14 @@ public final class RangeValue {
         isUnknown = buf.readBoolean();
     }
 
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeFloat(min);
+        buf.writeFloat(max);
+        buf.writeBoolean(isRange);
+        buf.writeBoolean(hasScore);
+        buf.writeBoolean(isUnknown);
+    }
+
     public RangeValue multiply(float value) {
         this.min *= value;
         this.max *= value;

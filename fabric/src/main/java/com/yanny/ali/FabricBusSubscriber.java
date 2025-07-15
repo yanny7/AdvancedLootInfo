@@ -1,5 +1,6 @@
 package com.yanny.ali;
 
+import com.yanny.ali.manager.PluginManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -13,6 +14,7 @@ public class FabricBusSubscriber {
     }
 
     private static void onServerStarted(MinecraftServer server) {
+        PluginManager.registerServerEvent();
         CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
     }
 

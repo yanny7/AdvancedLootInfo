@@ -12,6 +12,7 @@ mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
     config("${mod_id}.mixins.json")
+//    config("${mod_id}.lootjs.mixins.json")
     config("${mod_id}.forge.mixins.json")
 }
 
@@ -81,6 +82,7 @@ dependencies {
     compileOnly project(":api")
     compileOnly project(":common")
     compileOnly project(":common-rei")
+//    compileOnly project(":common-lootjs")
 
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")

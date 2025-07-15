@@ -10,7 +10,7 @@ public class Server extends AbstractServer {
     }
 
     @Override
-    protected void sendSyncMessage(ServerPlayer serverPlayer, InfoSyncLootTableMessage message) {
+    protected void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message) {
         PacketDistributor.sendToPlayer(serverPlayer, message);
     }
 }

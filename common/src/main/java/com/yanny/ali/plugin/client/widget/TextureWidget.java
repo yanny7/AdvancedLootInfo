@@ -1,7 +1,10 @@
 package com.yanny.ali.plugin.client.widget;
 
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.RelativeRect;
+import com.yanny.ali.api.WidgetDirection;
+import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -9,12 +12,9 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TextureWidget implements IWidget {
+public class TextureWidget extends IWidget {
     protected final ResourceLocation texture;
-    protected final int x;
-    protected final int y;
-    protected final int width;
-    protected final int height;
+    protected final RelativeRect rect;
     protected final int u;
     protected final int v;
     protected final int regionWidth;
@@ -22,34 +22,36 @@ public class TextureWidget implements IWidget {
     protected final int textureWidth;
     protected final int textureHeight;
     private final List<Component> components = new LinkedList<>();
-    private final Rect rect;
 
-    public TextureWidget(ResourceLocation texture, int x, int y, int width, int height, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+    public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+        super(new ResourceLocation("texture_widget"));
         this.texture = texture;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.rect = rect;
         this.u = u;
         this.v = v;
         this.regionWidth = regionWidth;
         this.regionHeight = regionHeight;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
-        rect = new Rect(x, y, width, height);
+        rect.setDimensions(rect.width, rect.height);
     }
 
-    public TextureWidget(ResourceLocation texture, int x, int y, int width, int height, int u, int v) {
-        this(texture, x, y, width, height, u, v, width, height, 256, 256);
+    public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v) {
+        this(texture, rect, u, v, rect.width, rect.height, 256, 256);
     }
 
     @Override
-    public Rect getRect() {
+    public RelativeRect getRect() {
         return rect;
     }
 
-    public void tooltipText(List<Component> components) {
-        this.components.addAll(components);
+    @Override
+    public WidgetDirection getDirection() {
+        return WidgetDirection.VERTICAL;
+    }
+
+    public void tooltipText(List<ITooltipNode> tooltip) {
+        this.components.addAll(NodeUtils.toComponents(tooltip, 0));
     }
 
     @Override
@@ -59,6 +61,6 @@ public class TextureWidget implements IWidget {
 
     @Override
     public void render(GuiGraphics draw, int mouseX, int mouseY) {
-        draw.blit(texture, x, y, width, height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
+        draw.blit(texture, rect.getX(), rect.getY(), rect.width, rect.height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
     }
 }

@@ -2,13 +2,15 @@ package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GameplayLootType;
-import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.jei.JeiBlockLoot;
 import com.yanny.ali.compatibility.jei.JeiEntityLoot;
 import com.yanny.ali.compatibility.jei.JeiGameplayLoot;
+import com.yanny.ali.manager.AliClientRegistry;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.IModPlugin;
@@ -27,8 +29,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
@@ -79,17 +79,18 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
+        AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         ClientLevel level = Minecraft.getInstance().level;
 
         if (level != null) {
-            Map<ResourceKey<LootTable>, LootTable> map = GenericUtils.getLootTables();
+            Map<ResourceKey<LootTable>, IDataNode> map = clientRegistry.getLootData();
             Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceKey<LootTable> location = block.getLootTable();
-                LootTable lootEntry = map.get(location);
+                IDataNode lootEntry = map.get(location);
 
                 if (lootEntry != null) {
                     RecipeType<BlockLootType> recipeType = null;
@@ -102,7 +103,7 @@ public class JeiCompatibility implements IModPlugin {
                     }
 
                     if (recipeType != null) {
-                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, GenericUtils.getItems(location)));
+                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, clientRegistry.getItems(location)));
                     }
 
                     map.remove(location);
@@ -110,55 +111,12 @@ public class JeiCompatibility implements IModPlugin {
             }
 
             for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-                List<Entity> entityList = new LinkedList<>();
-
-                if (entityType == EntityType.SHEEP) {
-                    for (DyeColor color : DyeColor.values()) {
-                        Sheep sheep;
-
-                        try {
-                            sheep = (Sheep) entityType.create(level);
-                        } catch (Throwable e) {
-                            LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
-                            continue;
-                        }
-
-                        if (sheep != null) {
-                            sheep.setColor(color);
-                            entityList.add(sheep);
-                        }
-                    }
-
-                    Sheep sheep;
-
-                    try {
-                        sheep = (Sheep) entityType.create(level);
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to create sheep: {}", e.getMessage());
-                        continue;
-                    }
-
-                    if (sheep != null) {
-                        sheep.setSheared(true);
-                        entityList.add(sheep);
-                    }
-                } else {
-                    Entity entity;
-
-                    try {
-                        entity = entityType.create(level);
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e.getMessage());
-                        continue;
-                    }
-
-                    entityList.add(entity);
-                }
+                List<Entity> entityList = clientRegistry.createEntities(entityType, level);
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
                         ResourceKey<LootTable> location = mob.getLootTable();
-                        LootTable lootEntry = map.get(location);
+                        IDataNode lootEntry = map.get(location);
 
                         if (lootEntry != null) {
                             RecipeType<EntityLootType> recipeType = null;
@@ -171,7 +129,7 @@ public class JeiCompatibility implements IModPlugin {
                             }
 
                             if (recipeType != null) {
-                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, GenericUtils.getItems(location)));
+                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, clientRegistry.getItems(location)));
                             }
 
                             map.remove(location);
@@ -180,7 +138,7 @@ public class JeiCompatibility implements IModPlugin {
                 }
             }
 
-            for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : map.entrySet()) {
+            for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : map.entrySet()) {
                 ResourceKey<LootTable> location = entry.getKey();
                 RecipeType<GameplayLootType> recipeType = null;
 
@@ -192,7 +150,7 @@ public class JeiCompatibility implements IModPlugin {
                 }
 
                 if (recipeType != null) {
-                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.location().getPath(), GenericUtils.getItems(location)));
+                    gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.location().getPath(), clientRegistry.getItems(location)));
                 }
             }
 

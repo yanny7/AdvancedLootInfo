@@ -41,7 +41,6 @@ public class ItemCollectorUtils {
             result.addAll(utils.collectItems(utils, entry));
         }
 
-        result.addAll(pool.conditions.stream().map((c) -> utils.collectItems(utils, List.copyOf(result), c)).flatMap(Collection::stream).toList());
         result.addAll(pool.functions.stream().map((f) -> utils.collectItems(utils, List.copyOf(result), f)).flatMap(Collection::stream).toList());
 
         return result;
@@ -98,13 +97,13 @@ public class ItemCollectorUtils {
     }
 
     @NotNull
-    public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction function) {
+    public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction ignoredFunction) {
         ServerLevel level = utils.getServerLevel();
 
         if (level != null) {
             return items.stream().map((i) -> level.getRecipeManager()
                     .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.value().getResultItem(null).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
+                    .map((l) -> List.of(l.value().getResultItem(utils.getServerLevel().registryAccess()).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
         }
 
         return List.of();
@@ -112,7 +111,7 @@ public class ItemCollectorUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Item> collectSetItem(IServerUtils utils, List<Item> items, SetItemFunction function) {
+    public static List<Item> collectSetItem(IServerUtils ignoredUtils, List<Item> ignoredItems, SetItemFunction function) {
         return List.of(function.item.value());
     }
 }
