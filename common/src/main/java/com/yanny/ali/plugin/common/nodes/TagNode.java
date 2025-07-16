@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class TagNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "tag");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "tag");
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;

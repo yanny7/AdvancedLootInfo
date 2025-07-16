@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class LootTableNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "loot_table");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "loot_table");
 
     private final List<ITooltipNode> tooltip;
 

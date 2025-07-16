@@ -18,7 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class GroupLootNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "grouped_loot");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "grouped_loot");
 
     private final List<ITooltipNode> tooltip;
 

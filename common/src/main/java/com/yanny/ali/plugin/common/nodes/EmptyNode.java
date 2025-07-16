@@ -16,7 +16,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class EmptyNode implements IDataNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "empty");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "empty");
 
     private final List<ITooltipNode> tooltip;
 

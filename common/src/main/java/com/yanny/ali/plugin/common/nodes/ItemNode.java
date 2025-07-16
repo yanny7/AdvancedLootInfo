@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class ItemNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item");
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;

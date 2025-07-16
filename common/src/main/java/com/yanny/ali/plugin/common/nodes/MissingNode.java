@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MissingNode implements IDataNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "missing");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "missing");
 
     public MissingNode() {
     }

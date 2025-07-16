@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class ModifiedNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "modified");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "modified");
 
     private final List<ITooltipNode> tooltip;
 

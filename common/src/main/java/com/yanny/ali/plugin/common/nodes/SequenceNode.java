@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class SequenceNode extends CompositeNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "sequence");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "sequence");
 
     private final List<ITooltipNode> tooltip;
 

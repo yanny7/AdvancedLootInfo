@@ -155,7 +155,7 @@ public class EntryTooltipUtils {
                     tooltip.add(new TooltipNode(translatable(
                             "ali.description.chance_bonus",
                             value(value, "%"),
-                            value(Component.translatable(enchantment.value().getDescriptionId())),
+                            value(enchantment.value().description()),
                             value(Component.translatable("enchantment.level." + level))
                     )));
                 }
@@ -181,7 +181,7 @@ public class EntryTooltipUtils {
                     tooltip.add(new TooltipNode(translatable(
                             "ali.description.count_bonus",
                             value(value),
-                            value(Component.translatable(enchantment.value().getDescriptionId())),
+                            value(enchantment.value().description()),
                             value(Component.translatable("enchantment.level." + level))
                     )));
                 }

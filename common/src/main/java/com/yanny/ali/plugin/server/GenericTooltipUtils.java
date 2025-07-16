@@ -24,10 +24,13 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.inventory.SlotRange;
+import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
@@ -143,11 +146,10 @@ public class GenericTooltipUtils {
     public static ITooltipNode getModifierTooltip(IServerUtils utils, String key, SetAttributesFunction.Modifier modifier) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getStringTooltip(utils, "ali.property.value.name", modifier.name()));
         tooltip.add(getHolderTooltip(utils, "ali.property.value.attribute", modifier.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
         tooltip.add(getEnumTooltip(utils, "ali.property.value.operation", modifier.operation()));
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.amount", modifier.amount()));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.uuid", modifier.id(), GenericTooltipUtils::getUUIDTooltip));
+        tooltip.add(getResourceLocationTooltip(utils, "ali.property.value.id", modifier.id()));
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.equipment_slots", "ali.property.value.null", modifier.slots(), GenericTooltipUtils::getEnumTooltip));
 
         return tooltip;
@@ -155,7 +157,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getUUIDTooltip(IServerUtils utils, String key, UUID uuid) {
-        return new TooltipNode(translatable("ali.property.value.uuid", value(uuid)));
+        return new TooltipNode(translatable(key, value(uuid)));
     }
 
     @NotNull
@@ -185,7 +187,6 @@ public class GenericTooltipUtils {
             return new TooltipNode(keyValue(name, value));
         }
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> minValue, Optional<String> maxValue)) {
-
             if (minValue.isPresent()) {
                 if (maxValue.isPresent()) {
                     return new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, minValue.get(), maxValue.get())));
@@ -211,6 +212,7 @@ public class GenericTooltipUtils {
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.tags", "ali.property.value.null", damagePredicate.tags(), GenericTooltipUtils::getTagPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.direct_entity", damagePredicate.directEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.source_entity", damagePredicate.sourceEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_direct", damagePredicate.isDirect(), GenericTooltipUtils::getBooleanTooltip));
 
         return tooltip;
     }
@@ -227,8 +229,9 @@ public class GenericTooltipUtils {
 
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.entity_types", entityPredicate.entityType(), GenericTooltipUtils::getEntityTypePredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.distance_to_player", entityPredicate.distanceToPlayer(), GenericTooltipUtils::getDistancePredicateTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.location", entityPredicate.location(), GenericTooltipUtils::getLocationPredicateTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.stepping_on_location", entityPredicate.steppingOnLocation(), GenericTooltipUtils::getLocationPredicateTooltip));
+        tooltip.add(getLocationWrapperTooltip(utils, "ali.property.branch.location", entityPredicate.location()));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.movement", entityPredicate.movement(), GenericTooltipUtils::getMovementPredicateTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.periodic_tick", entityPredicate.periodicTick(), GenericTooltipUtils::getIntegerTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.mob_effects", entityPredicate.effects(), GenericTooltipUtils::getMobEffectPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.nbt", entityPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.entity_flags", entityPredicate.flags(), GenericTooltipUtils::getEntityFlagsPredicateTooltip));
@@ -238,6 +241,7 @@ public class GenericTooltipUtils {
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.passenger", entityPredicate.passenger(), GenericTooltipUtils::getEntityPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.targeted_entity", entityPredicate.targetedEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.team", entityPredicate.team(), GenericTooltipUtils::getStringTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.slots", entityPredicate.slots(), GenericTooltipUtils::getSlotPredicateTooltip));
 
         return tooltip;
     }
@@ -273,6 +277,7 @@ public class GenericTooltipUtils {
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.light", locationPredicate.light(), GenericTooltipUtils::getLightPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.block_predicate", locationPredicate.block(), GenericTooltipUtils::getBlockPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.fluid_predicate", locationPredicate.fluid(), GenericTooltipUtils::getFluidPredicateTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.can_see_sky", locationPredicate.canSeeSky(), GenericTooltipUtils::getBooleanTooltip));
 
         return tooltip;
     }
@@ -328,11 +333,13 @@ public class GenericTooltipUtils {
     public static ITooltipNode getEntityFlagsPredicateTooltip(IServerUtils utils, String key, EntityFlagsPredicate predicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_on_ground", predicate.isOnGround(), GenericTooltipUtils::getBooleanTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_on_fire", predicate.isOnFire(), GenericTooltipUtils::getBooleanTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_baby", predicate.isBaby(), GenericTooltipUtils::getBooleanTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_crouching", predicate.isCrouching(), GenericTooltipUtils::getBooleanTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_sprinting", predicate.isSprinting(), GenericTooltipUtils::getBooleanTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_swimming", predicate.isSwimming(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.is_flying", predicate.isFlying(), GenericTooltipUtils::getBooleanTooltip));
 
         return tooltip;
     }
@@ -345,6 +352,7 @@ public class GenericTooltipUtils {
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.chest", predicate.chest(), GenericTooltipUtils::getItemPredicateTooltip));
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.legs", predicate.legs(), GenericTooltipUtils::getItemPredicateTooltip));
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.feet", predicate.feet(), GenericTooltipUtils::getItemPredicateTooltip));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.body", predicate.body(), GenericTooltipUtils::getItemPredicateTooltip));
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.mainhand", predicate.mainhand(), GenericTooltipUtils::getItemPredicateTooltip));
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.offhand", predicate.offhand(), GenericTooltipUtils::getItemPredicateTooltip));
 
@@ -365,11 +373,17 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getEnchantmentPredicateTooltip(IServerUtils utils, String key, EnchantmentPredicate enchantmentPredicate) {
-        ITooltipNode tooltip = getOptionalHolderTooltip(utils, key, enchantmentPredicate.enchantment(), RegistriesTooltipUtils::getEnchantmentTooltip);
+        ITooltipNode tooltip = getOptionalHolderSetTooltip(utils, key, "ali.property.value.null", enchantmentPredicate.enchantments(), RegistriesTooltipUtils::getEnchantmentTooltip);
 
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.level", enchantmentPredicate.level()));
 
         return tooltip;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getGameTypePredicateTooltip(IServerUtils utils, String key, GameTypePredicate gameType) {
+        return getCollectionTooltip(utils, key, "ali.property.value.null", gameType.types(), GenericTooltipUtils::getEnumTooltip);
     }
 
     @NotNull
@@ -521,8 +535,7 @@ public class GenericTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.attributes", "ali.property.value.null", predicate.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.id", predicate.id(), GenericTooltipUtils::getUUIDTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.name", predicate.name(), GenericTooltipUtils::getStringTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.id", predicate.id(), GenericTooltipUtils::getResourceLocationTooltip));
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.amount", predicate.amount()));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.operation", predicate.operation(), GenericTooltipUtils::getEnumTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.slot", predicate.slot(), GenericTooltipUtils::getEnumTooltip));
@@ -598,6 +611,85 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
+    public static ITooltipNode getLevelBasedValueTooltip(IServerUtils utils, String key, LevelBasedValue levelBasedValue) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        switch (levelBasedValue) {
+            case LevelBasedValue.Constant(float value) -> 
+                    tooltip.add(getFloatTooltip(utils, "ali.property.value.constant", value));
+            case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
+                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.clamped"));
+                
+                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.value", value));
+                t.add(getFloatTooltip(utils, "ali.property.value.min", min));
+                t.add(getFloatTooltip(utils, "ali.property.value.max", max));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
+                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.fraction"));
+                
+                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.numerator", numerator));
+                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.denominator", denominator));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
+                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.linear"));
+                
+                t.add(getFloatTooltip(utils, "ali.property.value.base", base));
+                t.add(getFloatTooltip(utils, "ali.property.value.per_level", perLevelAboveFirst));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.LevelsSquared(float added) -> {
+                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.level_squared"));
+                
+                t.add(getFloatTooltip(utils, "ali.property.value.added", added));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
+                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.lookup"));
+                
+                t.add(getStringTooltip(utils, "ali.property.value.values", values.toString()));
+                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.fallback", fallback));
+                tooltip.add(t);
+            }
+            default -> {
+            }
+        }
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getLocationWrapperTooltip(IServerUtils utils, String key, EntityPredicate.LocationWrapper locationWrapper) {
+        if (locationWrapper.located().isPresent() || locationWrapper.affectsMovement().isPresent() || locationWrapper.steppingOn().isPresent()) {
+            ITooltipNode tooltip = new TooltipNode(translatable(key));
+            
+            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.located", locationWrapper.located(), GenericTooltipUtils::getLocationPredicateTooltip));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.stepping_on_location", locationWrapper.steppingOn(), GenericTooltipUtils::getLocationPredicateTooltip));
+            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.affects_movement", locationWrapper.affectsMovement(), GenericTooltipUtils::getLocationPredicateTooltip));
+
+            return tooltip;
+        }
+
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static ITooltipNode getMovementPredicateTooltip(IServerUtils utils, String key, MovementPredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+        
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.x", predicate.x()));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.y", predicate.y()));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.z", predicate.z()));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.speed", predicate.speed()));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.horizontal_speed", predicate.horizontalSpeed()));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.vertical_speed", predicate.verticalSpeed()));
+        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.fall_distance", predicate.fallDistance()));
+
+        return tooltip;
+    }
+
+    @NotNull
     public static ITooltipNode getItemAttributeModifiersEntryTooltip(IServerUtils utils, String key, ItemAttributeModifiers.Entry entry) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
@@ -612,8 +704,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getAttributeModifierTooltip(IServerUtils utils, String key, AttributeModifier modifier) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getUUIDTooltip(utils, "ali.property.value.id", modifier.id()));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.name", modifier.name()));
+        tooltip.add(getResourceLocationTooltip(utils, "ali.property.value.id", modifier.id()));
         tooltip.add(getDoubleTooltip(utils, "ali.property.value.amount", modifier.amount()));
         tooltip.add(getEnumTooltip(utils, "ali.property.value.operation", modifier.operation()));
 
@@ -792,6 +883,11 @@ public class GenericTooltipUtils {
         tooltip.add(utils.getEntitySubPredicateTooltip(utils, predicate));
 
         return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getSlotPredicateTooltip(IServerUtils utils, String key, SlotsPredicate predicate) {
+        return getMapTooltip(utils, key, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
     }
 
     // HELPERS
@@ -1082,6 +1178,11 @@ public class GenericTooltipUtils {
         return TooltipNode.EMPTY;
     }
 
+    @NotNull
+    public static <T> ITooltipNode getEitherHolderTooltip(IServerUtils utils, String key, EitherHolder<T> holder, TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        return holder.asEither().map((v) -> mapper.apply(utils, key, v.value()), (k) -> getResourceKeyTooltip(utils, key, k));
+    }
+
     // MAP ENTRY
 
     @Unmodifiable
@@ -1202,6 +1303,15 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getItemSubPredicateEntryTooltip(IServerUtils utils, Map.Entry<ItemSubPredicate.Type<?>, ItemSubPredicate> entry) {
         return utils.getItemSubPredicateTooltip(utils, entry.getValue());
+    }
+
+    @NotNull
+    public static ITooltipNode getSlotRangePredicateEntryTooltip(IServerUtils utils, Map.Entry<SlotRange, ItemPredicate> entry) {
+        ITooltipNode tooltip = getIntListTooltip(utils, "ali.property.value.null", entry.getKey().slots());
+
+        tooltip.add(getItemPredicateTooltip(utils, "ali.property.branch.predicate", entry.getValue()));
+
+        return tooltip;
     }
 
     // PRIVATE

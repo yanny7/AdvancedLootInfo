@@ -164,7 +164,6 @@ public class FunctionTooltipTest {
     @Test
     public void testFillPlayerHeadTooltip() {
         assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.ATTACKER).build()), List.of(
-        assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.KILLER).build()), List.of(
                 "Fill Player Head:",
                 "  -> Target: ATTACKER"
         ));

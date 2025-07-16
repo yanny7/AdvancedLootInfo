@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class DynamicNode implements IDataNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "dynamic");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "dynamic");
 
     private final List<ITooltipNode> tooltip;
 

@@ -9,10 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.AdventureModePredicate;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Instrument;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.*;
@@ -129,6 +126,7 @@ public class DataComponentTooltipUtils {
         tooltip.add(getFloatTooltip(utils, "ali.property.value.saturation", food.saturation()));
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.can_always_eat", food.canAlwaysEat()));
         tooltip.add(getFloatTooltip(utils, "ali.property.value.eat_seconds", food.eatSeconds()));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.using_converts_to", food.usingConvertsTo(), GenericTooltipUtils::getItemStackTooltip));
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.branch.effect", food.effects(), GenericTooltipUtils::getPossibleEffectTooltip));
 
         return tooltip;
@@ -199,7 +197,7 @@ public class DataComponentTooltipUtils {
 
         tooltip.add(getOptionalHolderTooltip(utils, "ali.property.value.potion", value.potion(), RegistriesTooltipUtils::getPotionTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
+        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.custom_effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
 
         return tooltip;
     }
@@ -249,6 +247,16 @@ public class DataComponentTooltipUtils {
         return RegistriesTooltipUtils.getInstrumentTooltip(utils, "ali.property.value.value", value.value());
     }
 
+    @NotNull
+    public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayable value) {
+        ITooltipNode tooltip = new TooltipNode();
+
+        tooltip.add(getEitherHolderTooltip(utils, "ali.property.value.song", value.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
+
+        return tooltip;
+    }
+
     @Unmodifiable
     @NotNull
     public static ITooltipNode getRecipesTooltip(IServerUtils utils, List<ResourceLocation> value) {
@@ -293,7 +301,7 @@ public class DataComponentTooltipUtils {
         ITooltipNode tooltip = new TooltipNode();
 
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.name", value.name(), GenericTooltipUtils::getStringTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.id", value.id(), GenericTooltipUtils::getUUIDTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.uuid", value.id(), GenericTooltipUtils::getUUIDTooltip));
         tooltip.add(getMapTooltip(utils, "ali.property.branch.properties", value.properties().asMap(), GenericTooltipUtils::getPropertiesEntryTooltip));
 
         return tooltip;

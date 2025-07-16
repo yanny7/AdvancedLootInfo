@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemStackNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "item_stack");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "item_stack");
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;

@@ -82,6 +82,7 @@ public class Plugin implements IPlugin {
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
         registry.registerConditionTooltip(LootItemBlockStatePropertyCondition.class, ConditionTooltipUtils::getBlockStatePropertyTooltip);
         registry.registerConditionTooltip(DamageSourceCondition.class, ConditionTooltipUtils::getDamageSourcePropertiesTooltip);
+        registry.registerConditionTooltip(EnchantmentActiveCheck.class, ConditionTooltipUtils::getEnchantActiveCheckTooltip);
         registry.registerConditionTooltip(LootItemEntityPropertyCondition.class, ConditionTooltipUtils::getEntityPropertiesTooltip);
         registry.registerConditionTooltip(EntityHasScoreCondition.class, ConditionTooltipUtils::getEntityScoresTooltip);
         registry.registerConditionTooltip(InvertedLootItemCondition.class, ConditionTooltipUtils::getInvertedTooltip);
@@ -89,7 +90,7 @@ public class Plugin implements IPlugin {
         registry.registerConditionTooltip(LocationCheck.class, ConditionTooltipUtils::getLocationCheckTooltip);
         registry.registerConditionTooltip(MatchTool.class, ConditionTooltipUtils::getMatchToolTooltip);
         registry.registerConditionTooltip(LootItemRandomChanceCondition.class, ConditionTooltipUtils::getRandomChanceTooltip);
-        registry.registerConditionTooltip(LootItemRandomChanceWithLootingCondition.class, ConditionTooltipUtils::getRandomChanceWithLootingTooltip);
+        registry.registerConditionTooltip(LootItemRandomChanceWithEnchantedBonusCondition.class, ConditionTooltipUtils::getRandomChanceWithLootingTooltip);
         registry.registerConditionTooltip(ConditionReference.class, ConditionTooltipUtils::getReferenceTooltip);
         registry.registerConditionTooltip(ExplosionCondition.class, ConditionTooltipUtils::getSurvivesExplosionTooltip);
         registry.registerConditionTooltip(BonusLevelTableCondition.class, ConditionTooltipUtils::getTableBonusTooltip);
@@ -108,7 +109,7 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(FillPlayerHead.class, FunctionTooltipUtils::getFillPlayerHeadTooltip);
         registry.registerFunctionTooltip(SmeltItemFunction.class, FunctionTooltipUtils::getFurnaceSmeltTooltip);
         registry.registerFunctionTooltip(LimitCount.class, FunctionTooltipUtils::getLimitCountTooltip);
-        registry.registerFunctionTooltip(LootingEnchantFunction.class, FunctionTooltipUtils::getLootingEnchantTooltip);
+        registry.registerFunctionTooltip(EnchantedCountIncreaseFunction.class, FunctionTooltipUtils::getEnchantedCountIncreaseTooltip);
         registry.registerFunctionTooltip(FunctionReference.class, FunctionTooltipUtils::getReferenceTooltip);
         registry.registerFunctionTooltip(SequenceFunction.class, FunctionTooltipUtils::getSequenceTooltip);
         registry.registerFunctionTooltip(SetAttributesFunction.class, FunctionTooltipUtils::getSetAttributesTooltip);
@@ -233,13 +234,13 @@ public class Plugin implements IPlugin {
         registry.registerIngredientTooltip(Ingredient.class, IngredientTooltipUtils::getIngredientTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
-        registry.registerChanceModifier(LootItemRandomChanceWithLootingCondition.class, TooltipUtils::applyRandomChanceWithLooting);
+        registry.registerChanceModifier(LootItemRandomChanceWithEnchantedBonusCondition.class, TooltipUtils::applyRandomChanceWithLooting);
         registry.registerChanceModifier(BonusLevelTableCondition.class, TooltipUtils::applyTableBonus);
 
         registry.registerCountModifier(SetItemCountFunction.class, TooltipUtils::applySetCount);
         registry.registerCountModifier(ApplyBonusCount.class, TooltipUtils::applyBonus);
         registry.registerCountModifier(LimitCount.class, TooltipUtils::applyLimitCount);
-        registry.registerCountModifier(LootingEnchantFunction.class, TooltipUtils::applyLootingEnchant);
+        registry.registerCountModifier(EnchantedCountIncreaseFunction.class, TooltipUtils::applyLootingEnchant);
 
         registry.registerItemStackModifier(EnchantRandomlyFunction.class, TooltipUtils::applyEnchantRandomlyItemStackModifier);
         registry.registerItemStackModifier(EnchantWithLevelsFunction.class, TooltipUtils::applyEnchantWithLevelsItemStackModifier);

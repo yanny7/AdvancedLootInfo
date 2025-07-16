@@ -57,14 +57,10 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getEnchantRandomlyTooltip(IServerUtils utils, EnchantRandomlyFunction fun) {
-        ITooltipNode tooltip;
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.enchant_randomly"));
 
-        if (fun.enchantments.isPresent() && fun.enchantments.get().size() > 0) {
-            tooltip = getOptionalHolderSetTooltip(utils, "ali.type.function.enchant_randomly", "ali.property.value.null", fun.enchantments, RegistriesTooltipUtils::getEnchantmentTooltip);
-        } else {
-            tooltip = new TooltipNode(translatable("ali.type.function.enchant_randomly"));
-        }
-
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.enchantments", "ali.property.value.null", fun.options, RegistriesTooltipUtils::getEnchantmentTooltip));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.only_compatible", fun.onlyCompatible));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
         return tooltip;
@@ -75,7 +71,7 @@ public class FunctionTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.enchant_with_levels"));
 
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.levels", fun.levels));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.treasure", fun.treasure));
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.options", "ali.property.value.null", fun.options, RegistriesTooltipUtils::getEnchantmentTooltip));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
         return tooltip;
@@ -136,9 +132,10 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getLootingEnchantTooltip(IServerUtils utils, LootingEnchantFunction fun) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.looting_enchant"));
+    public static ITooltipNode getEnchantedCountIncreaseTooltip(IServerUtils utils, EnchantedCountIncreaseFunction fun) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.enchanted_count_increase"));
 
+        tooltip.add(getHolderTooltip(utils, "ali.property.value.enchantment", fun.enchantment, RegistriesTooltipUtils::getEnchantmentTooltip));
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.value", fun.value));
 
         if (fun.limit > 0) {

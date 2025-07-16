@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemTagNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "item_tag");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "item_tag");
 
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;

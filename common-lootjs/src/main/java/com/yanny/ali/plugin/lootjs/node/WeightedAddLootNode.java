@@ -22,7 +22,7 @@ import java.util.List;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
 public class WeightedAddLootNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "weighted_add_loot");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "weighted_add_loot");
 
     private final List<ITooltipNode> tooltip;
 

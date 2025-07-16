@@ -21,12 +21,12 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static ITooltipNode getItemEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.Enchantments predicate) {
-        return getCollectionTooltip(utils, "ali.type.item_sub_predicate.item_enchantments", "ali.property.value.null", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, "ali.type.item_sub_predicate.item_enchantments", "ali.property.branch.enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
     public static ITooltipNode getItemStoredEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
-        return getCollectionTooltip(utils, "ali.type.item_sub_predicate.item_stored_enchantments", "ali.property.value.null", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, "ali.type.item_sub_predicate.item_stored_enchantments", "ali.property.branch.enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
     }
 
     @NotNull
@@ -97,6 +97,15 @@ public class ItemSubPredicateTooltipUtils {
         
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.materials", "ali.property.value.null", predicate.material(), RegistriesTooltipUtils::getTrimMaterialTooltip));
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.patterns", "ali.property.value.null", predicate.pattern(), RegistriesTooltipUtils::getTrimPatternTooltip));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getItemJukeboxPlayableTooltip(IServerUtils utils, ItemJukeboxPlayablePredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.item_sub_predicate.item_jukebox_playable"));
+
+        tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
 
         return tooltip;
     }

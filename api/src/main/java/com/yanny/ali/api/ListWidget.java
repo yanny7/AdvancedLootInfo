@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class ListWidget extends IWidget {
-    public static final ResourceLocation TEXTURE_LOC = new ResourceLocation("ali", "textures/gui/gui.png");
+    public static final ResourceLocation TEXTURE_LOC = ResourceLocation.fromNamespaceAndPath("ali", "textures/gui/gui.png");
 
     public static final int GROUP_WIDGET_WIDTH = 7;
     public static final int GROUP_WIDGET_HEIGHT = 18;

@@ -550,14 +550,14 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testJukeboxPlayableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayable(
+        assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayable(
                 EitherHolder.fromEither(Either.right(JukeboxSongs.PIGSTEP)),
                 true
         )), List.of(
                 "Song: minecraft:pigstep",
                 "Show In Tooltip: true"
         ));
-        assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, 0, new JukeboxPlayable(
+        assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayable(
                 EitherHolder.fromEither(Either.left(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP))),
                 true
         )), List.of(

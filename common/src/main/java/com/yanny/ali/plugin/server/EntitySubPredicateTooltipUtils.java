@@ -38,7 +38,7 @@ public class EntitySubPredicateTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.entity_sub_predicate.player"));
         
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.level", predicate.level()));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.game_type", predicate.gameType(), GenericTooltipUtils::getEnumTooltip));
+        tooltip.add(getGameTypePredicateTooltip(utils, "ali.property.branch.game_types", predicate.gameType()));
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.stats", predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip));
         tooltip.add(getMapTooltip(utils, "ali.property.branch.recipes", predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip));
         tooltip.add(getMapTooltip(utils, "ali.property.branch.advancements", predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip));

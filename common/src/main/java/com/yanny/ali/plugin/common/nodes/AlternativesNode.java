@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public class AlternativesNode extends CompositeNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "alternatives");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "alternatives");
 
     private final List<ITooltipNode> tooltip;
 

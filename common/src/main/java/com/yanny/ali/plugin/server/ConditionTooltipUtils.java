@@ -42,6 +42,15 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
+    public static ITooltipNode getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.enchantment_active_check"));
+
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.active", cond.active()));
+
+        return tooltip;
+    }
+
+    @NotNull
     public static ITooltipNode getEntityPropertiesTooltip(IServerUtils utils, LootItemEntityPropertyCondition cond) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.entity_properties"));
 
@@ -98,17 +107,18 @@ public class ConditionTooltipUtils {
     public static ITooltipNode getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance"));
 
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.probability", cond.probability()));
+        tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.chance", cond.chance()));
 
         return tooltip;
     }
 
     @NotNull
-    public static ITooltipNode getRandomChanceWithLootingTooltip(IServerUtils utils, LootItemRandomChanceWithLootingCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_looting"));
+    public static ITooltipNode getRandomChanceWithLootingTooltip(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition cond) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_enchanted_bonus"));
 
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.percent", cond.percent()));
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.multiplier", cond.lootingMultiplier()));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.unenchanted_chance", cond.unenchantedChance()));
+        tooltip.add(getLevelBasedValueTooltip(utils, "ali.property.branch.enchanted_chance", cond.enchantedChance()));
+        tooltip.add(getHolderTooltip(utils, "ali.property.value.enchantment", cond.enchantment(), RegistriesTooltipUtils::getEnchantmentTooltip));
 
         return tooltip;
     }

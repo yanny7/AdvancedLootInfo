@@ -197,7 +197,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testRandomChanceWithLootingTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getRandomChanceWithLootingTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()), List.of(
                 "Random Chance With Enchanted Bonus:",
                 "  -> Unenchanted Chance: 0.25",
                 "  -> Enchanted Chance:",
