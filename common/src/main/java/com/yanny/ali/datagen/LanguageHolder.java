@@ -109,6 +109,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
+        TRANSLATION_MAP.put("ali.property.branch.dimensions", "Dimensions:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
         TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
         TRANSLATION_MAP.put("ali.property.branch.enchantments", "Enchantments:");
@@ -139,6 +140,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.stats", "Stats:");
         TRANSLATION_MAP.put("ali.property.branch.stepping_on_location", "Stepping on Location:");
         TRANSLATION_MAP.put("ali.property.branch.stored_enchantments", "Stored Enchantments:");
+        TRANSLATION_MAP.put("ali.property.branch.structures", "Structures:");
         TRANSLATION_MAP.put("ali.property.branch.stuck_entity", "Stuck Entity:");
         TRANSLATION_MAP.put("ali.property.branch.tags", "Tags:");
         TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");

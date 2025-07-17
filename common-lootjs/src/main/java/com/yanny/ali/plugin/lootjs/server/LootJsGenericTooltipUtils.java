@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.lootjs.server;
 
 import com.almostreliable.lootjs.filters.ItemFilter;
 import com.almostreliable.lootjs.filters.ResourceLocationFilter;
+import com.almostreliable.lootjs.loot.condition.AnyStructure;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.TooltipNode;
@@ -127,4 +128,14 @@ public class LootJsGenericTooltipUtils {
         return new TooltipNode(translatable(key, value("UNKNOWN")));
     }
 
+    @NotNull
+    public static ITooltipNode getStructureLocatorTooltip(IServerUtils utils, String key, AnyStructure.StructureLocator structureLocator) {
+        if (structureLocator instanceof AnyStructure.ById byId) {
+            return getResourceKeyTooltip(utils, key, byId.id());
+        } else if (structureLocator instanceof AnyStructure.ByTag byTag) {
+            return getTagKeyTooltip(utils, key, byTag.tag());
+        }
+
+        return TooltipNode.EMPTY;
+    }
 }

@@ -75,6 +75,7 @@ public class LootJsPlugin implements IPlugin {
         registry.registerConditionTooltip(AndCondition.class, LootJsConditionTooltipUtils::andConditionTooltip);
         registry.registerConditionTooltip(AnyBiomeCheck.class, LootJsConditionTooltipUtils::anyBiomeCheckTooltip);
         registry.registerConditionTooltip(AnyDimension.class, LootJsConditionTooltipUtils::anyDimensionTooltip);
+        registry.registerConditionTooltip(AnyStructure.class, LootJsConditionTooltipUtils::anyStructureTooltip);
         registry.registerConditionTooltip(BiomeCheck.class, LootJsConditionTooltipUtils::biomeCheckTooltip);
         registry.registerConditionTooltip(ContainsLootCondition.class, LootJsConditionTooltipUtils::containsLootConditionTooltip);
         registry.registerConditionTooltip(CustomParamPredicate.class, LootJsConditionTooltipUtils::customParamPredicateTooltip);
