@@ -84,3 +84,9 @@ mandatory=false
 versionRange="${rei_version_range}"
 ordering="AFTER"
 side="BOTH"
+
+[[dependencies.ali]]
+modId="lootjs"
+mandatory=false
+ordering="AFTER"
+side="BOTH"
