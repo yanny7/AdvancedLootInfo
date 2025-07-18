@@ -37,6 +37,17 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
+    public static ITooltipNode matchStructureTooltip(IServerUtils utils, MatchStructure condition) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_structure"));
+        MixinMatchStructure cond = (MixinMatchStructure) condition;
+
+        tooltip.add(getHolderSetTooltip(utils, "ali.property.branch.structures", "ali.property.value.null", cond.getStructures(), RegistriesTooltipUtils::getStructureTooltip));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.exact", cond.getExact()));
+
+        return tooltip;
+    }
+
+    @NotNull
     public static ITooltipNode customParamPredicateTooltip(IServerUtils ignoredUtils, CustomParamPredicate<?> ignoredCondition) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.custom_param_predicate"));
 

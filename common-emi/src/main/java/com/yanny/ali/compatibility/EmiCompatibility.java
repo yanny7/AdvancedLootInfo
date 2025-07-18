@@ -1,6 +1,5 @@
 package com.yanny.ali.compatibility;
 
-import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
@@ -28,7 +27,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -36,14 +34,12 @@ import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     @Override
     public void register(EmiRegistry emiRegistry) {
         registerLootTable(emiRegistry);
     }
 
-    private synchronized void registerLootTable(EmiRegistry registry) {
+    private void registerLootTable(EmiRegistry registry) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;

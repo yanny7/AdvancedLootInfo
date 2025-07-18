@@ -15,6 +15,7 @@
     "MixinMatchDimension",
     "MixinMatchEquipmentSlot",
     "MixinMatchKillerDistance",
+    "MixinMatchStructure",
     "MixinModifyLootAction",
     "MixinRemoveLootAction",
     "MixinReplaceLootAction"

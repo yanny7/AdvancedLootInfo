@@ -74,6 +74,7 @@ public class LootJsPlugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         registry.registerConditionTooltip(MatchBiome.class, LootJsConditionTooltipUtils::matchBiomeTooltip);
         registry.registerConditionTooltip(MatchDimension.class, LootJsConditionTooltipUtils::matchDimensionTooltip);
+        registry.registerConditionTooltip(MatchStructure.class, LootJsConditionTooltipUtils::matchStructureTooltip);
         registry.registerConditionTooltip(CustomParamPredicate.class, LootJsConditionTooltipUtils::customParamPredicateTooltip);
         registry.registerConditionTooltip(IsLightLevel.class, LootJsConditionTooltipUtils::isLightLevelTooltip);
         registry.registerConditionTooltip(MatchEquipmentSlot.class, LootJsConditionTooltipUtils::getMatchEquipmentSlotTooltip);
