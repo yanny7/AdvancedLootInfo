@@ -47,6 +47,17 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
+    public static ITooltipNode anyStructureTooltip(IServerUtils utils, AnyStructure condition) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.any_structure"));
+        MixinAnyStructure cond = (MixinAnyStructure) condition;
+
+        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.structures", "ali.property.value.null", cond.getStructureLocators(), LootJsGenericTooltipUtils::getStructureLocatorTooltip));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.exact", cond.getExact()));
+
+        return tooltip;
+    }
+
+    @NotNull
     public static ITooltipNode biomeCheckTooltip(IServerUtils utils, BiomeCheck condition) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.biome_check"));
         MixinBiomeCheck cond = (MixinBiomeCheck) condition;
