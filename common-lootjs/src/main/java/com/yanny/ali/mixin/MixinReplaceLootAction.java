@@ -1,20 +1,18 @@
 package com.yanny.ali.mixin;
 
-import com.almostreliable.lootjs.core.LootEntry;
-import com.almostreliable.lootjs.loot.action.ReplaceLootAction;
-import net.minecraft.world.item.ItemStack;
+import com.almostreliable.lootjs.core.entry.ItemLootEntry;
+import com.almostreliable.lootjs.core.filters.ItemFilter;
+import com.almostreliable.lootjs.loot.modifier.handler.ReplaceLootAction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-
-import java.util.function.Predicate;
 
 @Mixin(ReplaceLootAction.class)
 public interface MixinReplaceLootAction {
     @Accessor
-    Predicate<ItemStack> getPredicate();
+    ItemFilter getFilter();
 
     @Accessor
-    LootEntry getLootEntry();
+    ItemLootEntry getItemLootEntry();
 
     @Accessor
     boolean getPreserveCount();

@@ -6,7 +6,8 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -53,8 +54,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
         }
     }
 
-    public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
-        itemStack = buf.readItem();
+    public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
+        itemStack = ItemStack.STREAM_CODEC.decode(buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
@@ -94,8 +95,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeItem(itemStack);
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
+        ItemStack.STREAM_CODEC.encode(buf, itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
         buf.writeBoolean(modified);
@@ -113,15 +114,15 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     @NotNull
     private static List<ITooltipNode> getItemTooltip(IServerUtils utils, int baseCount, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
-        Map<Enchantment, Map<Integer, RangeValue>> countMap = getCount(utils, baseCount, functions);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = getCount(utils, baseCount, functions);
 
         return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions);
     }
 
     @NotNull
-    public static Map<Enchantment, Map<Integer, RangeValue>> getCount(IServerUtils utils, int baseCount, List<LootItemFunction> functions) {
-        Map<Enchantment, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
+    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getCount(IServerUtils utils, int baseCount, List<LootItemFunction> functions) {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
 
         count.put(null, Map.of(0, new RangeValue(baseCount)));
 

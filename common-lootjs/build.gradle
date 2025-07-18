@@ -1,33 +1,27 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'fabric-loom'
+    id 'net.neoforged.gradle.userdev' version '7.0.182'
 }
+
+if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+    minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
+    implementation "net.neoforged:neoforge:${neoforge_version}"
+    compileOnly project(":api")
+    compileOnly project(":common")
 
-    implementation project(":api")
-    implementation project(":common")
-
-    modCompileOnly "curse.maven:kubejs-238086:5853321"
-    modCompileOnly "curse.maven:rhino-416294:6186969"
-    modCompileOnly "curse.maven:lootjs-570630:6508898"
+    compileOnly "curse.maven:kubejs-238086:5810100"
+    compileOnly "curse.maven:rhino-416294:6184623"
+    compileOnly "curse.maven:lootjs-570630:6329532"
 }
 
-loom {
-    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
-    }
-
-    mixin {
-        defaultRefmapName.set("ali.kubejs.refmap.json")
-    }
-}
+// NeoGradle compiles the game, but we don't want to add our common code to the game's code
+Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 
 tasks.named('jar').configure {
     enabled = false
@@ -38,14 +32,6 @@ tasks.named('assemble').configure {
 }
 
 tasks.named('build').configure {
-    enabled = false
-}
-
-tasks.named('remapJar').configure {
-    enabled = false
-}
-
-tasks.named('remapSourcesJar').configure {
     enabled = false
 }
 

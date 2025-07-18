@@ -8,62 +8,30 @@ import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
 import net.minecraft.world.level.storage.loot.IntRange;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.List;
 
+import static com.yanny.ali.plugin.lootjs.server.LootJsGenericTooltipUtils.getItemFilterTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 public class LootJsConditionTooltipUtils {
     @NotNull
-    public static ITooltipNode andConditionTooltip(IServerUtils utils, AndCondition condition) {
-        //noinspection unchecked
-        List<LootItemCondition> conditions = (List<LootItemCondition>)(List<?>)List.of(((MixinAndCondition) condition).getConditions());
+    public static ITooltipNode matchBiomeTooltip(IServerUtils utils, MatchBiome condition) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_biome"));
+        MixinMatchBiome cond = (MixinMatchBiome) condition;
 
-        return getCollectionTooltip(utils, "ali.type.condition.and", conditions, utils::getConditionTooltip);
-    }
-
-    @NotNull
-    public static ITooltipNode anyBiomeCheckTooltip(IServerUtils utils, AnyBiomeCheck condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.any_biome_check"));
-        MixinBiomeCheck cond = (MixinBiomeCheck) condition;
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.biomes", "ali.property.value.null", cond.getBiomes(), GenericTooltipUtils::getResourceKeyTooltip));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.tags", "ali.property.value.null", cond.getTags(), GenericTooltipUtils::getTagKeyTooltip));
+        tooltip.add(getHolderSetTooltip(utils, "ali.property.branch.biomes", "ali.property.value.null", cond.getBiomes(), RegistriesTooltipUtils::getBiomeTooltip));
 
         return tooltip;
     }
 
     @NotNull
-    public static ITooltipNode anyDimensionTooltip(IServerUtils utils, AnyDimension condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.any_dimension"));
-        MixinAnyDimension cond = (MixinAnyDimension) condition;
+    public static ITooltipNode matchDimensionTooltip(IServerUtils utils, MatchDimension condition) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_dimension"));
+        MixinMatchDimension cond = (MixinMatchDimension) condition;
 
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.dimensions", "ali.property.value.null", Arrays.asList(cond.getDimensions()), GenericTooltipUtils::getResourceLocationTooltip));
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode biomeCheckTooltip(IServerUtils utils, BiomeCheck condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.biome_check"));
-        MixinBiomeCheck cond = (MixinBiomeCheck) condition;
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.biomes", "ali.property.value.null", cond.getBiomes(), GenericTooltipUtils::getResourceKeyTooltip));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.tags", "ali.property.value.null", cond.getTags(), GenericTooltipUtils::getTagKeyTooltip));
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode containsLootConditionTooltip(IServerUtils utils, ContainsLootCondition condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.contains_loot"));
-        MixinContainsLootCondition cond = (MixinContainsLootCondition) condition;
-
-        tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.branch.predicate", cond.getPredicate()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.exact", cond.getExact()));
 
         return tooltip;
     }
@@ -88,38 +56,12 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode lootItemConditionWrapperTooltip(IServerUtils utils, LootItemConditionWrapper condition) {
-        return utils.getConditionTooltip(utils, ((MixinLootItemConditionWrapper) condition).getCondition());
-    }
-
-    @NotNull
-    public static ITooltipNode mainHandTableBonusTooltip(IServerUtils utils, MainHandTableBonus condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.main_hand_table_bonus"));
-        MixinMainHandTableBonus cond = (MixinMainHandTableBonus) condition;
-
-        tooltip.add(RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.value.enchantment", cond.getEnchantment()));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.values", Arrays.toString(cond.getValues())));
-
-        return tooltip;
-    }
-
-    @NotNull
     public static ITooltipNode getMatchEquipmentSlotTooltip(IServerUtils utils, MatchEquipmentSlot condition) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_equipment_slot"));
         MixinMatchEquipmentSlot cond = (MixinMatchEquipmentSlot) condition;
 
-        tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", cond.getPredicate()));
+        tooltip.add(getItemFilterTooltip(utils, "ali.property.value.item_filter", cond.getItemFilter()));
         tooltip.add(GenericTooltipUtils.getEnumTooltip(utils, "ali.property.value.slot", cond.getSlot()));
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode matchFluidTooltip(IServerUtils utils, MatchFluid condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_fluid"));
-        MixinMatchFluid cond = (MixinMatchFluid) condition;
-
-        tooltip.add(getFluidPredicateTooltip(utils, "ali.property.value.predicate", cond.getPredicate()));
 
         return tooltip;
     }
@@ -145,24 +87,6 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode notConditionTooltip(IServerUtils utils, NotCondition condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.not"));
-        MixinNotCondition cond = (MixinNotCondition) condition;
-
-        tooltip.add(utils.getConditionTooltip(utils, (LootItemCondition) cond.getCondition()));
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode orConditionTooltip(IServerUtils utils, OrCondition condition) {
-        //noinspection unchecked
-        List<LootItemCondition> conditions = (List<LootItemCondition>)(List<?>)List.of(((MixinOrCondition) condition).getConditions());
-
-        return getCollectionTooltip(utils, "ali.type.condition.or", conditions, utils::getConditionTooltip);
-    }
-
-    @NotNull
     public static ITooltipNode playerParamPredicateTooltip(IServerUtils ignoredUtils, PlayerParamPredicate ignoredCondition) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.player_param_predicate"));
 
@@ -172,13 +96,11 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode wrapperDamageSourceConditionTooltip(IServerUtils utils, WrappedDamageSourceCondition condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.damage_source"));
-        MixinWrappedDamageSourceCondition cond = (MixinWrappedDamageSourceCondition) condition;
-        List<String> sourceNames = cond.getSourceNames() != null ? Arrays.asList(cond.getSourceNames()) : null;
+    public static ITooltipNode matchAnyInventorySlot(IServerUtils utils, MatchAnyInventorySlot condition) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_any_inventory_slot"));
 
-        tooltip.add(getDamageSourcePredicateTooltip(utils, "ali.property.branch.predicate", cond.getPredicate()));
-        tooltip.add(getOptionalCollectionTooltip(utils, "ali.property.branch.source_names", "ali.property.value.null", sourceNames, GenericTooltipUtils::getStringTooltip));
+        tooltip.add(getItemFilterTooltip(utils, "ali.property.branch.predicate", condition.filter()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.hotbar", condition.hotbar()));
 
         return tooltip;
     }

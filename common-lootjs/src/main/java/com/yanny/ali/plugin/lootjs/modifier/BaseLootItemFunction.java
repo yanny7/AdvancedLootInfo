@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class BaseLootItemFunction implements LootItemFunction {
     @NotNull
     @Override
-    public LootItemFunctionType getType() {
+    public LootItemFunctionType<?> getType() {
         return LootFunctionTypes.UNUSED;
     }
 

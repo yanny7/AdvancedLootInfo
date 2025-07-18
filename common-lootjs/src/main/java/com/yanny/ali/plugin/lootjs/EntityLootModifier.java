@@ -1,24 +1,22 @@
 package com.yanny.ali.plugin.lootjs;
 
-import com.almostreliable.lootjs.core.LootModificationByEntity;
+import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.mixin.MixinLootModificationByEntity;
+import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 
-import java.util.HashSet;
+public class EntityLootModifier extends AbstractLootModifier<Entity> {
+    private final HolderSet<EntityType<?>> entityTypes;
 
-public class EntityLootModifier extends LootModifier<Entity> {
-    private final HashSet<EntityType<?>> entityTypes;
-
-    public EntityLootModifier(IServerUtils utils, LootModificationByEntity byEntity) {
-        super(utils, byEntity);
-        entityTypes = ((MixinLootModificationByEntity) byEntity).getEntities();
+    public EntityLootModifier(IServerUtils utils, LootModifier modifier, LootModifier.EntityFiltered entityFiltered) {
+        super(utils, modifier);
+        entityTypes = entityFiltered.entities();
     }
 
     @Override
     public boolean predicate(Entity value) {
-        return entityTypes.contains(value.getType());
+        return entityTypes.stream().anyMatch((f) -> f.value().equals(value.getType()));
     }
 
     @Override

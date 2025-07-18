@@ -29,11 +29,12 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.not", "Not:");
         TRANSLATION_MAP.put("ali.type.condition.or", "Or:");
         TRANSLATION_MAP.put("ali.type.condition.damage_source", "Damage Source:");
-        TRANSLATION_MAP.put("ali.type.condition.any_biome_check", "Any Biome Check:");
+        TRANSLATION_MAP.put("ali.type.condition.match_biome", "Any Biome Check:");
         TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
         TRANSLATION_MAP.put("ali.type.condition.biome_check", "Biome Check:");
-        TRANSLATION_MAP.put("ali.type.condition.any_dimension", "Any Dimension:");
+        TRANSLATION_MAP.put("ali.type.condition.match_dimension", "Any Dimension:");
         TRANSLATION_MAP.put("ali.type.condition.contains_loot", "Contains Loot:");
+        TRANSLATION_MAP.put("ali.type.condition.match_any_inventory_slot", "Match Any Inventory Slot:");
         TRANSLATION_MAP.put("ali.type.condition.match_fluid", "Match Fluid:");
         TRANSLATION_MAP.put("ali.type.condition.custom_param_predicate", "Custom Param Predicate:");
         TRANSLATION_MAP.put("ali.type.condition.player_param_predicate", "Player Param Predicate:");
@@ -301,6 +302,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.hidden_effect", "Hidden Effect: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
         TRANSLATION_MAP.put("ali.property.value.horizontal_speed", "Horizontal Speed: %s");
+        TRANSLATION_MAP.put("ali.property.value.hotbar", "Hotbar: %s");
         TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
         TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
         TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");

@@ -1,21 +1,28 @@
 package com.yanny.ali.plugin.lootjs;
 
-import com.almostreliable.lootjs.core.*;
 import com.almostreliable.lootjs.loot.condition.*;
+import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.mixin.MixinAbstractLootModification;
 import com.yanny.ali.mixin.MixinLootModificationsAPI;
-import com.yanny.ali.plugin.lootjs.modifier.*;
-import com.yanny.ali.plugin.lootjs.node.*;
+import com.yanny.ali.mixin.MixinLootModifier;
+import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
+import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
+import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
+import com.yanny.ali.plugin.lootjs.node.ModifiedNode;
 import com.yanny.ali.plugin.lootjs.server.LootJsConditionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.server.LootJsFunctionTooltipUtils;
-import com.yanny.ali.plugin.lootjs.widget.*;
+import com.yanny.ali.plugin.lootjs.widget.ItemStackWidget;
+import com.yanny.ali.plugin.lootjs.widget.ItemTagWidget;
+import com.yanny.ali.plugin.lootjs.widget.ModifiedWidget;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @AliEntrypoint
 public class LootJsPlugin implements IPlugin {
@@ -26,27 +33,26 @@ public class LootJsPlugin implements IPlugin {
     @NotNull
     public static List<ILootModifier<?>> registerModifiers(IServerUtils utils) {
         List<ILootModifier<?>> modifiers = new ArrayList<>();
-        List<ILootAction> actions = MixinLootModificationsAPI.getActions();
+        List<LootModifier> actions = MixinLootModificationsAPI.getModifiers();
 
-        for (ILootAction action : actions) {
-            if (action instanceof AbstractLootModification lootModification) {
-                try {
-                    if (lootModification instanceof LootModificationByBlock byBlock) {
-                        modifiers.add(new BlockLootModifier(utils, byBlock));
-                    } else if (lootModification instanceof LootModificationByEntity byEntity) {
-                        modifiers.add(new EntityLootModifier(utils, byEntity));
-                    } else if (lootModification instanceof LootModificationByTable byTable) {
-                        modifiers.add(new TableLootModifier(utils, byTable));
-                    } else if (lootModification instanceof LootModificationByType byType) {
-                        modifiers.add(new TypeLootModifier(utils, byType));
-                    } else {
-                        LOGGER.error("Skipping unexpected modification type {}", lootModification.getClass().getCanonicalName());
-                    }
-                } catch (Throwable e) {
-                    LOGGER.error("Failed to process loot modification {}: {}", ((MixinAbstractLootModification) lootModification).getName(), e.getMessage());
+        for (LootModifier action : actions) {
+            Predicate<LootContext> predicate = ((MixinLootModifier) action).getShouldRun();
+
+            try {
+                switch (predicate) {
+                    case LootModifier.BlockFiltered blockFiltered ->
+                            modifiers.add(new BlockLootModifier(utils, action, blockFiltered));
+                    case LootModifier.EntityFiltered entityFiltered ->
+                            modifiers.add(new EntityLootModifier(utils, action, entityFiltered));
+                    case LootModifier.TableFiltered tableFiltered ->
+                            modifiers.add(new TableLootModifier(utils, action, tableFiltered));
+                    case LootModifier.TypeFiltered typeFiltered ->
+                            modifiers.add(new TableLootModifier(utils, action, typeFiltered));
+                    case null, default ->
+                            LOGGER.error("Skipping unexpected modification type {}", actions.getClass().getCanonicalName());
                 }
-            } else {
-                LOGGER.error("Unexpected action type {}", action.getClass().getCanonicalName());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to process loot modification {}: {}", action.getName(), e.getMessage());
             }
         }
 
@@ -55,45 +61,28 @@ public class LootJsPlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerNode(AddLootNode.ID, AddLootNode::new);
-        registry.registerNode(WeightedAddLootNode.ID, WeightedAddLootNode::new);
         registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
         registry.registerNode(ItemTagNode.ID, ItemTagNode::new);
-        registry.registerNode(GroupLootNode.ID, GroupLootNode::new);
         registry.registerNode(ModifiedNode.ID, ModifiedNode::new);
 
-        registry.registerWidget(AddLootNode.ID, AddLootWidget::new);
-        registry.registerWidget(WeightedAddLootNode.ID, WeightedAddLootWidget::new);
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);
-        registry.registerWidget(GroupLootNode.ID, GroupedLootWidget::new);
         registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerConditionTooltip(AndCondition.class, LootJsConditionTooltipUtils::andConditionTooltip);
-        registry.registerConditionTooltip(AnyBiomeCheck.class, LootJsConditionTooltipUtils::anyBiomeCheckTooltip);
-        registry.registerConditionTooltip(AnyDimension.class, LootJsConditionTooltipUtils::anyDimensionTooltip);
-        registry.registerConditionTooltip(BiomeCheck.class, LootJsConditionTooltipUtils::biomeCheckTooltip);
-        registry.registerConditionTooltip(ContainsLootCondition.class, LootJsConditionTooltipUtils::containsLootConditionTooltip);
+        registry.registerConditionTooltip(MatchBiome.class, LootJsConditionTooltipUtils::matchBiomeTooltip);
+        registry.registerConditionTooltip(MatchDimension.class, LootJsConditionTooltipUtils::matchDimensionTooltip);
         registry.registerConditionTooltip(CustomParamPredicate.class, LootJsConditionTooltipUtils::customParamPredicateTooltip);
         registry.registerConditionTooltip(IsLightLevel.class, LootJsConditionTooltipUtils::isLightLevelTooltip);
-        registry.registerConditionTooltip(LootItemConditionWrapper.class, LootJsConditionTooltipUtils::lootItemConditionWrapperTooltip);
-        registry.registerConditionTooltip(MainHandTableBonus.class, LootJsConditionTooltipUtils::mainHandTableBonusTooltip);
         registry.registerConditionTooltip(MatchEquipmentSlot.class, LootJsConditionTooltipUtils::getMatchEquipmentSlotTooltip);
-        registry.registerConditionTooltip(MatchFluid.class, LootJsConditionTooltipUtils::matchFluidTooltip);
         registry.registerConditionTooltip(MatchKillerDistance.class, LootJsConditionTooltipUtils::matchKillerDistanceTooltip);
         registry.registerConditionTooltip(MatchPlayer.class, LootJsConditionTooltipUtils::matchPlayerTooltip);
-        registry.registerConditionTooltip(NotCondition.class, LootJsConditionTooltipUtils::notConditionTooltip);
-        registry.registerConditionTooltip(OrCondition.class, LootJsConditionTooltipUtils::orConditionTooltip);
         registry.registerConditionTooltip(PlayerParamPredicate.class, LootJsConditionTooltipUtils::playerParamPredicateTooltip);
-        registry.registerConditionTooltip(WrappedDamageSourceCondition.class, LootJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
+        registry.registerConditionTooltip(MatchAnyInventorySlot.class, LootJsConditionTooltipUtils::matchAnyInventorySlot);
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
-        registry.registerFunctionTooltip(DropExperienceFunction.class, LootJsFunctionTooltipUtils::dropExperienceTooltip);
-        registry.registerFunctionTooltip(ExplodeFunction.class, LootJsFunctionTooltipUtils::explodeTooltip);
-        registry.registerFunctionTooltip(LightningStrikeFunction.class, LootJsFunctionTooltipUtils::lightningStrikeTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);

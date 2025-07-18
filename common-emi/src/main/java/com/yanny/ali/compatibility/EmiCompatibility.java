@@ -43,7 +43,7 @@ public class EmiCompatibility implements EmiPlugin {
         registerLootTable(emiRegistry);
     }
 
-    private void registerLootTable(EmiRegistry registry) {
+    private synchronized void registerLootTable(EmiRegistry registry) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;

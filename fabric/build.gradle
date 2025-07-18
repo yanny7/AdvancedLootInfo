@@ -37,12 +37,6 @@ dependencies {
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
     modCompileOnlyApi "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
     modCompileOnlyApi "dev.architectury:architectury-fabric:${architectury_version}"
-
-    // LootJS
-//    modImplementation "curse.maven:kubejs-238086:5853321"
-//    modImplementation "curse.maven:rhino-416294:6186969"
-//    modImplementation "curse.maven:architectury-api-419699:5137936"
-//    modImplementation "curse.maven:lootjs-570630:5404564"
 }
 
 loom {
@@ -85,7 +79,6 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
-//    source(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -94,7 +87,6 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
-//    from(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 processResources {
@@ -102,5 +94,4 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
-//    from project(":common-lootjs").sourceSets.main.resources
 }
