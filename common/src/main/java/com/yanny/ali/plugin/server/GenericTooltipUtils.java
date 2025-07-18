@@ -481,7 +481,7 @@ public class GenericTooltipUtils {
 
         tooltip.add(getItemTooltip(utils, "ali.property.value.item", item.getItem()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.count", item.getCount()));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.tag", item.getTag(), GenericTooltipUtils::getCompoundTagTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.tag", Optional.ofNullable(item.getTag()), GenericTooltipUtils::getCompoundTagTooltip));
 
         return tooltip;
     }
