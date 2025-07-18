@@ -12,7 +12,8 @@ import com.yanny.ali.mixin.MixinCompositeLootAction;
 import com.yanny.ali.mixin.MixinModifyLootAction;
 import com.yanny.ali.mixin.MixinRemoveLootAction;
 import com.yanny.ali.mixin.MixinReplaceLootAction;
-import com.yanny.ali.plugin.lootjs.modifier.*;
+import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.*;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -43,12 +44,6 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                 functions.add(lootFunctionAction.getLootItemFunction());
             } else if (handler instanceof CustomPlayerAction customPlayerAction) {
                 functions.add(new CustomPlayerFunction(customPlayerAction));
-            } else if (handler instanceof DropExperienceAction dropExperienceAction) {
-                functions.add(new DropExperienceFunction(dropExperienceAction));
-            } else if (handler instanceof ExplodeAction explodeAction) {
-                functions.add(new ExplodeFunction(explodeAction));
-            } else if (handler instanceof LightningStrikeAction lightningStrikeAction) {
-                functions.add(new LightningStrikeFunction(lightningStrikeAction));
             } else if (handler instanceof ILootAction lootAction) {
                 actions.add(lootAction); // must be last - functions are also instances of ILootAction
             } else {
