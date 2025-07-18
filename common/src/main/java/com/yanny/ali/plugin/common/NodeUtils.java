@@ -7,7 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
@@ -76,7 +76,7 @@ public class NodeUtils {
     public static List<Component> toComponents(ITooltipNode tooltip, int pad) {
         List<Component> components = new ArrayList<>();
 
-        if (tooltip.getContent().getContents() != ComponentContents.EMPTY) {
+        if (tooltip.getContent().getContents() != PlainTextContents.EMPTY) {
             components.add(GenericTooltipUtils.pad(pad, tooltip.getContent()));
             components.addAll(toComponents(tooltip.getChildren(), pad + 1));
         } else {
