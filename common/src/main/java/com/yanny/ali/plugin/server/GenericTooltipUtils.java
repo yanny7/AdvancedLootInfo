@@ -452,7 +452,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getTypedDataComponentTooltip(IServerUtils utils, String key, TypedDataComponent<?> typedDataComponent) {
         ITooltipNode tooltip = getDataComponentTypeTooltip(utils, key, typedDataComponent.type());
-        
+
         tooltip.add(utils.getDataComponentTypeTooltip(utils, typedDataComponent.type(), typedDataComponent.value()));
 
         return tooltip;
@@ -577,7 +577,7 @@ public class GenericTooltipUtils {
 
             return tooltip;
         }
-        
+
         return TooltipNode.EMPTY;
     }
 
@@ -777,10 +777,10 @@ public class GenericTooltipUtils {
 
             tooltip.add(getCollectionTooltip(utils, "ali.property.branch.values", value, s.value(), mapper));
             tooltip.add(getListOperationTooltip(utils, "ali.property.value.list_operation", s.operation()));
-            
+
             return tooltip;
         }
-        
+
         return TooltipNode.EMPTY;
     }
 
@@ -1144,7 +1144,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getMapDecorationEntryTooltip(IServerUtils utils, Map.Entry<String, MapDecorations.Entry> entry) {
         ITooltipNode tooltip = getStringTooltip(utils, "ali.property.value.decoration", entry.getKey());
-        
+
         tooltip.add(getMapDecorationEntryTooltip(utils, "ali.property.value.null", entry.getValue()));
 
         return tooltip;
@@ -1153,7 +1153,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getBlockPropertyEntryTooltip(IServerUtils utils, Map.Entry<Holder<Block>, Property<?>> entry) {
         ITooltipNode tooltip = getHolderTooltip(utils, "ali.property.value.block", entry.getKey(), RegistriesTooltipUtils::getBlockTooltip);
-        
+
         tooltip.add(getPropertyTooltip(utils, "ali.property.value.property", entry.getValue()));
 
         return tooltip;
@@ -1162,7 +1162,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getPropertiesEntryTooltip(IServerUtils utils, Map.Entry<String, Collection<com.mojang.authlib.properties.Property>> entry) {
         ITooltipNode tooltip = getStringTooltip(utils, "ali.property.value.null", entry.getKey());
-        
+
         tooltip.add(getCollectionTooltip(utils, entry.getValue(), GenericTooltipUtils::getAuthPropertyTooltip));
 
         return tooltip;
@@ -1171,7 +1171,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getEnchantmentLevelEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, Integer> entry) {
         ITooltipNode tooltip = getHolderTooltip(utils, "ali.property.value.null", entry.getKey(), RegistriesTooltipUtils::getEnchantmentTooltip);
-        
+
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.level", entry.getValue()));
 
         return tooltip;
@@ -1180,7 +1180,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getToggleEntryTooltip(IServerUtils utils, Map.Entry<ToggleTooltips.ComponentToggle<?>, Boolean> entry) {
         ITooltipNode tooltip = getDataComponentTypeTooltip(utils, "ali.property.value.null", entry.getKey().type());
-        
+
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.value", entry.getValue()));
 
         return tooltip;
@@ -1189,7 +1189,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getDataComponentPatchEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Optional<?>> entry) {
         ITooltipNode tooltip = getDataComponentTypeTooltip(utils, "ali.property.value.null", entry.getKey());
-        
+
         tooltip.add(getOptionalTooltip(utils, entry.getValue(), (u, v) -> u.getDataComponentTypeTooltip(u, entry.getKey(), v)));
 
         if (entry.getValue().isEmpty()) {

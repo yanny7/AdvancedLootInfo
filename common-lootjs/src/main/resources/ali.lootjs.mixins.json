@@ -9,6 +9,7 @@
     "MixinAddLootAction",
     "MixinAndCondition",
     "MixinAnyDimension",
+    "MixinAnyStructure",
     "MixinBiomeCheck",
     "MixinCompositeLootAction",
     "MixinContainsLootCondition",

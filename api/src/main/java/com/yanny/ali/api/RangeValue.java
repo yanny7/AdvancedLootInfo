@@ -33,9 +33,13 @@ public final class RangeValue {
     }
 
     public RangeValue(float min, float max) {
-        this.min = min;
-        this.max = max;
-        this.isRange = true;
+        if (max - min < 0.00001f) {
+            this.min = this.max = min;
+        } else {
+            this.min = min;
+            this.max = max;
+            this.isRange = true;
+        }
     }
 
     public RangeValue(FriendlyByteBuf buf) {

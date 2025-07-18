@@ -6,7 +6,8 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinAbstractLootModification;
 import com.yanny.ali.mixin.MixinLootModificationsAPI;
-import com.yanny.ali.plugin.lootjs.modifier.*;
+import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
+import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.*;
 import com.yanny.ali.plugin.lootjs.server.LootJsConditionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.server.LootJsFunctionTooltipUtils;
@@ -75,6 +76,7 @@ public class LootJsPlugin implements IPlugin {
         registry.registerConditionTooltip(AndCondition.class, LootJsConditionTooltipUtils::andConditionTooltip);
         registry.registerConditionTooltip(AnyBiomeCheck.class, LootJsConditionTooltipUtils::anyBiomeCheckTooltip);
         registry.registerConditionTooltip(AnyDimension.class, LootJsConditionTooltipUtils::anyDimensionTooltip);
+        registry.registerConditionTooltip(AnyStructure.class, LootJsConditionTooltipUtils::anyStructureTooltip);
         registry.registerConditionTooltip(BiomeCheck.class, LootJsConditionTooltipUtils::biomeCheckTooltip);
         registry.registerConditionTooltip(ContainsLootCondition.class, LootJsConditionTooltipUtils::containsLootConditionTooltip);
         registry.registerConditionTooltip(CustomParamPredicate.class, LootJsConditionTooltipUtils::customParamPredicateTooltip);
@@ -91,9 +93,6 @@ public class LootJsPlugin implements IPlugin {
         registry.registerConditionTooltip(WrappedDamageSourceCondition.class, LootJsConditionTooltipUtils::wrapperDamageSourceConditionTooltip);
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
-        registry.registerFunctionTooltip(DropExperienceFunction.class, LootJsFunctionTooltipUtils::dropExperienceTooltip);
-        registry.registerFunctionTooltip(ExplodeFunction.class, LootJsFunctionTooltipUtils::explodeTooltip);
-        registry.registerFunctionTooltip(LightningStrikeFunction.class, LootJsFunctionTooltipUtils::lightningStrikeTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);
