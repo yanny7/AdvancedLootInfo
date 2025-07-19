@@ -47,7 +47,7 @@ public class JeiCompatibility implements IModPlugin {
     private final List<JeiGameplayLoot> gameplayCategoryList = new LinkedList<>();
 
     @Override
-    public void registerCategories(@NotNull IRecipeCategoryRegistration registration) {
+    public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         blockCategoryList.clear();
@@ -76,19 +76,24 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     @Override
-    public void registerRecipes(@NotNull IRecipeRegistration registration) {
+    public void registerRecipes(IRecipeRegistration registration) {
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData) -> registerLootData(registration, lootData));
+    }
+
+    private void registerLootData(IRecipeRegistration registration, Map<ResourceLocation, IDataNode> lootData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         ClientLevel level = Minecraft.getInstance().level;
 
+        LOGGER.info("Adding loot information to JEI");
+
         if (level != null) {
-            Map<ResourceLocation, IDataNode> map = clientRegistry.getLootData();
             Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
-                IDataNode lootEntry = map.get(location);
+                IDataNode lootEntry = lootData.get(location);
 
                 if (lootEntry != null) {
                     RecipeType<BlockLootType> recipeType = null;
@@ -104,7 +109,7 @@ public class JeiCompatibility implements IModPlugin {
                         blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, clientRegistry.getItems(location)));
                     }
 
-                    map.remove(location);
+                    lootData.remove(location);
                 }
             }
 
@@ -114,7 +119,7 @@ public class JeiCompatibility implements IModPlugin {
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
                         ResourceLocation location = mob.getLootTable();
-                        IDataNode lootEntry = map.get(location);
+                        IDataNode lootEntry = lootData.get(location);
 
                         if (lootEntry != null) {
                             RecipeType<EntityLootType> recipeType = null;
@@ -130,13 +135,13 @@ public class JeiCompatibility implements IModPlugin {
                                 entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, clientRegistry.getItems(location)));
                             }
 
-                            map.remove(location);
+                            lootData.remove(location);
                         }
                     }
                 }
             }
 
-            for (Map.Entry<ResourceLocation, IDataNode> entry : map.entrySet()) {
+            for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
                 ResourceLocation location = entry.getKey();
                 RecipeType<GameplayLootType> recipeType = null;
 

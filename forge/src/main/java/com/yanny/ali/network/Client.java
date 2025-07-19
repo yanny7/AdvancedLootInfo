@@ -12,4 +12,9 @@ public class Client extends AbstractClient {
         super.onClear(msg);
         contextSupplier.setPacketHandled(true);
     }
+
+    protected void onDone(DoneMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+        super.onDone(msg);
+        contextSupplier.get().setPacketHandled(true);
+    }
 }

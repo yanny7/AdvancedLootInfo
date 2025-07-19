@@ -70,12 +70,16 @@ public abstract class AbstractServer {
                     LOGGER.warn("Failed to send message for loot table {} with error: {}", message.location, e.getMessage());
                 }
             }
+
+            sendDoneMessage(serverPlayer, new DoneMessage());
         }
     }
 
     protected abstract void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message);
 
     protected abstract void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message);
+
+    protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
     @NotNull
     private static List<Item> getItems(Map.Entry<ResourceLocation, LootTable> lootTableMap) {
