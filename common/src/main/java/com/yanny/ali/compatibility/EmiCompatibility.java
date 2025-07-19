@@ -17,6 +17,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.runtime.EmiReloadManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -38,16 +39,17 @@ public class EmiCompatibility implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry emiRegistry) {
-        registerLootTable(emiRegistry);
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData) -> registerLootData(emiRegistry, lootData));
     }
 
-    private void registerLootTable(EmiRegistry registry) {
+    private void registerLootData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
+        LOGGER.info("Adding loot information to EMI");
+
         if (client != null && level != null) {
-            Map<ResourceLocation, IDataNode> map = clientRegistry.getLootData();
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategoryMap = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
@@ -77,7 +79,7 @@ public class EmiCompatibility implements EmiPlugin {
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceLocation location = block.getLootTable();
-                IDataNode lootEntry = map.get(location);
+                IDataNode lootEntry = lootData.get(location);
 
                 if (lootEntry != null) {
                     EmiRecipeCategory category = null;
@@ -97,7 +99,7 @@ public class EmiCompatibility implements EmiPlugin {
                     }
 
                     registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, lootEntry, clientRegistry.getItems(location)));
-                    map.remove(location);
+                    lootData.remove(location);
                 }
             }
 
@@ -107,7 +109,7 @@ public class EmiCompatibility implements EmiPlugin {
                 entityList.forEach((entity) -> {
                     if (entity instanceof Mob mob) {
                         ResourceLocation location = mob.getLootTable();
-                        IDataNode lootEntry = map.get(location);
+                        IDataNode lootEntry = lootData.get(location);
 
                         if (lootEntry != null) {
                             EmiRecipeCategory category = null;
@@ -123,13 +125,13 @@ public class EmiCompatibility implements EmiPlugin {
                             }
 
                             registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entity, lootEntry, clientRegistry.getItems(location)));
-                            map.remove(location);
+                            lootData.remove(location);
                         }
                     }
                 });
             }
 
-            for (Map.Entry<ResourceLocation, IDataNode> entry : map.entrySet()) {
+            for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
                 ResourceLocation location = entry.getKey();
                 EmiRecipeCategory category = null;
 
@@ -145,6 +147,11 @@ public class EmiCompatibility implements EmiPlugin {
 
                 registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entry.getValue(), clientRegistry.getItems(location)));
             }
+        }
+
+        if (EmiReloadManager.isLoaded()) {
+            LOGGER.info("Loot information was added too late, requesting reload EMI");
+            EmiReloadManager.reload();
         }
     }
 

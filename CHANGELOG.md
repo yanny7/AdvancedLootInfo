@@ -3,6 +3,7 @@
 - Fixed duplicating slots
 - Added missing LootJS AnyStructure condition tooltip
 - Extended LootJS ItemStack tooltip
+- Fixed sporadic missing loot info
 
 ## [1.2.0]
 

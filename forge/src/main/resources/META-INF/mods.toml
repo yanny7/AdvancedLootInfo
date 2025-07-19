@@ -88,5 +88,6 @@ side="BOTH"
 [[dependencies.ali]]
 modId="lootjs"
 mandatory=false
+versionRange="(0,)"
 ordering="AFTER"
 side="BOTH"

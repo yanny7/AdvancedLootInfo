@@ -23,6 +23,7 @@ public class NetworkUtils {
 
         channel.registerMessage(getMessageId(), SyncLootTableMessage.class, SyncLootTableMessage::encode, SyncLootTableMessage::new, client::onLootInfo);
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, client::onClear);
+        channel.registerMessage(getMessageId(), DoneMessage.class, DoneMessage::encode, DoneMessage::new, client::onDone);
         return new DistHolder<>(client, server);
     }
 
@@ -32,6 +33,7 @@ public class NetworkUtils {
 
         channel.registerMessage(getMessageId(), SyncLootTableMessage.class, SyncLootTableMessage::encode, SyncLootTableMessage::new, (m, c) -> {});
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, (m, c) -> {});
+        channel.registerMessage(getMessageId(), DoneMessage.class, DoneMessage::encode, DoneMessage::new, (m, c) -> {});
         return new DistHolder<>(null, server);
     }
 

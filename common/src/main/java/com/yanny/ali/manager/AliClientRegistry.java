@@ -22,6 +22,9 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
     private final ICommonUtils utils;
 
+    private IOnDoneListener listener = null;
+    private volatile boolean dataReceived = false;
+
     public AliClientRegistry(ICommonUtils utils) {
         this.utils = utils;
     }
@@ -31,13 +34,29 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         lootNodeMap.put(resourceLocation, node);
     }
 
-    public Map<ResourceLocation, IDataNode> getLootData() {
-        return lootNodeMap;
-    }
-
     public void clearLootData() {
         lootNodeMap.clear();
         lootItemMap.clear();
+
+        LOGGER.info("Started receiving loot data");
+    }
+
+    public synchronized void doneLootData() {
+        dataReceived = true;
+        LOGGER.info("Finished receiving loot data");
+
+        if (listener != null) {
+            listener.onDone(lootNodeMap);
+            listener = null;
+        }
+    }
+
+    public synchronized void setOnDoneListener(IOnDoneListener listener) {
+        if (dataReceived) {
+            listener.onDone(lootNodeMap);
+        } else {
+            this.listener = listener;
+        }
     }
 
     @Override
