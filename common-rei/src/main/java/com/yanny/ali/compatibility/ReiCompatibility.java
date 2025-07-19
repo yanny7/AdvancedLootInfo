@@ -164,6 +164,11 @@ public class ReiCompatibility implements REIClientPlugin {
                 entry.getValue().forEach(registry::add);
             }
         }
+
+        if (!me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().isReloading()) {
+            LOGGER.info("Loot information was added too late, requesting reload REI");
+            me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().startReload();
+        }
     }
 
     @NotNull
