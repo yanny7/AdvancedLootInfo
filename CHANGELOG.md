@@ -4,6 +4,7 @@
 - Added missing LootJS AnyStructure condition tooltip
 - Extended LootJS ItemStack tooltip
 - Fixed sporadic missing loot info
+- Fixed sporadic crash on startup
 
 ## [1.2.0]
 

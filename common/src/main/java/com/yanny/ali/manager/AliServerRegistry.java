@@ -289,7 +289,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public List<LootPool> getLootPools(LootTable lootTable) {
-        return Services.PLATFORM.getLootPools(lootTable);
+        return Services.getPlatform().getLootPools(lootTable);
     }
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {
