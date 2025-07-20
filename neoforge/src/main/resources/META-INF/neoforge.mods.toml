@@ -61,5 +61,6 @@ side="BOTH"
 [[dependencies.ali]]
 modId="lootjs"
 type="optional"
+versionRange="[1.21.1-3.4.2,)"
 ordering="AFTER"
 side="BOTH"

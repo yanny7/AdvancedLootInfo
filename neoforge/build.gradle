@@ -67,7 +67,7 @@ dependencies {
     implementation "curse.maven:kubejs-238086:5810100"
     implementation "curse.maven:rhino-416294:6184623"
 //    modImplementation "curse.maven:architectury-api-419699:5137936"
-    implementation "curse.maven:lootjs-570630:6791140"
+    implementation "curse.maven:lootjs-570630:6792267"
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
