@@ -9,11 +9,11 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class FabricBusSubscriber {
     public static void registerEvents() {
-        ServerLifecycleEvents.SERVER_STARTED.register(FabricBusSubscriber::onServerStarted);
+        ServerLifecycleEvents.SERVER_STARTING.register(FabricBusSubscriber::onServerStarting);
         ServerPlayConnectionEvents.JOIN.register(FabricBusSubscriber::onPlayerLogIn);
     }
 
-    private static void onServerStarted(MinecraftServer server) {
+    private static void onServerStarting(MinecraftServer server) {
         PluginManager.registerServerEvent();
         CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
     }

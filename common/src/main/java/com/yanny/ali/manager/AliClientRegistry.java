@@ -36,7 +36,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         lootNodeMap.put(resourceLocation, node);
     }
 
-    public void clearLootData() {
+    public synchronized void clearLootData() {
+        dataReceived = false;
         lootNodeMap.clear();
         lootItemMap.clear();
 
