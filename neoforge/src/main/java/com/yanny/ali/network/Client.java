@@ -13,4 +13,9 @@ public class Client extends AbstractClient {
         super.onClear(msg);
         contextSupplier.setPacketHandled(true);
     }
+
+    public void onDone(DoneMessage msg, NetworkEvent.Context contextSupplier) {
+        super.onDone(msg);
+        contextSupplier.setPacketHandled(true);
+    }
 }

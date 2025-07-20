@@ -31,6 +31,11 @@ public class NetworkUtils {
                 .decoder(ClearMessage::new)
                 .consumerNetworkThread(client::onClear)
                 .add();
+        channel.messageBuilder(DoneMessage.class, getMessageId())
+                .encoder(DoneMessage::encode)
+                .decoder(DoneMessage::new)
+                .consumerNetworkThread(client::onDone)
+                .add();
         return new DistHolder<>(client, server);
     }
 
@@ -46,6 +51,11 @@ public class NetworkUtils {
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)
                 .decoder(ClearMessage::new)
+                .consumerNetworkThread((msg, context) -> {})
+                .add();
+        channel.messageBuilder(DoneMessage.class, getMessageId())
+                .encoder(DoneMessage::encode)
+                .decoder(DoneMessage::new)
                 .consumerNetworkThread((msg, context) -> {})
                 .add();
         return new DistHolder<>(null, server);

@@ -23,6 +23,6 @@ public class Server extends AbstractServer {
 
     @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
-        channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), message);
+        channel.send(message, PacketDistributor.PLAYER.with(serverPlayer));
     }
 }

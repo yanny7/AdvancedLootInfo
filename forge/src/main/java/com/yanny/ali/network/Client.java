@@ -13,8 +13,8 @@ public class Client extends AbstractClient {
         contextSupplier.setPacketHandled(true);
     }
 
-    protected void onDone(DoneMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
+    protected void onDone(DoneMessage msg, CustomPayloadEvent.Context contextSupplier) {
         super.onDone(msg);
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 }
