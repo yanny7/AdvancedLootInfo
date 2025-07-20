@@ -9,8 +9,6 @@ import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.rei.*;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
@@ -32,7 +30,10 @@ import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -82,21 +83,23 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData) -> registerLootData(registry, lootData));
+    }
+
+    private void registerLootData(DisplayRegistry registry, Map<ResourceKey<LootTable>, IDataNode> lootData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
-        if (client != null && level != null) {
-            Map<ResourceKey<LootTable>, IDataNode> map = clientRegistry.getLootData();
+        LOGGER.info("Adding loot information to REI");
+
+        if (level != null) {
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
-            map.entrySet().stream().sorted(Comparator.comparing(s -> s.getKey().location().getPath())).forEach((f) -> LOGGER.warn(f.getKey().location().getPath()));
-
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceKey<LootTable> location = block.getLootTable();
-                IDataNode node = map.get(location);
+                IDataNode node = lootData.get(location);
 
                 if (node != null) {
                     for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
@@ -106,7 +109,7 @@ public class ReiCompatibility implements REIClientPlugin {
                         }
                     }
 
-                    map.remove(location);
+                    lootData.remove(location);
                 }
             }
 
@@ -116,7 +119,7 @@ public class ReiCompatibility implements REIClientPlugin {
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
                         ResourceKey<LootTable> location = mob.getLootTable();
-                        IDataNode node = map.get(location);
+                        IDataNode node = lootData.get(location);
 
                         if (node != null) {
                             for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
@@ -126,13 +129,13 @@ public class ReiCompatibility implements REIClientPlugin {
                                 }
                             }
 
-                            map.remove(location);
+                            lootData.remove(location);
                         }
                     }
                 }
             }
 
-            for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : new HashMap<>(map).entrySet()) {
+            for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : new HashMap<>(lootData).entrySet()) {
                 ResourceKey<LootTable> location = entry.getKey();
 
                 for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
@@ -142,7 +145,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     }
                 }
 
-                map.remove(location);
+                lootData.remove(location);
             }
 
             for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
@@ -159,6 +162,11 @@ public class ReiCompatibility implements REIClientPlugin {
                 registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }
+        }
+
+        if (!me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().isReloading()) {
+            LOGGER.info("Loot information was added too late, requesting reload REI");
+            me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().startReload();
         }
     }
 

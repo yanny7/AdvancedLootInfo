@@ -13,4 +13,9 @@ public class Server extends AbstractServer {
     protected void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message) {
         PacketDistributor.sendToPlayer(serverPlayer, message);
     }
+
+    @Override
+    protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
+        PacketDistributor.sendToPlayer(serverPlayer, message);
+    }
 }

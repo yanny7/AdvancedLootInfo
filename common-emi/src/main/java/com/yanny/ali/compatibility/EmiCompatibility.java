@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility;
 
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
@@ -7,8 +8,6 @@ import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import dev.emi.emi.api.EmiEntrypoint;
@@ -16,6 +15,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.runtime.EmiReloadManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,6 +27,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.List;
 import java.util.Map;
@@ -34,18 +35,20 @@ import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
+    private static final Logger LOGGER = LogUtils.getLogger();
+    
     @Override
     public void register(EmiRegistry emiRegistry) {
-        registerLootTable(emiRegistry);
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData) -> registerLootData(emiRegistry, lootData));
     }
 
-    private void registerLootTable(EmiRegistry registry) {
+    private void registerLootData(EmiRegistry registry, Map<ResourceKey<LootTable>, IDataNode> lootData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
-        if (client != null && level != null) {
-            Map<ResourceKey<LootTable>, IDataNode> map = clientRegistry.getLootData();
+        LOGGER.info("Adding loot information to EMI");
+
+        if (level != null) {
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategoryMap = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
@@ -75,7 +78,7 @@ public class EmiCompatibility implements EmiPlugin {
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceKey<LootTable> location = block.getLootTable();
-                IDataNode lootEntry = map.get(location);
+                IDataNode lootEntry = lootData.get(location);
 
                 if (lootEntry != null) {
                     EmiRecipeCategory category = null;
@@ -95,7 +98,7 @@ public class EmiCompatibility implements EmiPlugin {
                     }
 
                     registry.addRecipe(new EmiBlockLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), block, lootEntry, clientRegistry.getItems(location)));
-                    map.remove(location);
+                    lootData.remove(location);
                 }
             }
 
@@ -105,7 +108,7 @@ public class EmiCompatibility implements EmiPlugin {
                 entityList.forEach((entity) -> {
                     if (entity instanceof Mob mob) {
                         ResourceKey<LootTable> location = mob.getLootTable();
-                        IDataNode lootEntry = map.get(location);
+                        IDataNode lootEntry = lootData.get(location);
 
                         if (lootEntry != null) {
                             EmiRecipeCategory category = null;
@@ -121,13 +124,13 @@ public class EmiCompatibility implements EmiPlugin {
                             }
 
                             registry.addRecipe(new EmiEntityLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entity, lootEntry, clientRegistry.getItems(location)));
-                            map.remove(location);
+                            lootData.remove(location);
                         }
                     }
                 });
             }
 
-            for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : map.entrySet()) {
+            for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : lootData.entrySet()) {
                 ResourceKey<LootTable> location = entry.getKey();
                 EmiRecipeCategory category = null;
 
@@ -143,6 +146,11 @@ public class EmiCompatibility implements EmiPlugin {
 
                 registry.addRecipe(new EmiGameplayLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entry.getValue(), clientRegistry.getItems(location)));
             }
+        }
+
+        if (EmiReloadManager.isLoaded()) {
+            LOGGER.info("Loot information was added too late, requesting reload EMI");
+            EmiReloadManager.reload();
         }
     }
 

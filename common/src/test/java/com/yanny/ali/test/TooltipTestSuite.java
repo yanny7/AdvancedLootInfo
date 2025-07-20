@@ -2,6 +2,7 @@ package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -50,6 +51,7 @@ import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -73,9 +75,10 @@ import java.util.concurrent.ExecutionException;
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
+    public static HolderLookup.Provider LOOKUP;
 
     private static Set<String> UNUSED;
-    public static HolderLookup.Provider LOOKUP;
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @BeforeSuite
     static void beforeAllTests() {
@@ -184,13 +187,13 @@ public class TooltipTestSuite {
             }
         };
 
-        System.out.printf("----- Translation keys (%d) -----\n", UNUSED.size());
+        LOGGER.info("----- Translation keys ({}) -----", UNUSED.size());
     }
 
     @AfterSuite
     static void afterAllTests() {
-        System.out.printf("----- Unused translation keys (%d) -----\n", UNUSED.size());
-        UNUSED.stream().sorted().forEach(System.out::println);
+        LOGGER.info("----- Unused translation keys ({}) -----", UNUSED.size());
+        UNUSED.stream().sorted().forEach(LOGGER::info);
     }
 
     @NotNull

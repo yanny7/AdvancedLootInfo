@@ -10,4 +10,8 @@ public class Client extends AbstractClient {
     public void onClear(ClearMessage message, ClientPlayNetworking.Context context) {
         super.onClear(message);
     }
+
+    public void onDone(DoneMessage message, ClientPlayNetworking.Context context) {
+        super.onDone(message);
+    }
 }

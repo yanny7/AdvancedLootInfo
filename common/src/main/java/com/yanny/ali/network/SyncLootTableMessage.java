@@ -8,14 +8,13 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
@@ -23,22 +22,22 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public record SyncLootTableMessage(ResourceKey<LootTable> location, List<Item> items, IDataNode node) implements CustomPacketPayload {
+public record SyncLootTableMessage(ResourceKey<LootTable> location, List<ItemStack> items, IDataNode node) implements CustomPacketPayload {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final Type<SyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLootTableMessage> CODEC = StreamCodec.composite(
             ResourceKey.streamCodec(Registries.LOOT_TABLE), (l) -> l.location,
             StreamCodec.of(
-                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
-                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.get(a.readResourceLocation()))
+                    (b, l) -> b.writeCollection(l, (a, i) -> ItemStack.STREAM_CODEC.encode((RegistryFriendlyByteBuf)a, i)),
+                    (b) -> b.readList((a) -> ItemStack.STREAM_CODEC.decode((RegistryFriendlyByteBuf) a))
             ), (l) -> l.items,
             StreamCodec.of(
                     (b, l) -> {
                         int fallbackIndex = b.writerIndex();
                         try {
                             IServerUtils utils = PluginManager.SERVER_REGISTRY;
-                            l.encode(utils, b);;
+                            l.encode(utils, b);
                         } catch (Throwable e) {
                             LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
                             b.writerIndex(fallbackIndex);
@@ -70,7 +69,7 @@ public record SyncLootTableMessage(ResourceKey<LootTable> location, List<Item> i
         IDataNode dataNode;
 
         location = buf.readResourceLocation();
-        items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
+        items = buf.readList(FriendlyByteBuf::readItem);
 
         try {
             IClientUtils utils = PluginManager.CLIENT_REGISTRY;
@@ -86,7 +85,7 @@ public record SyncLootTableMessage(ResourceKey<LootTable> location, List<Item> i
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeResourceLocation(location);
-        buf.writeCollection(items, (b, item) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
+        buf.writeCollection(items, FriendlyByteBuf::writeItem);
 
         IServerUtils utils = PluginManager.SERVER_REGISTRY;
 
