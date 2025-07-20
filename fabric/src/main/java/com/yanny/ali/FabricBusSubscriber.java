@@ -9,7 +9,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class FabricBusSubscriber {
     public static void registerEvents() {
-        ServerLifecycleEvents.SERVER_STARTED.register(FabricBusSubscriber::onServerStarting);
+        ServerLifecycleEvents.SERVER_STARTING.register(FabricBusSubscriber::onServerStarting);
         ServerPlayConnectionEvents.JOIN.register(FabricBusSubscriber::onPlayerLogIn);
     }
 
