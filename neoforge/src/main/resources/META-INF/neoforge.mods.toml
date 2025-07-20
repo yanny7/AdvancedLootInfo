@@ -54,3 +54,9 @@ type="optional" #mandatory (Can be one of "required", "optional", "incompatible"
 versionRange="${rei_version_range}"
 ordering="AFTER"
 side="BOTH"
+
+[[dependencies.ali]]
+modId="lootjs"
+type="optional"
+ordering="AFTER"
+side="BOTH"

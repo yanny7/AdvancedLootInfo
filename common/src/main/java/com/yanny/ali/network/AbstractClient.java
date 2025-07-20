@@ -10,4 +10,8 @@ public abstract class AbstractClient {
     protected void onClear(ClearMessage msg) {
         PluginManager.CLIENT_REGISTRY.clearLootData();
     }
+
+    protected void onDone(DoneMessage msg) {
+        PluginManager.CLIENT_REGISTRY.doneLootData();
+    }
 }

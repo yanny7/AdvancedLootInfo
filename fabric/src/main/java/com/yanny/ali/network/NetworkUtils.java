@@ -22,8 +22,10 @@ public class NetworkUtils {
 
         PayloadTypeRegistry.playS2C().register(SyncLootTableMessage.TYPE, SyncLootTableMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(ClearMessage.TYPE, ClearMessage.CODEC);
+        PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
         ClientPlayNetworking.registerGlobalReceiver(SyncLootTableMessage.TYPE, client::onLootInfo);
         ClientPlayNetworking.registerGlobalReceiver(ClearMessage.TYPE, client::onClear);
+        ClientPlayNetworking.registerGlobalReceiver(DoneMessage.TYPE, client::onDone);
         return new DistHolder<>(client, server);
     }
 
@@ -33,6 +35,7 @@ public class NetworkUtils {
 
         PayloadTypeRegistry.playS2C().register(SyncLootTableMessage.TYPE, SyncLootTableMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(ClearMessage.TYPE, ClearMessage.CODEC);
+        PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
         return new DistHolder<>(null, server);
     }
 }

@@ -2,7 +2,7 @@ package com.yanny.ali.api;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.List;
@@ -12,5 +12,5 @@ public interface IClientUtils extends ICommonUtils {
 
     <T extends IDataNode> IClientRegistry.NodeFactory<T> getNodeFactory(ResourceLocation id);
 
-    List<Item> getItems(ResourceKey<LootTable> location);
+    List<ItemStack> getItems(ResourceKey<LootTable> location);
 }

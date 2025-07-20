@@ -13,4 +13,12 @@ public class Server extends AbstractServer {
     protected void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message) {
         ServerPlayNetworking.send(serverPlayer, message);
     }
+
+    @Override
+    protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+
+        message.encode(buf);
+        ServerPlayNetworking.send(serverPlayer, NetworkUtils.DONE_LOOT_INFO_ID, buf);
+    }
 }

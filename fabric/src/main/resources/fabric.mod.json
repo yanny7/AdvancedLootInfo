@@ -50,7 +50,8 @@
     "suggests": {
         "emi": "${emi_version_range_fabric}",
         "jei": "${jei_version_range_fabric}",
-        "rei": "${rei_version_range_fabric}"
+        "rei": "${rei_version_range_fabric}",
+        "lootjs": "*"
     }
 }
   
