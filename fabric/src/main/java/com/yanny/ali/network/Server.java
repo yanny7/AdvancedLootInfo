@@ -16,9 +16,6 @@ public class Server extends AbstractServer {
 
     @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
-        FriendlyByteBuf buf = PacketByteBufs.create();
-
-        message.encode(buf);
-        ServerPlayNetworking.send(serverPlayer, NetworkUtils.DONE_LOOT_INFO_ID, buf);
+        ServerPlayNetworking.send(serverPlayer, message);
     }
 }

@@ -11,7 +11,7 @@ public class Client extends AbstractClient {
         super.onClear(message);
     }
 
-    public void onDone(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
-        super.onDone(new DoneMessage(buf));
+    public void onDone(DoneMessage message, ClientPlayNetworking.Context context) {
+        super.onDone(message);
     }
 }

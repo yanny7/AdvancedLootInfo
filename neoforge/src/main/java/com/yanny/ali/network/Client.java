@@ -12,7 +12,7 @@ public class Client extends AbstractClient {
         super.onClear(msg);
     }
 
-    public void onDone(DoneMessage msg, PlayPayloadContext contextSupplier) {
+    public void onDone(DoneMessage msg, IPayloadContext contextSupplier) {
         super.onDone(msg);
     }
 }

@@ -16,6 +16,6 @@ public class Server extends AbstractServer {
 
     @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
-        PacketDistributor.PLAYER.with(serverPlayer).send(message);
+        PacketDistributor.sendToPlayer(serverPlayer, message);
     }
 }

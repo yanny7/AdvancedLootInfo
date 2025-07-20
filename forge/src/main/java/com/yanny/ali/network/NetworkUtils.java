@@ -35,8 +35,7 @@ public class NetworkUtils {
                 .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
-                .encoder(DoneMessage::encode)
-                .decoder(DoneMessage::new)
+                .codec((StreamCodec<FriendlyByteBuf, DoneMessage>)(Object) DoneMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<DoneMessage, CustomPayloadEvent.Context>) client::onDone)
                 .add();
         return new DistHolder<>(client, server);
@@ -53,7 +52,7 @@ public class NetworkUtils {
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
-                .encoder(DoneMessage::encode)
+                .codec((StreamCodec<FriendlyByteBuf, DoneMessage>)(Object) DoneMessage.CODEC)
                 .decoder(DoneMessage::new)
                 .add();
         return new DistHolder<>(null, server);

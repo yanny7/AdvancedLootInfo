@@ -8,7 +8,6 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -30,15 +29,15 @@ public record SyncLootTableMessage(ResourceKey<LootTable> location, List<ItemSta
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLootTableMessage> CODEC = StreamCodec.composite(
             ResourceKey.streamCodec(Registries.LOOT_TABLE), (l) -> l.location,
             StreamCodec.of(
-                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
-                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.get(a.readResourceLocation()))
+                    (b, l) -> b.writeCollection(l, (a, i) -> ItemStack.STREAM_CODEC.encode((RegistryFriendlyByteBuf)a, i)),
+                    (b) -> b.readList((a) -> ItemStack.STREAM_CODEC.decode((RegistryFriendlyByteBuf) a))
             ), (l) -> l.items,
             StreamCodec.of(
                     (b, l) -> {
                         int fallbackIndex = b.writerIndex();
                         try {
                             IServerUtils utils = PluginManager.SERVER_REGISTRY;
-                            l.encode(utils, b);;
+                            l.encode(utils, b);
                         } catch (Throwable e) {
                             LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
                             b.writerIndex(fallbackIndex);
