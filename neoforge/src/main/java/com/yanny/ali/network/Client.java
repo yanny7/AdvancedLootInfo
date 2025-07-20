@@ -11,4 +11,8 @@ public class Client extends AbstractClient {
     public void onClear(ClearMessage msg, PlayPayloadContext contextSupplier) {
         super.onClear(msg);
     }
+
+    public void onDone(DoneMessage msg, PlayPayloadContext contextSupplier) {
+        super.onDone(msg);
+    }
 }

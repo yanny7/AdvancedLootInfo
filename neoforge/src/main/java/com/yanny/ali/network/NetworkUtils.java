@@ -33,6 +33,12 @@ public class NetworkUtils {
                 (handler) ->
                         handler.client(client::onClear).server((msg, ctx) -> {})
         );
+        registrar.play(
+                DoneMessage.ID,
+                DoneMessage::new,
+                (handler) ->
+                        handler.client(client::onDone).server((msg, ctx) -> {})
+        );
         return new DistHolder<>(client, server);
     }
 
@@ -48,6 +54,11 @@ public class NetworkUtils {
         registrar.play(
                 ClearMessage.ID,
                 ClearMessage::new,
+                (handler) -> {}
+        );
+        registrar.play(
+                DoneMessage.ID,
+                DoneMessage::new,
                 (handler) -> {}
         );
         return new DistHolder<>(null, server);

@@ -6,7 +6,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.slf4j.Logger;
 
@@ -18,26 +18,45 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
-    private final Map<ResourceLocation, List<Item>> lootItemMap = new HashMap<>();
+    private final Map<ResourceLocation, List<ItemStack>> lootItemMap = new HashMap<>();
     private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
     private final ICommonUtils utils;
+
+    private IOnDoneListener listener = null;
+    private volatile boolean dataReceived = false;
 
     public AliClientRegistry(ICommonUtils utils) {
         this.utils = utils;
     }
 
-    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<Item> items) {
+    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<ItemStack> items) {
         lootItemMap.put(resourceLocation, items);
         lootNodeMap.put(resourceLocation, node);
-    }
-
-    public Map<ResourceLocation, IDataNode> getLootData() {
-        return lootNodeMap;
     }
 
     public void clearLootData() {
         lootNodeMap.clear();
         lootItemMap.clear();
+
+        LOGGER.info("Started receiving loot data");
+    }
+
+    public synchronized void doneLootData() {
+        dataReceived = true;
+        LOGGER.info("Finished receiving loot data");
+
+        if (listener != null) {
+            listener.onDone(lootNodeMap);
+            listener = null;
+        }
+    }
+
+    public synchronized void setOnDoneListener(IOnDoneListener listener) {
+        if (dataReceived) {
+            listener.onDone(lootNodeMap);
+        } else {
+            this.listener = listener;
+        }
     }
 
     @Override
@@ -120,7 +139,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public List<Item> getItems(ResourceLocation location) {
+    public List<ItemStack> getItems(ResourceLocation location) {
         return lootItemMap.getOrDefault(location, List.of());
     }
 

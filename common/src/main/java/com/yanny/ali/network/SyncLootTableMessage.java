@@ -8,11 +8,10 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,11 +29,11 @@ public class SyncLootTableMessage implements CustomPacketPayload {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public final ResourceLocation location;
-    public final List<Item> items;
+    public final List<ItemStack> items;
 
     public final IDataNode node;
 
-    public SyncLootTableMessage(ResourceLocation location, List<Item> items, IDataNode node) {
+    public SyncLootTableMessage(ResourceLocation location, List<ItemStack> items, IDataNode node) {
         this.location = location;
         this.items = items;
         this.node = node;
@@ -44,7 +43,7 @@ public class SyncLootTableMessage implements CustomPacketPayload {
         IDataNode dataNode;
 
         location = buf.readResourceLocation();
-        items = buf.readList((b) -> BuiltInRegistries.ITEM.get(b.readResourceLocation()));
+        items = buf.readList(FriendlyByteBuf::readItem);
 
         try {
             IClientUtils utils = PluginManager.CLIENT_REGISTRY;
@@ -60,7 +59,7 @@ public class SyncLootTableMessage implements CustomPacketPayload {
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeResourceLocation(location);
-        buf.writeCollection(items, (b, item) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(item)));
+        buf.writeCollection(items, FriendlyByteBuf::writeItem);
 
         IServerUtils utils = PluginManager.SERVER_REGISTRY;
 

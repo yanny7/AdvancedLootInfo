@@ -3,6 +3,9 @@
 - Fixed duplicating slots
 - Added missing LootJS AnyStructure condition tooltip
 - Extended LootJS ItemStack tooltip
+- Fixed sporadic missing loot info
+- Fixed sporadic crash on startup
+- Fixed show recipe outputs doesn't follow modifier changes
 
 ## [1.2.0]
 
