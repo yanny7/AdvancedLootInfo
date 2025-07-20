@@ -9,8 +9,6 @@ import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.rei.*;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
@@ -88,12 +86,11 @@ public class ReiCompatibility implements REIClientPlugin {
 
     private void registerLootData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to REI");
 
-        if (client != null && level != null) {
+        if (level != null) {
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
             Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
@@ -163,6 +160,11 @@ public class ReiCompatibility implements REIClientPlugin {
                 registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }
+        }
+
+        if (!me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().isReloading()) {
+            LOGGER.info("Loot information was added too late, requesting reload REI");
+            me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().startReload();
         }
     }
 

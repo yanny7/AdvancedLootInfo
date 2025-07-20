@@ -8,8 +8,6 @@ import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import dev.emi.emi.api.EmiEntrypoint;
@@ -44,12 +42,11 @@ public class EmiCompatibility implements EmiPlugin {
 
     private void registerLootData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AbstractClient client = Services.PLATFORM.getInfoPropagator().client();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to EMI");
 
-        if (client != null && level != null) {
+        if (level != null) {
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategoryMap = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))

@@ -6,7 +6,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.slf4j.Logger;
 
@@ -18,7 +18,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
-    private final Map<ResourceLocation, List<Item>> lootItemMap = new HashMap<>();
+    private final Map<ResourceLocation, List<ItemStack>> lootItemMap = new HashMap<>();
     private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
     private final ICommonUtils utils;
 
@@ -29,7 +29,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         this.utils = utils;
     }
 
-    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<Item> items) {
+    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<ItemStack> items) {
         lootItemMap.put(resourceLocation, items);
         lootNodeMap.put(resourceLocation, node);
     }
@@ -139,7 +139,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public List<Item> getItems(ResourceLocation location) {
+    public List<ItemStack> getItems(ResourceLocation location) {
         return lootItemMap.getOrDefault(location, List.of());
     }
 

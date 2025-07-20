@@ -5,7 +5,7 @@ import com.yanny.ali.manager.PluginManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public List<Item> getItems(ResourceLocation location) {
+    public List<ItemStack> getItems(ResourceLocation location) {
         return PluginManager.CLIENT_REGISTRY.getItems(location);
     }
 }
