@@ -27,7 +27,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private final Widget widget;
     private final List<Holder> slotWidgets = new LinkedList<>();
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<Item> items) {
+    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> items) {
         super(category, id, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
         RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
         widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));

@@ -2,19 +2,24 @@ package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootDataType;
@@ -37,6 +42,7 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
         Map<ResourceLocation, List<Item>> lootTableItems;
+        Map<ResourceLocation, List<ItemStack>> lootTableItemStacks;
         List<ILootModifier<?>> lootModifiers = serverRegistry.getLootModifiers();
         Map<ILootModifier.IType<?>, List<ILootModifier<?>>> groupedTypes = lootModifiers.stream().collect(Collectors.groupingBy(ILootModifier::getType));
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.BLOCK, Collections.emptyList());
@@ -53,8 +59,10 @@ public abstract class AbstractServer {
         lootNodes.putAll(processEntities(serverRegistry, level, unprocessedLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
         lootNodes.putAll(processLootTables(serverRegistry, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
 
-        lootTables = removeEmptyLootTable(lootTables, lootTableItems);
-        lootTables.forEach((location, lootTable) -> messages.add(new SyncLootTableMessage(location, lootTableItems.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+        lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
+        lootTables = removeEmptyLootTable(lootTables, lootTableItemStacks);
+
+        sendLootData(lootTables, lootTableItemStacks, lootNodes);
 
         LOGGER.info("Prepared {} loot tables", messages.size());
     }
@@ -87,7 +95,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, LootTable> removeEmptyLootTable(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<Item>> items) {
+    private static Map<ResourceLocation, LootTable> removeEmptyLootTable(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<ItemStack>> items) {
         Map<ResourceLocation, LootTable> result = new HashMap<>();
 
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
@@ -190,5 +198,30 @@ public abstract class AbstractServer {
 
     private static boolean predicateItem(ILootModifier<?> modifier, List<Item> items) { //FIXME ItemStack!
         return items.stream().anyMatch((i) -> modifier.getOperations().stream().anyMatch(o -> o.predicate().test(i.getDefaultInstance())));
+    }
+
+    @NotNull
+    private static List<ItemStack> collectItems(IDataNode node) {
+        List<ItemStack> itemStacks = new ArrayList<>();
+
+        if (node instanceof ListNode listNode) {
+            for (IDataNode n : listNode.nodes()) {
+                itemStacks.addAll(collectItems(n));
+            }
+        } else if (node instanceof IItemNode itemNode) {
+            itemStacks.addAll(itemNode.getModifiedItem().map(List::of, AbstractServer::toItemStacks));
+        }
+
+        return itemStacks;
+    }
+
+    private void sendLootData(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
+        lootTables.forEach((location, lootTable) -> messages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+    }
+
+    private static List<ItemStack> toItemStacks(TagKey<Item> tag) {
+        return BuiltInRegistries.ITEM.getTag(tag)
+                .map(holders -> holders.stream().map(Holder::value).map(Item::getDefaultInstance).toList())
+                .orElse(Collections.emptyList());
     }
 }
