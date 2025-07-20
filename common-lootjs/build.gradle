@@ -17,7 +17,7 @@ dependencies {
 
     compileOnly "curse.maven:kubejs-238086:5810100"
     compileOnly "curse.maven:rhino-416294:6184623"
-    compileOnly "curse.maven:lootjs-570630:6329532"
+    compileOnly "curse.maven:lootjs-570630:6791140"
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code

@@ -5,7 +5,6 @@ import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinLootModificationsAPI;
-import com.yanny.ali.mixin.MixinLootModifier;
 import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
@@ -36,7 +35,7 @@ public class LootJsPlugin implements IPlugin {
         List<LootModifier> actions = MixinLootModificationsAPI.getModifiers();
 
         for (LootModifier action : actions) {
-            Predicate<LootContext> predicate = ((MixinLootModifier) action).getShouldRun();
+            Predicate<LootContext> predicate = action.runPredicate();
 
             try {
                 switch (predicate) {
@@ -52,7 +51,7 @@ public class LootJsPlugin implements IPlugin {
                             LOGGER.error("Skipping unexpected modification type {}", actions.getClass().getCanonicalName());
                 }
             } catch (Throwable e) {
-                LOGGER.error("Failed to process loot modification {}: {}", action.getName(), e.getMessage());
+                LOGGER.error("Failed to process loot modification {}: {}", action.name(), e.getMessage());
             }
         }
 

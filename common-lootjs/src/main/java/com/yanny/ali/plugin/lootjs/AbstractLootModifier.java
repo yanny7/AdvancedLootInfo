@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.lootjs;
 
+import com.almostreliable.lootjs.core.entry.ItemLootEntry;
 import com.almostreliable.lootjs.loot.modifier.LootAction;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.almostreliable.lootjs.loot.modifier.handler.AddLootAction;
@@ -9,7 +10,6 @@ import com.almostreliable.lootjs.loot.modifier.handler.ReplaceLootAction;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
@@ -18,7 +18,6 @@ import com.yanny.ali.plugin.lootjs.node.ModifiedNode;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -35,32 +34,26 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
     private final List<IOperation> operations = new ArrayList<>();
 
     public AbstractLootModifier(IServerUtils utils, LootModifier modifier) {
-        IGroupedLootActionAccessor mixin = (IGroupedLootActionAccessor) modifier;
-
-        List<LootItemCondition> conditions = mixin.ali_$getInjectedConditions();
-        List<LootItemFunction> functions = mixin.getFunctions();
-        List<LootAction> actions = mixin.getActions();
+        List<LootItemCondition> conditions = modifier.conditions();
+        List<LootItemFunction> functions = modifier.functions();
+        List<LootAction> actions = modifier.actions();
 
         for (LootAction action : actions) {
             switch (action) {
                 case AddLootAction addLootAction -> {
-                    MixinAddLootAction mixinAddLootAction = (MixinAddLootAction) addLootAction;
-
-                    for (LootPoolEntryContainer entry : mixinAddLootAction.getEntries()) {
+                    for (LootPoolEntryContainer entry : addLootAction.entries()) {
                         operations.add(new IOperation.AddOperation((s) -> true, utils.getEntryFactory(utils, entry).create(utils, entry, 1, 1, functions, conditions)));
                     }
                 }
                 case RemoveLootAction removeLootAction ->
-                        operations.add(new IOperation.RemoveOperation(((MixinRemoveLootAction) removeLootAction).getFilter()::test));
+                        operations.add(new IOperation.RemoveOperation(removeLootAction.filter()::test));
                 case ReplaceLootAction replaceLootAction -> {
-                    MixinReplaceLootAction lootAction = (MixinReplaceLootAction) replaceLootAction;
                     Function<IDataNode, List<IDataNode>> factory = (c) -> {
 
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
-                        //noinspection unchecked
-                        MixinAbstractSimpleLootEntry<LootItem> entry = (MixinAbstractSimpleLootEntry<LootItem>) lootAction.getItemLootEntry();
-                        boolean preserveCount = lootAction.getPreserveCount(); //FIXME custom itemNode with preserveCount
+                        ItemLootEntry entry = replaceLootAction.itemLootEntry();
+                        boolean preserveCount = replaceLootAction.preserveCount(); //FIXME custom itemNode with preserveCount
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
                         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
 
@@ -72,10 +65,9 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
 
                         return nodes;
                     };
-                    operations.add(new IOperation.ReplaceOperation(lootAction.getFilter()::test, factory));
+                    operations.add(new IOperation.ReplaceOperation(replaceLootAction.filter()::test, factory));
                 }
                 case ModifyLootAction modifyLootAction -> {
-                    MixinModifyLootAction lootAction = (MixinModifyLootAction) modifyLootAction;
                     Function<IDataNode, List<IDataNode>> factory = (c) -> {
                         List<IDataNode> nodes = new ArrayList<>();
                         IItemNode node = (IItemNode) c;
@@ -95,7 +87,7 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         return nodes;
                     };
 
-                    operations.add(new IOperation.ReplaceOperation(lootAction.getPredicate()::test, factory));
+                    operations.add(new IOperation.ReplaceOperation(modifyLootAction.predicate()::test, factory));
                 }
                 default -> LOGGER.warn("Skipping unexpected loot action {}", action.getClass().getCanonicalName());
             }

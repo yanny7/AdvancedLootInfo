@@ -49,12 +49,12 @@ dependencies {
     // EMI
     compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
     compileOnly "dev.emi:emi-neoforge:${emi_version}"
-    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
+//    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
 
     // JEI
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-//    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     // REI
     compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
@@ -67,7 +67,7 @@ dependencies {
     implementation "curse.maven:kubejs-238086:5810100"
     implementation "curse.maven:rhino-416294:6184623"
 //    modImplementation "curse.maven:architectury-api-419699:5137936"
-    implementation "curse.maven:lootjs-570630:6329532"
+    implementation "curse.maven:lootjs-570630:6791140"
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code

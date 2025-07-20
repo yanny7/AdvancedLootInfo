@@ -5,20 +5,7 @@
   "refmap": "ali.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinAbstractSimpleLootEntry",
-    "MixinAddLootAction",
-    "MixinGroupedLootAction",
-    "MixinIsLightLevel",
-    "MixinLootModificationsAPI",
-    "MixinLootModifier",
-    "MixinMatchBiome",
-    "MixinMatchDimension",
-    "MixinMatchEquipmentSlot",
-    "MixinMatchKillerDistance",
-    "MixinMatchStructure",
-    "MixinModifyLootAction",
-    "MixinRemoveLootAction",
-    "MixinReplaceLootAction"
+    "MixinLootModificationsAPI"
   ],
   "injectors": {
     "defaultRequire": 1
