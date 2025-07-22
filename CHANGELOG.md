@@ -7,6 +7,7 @@
 - Fixed sporadic crash on startup
 - Fixed show recipe outputs doesn't follow modifier changes
 - Changed modifiers and predicate names to match official names
+- Hiding 100% chance
 
 ## [1.2.0]
 
