@@ -65,7 +65,7 @@ public class EntryTooltipTest {
                 "Chance: 50%",
                 "Count: 1",
                 "----- Predicates -----",
-                "Must survive explosion",
+                "Survives Explosion",
                 "----- Modifiers -----",
                 "Explosion Decay"
         ));
@@ -115,7 +115,7 @@ public class EntryTooltipTest {
                 "  -> 1-5 (Fortune I)",
                 "  -> 1-10 (Fortune II)",
                 "----- Predicates -----",
-                "Must survive explosion",
+                "Survives Explosion",
                 "----- Modifiers -----",
                 "Explosion Decay"
         ));
@@ -135,7 +135,7 @@ public class EntryTooltipTest {
                 "  -> 1-5 (Fortune I)",
                 "  -> 1-10 (Fortune II)",
                 "----- Predicates -----",
-                "Must survive explosion",
+                "Survives Explosion",
                 "----- Modifiers -----",
                 "Explosion Decay"
         ));
