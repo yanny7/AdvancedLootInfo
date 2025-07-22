@@ -84,7 +84,6 @@ public class LootJsPlugin implements IPlugin {
         registry.registerConditionTooltip(LootItemConditionWrapper.class, LootJsConditionTooltipUtils::lootItemConditionWrapperTooltip);
         registry.registerConditionTooltip(MainHandTableBonus.class, LootJsConditionTooltipUtils::mainHandTableBonusTooltip);
         registry.registerConditionTooltip(MatchEquipmentSlot.class, LootJsConditionTooltipUtils::getMatchEquipmentSlotTooltip);
-        registry.registerConditionTooltip(MatchFluid.class, LootJsConditionTooltipUtils::matchFluidTooltip);
         registry.registerConditionTooltip(MatchKillerDistance.class, LootJsConditionTooltipUtils::matchKillerDistanceTooltip);
         registry.registerConditionTooltip(MatchPlayer.class, LootJsConditionTooltipUtils::matchPlayerTooltip);
         registry.registerConditionTooltip(NotCondition.class, LootJsConditionTooltipUtils::notConditionTooltip);
