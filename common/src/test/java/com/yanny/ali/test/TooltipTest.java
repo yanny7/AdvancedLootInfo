@@ -28,7 +28,7 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class TooltipTest {
     @Test
     public void testChanceTooltip() {
-        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(), 1)), List.of("Chance: 100%"));
+        assertTooltip(getChanceTooltip(getChance(UTILS, List.of(), 1)), List.of());
 
         assertTooltip(getChanceTooltip(getChance(UTILS, List.of(LootItemRandomChanceCondition.randomChance(0.25f).build()), 1)), List.of("Chance: 25%"));
         assertTooltip(getChanceTooltip(getChance(UTILS, List.of(LootItemRandomChanceCondition.randomChance(0.25f).build()), 0.5f)), List.of("Chance: 12.50%"));
