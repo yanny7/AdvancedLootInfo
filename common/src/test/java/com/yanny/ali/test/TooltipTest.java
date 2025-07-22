@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanny.ali.plugin.client.EntryTooltipUtils.getChanceTooltip;
-import static com.yanny.ali.plugin.client.EntryTooltipUtils.getCountTooltip;
-import static com.yanny.ali.plugin.client.TooltipUtils.getChance;
-import static com.yanny.ali.plugin.client.TooltipUtils.getCount;
+import static com.yanny.ali.plugin.server.EntryTooltipUtils.getChanceTooltip;
+import static com.yanny.ali.plugin.server.EntryTooltipUtils.getCountTooltip;
+import static com.yanny.ali.plugin.server.TooltipUtils.getChance;
+import static com.yanny.ali.plugin.server.TooltipUtils.getCount;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;

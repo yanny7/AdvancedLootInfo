@@ -1,7 +1,7 @@
 package com.yanny.ali.compatibility.jei;
 
+import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.compatibility.common.BlockLootType;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -50,7 +50,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 widgets.add(new JeiBlockSlotWidget(slotDrawable, recipe.block(), CATEGORY_WIDTH / 2 - 9, 5));
                 slotDrawables.add(slotDrawable);
             } else {
-                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
+                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, new RangeValue(1)));
                 slotDrawables.add(slotDrawable);
             }
         }));

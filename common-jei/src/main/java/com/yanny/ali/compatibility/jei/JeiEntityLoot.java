@@ -1,9 +1,9 @@
 package com.yanny.ali.compatibility.jei;
 
+import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GenericUtils;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -47,7 +47,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>();
 
         builder.getRecipeSlots().findSlotByName("spawn_egg").ifPresent((slotDrawable -> {
-            widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
+            widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, new RangeValue(1)));
             slotDrawables.add(slotDrawable);
         }));
         widgets.add(createTextWidget(recipe.entity().getDisplayName(), CATEGORY_WIDTH / 2, 0, true));

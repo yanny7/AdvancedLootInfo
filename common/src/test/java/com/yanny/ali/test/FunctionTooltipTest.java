@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.client.FunctionTooltipUtils;
+import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Holder;
@@ -51,7 +51,7 @@ import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 public class FunctionTooltipTest {
     @Test
     public void testApplyBonusCountTooltip() {
-        assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(UTILS, 0, (ApplyBonusCount) ApplyBonusCount.addOreBonusCount(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow()).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getApplyBonusTooltip(UTILS, (ApplyBonusCount) ApplyBonusCount.addOreBonusCount(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow()).build()), List.of(
                 "Apply Bonus:",
                 "  -> Enchantment: minecraft:looting",
                 "  -> Formula: minecraft:ore_drops"
@@ -60,7 +60,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyNameTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, 0, (CopyNameFunction) CopyNameFunction.copyName(CopyNameFunction.NameSource.THIS).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, (CopyNameFunction) CopyNameFunction.copyName(CopyNameFunction.NameSource.THIS).build()), List.of(
                 "Copy Name:",
                 "  -> Source: THIS"
         ));
@@ -68,11 +68,11 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyCustomDataTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.ATTACKER).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.ATTACKER).build()), List.of(
                 "Copy Custom Data:",
                 "  -> Source: minecraft:context"
         ));
-        assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, 0, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.ATTACKER)
+        assertTooltip(FunctionTooltipUtils.getCopyCustomDataTooltip(UTILS, (CopyCustomDataFunction) CopyCustomDataFunction.copyData(LootContext.EntityTarget.ATTACKER)
                 .copy("asdf", "jklo", CopyCustomDataFunction.MergeStrategy.MERGE)
                 .copy("qwer", "uiop", CopyCustomDataFunction.MergeStrategy.APPEND)
                 .build()
@@ -93,7 +93,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyStateTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, 0, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
+        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
                 .copy(BlockStateProperties.LIT)
                 .copy(BlockStateProperties.HORIZONTAL_FACING)
                 .build()
@@ -108,13 +108,13 @@ public class FunctionTooltipTest {
 
     @Test
     public void testEnchantRandomlyTooltip() {
-        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomApplicableEnchantment(LOOKUP).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomApplicableEnchantment(LOOKUP).build()), List.of(
                 "Enchant Randomly:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:on_random_loot",
                 "  -> Only Compatible: true"
         ));
-        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, 0, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomEnchantment()
+        assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomEnchantment()
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow())
                 .build()
         ), List.of(
@@ -127,7 +127,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testEnchantWithLevelsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getEnchantWithLevelsTooltip(UTILS, 0, (EnchantWithLevelsFunction) EnchantWithLevelsFunction.enchantWithLevels(LOOKUP, UniformGenerator.between(1, 3))
+        assertTooltip(FunctionTooltipUtils.getEnchantWithLevelsTooltip(UTILS, (EnchantWithLevelsFunction) EnchantWithLevelsFunction.enchantWithLevels(LOOKUP, UniformGenerator.between(1, 3))
                 .fromOptions(HolderSet.direct(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow())).build()
         ), List.of(
                 "Enchant With Levels:",
@@ -139,7 +139,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testExplorationMapTooltip() {
-        assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(UTILS, 0, (ExplorationMapFunction) ExplorationMapFunction.makeExplorationMap()
+        assertTooltip(FunctionTooltipUtils.getExplorationMapTooltip(UTILS, (ExplorationMapFunction) ExplorationMapFunction.makeExplorationMap()
                 .setDestination(StructureTags.RUINED_PORTAL)
                 .setMapDecoration(MapDecorationTypes.OCEAN_MONUMENT)
                 .setZoom((byte) 2)
@@ -158,12 +158,12 @@ public class FunctionTooltipTest {
 
     @Test
     public void testExplosionDecayTooltip() {
-        assertTooltip(FunctionTooltipUtils.getExplosionDecayTooltip(UTILS, 0, (ApplyExplosionDecay) ApplyExplosionDecay.explosionDecay().build()), List.of("Explosion Decay"));
+        assertTooltip(FunctionTooltipUtils.getExplosionDecayTooltip(UTILS, (ApplyExplosionDecay) ApplyExplosionDecay.explosionDecay().build()), List.of("Explosion Decay"));
     }
 
     @Test
     public void testFillPlayerHeadTooltip() {
-        assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, 0, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.ATTACKER).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getFillPlayerHeadTooltip(UTILS, (FillPlayerHead) FillPlayerHead.fillPlayerHead(LootContext.EntityTarget.ATTACKER).build()), List.of(
                 "Fill Player Head:",
                 "  -> Target: ATTACKER"
         ));
@@ -171,12 +171,12 @@ public class FunctionTooltipTest {
 
     @Test
     public void testFurnaceSmeltTooltip() {
-        assertTooltip(FunctionTooltipUtils.getFurnaceSmeltTooltip(UTILS, 0, (SmeltItemFunction) SmeltItemFunction.smelted().build()), List.of("Use Smelting Recipe On Item"));
+        assertTooltip(FunctionTooltipUtils.getFurnaceSmeltTooltip(UTILS, (SmeltItemFunction) SmeltItemFunction.smelted().build()), List.of("Use Smelting Recipe On Item"));
     }
 
     @Test
     public void testLimitCountTooltip() {
-        assertTooltip(FunctionTooltipUtils.getLimitCountTooltip(UTILS, 0, (LimitCount) LimitCount.limitCount(IntRange.range(0, 10)).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getLimitCountTooltip(UTILS, (LimitCount) LimitCount.limitCount(IntRange.range(0, 10)).build()), List.of(
                 "Limit Count:",
                 "  -> Limit: 0 - 10"
         ));
@@ -184,7 +184,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testLootingEnchantTooltip() {
-        assertTooltip(FunctionTooltipUtils.getEnchantedCountIncreaseTooltip(UTILS, 0, (EnchantedCountIncreaseFunction) EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 4))
+        assertTooltip(FunctionTooltipUtils.getEnchantedCountIncreaseTooltip(UTILS, (EnchantedCountIncreaseFunction) EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 4))
                 .setLimit(3)
                 .build()
         ), List.of(
@@ -197,7 +197,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, 0, (FunctionReference) FunctionReference.functionReference(ResourceKey.create(
+        assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, (FunctionReference) FunctionReference.functionReference(ResourceKey.create(
                 Registries.ITEM_MODIFIER,
                 ResourceLocation.withDefaultNamespace("gameplay/fishing"))
         ).build()), List.of(
@@ -208,7 +208,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSequenceTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, 0, SequenceFunction.of(List.of(
+        assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, SequenceFunction.of(List.of(
                 ApplyExplosionDecay.explosionDecay().build(),
                 SmeltItemFunction.smelted().build()
         ))), List.of(
@@ -220,7 +220,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetAttributesTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, 0, (SetAttributesFunction) SetAttributesFunction.setAttributes()
+        assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
                 .withModifier(new SetAttributesFunction.ModifierBuilder(ResourceLocation.withDefaultNamespace("armor"), Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))
                         .forSlot(EquipmentSlotGroup.HEAD)
                         .forSlot(EquipmentSlotGroup.CHEST)
@@ -254,7 +254,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetBannerPatternTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetBannerPatternTooltip(UTILS, 0, (SetBannerPatternFunction) SetBannerPatternFunction.setBannerPattern(true)
+        assertTooltip(FunctionTooltipUtils.getSetBannerPatternTooltip(UTILS, (SetBannerPatternFunction) SetBannerPatternFunction.setBannerPattern(true)
                 .addPattern(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.BASE).orElseThrow(), DyeColor.WHITE)
                 .addPattern(TooltipTestSuite.LOOKUP.lookup(Registries.BANNER_PATTERN).orElseThrow().get(BannerPatterns.CREEPER).orElseThrow(), DyeColor.GREEN)
                 .build()), List.of(
@@ -270,7 +270,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, 0, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER)
+        assertTooltip(FunctionTooltipUtils.getSetContentsTooltip(UTILS, (SetContainerContents) SetContainerContents.setContents(ContainerComponentManipulators.CONTAINER)
                 .withEntry(LootItem.lootTableItem(Items.BOOK))
                 .withEntry(LootItem.lootTableItem(Items.ENCHANTED_BOOK))
                 .build()), List.of(
@@ -281,7 +281,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetCountTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetCountTooltip(UTILS, 0, (SetItemCountFunction) SetItemCountFunction.setCount(UniformGenerator.between(12, 24), true).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetCountTooltip(UTILS, (SetItemCountFunction) SetItemCountFunction.setCount(UniformGenerator.between(12, 24), true).build()), List.of(
                 "Set Count:",
                 "  -> Count: 12-24",
                 "  -> Add: true"
@@ -290,7 +290,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetDamageTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetDamageTooltip(UTILS, 0, (SetItemDamageFunction) SetItemDamageFunction.setDamage(UniformGenerator.between(0.12345F, 3.1412F), false).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetDamageTooltip(UTILS, (SetItemDamageFunction) SetItemDamageFunction.setDamage(UniformGenerator.between(0.12345F, 3.1412F), false).build()), List.of(
                 "Set Damage:",
                 "  -> Damage: 0.12-3.14",
                 "  -> Add: false"
@@ -299,11 +299,11 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetEnchantmentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(true).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(true).build()), List.of(
                 "Set Enchantments:",
                 "  -> Add: true"
         ));
-        assertUnorderedTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, 0, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
+        assertUnorderedTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow(), ConstantValue.exactly(1))
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.MENDING).orElseThrow(), ConstantValue.exactly(2))
                 .build()), List.of(
@@ -321,7 +321,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetInstrumentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(UTILS, 0, (SetInstrumentFunction) SetInstrumentFunction.setInstrumentOptions(InstrumentTags.SCREAMING_GOAT_HORNS).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(UTILS, (SetInstrumentFunction) SetInstrumentFunction.setInstrumentOptions(InstrumentTags.SCREAMING_GOAT_HORNS).build()), List.of(
                 "Set Instrument:",
                 "  -> Options: minecraft:screaming_goat_horns"
         ));
@@ -329,7 +329,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetLootTableTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(UTILS, 0, (SetContainerLootTable) SetContainerLootTable.withLootTable(
+        assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(UTILS, (SetContainerLootTable) SetContainerLootTable.withLootTable(
                 BlockEntityType.BELL,
                 ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.withDefaultNamespace("gameplay/mesh")),
                 42L
@@ -343,7 +343,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetLoreTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(UTILS, 0, (SetLoreFunction) SetLoreFunction.setLore()
+        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(UTILS, (SetLoreFunction) SetLoreFunction.setLore()
                 .addLine(Component.literal("Hello"))
                 .addLine(Component.literal("World"))
                 .setMode(new ListOperation.ReplaceSection(1, Optional.of(2)))
@@ -357,7 +357,7 @@ public class FunctionTooltipTest {
                 "    -> Hello",
                 "    -> World"
         ));
-        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(UTILS, 0, (SetLoreFunction) SetLoreFunction.setLore()
+        assertTooltip(FunctionTooltipUtils.getSetLoreTooltip(UTILS, (SetLoreFunction) SetLoreFunction.setLore()
                 .setMode(new ListOperation.Insert(1))
                 .addLine(Component.translatable("emi.category.ali.block_loot"))
                 .setResolutionContext(LootContext.EntityTarget.ATTACKER)
@@ -374,12 +374,12 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetNameTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, 0, (SetNameFunction) SetNameFunction.setName(Component.literal("Epic Item"), SetNameFunction.Target.ITEM_NAME).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, (SetNameFunction) SetNameFunction.setName(Component.literal("Epic Item"), SetNameFunction.Target.ITEM_NAME).build()), List.of(
                 "Set Name:",
                 "  -> Name: Epic Item",
                 "  -> Target: ITEM_NAME"
         ));
-        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, 0, (SetNameFunction) SetNameFunction.setName(
+        assertTooltip(FunctionTooltipUtils.getSetNameTooltip(UTILS, (SetNameFunction) SetNameFunction.setName(
                 Component.translatable("emi.category.ali.block_loot"),
                 SetNameFunction.Target.CUSTOM_NAME,
                 LootContext.EntityTarget.ATTACKER).build()
@@ -398,7 +398,7 @@ public class FunctionTooltipTest {
         compoundTag.putBoolean("antlers", true);
 
         //noinspection deprecation
-        assertTooltip(FunctionTooltipUtils.getSetCustomDataTooltip(UTILS, 0, (SetCustomDataFunction) SetCustomDataFunction.setCustomData(compoundTag).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetCustomDataTooltip(UTILS, (SetCustomDataFunction) SetCustomDataFunction.setCustomData(compoundTag).build()), List.of(
                 "Set Custom Data:",
                 "  -> Tag: {antlers:1b}"
         ));
@@ -406,7 +406,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetPotionTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetPotionTooltip(UTILS, 0, (SetPotionFunction) SetPotionFunction.setPotion(Potions.TURTLE_MASTER).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetPotionTooltip(UTILS, (SetPotionFunction) SetPotionFunction.setPotion(Potions.TURTLE_MASTER).build()), List.of(
                 "Set Potion:",
                 "  -> Potion: minecraft:turtle_master"
         ));
@@ -414,7 +414,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetStewEffectTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, 0, (SetStewEffectFunction) SetStewEffectFunction.stewEffect()
+        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, (SetStewEffectFunction) SetStewEffectFunction.stewEffect()
                 .withEffect(MobEffects.LUCK, UniformGenerator.between(1, 5))
                 .withEffect(MobEffects.UNLUCK, UniformGenerator.between(3, 4))
                 .build()
@@ -429,7 +429,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetItemTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, 0, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))), List.of(
                 "Set Item:",
                 "  -> Item: minecraft:music_disc_mall"
         ));
@@ -437,7 +437,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetComponentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetComponentsTooltip(UTILS, 0, (SetComponentsFunction) SetComponentsFunction
+        assertTooltip(FunctionTooltipUtils.getSetComponentsTooltip(UTILS, (SetComponentsFunction) SetComponentsFunction
                 .setComponent(DataComponents.DAMAGE, 5)
                 .build()
         ), List.of(
@@ -449,7 +449,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testModifyContentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getModifyContentsTooltip(UTILS, 0, new ModifyContainerContents(
+        assertTooltip(FunctionTooltipUtils.getModifyContentsTooltip(UTILS, new ModifyContainerContents(
                 List.of(),
                 ContainerComponentManipulators.CONTAINER,
                 ApplyExplosionDecay.explosionDecay().build()
@@ -463,7 +463,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testFilteredTooltip() {
-        assertTooltip(FunctionTooltipUtils.getFilteredTooltip(UTILS, 0, new FilteredFunction(
+        assertTooltip(FunctionTooltipUtils.getFilteredTooltip(UTILS, new FilteredFunction(
                 List.of(),
                 ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.COALS).build(),
                 ApplyExplosionDecay.explosionDecay().build()
@@ -479,7 +479,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyComponentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyComponentsTooltip(UTILS, 0, (CopyComponentsFunction) CopyComponentsFunction
+        assertTooltip(FunctionTooltipUtils.getCopyComponentsTooltip(UTILS, (CopyComponentsFunction) CopyComponentsFunction
                 .copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                 .include(DataComponents.DAMAGE)
                 .include(DataComponents.FOOD)
@@ -500,7 +500,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetFireworks() {
-        assertTooltip(FunctionTooltipUtils.getSetFireworksTooltip(UTILS, 0, new SetFireworksFunction(
+        assertTooltip(FunctionTooltipUtils.getSetFireworksTooltip(UTILS, new SetFireworksFunction(
                 List.of(),
                 Optional.of(new ListOperation.StandAlone<>(
                         List.of(
@@ -534,7 +534,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetFireworkExplosionTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetFireworkExplosionTooltip(UTILS, 0, new SetFireworkExplosionFunction(
+        assertTooltip(FunctionTooltipUtils.getSetFireworkExplosionTooltip(UTILS, new SetFireworkExplosionFunction(
                 List.of(),
                 Optional.of(FireworkExplosion.Shape.CREEPER),
                 Optional.of(IntList.of(1, 2)),
@@ -553,7 +553,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetBookCoverTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetBookCoverTooltip(UTILS, 0, new SetBookCoverFunction(
+        assertTooltip(FunctionTooltipUtils.getSetBookCoverTooltip(UTILS, new SetBookCoverFunction(
                 List.of(),
                 Optional.of(new Filterable<>("Hello", Optional.of("World"))),
                 Optional.of("Yanny"),
@@ -570,7 +570,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetWrittenBookPagesTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetWrittenBookPagesTooltip(UTILS, 0, new SetWrittenBookPagesFunction(
+        assertTooltip(FunctionTooltipUtils.getSetWrittenBookPagesTooltip(UTILS, new SetWrittenBookPagesFunction(
                 List.of(),
                 List.of(
                         new Filterable<>(Component.literal("Hello"), Optional.of(Component.literal("World"))),
@@ -593,7 +593,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetWritableBookPagesTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetWritableBookPagesTooltip(UTILS, 0, new SetWritableBookPagesFunction(
+        assertTooltip(FunctionTooltipUtils.getSetWritableBookPagesTooltip(UTILS, new SetWritableBookPagesFunction(
                 List.of(),
                 List.of(
                         new Filterable<>("Hello", Optional.of("World")),
@@ -622,7 +622,7 @@ public class FunctionTooltipTest {
         map.put(new ToggleTooltips.ComponentToggle<>(DataComponents.BASE_COLOR, (dyeColor, b) -> DyeColor.BLACK), true);
         map.put(new ToggleTooltips.ComponentToggle<>(DataComponents.DAMAGE, (damage, b) -> 5), false);
 
-        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, 0, new ToggleTooltips(List.of(), map)), List.of(
+        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, new ToggleTooltips(List.of(), map)), List.of(
                 "Toggle Tooltips:",
                 "  -> Components:",
                 "    -> minecraft:base_color",
@@ -634,7 +634,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetOminousBottleAmplifierTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetOminousBottleAmplifierTooltip(UTILS, 0, new SetOminousBottleAmplifierFunction(
+        assertTooltip(FunctionTooltipUtils.getSetOminousBottleAmplifierTooltip(UTILS, new SetOminousBottleAmplifierFunction(
                 List.of(),
                 UniformGenerator.between(0.5F, 4.99F)
         )), List.of(
@@ -645,7 +645,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetCustomModelDataTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetCustomModelDataTooltip(UTILS, 0, new SetCustomModelDataFunction(
+        assertTooltip(FunctionTooltipUtils.getSetCustomModelDataTooltip(UTILS, new SetCustomModelDataFunction(
                 List.of(),
                 ConstantValue.exactly(3.14F)
         )), List.of(

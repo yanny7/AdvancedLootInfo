@@ -2,8 +2,9 @@ package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
+import com.yanny.ali.plugin.common.NodeUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
@@ -11,27 +12,17 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
 public class EmiLootSlotWidget extends SlotWidget {
     @Nullable
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(IClientUtils utils, LootPoolEntryContainer entry, EmiIngredient ingredient, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance,
-                             Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public EmiLootSlotWidget(IClientUtils utils, IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
         super(ingredient, x, y);
-        EntryTooltipUtils.getTooltip(utils, entry, chance, count, functions, conditions).forEach(this::appendTooltip);
-        setCount(count.get(null).get(0));
+        NodeUtils.toComponents(entry.getTooltip(), 0).forEach(this::appendTooltip);
+        setCount(count);
     }
 
     @Override

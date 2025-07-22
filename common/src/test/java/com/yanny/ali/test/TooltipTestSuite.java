@@ -1,41 +1,57 @@
 package com.yanny.ali.test;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
+import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.Rect;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelStorageSource;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -59,10 +75,11 @@ import java.util.concurrent.ExecutionException;
         TooltipTest.class
 })
 public class TooltipTestSuite {
-    public static ClientUtils UTILS;
+    public static IServerUtils UTILS;
+    public static HolderLookup.Provider LOOKUP;
 
     private static Set<String> UNUSED;
-    public static HolderLookup.Provider LOOKUP;
+    private static final Logger LOGGER = LogUtils.getLogger();
 
     @BeforeSuite
     static void beforeAllTests() {
@@ -77,15 +94,91 @@ public class TooltipTestSuite {
 
         PluginManager.registerCommonEvent();
         PluginManager.registerClientEvent();
-        UTILS = new ClientUtils() {
+        PluginManager.registerServerEvent();
+        UTILS = new IServerUtils() {
             @Override
-            public Rect addSlotWidget(Item item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                return null;
+            public List<Entity> createEntities(EntityType<?> type, Level level) {
+                return PluginManager.SERVER_REGISTRY.createEntities(type, level);
             }
 
             @Override
-            public Rect addSlotWidget(TagKey<Item> item, LootPoolEntryContainer entry, int x, int y, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count, List<LootItemFunction> allFunctions, List<LootItemCondition> allConditions) {
-                return null;
+            public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
+                return PluginManager.SERVER_REGISTRY.collectItems(utils, entry);
+            }
+
+            @Override
+            public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
+                return PluginManager.SERVER_REGISTRY.collectItems(utils, items, function);
+            }
+
+            @Override
+            public <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
+                return PluginManager.SERVER_REGISTRY.getEntryFactory(utils, type);
+            }
+
+            @Override
+            public <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function) {
+                return PluginManager.SERVER_REGISTRY.getFunctionTooltip(utils, function);
+            }
+
+            @Override
+            public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
+                return PluginManager.SERVER_REGISTRY.getConditionTooltip(utils, condition);
+            }
+
+            @Override
+            public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+                return PluginManager.SERVER_REGISTRY.getIngredientTooltip(utils, ingredient);
+            }
+
+            @Override
+            public <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
+                return PluginManager.SERVER_REGISTRY.getItemSubPredicateTooltip(utils, predicate);
+            }
+
+            @Override
+            public <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+                return PluginManager.SERVER_REGISTRY.getEntitySubPredicateTooltip(utils, predicate);
+            }
+
+            @Override
+            public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+                return PluginManager.SERVER_REGISTRY.getDataComponentTypeTooltip(utils, type, value);
+            }
+
+            @Override
+            public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+                PluginManager.SERVER_REGISTRY.applyCountModifier(utils, function, count);
+            }
+
+            @Override
+            public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+                PluginManager.SERVER_REGISTRY.applyChanceModifier(utils, condition, chance);
+            }
+
+            @Override
+            public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack) {
+                return PluginManager.SERVER_REGISTRY.applyItemStackModifier(utils, function, itemStack);
+            }
+
+            @Override
+            public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
+                return PluginManager.SERVER_REGISTRY.convertNumber(utils, numberProvider);
+            }
+
+            @Override
+            public @Nullable ServerLevel getServerLevel() {
+                return PluginManager.SERVER_REGISTRY.getServerLevel();
+            }
+
+            @Override
+            public LootContext getLootContext() {
+                return PluginManager.SERVER_REGISTRY.getLootContext();
+            }
+
+            @Override
+            public LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> location) {
+                return PluginManager.SERVER_REGISTRY.getLootTable(location);
             }
 
             @Nullable
@@ -95,13 +188,13 @@ public class TooltipTestSuite {
             }
         };
 
-        System.out.printf("----- Translation keys (%d) -----\n", UNUSED.size());
+        LOGGER.info("----- Translation keys ({}) -----", UNUSED.size());
     }
 
     @AfterSuite
     static void afterAllTests() {
-        System.out.printf("----- Unused translation keys (%d) -----\n", UNUSED.size());
-        UNUSED.stream().sorted().forEach(System.out::println);
+        LOGGER.info("----- Unused translation keys ({}) -----", UNUSED.size());
+        UNUSED.stream().sorted().forEach(LOGGER::info);
     }
 
     @NotNull
