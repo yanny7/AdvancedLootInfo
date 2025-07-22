@@ -113,7 +113,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getRandomChanceWithLootingTooltip(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition cond) {
+    public static ITooltipNode getRandomChanceWithEnchantedBonusTooltip(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition cond) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_enchanted_bonus"));
 
         tooltip.add(getFloatTooltip(utils, "ali.property.value.unenchanted_chance", cond.unenchantedChance()));
