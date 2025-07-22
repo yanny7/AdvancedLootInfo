@@ -13,6 +13,7 @@
     "MixinBiomeCheck",
     "MixinCompositeLootAction",
     "MixinContainsLootCondition",
+    "MixinCustomParamPredicate",
     "MixinDropExperienceAction",
     "MixinExplodeAction",
     "MixinGroupedLootAction",
