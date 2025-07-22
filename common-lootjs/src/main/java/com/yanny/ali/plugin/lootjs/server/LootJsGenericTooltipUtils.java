@@ -51,7 +51,7 @@ public class LootJsGenericTooltipUtils {
 
             tooltip.add(getIdFilterTooltip(utils, "ali.property.branch.filter", filter));
             tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.levels", levelBounds));
-            tooltip.add(getDataComponentTypeTooltip(utils, "component", type));
+            tooltip.add(getDataComponentTypeTooltip(utils, "ali.property.value.component", type));
 
             return tooltip;
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlot(EquipmentSlot equipmentSlot)) {

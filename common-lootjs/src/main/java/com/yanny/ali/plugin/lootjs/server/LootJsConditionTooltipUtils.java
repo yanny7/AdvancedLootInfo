@@ -4,9 +4,11 @@ import com.almostreliable.lootjs.loot.condition.*;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.mixin.MixinCustomParamPredicate;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -44,12 +46,36 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode customParamPredicateTooltip(IServerUtils ignoredUtils, CustomParamPredicate<?> ignoredCondition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.custom_param_predicate"));
+    public static ITooltipNode customParamPredicateTooltip(IServerUtils ignoredUtils, CustomParamPredicate<?> condition) {
+        MixinCustomParamPredicate<?> cond = (MixinCustomParamPredicate<?>) condition;
 
-        tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
+        if (cond.getParam() == LootContextParams.THIS_ENTITY) {
+            ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_entity_custom"));
 
-        return tooltip;
+            tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
+
+            return tooltip;
+        } else if (cond.getParam() == LootContextParams.ATTACKING_ENTITY) {
+            ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_attacker_custom"));
+
+            tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
+
+            return tooltip;
+        } else if (cond.getParam() == LootContextParams.DIRECT_ATTACKING_ENTITY) {
+            ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_direct_attacker_custom"));
+
+            tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
+
+            return tooltip;
+        } else if (cond.getParam() == LootContextParams.BLOCK_ENTITY) {
+            ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.block_entity"));
+
+            tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
+
+            return tooltip;
+        } else {
+            return TooltipNode.EMPTY;
+        }
     }
 
     @NotNull
@@ -63,17 +89,63 @@ public class LootJsConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getMatchEquipmentSlotTooltip(IServerUtils utils, MatchEquipmentSlot condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_equipment_slot"));
+        switch (condition.slot()) {
+            case MAINHAND -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_mainhand"));
 
-        tooltip.add(getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
-        tooltip.add(GenericTooltipUtils.getEnumTooltip(utils, "ali.property.value.slot", condition.slot()));
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
 
-        return tooltip;
+                return tooltip;
+            }
+            case OFFHAND -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_offhand"));
+
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
+
+                return tooltip;
+            }
+            case FEET -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_feet"));
+
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
+
+                return tooltip;
+            }
+            case LEGS -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_legs"));
+
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
+
+                return tooltip;
+            }
+            case CHEST -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_chest"));
+
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
+
+                return tooltip;
+            }
+            case HEAD -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_head"));
+
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
+
+                return tooltip;
+            }
+            default -> {
+                ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_equipment_slot"));
+
+                tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", condition.itemFilter()));
+                tooltip.add(GenericTooltipUtils.getEnumTooltip(utils, "ali.property.value.slot", condition.slot()));
+
+                return tooltip;
+            }
+        }
     }
 
     @NotNull
     public static ITooltipNode matchKillerDistanceTooltip(IServerUtils utils, MatchKillerDistance condition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_killer_distance"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_distance"));
 
         tooltip.add(getDistancePredicateTooltip(utils, "ali.property.value.predicate", condition.predicate()));
 
@@ -91,7 +163,7 @@ public class LootJsConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode playerParamPredicateTooltip(IServerUtils ignoredUtils, PlayerParamPredicate ignoredCondition) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.player_param_predicate"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_player_custom"));
 
         tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
 

@@ -14,7 +14,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 public class LootJsFunctionTooltipUtils {
     @NotNull
     public static ITooltipNode customPlayerTooltip(IServerUtils utils, CustomPlayerFunction function) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.custom_player"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.player_action"));
 
         tooltip.add(new TooltipNode(translatable("ali.property.value.detail_not_available")));
 

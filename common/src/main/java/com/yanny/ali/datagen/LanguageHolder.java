@@ -24,52 +24,66 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.description.count_bonus", "%s (%s %s)");
         TRANSLATION_MAP.put("ali.description.quality", "Quality: %s");
 
-        TRANSLATION_MAP.put("ali.type.condition.all_of", "All must pass:");
-        TRANSLATION_MAP.put("ali.type.condition.and", "And:");
+        /*
+         * PREDICATES
+         */
+
+        TRANSLATION_MAP.put("ali.type.condition.all_of", "All Of:");
         TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
-        TRANSLATION_MAP.put("ali.type.condition.biome_check", "Biome Check:");
         TRANSLATION_MAP.put("ali.type.condition.block_state_property", "Block State Property:");
-        TRANSLATION_MAP.put("ali.type.condition.can_item_perform_ability", "Can Item Perform Ability: %s");
-        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
-        TRANSLATION_MAP.put("ali.type.condition.contains_loot", "Contains Loot:");
-        TRANSLATION_MAP.put("ali.type.condition.custom_param_predicate", "Custom Param Predicate:");
-        TRANSLATION_MAP.put("ali.type.condition.damage_source", "Damage Source:");
         TRANSLATION_MAP.put("ali.type.condition.damage_source_properties", "Damage Source Properties:");
         TRANSLATION_MAP.put("ali.type.condition.enchantment_active_check", "Enchantment Active Check:");
         TRANSLATION_MAP.put("ali.type.condition.entity_properties", "Entity Properties:");
         TRANSLATION_MAP.put("ali.type.condition.entity_scores", "Entity Scores:");
         TRANSLATION_MAP.put("ali.type.condition.inverted", "Inverted:");
-        TRANSLATION_MAP.put("ali.type.condition.is_light_level", "Is Light Level:");
-        TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Must be killed by player");
+        TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Killed by player");
         TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
-        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
-        TRANSLATION_MAP.put("ali.type.condition.main_hand_table_bonus", "Main Hand Table Bonus:");
-        TRANSLATION_MAP.put("ali.type.condition.match_any_inventory_slot", "Match Any Inventory Slot:");
-        TRANSLATION_MAP.put("ali.type.condition.match_biome", "Any Biome Check:");
-        TRANSLATION_MAP.put("ali.type.condition.match_dimension", "Any Dimension:");
-        TRANSLATION_MAP.put("ali.type.condition.match_equipment_slot", "Match Equipment Slot:");
-        TRANSLATION_MAP.put("ali.type.condition.match_fluid", "Match Fluid:");
-        TRANSLATION_MAP.put("ali.type.condition.match_killer_distance", "Match Killer Distance:");
-        TRANSLATION_MAP.put("ali.type.condition.match_player", "Match Player:");
         TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
-        TRANSLATION_MAP.put("ali.type.condition.not", "Not:");
-        TRANSLATION_MAP.put("ali.type.condition.or", "Or:");
-        TRANSLATION_MAP.put("ali.type.condition.player_param_predicate", "Player Param Predicate:");
         TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
         TRANSLATION_MAP.put("ali.type.condition.random_chance_with_enchanted_bonus", "Random Chance With Enchanted Bonus:");
         TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
-        TRANSLATION_MAP.put("ali.type.condition.survives_explosion", "Must survive explosion");
+        TRANSLATION_MAP.put("ali.type.condition.survives_explosion", "Survives Explosion");
         TRANSLATION_MAP.put("ali.type.condition.table_bonus", "Table Bonus:");
         TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
         TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
         TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
+
+        // Forge
+        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
+        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
+
+        //TODO match_entity -> podla lootjs zdrojaku su to 3 rozne podmienky!!!!!!
+
+        // LootJS
+        TRANSLATION_MAP.put("ali.type.condition.block_entity", "Block Entity:");
+        TRANSLATION_MAP.put("ali.type.condition.is_light_level", "Is Light Level:");
+        TRANSLATION_MAP.put("ali.type.condition.match_any_inventory_slot", "Match Any Inventory Slot:");
+        TRANSLATION_MAP.put("ali.type.condition.match_attacker_custom", "Match Attacker Custom:");
+        TRANSLATION_MAP.put("ali.type.condition.match_biome", "Match Biome:");
+        TRANSLATION_MAP.put("ali.type.condition.match_chest", "Match Chest:");
+        TRANSLATION_MAP.put("ali.type.condition.match_dimension", "Match Dimension:");
+        TRANSLATION_MAP.put("ali.type.condition.match_distance", "Match Distance:");
+        TRANSLATION_MAP.put("ali.type.condition.match_direct_attacker_custom", "Match Direct Attacker Custom:");
+        TRANSLATION_MAP.put("ali.type.condition.match_entity_custom", "Match Entity Custom:");
+        TRANSLATION_MAP.put("ali.type.condition.match_equipment_slot", "Match Equipment Slot:");
+        TRANSLATION_MAP.put("ali.type.condition.match_feet", "Match Feet:");
+        TRANSLATION_MAP.put("ali.type.condition.match_head", "Match Head:");
+        TRANSLATION_MAP.put("ali.type.condition.match_legs", "Match Legs:");
+        TRANSLATION_MAP.put("ali.type.condition.match_mainhand", "Match Mainhand:");
+        TRANSLATION_MAP.put("ali.type.condition.match_offhand", "Match Offhand:");
+        TRANSLATION_MAP.put("ali.type.condition.match_player", "Match Player:");
+        TRANSLATION_MAP.put("ali.type.condition.match_player_custom", "Match Player Custom:");
+        TRANSLATION_MAP.put("ali.type.condition.match_structure", "Match Structure:");
+
+        /*
+         * MODIFIERS
+         */
 
         TRANSLATION_MAP.put("ali.type.function.apply_bonus", "Apply Bonus:");
         TRANSLATION_MAP.put("ali.type.function.copy_components", "Copy Components:");
         TRANSLATION_MAP.put("ali.type.function.copy_custom_data", "Copy Custom Data:");
         TRANSLATION_MAP.put("ali.type.function.copy_name", "Copy Name:");
         TRANSLATION_MAP.put("ali.type.function.copy_state", "Copy State:");
-        TRANSLATION_MAP.put("ali.type.function.custom_player", "Custom Player Modifier:");
         TRANSLATION_MAP.put("ali.type.function.enchant_randomly", "Enchant Randomly:");
         TRANSLATION_MAP.put("ali.type.function.enchant_with_levels", "Enchant With Levels:");
         TRANSLATION_MAP.put("ali.type.function.enchanted_count_increase", "Enchanted Count Increase:");
@@ -78,9 +92,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.explosion_decay", "Explosion Decay");
         TRANSLATION_MAP.put("ali.type.function.fill_player_head", "Fill Player Head:");
         TRANSLATION_MAP.put("ali.type.function.filtered", "Filtered:");
-        TRANSLATION_MAP.put("ali.type.function.furnace_smelt", "Use Smelting Recipe On Item");
+        TRANSLATION_MAP.put("ali.type.function.furnace_smelt", "Furnace Smelt");
         TRANSLATION_MAP.put("ali.type.function.limit_count", "Limit Count:");
-        TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically! UNKNOWN RESULT!");
         TRANSLATION_MAP.put("ali.type.function.modify_contents", "Modify Contents:");
         TRANSLATION_MAP.put("ali.type.function.reference", "Reference:");
         TRANSLATION_MAP.put("ali.type.function.sequence", "Sequence:");
@@ -107,6 +120,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.set_writable_book_pages", "Set Writable Book Pages:");
         TRANSLATION_MAP.put("ali.type.function.set_written_book_pages", "Set Written Book Pages:");
         TRANSLATION_MAP.put("ali.type.function.toggle_tooltips", "Toggle Tooltips:");
+
+        // LootJS
+        TRANSLATION_MAP.put("ali.type.function.player_action", "Player Action:");
+        TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
 
         TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_attribute_modifiers", "Attribute Modifiers:");
         TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_bundle", "Bundle:");
@@ -292,6 +309,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.extra_rounds", "Extra Rounds: %s");
         TRANSLATION_MAP.put("ali.property.value.fade_colors", "Fade Colors: %s");
         TRANSLATION_MAP.put("ali.property.value.fall_distance", "Fall Distance: %s");
+        TRANSLATION_MAP.put("ali.property.value.filter", "Filter: %s");
         TRANSLATION_MAP.put("ali.property.value.filtered", "Filtered: %s");
         TRANSLATION_MAP.put("ali.property.value.flight_duration", "Flight Duration: %s");
         TRANSLATION_MAP.put("ali.property.value.fluid", "Fluid: %s");
