@@ -171,7 +171,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testFurnaceSmeltTooltip() {
-        assertTooltip(FunctionTooltipUtils.getFurnaceSmeltTooltip(UTILS, (SmeltItemFunction) SmeltItemFunction.smelted().build()), List.of("Use Smelting Recipe On Item"));
+        assertTooltip(FunctionTooltipUtils.getFurnaceSmeltTooltip(UTILS, (SmeltItemFunction) SmeltItemFunction.smelted().build()), List.of("Furnace Smelt"));
     }
 
     @Test
@@ -214,7 +214,7 @@ public class FunctionTooltipTest {
         ))), List.of(
                 "Sequence:",
                 "  -> Explosion Decay",
-                "  -> Use Smelting Recipe On Item"
+                "  -> Furnace Smelt"
         ));
     }
 
