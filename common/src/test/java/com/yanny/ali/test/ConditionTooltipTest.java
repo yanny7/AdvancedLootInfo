@@ -29,7 +29,7 @@ public class ConditionTooltipTest {
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()), List.of(
-                "All must pass:",
+                "All Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
                 "    -> Value: 1 - 8",
@@ -137,7 +137,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testKilledByPlayerTooltip() {
-        assertTooltip(ConditionTooltipUtils.getKilledByPlayerTooltip(UTILS, (LootItemKilledByPlayerCondition) LootItemKilledByPlayerCondition.killedByPlayer().build()), List.of("Must be killed by player"));
+        assertTooltip(ConditionTooltipUtils.getKilledByPlayerTooltip(UTILS, (LootItemKilledByPlayerCondition) LootItemKilledByPlayerCondition.killedByPlayer().build()), List.of("Killed by player"));
     }
 
     @Test
@@ -194,7 +194,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testSurvivesExplosionTooltip() {
-        assertTooltip(ConditionTooltipUtils.getSurvivesExplosionTooltip(UTILS, (ExplosionCondition) ExplosionCondition.survivesExplosion().build()), List.of("Must survive explosion"));
+        assertTooltip(ConditionTooltipUtils.getSurvivesExplosionTooltip(UTILS, (ExplosionCondition) ExplosionCondition.survivesExplosion().build()), List.of("Survives Explosion"));
     }
 
     @Test
