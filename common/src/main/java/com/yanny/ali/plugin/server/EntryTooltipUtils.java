@@ -141,7 +141,14 @@ public class EntryTooltipUtils {
 
     @NotNull
     public static ITooltipNode getChanceTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.description.chance", value(chance.get(null).get(0), "%")));
+        RangeValue defaultChance = chance.get(null).get(0);
+        ITooltipNode tooltip;
+
+        if (!defaultChance.isRange() && defaultChance.max() > 99.99999) {
+            tooltip = new TooltipNode();
+        } else {
+            tooltip = new TooltipNode(translatable("ali.description.chance", value(chance.get(null).get(0), "%")));
+        }
 
         for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceEntry : chance.entrySet()) {
             Holder<Enchantment> enchantment = chanceEntry.getKey();
