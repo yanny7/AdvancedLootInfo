@@ -7,8 +7,19 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.entity.animal.CatVariant;
+import net.minecraft.world.entity.animal.ChickenVariant;
+import net.minecraft.world.entity.animal.CowVariant;
+import net.minecraft.world.entity.animal.PigVariant;
+import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
+import net.minecraft.world.entity.decoration.PaintingVariant;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -19,8 +30,8 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.enchantment.Repairable;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
-import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import org.jetbrains.annotations.NotNull;
@@ -36,19 +47,13 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCustomDataTooltip(IServerUtils utils, CustomData value) {
-        return getStringTooltip(utils, "ali.property.value.tag", value.copyTag().getAsString());
+        return getStringTooltip(utils, "ali.property.value.tag", value.copyTag().toString());
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getIntTooltip(IServerUtils utils, int value) {
         return getIntegerTooltip(utils, "ali.property.value.value", value);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static ITooltipNode getUnbreakableTooltip(IServerUtils utils, Unbreakable value) {
-        return getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip());
     }
 
     @Unmodifiable
@@ -86,22 +91,12 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getAdventureModePredicateTooltip(IServerUtils utils, AdventureModePredicate value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.blocks", "ali.property.branch.predicate", value.predicates, GenericTooltipUtils::getBlockPredicateTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip));
-
-        return tooltip;
+        return getCollectionTooltip(utils, "ali.property.branch.blocks", "ali.property.branch.predicate", value.predicates, GenericTooltipUtils::getBlockPredicateTooltip);
     }
 
     @NotNull
     public static ITooltipNode getAttributeModifiersTooltip(IServerUtils utils, ItemAttributeModifiers value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.modifiers", "ali.property.branch.modifier", value.modifiers(), GenericTooltipUtils::getItemAttributeModifiersEntryTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return getCollectionTooltip(utils, "ali.property.branch.modifiers", "ali.property.branch.modifier", value.modifiers(), GenericTooltipUtils::getItemAttributeModifiersEntryTooltip);
     }
 
     @Unmodifiable
@@ -115,6 +110,17 @@ public class DataComponentTooltipUtils {
         tooltip.add(getStringTooltip(utils, "ali.property.value.colors", value.colors().toString()));
 
         return tooltip;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getTooltipDisplayTooltip(IServerUtils utils, TooltipDisplay value) {
+        ITooltipNode components = new TooltipNode();
+
+        components.add(getBooleanTooltip(utils, "ali.property.value.hide_tooltip", value.hideTooltip()));
+        components.add(getCollectionTooltip(utils, "ali.property.branch.hidden_components", "ali.property.value.null", value.hiddenComponents(), RegistriesTooltipUtils::getDataComponentTypeTooltip));
+
+        return components;
     }
 
     @Unmodifiable
@@ -181,8 +187,19 @@ public class DataComponentTooltipUtils {
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.rules", "ali.property.branch.rule", tool.rules(), GenericTooltipUtils::getRuleTooltip));
         tooltip.add(getFloatTooltip(utils, "ali.property.value.default_mining_speed", tool.defaultMiningSpeed()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.damage_per_block", tool.damagePerBlock()));
+        tooltip.add(getBooleanTooltip(utils, "ali.property.value.can_destroy_blocks_in_creative", tool.canDestroyBlocksInCreative()));
 
         return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getWeaponTooltip(IServerUtils utils, Weapon weapon) {
+        ITooltipNode components = new TooltipNode();
+
+        components.add(getIntegerTooltip(utils, "ali.property.value.item_damage_per_attack", weapon.itemDamagePerAttack()));
+        components.add(getFloatTooltip(utils, "ali.property.value.disable_blocking_for_seconds", weapon.disableBlockingForSeconds()));
+
+        return components;
     }
 
     @Unmodifiable
@@ -204,6 +221,7 @@ public class DataComponentTooltipUtils {
         components.add(getBooleanTooltip(utils, "ali.property.value.dispensable", equippable.dispensable()));
         components.add(getBooleanTooltip(utils, "ali.property.value.swappable", equippable.swappable()));
         components.add(getBooleanTooltip(utils, "ali.property.value.damage_on_hurt", equippable.damageOnHurt()));
+        components.add(getBooleanTooltip(utils, "ali.property.value.equip_on_interact", equippable.equipOnInteract()));
 
         return components;
     }
@@ -220,14 +238,25 @@ public class DataComponentTooltipUtils {
         return getCollectionTooltip(utils, "ali.property.branch.death_effects", protection.deathEffects(), utils::getConsumeEffectTooltip);
     }
 
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getBlockAttacksTooltip(IServerUtils utils, BlocksAttacks value) {
+        ITooltipNode components = new TooltipNode();
+
+        components.add(getFloatTooltip(utils, "ali.property.value.block_delay_seconds", value.blockDelaySeconds()));
+        components.add(getFloatTooltip(utils, "ali.property.value.disable_cooldown_scale", value.disableCooldownScale()));
+        components.add(getCollectionTooltip(utils, "ali.property.branch.damage_reductions", "ali.property.branch.damage_reduction", value.damageReductions(), GenericTooltipUtils::getDamageReductionTooltip));
+        components.add(getItemDamageTooltip(utils, "ali.property.branch.item_damage", value.itemDamage()));
+        components.add(getOptionalTooltip(utils, "ali.property.value.bypassed_by", value.bypassedBy(), GenericTooltipUtils::getTagKeyTooltip));
+        components.add(getOptionalHolderTooltip(utils, "ali.property.value.block_sound", value.blockSound(), RegistriesTooltipUtils::getSoundEventTooltip));
+        components.add(getOptionalHolderTooltip(utils, "ali.property.value.disable_sound", value.disableSound(), RegistriesTooltipUtils::getSoundEventTooltip));
+
+        return components;
+    }
+
     @NotNull
     public static ITooltipNode getDyedColorTooltip(IServerUtils utils, DyedItemColor value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.rgb", value.rgb()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return getIntegerTooltip(utils, "ali.property.value.rgb", value.rgb());
     }
 
     @Unmodifiable
@@ -280,6 +309,12 @@ public class DataComponentTooltipUtils {
         return tooltip;
     }
 
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getFloatValueTooltip(IServerUtils utils, float value) {
+        return getFloatTooltip(utils, "ali.property.value.value", value);
+    }
+
     @NotNull
     public static ITooltipNode getSuspiciousStewEffectsTooltip(IServerUtils utils, SuspiciousStewEffects value) {
         return getCollectionTooltip(utils, "ali.property.branch.effects", value.effects(), GenericTooltipUtils::getSuspiciousStewEffectEntryTooltip);
@@ -309,7 +344,6 @@ public class DataComponentTooltipUtils {
 
         tooltip.add(getTrimMaterialTooltip(utils, "ali.property.value.material", value.material().value()));
         tooltip.add(getTrimPatternTooltip(utils, "ali.property.value.pattern", value.pattern().value()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
 
         return tooltip;
     }
@@ -321,8 +355,14 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getInstrumentTooltip(IServerUtils utils, Holder<Instrument> value) {
-        return RegistriesTooltipUtils.getInstrumentTooltip(utils, "ali.property.value.value", value.value());
+    public static ITooltipNode getInstrumentTooltip(IServerUtils utils, InstrumentComponent value) {
+        return getEitherHolderTooltip(utils, "ali.property.value.value", value.instrument(), RegistriesTooltipUtils::getInstrumentTooltip);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getProvidesTrimMaterialTooltip(IServerUtils utils, ProvidesTrimMaterial value) {
+        return getEitherHolderTooltip(utils, "ali.property.value.material", value.material(), RegistriesTooltipUtils::getTrimMaterialTooltip);
     }
 
     @Unmodifiable
@@ -333,12 +373,13 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayable value) {
-        ITooltipNode tooltip = new TooltipNode();
+        return getEitherHolderTooltip(utils, "ali.property.value.song", value.song(), RegistriesTooltipUtils::getJukeboxSongTooltip);
+    }
 
-        tooltip.add(getEitherHolderTooltip(utils, "ali.property.value.song", value.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getProvidesBannerPatternsTooltip(IServerUtils utils, TagKey<BannerPattern> value) {
+        return getTagKeyTooltip(utils, "ali.property.value.banner_pattern", value);
     }
 
     @Unmodifiable
@@ -405,7 +446,7 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getBaseColorTooltip(IServerUtils utils, DyeColor value) {
+    public static ITooltipNode getDyeColorTooltip(IServerUtils utils, DyeColor value) {
         return getEnumTooltip(utils, "ali.property.value.color", value);
     }
 
@@ -432,8 +473,8 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getBeesTooltip(IServerUtils utils, List<BeehiveBlockEntity.Occupant> properties) {
-        return getCollectionTooltip(utils, "ali.property.branch.bees", "ali.property.branch.occupant", properties, GenericTooltipUtils::getBeehiveBlockEntityOccupantTooltip);
+    public static ITooltipNode getBeesTooltip(IServerUtils utils, Bees bees) {
+        return getCollectionTooltip(utils, "ali.property.branch.bees", "ali.property.branch.occupant", bees.bees(), GenericTooltipUtils::getBeehiveBlockEntityOccupantTooltip);
     }
 
     @Unmodifiable
@@ -450,5 +491,61 @@ public class DataComponentTooltipUtils {
         tooltip.add(getLongTooltip(utils, "ali.property.value.seed", value.seed()));
 
         return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getBreakSoundTooltip(IServerUtils utils, Holder<SoundEvent> soundEvent) {
+        return getHolderTooltip(utils, "ali.property.value.sound", soundEvent, RegistriesTooltipUtils::getSoundEventTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getVillagerVariantTooltip(IServerUtils utils, Holder<VillagerType> villager) {
+        return getHolderTooltip(utils, "ali.property.value.type", villager, RegistriesTooltipUtils::getVillagerTypeTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getWolfVariantTooltip(IServerUtils utils, Holder<WolfVariant> wolf) {
+        return getHolderTooltip(utils, "ali.property.value.type", wolf, RegistriesTooltipUtils::getWolfVariantTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getWolfSoundVariantTooltip(IServerUtils utils, Holder<WolfSoundVariant> wolfSound) {
+        return getHolderTooltip(utils, "ali.property.value.type", wolfSound, RegistriesTooltipUtils::getWolfSoundVariantTooltip);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getEnumTypeTooltip(IServerUtils utils, Enum<?> type) {
+        return getEnumTooltip(utils, "ali.property.value.type", type);
+    }
+
+    @NotNull
+    public static ITooltipNode getPigVariantTooltip(IServerUtils utils, Holder<PigVariant> pigVariant) {
+        return getHolderTooltip(utils, "ali.property.value.type", pigVariant, RegistriesTooltipUtils::getPigVariantTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getCowVariantTooltip(IServerUtils utils, Holder<CowVariant> cowVariant) {
+        return getHolderTooltip(utils, "ali.property.value.type", cowVariant, RegistriesTooltipUtils::getCowVariantTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getChickenVariantTooltip(IServerUtils utils, EitherHolder<ChickenVariant> holder) {
+        return getEitherHolderTooltip(utils, "ali.property.value.type", holder, RegistriesTooltipUtils::getChickenVariantTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getFrogVariantTooltip(IServerUtils utils, Holder<FrogVariant> frogVariant) {
+        return getHolderTooltip(utils, "ali.property.value.type", frogVariant, RegistriesTooltipUtils::getFrogVariantTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getPaintingVariantTooltip(IServerUtils utils, Holder<PaintingVariant> paintingVariant) {
+        return getHolderTooltip(utils, "ali.property.value.type", paintingVariant, RegistriesTooltipUtils::getPaintingVariantTooltip);
+    }
+
+    @NotNull
+    public static ITooltipNode getCatVariantTooltip(IServerUtils utils, Holder<CatVariant> catVariant) {
+        return getHolderTooltip(utils, "ali.property.value.type", catVariant, RegistriesTooltipUtils::getCatVariantTooltip);
     }
 }

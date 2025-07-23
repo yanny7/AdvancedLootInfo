@@ -13,12 +13,12 @@ import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.resources.ResourceKey;
@@ -133,8 +133,8 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
-                return PluginManager.SERVER_REGISTRY.getItemSubPredicateTooltip(utils, predicate);
+            public <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
+                return PluginManager.SERVER_REGISTRY.getDataComponentPredicateTooltip(utils, predicate);
             }
 
             @Override

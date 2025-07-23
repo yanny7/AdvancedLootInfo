@@ -278,7 +278,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getSetCustomDataTooltip(IServerUtils utils, SetCustomDataFunction fun) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.set_custom_data"));
 
-        tooltip.add(getStringTooltip(utils, "ali.property.value.tag", fun.tag.getAsString()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.tag", fun.tag.toString()));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
         return tooltip;
@@ -423,7 +423,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.toggle_tooltips"));
 
-        tooltip.add(getMapTooltip(utils, "ali.property.branch.components", fun.values, GenericTooltipUtils::getToggleEntryTooltip));
+        tooltip.add(getMapTooltip(utils, "ali.property.branch.components", fun.values, GenericTooltipUtils::getDataComponentEntryTooltip));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
         return tooltip;

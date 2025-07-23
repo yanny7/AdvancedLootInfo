@@ -4,14 +4,9 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.TooltipNode;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.world.entity.animal.CatVariant;
-import net.minecraft.world.entity.animal.FrogVariant;
-import net.minecraft.world.entity.animal.WolfVariant;
-import net.minecraft.world.entity.decoration.PaintingVariant;
 import org.jetbrains.annotations.NotNull;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
 public class EntitySubPredicateTooltipUtils {
     @NotNull
@@ -72,33 +67,6 @@ public class EntitySubPredicateTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.entity_sub_predicate.sheep"));
 
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.sheared", predicate.sheared(), GenericTooltipUtils::getBooleanTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.color", predicate.color(), GenericTooltipUtils::getEnumTooltip));
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static <V> ITooltipNode getVariantPredicateTooltip(IServerUtils utils, EntitySubPredicates.EntityVariantPredicateType<V>.Instance predicate) {
-        ITooltipNode tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, "ali.property.value.type", predicate);
-
-        if (predicate.variant instanceof Enum<?> variant) {
-            tooltip.add(getEnumTooltip(utils, "ali.property.value.variant", variant));
-        }
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static <V> ITooltipNode getHolderVariantPredicateTooltip(IServerUtils utils, EntitySubPredicates.EntityHolderVariantPredicateType<V>.Instance predicate) {
-        ITooltipNode tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, "ali.property.value.type", predicate);
-        
-        tooltip.add(getHolderSetTooltip(utils, "ali.property.branch.variants", "ali.property.value.variant", predicate.variants, (u, s, v) -> switch (v) {
-            case CatVariant catVariant -> getCatVariantTooltip(u, s, catVariant);
-            case PaintingVariant paintingVariant -> getPaintingVariantTooltip(u, s, paintingVariant);
-            case FrogVariant frogVariant -> getFrogVariantTooltip(u, s, frogVariant);
-            case WolfVariant wolfVariant -> getWolfVariantTooltip(u, s, wolfVariant);
-            default -> TooltipNode.EMPTY;
-        }));
 
         return tooltip;
     }

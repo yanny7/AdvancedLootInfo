@@ -1,7 +1,10 @@
 package com.yanny.ali.plugin.server;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.TooltipNode;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.ChatFormatting;
@@ -9,6 +12,7 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
 import net.minecraft.core.component.*;
+import net.minecraft.core.component.predicates.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -238,6 +242,7 @@ public class GenericTooltipUtils {
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.targeted_entity", entityPredicate.targetedEntity(), GenericTooltipUtils::getEntityPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.team", entityPredicate.team(), GenericTooltipUtils::getStringTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.slots", entityPredicate.slots(), GenericTooltipUtils::getSlotPredicateTooltip));
+        tooltip.add(getDataComponentMatchersTooltip(utils, "ali.property.branch.components", entityPredicate.components()));
 
         return tooltip;
     }
@@ -300,6 +305,7 @@ public class GenericTooltipUtils {
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.blocks", "ali.property.value.null", blockPredicate.blocks(), RegistriesTooltipUtils::getBlockTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.properties", blockPredicate.properties(), GenericTooltipUtils::getStatePropertiesPredicateTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.nbt", blockPredicate.nbt(), GenericTooltipUtils::getNbtPredicateTooltip));
+        tooltip.add(getDataComponentMatchersTooltip(utils, "ali.property.branch.components", blockPredicate.components()));
 
         return tooltip;
     }
@@ -360,8 +366,7 @@ public class GenericTooltipUtils {
 
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.items", "ali.property.value.null", itemPredicate.items(), RegistriesTooltipUtils::getItemTooltip));
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.count", itemPredicate.count()));
-        tooltip.add(getDataComponentPredicateTooltip(utils, "ali.property.branch.components", itemPredicate.components()));
-        tooltip.add(getMapTooltip(utils, "ali.property.branch.item_predicates", itemPredicate.subPredicates(), GenericTooltipUtils::getItemSubPredicateEntryTooltip));
+        tooltip.add(getDataComponentMatchersTooltip(utils, "ali.property.branch.components", itemPredicate.components()));
 
         return tooltip;
     }
@@ -449,12 +454,22 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, String key, DataComponentPredicate dataComponentPredicate) {
-        if (dataComponentPredicate != DataComponentPredicate.EMPTY) {
-            return getCollectionTooltip(utils, key, "ali.property.value.null", dataComponentPredicate.expectedComponents, GenericTooltipUtils::getTypedDataComponentTooltip);
-        } else {
-            return TooltipNode.EMPTY;
+    public static ITooltipNode getDataComponentMatchersTooltip(IServerUtils utils, String key, DataComponentMatchers dataComponentMatchers) {
+        if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
+            ITooltipNode components = new TooltipNode(translatable(key));
+            
+            components.add(getDataComponentExactPredicateTooltip(utils, dataComponentMatchers.exact()));
+            components.add(getMapTooltip(utils, "ali.property.branch.partial_matchers", dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip));
+        
+            return components;
         }
+
+        return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static ITooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
+        return getCollectionTooltip(utils, "ali.property.branch.expected_components", "ali.property.value.null", dataComponentMatchers.expectedComponents, GenericTooltipUtils::getTypedDataComponentTooltip);
     }
 
     @Unmodifiable
@@ -503,7 +518,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getFireworkPredicateTooltip(IServerUtils utils, String key, ItemFireworkExplosionPredicate.FireworkPredicate predicate) {
+    public static ITooltipNode getFireworkPredicateTooltip(IServerUtils utils, String key, FireworkExplosionPredicate.FireworkPredicate predicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.shape", predicate.shape(), GenericTooltipUtils::getEnumTooltip));
@@ -515,18 +530,18 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, String key, ItemWritableBookPredicate.PagePredicate predicate) {
+    public static ITooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, String key, WritableBookPredicate.PagePredicate predicate) {
         return new TooltipNode(translatable(key, value(predicate.contents())));
     }
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, String key, ItemWrittenBookPredicate.PagePredicate predicate) {
+    public static ITooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, String key, WrittenBookPredicate.PagePredicate predicate) {
         return new TooltipNode(translatable(key, value(predicate.contents())));
     }
 
     @NotNull
-    public static ITooltipNode getEntryPredicateTooltip(IServerUtils utils, String key, ItemAttributeModifiersPredicate.EntryPredicate predicate) {
+    public static ITooltipNode getEntryPredicateTooltip(IServerUtils utils, String key, AttributeModifiersPredicate.EntryPredicate predicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
         tooltip.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.attributes", "ali.property.value.null", predicate.attribute(), RegistriesTooltipUtils::getAttributeTooltip));
@@ -796,7 +811,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getBeehiveBlockEntityOccupantTooltip(IServerUtils utils, String key, BeehiveBlockEntity.Occupant occupant) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getStringTooltip(utils, "ali.property.value.entity_data", occupant.entityData().copyTag().getAsString()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.entity_data", occupant.entityData().copyTag().toString()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.ticks_in_hive", occupant.ticksInHive()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.min_ticks_in_hive", occupant.minTicksInHive()));
 
@@ -880,7 +895,30 @@ public class GenericTooltipUtils {
         ITooltipNode components = new TooltipNode(translatable(key));
 
         components.add(getListOperationTooltip(utils, "ali.property.value.list_operation", predicate.operation()));
-        components.add(getCollectionTooltip(utils, "ali.property.branch.values", predicate.value(), (u, v) -> mapper.apply(u, "ali.property.value.value", v)));
+        components.add(getCollectionTooltip(utils, "ali.property.branch.values", predicate.value(), (u, v) -> mapper.apply(u, "ali.property.value.null", v)));
+
+        return components;
+    }
+
+    @NotNull
+    public static ITooltipNode getDamageReductionTooltip(IServerUtils utils, String key, BlocksAttacks.DamageReduction value) {
+        ITooltipNode components = new TooltipNode(translatable(key));
+
+        components.add(getFloatTooltip(utils, "ali.property.value.horizontal_blocking_angle", value.horizontalBlockingAngle()));
+        components.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.damage_types", "ali.property.value.null", value.type(), RegistriesTooltipUtils::getDamageTypeTooltip));
+        components.add(getFloatTooltip(utils, "ali.property.value.base", value.base()));
+        components.add(getFloatTooltip(utils, "ali.property.value.factor", value.factor()));
+
+        return components;
+    }
+
+    @NotNull
+    public static ITooltipNode getItemDamageTooltip(IServerUtils utils, String key, BlocksAttacks.ItemDamageFunction value) {
+        ITooltipNode components = new TooltipNode(translatable(key));
+
+        components.add(getFloatTooltip(utils, "ali.property.value.threshold", value.threshold()));
+        components.add(getFloatTooltip(utils, "ali.property.value.base", value.base()));
+        components.add(getFloatTooltip(utils, "ali.property.value.factor", value.factor()));
 
         return components;
     }
@@ -1190,7 +1228,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static <T> ITooltipNode getEitherHolderTooltip(IServerUtils utils, String key, EitherHolder<T> holder, TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
-        return holder.asEither().map((v) -> mapper.apply(utils, key, v.value()), (k) -> getResourceKeyTooltip(utils, key, k));
+        return holder.contents().map((v) -> mapper.apply(utils, key, v.value()), (k) -> getResourceKeyTooltip(utils, key, k));
     }
 
     // MAP ENTRY
@@ -1289,12 +1327,12 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getToggleEntryTooltip(IServerUtils utils, Map.Entry<ToggleTooltips.ComponentToggle<?>, Boolean> entry) {
-        ITooltipNode tooltip = getDataComponentTypeTooltip(utils, "ali.property.value.null", entry.getKey().type());
+    public static ITooltipNode getDataComponentEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Boolean> entry) {
+        ITooltipNode components = getDataComponentTypeTooltip(utils, "ali.property.value.null", entry.getKey());
 
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.value", entry.getValue()));
+        components.add(getBooleanTooltip(utils, "ali.property.value.value", entry.getValue()));
 
-        return tooltip;
+        return components;
     }
 
     @NotNull
@@ -1311,8 +1349,12 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getItemSubPredicateEntryTooltip(IServerUtils utils, Map.Entry<ItemSubPredicate.Type<?>, ItemSubPredicate> entry) {
-        return utils.getItemSubPredicateTooltip(utils, entry.getValue());
+    public static ITooltipNode getDataComponentPredicateEntryTooltip(IServerUtils utils, Map.Entry<DataComponentPredicate.Type<?>, DataComponentPredicate> entry) {
+        ITooltipNode components = getDataComponentPredicateTypeTooltip(utils, "ali.property.value.null", entry.getKey());
+
+        components.add(utils.getDataComponentPredicateTooltip(utils, entry.getValue()));
+
+        return components;
     }
 
     @NotNull

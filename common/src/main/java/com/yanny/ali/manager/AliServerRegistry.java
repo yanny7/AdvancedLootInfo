@@ -8,10 +8,10 @@ import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -49,7 +49,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode>> itemSubPredicateTooltipMap = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicate = new HashMap<>();
     private final Map<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltipMap = new HashMap<>();
@@ -123,9 +123,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
-        itemSubPredicateTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        dataComponentPredicate.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
@@ -254,13 +254,13 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
-        BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode> itemSubPredicateTooltipGetter = itemSubPredicateTooltipMap.get(predicate.getClass());
+    public <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
+        BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode> dataComponentPredicateTooltipGetter = dataComponentPredicate.get(predicate.getClass());
 
-        if (itemSubPredicateTooltipGetter != null) {
-            return itemSubPredicateTooltipGetter.apply(utils, predicate);
+        if (dataComponentPredicateTooltipGetter != null) {
+            return dataComponentPredicateTooltipGetter.apply(utils, predicate);
         } else {
-            LOGGER.warn("Item sub predicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            LOGGER.warn("Data component predicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
         }
     }
@@ -390,7 +390,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} function tooltips", functionTooltipMap.size());
         LOGGER.info("Registered {} condition tooltips", conditionTooltipMap.size());
         LOGGER.info("Registered {} ingredient tooltips", ingredientTooltipMap.size());
-        LOGGER.info("Registered {} item sub predicate tooltips", itemSubPredicateTooltipMap.size());
+        LOGGER.info("Registered {} data component predicate tooltips", dataComponentPredicate.size());
         LOGGER.info("Registered {} entity sub predicate tooltips", entitySubPredicateTooltipMap.size());
         LOGGER.info("Registered {} data component type tooltips", dataComponentTypeTooltipMap.size());
         LOGGER.info("Registered {} chance modifiers", chanceModifierMap.size());
