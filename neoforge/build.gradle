@@ -63,6 +63,12 @@ dependencies {
     runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     implementation "dev.architectury:architectury-neoforge:${architectury_version}"
+
+    // LootJS
+//    implementation "curse.maven:kubejs-238086:5810100"
+//    implementation "curse.maven:rhino-416294:6184623"
+//    modImplementation "curse.maven:architectury-api-419699:5137936"
+//    implementation "curse.maven:lootjs-570630:6792267"
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
@@ -82,6 +88,7 @@ tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
 //    source(project(":common-emi").sourceSets.main.allSource)
 //    source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
+//    source(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -90,6 +97,7 @@ tasks.named("sourcesJar", Jar) {
 //    from(project(":common-emi").sourceSets.main.allSource)
 //    from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
+//    from(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
@@ -97,4 +105,5 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":common").sourceSets.main.resources
 //    from project(":common-emi").sourceSets.main.resources
 //    from project(":common-jei").sourceSets.main.resources
+//    from project(":common-lootjs").sourceSets.main.resources
 }

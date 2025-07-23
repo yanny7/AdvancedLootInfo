@@ -8,4 +8,8 @@ public interface IPlugin {
     default void registerServer(IServerRegistry registry) {
 
     }
+
+    default void registerCommon(ICommonRegistry registry) {
+
+    }
 }

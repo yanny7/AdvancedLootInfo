@@ -26,13 +26,17 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, InfoSyncLootTableMessage>)(Object) InfoSyncLootTableMessage.CODEC)
-                .consumerNetworkThread((BiConsumer<InfoSyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
+                .add();
+        channel.messageBuilder(DoneMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, DoneMessage>)(Object) DoneMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<DoneMessage, CustomPayloadEvent.Context>) client::onDone)
                 .add();
         return new DistHolder<>(client, server);
     }
@@ -41,11 +45,15 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.messageBuilder(InfoSyncLootTableMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, InfoSyncLootTableMessage>)(Object) InfoSyncLootTableMessage.CODEC)
+        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
+                .add();
+        channel.messageBuilder(DoneMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, DoneMessage>)(Object) DoneMessage.CODEC)
+                .decoder(DoneMessage::new)
                 .add();
         return new DistHolder<>(null, server);
     }
