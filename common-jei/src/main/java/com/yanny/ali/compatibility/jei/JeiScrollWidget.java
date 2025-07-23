@@ -152,12 +152,9 @@ public class JeiScrollWidget implements IRecipeWidget, IJeiInputHandler, ISlotte
 
     private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY, float scrollOffsetY) {
         PoseStack poseStack = guiGraphics.pose();
-        PoseStack.Pose last = poseStack.last();
-        Matrix4f pose = last.pose();
-        ScreenRectangle scissorArea = transform(rect, pose);
         float scrollAmount = getHiddenAmount() * scrollOffsetY;
 
-        guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
+        guiGraphics.enableScissor(rect.x(), rect.y(), rect.right(), rect.bottom());
         poseStack.pushPose();
         poseStack.translate(0.0, -scrollAmount, 0.0);
 

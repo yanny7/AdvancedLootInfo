@@ -15,10 +15,12 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.ScreenPosition;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -28,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
     static final int CATEGORY_WIDTH = 9 * 18;
@@ -35,12 +38,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     private static final Map<IType, Pair<JeiWidgetWrapper, List<Holder>>> widgets = new HashMap<>();
 
     protected final IGuiHelper guiHelper;
-    private final RecipeType<T> recipeType;
+    private final IRecipeType<T> recipeType;
     private final LootCategory<V> lootCategory;
     private final Component title;
     private final IDrawable icon;
 
-    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
+    public JeiBaseLoot(IGuiHelper guiHelper, IRecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
         this.guiHelper = guiHelper;
         this.recipeType = recipeType;
         this.lootCategory = lootCategory;
@@ -50,7 +53,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @NotNull
     @Override
-    public final RecipeType<T> getRecipeType() {
+    public final IRecipeType<T> getRecipeType() {
         return recipeType;
     }
 
@@ -88,8 +91,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             Optional<ItemStack> left = h.item.left();
             Optional<TagKey<Item>> right = h.item.right();
 
-            left.ifPresent(slotBuilder::addItemStack);
-            right.ifPresent((t) -> slotBuilder.addIngredients(Ingredient.of(t)));
+            left.ifPresent(slotBuilder::add);
+            right.ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get(t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
         }
     }
 
@@ -141,19 +144,17 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @NotNull
     protected IRecipeWidget createTextWidget(Component component, int x, int y, boolean centered) {
-        return guiHelper.createWidgetFromDrawable(new IDrawable() {
+        return new IRecipeWidget() {
+            private final ScreenPosition position = new ScreenPosition(x, y);
+
+            @NotNull
             @Override
-            public int getWidth() {
-                return CATEGORY_WIDTH;
+            public ScreenPosition getPosition() {
+                return position;
             }
 
             @Override
-            public int getHeight() {
-                return 8;
-            }
-
-            @Override
-            public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+            public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
                 if (centered) {
                     int width = Minecraft.getInstance().font.width(component);
                     guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, y, 0, false);
@@ -161,7 +162,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                     guiGraphics.drawString(Minecraft.getInstance().font, component, x, y, 0, false);
                 }
             }
-        }, x, y);
+        };
     }
 
     @NotNull

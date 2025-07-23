@@ -443,7 +443,10 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.set_custom_model_data"));
 
-        tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.value", fun.valueProvider));
+        tooltip.add(getStandaloneTooltip(utils, "ali.property.branch.floats", "ali.property.value.null", fun.floats, GenericTooltipUtils::getNumberProviderTooltip));
+        tooltip.add(getStandaloneTooltip(utils, "ali.property.branch.colors", "ali.property.value.null", fun.colors, GenericTooltipUtils::getNumberProviderTooltip));
+        tooltip.add(getStandaloneTooltip(utils, "ali.property.branch.flags", "ali.property.value.null", fun.flags, GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getStandaloneTooltip(utils, "ali.property.branch.strings", "ali.property.value.null", fun.strings, GenericTooltipUtils::getStringTooltip));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
         return tooltip;

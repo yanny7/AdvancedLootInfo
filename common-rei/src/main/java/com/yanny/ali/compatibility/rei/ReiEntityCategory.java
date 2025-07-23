@@ -60,7 +60,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
         innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
             graphics.pose().pushPose();
             graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-            GenericUtils.renderEntity(display.getEntity(), rect, CATEGORY_WIDTH, graphics, mouseX + innerBounds.width / 2, mouseY);
+            GenericUtils.renderEntity(display.getEntity(), rect, CATEGORY_WIDTH, graphics, mouseX + WIDGET_SIZE / 2 - innerBounds.width / 2, mouseY);
             graphics.pose().popPose();
         }));
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntity().getDisplayName()));

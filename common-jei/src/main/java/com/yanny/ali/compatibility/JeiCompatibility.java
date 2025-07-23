@@ -17,7 +17,7 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
@@ -89,30 +89,31 @@ public class JeiCompatibility implements IModPlugin {
         LOGGER.info("Adding loot information to JEI");
 
         if (level != null) {
-            Map<RecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
-            Map<RecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
-            Map<RecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
+            Map<IRecipeType<BlockLootType>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
+            Map<IRecipeType<EntityLootType>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
+            Map<IRecipeType<GameplayLootType>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceKey<LootTable> location = block.getLootTable();
-                IDataNode lootEntry = lootData.get(location);
+                block.getLootTable().ifPresent((location) -> {
+                    IDataNode lootEntry = lootData.get(location);
 
-                if (lootEntry != null) {
-                    RecipeType<BlockLootType> recipeType = null;
+                    if (lootEntry != null) {
+                        IRecipeType<BlockLootType> recipeType = null;
 
-                    for (JeiBlockLoot recipeCategory : blockCategoryList) {
-                        if (recipeCategory.getLootCategory().validate(block)) {
-                            recipeType = recipeCategory.getRecipeType();
-                            break;
+                        for (JeiBlockLoot recipeCategory : blockCategoryList) {
+                            if (recipeCategory.getLootCategory().validate(block)) {
+                                recipeType = recipeCategory.getRecipeType();
+                                break;
+                            }
                         }
-                    }
 
-                    if (recipeType != null) {
-                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, clientRegistry.getItems(location)));
-                    }
+                        if (recipeType != null) {
+                            blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, lootEntry, clientRegistry.getItems(location)));
+                        }
 
-                    lootData.remove(location);
-                }
+                        lootData.remove(location);
+                    }
+                });
             }
 
             for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
@@ -120,32 +121,33 @@ public class JeiCompatibility implements IModPlugin {
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
-                        ResourceKey<LootTable> location = mob.getLootTable();
-                        IDataNode lootEntry = lootData.get(location);
+                        mob.getLootTable().ifPresent((location) -> {
+                            IDataNode lootEntry = lootData.get(location);
 
-                        if (lootEntry != null) {
-                            RecipeType<EntityLootType> recipeType = null;
+                            if (lootEntry != null) {
+                                IRecipeType<EntityLootType> recipeType = null;
 
-                            for (JeiEntityLoot recipeCategory : entityCategoryList) {
-                                if (recipeCategory.getLootCategory().validate(entity)) {
-                                    recipeType = recipeCategory.getRecipeType();
-                                    break;
+                                for (JeiEntityLoot recipeCategory : entityCategoryList) {
+                                    if (recipeCategory.getLootCategory().validate(entity)) {
+                                        recipeType = recipeCategory.getRecipeType();
+                                        break;
+                                    }
                                 }
-                            }
 
-                            if (recipeType != null) {
-                                entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, clientRegistry.getItems(location)));
-                            }
+                                if (recipeType != null) {
+                                    entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, lootEntry, clientRegistry.getItems(location)));
+                                }
 
-                            lootData.remove(location);
-                        }
+                                lootData.remove(location);
+                            }
+                        });
                     }
                 }
             }
 
             for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : lootData.entrySet()) {
                 ResourceKey<LootTable> location = entry.getKey();
-                RecipeType<GameplayLootType> recipeType = null;
+                IRecipeType<GameplayLootType> recipeType = null;
 
                 for (JeiGameplayLoot recipeCategory : gameplayCategoryList) {
                     if (recipeCategory.getLootCategory().validate(location.location().getPath())) {
@@ -159,15 +161,15 @@ public class JeiCompatibility implements IModPlugin {
                 }
             }
 
-            for (Map.Entry<RecipeType<BlockLootType>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
+            for (Map.Entry<IRecipeType<BlockLootType>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
                 registration.addRecipes(entry.getKey(), entry.getValue());
             }
 
-            for (Map.Entry<RecipeType<EntityLootType>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
+            for (Map.Entry<IRecipeType<EntityLootType>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
                 registration.addRecipes(entry.getKey(), entry.getValue());
             }
 
-            for (Map.Entry<RecipeType<GameplayLootType>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
+            for (Map.Entry<IRecipeType<GameplayLootType>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
                 registration.addRecipes(entry.getKey(), entry.getValue());
             }
         } else {
@@ -182,20 +184,20 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     private static <T, U, V> T createCategory(IGuiHelper guiHelper, LootCategory<U> e, Class<V> clazz, LootConstructor<T, U, V> constructor) {
-        RecipeType<V> recipeType = RecipeType.create(Utils.MOD_ID, e.getKey(), clazz);
+        IRecipeType<V> recipeType = IRecipeType.create(Utils.MOD_ID, e.getKey(), clazz);
         Component title = Component.translatable("emi.category." + Utils.MOD_ID + "." + e.getKey().replace('/', '.'));
         return constructor.construct(guiHelper, recipeType, e, title, guiHelper.createDrawableItemStack(e.getIcon()));
     }
 
     private static <T, U, V> T createCategory(IGuiHelper guiHelper, Map.Entry<ResourceLocation, LootCategory<U>> e, Class<V> clazz, LootConstructor<T, U, V> constructor) {
         ResourceLocation id = e.getKey();
-        RecipeType<V> recipeType = RecipeType.create(id.getNamespace(), id.getPath(), clazz);
+        IRecipeType<V> recipeType = IRecipeType.create(id.getNamespace(), id.getPath(), clazz);
         Component title = Component.translatable("emi.category." + id.getNamespace() + "." + id.getPath().replace('/', '.'));
         return constructor.construct(guiHelper, recipeType, e.getValue(), title, guiHelper.createDrawableItemStack(e.getValue().getIcon()));
     }
 
     @FunctionalInterface
     private interface LootConstructor<T, U, V> {
-        T construct(IGuiHelper guiHelper, RecipeType<V> recipeType, LootCategory<U> lootCategory, Component title, IDrawable icon);
+        T construct(IGuiHelper guiHelper, IRecipeType<V> recipeType, LootCategory<U> lootCategory, Component title, IDrawable icon);
     }
 }

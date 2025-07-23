@@ -13,7 +13,7 @@ import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
-    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<EntityLootType> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
+    public JeiEntityLoot(IGuiHelper guiHelper, IRecipeType<EntityLootType> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
@@ -37,7 +37,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
         SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.entity().getType());
 
         if (spawnEgg != null) {
-            builder.addSlot(RecipeIngredientRole.CATALYST).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").addItemLike(spawnEgg);
+            builder.addSlot(RecipeIngredientRole.CRAFTING_STATION).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").add(spawnEgg);
         }
     }
 

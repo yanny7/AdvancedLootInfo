@@ -1,10 +1,7 @@
 package com.yanny.ali.plugin.server;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.api.*;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.ChatFormatting;
@@ -876,6 +873,16 @@ public class GenericTooltipUtils {
         }
 
         return TooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static <T> ITooltipNode getStandaloneTooltip(IServerUtils utils, String key, ListOperation.StandAlone<T> predicate, TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
+        ITooltipNode components = new TooltipNode(translatable(key));
+
+        components.add(getListOperationTooltip(utils, "ali.property.value.list_operation", predicate.operation()));
+        components.add(getCollectionTooltip(utils, "ali.property.branch.values", predicate.value(), (u, v) -> mapper.apply(u, "ali.property.value.value", v)));
+
+        return components;
     }
 
     @Unmodifiable

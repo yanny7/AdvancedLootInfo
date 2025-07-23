@@ -107,7 +107,14 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCustomModelDataTooltip(IServerUtils utils, CustomModelData value) {
-        return getIntegerTooltip(utils, "ali.property.value.value", value.value());
+        ITooltipNode tooltip = new TooltipNode();
+        
+        tooltip.add(getStringTooltip(utils, "ali.property.value.floats", value.floats().toString()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.flags", value.flags().toString()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.strings", value.strings().toString()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.colors", value.colors().toString()));
+
+        return tooltip;
     }
 
     @Unmodifiable
@@ -191,7 +198,7 @@ public class DataComponentTooltipUtils {
 
         components.add(getEnumTooltip(utils, "ali.property.value.equipment_slot", equippable.slot()));
         components.add(getHolderTooltip(utils, "ali.property.value.equip_sound", equippable.equipSound(), RegistriesTooltipUtils::getSoundEventTooltip));
-        components.add(getOptionalTooltip(utils, "ali.property.value.model", equippable.model(), GenericTooltipUtils::getResourceLocationTooltip));
+        components.add(getOptionalTooltip(utils, "ali.property.value.asset_id", equippable.assetId(), GenericTooltipUtils::getResourceKeyTooltip));
         components.add(getOptionalTooltip(utils, "ali.property.value.camera_overlay", equippable.cameraOverlay(), GenericTooltipUtils::getResourceLocationTooltip));
         components.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.allowed_entities", "ali.property.value.null", equippable.allowedEntities(), RegistriesTooltipUtils::getEntityTypeTooltip));
         components.add(getBooleanTooltip(utils, "ali.property.value.dispensable", equippable.dispensable()));

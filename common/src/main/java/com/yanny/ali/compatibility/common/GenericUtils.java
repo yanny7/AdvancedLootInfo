@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -65,7 +64,7 @@ public class GenericUtils {
                     256
             );
 
-            guiGraphics.enableScissor(screenX + bounds.x() + 1, screenY + bounds.y() + 1, screenX + bounds.right() - 1, screenY + bounds.bottom() - 1);
+            guiGraphics.enableScissor(bounds.x() + 1, bounds.y() + 1, bounds.right() - 1, bounds.bottom() - 1);
 
             EntityDimensions dimensions = entity.getType().getDimensions();
             InventoryScreen.renderEntityInInventoryFollowsMouse(
@@ -76,7 +75,7 @@ public class GenericUtils {
                     screenY + bounds.bottom(),
                     (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
                     0.0625F,
-                    mouseX - fullWidth / 2f,
+                    mouseX,
                     mouseY,
                     livingEntity
             );

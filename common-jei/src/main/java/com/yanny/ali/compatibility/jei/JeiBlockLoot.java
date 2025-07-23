@@ -12,6 +12,7 @@ import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
-    public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
+    public JeiBlockLoot(IGuiHelper guiHelper, IRecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
@@ -37,7 +38,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 0).setStandardSlotBackground();
         }
 
-        slotBuilder.addItemLike(recipe.block());
+        slotBuilder.add(recipe.block());
     }
 
     @Override
