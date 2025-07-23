@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.client.EntitySubPredicateTooltipUtils;
+import com.yanny.ali.plugin.server.EntitySubPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -23,11 +23,11 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class EntitySubPredicateTooltipTest {
     @Test
     public void testLightningBoltPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, 0, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))), List.of(
                 "Lightning Bolt:",
                 "  -> Blocks On Fire: ≤5"
         ));
-        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, 0,
+        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS,
                 new LightningBoltPredicate(MinMaxBounds.Ints.between(1, 5), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
                 "Lightning Bolt:",
                 "  -> Blocks On Fire: 1-5",
@@ -38,10 +38,10 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testFishingHookPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, 0, FishingHookPredicate.ANY), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.ANY), List.of(
                 "Fishing Hook:"
         ));
-        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, 0, FishingHookPredicate.inOpenWater(true)), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)), List.of(
                 "Fishing Hook:",
                 "  -> Is In Open Water: true"
         ));
@@ -50,7 +50,7 @@ public class EntitySubPredicateTooltipTest {
     @SuppressWarnings("deprecation")
     @Test
     public void testPlayerPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, 0, PlayerPredicate.Builder.player()
+        assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
                 .checkAdvancementDone(ResourceLocation.withDefaultNamespace("test"), true)
                 .addRecipe(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("test")), false)
                 .checkAdvancementCriterions(ResourceLocation.withDefaultNamespace("criterion"), Map.of("test", true))
@@ -85,7 +85,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testSlimePredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, 0, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))), List.of(
                 "Slime:",
                 "  -> Size: 0-2"
         ));
@@ -93,7 +93,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testRaiderPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, 0, RaiderPredicate.CAPTAIN_WITHOUT_RAID), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, RaiderPredicate.CAPTAIN_WITHOUT_RAID), List.of(
                 "Raider:",
                 "  -> Has Raid: false",
                 "  -> Is Captain: true"
@@ -102,7 +102,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testSheepPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, 0, new SheepPredicate(Optional.of(false))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, new SheepPredicate(Optional.of(false))), List.of(
                 "Sheep:",
                 "  -> Sheared: false"
         ));

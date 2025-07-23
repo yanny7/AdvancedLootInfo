@@ -33,9 +33,13 @@ public final class RangeValue {
     }
 
     public RangeValue(float min, float max) {
-        this.min = min;
-        this.max = max;
-        this.isRange = true;
+        if (max - min < 0.00001f) {
+            this.min = this.max = min;
+        } else {
+            this.min = min;
+            this.max = max;
+            this.isRange = true;
+        }
     }
 
     public RangeValue(FriendlyByteBuf buf) {
@@ -44,6 +48,14 @@ public final class RangeValue {
         isRange = buf.readBoolean();
         hasScore = buf.readBoolean();
         isUnknown = buf.readBoolean();
+    }
+
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeFloat(min);
+        buf.writeFloat(max);
+        buf.writeBoolean(isRange);
+        buf.writeBoolean(hasScore);
+        buf.writeBoolean(isUnknown);
     }
 
     public RangeValue multiply(float value) {

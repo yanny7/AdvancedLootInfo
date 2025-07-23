@@ -20,6 +20,9 @@ config = "${mod_id}.mixins.json"
 [[mixins]]
 config = "${mod_id}.neoforge.mixins.json"
 
+#[[mixins]]
+#config = "${mod_id}.lootjs.mixins.json"
+
 [[dependencies.ali]] #optional
 modId = "neoforge" #mandatory
 type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
@@ -52,5 +55,12 @@ side="BOTH"
 modId="rei"
 type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
 versionRange="${rei_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.ali]]
+modId="lootjs"
+type="optional"
+versionRange="[1.21.1-3.4.2,)"
 ordering="AFTER"
 side="BOTH"

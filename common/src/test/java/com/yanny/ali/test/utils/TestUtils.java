@@ -3,7 +3,9 @@ package com.yanny.ali.test.utils;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.datagen.LanguageHolder;
+import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -26,7 +28,8 @@ import java.util.function.BiFunction;
 public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static void assertTooltip(List<Component> components, List<String> expected) {
+    public static void assertTooltip(ITooltipNode tooltip, List<String> expected) {
+        List<Component> components = NodeUtils.toComponents(tooltip, 0);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -42,7 +45,25 @@ public class TestUtils {
         Assertions.assertAll(executables);
     }
 
-    public static void assertUnorderedTooltip(List<Component> components, List<Object> expected) {
+    public static void assertTooltip(List<ITooltipNode> tooltip, List<String> expected) {
+        List<Component> components = NodeUtils.toComponents(tooltip, 0);
+        List<Executable> executables = new LinkedList<>();
+
+        executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
+
+        for (int i = 0; i < components.size(); i++) {
+            int index = i;
+
+            if (i < expected.size()) {
+                executables.add(() -> assertTooltip(components.get(index), expected.get(index), String.format("Index: %d", index)));
+            }
+        }
+
+        Assertions.assertAll(executables);
+    }
+
+    public static void assertUnorderedTooltip(ITooltipNode tooltip, List<Object> expected) {
+        List<Component> components = NodeUtils.toComponents(tooltip, 0);
         int cmpIndex = 0;
         int expIndex = 0;
 

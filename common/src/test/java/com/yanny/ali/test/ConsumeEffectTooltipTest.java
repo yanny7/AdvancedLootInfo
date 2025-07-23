@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.plugin.client.ConsumeEffectTooltipUtils;
+import com.yanny.ali.plugin.server.ConsumeEffectTooltipUtils;
 import net.minecraft.core.HolderSet;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,7 +16,7 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class ConsumeEffectTooltipTest {
     @Test
     public void testApplyEffectTooltip() {
-        assertTooltip(ConsumeEffectTooltipUtils.getApplyEffectsTooltip(UTILS, 0, new ApplyStatusEffectsConsumeEffect(
+        assertTooltip(ConsumeEffectTooltipUtils.getApplyEffectsTooltip(UTILS, new ApplyStatusEffectsConsumeEffect(
                 List.of(
                         new MobEffectInstance(MobEffects.BAD_OMEN),
                         new MobEffectInstance(MobEffects.NAUSEA)
@@ -42,7 +42,7 @@ public class ConsumeEffectTooltipTest {
 
     @Test
     public void testRemoveEffectTooltip() {
-        assertTooltip(ConsumeEffectTooltipUtils.getRemoveEffectsTooltip(UTILS, 0, new RemoveStatusEffectsConsumeEffect(
+        assertTooltip(ConsumeEffectTooltipUtils.getRemoveEffectsTooltip(UTILS, new RemoveStatusEffectsConsumeEffect(
                 HolderSet.direct(MobEffects.BLINDNESS, MobEffects.HASTE)
         )), List.of(
                 "Remove Effects:",
@@ -53,12 +53,12 @@ public class ConsumeEffectTooltipTest {
 
     @Test
     public void testClearAllEffectsTooltip() {
-        assertTooltip(ConsumeEffectTooltipUtils.getClearAllEffectsTooltip(UTILS, 0, new ClearAllStatusEffectsConsumeEffect()), List.of("Clear All Effects:"));
+        assertTooltip(ConsumeEffectTooltipUtils.getClearAllEffectsTooltip(UTILS, new ClearAllStatusEffectsConsumeEffect()), List.of("Clear All Effects:"));
     }
 
     @Test
     public void testTeleportRandomlyTooltip() {
-        assertTooltip(ConsumeEffectTooltipUtils.getTeleportRandomlyTooltip(UTILS, 0, new TeleportRandomlyConsumeEffect(30)), List.of(
+        assertTooltip(ConsumeEffectTooltipUtils.getTeleportRandomlyTooltip(UTILS, new TeleportRandomlyConsumeEffect(30)), List.of(
                 "Teleport Randomly:",
                 "  -> Diameter: 30.0"
         ));
@@ -66,7 +66,7 @@ public class ConsumeEffectTooltipTest {
 
     @Test
     public void testPlaySoundTooltip() {
-        assertTooltip(ConsumeEffectTooltipUtils.getPlaySoundTooltip(UTILS, 0, new PlaySoundConsumeEffect(SoundEvents.ARMOR_EQUIP_CHAIN)), List.of(
+        assertTooltip(ConsumeEffectTooltipUtils.getPlaySoundTooltip(UTILS, new PlaySoundConsumeEffect(SoundEvents.ARMOR_EQUIP_CHAIN)), List.of(
                 "Play Sound:",
                 "  -> Sound: minecraft:item.armor.equip_chain"
         ));

@@ -1,11 +1,11 @@
 package com.yanny.ali.compatibility.common;
 
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.storage.loot.LootTable;
+import com.yanny.ali.api.IDataNode;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
 public interface IType {
-    LootTable entry();
-    List<Item> items();
+    IDataNode entry();
+    List<ItemStack> items();
 }

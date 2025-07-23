@@ -1,10 +1,10 @@
 package com.yanny.ali.compatibility.common;
 
-import net.minecraft.world.item.Item;
+import com.yanny.ali.api.IDataNode;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.List;
 
-public record BlockLootType(Block block, LootTable entry, List<Item> items) implements IType {
+public record BlockLootType(Block block, IDataNode entry, List<ItemStack> items) implements IType {
 }

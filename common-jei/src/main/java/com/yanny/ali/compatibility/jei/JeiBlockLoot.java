@@ -1,7 +1,7 @@
 package com.yanny.ali.compatibility.jei;
 
+import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.compatibility.common.BlockLootType;
-import com.yanny.ali.plugin.client.EntryTooltipUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -12,6 +12,7 @@ import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
-    public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
+    public JeiBlockLoot(IGuiHelper guiHelper, IRecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
@@ -37,7 +38,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 0).setStandardSlotBackground();
         }
 
-        slotBuilder.addItemLike(recipe.block());
+        slotBuilder.add(recipe.block());
     }
 
     @Override
@@ -50,7 +51,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 widgets.add(new JeiBlockSlotWidget(slotDrawable, recipe.block(), CATEGORY_WIDTH / 2 - 9, 5));
                 slotDrawables.add(slotDrawable);
             } else {
-                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, EntryTooltipUtils.getBaseMap(0)));
+                widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, new RangeValue(1)));
                 slotDrawables.add(slotDrawable);
             }
         }));
