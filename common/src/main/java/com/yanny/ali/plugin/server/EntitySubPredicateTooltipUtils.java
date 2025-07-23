@@ -43,6 +43,7 @@ public class EntitySubPredicateTooltipUtils {
         tooltip.add(getMapTooltip(utils, "ali.property.branch.recipes", predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip));
         tooltip.add(getMapTooltip(utils, "ali.property.branch.advancements", predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip));
         tooltip.add(getOptionalTooltip(utils, "ali.property.branch.looking_at", predicate.lookingAt(), GenericTooltipUtils::getEntityPredicateTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.input", predicate.input(), GenericTooltipUtils::getInputPredicateTooltip));
 
         return tooltip;
     }
@@ -62,6 +63,16 @@ public class EntitySubPredicateTooltipUtils {
         
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.has_raid", predicate.hasRaid()));
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.is_captain", predicate.isCaptain()));
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getSheepPredicateTooltip(IServerUtils utils, SheepPredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.entity_sub_predicate.sheep"));
+
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.sheared", predicate.sheared(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.color", predicate.color(), GenericTooltipUtils::getEnumTooltip));
 
         return tooltip;
     }

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -51,6 +52,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode>> itemSubPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltipMap = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltipMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
@@ -82,7 +84,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     public void setServerLevel(ServerLevel serverLevel) {
         this.serverLevel = serverLevel;
-        this.lootContext = new LootContext(new LootParams(serverLevel, Map.of(), Map.of(), 0F), RandomSource.create(), null); //FIXME
+        this.lootContext = new LootContext(new LootParams(serverLevel, null, Map.of(), 0F), RandomSource.create(), null); //FIXME
     }
 
     @Override
@@ -136,6 +138,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
         dataComponentTypeTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+    }
+
+    @Override
+    public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+        //noinspection unchecked
+        consumeEffectTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
@@ -278,6 +286,18 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         } else {
             LOGGER.warn("Data component type tooltip for {} was not registered", type.getClass().getCanonicalName());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", type.getClass().getSimpleName());
+        }
+    }
+
+    @Override
+    public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+        BiFunction<IServerUtils, ConsumeEffect, ITooltipNode> consumeEffectTooltipGetter = consumeEffectTooltipMap.get(effect.getClass());
+
+        if (consumeEffectTooltipGetter != null) {
+            return consumeEffectTooltipGetter.apply(utils, effect);
+        } else {
+            LOGGER.warn("Consume effect tooltip for {} was not registered", effect.getClass().getCanonicalName());
+            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", effect.getClass().getSimpleName());
         }
     }
 

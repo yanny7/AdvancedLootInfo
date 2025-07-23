@@ -157,10 +157,9 @@ public class NodeUtils {
         return itemNode.getModifiedItem().map(
                 predicate::test,
                 (tagKey) -> BuiltInRegistries.ITEM
-                        .getTag(tagKey)
-                        .map((holders) -> holders.stream().map(Holder::value))
+                        .get(tagKey)
+                        .map((named) -> named.stream().map(Holder::value).map(Item::getDefaultInstance))
                         .orElse(Stream.of())
-                        .map(Item::getDefaultInstance)
                         .allMatch(predicate));
     }
 }

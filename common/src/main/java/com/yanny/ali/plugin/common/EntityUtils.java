@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.common;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
@@ -23,7 +24,7 @@ public class EntityUtils {
             Sheep sheep;
 
             try {
-                sheep = EntityType.SHEEP.create(level);
+                sheep = EntityType.SHEEP.create(level, EntitySpawnReason.LOAD);
             } catch (Throwable e) {
                 LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
                 continue;
@@ -38,7 +39,7 @@ public class EntityUtils {
         Sheep sheep;
 
         try {
-            sheep = EntityType.SHEEP.create(level);
+            sheep = EntityType.SHEEP.create(level, EntitySpawnReason.LOAD);
         } catch (Throwable e) {
             LOGGER.warn("Failed to create sheep: {}", e.getMessage());
             return entities;

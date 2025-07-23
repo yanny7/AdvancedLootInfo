@@ -35,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
@@ -144,6 +145,11 @@ public class TooltipTestSuite {
             @Override
             public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
                 return PluginManager.SERVER_REGISTRY.getDataComponentTypeTooltip(utils, type, value);
+            }
+
+            @Override
+            public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+                return PluginManager.SERVER_REGISTRY.getConsumeEffectTooltip(utils, effect);
             }
 
             @Override

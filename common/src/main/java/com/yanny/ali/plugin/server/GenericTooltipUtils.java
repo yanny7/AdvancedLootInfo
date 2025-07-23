@@ -23,12 +23,12 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.Block;
@@ -121,7 +121,6 @@ public class GenericTooltipUtils {
         return Collections.emptyList();
     }
 
-    @Unmodifiable
     @NotNull
     public static ITooltipNode getFormulaTooltip(IServerUtils utils, String key, ApplyBonusCount.Formula formula) {
         ITooltipNode tooltip = getResourceLocationTooltip(utils, key, formula.getType().id());
@@ -249,7 +248,6 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getEntityTypePredicateTooltip(IServerUtils utils, String key, EntityTypePredicate entityTypePredicate) {
         return getHolderSetTooltip(utils, key, "ali.property.value.null", entityTypePredicate.types(), RegistriesTooltipUtils::getEntityTypeTooltip);
-
     }
 
     @NotNull
@@ -712,16 +710,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getPossibleEffectTooltip(IServerUtils utils, String key, FoodProperties.PossibleEffect effect) {
-        ITooltipNode tooltip = new TooltipNode(translatable(key));
-
-        tooltip.add(getMobEffectInstanceTooltip(utils, "ali.property.value.effect", effect.effect()));
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.probability", effect.probability()));
-
-        return tooltip;
-    }
-
-    @NotNull
     public static ITooltipNode getMobEffectInstanceTooltip(IServerUtils utils, String key, MobEffectInstance effect) {
         ITooltipNode tooltip = getHolderTooltip(utils, key, effect.getEffect(), RegistriesTooltipUtils::getMobEffectTooltip);
 
@@ -837,6 +825,21 @@ public class GenericTooltipUtils {
         if (property.signature() != null) {
             tooltip.add(getStringTooltip(utils, "ali.property.value.signature", property.signature()));
         }
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static ITooltipNode getInputPredicateTooltip(IServerUtils utils, String key, InputPredicate predicate) {
+        ITooltipNode tooltip = new TooltipNode(translatable(key));
+
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.forward", predicate.forward(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.backward", predicate.backward(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.left", predicate.left(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.right", predicate.right(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.jump", predicate.jump(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.sneak", predicate.sneak(), GenericTooltipUtils::getBooleanTooltip));
+        tooltip.add(getOptionalTooltip(utils, "ali.property.value.sprint", predicate.sprint(), GenericTooltipUtils::getBooleanTooltip));
 
         return tooltip;
     }
@@ -998,7 +1001,7 @@ public class GenericTooltipUtils {
         HolderLookup.Provider provider = utils.lookupProvider();
 
         if (provider != null) {
-            Optional<HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
+            Optional<? extends HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
 
             if (lookup.isPresent()) {
                 Optional<Holder.Reference<V>> first = lookup.get().listElements().filter((l) -> l.value() == value).findFirst();
@@ -1187,8 +1190,8 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceLocation, Boolean> entry) {
-        return new TooltipNode(keyValue(entry.getKey(), entry.getValue()));
+    public static ITooltipNode getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceKey<Recipe<?>>, Boolean> entry) {
+        return new TooltipNode(keyValue(entry.getKey().location(), entry.getValue()));
     }
 
     @Unmodifiable

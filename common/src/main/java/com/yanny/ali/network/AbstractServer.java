@@ -11,7 +11,6 @@ import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.ReloadableServerRegistries;
@@ -128,20 +127,21 @@ public abstract class AbstractServer {
         Map<ResourceKey<LootTable>, IDataNode> lootNodes = new HashMap<>();
 
         for (Block block : BuiltInRegistries.BLOCK) {
-            ResourceKey<LootTable> location = block.getLootTable();
-            LootTable lootTable = lootTables.remove(location);
-            List<Item> items = lootTableItems.get(location);
+            block.getLootTable().ifPresent((location) -> {
+                LootTable lootTable = lootTables.remove(location);
+                List<Item> items = lootTableItems.get(location);
 
-            if (lootTable != null) {
-                List<ILootModifier<?>> lootModifiers = Stream.concat(
-                        blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
-                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                ).toList();
+                if (lootTable != null) {
+                    List<ILootModifier<?>> lootModifiers = Stream.concat(
+                            blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
+                            lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                    ).toList();
 
-                lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-            } else {
-                LOGGER.debug("Missing block loot table for {}", block);
-            }
+                    lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                } else {
+                    LOGGER.debug("Missing block loot table for {}", block);
+                }
+            });
         }
 
         return lootNodes;
@@ -158,20 +158,21 @@ public abstract class AbstractServer {
 
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
-                    ResourceKey<LootTable> location = mob.getLootTable();
-                    LootTable lootTable = lootTables.remove(location);
-                    List<Item> items = lootTableItems.get(location);
+                    mob.getLootTable().ifPresent((location) -> {
+                        LootTable lootTable = lootTables.remove(location);
+                        List<Item> items = lootTableItems.get(location);
 
-                    if (lootTable != null) {
-                        List<ILootModifier<?>> lootModifiers = Stream.concat(
-                                entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
-                                lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                        ).toList();
+                        if (lootTable != null) {
+                            List<ILootModifier<?>> lootModifiers = Stream.concat(
+                                    entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
+                                    lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                            ).toList();
 
-                        lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-                    } else {
-                        LOGGER.debug("Missing entity loot table for {}", entity);
-                    }
+                            lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                        } else {
+                            LOGGER.debug("Missing entity loot table for {}", entity);
+                        }
+                    });
                 }
             }
         }
@@ -225,8 +226,6 @@ public abstract class AbstractServer {
     }
 
     private static List<ItemStack> toItemStacks(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.getTag(tag)
-                .map(holders -> holders.stream().map(Holder::value).map(Item::getDefaultInstance).toList())
-                .orElse(Collections.emptyList());
+        return BuiltInRegistries.ITEM.get(tag).map((named) -> named.stream().map(Holder::value).map(Item::getDefaultInstance).toList()).orElse(Collections.emptyList());
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.ICommonUtils;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
         List<Entity> entities = new ArrayList<>();
 
         if (factory == null) {
-            factory = (l) -> Collections.singletonList(type.create(l));
+            factory = (l) -> Collections.singletonList(type.create(l, EntitySpawnReason.LOAD));
         }
 
         try {

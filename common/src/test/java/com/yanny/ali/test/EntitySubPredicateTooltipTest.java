@@ -110,7 +110,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testSheepPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, 0, new SheepPredicate(Optional.of(false), Optional.of(DyeColor.BROWN))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, new SheepPredicate(Optional.of(false), Optional.of(DyeColor.BROWN))), List.of(
                 "Sheep:",
                 "  -> Sheared: false",
                 "  -> Color: BROWN"

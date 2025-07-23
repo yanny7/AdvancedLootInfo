@@ -114,12 +114,7 @@ accessible field net/minecraft/world/level/storage/loot/functions/ToggleTooltips
 accessible field net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction amplifierGenerator Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/level/storage/loot/functions/SetCustomModelDataFunction valueProvider Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 
-accessible field net/minecraft/world/item/crafting/Ingredient values [Lnet/minecraft/world/item/crafting/Ingredient$Value;
-accessible class net/minecraft/world/item/crafting/Ingredient$Value
-accessible class net/minecraft/world/item/crafting/Ingredient$ItemValue
-accessible field net/minecraft/world/item/crafting/Ingredient$ItemValue item Lnet/minecraft/world/item/ItemStack;
-accessible class net/minecraft/world/item/crafting/Ingredient$TagValue
-accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/item/crafting/Ingredient values Lnet/minecraft/core/HolderSet;
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/HolderGetter$Provider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetItemFunction <init> (Ljava/util/List;Lnet/minecraft/core/Holder;)V

@@ -6,6 +6,7 @@ import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -17,9 +18,9 @@ import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -123,7 +124,7 @@ public class RegistriesTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getInstrumentTooltip(IServerUtils utils, String key, Instrument value) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.INSTRUMENT, value);
+        return getRegistryTooltip(utils, key, Registries.INSTRUMENT, value);
     }
 
     @Unmodifiable
@@ -190,5 +191,11 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static ITooltipNode getJukeboxSongTooltip(IServerUtils utils, String key, JukeboxSong pattern) {
         return getRegistryTooltip(utils, key, Registries.JUKEBOX_SONG, pattern);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getSoundEventTooltip(IServerUtils utils, String key, SoundEvent soundEvent) {
+        return getRegistryTooltip(utils, key, Registries.SOUND_EVENT, soundEvent);
     }
 }

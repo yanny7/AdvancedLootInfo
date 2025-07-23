@@ -3,6 +3,7 @@ package com.yanny.ali.api;
 import com.mojang.math.Divisor;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -82,14 +83,14 @@ public abstract class ListWidget extends IWidget {
         int top = bounds.getY() + 18;
         int height = lastY - bounds.getY() - 9;
 
-        blitRepeating(guiGraphics, bounds.getX() + 3, top, 2, height, 0, 0, 2, 18);
+        blitRepeating(guiGraphics, TEXTURE_LOC, bounds.getX() + 3, top, 2, height, 0, 0, 2, 18);
         lastDirection = null;
 
         for (IWidget widget : widgets) {
             WidgetDirection direction = widget.getDirection();
 
             if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().offsetY > 0) {
-                blitRepeating(guiGraphics, bounds.getX() + 4, widget.getRect().getY() + 8, 3, 2, 2, 0, 18, 2);
+                blitRepeating(guiGraphics, TEXTURE_LOC, bounds.getX() + 4, widget.getRect().getY() + 8, 3, 2, 2, 0, 18, 2);
             }
 
             lastDirection = direction;
@@ -126,21 +127,28 @@ public abstract class ListWidget extends IWidget {
         return clicked;
     }
 
-    private static void blitRepeating(GuiGraphics guiGraphics, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
+    public static void blit(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
+        guiGraphics.blit(RenderType::guiTextured, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 255, 255 );
+    }
+
+    public static void blit(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {
+        blit(guiGraphics, pAtlasLocation, pX, pY, pWidth, pHeight, pUOffset, pVOffset, pWidth, pHeight);
+    }
+
+    public static void blitRepeating(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
         int i = pTargetX;
         int j;
 
         for(IntIterator intiterator = slices(pTargetWidth, pSourceWidth); intiterator.hasNext(); i += j) {
             j = intiterator.nextInt();
-
             int k = (pSourceWidth - j) / 2;
             int l = pTargetY;
-            int i1;
 
-            for(IntIterator iterator = slices(pTargetHeight, pSourceHeight); iterator.hasNext(); l += i1) {
-                i1 = iterator.nextInt();
+            int i1;
+            for(IntIterator intiterator1 = slices(pTargetHeight, pSourceHeight); intiterator1.hasNext(); l += i1) {
+                i1 = intiterator1.nextInt();
                 int j1 = (pSourceHeight - i1) / 2;
-                guiGraphics.blit(ListWidget.TEXTURE_LOC, i, l, pSourceX + k, pSourceY + j1, j, i1);
+                blit(guiGraphics, pAtlasLocation, i, l, pSourceX + k, pSourceY + j1, j, i1);
             }
         }
     }

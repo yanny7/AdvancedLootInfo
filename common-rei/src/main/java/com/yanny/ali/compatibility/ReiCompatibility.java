@@ -23,7 +23,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.Block;
@@ -99,19 +98,20 @@ public class ReiCompatibility implements REIClientPlugin {
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
 
             for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceKey<LootTable> location = block.getLootTable();
-                IDataNode node = lootData.get(location);
+                block.getLootTable().ifPresent((location) -> {
+                    IDataNode node = lootData.get(location);
 
-                if (node != null) {
-                    for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
-                        if (holder.category.getLootCategory().validate(block)) {
-                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, clientRegistry.getItems(location)));
-                            break;
+                    if (node != null) {
+                        for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
+                            if (holder.category.getLootCategory().validate(block)) {
+                                blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, clientRegistry.getItems(location)));
+                                break;
+                            }
                         }
-                    }
 
-                    lootData.remove(location);
-                }
+                        lootData.remove(location);
+                    }
+                });
             }
 
             for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
@@ -119,19 +119,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                 for (Entity entity : entityList) {
                     if (entity instanceof Mob mob) {
-                        ResourceKey<LootTable> location = mob.getLootTable();
-                        IDataNode node = lootData.get(location);
+                        mob.getLootTable().ifPresent((location) -> {
+                            IDataNode node = lootData.get(location);
 
-                        if (node != null) {
-                            for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
-                                if (holder.category.getLootCategory().validate(entity)) {
-                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, clientRegistry.getItems(location)));
-                                    break;
+                            if (node != null) {
+                                for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
+                                    if (holder.category.getLootCategory().validate(entity)) {
+                                        entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, clientRegistry.getItems(location)));
+                                        break;
+                                    }
                                 }
-                            }
 
-                            lootData.remove(location);
-                        }
+                                lootData.remove(location);
+                            }
+                        });
                     }
                 }
             }

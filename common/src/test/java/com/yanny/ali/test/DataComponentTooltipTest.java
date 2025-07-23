@@ -234,7 +234,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testConsumableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getConsumableTooltip(UTILS, 0, new Consumable(
+        assertTooltip(DataComponentTooltipUtils.getConsumableTooltip(UTILS, new Consumable(
                 5,
                 ItemUseAnimation.DRINK,
                 Holder.direct(SoundEvents.ALLAY_HURT),
@@ -257,7 +257,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testUseRemainderTooltip() {
-        assertUnorderedTooltip(DataComponentTooltipUtils.getUseRemainderTooltip(UTILS, 0, new UseRemainder(
+        assertUnorderedTooltip(DataComponentTooltipUtils.getUseRemainderTooltip(UTILS, new UseRemainder(
                 new ItemStack(Holder.direct(Items.ANDESITE), 10)
         )), List.of(
                 "Convert Into:",
@@ -285,7 +285,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testUseCooldownTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getUseCooldownTooltip(UTILS, 0, new UseCooldown(
+        assertTooltip(DataComponentTooltipUtils.getUseCooldownTooltip(UTILS, new UseCooldown(
                 3.5f,
                 Optional.of(ResourceLocation.withDefaultNamespace("test"))
         )), List.of(
@@ -296,7 +296,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testDamageResistantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getDamageResistantTooltip(UTILS, 0, new DamageResistant(DamageTypeTags.DAMAGES_HELMET)),
+        assertTooltip(DataComponentTooltipUtils.getDamageResistantTooltip(UTILS, new DamageResistant(DamageTypeTags.DAMAGES_HELMET)),
                 List.of("Type: minecraft:damages_helmet"));
     }
 
@@ -335,12 +335,12 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testEnchantableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getEnchantableTooltip(UTILS, 0, new Enchantable(16)), List.of("Value: 16"));
+        assertTooltip(DataComponentTooltipUtils.getEnchantableTooltip(UTILS, new Enchantable(16)), List.of("Value: 16"));
     }
 
     @Test
     public void testEquipableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getEquipableTooltip(UTILS, 0, new Equippable(
+        assertTooltip(DataComponentTooltipUtils.getEquipableTooltip(UTILS, new Equippable(
                 EquipmentSlot.LEGS,
                 Holder.direct(SoundEvents.ANVIL_FALL),
                 Optional.of(ResourceLocation.withDefaultNamespace("anvil")),
@@ -365,7 +365,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testRepairableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getRepairableTooltip(UTILS, 0, new Repairable(
+        assertTooltip(DataComponentTooltipUtils.getRepairableTooltip(UTILS, new Repairable(
                 HolderSet.direct(Holder.direct(Items.ANDESITE), Holder.direct(Items.DIORITE))
         )), List.of(
                 "Items:",
@@ -376,7 +376,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testDeathProtectionTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getDeathProtectionTooltip(UTILS, 0, new DeathProtection(List.of(
+        assertTooltip(DataComponentTooltipUtils.getDeathProtectionTooltip(UTILS, new DeathProtection(List.of(
                 new TeleportRandomlyConsumeEffect(30),
                 new ClearAllStatusEffectsConsumeEffect()
         ))), List.of(
@@ -661,7 +661,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testOminousBottleAmplifierTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getOminousBottleAmplifierTooltip(UTILS, 0, new OminousBottleAmplifier(5)), List.of("Value: 5"));
+        assertTooltip(DataComponentTooltipUtils.getOminousBottleAmplifierTooltip(UTILS, new OminousBottleAmplifier(5)), List.of("Value: 5"));
     }
 
     @Test
