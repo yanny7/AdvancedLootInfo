@@ -17,7 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -32,7 +32,7 @@ public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<Entity>> ENTITY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> GAMEPLAY_LOOT_CATEGORIES = new HashMap<>();
 
-    public static final LootCategory<Block> PLANT_LOOT = getBlockCategory("plant_loot", Items.DIAMOND_HOE, (block) -> block instanceof BushBlock);
+    public static final LootCategory<Block> PLANT_LOOT = getBlockCategory("plant_loot", Items.DIAMOND_HOE, (block) -> block instanceof VegetationBlock);
     public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory("block_loot", Items.DIAMOND_PICKAXE, (block) -> true);
     public static final LootCategory<Entity> ENTITY_LOOT = getEntityCategory("entity_loot", Items.SKELETON_SKULL, (entity) -> true);
     public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory((path) -> true);
