@@ -333,6 +333,7 @@
   "ali.type.condition.any_of": "Any of:",
   "ali.type.condition.block_entity": "Block Entity:",
   "ali.type.condition.block_state_property": "Block State Property:",
+  "ali.type.condition.can_item_perform_ability": "Can Item Perform Ability: %s",
   "ali.type.condition.can_tool_perform_action": "Can Tool Perform Action: %s",
   "ali.type.condition.damage_source_properties": "Damage Source Properties:",
   "ali.type.condition.enchantment_active_check": "Enchantment Active Check:",

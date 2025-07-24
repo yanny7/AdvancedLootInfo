@@ -51,6 +51,7 @@ public class LanguageHolder {
 
         // Forge
         TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
+        TRANSLATION_MAP.put("ali.type.condition.can_item_perform_ability", "Can Item Perform Ability: %s");
         TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
 
         // LootJS
