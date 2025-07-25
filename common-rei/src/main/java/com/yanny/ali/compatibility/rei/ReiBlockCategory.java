@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.LinkedList;
@@ -43,7 +43,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
     @SuppressWarnings("UnstableApiUsage")
     @Override
     public List<Widget> setupDisplay(ReiBlockDisplay display, Rectangle bounds) {
-        boolean isSpecial = display.getBlock() instanceof BushBlock || display.getBlock().asItem() == Items.AIR;
+        boolean isSpecial = display.getBlock() instanceof VegetationBlock || display.getBlock().asItem() == Items.AIR;
         int offset = isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING;
         List<Widget> widgets = new LinkedList<>();
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), offset);
@@ -99,7 +99,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         public BlockSlotRenderer(Block block) {
             this.block = block;
             blockState = block.defaultBlockState();
-            isPlant = block instanceof BushBlock;
+            isPlant = block instanceof VegetationBlock;
             level = Minecraft.getInstance().level;
         }
 
@@ -122,7 +122,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                if (block instanceof MixinVegetationBlock vegetationBlock && vegetationBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();

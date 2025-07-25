@@ -2,7 +2,7 @@ package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yanny.ali.mixin.MixinBushBlock;
+import com.yanny.ali.mixin.MixinVegetationBlock;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
         super(EmiStack.of(block), x, y);
         this.block = block;
         blockState = block.defaultBlockState();
-        isPlant = block instanceof BushBlock;
+        isPlant = block instanceof VegetationBlock;
         level = Minecraft.getInstance().level;
         large(true);
     }
@@ -56,7 +56,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
             BlockState base;
             BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-            if (block instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+            if (block instanceof MixinVegetationBlock vegetationBlock && vegetationBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                 base = farmland;
             } else {
                 base = Blocks.GRASS_BLOCK.defaultBlockState();

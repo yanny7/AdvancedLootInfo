@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final boolean isSpecial;
 
     public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, IDataNode lootTable, List<ItemStack> items) {
-        super(category, id, lootTable, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22, items);
+        super(category, id, lootTable, 0, (block instanceof VegetationBlock || block.asItem() == Items.AIR) ? 30 : 22, items);
         this.block = block;
-        isSpecial = block instanceof BushBlock || block.asItem() == Items.AIR;
+        isSpecial = block instanceof VegetationBlock || block.asItem() == Items.AIR;
         inputs = List.of(EmiStack.of(block));
     }
 

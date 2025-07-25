@@ -18,7 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         this.slotDrawable = slotDrawable;
         this.block = block;
         blockState = block.defaultBlockState();
-        isPlant = block instanceof BushBlock;
+        isPlant = block instanceof VegetationBlock;
         position = new ScreenPosition(x, y);
         rect = new Rect(x - 4, y - 4, 24, 24);
         level = Minecraft.getInstance().level;
@@ -76,7 +76,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                if (block instanceof MixinVegetationBlock vegetationBlock && vegetationBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();
