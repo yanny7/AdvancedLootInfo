@@ -12,7 +12,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix3x2fStack;
@@ -32,7 +32,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         this.slotDrawable = slotDrawable;
         this.block = block;
         blockState = block.defaultBlockState();
-        isPlant = block instanceof BushBlock;
+        isPlant = block instanceof VegetationBlock;
         position = new ScreenPosition(x, y);
         rect = new Rect(x - 4, y - 4, 24, 24);
         level = Minecraft.getInstance().level;

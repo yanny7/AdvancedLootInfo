@@ -11,12 +11,11 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import oshi.util.tuples.Pair;
 
 import java.util.LinkedList;
@@ -32,7 +31,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
         super.setRecipe(builder, recipe, iFocusGroup);
         IRecipeSlotBuilder slotBuilder = builder.addInputSlot().setSlotName("block");
 
-        if (recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR) {
+        if (recipe.block() instanceof VegetationBlock || recipe.block().asItem() == Items.AIR) {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 5).setOutputSlotBackground();
         } else {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 0).setStandardSlotBackground();
@@ -47,7 +46,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>();
 
         builder.getRecipeSlots().findSlotByName("block").ifPresent((slotDrawable -> {
-            if (recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR) {
+            if (recipe.block() instanceof VegetationBlock || recipe.block().asItem() == Items.AIR) {
                 widgets.add(new JeiBlockSlotWidget(slotDrawable, recipe.block(), CATEGORY_WIDTH / 2 - 9, 5));
                 slotDrawables.add(slotDrawable);
             } else {
@@ -61,7 +60,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
 
     @Override
     int getYOffset(BlockLootType recipe) {
-        boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
+        boolean isSpecial = recipe.block() instanceof VegetationBlock || recipe.block().asItem() == Items.AIR;
         return isSpecial ? 30 : 22;
     }
 }
