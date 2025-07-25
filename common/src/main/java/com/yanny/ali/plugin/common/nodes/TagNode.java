@@ -92,11 +92,4 @@ public class TagNode implements IDataNode, IItemNode {
     public ResourceLocation getId() {
         return ID;
     }
-
-//    @Override
-//    public List<Item> getItems() {
-//        return BuiltInRegistries.ITEM.getTag(tag)
-//                .map(holders -> holders.stream().map(Holder::value).toList())
-//                .orElse(Collections.emptyList());
-//    }
 }

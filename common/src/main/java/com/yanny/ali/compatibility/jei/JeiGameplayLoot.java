@@ -30,7 +30,7 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
         Component fullText = Component.translatableWithFallback(key, recipe.id());
         Rect rect = new Rect(0, 0, CATEGORY_WIDTH, 8);
         return new Pair<>(List.of(
-                createTextWidget(text, 0, 0, false),
+                createTextWidget(text, 0, false),
                 new TooltipWidget(fullText, rect)
         ), List.of());
     }

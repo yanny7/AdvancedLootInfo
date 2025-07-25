@@ -140,7 +140,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     abstract int getYOffset(T recipe);
 
     @NotNull
-    protected IRecipeWidget createTextWidget(Component component, int x, int y, boolean centered) {
+    protected IRecipeWidget createTextWidget(Component component, int x, boolean centered) {
         return guiHelper.createWidgetFromDrawable(new IDrawable() {
             @Override
             public int getWidth() {
@@ -156,12 +156,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
                 if (centered) {
                     int width = Minecraft.getInstance().font.width(component);
-                    guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, y, 0, false);
+                    guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, 0, 0, false);
                 } else {
-                    guiGraphics.drawString(Minecraft.getInstance().font, component, x, y, 0, false);
+                    guiGraphics.drawString(Minecraft.getInstance().font, component, x, 0, 0, false);
                 }
             }
-        }, x, y);
+        }, x, 0);
     }
 
     @NotNull
