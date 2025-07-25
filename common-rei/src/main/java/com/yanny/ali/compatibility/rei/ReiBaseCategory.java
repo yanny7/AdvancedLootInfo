@@ -135,11 +135,11 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                     stack.pushPose();
                     stack.scale(0.5f, 0.5f, 0.5f);
                     //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
+                    guiGraphics.drawString(font, count, -font.width(count), 0, -1, false);
                     stack.popPose();
                 } else {
                     stack.translate(18, 10, 200);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
+                    guiGraphics.drawString(font, count, -font.width(count), 0, -1, true);
                 }
 
                 stack.popPose();

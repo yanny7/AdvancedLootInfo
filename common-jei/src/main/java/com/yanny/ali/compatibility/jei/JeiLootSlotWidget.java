@@ -1,6 +1,5 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.api.Rect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -14,6 +13,7 @@ import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2fStack;
 
 import java.util.Optional;
 
@@ -48,30 +48,30 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
 
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        PoseStack stack = guiGraphics.pose();
+        Matrix3x2fStack stack = guiGraphics.pose();
 
-        stack.translate(1, 1, 0);
+        stack.translate(1, 1);
         slotDrawable.draw(guiGraphics);
-        stack.translate(-1, -1, 0);
+        stack.translate(-1, -1);
 
         if (count != null) {
             Font font = Minecraft.getInstance().font;
 
-            stack.pushPose();
-            stack.translate(rect.x(), rect.y(), 0);
+            stack.pushMatrix();
+            stack.translate(rect.x(), rect.y());
 
             if (isRange) {
-                stack.translate(17, 13, 200);
-                stack.pushPose();
-                stack.scale(0.5f, 0.5f, 0.5f);
-                guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
-                stack.popPose();
+                stack.translate(17, 13);
+                stack.pushMatrix();
+                stack.scale(0.5f);
+                guiGraphics.drawString(font, count, -font.width(count), 0, -1, false);
+                stack.popMatrix();
             } else {
-                stack.translate(18, 10, 200);
-                guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
+                stack.translate(18, 10);
+                guiGraphics.drawString(font, count, -font.width(count), 0, -1, true);
             }
 
-            stack.popPose();
+            stack.popMatrix();
         }
     }
 

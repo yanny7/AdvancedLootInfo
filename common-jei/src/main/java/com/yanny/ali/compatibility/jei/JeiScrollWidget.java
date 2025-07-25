@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility.jei;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -15,8 +14,7 @@ import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
+import org.joml.Matrix3x2fStack;
 
 import java.util.List;
 import java.util.Optional;
@@ -151,17 +149,17 @@ public class JeiScrollWidget implements IRecipeWidget, IJeiInputHandler, ISlotte
     }
 
     private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY, float scrollOffsetY) {
-        PoseStack poseStack = guiGraphics.pose();
+        Matrix3x2fStack poseStack = guiGraphics.pose();
         float scrollAmount = getHiddenAmount() * scrollOffsetY;
 
         guiGraphics.enableScissor(rect.x(), rect.y(), rect.right(), rect.bottom());
-        poseStack.pushPose();
-        poseStack.translate(0.0, -scrollAmount, 0.0);
+        poseStack.pushMatrix();
+        poseStack.translate(0, -scrollAmount);
 
         try {
             widgets.forEach((widget) -> widget.drawWidget(guiGraphics, mouseX, mouseY + scrollAmount));
         } finally {
-            poseStack.popPose();
+            poseStack.popMatrix();
             guiGraphics.disableScissor();
         }
     }
@@ -188,19 +186,6 @@ public class JeiScrollWidget implements IRecipeWidget, IJeiInputHandler, ISlotte
 
     private int getHiddenAmount() {
         return Math.max(contentRect.height() - rect.height(), 0);
-    }
-
-    @NotNull
-    public static ScreenRectangle transform(Rect rect, Matrix4f pose) {
-        Vector3f topLeft = new Vector3f(rect.x(), rect.y(), 1.0f);
-        Vector3f bottomRight = new Vector3f(rect.x() + rect.width(), rect.y() + rect.height(), 1.0f);
-
-        topLeft = pose.transformPosition(topLeft);
-        bottomRight = pose.transformPosition(bottomRight);
-
-        int x = Math.round(topLeft.x);
-        int y = Math.round(topLeft.y);
-        return new ScreenRectangle(x, y, Math.round(bottomRight.x) - x, Math.round(bottomRight.y) - y);
     }
 
     @NotNull

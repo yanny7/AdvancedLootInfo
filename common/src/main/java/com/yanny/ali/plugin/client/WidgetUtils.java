@@ -9,7 +9,7 @@ import com.yanny.ali.api.RelativeRect;
 import com.yanny.ali.plugin.client.widget.TextureWidget;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -80,7 +80,7 @@ public class WidgetUtils {
     }
 
     public static void blit(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
-        guiGraphics.blit(RenderType::guiTextured, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 255, 255 );
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 255, 255 );
     }
 
     public static void blit(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {

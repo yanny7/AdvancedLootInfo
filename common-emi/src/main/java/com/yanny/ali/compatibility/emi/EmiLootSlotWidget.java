@@ -38,11 +38,11 @@ public class EmiLootSlotWidget extends SlotWidget {
                 stack.pushPose();
                 stack.scale(0.5f, 0.5f, 0.5f);
                 //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                draw.drawString(font, count, -font.width(count), 0, 16777215, false);
+                draw.drawString(font, count, -font.width(count), 0, -1, false);
                 stack.popPose();
             } else {
                 stack.translate(x + 18, y + 10, 200);
-                draw.drawString(font, count, -font.width(count), 0, 16777215, true);
+                draw.drawString(font, count, -font.width(count), 0, -1, true);
             }
 
             stack.popPose();

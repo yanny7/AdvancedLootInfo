@@ -45,7 +45,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":api")
     compileOnly project(":common")
-    compileOnly project(":common-rei")
+//    compileOnly project(":common-rei")
 
     // EMI
 //    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
@@ -58,11 +58,11 @@ dependencies {
     runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
     // REI
-    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
+//    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
+//    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
 //    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-    implementation "dev.architectury:architectury-neoforge:${architectury_version}"
+//    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+//    implementation "dev.architectury:architectury-neoforge:${architectury_version}"
 
     // LootJS
 //    implementation "curse.maven:kubejs-238086:5810100"
@@ -87,7 +87,7 @@ tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
     source(project(":common").sourceSets.main.allSource)
 //    source(project(":common-emi").sourceSets.main.allSource)
     source(project(":common-jei").sourceSets.main.allSource)
-    source(project(":common-rei").sourceSets.main.allSource)
+//    source(project(":common-rei").sourceSets.main.allSource)
 //    source(project(":common-lootjs").sourceSets.main.allSource)
 }
 
@@ -96,7 +96,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
 //    from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
-    from(project(":common-rei").sourceSets.main.allSource)
+//    from(project(":common-rei").sourceSets.main.allSource)
 //    from(project(":common-lootjs").sourceSets.main.allSource)
 }
 

@@ -387,7 +387,9 @@ public class DataComponentTooltipTest {
                 true,
                 true,
                 false,
-                true
+                true,
+                false,
+                SoundEvents.ARMOR_EQUIP_TURTLE
         )), List.of(
                 "Equipment Slot: LEGS",
                 "Equip Sound: minecraft:block.anvil.fall",
