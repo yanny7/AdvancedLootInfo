@@ -1,6 +1,9 @@
 package com.yanny.ali.compatibility.jei;
 
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.mixin.MixinVegetationBlock;
+import com.yanny.ali.pip.BlockRenderState;
+import com.yanny.ali.platform.Services;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
@@ -9,9 +12,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +38,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         blockState = block.defaultBlockState();
         isPlant = block instanceof VegetationBlock;
         position = new ScreenPosition(x, y);
-        rect = new Rect(x - 4, y - 4, 24, 24);
+        rect = new Rect(x, y, 24, 24);
         level = Minecraft.getInstance().level;
     }
 
@@ -53,7 +57,6 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         Matrix3x2fStack poseStack = guiGraphics.pose();
-        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 
         poseStack.pushMatrix();
         slotDrawable.draw(guiGraphics);
@@ -62,30 +65,30 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
             poseStack.translate(rect.x(), rect.y());
 
             if (isPlant) {
-                poseStack.translate(18, 10);
-                poseStack.scale(9, -9);
-//                poseStack.mulPose(Axis.XP.rotationDegrees(30f)); FIXME - PIP
-//                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-//                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
-//
-//                BlockState base;
-//                BlockState farmland = Blocks.FARMLAND.defaultBlockState();
-//
-//                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
-//                    base = farmland;
-//                } else {
-//                    base = Blocks.GRASS_BLOCK.defaultBlockState();
-//                }
-//
-//                poseStack.translate(0, -1);
-//                blockRenderer.renderSingleBlock(base, poseStack, guiGraphics, 15728880, OverlayTexture.NO_OVERLAY);
+                int x = (int) guiGraphics.pose().m20() - 7;
+                int y = (int) guiGraphics.pose().m21() - 8;
+
+                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, rect.width() + x, rect.height() + y, 0.75f, null);
+
+                BlockState base;
+                BlockState farmland = Blocks.FARMLAND.defaultBlockState();
+
+                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                    base = farmland;
+                } else {
+                    base = Blocks.GRASS_BLOCK.defaultBlockState();
+                }
+
+                BlockRenderState farmlandState = BlockRenderState.of(base, level, x + 3, y + 7, rect.width() + x + 3, rect.height() + y + 7, 0.75f, null);
+
+                Services.getPlatform().renderBlockInGui(guiGraphics, farmlandState);
+                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
             } else {
-                poseStack.translate(25.5F, 21F);
-                poseStack.scale(18, -18);
-//                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-//                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-//                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
-                poseStack.translate(0, -1);
+                int x = (int) guiGraphics.pose().m20() - 4;
+                int y = (int) guiGraphics.pose().m21() - 4;
+
+                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, rect.width() + x, rect.height() + y, 1, null);
+                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
             }
         }
 
@@ -94,11 +97,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
 
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
         if (slotDrawable.isMouseOver(mouseX, mouseY)) {
-            if (isPlant) {
-                tooltip.add(block.getName());
-            } else {
-                slotDrawable.getTooltip(tooltip);
-            }
+            tooltip.add(block.getName());
         }
     }
 }

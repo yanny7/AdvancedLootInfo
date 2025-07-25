@@ -8,7 +8,9 @@ import com.yanny.ali.manager.PluginHolder;
 import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
+import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
@@ -54,5 +56,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public DistHolder<AbstractClient, AbstractServer> getInfoPropagator() {
         return AliMod.INFO_PROPAGATOR;
+    }
+
+    @Override
+    public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
+        guiGraphics.submitPictureInPictureRenderState(renderState);
     }
 }

@@ -6,11 +6,14 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
+import com.yanny.ali.pip.BlockPictureInPictureRenderer;
+import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.registries.NeoForgeReloadListener;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
@@ -24,6 +27,7 @@ public class AliMod {
         modEventBus.addListener(AliMod::registerClientEvent);
         modEventBus.addListener(AliMod::registerPayloadHandler);
         modEventBus.addListener(NeoForgeReloadListener::onResourceReload);
+        modEventBus.addListener(AliMod::registerPipRenderer);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
@@ -36,5 +40,9 @@ public class AliMod {
 
     public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
         INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator(event.registrar(Utils.MOD_ID).versioned(PROTOCOL_VERSION));
+    }
+
+    public static void registerPipRenderer(final RegisterPictureInPictureRenderersEvent event) {
+        event.register(BlockRenderState.class, BlockPictureInPictureRenderer::new);
     }
 }
