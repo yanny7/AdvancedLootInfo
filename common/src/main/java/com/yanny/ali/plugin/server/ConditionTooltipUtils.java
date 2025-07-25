@@ -17,7 +17,7 @@ import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getBlockTooltip
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getEnchantmentTooltip;
 
 public class ConditionTooltipUtils {
-    private static final DecimalFormat FLOAT_FORMAT = new DecimalFormat("0.###");
+    private static final DecimalFormat FLOAT_FORMAT = new DecimalFormat("0.####");
 
     @NotNull
     public static ITooltipNode getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
