@@ -1,13 +1,9 @@
 package com.yanny.ali.platform;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.AliMod;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.manager.PluginHolder;
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.network.AbstractServer;
-import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforgespi.language.ModFileScanData;
@@ -49,10 +45,5 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s", plugins.size());
         return plugins;
-    }
-
-    @Override
-    public DistHolder<AbstractClient, AbstractServer> getInfoPropagator() {
-        return AliMod.INFO_PROPAGATOR;
     }
 }

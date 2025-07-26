@@ -124,7 +124,6 @@ public class LootJsGenericTooltipUtils {
             }
         }
 
-
         return new TooltipNode(translatable(key, value("UNKNOWN")));
     }
 
