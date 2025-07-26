@@ -1,4 +1,4 @@
-## []
+## [1.2.2]
 
 - Fixed crash when empty itemStack
 
