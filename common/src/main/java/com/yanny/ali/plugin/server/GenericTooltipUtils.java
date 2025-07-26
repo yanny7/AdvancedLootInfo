@@ -184,21 +184,11 @@ public class GenericTooltipUtils {
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher(String value)) {
             return new TooltipNode(keyValue(name, value));
         }
-        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> minValue, Optional<String> maxValue)) {
-
-            if (minValue.isPresent()) {
-                if (maxValue.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, minValue.get(), maxValue.get())));
-                } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, minValue.get())));
-                }
-            } else {
-                if (maxValue.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, maxValue.get())));
-                } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)));
-                }
-            }
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> min, Optional<String> max)) {
+            return min.map((s) -> max.map(string -> new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, s, string))))
+                            .orElseGet(() -> new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, s)))))
+                    .orElseGet(() -> max.map(string -> new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, string))))
+                            .orElseGet(() -> new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)))));
         }
         
         return TooltipNode.EMPTY;
