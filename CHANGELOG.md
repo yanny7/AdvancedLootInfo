@@ -1,6 +1,7 @@
 ## []
 
 - Fixed Ingredient tooltip
+- Make uppercased chest name from loot table name if missing translation
 
 ## [1.2.1]
 
