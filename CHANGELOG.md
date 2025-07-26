@@ -1,3 +1,7 @@
+## [1.2.2]
+
+- Fixed crash when empty itemStack
+
 ## [1.2.1]
 
 - Fixed duplicating slots

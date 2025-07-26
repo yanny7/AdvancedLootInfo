@@ -39,7 +39,7 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        itemStack = ItemStack.STREAM_CODEC.decode(buf);;
+        itemStack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);;
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
 
@@ -75,7 +75,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ItemStack.STREAM_CODEC.encode(buf, itemStack);
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
     }
