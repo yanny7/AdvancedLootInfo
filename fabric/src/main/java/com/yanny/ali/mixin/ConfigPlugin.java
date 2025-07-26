@@ -21,11 +21,7 @@ public class ConfigPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.contains("MixinRecipeScreen") && !isLoaded("emi")) {
-            return false;
-        }
-
-        return true;
+        return !mixinClassName.contains("MixinRecipeScreen") || isLoaded("emi");
     }
 
     @Override

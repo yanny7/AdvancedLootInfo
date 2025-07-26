@@ -57,7 +57,6 @@ import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -213,10 +212,6 @@ public class GenericTooltipTest {
                 "  -> level: 3"
         ));
     }
-
-    @Disabled("internal function")
-    @Test
-    public void testPropertyMatcherTooltip() {}
 
     @Test
     void testDamageSourcePredicateTooltip() {
@@ -488,21 +483,6 @@ public class GenericTooltipTest {
         ));
     }
 
-//    @Test
-//    public void testMobEffectInstancePredicateTooltip() {
-//        assertTooltip(GenericTooltipUtils.getMobEffectInstancePredicateTooltip(UTILS, new MobEffectsPredicate.MobEffectInstancePredicate(
-//                MinMaxBounds.Ints.between(10, 15),
-//                MinMaxBounds.Ints.atMost(5),
-//                Optional.of(true),
-//                Optional.of(false))
-//        ), List.of(
-//                "Amplifier: 10-15",
-//                "Duration: ≤5",
-//                "Is Ambient: true",
-//                "Is Visible: false"
-//        ));
-//    }
-
     @Test
     public void testEntityFlagsPredicateTooltip() {
         assertTooltip(GenericTooltipUtils.getEntityFlagsPredicateTooltip(UTILS, "ali.property.branch.entity_flags", EntityFlagsPredicate.Builder.flags()
@@ -689,10 +669,6 @@ public class GenericTooltipTest {
     public void testContainerComponentManipulatorTooltip() {
         assertTooltip(GenericTooltipUtils.getContainerComponentManipulatorTooltip(UTILS, "ali.property.value.container", ContainerComponentManipulators.CHARGED_PROJECTILES), List.of("Container: minecraft:charged_projectiles"));
     }
-
-    @Disabled("internal function")
-    @Test
-    public void testCopyOperationTooltip() {}
 
     @Test
     public void testNbtPathTooltip() throws CommandSyntaxException {
