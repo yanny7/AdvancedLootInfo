@@ -28,10 +28,7 @@ public record SyncLootTableMessage(ResourceKey<LootTable> location, List<ItemSta
     public static final Type<SyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLootTableMessage> CODEC = StreamCodec.composite(
             ResourceKey.streamCodec(Registries.LOOT_TABLE), (l) -> l.location,
-            StreamCodec.of(
-                    (b, l) -> b.writeCollection(l, (a, i) -> ItemStack.STREAM_CODEC.encode((RegistryFriendlyByteBuf)a, i)),
-                    (b) -> b.readList((a) -> ItemStack.STREAM_CODEC.decode((RegistryFriendlyByteBuf) a))
-            ), (l) -> l.items,
+            ItemStack.OPTIONAL_LIST_STREAM_CODEC, (l) -> l.items,
             StreamCodec.of(
                     (b, l) -> {
                         int fallbackIndex = b.writerIndex();
