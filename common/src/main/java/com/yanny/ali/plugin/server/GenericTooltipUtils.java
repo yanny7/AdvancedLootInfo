@@ -185,20 +185,11 @@ public class GenericTooltipUtils {
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher(String value)) {
             return new TooltipNode(keyValue(name, value));
         }
-        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> minValue, Optional<String> maxValue)) {
-            if (minValue.isPresent()) {
-                if (maxValue.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, minValue.get(), maxValue.get())));
-                } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, minValue.get())));
-                }
-            } else {
-                if (maxValue.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, maxValue.get())));
-                } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)));
-                }
-            }
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> min, Optional<String> max)) {
+            return min.map((s) -> max.map(string -> new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, s, string))))
+                            .orElseGet(() -> new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, s)))))
+                    .orElseGet(() -> max.map(string -> new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, string))))
+                            .orElseGet(() -> new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)))));
         }
         
         return TooltipNode.EMPTY;
@@ -613,11 +604,11 @@ public class GenericTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
         switch (levelBasedValue) {
-            case LevelBasedValue.Constant(float value) -> 
+            case LevelBasedValue.Constant(float value) ->
                     tooltip.add(getFloatTooltip(utils, "ali.property.value.constant", value));
             case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
                 ITooltipNode t = new TooltipNode(translatable("ali.property.branch.clamped"));
-                
+
                 t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.value", value));
                 t.add(getFloatTooltip(utils, "ali.property.value.min", min));
                 t.add(getFloatTooltip(utils, "ali.property.value.max", max));
@@ -625,27 +616,27 @@ public class GenericTooltipUtils {
             }
             case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
                 ITooltipNode t = new TooltipNode(translatable("ali.property.branch.fraction"));
-                
+
                 t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.numerator", numerator));
                 t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.denominator", denominator));
                 tooltip.add(t);
             }
             case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
                 ITooltipNode t = new TooltipNode(translatable("ali.property.branch.linear"));
-                
+
                 t.add(getFloatTooltip(utils, "ali.property.value.base", base));
                 t.add(getFloatTooltip(utils, "ali.property.value.per_level", perLevelAboveFirst));
                 tooltip.add(t);
             }
             case LevelBasedValue.LevelsSquared(float added) -> {
                 ITooltipNode t = new TooltipNode(translatable("ali.property.branch.level_squared"));
-                
+
                 t.add(getFloatTooltip(utils, "ali.property.value.added", added));
                 tooltip.add(t);
             }
             case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
                 ITooltipNode t = new TooltipNode(translatable("ali.property.branch.lookup"));
-                
+
                 t.add(getStringTooltip(utils, "ali.property.value.values", values.toString()));
                 t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.fallback", fallback));
                 tooltip.add(t);
@@ -661,7 +652,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getLocationWrapperTooltip(IServerUtils utils, String key, EntityPredicate.LocationWrapper locationWrapper) {
         if (locationWrapper.located().isPresent() || locationWrapper.affectsMovement().isPresent() || locationWrapper.steppingOn().isPresent()) {
             ITooltipNode tooltip = new TooltipNode(translatable(key));
-            
+
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.located", locationWrapper.located(), GenericTooltipUtils::getLocationPredicateTooltip));
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.stepping_on_location", locationWrapper.steppingOn(), GenericTooltipUtils::getLocationPredicateTooltip));
             tooltip.add(getOptionalTooltip(utils, "ali.property.branch.affects_movement", locationWrapper.affectsMovement(), GenericTooltipUtils::getLocationPredicateTooltip));
@@ -675,7 +666,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getMovementPredicateTooltip(IServerUtils utils, String key, MovementPredicate predicate) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
-        
+
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.x", predicate.x()));
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.y", predicate.y()));
         tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.z", predicate.z()));
