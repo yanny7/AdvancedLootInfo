@@ -61,6 +61,7 @@ import java.util.concurrent.ExecutionException;
         ConditionTooltipTest.class,
         FunctionTooltipTest.class,
         EntryTooltipTest.class,
+        IngredientTooltipTest.class,
         TooltipTest.class
 })
 public class TooltipTestSuite {

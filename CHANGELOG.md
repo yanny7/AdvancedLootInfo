@@ -1,3 +1,7 @@
+## []
+
+- Fixed Ingredient tooltip
+
 ## [1.2.1]
 
 - Fixed duplicating slots
