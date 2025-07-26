@@ -1,6 +1,5 @@
 package com.yanny.ali.network;
 
-import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;

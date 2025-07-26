@@ -74,7 +74,7 @@ public class LootJsConditionTooltipUtils {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.match_loot"));
         MixinContainsLootCondition cond = (MixinContainsLootCondition) condition;
 
-        tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.branch.predicate", cond.getPredicate()));
+        tooltip.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, "ali.property.value.item_filter", cond.getPredicate()));
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.exact", cond.getExact()));
 
         return tooltip;

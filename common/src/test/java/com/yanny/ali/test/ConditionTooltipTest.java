@@ -202,7 +202,7 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.MOB_LOOTING, 0.25F, 0.5555F, 0.99F).build()), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: minecraft:looting",
-                "  -> Values: [0.25, 0.555, 0.99]"
+                "  -> Values: [0.25, 0.5555, 0.99]"
         ));
     }
 

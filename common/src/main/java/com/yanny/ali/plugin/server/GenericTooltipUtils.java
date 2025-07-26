@@ -178,19 +178,10 @@ public class GenericTooltipUtils {
             Optional<String> min = matcher.minValue();
             Optional<String> max = matcher.maxValue();
 
-            if (min.isPresent()) {
-                if (max.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, min.get(), max.get())));
-                } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, min.get())));
-                }
-            } else {
-                if (max.isPresent()) {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, max.get())));
-                } else {
-                    return new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)));
-                }
-            }
+            return min.map((s) -> max.map(string -> new TooltipNode(value(translatable("ali.property.value.ranged_property_both", name, s, string))))
+                            .orElseGet(() -> new TooltipNode(value(translatable("ali.property.value.ranged_property_gte", name, s)))))
+                    .orElseGet(() -> max.map(string -> new TooltipNode(value(translatable("ali.property.value.ranged_property_lte", name, string))))
+                            .orElseGet(() -> new TooltipNode(value(translatable("ali.property.value.ranged_property_any", name)))));
         }
         
         return TooltipNode.EMPTY;
@@ -753,15 +744,6 @@ public class GenericTooltipUtils {
         ITooltipNode tooltip = getHolderTooltip(utils, "ali.property.value.null", entry.getKey(), RegistriesTooltipUtils::getEnchantmentTooltip);
 
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.levels", entry.getValue()));
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode getMobEffectDurationEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, NumberProvider> entry) {
-        ITooltipNode tooltip = getMobEffectTooltip(utils, "ali.property.value.null", entry.getKey());
-
-        tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.duration", entry.getValue()));
 
         return tooltip;
     }
