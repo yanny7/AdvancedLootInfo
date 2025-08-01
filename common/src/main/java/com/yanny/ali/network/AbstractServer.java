@@ -64,7 +64,7 @@ public abstract class AbstractServer {
 
         sendLootData(lootTables, lootTableItemStacks, lootNodes);
 
-        LOGGER.info("Prepared {} loot tables", messages.size());
+        serverRegistry.printRuntimeInfo();
     }
 
     public final void syncLootTables(Player player) {
