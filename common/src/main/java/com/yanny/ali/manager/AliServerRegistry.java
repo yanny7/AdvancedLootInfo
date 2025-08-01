@@ -48,6 +48,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
     private final ICommonUtils utils;
 
+    private final Set<Class<?>> missingFunctionTooltips = new HashSet<>();
+    private final Set<Class<?>> missingConditionTooltips = new HashSet<>();
+    private final Set<Class<?>> missingIngredientTooltips = new HashSet<>();
+
     private ServerLevel serverLevel;
     private LootContext lootContext;
 
@@ -180,7 +184,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, function);
         } else {
-            LOGGER.warn("Function tooltip for {} was not registered", function.getClass().getCanonicalName());
+            missingFunctionTooltips.add(function.getClass());
 
             try {
                 return GenericTooltipUtils.getMissingFunction(utils, function);
@@ -198,7 +202,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, condition);
         } else {
-            LOGGER.warn("Condition tooltip for {} was not registered", condition.getClass().getCanonicalName());
+            missingConditionTooltips.add(condition.getClass());
 
             try {
                 return GenericTooltipUtils.getMissingCondition(utils, condition);
@@ -216,7 +220,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (ingredientTooltipGetter != null) {
             return ingredientTooltipGetter.apply(utils, ingredient);
         } else {
-            LOGGER.warn("Ingredient tooltip for {} was not registered", ingredient.getClass().getCanonicalName());
+            missingIngredientTooltips.add(ingredient.getClass());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", ingredient.getClass().getSimpleName());
         }
     }
@@ -301,7 +305,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return utils.createEntities(type, level);
     }
 
-    public void printServerInfo() {
+    public void printRegistrationInfo() {
         LOGGER.info("Registered {} entry item collectors", entryItemCollectorMap.size());
         LOGGER.info("Registered {} function item collectors", functionItemCollectorMap.size());
         LOGGER.info("Registered {} number converters", numberConverterMap.size());
@@ -313,5 +317,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} count modifiers", countModifierMap.size());
         LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
+    }
+
+    public void printRuntimeInfo() {
+        missingFunctionTooltips.forEach((t) -> LOGGER.warn("Missing function tooltip for {}", t.getCanonicalName()));
+        missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getCanonicalName()));
+        missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getCanonicalName()));
+        LOGGER.info("Prepared {} loot tables", lootTableMap.size());
     }
 }
