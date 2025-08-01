@@ -32,7 +32,7 @@ public class PluginManager {
             }
         }
 
-        COMMON_REGISTRY.printClientInfo();
+        COMMON_REGISTRY.printRegistrationInfo();
         LOGGER.info("Registering common plugin data finished");
     }
 
@@ -52,7 +52,7 @@ public class PluginManager {
             }
         }
 
-        CLIENT_REGISTRY.printClientInfo();
+        CLIENT_REGISTRY.printRegistrationInfo();
         LOGGER.info("Registering client plugin data finished");
     }
 
@@ -69,7 +69,7 @@ public class PluginManager {
         }
 
         SERVER_REGISTRY.prepareLootModifiers();
-        SERVER_REGISTRY.printServerInfo();
+        SERVER_REGISTRY.printRegistrationInfo();
         LOGGER.info("Registering server plugin data finished");
     }
 }

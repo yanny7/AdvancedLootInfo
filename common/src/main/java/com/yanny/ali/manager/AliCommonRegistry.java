@@ -17,7 +17,7 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
     private final Map<EntityType<?>, Function<Level, List<Entity>>> entityVariantsMap = new HashMap<>();
 
     @Override
-    public <T extends Entity> void registerEntityVariants(EntityType<?> type, Function<Level, List<Entity>> factory) {
+    public <T extends Entity> void registerEntityVariants(EntityType<T> type, Function<Level, List<Entity>> factory) {
         entityVariantsMap.put(type, factory);
     }
 
@@ -39,7 +39,7 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
         return entities;
     }
 
-    public void printClientInfo() {
+    public void printRegistrationInfo() {
         LOGGER.info("Registered {} entity variants", entityVariantsMap.size());
     }
 }

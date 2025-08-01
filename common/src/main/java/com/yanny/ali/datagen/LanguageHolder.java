@@ -138,6 +138,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.feet", "Feet:");
         TRANSLATION_MAP.put("ali.property.branch.fluid_predicate", "Fluid Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.head", "Head:");
+        TRANSLATION_MAP.put("ali.property.branch.item", "Item:");
         TRANSLATION_MAP.put("ali.property.branch.items", "Items:");
         TRANSLATION_MAP.put("ali.property.branch.legs", "Legs:");
         TRANSLATION_MAP.put("ali.property.branch.location", "Location:");
