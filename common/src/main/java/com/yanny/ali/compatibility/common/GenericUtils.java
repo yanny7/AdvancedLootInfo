@@ -20,6 +20,12 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
@@ -90,7 +96,7 @@ public class GenericUtils {
     public static Component ellipsis(String text, String fallback, int maxWidth) {
         Font font = Minecraft.getInstance().font;
 
-        text = Language.getInstance().getOrDefault(text, fallback);
+        text = Language.getInstance().getOrDefault(text, getFallbackText(fallback));
 
         if (font.width(text) > maxWidth) {
             int index = 20;
@@ -103,5 +109,18 @@ public class GenericUtils {
         }
 
         return Component.literal(text);
+    }
+
+    // split table path and make uppercased text
+    private static String getFallbackText(String fallback) {
+        List<String> pathSegments = Pattern.compile("/").splitAsStream(fallback).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+
+        Collections.reverse(pathSegments);
+
+        return pathSegments.stream()
+                .flatMap(segment -> Arrays.stream(segment.split("_")))
+                .filter(s -> !s.isEmpty())
+                .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
+                .collect(Collectors.joining(" "));
     }
 }
