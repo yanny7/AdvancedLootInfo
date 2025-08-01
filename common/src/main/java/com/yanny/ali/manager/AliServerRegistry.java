@@ -49,7 +49,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicate = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicateTooltipMap = new HashMap<>();
     private final Map<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltipMap = new HashMap<>();
@@ -60,6 +60,14 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
     private final ICommonUtils utils;
+
+    private final Set<Class<?>> missingFunctionTooltips = new HashSet<>();
+    private final Set<Class<?>> missingConditionTooltips = new HashSet<>();
+    private final Set<Class<?>> missingIngredientTooltips = new HashSet<>();
+    private final Set<Class<?>> missingDataComponentPredicateTooltips = new HashSet<>();
+    private final Set<Class<?>> missingEntitySubPredicateTooltips = new HashSet<>();
+    private final Set<Class<?>> missingDataComponentTypeTooltips = new HashSet<>();
+    private final Set<Class<?>> missingConsumeEffectTooltips = new HashSet<>();
 
     private ServerLevel serverLevel;
     private LootContext lootContext;
@@ -125,7 +133,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     @Override
     public <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
-        dataComponentPredicate.put(type, (u, c) -> getter.apply(u, (T) c));
+        dataComponentPredicateTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
@@ -212,7 +220,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, function);
         } else {
-            LOGGER.warn("Function tooltip for {} was not registered", function.getClass().getCanonicalName());
+            missingFunctionTooltips.add(function.getClass());
 
             try {
                 return GenericTooltipUtils.getMissingFunction(utils, function);
@@ -230,7 +238,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (entryTooltipGetter != null) {
             return entryTooltipGetter.apply(utils, condition);
         } else {
-            LOGGER.warn("Condition tooltip for {} was not registered", condition.getClass().getCanonicalName());
+            missingConditionTooltips.add(condition.getClass());
 
             try {
                 return GenericTooltipUtils.getMissingCondition(utils, condition);
@@ -248,19 +256,19 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (ingredientTooltipGetter != null) {
             return ingredientTooltipGetter.apply(utils, ingredient);
         } else {
-            LOGGER.warn("Ingredient tooltip for {} was not registered", ingredient.getClass().getCanonicalName());
+            missingIngredientTooltips.add(ingredient.getClass());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", ingredient.getClass().getSimpleName());
         }
     }
 
     @Override
     public <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
-        BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode> dataComponentPredicateTooltipGetter = dataComponentPredicate.get(predicate.getClass());
+        BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode> dataComponentPredicateTooltipGetter = dataComponentPredicateTooltipMap.get(predicate.getClass());
 
         if (dataComponentPredicateTooltipGetter != null) {
             return dataComponentPredicateTooltipGetter.apply(utils, predicate);
         } else {
-            LOGGER.warn("Data component predicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            missingDataComponentPredicateTooltips.add(predicate.getClass());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
         }
     }
@@ -272,7 +280,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (entitySubPredicateTooltipGetter != null) {
             return entitySubPredicateTooltipGetter.apply(utils, predicate);
         } else {
-            LOGGER.warn("Entity sub predicate tooltip for {} was not registered", predicate.getClass().getCanonicalName());
+            missingEntitySubPredicateTooltips.add(predicate.getClass());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
         }
     }
@@ -284,7 +292,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (dataComponentTypeTooltipGetter != null) {
             return dataComponentTypeTooltipGetter.apply(utils, value);
         } else {
-            LOGGER.warn("Data component type tooltip for {} was not registered", type.getClass().getCanonicalName());
+            missingDataComponentTypeTooltips.add(type.getClass());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", type.getClass().getSimpleName());
         }
     }
@@ -296,7 +304,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (consumeEffectTooltipGetter != null) {
             return consumeEffectTooltipGetter.apply(utils, effect);
         } else {
-            LOGGER.warn("Consume effect tooltip for {} was not registered", effect.getClass().getCanonicalName());
+            missingConsumeEffectTooltips.add(effect.getClass());
             return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", effect.getClass().getSimpleName());
         }
     }
@@ -382,7 +390,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return utils.createEntities(type, level);
     }
 
-    public void printServerInfo() {
+    public void printRegistrationInfo() {
         LOGGER.info("Registered {} entry item collectors", entryItemCollectorMap.size());
         LOGGER.info("Registered {} function item collectors", functionItemCollectorMap.size());
         LOGGER.info("Registered {} number converters", numberConverterMap.size());
@@ -390,12 +398,23 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} function tooltips", functionTooltipMap.size());
         LOGGER.info("Registered {} condition tooltips", conditionTooltipMap.size());
         LOGGER.info("Registered {} ingredient tooltips", ingredientTooltipMap.size());
-        LOGGER.info("Registered {} data component predicate tooltips", dataComponentPredicate.size());
+        LOGGER.info("Registered {} data component predicate tooltips", dataComponentPredicateTooltipMap.size());
         LOGGER.info("Registered {} entity sub predicate tooltips", entitySubPredicateTooltipMap.size());
         LOGGER.info("Registered {} data component type tooltips", dataComponentTypeTooltipMap.size());
         LOGGER.info("Registered {} chance modifiers", chanceModifierMap.size());
         LOGGER.info("Registered {} count modifiers", countModifierMap.size());
         LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
+    }
+
+    public void printRuntimeInfo() {
+        missingFunctionTooltips.forEach((t) -> LOGGER.warn("Missing function tooltip for {}", t.getCanonicalName()));
+        missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getCanonicalName()));
+        missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getCanonicalName()));
+        missingDataComponentPredicateTooltips.forEach((t) -> LOGGER.warn("Missing data component predicate tooltip for {}", t.getCanonicalName()));
+        missingEntitySubPredicateTooltips.forEach((t) -> LOGGER.warn("Missing entity sub predicate tooltip for {}", t.getCanonicalName()));
+        missingDataComponentTypeTooltips.forEach((t) -> LOGGER.warn("Missing data component type tooltip for {}", t.getCanonicalName()));
+        missingConsumeEffectTooltips.forEach((t) -> LOGGER.warn("Missing consume effect tooltip for {}", t.getCanonicalName()));
+        LOGGER.info("Prepared {} loot tables", lootTableMap.size());
     }
 }
