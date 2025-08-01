@@ -15,7 +15,7 @@ public class IngredientTooltipUtils {
 
         for (Ingredient.Value value : ingredient.values) {
             if (value instanceof Ingredient.ItemValue itemValue) {
-                tooltip.add(getItemStackTooltip(utils, "ali.property.branch.items", itemValue.item()));
+                tooltip.add(getItemStackTooltip(utils, "ali.property.branch.item", itemValue.item()));
             } else if (value instanceof Ingredient.TagValue tagValue) {
                 tooltip.add(getTagKeyTooltip(utils, "ali.property.value.tag", tagValue.tag()));
             } else {
