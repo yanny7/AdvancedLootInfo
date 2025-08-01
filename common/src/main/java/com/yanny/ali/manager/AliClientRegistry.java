@@ -151,7 +151,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         return utils.createEntities(type, level);
     }
 
-    public void printClientInfo() {
+    public void printRegistrationInfo() {
         LOGGER.info("Registered {} widgets", widgetMap.size());
         LOGGER.info("Registered {} node factories", nodeFactoryMap.size());
     }
