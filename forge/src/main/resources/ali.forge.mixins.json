@@ -9,7 +9,8 @@
     "MixinBushBlock",
     "MixinForgeHooks",
     "MixinLootTableForge",
-    "MixinLootTableIdCondition"
+    "MixinLootTableIdCondition",
+    "MixinMinecraftServer"
   ],
   "client": [
     "MixinRecipeScreen"
