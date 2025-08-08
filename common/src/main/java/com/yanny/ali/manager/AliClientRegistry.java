@@ -49,13 +49,17 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         if (listener != null) {
             listener.onDone(lootNodeMap);
             listener = null;
+            dataReceived = false;
         }
     }
 
     public synchronized void setOnDoneListener(IOnDoneListener listener) {
         if (dataReceived) {
+            LOGGER.info("Already done receiving data");
             listener.onDone(lootNodeMap);
+            dataReceived = false;
         } else {
+            LOGGER.info("Registered done listener");
             this.listener = listener;
         }
     }

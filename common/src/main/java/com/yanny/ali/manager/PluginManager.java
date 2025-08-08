@@ -40,6 +40,30 @@ public class PluginManager {
         registerServerData();
     }
 
+    public static void reloadServer() {
+        LOGGER.info("Reloading server plugin data...");
+        SERVER_REGISTRY.clearData();
+
+        for (PluginHolder plugin : PLUGINS) {
+            try {
+                plugin.plugin().registerServer(SERVER_REGISTRY);
+            } catch (Throwable throwable) {
+                LOGGER.error("Failed to reload {} server part with error: {}", plugin.modId(), throwable.getMessage());
+            }
+        }
+
+        SERVER_REGISTRY.prepareLootModifiers();
+        SERVER_REGISTRY.printRegistrationInfo();
+        LOGGER.info("Reloading server plugin data finished");
+    }
+
+    public static void deregisterServerEvent() {
+        LOGGER.info("Deregistering server plugin data...");
+        SERVER_REGISTRY.clearData();
+        SERVER_REGISTRY = null;
+        LOGGER.info("Deregistering server plugin data finished");
+    }
+
     private static void registerClientData() {
         LOGGER.info("Registering client plugin data...");
         CLIENT_REGISTRY = new AliClientRegistry(COMMON_REGISTRY);
