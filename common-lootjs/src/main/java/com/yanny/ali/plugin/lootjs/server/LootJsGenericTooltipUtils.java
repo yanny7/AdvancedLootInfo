@@ -135,6 +135,6 @@ public class LootJsGenericTooltipUtils {
             return getTagKeyTooltip(utils, key, byTag.tag());
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 }

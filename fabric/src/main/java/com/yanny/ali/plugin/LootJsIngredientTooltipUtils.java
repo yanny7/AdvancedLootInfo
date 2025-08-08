@@ -45,11 +45,11 @@ public class LootJsIngredientTooltipUtils {
             return tooltip;
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
-            return TooltipNode.EMPTY;
+            return new TooltipNode();
         } else {
             LOGGER.warn("Missing tooltip for fabric custom ingredient {}", i.getClass().getCanonicalName());
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 }

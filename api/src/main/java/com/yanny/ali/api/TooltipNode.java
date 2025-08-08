@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class TooltipNode implements ITooltipNode {
-    public static final TooltipNode EMPTY = new TooltipNode(Component.empty());
-
     private final List<ITooltipNode> children;
     private final Component component;
 

@@ -132,7 +132,7 @@ public class EntryTooltipUtils {
             return new TooltipNode(translatable("ali.description.quality", value(quality)));
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull

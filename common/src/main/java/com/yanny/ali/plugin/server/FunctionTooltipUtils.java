@@ -164,7 +164,13 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getSetAttributesTooltip(IServerUtils utils, SetAttributesFunction fun) {
-        ITooltipNode tooltip = getCollectionTooltip(utils, "ali.type.function.set_attributes", "ali.property.branch.modifier", fun.modifiers, GenericTooltipUtils::getModifierTooltip);
+        ITooltipNode tooltip;
+
+        if (!fun.modifiers.isEmpty()) {
+            tooltip = getCollectionTooltip(utils, "ali.type.function.set_attributes", "ali.property.branch.modifier", fun.modifiers, GenericTooltipUtils::getModifierTooltip);
+        } else {
+            tooltip = new TooltipNode(translatable("ali.type.function.set_attributes"));
+        }
 
         tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(fun.predicates)));
 
@@ -293,7 +299,13 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getSetStewEffectTooltip(IServerUtils utils, SetStewEffectFunction fun) {
-        ITooltipNode tooltip = getMapTooltip(utils, "ali.type.function.set_stew_effect", fun.effectDurationMap, GenericTooltipUtils::getMobEffectDurationEntryTooltip);
+        ITooltipNode tooltip;
+
+        if (!fun.effectDurationMap.isEmpty()) {
+            tooltip = getMapTooltip(utils, "ali.type.function.set_stew_effect", fun.effectDurationMap, GenericTooltipUtils::getMobEffectDurationEntryTooltip);
+        } else {
+            tooltip = new TooltipNode(translatable("ali.type.function.set_stew_effect"));
+        }
 
         tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(fun.predicates)));
 

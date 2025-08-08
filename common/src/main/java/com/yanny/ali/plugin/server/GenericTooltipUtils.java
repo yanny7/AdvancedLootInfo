@@ -91,7 +91,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -191,7 +191,7 @@ public class GenericTooltipUtils {
             }
         }
         
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -206,7 +206,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @Unmodifiable
@@ -237,7 +237,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -251,7 +251,7 @@ public class GenericTooltipUtils {
             }
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -268,7 +268,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -290,7 +290,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -299,7 +299,7 @@ public class GenericTooltipUtils {
             return getMinMaxBoundsTooltip(utils, key, lightPredicate.composite);
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -315,7 +315,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -324,7 +324,7 @@ public class GenericTooltipUtils {
             return getOptionalTooltip(utils, key, nbtPredicate.tag, GenericTooltipUtils::getCompoundTagTooltip);
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -339,7 +339,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -348,7 +348,7 @@ public class GenericTooltipUtils {
             return getMapTooltip(utils, key, mobEffectsPredicate.effects, GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -365,7 +365,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -383,7 +383,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -403,20 +403,26 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
     public static ITooltipNode getEnchantmentPredicateTooltip(IServerUtils utils, String key, EnchantmentPredicate enchantmentPredicate) {
         if (enchantmentPredicate != EnchantmentPredicate.ANY) {
-            ITooltipNode tooltip = getOptionalTooltip(utils, key, enchantmentPredicate.enchantment, RegistriesTooltipUtils::getEnchantmentTooltip);
+            ITooltipNode tooltip;
+
+            if (enchantmentPredicate.enchantment != null) {
+                tooltip = getOptionalTooltip(utils, key, enchantmentPredicate.enchantment, RegistriesTooltipUtils::getEnchantmentTooltip);
+            } else {
+                tooltip = new TooltipNode();
+            }
 
             tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.level", enchantmentPredicate.level));
 
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -453,10 +459,10 @@ public class GenericTooltipUtils {
                 }
 
                 return tooltip;
-            }).orElse(TooltipNode.EMPTY);
+            }).orElse(new TooltipNode());
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -493,7 +499,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @Unmodifiable
@@ -527,7 +533,7 @@ public class GenericTooltipUtils {
             return getMapTooltip(utils, criterionsPredicate.criterions, GenericTooltipUtils::getCriterionEntryTooltip);
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @Unmodifiable
@@ -662,7 +668,7 @@ public class GenericTooltipUtils {
             return new TooltipNode(translatable(key, value(toString(ints))));
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -671,7 +677,7 @@ public class GenericTooltipUtils {
             return new TooltipNode(translatable(key, value(toString(doubles))));
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -679,7 +685,7 @@ public class GenericTooltipUtils {
         if (optional != null) {
             return mapper.apply(utils, key, optional);
         } else {
-            return TooltipNode.EMPTY;
+            return new TooltipNode();
         }
     }
 
@@ -698,7 +704,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -711,7 +717,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -724,7 +730,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -737,7 +743,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -750,7 +756,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     // MAP ENTRY
