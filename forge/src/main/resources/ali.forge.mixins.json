@@ -6,7 +6,8 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.yanny.ali.mixin.ConfigPlugin",
   "mixins": [
-    "MixinBushBlock"
+    "MixinBushBlock",
+    "MixinMinecraftServer"
   ],
   "client": [
     "MixinRecipeScreen"

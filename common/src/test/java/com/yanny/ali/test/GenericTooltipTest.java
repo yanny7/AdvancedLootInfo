@@ -538,6 +538,9 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
+        assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, "ali.property.value.enchantment", new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))), List.of(
+                "Level: ≥1"
+        ));
         assertTooltip(GenericTooltipUtils.getEnchantmentPredicateTooltip(UTILS, "ali.property.value.enchantment", new EnchantmentPredicate(Enchantments.FALL_PROTECTION, MinMaxBounds.Ints.atMost(2))), List.of(
                 "Enchantment: minecraft:feather_falling",
                 "  -> Level: ≤2"
