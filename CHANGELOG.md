@@ -1,5 +1,6 @@
 ## []
 
+- Fixed rare tooltip bug printing nonsense
 - Supported reload
 - Fixed Ingredient tooltip
 - Make uppercased chest name from loot table name if missing translation
