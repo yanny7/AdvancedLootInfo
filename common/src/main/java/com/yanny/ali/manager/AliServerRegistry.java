@@ -73,6 +73,35 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         this.utils = utils;
     }
 
+    public void clearData() {
+        entryItemCollectorMap.clear();
+        functionItemCollectorMap.clear();
+        numberConverterMap.clear();
+        entryFactoryMap.clear();
+
+        functionTooltipMap.clear();
+        conditionTooltipMap.clear();
+        ingredientTooltipMap.clear();
+        itemSubPredicateTooltipMap.clear();
+        entitySubPredicateTooltipMap.clear();
+        dataComponentTypeTooltipMap.clear();
+
+        chanceModifierMap.clear();
+        countModifierMap.clear();
+        itemStackModifierMap.clear();
+
+        lootTableMap.clear();
+        lootModifierGetters.clear();
+        lootModifierMap.clear();
+
+        missingFunctionTooltips.clear();
+        missingConditionTooltips.clear();
+        missingIngredientTooltips.clear();
+        missingItemSubPredicateTooltips.clear();
+        missingEntitySubPredicateTooltips.clear();
+        missingDataComponentTypeTooltips.clear();
+    }
+
     public void addLootTable(ResourceKey<LootTable> resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
     }
