@@ -204,6 +204,9 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetAttributesTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes().build()), List.of(
+                "Set Attributes:"
+        ));
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
                 .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))
                         .forSlot(EquipmentSlotGroup.HEAD)
@@ -398,6 +401,9 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetStewEffectTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, (SetStewEffectFunction) SetStewEffectFunction.stewEffect().build()), List.of(
+                "Set Stew Effect:"
+        ));
         assertTooltip(FunctionTooltipUtils.getSetStewEffectTooltip(UTILS, (SetStewEffectFunction) SetStewEffectFunction.stewEffect()
                 .withEffect(MobEffects.LUCK, UniformGenerator.between(1, 5))
                 .withEffect(MobEffects.UNLUCK, UniformGenerator.between(3, 4))
