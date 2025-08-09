@@ -5,7 +5,8 @@
   "refmap": "ali.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinBushBlock"
+    "MixinBushBlock",
+    "MixinMinecraftServer"
   ],
   "injectors": {
     "defaultRequire": 1

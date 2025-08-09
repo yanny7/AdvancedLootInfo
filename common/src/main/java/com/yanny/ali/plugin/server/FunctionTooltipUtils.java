@@ -296,7 +296,13 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getSetStewEffectTooltip(IServerUtils utils, SetStewEffectFunction fun) {
-        ITooltipNode tooltip = getCollectionTooltip(utils, "ali.type.function.set_stew_effect", "ali.property.value.null", fun.effects, GenericTooltipUtils::getEffectEntryTooltip);
+        ITooltipNode tooltip;
+
+        if (!fun.effects.isEmpty()) {
+            tooltip = getCollectionTooltip(utils, "ali.type.function.set_stew_effect", "ali.property.value.null", fun.effects, GenericTooltipUtils::getEffectEntryTooltip);
+        } else {
+            tooltip = new TooltipNode(translatable("ali.type.function.set_stew_effect"));
+        }
 
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
