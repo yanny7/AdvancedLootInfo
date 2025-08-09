@@ -1,6 +1,5 @@
 package com.yanny.ali.compatibility.rei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.ClientUtils;
@@ -20,13 +19,13 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2fStack;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -125,24 +124,25 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
             if (count != null) {
                 Font font = Minecraft.getInstance().font;
-                PoseStack stack = guiGraphics.pose();
+                Matrix3x2fStack stack = guiGraphics.pose();
 
-                stack.pushPose();
-                stack.translate(bounds.getX(), bounds.getY(), 0);
+
+                stack.pushMatrix();
+                stack.translate(bounds.getX(), bounds.getY());
 
                 if (isRange) {
-                    stack.translate(17, 13, 200);
-                    stack.pushPose();
-                    stack.scale(0.5f, 0.5f, 0.5f);
+                    stack.translate(17, 13);
+                    stack.pushMatrix();
+                    stack.scale(0.5f);
                     //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
-                    stack.popPose();
+                    guiGraphics.drawString(font, count, -font.width(count), 0, -1, false);
+                    stack.popMatrix();
                 } else {
-                    stack.translate(18, 10, 200);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
+                    stack.translate(18, 10);
+                    guiGraphics.drawString(font, count, -font.width(count), 0, -1, true);
                 }
 
-                stack.popPose();
+                stack.popMatrix();
             }
         }
     }

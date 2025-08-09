@@ -3,9 +3,11 @@ package com.yanny.ali.platform;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.manager.PluginHolder;
+import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.minecraft.client.gui.GuiGraphics;
 import org.slf4j.Logger;
 
 import java.util.LinkedList;
@@ -31,5 +33,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
+    }
+
+    @Override
+    public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
+//        guiGraphics.submitPictureInPictureRenderState(renderState); FIXME how?
     }
 }

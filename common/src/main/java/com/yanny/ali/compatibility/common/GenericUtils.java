@@ -1,14 +1,11 @@
 package com.yanny.ali.compatibility.common;
 
-import com.mojang.blaze3d.platform.Window;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.Rect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,8 +13,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,54 +28,30 @@ public class GenericUtils {
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
 
     public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        Minecraft minecraft = Minecraft.getInstance();
-        Window window = minecraft.getWindow();
-        PoseStack poseStack = guiGraphics.pose();
-
-        // Get the model-view matrix (combined) from the PoseStack
-        Matrix4f modelViewMatrix = new Matrix4f(poseStack.last().pose());
-        // Get the projection matrix
-        Matrix4f projectionMatrix = new Matrix4f(RenderSystem.getProjectionMatrix());
-        // Combine model-view and projection
-        Matrix4f mvpMatrix = projectionMatrix.mul(modelViewMatrix);
-        // Define the 3D coordinates of the top-left and bottom-right corners of your element
-        // Since it's a 2D element in GUI, Z can be 0.
-        Vector4f topLeftWorld = new Vector4f(0, 0, 0, 1);
-        // Project to clip space
-        Vector4f topLeftClip = mvpMatrix.transform(topLeftWorld);
-        // Perspective divide
-        Vector4f topLeftNDC = new Vector4f(topLeftClip.x / topLeftClip.w, topLeftClip.y / topLeftClip.w, 0, 1);
-
-        // Convert to screen coordinates (pixels)
-        int screenX = Math.round((topLeftNDC.x + 1) / 2f * window.getGuiScaledWidth());
-        int screenY = Math.round((1 - topLeftNDC.y) / 2f * window.getGuiScaledHeight());
-
         if (entity instanceof LivingEntity livingEntity) {
-            guiGraphics.pose().pushPose();
+            guiGraphics.pose().pushMatrix();
             guiGraphics.blit(
-                    RenderType::guiTextured,
+                    RenderPipelines.GUI_TEXTURED,
                     TEXTURE_LOC,
                     bounds.x(),
                     bounds.y(),
                     0,
-                    36,
+                    WIDGET_SIZE,
                     bounds.width(),
                     bounds.height(),
-                    36,
-                    36,
+                    WIDGET_SIZE,
+                    WIDGET_SIZE,
                     256,
                     256
             );
 
-            guiGraphics.enableScissor(bounds.x() + 1, bounds.y() + 1, bounds.right() - 1, bounds.bottom() - 1);
-
             EntityDimensions dimensions = entity.getType().getDimensions();
-            InventoryScreen.renderEntityInInventoryFollowsMouse(
+            renderEntityInInventoryFollowsMouse(
                     guiGraphics,
-                    -screenX + bounds.x(),
-                    -screenY + bounds.y(),
-                    screenX + bounds.right(),
-                    screenY + bounds.bottom(),
+                    bounds.x() + 1,
+                    bounds.y() + 1,
+                    bounds.right() - 1,
+                    bounds.bottom() - 1,
                     (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
                     0.0625F,
                     mouseX,
@@ -86,8 +59,7 @@ public class GenericUtils {
                     livingEntity
             );
 
-            guiGraphics.disableScissor();
-            guiGraphics.pose().popPose();
+            guiGraphics.pose().popMatrix();
         }
     }
 
@@ -108,6 +80,43 @@ public class GenericUtils {
         }
 
         return Component.literal(text);
+    }
+
+    public static void renderEntityInInventoryFollowsMouse(GuiGraphics guiGraphics, int left, int top, int right, int bottom,
+                                                           int size, float scale, float mouseX, float mouseY, LivingEntity entity) {
+        float hCenter = (float)(left + right) / 2.0F;
+        float vCenter = (float)(top + bottom) / 2.0F;
+        float xRotation = (float)Math.atan((hCenter - mouseX) / 40.0F);
+        float yRotation = (float)Math.atan((vCenter - mouseY) / 40.0F);
+        float yBodyRot = entity.yBodyRot;
+        float entityYRot = entity.getYRot();
+        float entityXRot = entity.getXRot();
+        float yHeadRotO = entity.yHeadRotO;
+        float yHeadRot = entity.yHeadRot;
+        Quaternionf rotateZ = (new Quaternionf()).rotateZ((float)Math.PI);
+        Quaternionf rotateX = (new Quaternionf()).rotateX(yRotation * 20.0F * ((float)Math.PI / 180F));
+
+        rotateZ.mul(rotateX);
+        guiGraphics.enableScissor(left, top, right, bottom);
+        entity.yBodyRot = 180.0F + xRotation * 20.0F;
+        entity.setYRot(180.0F + xRotation * 40.0F);
+        entity.setXRot(-yRotation * 20.0F);
+        entity.yHeadRot = entity.getYRot();
+        entity.yHeadRotO = entity.getYRot();
+
+        float entityScale = entity.getScale();
+        Vector3f $$22 = new Vector3f(0.0F, entity.getBbHeight() / 2.0F + scale * entityScale, 0.0F);
+        float $$23 = (float)size / entityScale;
+        int x = (int) guiGraphics.pose().m20();
+        int y = (int) guiGraphics.pose().m21();
+        InventoryScreen.renderEntityInInventory(guiGraphics, left + x, top + y, right + x, bottom + y, $$23, $$22, rotateZ, rotateX, entity);
+
+        entity.yBodyRot = yBodyRot;
+        entity.setYRot(entityYRot);
+        entity.setXRot(entityXRot);
+        entity.yHeadRotO = yHeadRotO;
+        entity.yHeadRot = yHeadRot;
+        guiGraphics.disableScissor();
     }
 
     // split table path and make uppercased text

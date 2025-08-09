@@ -29,7 +29,7 @@ rootProject.name = 'MultiLoader-AdvancedLootInfo'
 include("api")
 include("common")
 //include("common-emi")
-include("common-jei")
+//include("common-jei")
 include("common-rei")
 //include("common-lootjs")
 include("fabric")

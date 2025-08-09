@@ -58,10 +58,10 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
         }
 
         innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
-            graphics.pose().pushPose();
-            graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
+            graphics.pose().pushMatrix();
+            graphics.pose().translate(bounds1.getX(), bounds1.getY());
             GenericUtils.renderEntity(display.getEntity(), rect, CATEGORY_WIDTH, graphics, mouseX + WIDGET_SIZE / 2 - innerBounds.width / 2, mouseY);
-            graphics.pose().popPose();
+            graphics.pose().popMatrix();
         }));
         innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntity().getDisplayName()));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
@@ -69,7 +69,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
 
         if (bounds.height >= innerBounds.height + 8) {
             innerBounds.move(bounds.getCenterX() - innerBounds.width / 2, bounds.y + 2 * PADDING);
-            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING, 0));
+            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING));
         } else {
             Rectangle overflowBounds = new Rectangle(fullBounds.x + PADDING, fullBounds.y + PADDING, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING);
             widgets.add(Widgets.overflowed(overflowBounds, Widgets.concatWithBounds(innerBounds, innerWidgets)));

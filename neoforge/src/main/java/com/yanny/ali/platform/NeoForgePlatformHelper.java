@@ -4,7 +4,9 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.manager.PluginHolder;
+import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
+import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
@@ -45,5 +47,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s", plugins.size());
         return plugins;
+    }
+
+    @Override
+    public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
+        guiGraphics.submitPictureInPictureRenderState(renderState);
     }
 }

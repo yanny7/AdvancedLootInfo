@@ -23,10 +23,10 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(bounds.getX(), bounds.getY(), 0);
+        guiGraphics.pose().pushMatrix();
+        guiGraphics.pose().translate(bounds.getX(), bounds.getY());
         widget.render(guiGraphics, mouseX, mouseY);
-        guiGraphics.pose().popPose();
+        guiGraphics.pose().popMatrix();
     }
 
     @Nullable
