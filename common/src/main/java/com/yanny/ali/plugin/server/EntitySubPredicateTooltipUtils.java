@@ -97,7 +97,7 @@ public class EntitySubPredicateTooltipUtils {
             case PaintingVariant paintingVariant -> getPaintingVariantTooltip(u, s, paintingVariant);
             case FrogVariant frogVariant -> getFrogVariantTooltip(u, s, frogVariant);
             case WolfVariant wolfVariant -> getWolfVariantTooltip(u, s, wolfVariant);
-            default -> TooltipNode.EMPTY;
+            default -> new TooltipNode();
         }));
 
         return tooltip;

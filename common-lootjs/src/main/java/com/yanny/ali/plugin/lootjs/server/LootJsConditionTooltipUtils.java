@@ -74,7 +74,7 @@ public class LootJsConditionTooltipUtils {
 
             return tooltip;
         } else {
-            return TooltipNode.EMPTY;
+            return new TooltipNode();
         }
     }
 
