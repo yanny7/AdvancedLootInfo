@@ -1,5 +1,7 @@
 ## []
 
+- Fixed no tooltip in part of right panel
+- Fixed REI doesn't show entity loot table when right-clicked on Spawn Egg
 - Fixed rare tooltip bug printing nonsense
 - Supported reload
 - Fixed Ingredient tooltip
