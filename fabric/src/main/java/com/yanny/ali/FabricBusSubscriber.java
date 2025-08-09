@@ -37,7 +37,7 @@ public class FabricBusSubscriber {
     private static void onReload(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         if (success) {
             PluginManager.reloadServer();
-            CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.getLootData(), server.overworld());
+            CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 CommonAliMod.INFO_PROPAGATOR.server().syncLootTables(player);

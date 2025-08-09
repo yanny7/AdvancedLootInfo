@@ -440,7 +440,7 @@ public class GenericTooltipUtils {
         if (dataComponentPredicate != DataComponentPredicate.EMPTY) {
             return getCollectionTooltip(utils, key, "ali.property.value.null", dataComponentPredicate.expectedComponents, GenericTooltipUtils::getTypedDataComponentTooltip);
         } else {
-            return TooltipNode.EMPTY;
+            return new TooltipNode();
         }
     }
 
@@ -474,19 +474,19 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
     public static <A, B extends Predicate<A>> ITooltipNode getCollectionContentsPredicateTooltip(IServerUtils utils, String key, String value, Optional<CollectionContentsPredicate<A, B>> predicate,
                                                                                                     TriFunction<IServerUtils, String, B, ITooltipNode> mapper) {
-        return predicate.map((p) -> getCollectionTooltip(utils, key, value, p.unpack(), mapper)).orElse(TooltipNode.EMPTY);
+        return predicate.map((p) -> getCollectionTooltip(utils, key, value, p.unpack(), mapper)).orElse(new TooltipNode());
     }
 
     @NotNull
     public static <A, B extends Predicate<A>> ITooltipNode getCollectionCountsPredicateTooltip(IServerUtils utils, String key, String value, Optional<CollectionCountsPredicate<A, B>> predicate,
                                                                                                   TriFunction<IServerUtils, String, CollectionCountsPredicate.Entry<A, B>, ITooltipNode> mapper) {
-        return predicate.map((p) -> getCollectionTooltip(utils, key, value, p.unpack(), mapper)).orElse(TooltipNode.EMPTY);
+        return predicate.map((p) -> getCollectionTooltip(utils, key, value, p.unpack(), mapper)).orElse(new TooltipNode());
     }
 
     @NotNull
@@ -574,7 +574,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -690,7 +690,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -777,7 +777,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @Unmodifiable
@@ -909,7 +909,7 @@ public class GenericTooltipUtils {
             }
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @Unmodifiable
@@ -950,7 +950,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static <T> ITooltipNode getOptionalTooltip(IServerUtils utils, Optional<T> optional, BiFunction<IServerUtils, T, ITooltipNode> mapper) {
-        return optional.map((value) -> mapper.apply(utils, value)).orElse(TooltipNode.EMPTY);
+        return optional.map((value) -> mapper.apply(utils, value)).orElse(new TooltipNode());
     }
 
     @NotNull
@@ -1006,7 +1006,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull
@@ -1032,7 +1032,7 @@ public class GenericTooltipUtils {
             return tooltip;
         }
 
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @NotNull

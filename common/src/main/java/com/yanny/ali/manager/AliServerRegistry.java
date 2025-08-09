@@ -82,6 +82,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         functionTooltipMap.clear();
         conditionTooltipMap.clear();
         ingredientTooltipMap.clear();
+        itemSubPredicateTooltipMap.clear();
+        entitySubPredicateTooltipMap.clear();
+        dataComponentTypeTooltipMap.clear();
 
         chanceModifierMap.clear();
         countModifierMap.clear();
@@ -94,6 +97,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingFunctionTooltips.clear();
         missingConditionTooltips.clear();
         missingIngredientTooltips.clear();
+        missingItemSubPredicateTooltips.clear();
+        missingEntitySubPredicateTooltips.clear();
+        missingDataComponentTypeTooltips.clear();
     }
 
     public void addLootTable(ResourceKey<LootTable> resourceLocation, LootTable lootTable) {

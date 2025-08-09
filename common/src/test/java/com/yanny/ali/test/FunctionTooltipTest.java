@@ -205,7 +205,8 @@ public class FunctionTooltipTest {
     @Test
     public void testSetAttributesTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes().build()), List.of(
-                "Set Attributes:"
+                "Set Attributes:",
+                "  -> Replace: false"
         ));
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
                 .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))

@@ -22,7 +22,7 @@ public class MixinMinecraftServer {
 
                 if (server != null) {
                     PluginManager.reloadServer();
-                    AliMod.INFO_PROPAGATOR.server().readLootTables(server.getLootData(), server.overworld());
+                    AliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
 
                     for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                         AliMod.INFO_PROPAGATOR.server().syncLootTables(player);
