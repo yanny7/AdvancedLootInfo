@@ -113,7 +113,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getEmptyTooltip(IServerUtils ignoredUtils, Unit ignoredValue) {
-        return TooltipNode.EMPTY;
+        return new TooltipNode();
     }
 
     @Unmodifiable
