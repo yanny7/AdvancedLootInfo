@@ -167,12 +167,12 @@ def upload_to_modrinth(api_token, project_id, version_number, mod_file_path, loa
     print(f"\n--- Uploading to Modrinth ---")
     print(f"Uploading file '{mod_file_path}'")
     # print(f"Metadata: {json.dumps(metadata, indent=2)}")
-    print("Do you want to proceed?")
-    yes_no = input()
-
-    if not yes_no.startswith("y"):
-        print("Skipping upload...")
-        return
+    # print("Do you want to proceed?")
+    # yes_no = input()
+    #
+    # if not yes_no.startswith("y"):
+    #     print("Skipping upload...")
+    #     return
 
     try:
         with open(mod_file_path, 'rb') as f:
@@ -252,12 +252,12 @@ def upload_to_curseforge(api_token, api_key, project_id, version_number, mod_fil
     print(f"\n--- Uploading to CurseForge ---")
     print(f"File: {mod_file_path}")
     # print(f"Metadata: {json.dumps(metadata, indent=2)}")
-    print("Do you want to proceed?")
-    yes_no = input()
-
-    if not yes_no.startswith("y"):
-        print("Skipping upload...")
-        return
+    # print("Do you want to proceed?")
+    # yes_no = input()
+    #
+    # if not yes_no.startswith("y"):
+    #     print("Skipping upload...")
+    #     return
 
     try:
         with open(mod_file_path, 'rb') as f:
