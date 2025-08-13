@@ -1,6 +1,7 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.yanny.ali.api.IWidget;
+import com.yanny.ali.api.RelativeRect;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
@@ -16,9 +17,11 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
     private final IWidget widget;
     private final Rectangle bounds;
 
-    public ReiWidgetWrapper(IWidget widget, Rectangle bounds) {
+    public ReiWidgetWrapper(IWidget widget) {
+        RelativeRect rect = widget.getRect();
+
         this.widget = widget;
-        this.bounds = bounds;
+        this.bounds = new Rectangle(rect.getX(), 0, rect.width, rect.height);
     }
 
     @Override

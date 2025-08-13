@@ -68,8 +68,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         List<Holder> slotWidgets = new LinkedList<>();
         List<Widget> widgets = new LinkedList<>();
         RelativeRect rect = new RelativeRect(0, y, CATEGORY_WIDTH, 0);
-        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets, bounds), display.getLootData(), rect, CATEGORY_WIDTH);
-        ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget, bounds);
+        LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets), display.getLootData(), rect, CATEGORY_WIDTH);
+        ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget);
 
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
         widgets.add(widgetWrapper);
@@ -97,7 +97,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     }
 
     @NotNull
-    private IWidgetUtils getUtils(List<Holder> widgets, Rectangle bounds) {
+    private IWidgetUtils getUtils(List<Holder> widgets) {
         return new ClientUtils() {
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
