@@ -48,7 +48,7 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Str
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
-        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName).noShadow().color(0).tooltip(fullText));
+        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName).noShadow().color(0xFF000000).tooltip(fullText));
         widgets.add(Widgets.createCategoryBase(fullBounds));
 
         if (bounds.height >= innerBounds.height + 8) {
