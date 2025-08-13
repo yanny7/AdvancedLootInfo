@@ -1,8 +1,8 @@
 package com.yanny.ali.compatibility.rei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import com.yanny.ali.mixin.MixinVegetationBlock;
+import com.yanny.ali.pip.BlockRenderState;
+import com.yanny.ali.platform.Services;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +23,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Matrix3x2fStack;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
 
         if (bounds.height >= innerBounds.height + 8) {
             innerBounds.move(bounds.getCenterX() - innerBounds.width / 2, bounds.y + 2 * PADDING);
-            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING, 0));
+            widgets.add(Widgets.withTranslate(Widgets.concat(innerWidgets), bounds.getCenterX() - Math.round(innerBounds.width / 2f), bounds.y + 2 * PADDING));
         } else {
             Rectangle overflowBounds = new Rectangle(fullBounds.x + PADDING, fullBounds.y + PADDING, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING);
             widgets.add(Widgets.overflowed(overflowBounds, Widgets.concatWithBounds(innerBounds, innerWidgets)));
@@ -106,40 +106,39 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         @Override
         public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
             BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
-            PoseStack poseStack = guiGraphics.pose();
+            Matrix3x2fStack poseStack = guiGraphics.pose();
 
-            poseStack.pushPose();
-            poseStack.translate(bounds.getX(), bounds.getY(), 100);
+            poseStack.pushMatrix();
+            poseStack.translate(bounds.getX(), bounds.getY());
 
             if (isPlant) {
-                poseStack.translate(18, 14, 100);
-                poseStack.scale(9, -9, 9);
-                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+                int x = (int) guiGraphics.pose().m20() - 7;
+                int y = (int) guiGraphics.pose().m21() - 8;
 
-                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
+                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 0.75f, null);
 
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (block instanceof MixinVegetationBlock vegetationBlock && vegetationBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                if (block instanceof MixinVegetationBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();
                 }
 
-                poseStack.translate(0, -1, 0);
-                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(base, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
+                BlockRenderState farmlandState = BlockRenderState.of(base, level, x + 3, y + 7, bounds.width + x + 3, bounds.height + y + 7, 0.75f, null);
+
+                Services.getPlatform().renderBlockInGui(guiGraphics, farmlandState);
+                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
             } else {
-                poseStack.translate(25.5, 21, 100);
-                poseStack.scale(18, -18, 18);
-                poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-                poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
-                poseStack.translate(0, -1, 0);
+                int x = (int) guiGraphics.pose().m20() - 4;
+                int y = (int) guiGraphics.pose().m21() - 4;
+
+                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1, null);
+                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
             }
 
-            poseStack.popPose();
+            poseStack.popMatrix();
         }
     }
 }
