@@ -1,3 +1,7 @@
+## []
+
+- Fixed no LootJS info displayed when adding to empty loot table
+
 ## [1.2.4]
 
 - Fixed no tooltip in part of right panel in REI
