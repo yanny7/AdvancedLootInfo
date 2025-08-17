@@ -200,7 +200,11 @@ public abstract class AbstractServer {
     }
 
     private static boolean predicateItem(ILootModifier<?> modifier, List<Item> items) { //FIXME ItemStack!
-        return items.stream().anyMatch((i) -> modifier.getOperations().stream().anyMatch(o -> o.predicate().test(i.getDefaultInstance())));
+        if (!items.isEmpty()) {
+            return items.stream().anyMatch((i) -> modifier.getOperations().stream().anyMatch(o -> o.predicate().test(i.getDefaultInstance())));
+        } else {
+            return true;
+        }
     }
 
     @NotNull
