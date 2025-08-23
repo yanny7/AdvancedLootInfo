@@ -5,7 +5,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -47,13 +47,13 @@ public class ItemsForEmeraldsNode extends ListNode {
         );
     }
 
-    public ItemsForEmeraldsNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public ItemsForEmeraldsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 

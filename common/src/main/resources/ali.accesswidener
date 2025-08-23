@@ -165,7 +165,7 @@ accessible class net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEme
 accessible class net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds
 accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems
 
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems itemStack Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems itemStack Lnet/minecraft/world/item/trading/ItemCost;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems emeraldAmount I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems maxUses I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems villagerXp I
@@ -179,7 +179,7 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds 
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds maxUses I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds villagerXp I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds priceMultiplier F
-accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald effects Ljava/util/List;
+accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald effects Lnet/minecraft/world/item/component/SuspiciousStewEffects;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald xp I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald priceMultiplier F
 accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds itemStack Lnet/minecraft/world/item/ItemStack;
@@ -206,10 +206,10 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEme
 accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds emeraldCost I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds destination Lnet/minecraft/tags/TagKey;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds displayName Ljava/lang/String;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds destinationType Lnet/minecraft/world/level/saveddata/maps/MapDecoration$Type;
+accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds destinationType Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds maxUses I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems fromItem Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems fromItem Lnet/minecraft/world/item/trading/ItemCost;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems emeraldCost I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems toItem Lnet/minecraft/world/item/ItemStack;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems maxUses I

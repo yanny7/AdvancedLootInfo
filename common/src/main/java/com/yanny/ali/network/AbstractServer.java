@@ -97,7 +97,7 @@ public abstract class AbstractServer {
                 try {
                     sendSyncTradeMessage(serverPlayer, message);
                 } catch (Throwable e) {
-                    LOGGER.warn("Failed to send message for trade {} with error: {}", message.location, e.getMessage());
+                    LOGGER.warn("Failed to send message for trade {} with error: {}", message.location(), e.getMessage());
                 }
             }
 
@@ -271,7 +271,7 @@ public abstract class AbstractServer {
     }
 
     private void sendLootData(Map<ResourceKey<LootTable>, LootTable> lootTables, Map<ResourceKey<LootTable>, List<ItemStack>> lootTableItemStacks, Map<ResourceKey<LootTable>, IDataNode> lootNodes) {
-        lootTables.forEach((location, lootTable) -> messages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+        lootTables.forEach((location, lootTable) -> lootTableMessages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
     }
 
     private void sendTradeData(Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {

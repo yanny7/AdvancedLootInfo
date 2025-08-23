@@ -5,7 +5,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -23,12 +23,12 @@ public class EmeraldsForVillagerTypeItemNode extends ListNode {
         listing.trades.entrySet().forEach((entry) -> addChildren(new ItemsForEmeraldsNode(utils, listing, entry)));
     }
 
-    public EmeraldsForVillagerTypeItemNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public EmeraldsForVillagerTypeItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
 
     }
 

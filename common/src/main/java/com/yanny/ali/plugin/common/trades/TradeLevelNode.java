@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
@@ -26,13 +26,13 @@ public class TradeLevelNode extends ListNode {
         }
     }
 
-    public TradeLevelNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public TradeLevelNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         level = buf.readInt();
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeInt(level);
     }
 

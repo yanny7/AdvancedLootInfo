@@ -5,20 +5,21 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SuspiciousStewItem;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 public class SuspiciousStewForEmeraldNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "suspicious_stew_for_emerald");
@@ -28,17 +29,11 @@ public class SuspiciousStewForEmeraldNode extends ListNode {
     public SuspiciousStewForEmeraldNode(IServerUtils utils, VillagerTrades.SuspiciousStewForEmerald listing) {
         ItemStack stew = Items.SUSPICIOUS_STEW.getDefaultInstance();
 
-        SuspiciousStewItem.saveMobEffects(stew, listing.effects);
+        stew.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, listing.effects);
 
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue()));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));
-        addChildren(new ItemStackNode(utils, stew, new RangeValue(), List.of(
-                getCollectionTooltip(utils, "ali.type.function.set_stew_effect", "ali.property.value.null", listing.effects, (u, k, effect) -> {
-                    ITooltipNode tooltip = RegistriesTooltipUtils.getMobEffectTooltip(utils, "ali.property.value.effect", effect.effect());
-                    tooltip.add(getIntegerTooltip(utils, "ali.property.value.duration", effect.duration()));
-                    return tooltip;
-                })
-        )));
+        addChildren(new ItemStackNode(utils, stew, new RangeValue(), List.of(DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(utils, listing.effects))));
         tooltip = List.of(
                 getIntegerTooltip(utils, "ali.property.value.uses", 12),
                 getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.xp),
@@ -46,13 +41,13 @@ public class SuspiciousStewForEmeraldNode extends ListNode {
         );
     }
 
-    public SuspiciousStewForEmeraldNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public SuspiciousStewForEmeraldNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 

@@ -5,7 +5,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -24,7 +24,7 @@ public class EmeraldForItemsNode extends ListNode {
     private final List<ITooltipNode> tooltip;
 
     public EmeraldForItemsNode(IServerUtils utils, VillagerTrades.EmeraldForItems listing) {
-        addChildren(new ItemStackNode(utils, listing.itemStack, new RangeValue(listing.itemStack.getCount())));
+        addChildren(new ItemStackNode(utils, listing.itemStack.itemStack(), new RangeValue(listing.itemStack.count())));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue()));
         tooltip = List.of(
@@ -34,13 +34,13 @@ public class EmeraldForItemsNode extends ListNode {
         );
     }
 
-    public EmeraldForItemsNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public EmeraldForItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 
@@ -57,7 +57,7 @@ public class EmeraldForItemsNode extends ListNode {
     @NotNull
     public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.EmeraldForItems listing) {
         return new Pair<>(
-                List.of(listing.itemStack.getItem()),
+                List.of(listing.itemStack.item().value()),
                 List.of(Items.EMERALD)
         );
     }

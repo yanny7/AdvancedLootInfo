@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -32,8 +32,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
         this.count = count;
     }
 
-    public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
-        itemStack = buf.readItem();
+    public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
+        itemStack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
     }
@@ -64,8 +64,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeItem(itemStack);
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
     }

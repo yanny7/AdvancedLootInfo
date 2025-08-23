@@ -5,7 +5,9 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import net.minecraft.network.FriendlyByteBuf;
+import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -27,13 +29,13 @@ public class TreasureMapForEmeraldsNode extends ListNode {
     public TreasureMapForEmeraldsNode(IServerUtils utils, VillagerTrades.TreasureMapForEmeralds listing) {
         ItemStack map = Items.MAP.getDefaultInstance();
 
-        map.setHoverName(Component.translatable(listing.displayName));
+        map.set(DataComponents.ITEM_NAME, Component.translatable(listing.displayName));
 
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(listing.emeraldCost)));
         addChildren(new ItemNode(utils, Items.COMPASS, new RangeValue()));
         addChildren(new ItemStackNode(utils, map, new RangeValue(), List.of(
                 getTagKeyTooltip(utils, "ali.property.value.destination", listing.destination),
-                getEnumTooltip(utils, "ali.property.value.map_decoration", listing.destinationType)
+                getHolderTooltip(utils, "ali.property.value.map_decoration", listing.destinationType, RegistriesTooltipUtils::getMapDecorationTypeTooltip)
         )));
         tooltip = List.of(
                 getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses),
@@ -42,13 +44,13 @@ public class TreasureMapForEmeraldsNode extends ListNode {
         );
     }
 
-    public TreasureMapForEmeraldsNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public TreasureMapForEmeraldsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 

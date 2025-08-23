@@ -5,7 +5,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -24,7 +24,7 @@ public class ItemsAndEmeraldsToItemsNode extends ListNode {
     private final List<ITooltipNode> tooltip;
 
     public ItemsAndEmeraldsToItemsNode(IServerUtils utils, VillagerTrades.ItemsAndEmeraldsToItems listing) {
-        addChildren(new ItemNode(utils, listing.fromItem.getItem(), new RangeValue(listing.fromItem.getCount())));
+        addChildren(new ItemStackNode(utils, listing.fromItem.itemStack(), new RangeValue(listing.fromItem.count())));
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(listing.emeraldCost)));
         addChildren(new ItemStackNode(utils, listing.toItem, new RangeValue(listing.toItem.getCount())));
         tooltip = List.of(
@@ -34,7 +34,7 @@ public class ItemsAndEmeraldsToItemsNode extends ListNode {
         );
     }
 
-    public ItemsAndEmeraldsToItemsNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public ItemsAndEmeraldsToItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
     }
@@ -50,14 +50,14 @@ public class ItemsAndEmeraldsToItemsNode extends ListNode {
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 
     @NotNull
     public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.ItemsAndEmeraldsToItems listing) {
         return new Pair<>(
-                List.of(Items.EMERALD, listing.fromItem.getItem()),
+                List.of(Items.EMERALD, listing.fromItem.item().value()),
                 List.of(listing.toItem.getItem())
         );
     }

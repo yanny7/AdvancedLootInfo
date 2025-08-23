@@ -8,7 +8,7 @@ public class Client extends AbstractClient {
         super.onLootInfo(msg);
     }
 
-    public void onLootInfo(SyncTradeMessage msg, IPayloadContext contextSupplier) {
+    public void onTradeInfo(SyncTradeMessage msg, IPayloadContext contextSupplier) {
         super.onTradeInfo(msg);
     }
 

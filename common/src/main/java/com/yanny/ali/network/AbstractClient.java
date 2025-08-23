@@ -8,7 +8,7 @@ public abstract class AbstractClient {
     }
 
     protected void onTradeInfo(SyncTradeMessage msg) {
-        PluginManager.CLIENT_REGISTRY.addTradeData(msg.location, msg.node, msg.inputs, msg.outputs);
+        PluginManager.CLIENT_REGISTRY.addTradeData(msg.location(), msg.node(), msg.inputs(), msg.outputs());
     }
 
     protected void onClear(ClearMessage msg) {
