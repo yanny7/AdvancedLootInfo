@@ -9,6 +9,11 @@ public class Client extends AbstractClient {
         contextSupplier.setPacketHandled(true);
     }
 
+    protected void onTradeInfo(SyncTradeMessage msg, NetworkEvent.Context contextSupplier) {
+        super.onTradeInfo(msg);
+        contextSupplier.setPacketHandled(true);
+    }
+
     public void onClear(ClearMessage msg, NetworkEvent.Context contextSupplier) {
         super.onClear(msg);
         contextSupplier.setPacketHandled(true);

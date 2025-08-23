@@ -38,6 +38,19 @@ public class ItemNode implements IDataNode, IItemNode {
         count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
     }
 
+    public ItemNode(IServerUtils utils, Item item, RangeValue count) {
+        this(utils, item, count, Collections.emptyList());
+    }
+
+    public ItemNode(IServerUtils ignoredUtils, Item item, RangeValue count, List<ITooltipNode> tooltip) {
+        this.conditions = Collections.emptyList();
+        this.functions = Collections.emptyList();
+        chance = 1;
+        itemStack = item.getDefaultInstance();
+        this.tooltip = tooltip;
+        this.count = count;
+    }
+
     public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);

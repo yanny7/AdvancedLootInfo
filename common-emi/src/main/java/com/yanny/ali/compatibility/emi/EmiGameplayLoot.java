@@ -1,7 +1,11 @@
 package com.yanny.ali.compatibility.emi;
 
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidget;
+import com.yanny.ali.api.IWidgetUtils;
+import com.yanny.ali.api.RelativeRect;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.*;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -10,12 +14,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
 public class EmiGameplayLoot extends EmiBaseLoot {
-    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, List<ItemStack> items) {
-        super(category, id, lootTable, 0, 10, items);
+    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, List<ItemStack> outputs) {
+        super(category, id, lootTable, 0, 10, Collections.emptyList(), outputs);
     }
 
     @Override
@@ -33,6 +38,11 @@ public class EmiGameplayLoot extends EmiBaseLoot {
                 new TextWidget(text.getVisualOrderText(), 0, 0, 0, false),
                 new TitleWidget(bounds, fullText)
         );
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 
     private static class TitleWidget extends TooltipWidget {

@@ -1,6 +1,10 @@
 package com.yanny.ali.compatibility.emi;
 
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidget;
+import com.yanny.ali.api.IWidgetUtils;
+import com.yanny.ali.api.RelativeRect;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
@@ -12,14 +16,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EmiBlockLoot extends EmiBaseLoot {
     private final Block block;
     private final boolean isSpecial;
 
-    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, IDataNode lootTable, List<ItemStack> items) {
-        super(category, id, lootTable, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22, items);
+    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, IDataNode lootTable, List<ItemStack> outputs) {
+        super(category, id, lootTable, 0, (block instanceof BushBlock || block.asItem() == Items.AIR) ? 30 : 22, Collections.emptyList(), outputs);
         this.block = block;
         isSpecial = block instanceof BushBlock || block.asItem() == Items.AIR;
         inputs = List.of(EmiStack.of(block));
@@ -37,5 +42,10 @@ public class EmiBlockLoot extends EmiBaseLoot {
         } else {
             return List.of(new SlotWidget(inputs.get(0), CATEGORY_WIDTH / 2 - 9, 0));
         }
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 }

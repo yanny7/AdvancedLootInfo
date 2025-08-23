@@ -7,13 +7,11 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class ReferenceWidget extends IWidget {
+public class ReferenceWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
     public ReferenceWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
-        super(entry.getId());
-
         if (entry instanceof ListNode listNode && !listNode.nodes().isEmpty()) {
             widget = new LootTableWidget(utils, ((ReferenceNode) entry).nodes().get(0), rect, maxWidth, entry);
         } else {

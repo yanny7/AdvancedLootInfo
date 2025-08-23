@@ -26,6 +26,11 @@ public class NetworkUtils {
                 .decoder(SyncLootTableMessage::new)
                 .consumerNetworkThread(client::onLootInfo)
                 .add();
+        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
+                .encoder(SyncTradeMessage::encode)
+                .decoder(SyncTradeMessage::new)
+                .consumerNetworkThread(client::onTradeInfo)
+                .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)
                 .decoder(ClearMessage::new)
@@ -46,6 +51,11 @@ public class NetworkUtils {
         channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
                 .encoder(SyncLootTableMessage::encode)
                 .decoder(SyncLootTableMessage::new)
+                .consumerNetworkThread((msg, context) -> {})
+                .add();
+        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
+                .encoder(SyncTradeMessage::encode)
+                .decoder(SyncTradeMessage::new)
                 .consumerNetworkThread((msg, context) -> {})
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
