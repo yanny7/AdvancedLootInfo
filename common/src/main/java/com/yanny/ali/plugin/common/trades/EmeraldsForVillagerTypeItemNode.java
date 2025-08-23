@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EmeraldsForVillagerTypeItemNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "emerald_for_villager_type_item");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "emerald_for_villager_type_item");
 
     public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing) {
         listing.trades.entrySet().forEach((entry) -> addChildren(new ItemsForEmeraldsNode(utils, listing, entry)));

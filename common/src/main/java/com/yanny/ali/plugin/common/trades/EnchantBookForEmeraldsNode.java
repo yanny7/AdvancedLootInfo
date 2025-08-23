@@ -17,7 +17,7 @@ import java.util.List;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 public class EnchantBookForEmeraldsNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "enchanted_book_for_emeralds");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "enchanted_book_for_emeralds");
 
     private final List<ITooltipNode> tooltip;
 

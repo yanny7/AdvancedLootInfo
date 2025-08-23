@@ -19,7 +19,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 public class ItemsAndEmeraldsToItemsNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "items_and_emeralds_to_items");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "items_and_emeralds_to_items");
 
     private final List<ITooltipNode> tooltip;
 

@@ -22,7 +22,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 public class SuspiciousStewForEmeraldNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "suspicious_stew_for_emerald");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "suspicious_stew_for_emerald");
 
     private final List<ITooltipNode> tooltip;
 

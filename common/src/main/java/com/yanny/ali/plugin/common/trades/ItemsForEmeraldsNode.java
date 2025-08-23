@@ -20,7 +20,7 @@ import java.util.Map;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 public class ItemsForEmeraldsNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item_for_emeralds");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item_for_emeralds");
 
     private final List<ITooltipNode> tooltip;
 

@@ -19,7 +19,7 @@ import java.util.List;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 public class EnchantedItemForEmeraldsNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "enchanted_item_for_emeralds");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "enchanted_item_for_emeralds");
 
     private final List<ITooltipNode> tooltip;
 
@@ -27,7 +27,6 @@ public class EnchantedItemForEmeraldsNode extends ListNode {
         ITooltipNode t = new TooltipNode(translatable("ali.type.function.enchant_with_levels"));
 
         t.add(getNumberProviderTooltip(utils, "ali.property.value.levels", UniformGenerator.between(5, 19)));
-        t.add(getBooleanTooltip(utils, "ali.property.value.treasure", false));
 
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(listing.baseEmeraldCost + 5, listing.baseEmeraldCost + 19)));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));

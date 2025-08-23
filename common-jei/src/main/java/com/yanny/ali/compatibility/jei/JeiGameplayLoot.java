@@ -1,8 +1,9 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -19,7 +20,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 
 public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
-    public JeiGameplayLoot(IGuiHelper guiHelper, RecipeType<GameplayLootType> recipeType, LootCategory<String> lootCategory, Component title, IDrawable icon) {
+    public JeiGameplayLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<GameplayLootType>> recipeType, LootCategory<String> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
@@ -30,7 +31,7 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
         Component fullText = Component.translatableWithFallback(key, recipe.id());
         Rect rect = new Rect(0, 0, CATEGORY_WIDTH, 8);
         return new Pair<>(List.of(
-                createTextWidget(text, 0, 0, false),
+                createTextWidget(text, 0, false),
                 new TooltipWidget(fullText, rect)
         ), List.of());
     }
@@ -38,6 +39,11 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
     @Override
     int getYOffset(GameplayLootType recipe) {
         return 10;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 
     private record TooltipWidget(Component component, Rect rect) implements IRecipeWidget {

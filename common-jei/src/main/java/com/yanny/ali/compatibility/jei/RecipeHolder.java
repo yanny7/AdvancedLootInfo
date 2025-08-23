@@ -1,18 +1,17 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.IWidget;
 import com.yanny.ali.compatibility.common.IType;
 
 import java.util.List;
 
 public final class RecipeHolder<T extends IType> {
     private final T type;
-    private IWidget widget;
+    private JeiWidgetWrapper widgetWrapper;
     private List<JeiBaseLoot.Holder> holders;
 
-    public RecipeHolder(T type, IWidget widget, List<JeiBaseLoot.Holder> holders) {
+    public RecipeHolder(T type, JeiWidgetWrapper widgetWrapper, List<JeiBaseLoot.Holder> holders) {
         this.type = type;
-        this.widget = widget;
+        this.widgetWrapper = widgetWrapper;
         this.holders = holders;
     }
 
@@ -20,12 +19,12 @@ public final class RecipeHolder<T extends IType> {
         return type;
     }
 
-    public IWidget getWidget() {
-        return widget;
+    public JeiWidgetWrapper getWidgetWrapper() {
+        return widgetWrapper;
     }
 
-    public void setWidget(IWidget widget) {
-        this.widget = widget;
+    public void setWidgetWrapper(JeiWidgetWrapper widgetWrapper) {
+        this.widgetWrapper = widgetWrapper;
     }
 
     public List<JeiBaseLoot.Holder> getHolders() {

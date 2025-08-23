@@ -19,7 +19,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 public class TippedArrowForItemsAndEmeraldsNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "tipped_arrow_for_item_and_emeralds");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "tipped_arrow_for_item_and_emeralds");
 
     private final List<ITooltipNode> tooltip;
 

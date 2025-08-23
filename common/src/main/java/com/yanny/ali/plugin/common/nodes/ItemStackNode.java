@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemStackNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item_stack");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item_stack");
 
     private final List<ITooltipNode> tooltip;
     private final ItemStack itemStack;

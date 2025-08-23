@@ -63,7 +63,7 @@ public record SyncTradeMessage(ResourceLocation location, IDataNode node, List<I
     );
 
     public SyncTradeMessage(IDataNode node, Pair<List<Item>, List<Item>> items) {
-        this(new ResourceLocation("empty"), node, items.getA(), items.getB());
+        this(ResourceLocation.withDefaultNamespace("empty"), node, items.getA(), items.getB());
     }
 
     public SyncTradeMessage(ResourceLocation location, IDataNode node, Pair<List<Item>, List<Item>> items) {

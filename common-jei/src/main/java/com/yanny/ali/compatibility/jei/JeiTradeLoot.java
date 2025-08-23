@@ -5,40 +5,36 @@ import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.common.TradeLootType;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.registries.LootCategory;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
+import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
+
+import java.util.List;
 
 public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, String> {
     public JeiTradeLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<TradeLootType>> recipeType, LootCategory<String> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
-    @NotNull
     @Override
-    public IDrawable getBackground() {
-        return guiHelper.createBlankDrawable(getWidth(), getHeight());
-    }
-
-    @Override
-    public void draw(RecipeHolder<TradeLootType> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
-        String key = recipe.type().id().equals("empty") ? "entity.minecraft.wandering_trader" : "entity.minecraft.villager." + recipe.type().id();
-        String id = recipe.type().id().equals("empty") ? "wandering_trader" : recipe.type().id();
-        Component text = GenericUtils.ellipsis(key, id, 9 * 18);
+    Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, TradeLootType recipe) {
+        String key = recipe.id().equals("empty") ? "entity.minecraft.wandering_trader" : "entity.minecraft.villager." + recipe.id();
+        String id = recipe.id().equals("empty") ? "wandering_trader" : recipe.id();
+        Component text = GenericUtils.ellipsis(key, id, CATEGORY_WIDTH);
         Component fullText = Component.translatableWithFallback(key, id);
-        Rect rect = new Rect(0, 0, 9 * 18, 8);
-
-        guiGraphics.drawString(Minecraft.getInstance().font, text, 0, 0, 0, false);
-
-        if (rect.contains((int) mouseX, (int) mouseY)) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, fullText, (int) mouseX, (int) mouseY);
-        }
+        Rect rect = new Rect(0, 0, CATEGORY_WIDTH, 8);
+        return new Pair<>(List.of(
+                createTextWidget(text, 0, false),
+                new TooltipWidget(fullText, rect)
+        ), List.of());
     }
 
     @Override
@@ -49,5 +45,20 @@ public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, String> {
     @Override
     IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         return new TradeWidget(utils, entry, rect, maxWidth);
+    }
+
+    private record TooltipWidget(Component component, Rect rect) implements IRecipeWidget {
+        @NotNull
+        @Override
+        public ScreenPosition getPosition() {
+            return new ScreenPosition(rect().x(), rect.y());
+        }
+
+        @Override
+        public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {
+            if (rect.contains((int) mouseX, (int) mouseY)) {
+                tooltip.add(component);
+            }
+        }
     }
 }
