@@ -23,22 +23,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
-    public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
+    public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<BlockLootType>> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, BlockLootType recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BlockLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
         IRecipeSlotBuilder slotBuilder = builder.addInputSlot().setSlotName("block");
 
-        if (recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR) {
+        if (recipe.type().block() instanceof BushBlock || recipe.type().block().asItem() == Items.AIR) {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 5).setOutputSlotBackground();
         } else {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 0).setStandardSlotBackground();
         }
 
-        slotBuilder.addItemLike(recipe.block());
+        slotBuilder.addItemLike(recipe.type().block());
     }
 
     @Override

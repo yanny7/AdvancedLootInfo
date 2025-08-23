@@ -20,7 +20,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 
 public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
-    public JeiGameplayLoot(IGuiHelper guiHelper, RecipeType<GameplayLootType> recipeType, LootCategory<String> lootCategory, Component title, IDrawable icon) {
+    public JeiGameplayLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<GameplayLootType>> recipeType, LootCategory<String> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 

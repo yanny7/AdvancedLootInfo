@@ -25,22 +25,24 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
-public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
+public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<RecipeHolder<T>> {
     static final int CATEGORY_WIDTH = 9 * 18;
     static final int CATEGORY_HEIGHT = 7 * 18;
-    private static final Map<IType, Pair<JeiWidgetWrapper, List<Holder>>> widgets = new HashMap<>();
 
     protected final IGuiHelper guiHelper;
-    private final RecipeType<T> recipeType;
+    private final RecipeType<RecipeHolder<T>> recipeType;
     private final LootCategory<V> lootCategory;
     private final Component title;
     private final IDrawable icon;
 
-    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
+    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<T>> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
         this.guiHelper = guiHelper;
         this.recipeType = recipeType;
         this.lootCategory = lootCategory;
@@ -50,7 +52,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @NotNull
     @Override
-    public final RecipeType<T> getRecipeType() {
+    public final RecipeType<RecipeHolder<T>> getRecipeType() {
         return recipeType;
     }
 
@@ -70,14 +72,15 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<T> recipe, IFocusGroup iFocusGroup) {
         List<Holder> slotParams = new LinkedList<>();
         IWidgetUtils utils = getJeiUtils(slotParams);
-        RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
+        RelativeRect rect = new RelativeRect(0, getYOffset(recipe.type()), CATEGORY_WIDTH, 0);
 
-        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(getRootWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH)), slotParams));
-        recipe.inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
-        recipe.outputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(i));
+        recipe.setWidgetWrapper(new JeiWidgetWrapper(getRootWidget(utils, recipe.type().entry(), rect, CATEGORY_WIDTH)));
+        recipe.setHolders(slotParams);
+        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
+        recipe.type().outputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(i));
 
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
@@ -96,16 +99,15 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @Override
-    public void createRecipeExtras(IRecipeExtrasBuilder builder, T recipe, IFocusGroup focuses) {
-        Pair<JeiWidgetWrapper, List<Holder>> pair = widgets.remove(recipe);
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, RecipeHolder<T> recipe, IFocusGroup focuses) {
+        JeiWidgetWrapper widgetWrapper = recipe.getWidgetWrapper();
+        List<Holder> slotParams = recipe.getHolders();
 
-        if (pair == null) {
+        if (widgetWrapper == null || slotParams == null) {
             return;
         }
 
-        Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> additionalWidgets = getWidgets(builder, recipe);
-        JeiWidgetWrapper widgetWrapper = pair.getA();
-        List<Holder> slotParams = pair.getB();
+        Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> additionalWidgets = getWidgets(builder, recipe.type());
         List<IRecipeWidget> scrollWidgets = new LinkedList<>(additionalWidgets.getA());
         List<IRecipeSlotDrawable> slotDrawables = new LinkedList<>(additionalWidgets.getB());
 
@@ -121,7 +123,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         }
 
         Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollBoxScrollbarExtraWidth(), CATEGORY_HEIGHT);
-        JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, pair.getA().getRect().height() + getYOffset(recipe), scrollWidgets);
+        JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().height() + getYOffset(recipe.type()), scrollWidgets);
 
         builder.addSlottedWidget(scrollWidget, slotDrawables);
         builder.addInputHandler(scrollWidget);
@@ -178,5 +180,9 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         };
     }
 
-    private record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {}
+    public record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect, @Nullable JeiWidgetWrapper widgetWrapper, @Nullable List<Holder> listHolder) {
+        public Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+            this(item, entry, rect, null, null);
+        }
+    }
 }

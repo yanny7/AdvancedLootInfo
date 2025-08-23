@@ -26,15 +26,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
-    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<EntityLootType> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
+    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<EntityLootType>> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, EntityLootType recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<EntityLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.entity().getType());
+        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.type().entity().getType());
 
         if (spawnEgg != null) {
             builder.addSlot(RecipeIngredientRole.CATALYST).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").addItemLike(spawnEgg);
