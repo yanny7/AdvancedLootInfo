@@ -12,7 +12,7 @@ public abstract class ReiBaseDisplay extends BasicDisplay {
     private final IDataNode node;
 
     public ReiBaseDisplay(List<EntryIngredient> inputs, IType type) {
-        super(inputs, type.items().stream().map(EntryIngredients::of).toList());
+        super(inputs, type.outputs().stream().map(EntryIngredients::of).toList());
         node = type.entry();
     }
 

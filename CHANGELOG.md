@@ -1,3 +1,8 @@
+## []
+
+- Added Trade info support for vanilla
+- Fixed memory leak in JEI plugin
+
 ## [1.2.5]
 
 - Fixed no LootJS info displayed when adding to empty loot table

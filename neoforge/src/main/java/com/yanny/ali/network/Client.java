@@ -8,6 +8,10 @@ public class Client extends AbstractClient {
         super.onLootInfo(msg);
     }
 
+    public void onLootInfo(SyncTradeMessage msg, IPayloadContext contextSupplier) {
+        super.onTradeInfo(msg);
+    }
+
     public void onClear(ClearMessage msg, IPayloadContext contextSupplier) {
         super.onClear(msg);
     }

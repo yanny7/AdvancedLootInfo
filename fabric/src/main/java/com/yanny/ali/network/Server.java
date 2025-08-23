@@ -15,6 +15,11 @@ public class Server extends AbstractServer {
     }
 
     @Override
+    protected void sendSyncTradeMessage(ServerPlayer serverPlayer, SyncTradeMessage message) {
+        ServerPlayNetworking.send(serverPlayer, message);
+    }
+
+    @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
         ServerPlayNetworking.send(serverPlayer, message);
     }

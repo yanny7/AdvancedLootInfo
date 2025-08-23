@@ -15,6 +15,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.archaeology_loot", "Archaeology Loot");
         TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
+        TRANSLATION_MAP.put("emi.category.ali.trade_loot", "Trading Loot");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s");
@@ -121,6 +122,9 @@ public class LanguageHolder {
         // LootJS
         TRANSLATION_MAP.put("ali.type.function.custom_player", "Custom Player Modifier:");
         TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
+
+        // Trades
+        TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
 
         TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_attribute_modifiers", "Attribute Modifiers:");
         TRANSLATION_MAP.put("ali.type.item_sub_predicate.item_bundle", "Bundle:");
@@ -325,6 +329,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.percent", "Percent: %s");
         TRANSLATION_MAP.put("ali.property.value.period", "Period: %s");
         TRANSLATION_MAP.put("ali.property.value.potion", "Potion: %s");
+        TRANSLATION_MAP.put("ali.property.value.price_multiplier", "Price Multiplier: %s");
         TRANSLATION_MAP.put("ali.property.value.probability", "Probability: %s");
         TRANSLATION_MAP.put("ali.property.value.property", "Property: %s");
         TRANSLATION_MAP.put("ali.property.value.provider", "Provider: %s");
@@ -367,10 +372,13 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.treasure", "Treasure: %s");
         TRANSLATION_MAP.put("ali.property.value.twinkle", "Twinkle: %s");
         TRANSLATION_MAP.put("ali.property.value.type", "Type: %s");
+        TRANSLATION_MAP.put("ali.property.value.uses", "Uses: %s");
         TRANSLATION_MAP.put("ali.property.value.uuid", "UUID: %s");
         TRANSLATION_MAP.put("ali.property.value.value", "Value: %s");
         TRANSLATION_MAP.put("ali.property.value.values", "Values: %s");
         TRANSLATION_MAP.put("ali.property.value.variant", "Variant: %s");
+        TRANSLATION_MAP.put("ali.property.value.villager_type", "Villager Type: %s");
+        TRANSLATION_MAP.put("ali.property.value.villager_xp", "XP: %s");
         TRANSLATION_MAP.put("ali.property.value.x", "X: %s");
         TRANSLATION_MAP.put("ali.property.value.y", "Y: %s");
         TRANSLATION_MAP.put("ali.property.value.z", "Z: %s");

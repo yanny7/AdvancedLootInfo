@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -26,22 +25,22 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
-import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
-public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<T> {
+public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<RecipeHolder<T>> {
     static final int CATEGORY_WIDTH = 9 * 18;
     static final int CATEGORY_HEIGHT = 7 * 18;
-    private static final Map<IType, Pair<IWidget, List<Holder>>> widgets = new HashMap<>();
 
-    private final RecipeType<T> recipeType;
+    private final RecipeType<RecipeHolder<T>> recipeType;
     private final LootCategory<V> lootCategory;
     private final Component title;
     private final IDrawable icon;
     protected final IGuiHelper guiHelper;
 
-    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<T> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
+    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<T>> recipeType, LootCategory<V> lootCategory, Component title, IDrawable icon) {
         this.guiHelper = guiHelper;
         this.recipeType = recipeType;
         this.lootCategory = lootCategory;
@@ -51,7 +50,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @NotNull
     @Override
-    public final RecipeType<T> getRecipeType() {
+    public final RecipeType<RecipeHolder<T>> getRecipeType() {
         return recipeType;
     }
 
@@ -72,16 +71,19 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, T recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<T> recipe, IFocusGroup iFocusGroup) {
         List<Holder> slotParams = new LinkedList<>();
         IWidgetUtils utils = getJeiUtils(slotParams);
-        RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
+        RelativeRect rect = new RelativeRect(0, getYOffset(recipe.type()), CATEGORY_WIDTH, 0);
 
-        widgets.put(recipe, new Pair<>(new LootTableWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH), slotParams));
+        recipe.setWidget(getRootWidget(utils, recipe.type().entry(), rect, CATEGORY_WIDTH));
+        recipe.setHolders(slotParams);
+        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
+        recipe.type().outputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(i));
 
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
-            IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.OUTPUT, h.rect.getX() + 1, h.rect.getY() + 1)
+            IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY, h.rect.getX() + 1, h.rect.getY() + 1)
                     .setSlotName(String.valueOf(i))
                     .addTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0)));
@@ -94,15 +96,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @Override
-    public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        Pair<IWidget, List<Holder>> pair = widgets.get(recipe);
+    public void draw(RecipeHolder<T> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        IWidget widget = recipe.getWidget();
+        List<Holder> slotParams = recipe.getHolders();
 
-        if (pair == null) {
+        if (widget == null || slotParams == null) {
             return;
         }
-
-        IWidget widget = pair.getA();
-        List<Holder> slotParams = pair.getB();
 
         widget.render(guiGraphics, (int) mouseX, (int) mouseY);
         guiGraphics.renderTooltip(Minecraft.getInstance().font, widget.getTooltipComponents((int) mouseX, (int) mouseY), Optional.empty(), (int) mouseX, (int) mouseY);
@@ -154,6 +154,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     abstract int getYOffset(T recipe);
 
+    abstract IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth);
+
     @NotNull
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
@@ -164,5 +166,6 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         };
     }
 
-    private record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {}
+    public record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+    }
 }
