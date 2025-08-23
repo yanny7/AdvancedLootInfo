@@ -6,6 +6,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
+import com.yanny.ali.compatibility.emi.EmiTradeLoot;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.registries.LootCategories;
@@ -24,11 +25,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,13 +41,13 @@ import java.util.stream.Collectors;
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
-    
+
     @Override
     public void register(EmiRegistry emiRegistry) {
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData) -> registerLootData(emiRegistry, lootData));
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> registerData(emiRegistry, lootData, tradeData));
     }
 
-    private void registerLootData(EmiRegistry registry, Map<ResourceKey<LootTable>, IDataNode> lootData) {
+    private void registerData(EmiRegistry registry, Map<ResourceKey<LootTable>, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         ClientLevel level = Minecraft.getInstance().level;
 
@@ -61,20 +66,27 @@ public class EmiCompatibility implements EmiPlugin {
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
             ));
+            Map<LootCategory<String>, EmiRecipeCategory> tradeCategoryMap = LootCategories.TRADE_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
+                    Map.Entry::getValue,
+                    (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
+            ));
 
             blockCategoryMap.values().forEach(registry::addCategory);
             entityCategoryMap.values().forEach(registry::addCategory);
             gameplayCategoryMap.values().forEach(registry::addCategory);
+            tradeCategoryMap.values().forEach(registry::addCategory);
 
             EmiRecipeCategory blockCategory = createCategory(LootCategories.BLOCK_LOOT);
             EmiRecipeCategory plantCategory = createCategory(LootCategories.PLANT_LOOT);
             EmiRecipeCategory entityCategory = createCategory(LootCategories.ENTITY_LOOT);
             EmiRecipeCategory gameplayCategory = createCategory(LootCategories.GAMEPLAY_LOOT);
+            EmiRecipeCategory tradeCategory = createCategory(LootCategories.TRADE_LOOT);
 
             registry.addCategory(blockCategory);
             registry.addCategory(plantCategory);
             registry.addCategory(entityCategory);
             registry.addCategory(gameplayCategory);
+            registry.addCategory(tradeCategory);
 
             for (Block block : BuiltInRegistries.BLOCK) {
                 ResourceKey<LootTable> location = block.getLootTable();
@@ -97,7 +109,7 @@ public class EmiCompatibility implements EmiPlugin {
                         }
                     }
 
-                    registry.addRecipe(new EmiBlockLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), block, lootEntry, clientRegistry.getItems(location)));
+                    registry.addRecipe(new EmiBlockLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), block, lootEntry, clientRegistry.getLootItems(location)));
                     lootData.remove(location);
                 }
             }
@@ -123,7 +135,7 @@ public class EmiCompatibility implements EmiPlugin {
                                 category = entityCategory;
                             }
 
-                            registry.addRecipe(new EmiEntityLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entity, lootEntry, clientRegistry.getItems(location)));
+                            registry.addRecipe(new EmiEntityLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entity, lootEntry, clientRegistry.getLootItems(location)));
                             lootData.remove(location);
                         }
                     }
@@ -144,7 +156,60 @@ public class EmiCompatibility implements EmiPlugin {
                     category = gameplayCategory;
                 }
 
-                registry.addRecipe(new EmiGameplayLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entry.getValue(), clientRegistry.getItems(location)));
+                registry.addRecipe(new EmiGameplayLoot(category, ResourceLocation.fromNamespaceAndPath(location.location().getNamespace(), "/" + location.location().getPath()), entry.getValue(), clientRegistry.getLootItems(location)));
+            }
+
+            List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = BuiltInRegistries.VILLAGER_PROFESSION.entrySet()
+                    .stream()
+                    .sorted(Comparator.comparing(a -> a.getKey().location().getPath()))
+                    .toList();
+
+            for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
+                ResourceLocation location = entry.getKey().location();
+                IDataNode tradeEntry = tradeData.get(location);
+
+                if (tradeEntry != null) {
+                    EmiRecipeCategory category = null;
+                    List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
+                    List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
+
+                    for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategoryMap.entrySet()) {
+                        if (e.getKey().validate(location.getPath())) {
+                            category = e.getValue();
+                        }
+                    }
+
+                    if (category == null) {
+                        category = tradeCategory;
+                    }
+
+                    registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
+                    tradeData.remove(location);
+                }
+            }
+
+            for (Map.Entry<ResourceLocation, IDataNode> entry : tradeData.entrySet()) {
+                ResourceLocation location = entry.getKey();
+                IDataNode tradeEntry = tradeData.get(location);
+
+                if (tradeEntry != null) {
+                    EmiRecipeCategory category = null;
+                    List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
+                    List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
+
+                    for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategoryMap.entrySet()) {
+                        if (e.getKey().validate(location.getPath())) {
+                            category = e.getValue();
+                        }
+                    }
+
+                    if (category == null) {
+                        category = tradeCategory;
+                    }
+
+                    registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
+                    tradeData.remove(location);
+                }
             }
         }
 

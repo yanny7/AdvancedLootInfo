@@ -30,6 +30,10 @@ public class NetworkUtils {
                 .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
+        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, SyncTradeMessage>)(Object) SyncTradeMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<SyncTradeMessage, CustomPayloadEvent.Context>) client::onTradeInfo)
+                .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
@@ -47,6 +51,9 @@ public class NetworkUtils {
 
         channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
+                .add();
+        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, SyncTradeMessage>)(Object) SyncTradeMessage.CODEC)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
