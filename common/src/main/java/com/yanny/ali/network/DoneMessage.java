@@ -15,9 +15,6 @@ public class DoneMessage implements CustomPacketPayload {
     public DoneMessage(FriendlyByteBuf buf) {
     }
 
-    public void encode(FriendlyByteBuf buf) {
-    }
-
     @Override
     public void write(FriendlyByteBuf friendlyByteBuf) {
 

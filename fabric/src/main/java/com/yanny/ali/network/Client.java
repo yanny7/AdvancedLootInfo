@@ -9,6 +9,9 @@ public class Client extends AbstractClient {
     public void onLootInfo(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
         super.onLootInfo(new SyncLootTableMessage(buf));
     }
+    public void onTradeInfo(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
+        super.onTradeInfo(new SyncTradeMessage(buf));
+    }
 
     public void onClear(Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) {
         super.onClear(new ClearMessage(buf));

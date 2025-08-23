@@ -1,7 +1,6 @@
 package com.yanny.ali.test.utils;
 
 import com.google.common.collect.ImmutableMap;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.datagen.LanguageHolder;
@@ -19,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;

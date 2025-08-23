@@ -28,6 +28,12 @@ public class NetworkUtils {
                         handler.client(client::onLootInfo).server((msg, ctx) -> {})
         );
         registrar.play(
+                SyncTradeMessage.ID,
+                SyncTradeMessage::new,
+                (handler) ->
+                        handler.client(client::onTradeInfo).server((msg, ctx) -> {})
+        );
+        registrar.play(
                 ClearMessage.ID,
                 ClearMessage::new,
                 (handler) ->
@@ -49,6 +55,11 @@ public class NetworkUtils {
         registrar.play(
                 SyncLootTableMessage.ID,
                 SyncLootTableMessage::new,
+                (handler) -> {}
+        );
+        registrar.play(
+                SyncTradeMessage.ID,
+                SyncTradeMessage::new,
                 (handler) -> {}
         );
         registrar.play(

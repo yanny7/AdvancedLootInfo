@@ -4,13 +4,16 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -25,6 +28,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -37,20 +41,29 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectorMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
     private final Map<Class<?>, EntryFactory<?>> entryFactoryMap = new HashMap<>();
+
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
+
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
+
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
-    private final ICommonUtils utils;
 
+    private final Map<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, IDataNode>> itemListingFactoryMap = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectorMap = new HashMap<>();
+
+    private final Set<Class<?>> missingEntryFactories = new HashSet<>();
     private final Set<Class<?>> missingFunctionTooltips = new HashSet<>();
     private final Set<Class<?>> missingConditionTooltips = new HashSet<>();
     private final Set<Class<?>> missingIngredientTooltips = new HashSet<>();
+    private final Set<Class<?>> missingItemListingFactories = new HashSet<>();
+
+    private final ICommonUtils utils;
 
     private ServerLevel serverLevel;
     private LootContext lootContext;
@@ -77,9 +90,14 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         lootModifierGetters.clear();
         lootModifierMap.clear();
 
+        itemListingFactoryMap.clear();
+        tradeItemCollectorMap.clear();
+
+        missingEntryFactories.clear();
         missingFunctionTooltips.clear();
         missingConditionTooltips.clear();
         missingIngredientTooltips.clear();
+        missingItemListingFactories.clear();
     }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
@@ -171,6 +189,18 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
+    public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, BiFunction<IServerUtils, T, IDataNode> tradeFactory) {
+        //noinspection unchecked
+        itemListingFactoryMap.put(type, (u, i) -> tradeFactory.apply(u, (T) i));
+    }
+
+    @Override
+    public <T extends VillagerTrades.ItemListing> void registerItemListingCollector(Class<T> type, BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemSupplier) {
+        //noinspection unchecked
+        tradeItemCollectorMap.put(type, (u, i) -> itemSupplier.apply(u, (T) i));
+    }
+
+    @Override
     public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
         BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>> itemSupplier = entryItemCollectorMap.get(entry.getClass());
 
@@ -197,7 +227,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         //noinspection unchecked
         EntryFactory<T> entryFactory = (EntryFactory<T>) entryFactoryMap.get(type.getClass());
 
-        return Objects.requireNonNullElseGet(entryFactory, () -> (utils1, entry, chance, sumWeight, functions, conditions) -> new MissingNode());
+        if (entryFactory != null) {
+            return entryFactory;
+        } else {
+            missingEntryFactories.add(type.getClass());
+            return (utils1, entry, chance, sumWeight, functions, conditions) ->  new MissingNode();
+        }
     }
 
     @Override
@@ -278,6 +313,31 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
+    public <T extends VillagerTrades.ItemListing> BiFunction<IServerUtils, T, IDataNode> getItemListingFactory(IServerUtils utils, T entry) {
+        //noinspection unchecked
+        BiFunction<IServerUtils, T, IDataNode> itemListingFactory = (BiFunction<IServerUtils, T, IDataNode>) itemListingFactoryMap.get(entry.getClass());
+
+        if (itemListingFactory != null) {
+            return itemListingFactory;
+        } else {
+            missingItemListingFactories.add(entry.getClass());
+            return (utils1, entry1) ->  new MissingNode();
+        }
+    }
+
+    @Override
+    public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
+        //noinspection unchecked
+        BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemCollector = (BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>>) tradeItemCollectorMap.get(entry.getClass());
+
+        if (itemCollector != null) {
+            return itemCollector.apply(utils, entry);
+        }
+
+        return new Pair<>(Collections.emptyList(), Collections.emptyList());
+    }
+
+    @Override
     public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
         if (numberProvider != null) {
             BiFunction<IServerUtils, NumberProvider, RangeValue> function = numberConverterMap.get(numberProvider.getClass());
@@ -318,6 +378,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return new LootTableNode(modifiers, this, lootTable);
     }
 
+    public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
+        return new TradeNode(this, itemListingMap);
+    }
+
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return utils.createEntities(type, level);
@@ -335,12 +399,15 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} count modifiers", countModifierMap.size());
         LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
+        LOGGER.info("Registered {} item listing factories", itemListingFactoryMap.size());
     }
 
     public void printRuntimeInfo() {
-        missingFunctionTooltips.forEach((t) -> LOGGER.warn("Missing function tooltip for {}", t.getCanonicalName()));
-        missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getCanonicalName()));
-        missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getCanonicalName()));
-        LOGGER.info("Prepared {} loot tables", lootTableMap.size());
+        missingEntryFactories.forEach((t) -> LOGGER.warn("Missing entry factory for {}", t.getName()));
+        missingFunctionTooltips.forEach((t) -> LOGGER.warn("Missing function tooltip for {}", t.getName()));
+        missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getName()));
+        missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getName()));
+        missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
+        LOGGER.info("Prepared {} loot tables and {} loot trades", lootTableMap.size(), lootTableMap.size());
     }
 }

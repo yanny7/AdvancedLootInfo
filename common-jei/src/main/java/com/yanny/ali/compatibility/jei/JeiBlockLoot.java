@@ -2,9 +2,14 @@ package com.yanny.ali.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidget;
+import com.yanny.ali.api.IWidgetUtils;
+import com.yanny.ali.api.RelativeRect;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.mixin.MixinBushBlock;
 import com.yanny.ali.plugin.client.WidgetUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -30,20 +35,20 @@ import org.jetbrains.annotations.NotNull;
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     private final ClientLevel level;
 
-    public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
+    public JeiBlockLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<BlockLootType>> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
         level = Minecraft.getInstance().level;
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, BlockLootType recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BlockLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
+        boolean isSpecial = recipe.type().block() instanceof BushBlock || recipe.type().block().asItem() == Items.AIR;
 
         if (!isSpecial) {
             builder.addSlot(RecipeIngredientRole.INPUT, 4 * 18 + 1, 1)
-                    .addItemStack(recipe.block().asItem().getDefaultInstance());
+                    .addItemStack(recipe.type().block().asItem().getDefaultInstance());
         }
     }
 
@@ -54,11 +59,11 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     }
 
     @Override
-    public void draw(BlockLootType recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<BlockLootType> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
-        boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
-        boolean isPlant = recipe.block() instanceof BushBlock;
-        BlockState blockState = recipe.block().defaultBlockState();
+        boolean isSpecial = recipe.type().block() instanceof BushBlock || recipe.type().block().asItem() == Items.AIR;
+        boolean isPlant = recipe.type().block() instanceof BushBlock;
+        BlockState blockState = recipe.type().block().defaultBlockState();
         PoseStack poseStack = guiGraphics.pose();
 
         poseStack.pushPose();
@@ -79,7 +84,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
 
-                if (recipe.block() instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
+                if (recipe.type().block() instanceof MixinBushBlock bushBlock && bushBlock.invokeMayPlaceOn(farmland, level, BlockPos.ZERO)) {
                     base = farmland;
                 } else {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();
@@ -104,7 +109,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
         poseStack.popPose();
 
         if (isSpecial && mouseX >= 4 * 18 - 4 && mouseX < 4 * 18 + 20 && mouseY >= 0 && mouseY < 24) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable(recipe.block().getDescriptionId()), (int) mouseX, (int) mouseY);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, Component.translatable(recipe.type().block().getDescriptionId()), (int) mouseX, (int) mouseY);
         }
     }
 
@@ -112,5 +117,10 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     int getYOffset(BlockLootType recipe) {
         boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
         return isSpecial ? 30 : 22;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 }

@@ -29,13 +29,18 @@ public class NetworkUtils {
                 .decoder(SyncLootTableMessage::new)
                 .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
+        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
+                .encoder(SyncTradeMessage::write)
+                .decoder(SyncTradeMessage::new)
+                .consumerNetworkThread((BiConsumer<SyncTradeMessage, CustomPayloadEvent.Context>) client::onTradeInfo)
+                .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::write)
                 .decoder(ClearMessage::new)
                 .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
-                .encoder(DoneMessage::encode)
+                .encoder(DoneMessage::write)
                 .decoder(DoneMessage::new)
                 .consumerNetworkThread((BiConsumer<DoneMessage, CustomPayloadEvent.Context>) client::onDone)
                 .add();
@@ -50,12 +55,16 @@ public class NetworkUtils {
                 .encoder(SyncLootTableMessage::write)
                 .decoder(SyncLootTableMessage::new)
                 .add();
+        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
+                .encoder(SyncTradeMessage::write)
+                .decoder(SyncTradeMessage::new)
+                .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::write)
                 .decoder(ClearMessage::new)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
-                .encoder(DoneMessage::encode)
+                .encoder(DoneMessage::write)
                 .decoder(DoneMessage::new)
                 .add();
         return new DistHolder<>(null, server);

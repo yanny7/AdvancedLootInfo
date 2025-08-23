@@ -15,14 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 public class SyncLootTableMessage implements CustomPacketPayload {
     public static final ResourceLocation ID = Utils.modLoc("loot_table_sync");
@@ -75,38 +68,5 @@ public class SyncLootTableMessage implements CustomPacketPayload {
     @Override
     public ResourceLocation id() {
         return ID;
-    }
-
-    public static String compressString(String input) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        try (GZIPOutputStream gzipOut = new GZIPOutputStream(baos)) {
-            gzipOut.write(input.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            LOGGER.error("Failed to compress loot table with error: {}", e.getMessage());
-            throw new RuntimeException();
-        }
-
-        return Base64.getEncoder().encodeToString(baos.toByteArray());
-    }
-
-    public static String decompressString(String compressedBase64) {
-        byte[] compressedBytes = Base64.getDecoder().decode(compressedBase64);
-        ByteArrayInputStream bais = new ByteArrayInputStream(compressedBytes);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        try (GZIPInputStream gzipIn = new GZIPInputStream(bais)) {
-            byte[] buffer = new byte[1024];
-            int len;
-
-            while ((len = gzipIn.read(buffer)) > 0) {
-                baos.write(buffer, 0, len);
-            }
-        } catch (IOException e) {
-            LOGGER.error("Failed to decompress loot table with error: {}", e.getMessage());
-            throw new RuntimeException();
-        }
-
-        return baos.toString(StandardCharsets.UTF_8);
     }
 }

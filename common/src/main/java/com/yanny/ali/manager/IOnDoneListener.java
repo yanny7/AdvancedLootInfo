@@ -7,5 +7,5 @@ import java.util.Map;
 
 @FunctionalInterface
 public interface IOnDoneListener {
-    void onDone(Map<ResourceLocation, IDataNode> lootData);
+    void onDone(Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData);
 }
