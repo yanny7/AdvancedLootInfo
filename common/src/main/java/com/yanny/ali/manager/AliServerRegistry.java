@@ -413,6 +413,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getName()));
         missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getName()));
         missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
-        LOGGER.info("Prepared {} loot tables and {} loot trades", lootTableMap.size(), lootTableMap.size());
+        LOGGER.info("Prepared {} loot tables", lootTableMap.size());
     }
 }

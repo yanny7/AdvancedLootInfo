@@ -25,7 +25,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.LinkedList;
@@ -180,9 +179,6 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         };
     }
 
-    public record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect, @Nullable JeiWidgetWrapper widgetWrapper, @Nullable List<Holder> listHolder) {
-        public Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
-            this(item, entry, rect, null, null);
-        }
+    public record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
     }
 }
