@@ -1,11 +1,7 @@
 package com.yanny.ali.test;
 
-import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IServerRegistry;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
@@ -26,6 +22,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -45,6 +42,7 @@ import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -53,6 +51,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.BiFunction;
 
 @Suite
 @SelectClasses({
@@ -77,8 +76,8 @@ public class TooltipTestSuite {
         ResourceManager resourceManager = loadClientResources();
         Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
 
-        Language.inject(pair.getFirst());
-        UNUSED = pair.getSecond();
+        Language.inject(pair.getA());
+        UNUSED = pair.getB();
 
         PluginManager.registerCommonEvent();
         PluginManager.registerClientEvent();
@@ -137,6 +136,16 @@ public class TooltipTestSuite {
             @Override
             public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack) {
                 return PluginManager.SERVER_REGISTRY.applyItemStackModifier(utils, function, itemStack);
+            }
+
+            @Override
+            public <T extends VillagerTrades.ItemListing> BiFunction<IServerUtils, T, IDataNode> getItemListingFactory(IServerUtils utils, T entry) {
+                return PluginManager.SERVER_REGISTRY.getItemListingFactory(utils, entry);
+            }
+
+            @Override
+            public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
+                return PluginManager.SERVER_REGISTRY.collectItems(utils, entry);
             }
 
             @Override

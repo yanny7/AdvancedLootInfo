@@ -3,7 +3,6 @@ package com.yanny.ali.compatibility.emi;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -27,11 +26,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private final Widget widget;
     private final List<Holder> slotWidgets = new LinkedList<>();
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> items) {
+    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<ItemStack> outputs) {
         super(category, id, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
         RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
-        widget = new EmiWidgetWrapper(new LootTableWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
-        outputs.addAll(items.stream().map(EmiStack::of).toList());
+        widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
+        this.inputs.addAll(inputs.stream().map(EmiStack::of).toList());
+        this.outputs.addAll(outputs.stream().map(EmiStack::of).toList());
     }
 
     @Override
@@ -41,7 +41,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
         widgets.addAll(slotWidgets.stream().map((h) -> {
             EmiIngredient ingredient = h.item.map(EmiStack::of, EmiIngredient::of);
-            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.utils, h.entry, ingredient, h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount());
+            EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), ((IItemNode) h.entry).getCount());
 
             widget.recipeContext(h.recipe);
             return (Widget) widget;
@@ -68,6 +68,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
         return List.of();
     }
+
+    abstract IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth);
 
     @NotNull
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {

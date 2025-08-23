@@ -2,10 +2,16 @@ package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
+import com.yanny.ali.plugin.client.widget.trades.EmeraldForVillagerTypeItemWidget;
+import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
+import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
+import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
@@ -37,6 +43,20 @@ public class Plugin implements IPlugin {
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
         registry.registerWidget(MissingNode.ID, MissingWidget::new);
 
+        registry.registerWidget(TradeNode.ID, TradeWidget::new);
+        registry.registerWidget(TradeLevelNode.ID, TradeLevelWidget::new);
+        registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
+        registry.registerWidget(EmeraldForItemsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(ItemsForEmeraldsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(ItemsAndEmeraldsToItemsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(SuspiciousStewForEmeraldNode.ID, ItemListingWidget::new);
+        registry.registerWidget(EnchantedItemForEmeraldsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(TippedArrowForItemsAndEmeraldsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(TreasureMapForEmeraldsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(EnchantBookForEmeraldsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(DyedArmorForEmeraldsNode.ID, ItemListingWidget::new);
+        registry.registerWidget(EmeraldsForVillagerTypeItemNode.ID, EmeraldForVillagerTypeItemWidget::new);
+
         registry.registerNode(LootTableNode.ID, LootTableNode::new);
         registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
         registry.registerNode(ItemNode.ID, ItemNode::new);
@@ -48,6 +68,20 @@ public class Plugin implements IPlugin {
         registry.registerNode(DynamicNode.ID, DynamicNode::new);
         registry.registerNode(ReferenceNode.ID, ReferenceNode::new);
         registry.registerNode(MissingNode.ID, MissingNode::new);
+
+        registry.registerNode(TradeNode.ID, TradeNode::new);
+        registry.registerNode(TradeLevelNode.ID, TradeLevelNode::new);
+        registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerNode(EmeraldForItemsNode.ID, EmeraldForItemsNode::new);
+        registry.registerNode(ItemsForEmeraldsNode.ID, ItemsForEmeraldsNode::new);
+        registry.registerNode(ItemsAndEmeraldsToItemsNode.ID, ItemsAndEmeraldsToItemsNode::new);
+        registry.registerNode(SuspiciousStewForEmeraldNode.ID, SuspiciousStewForEmeraldNode::new);
+        registry.registerNode(EnchantedItemForEmeraldsNode.ID, EnchantedItemForEmeraldsNode::new);
+        registry.registerNode(TippedArrowForItemsAndEmeraldsNode.ID, TippedArrowForItemsAndEmeraldsNode::new);
+        registry.registerNode(TreasureMapForEmeraldsNode.ID, TreasureMapForEmeraldsNode::new);
+        registry.registerNode(EnchantBookForEmeraldsNode.ID, EnchantBookForEmeraldsNode::new);
+        registry.registerNode(DyedArmorForEmeraldsNode.ID, DyedArmorForEmeraldsNode::new);
+        registry.registerNode(EmeraldsForVillagerTypeItemNode.ID, EmeraldsForVillagerTypeItemNode::new);
     }
 
     @Override
@@ -141,6 +175,28 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(SetNameFunction.class, TooltipUtils::applySetNameItemStackModifier);
         registry.registerItemStackModifier(SetNbtFunction.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(SetPotionFunction.class, TooltipUtils::applyItemStackModifier);
+
+        registry.registerItemListing(VillagerTrades.DyedArmorForEmeralds.class, DyedArmorForEmeraldsNode::new);
+        registry.registerItemListing(VillagerTrades.EmeraldForItems.class, EmeraldForItemsNode::new);
+        registry.registerItemListing(VillagerTrades.EmeraldsForVillagerTypeItem.class, EmeraldsForVillagerTypeItemNode::new);
+        registry.registerItemListing(VillagerTrades.EnchantBookForEmeralds.class, EnchantBookForEmeraldsNode::new);
+        registry.registerItemListing(VillagerTrades.EnchantedItemForEmeralds.class, EnchantedItemForEmeraldsNode::new);
+        registry.registerItemListing(VillagerTrades.ItemsAndEmeraldsToItems.class, ItemsAndEmeraldsToItemsNode::new);
+        registry.registerItemListing(VillagerTrades.ItemsForEmeralds.class, ItemsForEmeraldsNode::new);
+        registry.registerItemListing(VillagerTrades.SuspiciousStewForEmerald.class, SuspiciousStewForEmeraldNode::new);
+        registry.registerItemListing(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TippedArrowForItemsAndEmeraldsNode::new);
+        registry.registerItemListing(VillagerTrades.TreasureMapForEmeralds.class, TreasureMapForEmeraldsNode::new);
+
+        registry.registerItemListingCollector(VillagerTrades.DyedArmorForEmeralds.class, DyedArmorForEmeraldsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.EmeraldForItems.class, EmeraldForItemsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.EmeraldsForVillagerTypeItem.class, EmeraldsForVillagerTypeItemNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.EnchantBookForEmeralds.class, EnchantBookForEmeraldsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.EnchantedItemForEmeralds.class, EnchantedItemForEmeraldsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.ItemsAndEmeraldsToItems.class, ItemsAndEmeraldsToItemsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.ItemsForEmeralds.class, ItemsForEmeraldsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.SuspiciousStewForEmerald.class, SuspiciousStewForEmeraldNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TippedArrowForItemsAndEmeraldsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.TreasureMapForEmeralds.class, TreasureMapForEmeraldsNode::collectItems);
     }
 
     @NotNull

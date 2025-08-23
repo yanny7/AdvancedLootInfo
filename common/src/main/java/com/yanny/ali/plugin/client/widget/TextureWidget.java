@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TextureWidget extends IWidget {
+public class TextureWidget implements IWidget {
     protected final ResourceLocation texture;
     protected final RelativeRect rect;
     protected final int u;
@@ -24,7 +24,6 @@ public class TextureWidget extends IWidget {
     private final List<Component> components = new LinkedList<>();
 
     public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
-        super(new ResourceLocation("texture_widget"));
         this.texture = texture;
         this.rect = rect;
         this.u = u;

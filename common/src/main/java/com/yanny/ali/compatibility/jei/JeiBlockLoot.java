@@ -1,7 +1,8 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.BlockLootType;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -62,5 +63,10 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     int getYOffset(BlockLootType recipe) {
         boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
         return isSpecial ? 30 : 22;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 }

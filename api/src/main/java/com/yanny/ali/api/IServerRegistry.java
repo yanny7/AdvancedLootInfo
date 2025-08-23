@@ -1,5 +1,6 @@
 package com.yanny.ali.api;
 
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
+import oshi.util.tuples.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +40,10 @@ public interface IServerRegistry {
     <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer);
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
+
+    <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, BiFunction<IServerUtils, T, IDataNode> supplier);
+
+    <T extends VillagerTrades.ItemListing> void registerItemListingCollector(Class<T> type, BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemSupplier);
 
     @FunctionalInterface
     interface EntryFactory<T extends LootPoolEntryContainer> {

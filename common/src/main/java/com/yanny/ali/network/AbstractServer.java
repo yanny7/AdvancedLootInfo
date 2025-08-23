@@ -8,8 +8,10 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +19,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +30,7 @@ import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +39,8 @@ import java.util.stream.Stream;
 public abstract class AbstractServer {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final List<SyncLootTableMessage> messages = new LinkedList<>();
+    private final List<SyncLootTableMessage> lootTableMessages = new LinkedList<>();
+    private final List<SyncTradeMessage> tradeMessages = new LinkedList<>();
 
     public final void readLootTables(LootDataManager manager, ServerLevel level) {
         AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
@@ -48,11 +54,17 @@ public abstract class AbstractServer {
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.BLOCK, Collections.emptyList());
         List<ILootModifier<?>> entityLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.ENTITY, Collections.emptyList());
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.LOOT_TABLE, Collections.emptyList());
+        Map<ResourceLocation, IDataNode> tradeNodes;
+        Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
+        Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
+        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
 
         serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable);
         lootTableItems = lootTables.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, AbstractServer::getItems));
-        messages.clear();
+
+        lootTableMessages.clear();
+        tradeMessages.clear();
 
         // apply modifiers
         lootNodes.putAll(processBlocks(serverRegistry, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
@@ -61,8 +73,10 @@ public abstract class AbstractServer {
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
         lootTables = removeEmptyLootTable(lootTables, lootTableItemStacks);
+        tradeNodes = new HashMap<>(processTrades(serverRegistry, tradeItems));
 
         sendLootData(lootTables, lootTableItemStacks, lootNodes);
+        sendTradeData(tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
 
         serverRegistry.printRuntimeInfo();
     }
@@ -71,11 +85,19 @@ public abstract class AbstractServer {
         if (player instanceof ServerPlayer serverPlayer) {
             sendClearMessage(serverPlayer, new ClearMessage());
 
-            for (SyncLootTableMessage message : messages) {
+            for (SyncLootTableMessage message : lootTableMessages) {
                 try {
-                    sendSyncMessage(serverPlayer, message);
+                    sendSyncLootTableMessage(serverPlayer, message);
                 } catch (Throwable e) {
                     LOGGER.warn("Failed to send message for loot table {} with error: {}", message.location, e.getMessage());
+                }
+            }
+
+            for (SyncTradeMessage message : tradeMessages) {
+                try {
+                    sendSyncTradeMessage(serverPlayer, message);
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to send message for trade {} with error: {}", message.location, e.getMessage());
                 }
             }
 
@@ -85,7 +107,9 @@ public abstract class AbstractServer {
 
     protected abstract void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message);
 
-    protected abstract void sendSyncMessage(ServerPlayer serverPlayer, SyncLootTableMessage message);
+    protected abstract void sendSyncLootTableMessage(ServerPlayer serverPlayer, SyncLootTableMessage message);
+
+    protected abstract void sendSyncTradeMessage(ServerPlayer serverPlayer, SyncTradeMessage message);
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
@@ -191,6 +215,30 @@ public abstract class AbstractServer {
         return lootNodes;
     }
 
+    @NotNull
+    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
+        Map<ResourceLocation, IDataNode> nodes = new HashMap<>();
+
+        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
+            ResourceLocation location = entry.getKey().location();
+            Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = VillagerTrades.TRADES.get(entry.getValue());
+
+            if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
+                nodes.put(location, serverRegistry.parseTrade(itemListingMap));
+                tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
+            } else {
+                LOGGER.warn("No trades defined for {}", location);
+            }
+        }
+
+        return nodes;
+    }
+
+    @NotNull
+    private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry) {
+        return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+    }
+
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
         //noinspection unchecked
         return ((ILootModifier<T>) modifier).predicate(value) && predicateItem(modifier, items);
@@ -220,7 +268,12 @@ public abstract class AbstractServer {
     }
 
     private void sendLootData(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        lootTables.forEach((location, lootTable) -> messages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+        lootTables.forEach((location, lootTable) -> lootTableMessages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+    }
+
+    private void sendTradeData(Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
+        trades.forEach((location, node) -> tradeMessages.add(new SyncTradeMessage(location, node, items.get(location))));
+        tradeMessages.add(new SyncTradeMessage(wanderingTraderNode, wanderingTraderItems));
     }
 
     private static List<ItemStack> toItemStacks(TagKey<Item> tag) {

@@ -4,7 +4,6 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -15,6 +14,7 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
@@ -75,11 +75,13 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         IWidgetUtils utils = getJeiUtils(slotParams);
         RelativeRect rect = new RelativeRect(0, getYOffset(recipe), CATEGORY_WIDTH, 0);
 
-        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(new LootTableWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH)), slotParams));
+        widgets.put(recipe, new Pair<>(new JeiWidgetWrapper(getRootWidget(utils, recipe.entry(), rect, CATEGORY_WIDTH)), slotParams));
+        recipe.inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
+        recipe.outputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(i));
 
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
-            IRecipeSlotBuilder slotBuilder = builder.addOutputSlot()
+            IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY)
                     .setStandardSlotBackground()
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
@@ -138,6 +140,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, T recipe);
 
     abstract int getYOffset(T recipe);
+
+    abstract IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth);
 
     @NotNull
     protected IRecipeWidget createTextWidget(Component component, int x, boolean centered) {

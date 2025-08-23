@@ -1,8 +1,9 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -38,6 +39,11 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, String> {
     @Override
     int getYOffset(GameplayLootType recipe) {
         return 10;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 
     private record TooltipWidget(Component component, Rect rect) implements IRecipeWidget {

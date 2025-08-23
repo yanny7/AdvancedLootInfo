@@ -36,6 +36,7 @@ public class LootCategory<T> {
     public enum Type {
         BLOCK,
         ENTITY,
-        GAMEPLAY
+        GAMEPLAY,
+        TRADE
     }
 }

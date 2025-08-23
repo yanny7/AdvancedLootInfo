@@ -6,5 +6,5 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record EntityLootType(Entity entity, IDataNode entry, List<ItemStack> items) implements IType {
+public record EntityLootType(Entity entity, IDataNode entry, List<ItemStack> inputs, List<ItemStack> outputs) implements IType {
 }

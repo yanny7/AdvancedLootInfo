@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class ListWidget extends IWidget {
+public abstract class ListWidget implements IWidget {
     public static final ResourceLocation TEXTURE_LOC = new ResourceLocation("ali", "textures/gui/gui.png");
 
     public static final int GROUP_WIDGET_WIDTH = 7;
@@ -17,17 +17,17 @@ public abstract class ListWidget extends IWidget {
 
     private final List<IWidget> widgets;
     private final RelativeRect bounds;
+    private final int groupWidgetWidth;
 
     public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         this(utils, entry, rect, maxWidth, entry);
     }
 
     public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth, IDataNode tooltipNode) {
-        super(entry.getId());
         IWidget groupWidget = getLootGroupWidget(rect, tooltipNode);
         boolean hasGroupWidget = groupWidget != null;
-        int xOffset = hasGroupWidget ? GROUP_WIDGET_WIDTH : 0;
 
+        groupWidgetWidth = hasGroupWidget ? groupWidget.getRect().width : 0;
         widgets = new ArrayList<>();
         bounds = rect;
 
@@ -36,10 +36,10 @@ public abstract class ListWidget extends IWidget {
         }
 
         if (entry instanceof ListNode listNode) {
-            RelativeRect subRect = new RelativeRect(xOffset, 0, rect.width - GROUP_WIDGET_WIDTH, 0, rect);
+            RelativeRect subRect = new RelativeRect(groupWidgetWidth, 0, rect.width - groupWidgetWidth, 0, rect);
 
             widgets.addAll(utils.createWidgets(utils, listNode.nodes(), subRect, maxWidth));
-            bounds.setDimensions(subRect.width + GROUP_WIDGET_WIDTH, subRect.height);
+            bounds.setDimensions(subRect.width + groupWidgetWidth, subRect.height);
         } else {
             bounds.setDimensions(GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         }
@@ -78,14 +78,14 @@ public abstract class ListWidget extends IWidget {
         int top = bounds.getY() + 18;
         int height = lastY - bounds.getY() - 9;
 
-        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.getX() + 3, top, 2, height, 0, 0, 2, 18);
+        guiGraphics.blitRepeating(TEXTURE_LOC, bounds.getX() + groupWidgetWidth / 2, top, 2, height, 0, 0, 2, 18);
         lastDirection = null;
 
         for (IWidget widget : widgets) {
             WidgetDirection direction = widget.getDirection();
 
             if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().offsetY > 0) {
-                guiGraphics.blitRepeating(TEXTURE_LOC, bounds.getX() + 4, widget.getRect().getY() + 8, 3, 2, 2, 0, 18, 2);
+                guiGraphics.blitRepeating(TEXTURE_LOC, (int) (bounds.getX() + Math.floor((double) groupWidgetWidth / 2) + 1), widget.getRect().getY() + 8, (int) (Math.ceil((double) groupWidgetWidth / 2) - 1), 2, 2, 0, 18, 2);
             }
 
             lastDirection = direction;

@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -18,7 +17,7 @@ public class EmiLootSlotWidget extends SlotWidget {
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(IClientUtils utils, IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
+    public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
         super(ingredient, x, y);
         NodeUtils.toComponents(entry.getTooltip(), 0).forEach(this::appendTooltip);
         setCount(count);
