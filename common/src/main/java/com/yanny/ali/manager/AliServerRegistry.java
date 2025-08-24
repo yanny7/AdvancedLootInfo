@@ -65,7 +65,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
-    private final Map<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, IDataNode>> itemListingFactoryMap = new HashMap<>();
+    private final Map<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, List<ITooltipNode>, IDataNode>> itemListingFactoryMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectorMap = new HashMap<>();
 
     private final Set<Class<?>> missingEntryFactories = new HashSet<>();
@@ -222,9 +222,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, BiFunction<IServerUtils, T, IDataNode> tradeFactory) {
+    public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, List<ITooltipNode>, IDataNode> tradeFactory) {
         //noinspection unchecked
-        itemListingFactoryMap.put(type, (u, i) -> tradeFactory.apply(u, (T) i));
+        itemListingFactoryMap.put(type, (u, i, c) -> tradeFactory.apply(u, (T) i, c));
     }
 
     @Override
@@ -382,15 +382,15 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends VillagerTrades.ItemListing> BiFunction<IServerUtils, T, IDataNode> getItemListingFactory(IServerUtils utils, T entry) {
+    public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions) {
         //noinspection unchecked
-        BiFunction<IServerUtils, T, IDataNode> itemListingFactory = (BiFunction<IServerUtils, T, IDataNode>) itemListingFactoryMap.get(entry.getClass());
+        TriFunction<IServerUtils, T, List<ITooltipNode>, IDataNode> itemListingFactory = (TriFunction<IServerUtils, T, List<ITooltipNode>, IDataNode>) itemListingFactoryMap.get(entry.getClass());
 
         if (itemListingFactory != null) {
-            return itemListingFactory;
+            return itemListingFactory.apply(utils, entry, conditions);
         } else {
             missingItemListingFactories.add(entry.getClass());
-            return (utils1, entry1) ->  new MissingNode();
+            return new MissingNode();
         }
     }
 

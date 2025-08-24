@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
@@ -26,7 +27,7 @@ public class SuspiciousStewForEmeraldNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public SuspiciousStewForEmeraldNode(IServerUtils utils, VillagerTrades.SuspiciousStewForEmerald listing) {
+    public SuspiciousStewForEmeraldNode(IServerUtils utils, VillagerTrades.SuspiciousStewForEmerald listing, List<ITooltipNode> conditions) {
         ItemStack stew = Items.SUSPICIOUS_STEW.getDefaultInstance();
 
         stew.set(DataComponents.SUSPICIOUS_STEW_EFFECTS, listing.effects);
@@ -34,11 +35,10 @@ public class SuspiciousStewForEmeraldNode extends ListNode {
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue()));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));
         addChildren(new ItemStackNode(utils, stew, new RangeValue(), List.of(DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(utils, listing.effects))));
-        tooltip = List.of(
-                getIntegerTooltip(utils, "ali.property.value.uses", 12),
-                getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.xp),
-                getFloatTooltip(utils, "ali.property.value.price_multiplier", listing.priceMultiplier)
-        );
+        tooltip = new ArrayList<>(conditions);
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", 12));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.xp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", listing.priceMultiplier));
     }
 
     public SuspiciousStewForEmeraldNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
