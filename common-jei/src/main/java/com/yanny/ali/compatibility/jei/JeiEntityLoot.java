@@ -1,9 +1,9 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -26,15 +26,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
-    public JeiEntityLoot(IGuiHelper guiHelper, IRecipeType<EntityLootType> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
+    public JeiEntityLoot(IGuiHelper guiHelper, IRecipeType<RecipeHolder<EntityLootType>> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, EntityLootType recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<EntityLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.entity().getType());
+        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.type().entity().getType());
 
         if (spawnEgg != null) {
             builder.addSlot(RecipeIngredientRole.CRAFTING_STATION).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").add(spawnEgg);
@@ -74,5 +74,10 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
     @Override
     int getYOffset(EntityLootType recipe) {
         return 48;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 }

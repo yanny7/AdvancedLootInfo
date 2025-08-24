@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface IType {
     IDataNode entry();
-    List<ItemStack> items();
+    List<ItemStack> inputs();
+    List<ItemStack> outputs();
 }
