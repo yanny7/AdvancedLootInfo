@@ -8,12 +8,11 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class DynamicWidget extends IWidget {
+public class DynamicWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
     public DynamicWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
-        super(entry.getId());
         widget = WidgetUtils.getDynamicWidget(rect, entry);
         bounds = widget.getRect();
     }

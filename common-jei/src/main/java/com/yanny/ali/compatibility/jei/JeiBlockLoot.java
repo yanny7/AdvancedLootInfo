@@ -1,7 +1,8 @@
 package com.yanny.ali.compatibility.jei;
 
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.BlockLootType;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -11,7 +12,6 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
@@ -23,22 +23,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
-    public JeiBlockLoot(IGuiHelper guiHelper, IRecipeType<BlockLootType> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
+    public JeiBlockLoot(IGuiHelper guiHelper, IRecipeType<RecipeHolder<BlockLootType>> recipeType, LootCategory<Block> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, BlockLootType recipe, IFocusGroup iFocusGroup) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<BlockLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
         IRecipeSlotBuilder slotBuilder = builder.addInputSlot().setSlotName("block");
 
-        if (recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR) {
+        if (recipe.type().block() instanceof BushBlock || recipe.type().block().asItem() == Items.AIR) {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 5).setOutputSlotBackground();
         } else {
             slotBuilder.setPosition(CATEGORY_WIDTH / 2 - 9, 0).setStandardSlotBackground();
         }
 
-        slotBuilder.add(recipe.block());
+        slotBuilder.add(recipe.type().block());
     }
 
     @Override
@@ -63,5 +63,10 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
     int getYOffset(BlockLootType recipe) {
         boolean isSpecial = recipe.block() instanceof BushBlock || recipe.block().asItem() == Items.AIR;
         return isSpecial ? 30 : 22;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 }

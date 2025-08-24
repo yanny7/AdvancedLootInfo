@@ -43,6 +43,7 @@ public class RegistriesTooltipUtils {
     public static ITooltipNode getFunctionTypeTooltip(IServerUtils utils, String key, LootItemFunctionType<?> type) {
         return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.LOOT_FUNCTION_TYPE, type);
     }
+
     @Unmodifiable
     @NotNull
     public static ITooltipNode getConditionTypeTooltip(IServerUtils utils, String key, LootItemConditionType type) {

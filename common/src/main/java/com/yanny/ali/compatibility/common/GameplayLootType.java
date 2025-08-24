@@ -5,5 +5,5 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public record GameplayLootType(IDataNode entry, String id, List<ItemStack> items) implements IType {
+public record GameplayLootType(IDataNode entry, String id, List<ItemStack> inputs, List<ItemStack> outputs) implements IType {
 }

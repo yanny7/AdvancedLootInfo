@@ -7,12 +7,11 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class EmptyWidget extends IWidget {
+public class EmptyWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
     public EmptyWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
-        super(entry.getId());
         bounds = rect;
         bounds.setDimensions(18, 18);
         widget = WidgetUtils.getEmptyWidget(rect, entry);

@@ -1,8 +1,8 @@
 package com.yanny.ali.compatibility.emi;
 
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.Rect;
+import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.*;
@@ -14,14 +14,15 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class EmiEntityLoot extends EmiBaseLoot {
     private final Entity entity;
 
-    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, IDataNode lootTable, List<ItemStack> items) {
-        super(category, id, lootTable, 0, 48, items);
+    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, Entity entity, IDataNode lootTable, List<ItemStack> outputs) {
+        super(category, id, lootTable, 0, 48, Collections.emptyList(), outputs);
         this.entity = entity;
 
         SpawnEggItem spawnEgg = SpawnEggItem.byId(entity.getType());
@@ -64,5 +65,10 @@ public class EmiEntityLoot extends EmiBaseLoot {
 
         catalysts.forEach((catalyst) -> widgets.add(new SlotWidget(catalyst, 0, 0)));
         return widgets;
+    }
+
+    @Override
+    IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+        return new LootTableWidget(utils, entry, rect, maxWidth);
     }
 }
