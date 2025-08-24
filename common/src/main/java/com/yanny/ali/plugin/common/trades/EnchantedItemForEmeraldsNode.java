@@ -14,6 +14,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
@@ -23,7 +24,7 @@ public class EnchantedItemForEmeraldsNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public EnchantedItemForEmeraldsNode(IServerUtils utils, VillagerTrades.EnchantedItemForEmeralds listing) {
+    public EnchantedItemForEmeraldsNode(IServerUtils utils, VillagerTrades.EnchantedItemForEmeralds listing, List<ITooltipNode> conditions) {
         ITooltipNode t = new TooltipNode(translatable("ali.type.function.enchant_with_levels"));
 
         t.add(getNumberProviderTooltip(utils, "ali.property.value.levels", UniformGenerator.between(5, 19)));
@@ -31,11 +32,10 @@ public class EnchantedItemForEmeraldsNode extends ListNode {
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(listing.baseEmeraldCost + 5, listing.baseEmeraldCost + 19)));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));
         addChildren(new ItemStackNode(utils, listing.itemStack, new RangeValue(), List.of(t)));
-        tooltip = List.of(
-                getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses),
-                getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp),
-                getFloatTooltip(utils, "ali.property.value.price_multiplier", listing.priceMultiplier)
-        );
+        tooltip = new ArrayList<>(conditions);
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", listing.priceMultiplier));
     }
 
     public EnchantedItemForEmeraldsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

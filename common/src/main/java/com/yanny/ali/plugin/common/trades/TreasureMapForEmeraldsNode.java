@@ -17,6 +17,7 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
@@ -26,7 +27,7 @@ public class TreasureMapForEmeraldsNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public TreasureMapForEmeraldsNode(IServerUtils utils, VillagerTrades.TreasureMapForEmeralds listing) {
+    public TreasureMapForEmeraldsNode(IServerUtils utils, VillagerTrades.TreasureMapForEmeralds listing, List<ITooltipNode> conditions) {
         ItemStack map = Items.MAP.getDefaultInstance();
 
         map.set(DataComponents.ITEM_NAME, Component.translatable(listing.displayName));
@@ -37,11 +38,10 @@ public class TreasureMapForEmeraldsNode extends ListNode {
                 getTagKeyTooltip(utils, "ali.property.value.destination", listing.destination),
                 getHolderTooltip(utils, "ali.property.value.map_decoration", listing.destinationType, RegistriesTooltipUtils::getMapDecorationTypeTooltip)
         )));
-        tooltip = List.of(
-                getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses),
-                getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp),
-                getFloatTooltip(utils, "ali.property.value.price_multiplier", 0.2F)
-        );
+        tooltip = new ArrayList<>(conditions);
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", 0.2F));
     }
 
     public TreasureMapForEmeraldsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
