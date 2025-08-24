@@ -6,6 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
@@ -21,7 +22,7 @@ public class TradeLevelNode extends ListNode {
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {
-                addChildren(utils.getItemListingFactory(utils, itemListing).apply(utils, itemListing));
+                addChildren(utils.getItemListing(utils, itemListing, Collections.emptyList()));
             }
         }
     }
