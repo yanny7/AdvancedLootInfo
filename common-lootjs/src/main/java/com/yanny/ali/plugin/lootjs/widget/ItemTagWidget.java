@@ -5,13 +5,12 @@ import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class ItemTagWidget extends IWidget {
+public class ItemTagWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
     private final boolean modified;
 
     public ItemTagWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
-        super(entry.getId());
         ItemTagNode node = (ItemTagNode) entry;
 
         utils.addSlotWidget(node.getModifiedItem(), node, rect);
