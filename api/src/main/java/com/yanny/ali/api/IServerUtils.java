@@ -25,7 +25,6 @@ import oshi.util.tuples.Pair;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 public interface IServerUtils extends ICommonUtils {
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
@@ -54,7 +53,7 @@ public interface IServerUtils extends ICommonUtils {
 
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
-    <T extends VillagerTrades.ItemListing> BiFunction<IServerUtils, T, IDataNode> getItemListingFactory(IServerUtils utils, T entry);
+    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions);
 
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);
 

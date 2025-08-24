@@ -13,6 +13,7 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
@@ -23,15 +24,14 @@ public class TippedArrowForItemsAndEmeraldsNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public TippedArrowForItemsAndEmeraldsNode(IServerUtils utils, VillagerTrades.TippedArrowForItemsAndEmeralds listing) {
+    public TippedArrowForItemsAndEmeraldsNode(IServerUtils utils, VillagerTrades.TippedArrowForItemsAndEmeralds listing, List<ITooltipNode> conditions) {
         addChildren(new ItemNode(utils, listing.fromItem, new RangeValue(listing.fromCount)));
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(listing.emeraldCost)));
         addChildren(new ItemStackNode(utils, listing.toItem, new RangeValue(listing.toCount)));
-        tooltip = List.of(
-                getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses),
-                getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp),
-                getFloatTooltip(utils, "ali.property.value.price_multiplier", listing.priceMultiplier)
-        );
+        tooltip = new ArrayList<>(conditions);
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", listing.priceMultiplier));
     }
 
     public TippedArrowForItemsAndEmeraldsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
