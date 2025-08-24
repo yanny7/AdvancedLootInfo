@@ -12,6 +12,7 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
@@ -21,15 +22,14 @@ public class EnchantBookForEmeraldsNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public EnchantBookForEmeraldsNode(IServerUtils utils, VillagerTrades.EnchantBookForEmeralds listing) {
+    public EnchantBookForEmeraldsNode(IServerUtils utils, VillagerTrades.EnchantBookForEmeralds listing, List<ITooltipNode> conditions) {
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(5, 64)));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));
         addChildren(new ItemNode(utils, Items.ENCHANTED_BOOK, new RangeValue(), List.of(new TooltipNode(translatable("ali.type.function.enchant_randomly")))));
-        tooltip = List.of(
-                getIntegerTooltip(utils, "ali.property.value.uses", 12),
-                getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp),
-                getFloatTooltip(utils, "ali.property.value.price_multiplier", 0.2F)
-        );
+        tooltip = new ArrayList<>(conditions);
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", 12));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", 0.2F));
     }
 
     public EnchantBookForEmeraldsNode(IClientUtils utils, FriendlyByteBuf buf) {
