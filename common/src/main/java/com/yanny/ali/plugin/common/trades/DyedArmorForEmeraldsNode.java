@@ -12,6 +12,7 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
@@ -21,17 +22,14 @@ public class DyedArmorForEmeraldsNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public DyedArmorForEmeraldsNode(IServerUtils utils, VillagerTrades.DyedArmorForEmeralds listing) {
+    public DyedArmorForEmeraldsNode(IServerUtils utils, VillagerTrades.DyedArmorForEmeralds listing, List<ITooltipNode> conditions) {
         addChildren(new ItemNode(utils, Items.EMERALD, new RangeValue(listing.value)));
         addChildren(new ItemNode(utils, Items.AIR, new RangeValue()));
-        addChildren(new ItemNode(utils, listing.item, new RangeValue(), List.of(
-                new TooltipNode(translatable("ali.type.function.dyed_randomly"))
-        )));
-        tooltip = List.of(
-                getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses),
-                getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp),
-                getFloatTooltip(utils, "ali.property.value.price_multiplier", 0.2F)
-        );
+        addChildren(new ItemNode(utils, listing.item, new RangeValue(), List.of(new TooltipNode(translatable("ali.type.function.dyed_randomly")))));
+        tooltip = new ArrayList<>(conditions);
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", listing.maxUses));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", listing.villagerXp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", 0.2F));
     }
 
     public DyedArmorForEmeraldsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

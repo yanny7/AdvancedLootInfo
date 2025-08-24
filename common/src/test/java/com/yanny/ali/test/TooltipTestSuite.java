@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.BiFunction;
 
 @Suite
 @SelectClasses({
@@ -161,8 +160,8 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends VillagerTrades.ItemListing> BiFunction<IServerUtils, T, IDataNode> getItemListingFactory(IServerUtils utils, T entry) {
-                return PluginManager.SERVER_REGISTRY.getItemListingFactory(utils, entry);
+            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions) {
+                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, conditions);
             }
 
             @Override
