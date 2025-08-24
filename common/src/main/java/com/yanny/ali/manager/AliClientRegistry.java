@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -22,6 +23,9 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
     private final Map<ResourceKey<LootTable>, List<ItemStack>> lootItemMap = new HashMap<>();
     private final Map<ResourceKey<LootTable>, IDataNode> lootNodeMap = new HashMap<>();
+    private final Map<ResourceLocation, IDataNode> lootTradeMap = new HashMap<>();
+    private final Map<ResourceLocation, List<Item>> tradeInputItemMap = new HashMap<>();
+    private final Map<ResourceLocation, List<Item>> tradeOutputItemMap = new HashMap<>();
     private final ICommonUtils utils;
 
     private IOnDoneListener listener = null;
@@ -36,9 +40,17 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         lootNodeMap.put(resourceLocation, node);
     }
 
+    public void addTradeData(ResourceLocation resourceLocation, IDataNode node, List<Item> inputs, List<Item> outputs) {
+        lootTradeMap.put(resourceLocation, node);
+        tradeInputItemMap.put(resourceLocation, inputs);
+        tradeOutputItemMap.put(resourceLocation, outputs);
+    }
+
     public synchronized void clearLootData() {
         dataReceived = false;
+        listener = null;
         lootNodeMap.clear();
+        lootTradeMap.clear();
         lootItemMap.clear();
 
         LOGGER.info("Started receiving loot data");
@@ -49,7 +61,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Finished receiving loot data");
 
         if (listener != null) {
-            listener.onDone(lootNodeMap);
+            LOGGER.info("Received data {}/{}", lootNodeMap.size(), lootTradeMap.size());
+            listener.onDone(lootNodeMap, lootTradeMap);
             listener = null;
             dataReceived = false;
         }
@@ -57,8 +70,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     public synchronized void setOnDoneListener(IOnDoneListener listener) {
         if (dataReceived) {
-            LOGGER.info("Already done receiving data");
-            listener.onDone(lootNodeMap);
+            LOGGER.info("Already done receiving data {}/{}", lootNodeMap.size(), lootTradeMap.size());
+            listener.onDone(lootNodeMap, lootTradeMap);
             dataReceived = false;
         } else {
             LOGGER.info("Registered done listener");
@@ -146,8 +159,18 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public List<ItemStack> getItems(ResourceKey<LootTable> location) {
-        return lootItemMap.getOrDefault(location, List.of());
+    public List<ItemStack> getLootItems(ResourceKey<LootTable> location) {
+        return lootItemMap.getOrDefault(location, Collections.emptyList());
+    }
+
+    @Override
+    public List<Item> getTradeInputItems(ResourceLocation location) {
+        return tradeInputItemMap.getOrDefault(location, Collections.emptyList());
+    }
+
+    @Override
+    public List<Item> getTradeOutputItems(ResourceLocation location) {
+        return tradeOutputItemMap.getOrDefault(location, Collections.emptyList());
     }
 
     @Override
@@ -158,5 +181,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     public void printRegistrationInfo() {
         LOGGER.info("Registered {} widgets", widgetMap.size());
         LOGGER.info("Registered {} node factories", nodeFactoryMap.size());
+        LOGGER.info("Registered {} trade factories", lootTradeMap.size());
     }
 }

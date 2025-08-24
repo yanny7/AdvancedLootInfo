@@ -7,6 +7,10 @@ public class Client extends AbstractClient {
         super.onLootInfo(message);
     }
 
+    public void onTradeInfo(SyncTradeMessage message, ClientPlayNetworking.Context context) {
+        super.onTradeInfo(message);
+    }
+
     public void onClear(ClearMessage message, ClientPlayNetworking.Context context) {
         super.onClear(message);
     }
