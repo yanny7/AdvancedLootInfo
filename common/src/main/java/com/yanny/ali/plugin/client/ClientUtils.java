@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -29,7 +30,17 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public List<ItemStack> getItems(ResourceKey<LootTable> location) {
-        return PluginManager.CLIENT_REGISTRY.getItems(location);
+    public List<ItemStack> getLootItems(ResourceKey<LootTable> location) {
+        return PluginManager.CLIENT_REGISTRY.getLootItems(location);
+    }
+
+    @Override
+    public List<Item> getTradeInputItems(ResourceLocation location) {
+        return PluginManager.CLIENT_REGISTRY.getTradeInputItems(location);
+    }
+
+    @Override
+    public List<Item> getTradeOutputItems(ResourceLocation location) {
+        return PluginManager.CLIENT_REGISTRY.getTradeOutputItems(location);
     }
 }
