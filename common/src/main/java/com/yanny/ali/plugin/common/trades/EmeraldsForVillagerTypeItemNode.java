@@ -6,6 +6,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
@@ -20,18 +21,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStringTooltip;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getResourceKeyTooltip;
 
 public class EmeraldsForVillagerTypeItemNode extends ListNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "emerald_for_villager_type_item");
 
     public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing, List<ITooltipNode> conditions) {
-        for (Map.Entry<VillagerType, Item> entry : listing.trades.entrySet()) {
-            VillagerType type = entry.getKey();
+        for (Map.Entry<ResourceKey<VillagerType>, Item> entry : listing.trades.entrySet()) {
+            ResourceKey<VillagerType> type = entry.getKey();
             Item item = entry.getValue();
             List<ITooltipNode> cond = new ArrayList<>(conditions);
 
-            cond.add(getStringTooltip(utils, "ali.property.value.villager_type", type.toString()));
+            cond.add(getResourceKeyTooltip(utils, "ali.property.value.villager_type", type));
             addChildren(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }
     }

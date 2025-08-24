@@ -18,7 +18,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ItemCollectorUtils {
     @NotNull
@@ -123,6 +126,23 @@ public class ItemCollectorUtils {
 
         for (VillagerTrades.ItemListing[] itemListings : itemLists.values()) {
             for (VillagerTrades.ItemListing itemListing : itemListings) {
+                Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
+
+                inputs.addAll(pair.getA());
+                outputs.addAll(pair.getB());
+            }
+        }
+
+        return new Pair<>(inputs, outputs);
+    }
+
+    @NotNull
+    public static Pair<List<Item>, List<Item>> collectTradeItems(IServerUtils utils, List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> itemLists) {
+        List<Item> inputs = new ArrayList<>();
+        List<Item> outputs = new ArrayList<>();
+
+        for (org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer> p : itemLists) {
+            for (VillagerTrades.ItemListing itemListing : p.getLeft()) {
                 Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
 
                 inputs.addAll(pair.getA());

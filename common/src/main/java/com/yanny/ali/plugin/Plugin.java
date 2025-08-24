@@ -2,10 +2,7 @@ package com.yanny.ali.plugin;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
-import com.yanny.ali.plugin.client.widget.trades.EmeraldForVillagerTypeItemWidget;
-import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
-import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
-import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
+import com.yanny.ali.plugin.client.widget.trades.*;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.trades.*;
@@ -57,6 +54,7 @@ public class Plugin implements IPlugin {
         registry.registerWidget(EnchantBookForEmeraldsNode.ID, ItemListingWidget::new);
         registry.registerWidget(DyedArmorForEmeraldsNode.ID, ItemListingWidget::new);
         registry.registerWidget(EmeraldsForVillagerTypeItemNode.ID, EmeraldForVillagerTypeItemWidget::new);
+        registry.registerWidget(TypeSpecificTradeNode.ID, TypeSpecificTradeWidget::new);
 
         registry.registerNode(LootTableNode.ID, LootTableNode::new);
         registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
@@ -83,6 +81,7 @@ public class Plugin implements IPlugin {
         registry.registerNode(EnchantBookForEmeraldsNode.ID, EnchantBookForEmeraldsNode::new);
         registry.registerNode(DyedArmorForEmeraldsNode.ID, DyedArmorForEmeraldsNode::new);
         registry.registerNode(EmeraldsForVillagerTypeItemNode.ID, EmeraldsForVillagerTypeItemNode::new);
+        registry.registerNode(TypeSpecificTradeNode.ID, TypeSpecificTradeNode::new);
     }
 
     @Override
@@ -301,7 +300,6 @@ public class Plugin implements IPlugin {
         registry.registerConsumeEffectTooltip(TeleportRandomlyConsumeEffect.class, ConsumeEffectTooltipUtils::getTeleportRandomlyTooltip);
         registry.registerConsumeEffectTooltip(PlaySoundConsumeEffect.class, ConsumeEffectTooltipUtils::getPlaySoundTooltip);
 
-
         registry.registerIngredientTooltip(Ingredient.class, IngredientTooltipUtils::getIngredientTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
@@ -339,6 +337,7 @@ public class Plugin implements IPlugin {
         registry.registerItemListing(VillagerTrades.SuspiciousStewForEmerald.class, SuspiciousStewForEmeraldNode::new);
         registry.registerItemListing(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TippedArrowForItemsAndEmeraldsNode::new);
         registry.registerItemListing(VillagerTrades.TreasureMapForEmeralds.class, TreasureMapForEmeraldsNode::new);
+        registry.registerItemListing(VillagerTrades.TypeSpecificTrade.class, TypeSpecificTradeNode::new);
 
         registry.registerItemListingCollector(VillagerTrades.DyedArmorForEmeralds.class, DyedArmorForEmeraldsNode::collectItems);
         registry.registerItemListingCollector(VillagerTrades.EmeraldForItems.class, EmeraldForItemsNode::collectItems);
@@ -350,6 +349,7 @@ public class Plugin implements IPlugin {
         registry.registerItemListingCollector(VillagerTrades.SuspiciousStewForEmerald.class, SuspiciousStewForEmeraldNode::collectItems);
         registry.registerItemListingCollector(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TippedArrowForItemsAndEmeraldsNode::collectItems);
         registry.registerItemListingCollector(VillagerTrades.TreasureMapForEmeralds.class, TreasureMapForEmeraldsNode::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.TypeSpecificTrade.class, TypeSpecificTradeNode::collectItems);
     }
 
     @NotNull

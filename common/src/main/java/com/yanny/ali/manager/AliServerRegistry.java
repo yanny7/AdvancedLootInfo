@@ -480,6 +480,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return new TradeNode(this, itemListingMap);
     }
 
+    public IDataNode parseTrade(List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> itemListing) {
+        return new TradeNode(this, itemListing);
+    }
+
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return utils.createEntities(type, level);
