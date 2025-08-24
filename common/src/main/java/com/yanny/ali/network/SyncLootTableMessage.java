@@ -60,37 +60,3 @@ public record SyncLootTableMessage(ResourceKey<LootTable> location, List<ItemSta
         return TYPE;
     }
 }
-
-/*
-    public SyncLootTableMessage(FriendlyByteBuf buf) {
-        IDataNode dataNode;
-
-        location = buf.readResourceLocation();
-        items = buf.readList(FriendlyByteBuf::readItem);
-
-        try {
-            IClientUtils utils = PluginManager.CLIENT_REGISTRY;
-            dataNode = utils.getNodeFactory(LootTableNode.ID).create(utils, buf);
-        } catch (Throwable e) {
-            LOGGER.error("Failed to decode node for loot table {} with error: {}", location, e.getMessage());
-            dataNode = new MissingNode();
-        }
-
-        node = dataNode;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(location);
-        buf.writeCollection(items, FriendlyByteBuf::writeItem);
-
-        IServerUtils utils = PluginManager.SERVER_REGISTRY;
-
-        try {
-            node.encode(utils, buf);
-        } catch (Throwable e) {
-            LOGGER.error("Failed to encode node with error: {}", e.getMessage());
-            new MissingNode().encode(utils, buf);
-        }
-    }
- */

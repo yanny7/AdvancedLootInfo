@@ -5,13 +5,12 @@ import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class ItemStackWidget extends IWidget {
+public class ItemStackWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
     private final boolean modified;
 
     public ItemStackWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
-        super(entry.getId());
         ItemStackNode node = (ItemStackNode) entry;
 
         utils.addSlotWidget(node.getModifiedItem(), node, rect);
