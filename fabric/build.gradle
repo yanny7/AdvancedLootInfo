@@ -41,6 +41,12 @@ dependencies {
     modImplementation "curse.maven:rhino-416294:6186969"
     modImplementation "curse.maven:architectury-api-419699:5137936"
     modImplementation "curse.maven:lootjs-570630:5404564"
+
+    // Testing
+//    modLocalRuntime "curse.maven:supplementaries-412082:6889002"
+//    modLocalRuntime "curse.maven:selene-499980:6902843"
+//    include "curse.maven:c2me-533097:6181291"
+//    modLocalRuntime "curse.maven:c2me-533097:6181291"
 }
 
 loom {

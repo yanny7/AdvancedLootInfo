@@ -29,21 +29,26 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
+
     @Override
     public void register(EmiRegistry emiRegistry) {
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> registerData(emiRegistry, lootData, tradeData));
+        futureData.thenAcceptAsync((pair) -> registerData(emiRegistry, pair.getLeft(), pair.getRight()), Minecraft.getInstance());
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
     }
 
     private void registerData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {

@@ -29,10 +29,12 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @JeiPlugin
@@ -43,6 +45,8 @@ public class JeiCompatibility implements IModPlugin {
     private final List<JeiEntityLoot> entityCategoryList = new LinkedList<>();
     private final List<JeiGameplayLoot> gameplayCategoryList = new LinkedList<>();
     private final List<JeiTradeLoot> tradeCategoryList = new LinkedList<>();
+
+    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
     @Override
     public void onRuntimeUnavailable() {
@@ -85,8 +89,8 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        LOGGER.info("Registering recipes");
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> registerData(registration, lootData, tradeData));
+        futureData.thenAcceptAsync((pair) -> registerData(registration, pair.getLeft(), pair.getRight()), Minecraft.getInstance());
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
     }
 
     private void registerData(IRecipeRegistration registration, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
@@ -219,19 +223,19 @@ public class JeiCompatibility implements IModPlugin {
             }
 
             for (Map.Entry<RecipeType<RecipeHolder<BlockLootType>>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map((v) -> new RecipeHolder<>(v, null, null)).toList());
+                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
             }
 
             for (Map.Entry<RecipeType<RecipeHolder<EntityLootType>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map((v) -> new RecipeHolder<>(v, null, null)).toList());
+                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
             }
 
             for (Map.Entry<RecipeType<RecipeHolder<GameplayLootType>>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map((v) -> new RecipeHolder<>(v, null, null)).toList());
+                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
             }
 
             for (Map.Entry<RecipeType<RecipeHolder<TradeLootType>>, List<TradeLootType>> entry : tradeRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map((v) -> new RecipeHolder<>(v, null, null)).toList());
+                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
             }
         } else {
             LOGGER.warn("JEI integration was not loaded! Level is null!");
@@ -245,6 +249,7 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     private static <T, U, V extends IType> T createCategory(IGuiHelper guiHelper, LootCategory<U> e, LootConstructor<T, U, V> constructor) {
+        //noinspection unchecked
         RecipeType<RecipeHolder<V>> recipeType = (RecipeType<RecipeHolder<V>>) (Object) RecipeType.create(Utils.MOD_ID, e.getKey(), RecipeHolder.class);
         Component title = Component.translatable("emi.category." + Utils.MOD_ID + "." + e.getKey().replace('/', '.'));
         return constructor.construct(guiHelper, recipeType, e, title, guiHelper.createDrawableItemStack(e.getIcon()));
@@ -252,6 +257,7 @@ public class JeiCompatibility implements IModPlugin {
 
     private static <T, U, V extends IType> T createCategory(IGuiHelper guiHelper, Map.Entry<ResourceLocation, LootCategory<U>> e, LootConstructor<T, U, V> constructor) {
         ResourceLocation id = e.getKey();
+        //noinspection unchecked
         RecipeType<RecipeHolder<V>> recipeType = (RecipeType<RecipeHolder<V>>) (Object) RecipeType.create(id.getNamespace(), id.getPath(), RecipeHolder.class);
         Component title = Component.translatable("emi.category." + id.getNamespace() + "." + id.getPath().replace('/', '.'));
         return constructor.construct(guiHelper, recipeType, e.getValue(), title, guiHelper.createDrawableItemStack(e.getValue().getIcon()));

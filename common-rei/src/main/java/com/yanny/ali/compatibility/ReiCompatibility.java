@@ -30,10 +30,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -46,6 +48,8 @@ public class ReiCompatibility implements REIClientPlugin {
     private final List<Holder<ReiEntityDisplay, EntityLootType, Entity>> entityCategoryList = new LinkedList<>();
     private final List<Holder<ReiGameplayDisplay, GameplayLootType, String>> gameplayCategoryList = new LinkedList<>();
     private final List<Holder<ReiTradeDisplay, TradeLootType, String>> tradeCategoryList = new LinkedList<>();
+
+    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
@@ -94,7 +98,8 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> registerData(registry, lootData, tradeData));
+        futureData.thenAcceptAsync((pair) -> registerData(registry, pair.getLeft(), pair.getRight()), Minecraft.getInstance());
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
     }
 
     private void registerData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
