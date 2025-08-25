@@ -3,24 +3,29 @@ package com.yanny.ali.compatibility.common;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.manager.AliClientRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -103,6 +108,86 @@ public class GenericUtils {
         }
 
         return Component.literal(text);
+    }
+
+    public static void processData(ClientLevel level, AliClientRegistry clientRegistry,
+                                   Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData,
+                                   QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
+                                   QuadConsumer<IDataNode, ResourceLocation, Entity, List<ItemStack>> entityConsumer,
+                                   TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
+                                   QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
+                                   QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
+        for (Block block : BuiltInRegistries.BLOCK) {
+            ResourceLocation location = block.getLootTable();
+            IDataNode lootEntry = lootData.get(location);
+
+            if (lootEntry != null) {
+                List<ItemStack> outputs = clientRegistry.getLootItems(location);
+
+                blockConsumer.accept(lootEntry, location, block, outputs);
+                lootData.remove(location);
+            }
+        }
+
+        for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
+            List<Entity> entityList = clientRegistry.createEntities(entityType, level);
+
+            for (Entity entity : entityList) {
+                if (entity instanceof Mob mob) {
+                    ResourceLocation location = mob.getLootTable();
+                    IDataNode lootEntry = lootData.get(location);
+
+                    if (lootEntry != null) {
+                        List<ItemStack> outputs = clientRegistry.getLootItems(location);
+
+                        entityConsumer.accept(lootEntry, location, entity, outputs);
+                    }
+
+                    lootData.remove(location);
+                }
+            }
+        }
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
+            ResourceLocation location = entry.getKey();
+            List<ItemStack> outputs = clientRegistry.getLootItems(location);
+
+            gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+        }
+
+        lootData.clear();
+
+        List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = BuiltInRegistries.VILLAGER_PROFESSION.entrySet()
+                .stream()
+                .sorted(Comparator.comparing(a -> a.getKey().location().getPath()))
+                .toList();
+
+        for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
+            ResourceLocation location = entry.getKey().location();
+            IDataNode tradeEntry = tradeData.get(location);
+
+            if (tradeEntry != null) {
+                List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
+                List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
+
+                traderConsumer.accept(tradeEntry, location, inputs, outputs);
+                tradeData.remove(location);
+            }
+        }
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : tradeData.entrySet()) {
+            ResourceLocation location = entry.getKey();
+            IDataNode tradeEntry = tradeData.get(location);
+
+            if (tradeEntry != null) {
+                List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
+                List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
+
+                wanderingTraderConsumer.accept(tradeEntry, location, inputs, outputs);
+            }
+        }
+
+        tradeData.clear();
     }
 
     // split table path and make uppercased text

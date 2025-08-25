@@ -3,6 +3,7 @@ package com.yanny.ali.compatibility;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
@@ -16,25 +17,15 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
-import dev.emi.emi.runtime.EmiReloadManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -47,8 +38,8 @@ public class EmiCompatibility implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry emiRegistry) {
-        futureData.thenAcceptAsync((pair) -> registerData(emiRegistry, pair.getLeft(), pair.getRight()), Minecraft.getInstance());
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
+        futureData.thenAccept((pair) -> registerData(emiRegistry, pair.getLeft(), pair.getRight()));
     }
 
     private void registerData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
@@ -92,134 +83,93 @@ public class EmiCompatibility implements EmiPlugin {
             registry.addCategory(gameplayCategory);
             registry.addCategory(tradeCategory);
 
-            for (Block block : BuiltInRegistries.BLOCK) {
-                ResourceLocation location = block.getLootTable();
-                IDataNode lootEntry = lootData.get(location);
+            GenericUtils.processData(
+                    level,
+                    clientRegistry,
+                    lootData,
+                    tradeData,
+                    (node, location, block, outputs) -> {
+                        EmiRecipeCategory category = null;
 
-                if (lootEntry != null) {
-                    EmiRecipeCategory category = null;
-
-                    if (LootCategories.PLANT_LOOT.validate(block)) {
-                        category = plantCategory;
-                    } else {
-                        for (Map.Entry<LootCategory<Block>, EmiRecipeCategory> entry : blockCategoryMap.entrySet()) {
-                            if (entry.getKey().validate(block)) {
-                                category = entry.getValue();
-                            }
-                        }
-
-                        if (category == null) {
-                            category = blockCategory;
-                        }
-                    }
-
-                    registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, lootEntry, clientRegistry.getLootItems(location)));
-                    lootData.remove(location);
-                }
-            }
-
-            for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-                List<Entity> entityList = clientRegistry.createEntities(entityType, level);
-
-                entityList.forEach((entity) -> {
-                    if (entity instanceof Mob mob) {
-                        ResourceLocation location = mob.getLootTable();
-                        IDataNode lootEntry = lootData.get(location);
-
-                        if (lootEntry != null) {
-                            EmiRecipeCategory category = null;
-
-                            for (Map.Entry<LootCategory<Entity>, EmiRecipeCategory> entry : entityCategoryMap.entrySet()) {
-                                if (entry.getKey().validate(entity)) {
+                        if (LootCategories.PLANT_LOOT.validate(block)) {
+                            category = plantCategory;
+                        } else {
+                            for (Map.Entry<LootCategory<Block>, EmiRecipeCategory> entry : blockCategoryMap.entrySet()) {
+                                if (entry.getKey().validate(block)) {
                                     category = entry.getValue();
                                 }
                             }
 
                             if (category == null) {
-                                category = entityCategory;
+                                category = blockCategory;
                             }
-
-                            registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entity, lootEntry, clientRegistry.getLootItems(location)));
-                            lootData.remove(location);
                         }
-                    }
-                });
-            }
 
-            for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
-                ResourceLocation location = entry.getKey();
-                EmiRecipeCategory category = null;
+                        registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, node, outputs));
+                    },
+                    (node, location, entity, outputs) -> {
+                        EmiRecipeCategory category = null;
 
-                for (Map.Entry<LootCategory<String>, EmiRecipeCategory> gameplayEntry : gameplayCategoryMap.entrySet()) {
-                    if (gameplayEntry.getKey().validate(location.getPath())) {
-                        category = gameplayEntry.getValue();
-                    }
-                }
-
-                if (category == null) {
-                    category = gameplayCategory;
-                }
-
-                registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entry.getValue(), clientRegistry.getLootItems(location)));
-            }
-
-            List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = BuiltInRegistries.VILLAGER_PROFESSION.entrySet()
-                    .stream()
-                    .sorted(Comparator.comparing(a -> a.getKey().location().getPath()))
-                    .toList();
-
-            for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
-                ResourceLocation location = entry.getKey().location();
-                IDataNode tradeEntry = tradeData.get(location);
-
-                if (tradeEntry != null) {
-                    EmiRecipeCategory category = null;
-                    List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
-                    List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
-
-                    for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategoryMap.entrySet()) {
-                        if (e.getKey().validate(location.getPath())) {
-                            category = e.getValue();
+                        for (Map.Entry<LootCategory<Entity>, EmiRecipeCategory> entry : entityCategoryMap.entrySet()) {
+                            if (entry.getKey().validate(entity)) {
+                                category = entry.getValue();
+                            }
                         }
-                    }
 
-                    if (category == null) {
-                        category = tradeCategory;
-                    }
-
-                    registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
-                    tradeData.remove(location);
-                }
-            }
-
-            for (Map.Entry<ResourceLocation, IDataNode> entry : tradeData.entrySet()) {
-                ResourceLocation location = entry.getKey();
-                IDataNode tradeEntry = tradeData.get(location);
-
-                if (tradeEntry != null) {
-                    EmiRecipeCategory category = null;
-                    List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
-                    List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
-
-                    for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategoryMap.entrySet()) {
-                        if (e.getKey().validate(location.getPath())) {
-                            category = e.getValue();
+                        if (category == null) {
+                            category = entityCategory;
                         }
+
+                        registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entity, node, outputs));
+                    },
+                    (node, location, outputs) -> {
+                        EmiRecipeCategory category = null;
+
+                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> gameplayEntry : gameplayCategoryMap.entrySet()) {
+                            if (gameplayEntry.getKey().validate(location.getPath())) {
+                                category = gameplayEntry.getValue();
+                            }
+                        }
+
+                        if (category == null) {
+                            category = gameplayCategory;
+                        }
+
+                        registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), node, outputs));
+                    },
+                    (tradeEntry, location, inputs, outputs) -> {
+                        EmiRecipeCategory category = null;
+
+                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategoryMap.entrySet()) {
+                            if (e.getKey().validate(location.getPath())) {
+                                category = e.getValue();
+                            }
+                        }
+
+                        if (category == null) {
+                            category = tradeCategory;
+                        }
+
+                        registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
+                    },
+                    (tradeEntry, location, inputs, outputs) -> {
+                        EmiRecipeCategory category = null;
+
+                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategoryMap.entrySet()) {
+                            if (e.getKey().validate(location.getPath())) {
+                                category = e.getValue();
+                            }
+                        }
+
+                        if (category == null) {
+                            category = tradeCategory;
+                        }
+
+                        registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
                     }
-
-                    if (category == null) {
-                        category = tradeCategory;
-                    }
-
-                    registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
-                    tradeData.remove(location);
-                }
-            }
-        }
-
-        if (EmiReloadManager.isLoaded()) {
-            LOGGER.info("Loot information was added too late, requesting reload EMI");
-            EmiReloadManager.reload();
+            );
+        } else {
+            LOGGER.warn("EMI integration was not loaded! Level is null!");
         }
     }
 
