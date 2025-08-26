@@ -17,7 +17,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackResources;
@@ -192,7 +192,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> location) {
+            public LootTable getLootTable(Either<ResourceLocation, LootTable> location) {
                 return PluginManager.SERVER_REGISTRY.getLootTable(location);
             }
 

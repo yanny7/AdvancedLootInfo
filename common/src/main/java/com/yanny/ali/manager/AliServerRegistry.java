@@ -14,7 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -63,7 +63,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
 
-    private final Map<ResourceKey<LootTable>, LootTable> lootTableMap = new HashMap<>();
+    private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
@@ -125,7 +125,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingItemListingFactories.clear();
     }
 
-    public void addLootTable(ResourceKey<LootTable> resourceLocation, LootTable lootTable) {
+    public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
     }
 
@@ -462,7 +462,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Nullable
     @Override
-    public LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either) {
+    public LootTable getLootTable(Either<ResourceLocation, LootTable> either) {
         return either.map(lootTableMap::get, lootTable -> lootTable);
     }
 
