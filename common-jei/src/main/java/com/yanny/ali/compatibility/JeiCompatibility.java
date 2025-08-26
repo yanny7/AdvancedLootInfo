@@ -20,7 +20,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -85,7 +84,7 @@ public class JeiCompatibility implements IModPlugin {
         futureData.thenAccept((pair) -> registerData(registration, pair.getLeft(), pair.getRight()));
     }
 
-    private void registerData(IRecipeRegistration registration, Map<ResourceKey<LootTable>, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
+    private void registerData(IRecipeRegistration registration, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         ClientLevel level = Minecraft.getInstance().level;
 

@@ -121,7 +121,7 @@ public class GenericUtils {
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
         for (Block block : BuiltInRegistries.BLOCK) {
-            ResourceLocation location = block.getLootTable();
+            ResourceLocation location = block.getLootTable().location();
             IDataNode lootEntry = lootData.get(location);
 
             if (lootEntry != null) {
@@ -137,7 +137,7 @@ public class GenericUtils {
 
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
-                    ResourceLocation location = mob.getLootTable();
+                    ResourceLocation location = mob.getLootTable().location();
                     IDataNode lootEntry = lootData.get(location);
 
                     if (lootEntry != null) {

@@ -4,6 +4,7 @@ import com.yanny.ali.api.IServerUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -18,7 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ItemCollectorUtils {
     @NotNull
@@ -87,7 +91,7 @@ public class ItemCollectorUtils {
     @NotNull
     public static List<Item> collectReference(IServerUtils utils, NestedLootTable entry) {
         List<Item> result = new LinkedList<>();
-        LootTable lootTable = utils.getLootTable(entry.contents);
+        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::location));
 
         if (lootTable != null) {
             result.addAll(collectLootTable(utils, lootTable));

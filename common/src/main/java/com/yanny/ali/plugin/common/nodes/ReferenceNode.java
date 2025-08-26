@@ -8,6 +8,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
@@ -25,7 +26,7 @@ public class ReferenceNode extends ListNode {
     public ReferenceNode(IServerUtils utils, NestedLootTable entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
-        LootTable lootTable = utils.getLootTable(entry.contents);
+        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::location));
 
         if (lootTable != null) {
             addChildren(new LootTableNode(utils, lootTable, chance * entry.weight / sumWeight, allFunctions, allConditions));
