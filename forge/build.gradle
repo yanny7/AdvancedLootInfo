@@ -105,9 +105,13 @@ dependencies {
 //    implementation fg.deobf("curse.maven:rhino-416294:6186971")
 //    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
 
+    // Testing
 //    implementation fg.deobf("curse.maven:botania-225643:6366547")
 //    implementation fg.deobf("curse.maven:curios-309927:6418456")
 //    implementation fg.deobf("curse.maven:patchouli-306770:6164575")
+//    implementation fg.deobf("curse.maven:alexs-caves-924854:5848216")
+//    implementation fg.deobf("curse.maven:citadel-331936:6702068")
+//    implementation fg.deobf("curse.maven:alexs-mobs-426558:5698791")
 }
 
 tasks.named('compileTestJava') {

@@ -10,6 +10,12 @@ public final class RecipeHolder<T extends IType> {
     private IWidget widget;
     private List<JeiBaseLoot.Holder> holders;
 
+    public RecipeHolder(T type) {
+        this.type = type;
+        widget = null;
+        holders = null;
+    }
+
     public RecipeHolder(T type, IWidget widget, List<JeiBaseLoot.Holder> holders) {
         this.type = type;
         this.widget = widget;
