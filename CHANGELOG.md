@@ -2,6 +2,7 @@
 
 - Added Trade info support for vanilla
 - Fixed memory leak in JEI plugin
+- Fixed crash when used with c2me
 
 ## [1.2.5]
 
