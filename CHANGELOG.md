@@ -1,4 +1,4 @@
-## []
+## [1.3.0]
 
 - Added Trade info support for vanilla
 - Fixed memory leak in JEI plugin
