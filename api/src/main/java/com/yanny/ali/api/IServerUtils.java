@@ -6,7 +6,7 @@ import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -61,7 +61,7 @@ public interface IServerUtils extends ICommonUtils {
 
     LootContext getLootContext();
 
-    LootTable getLootTable(Either<ResourceKey<LootTable>, LootTable> either);
+    LootTable getLootTable(Either<ResourceLocation, LootTable> either);
 
     @Nullable
     HolderLookup.Provider lookupProvider();
