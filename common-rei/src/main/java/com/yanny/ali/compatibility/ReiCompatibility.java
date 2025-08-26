@@ -3,10 +3,7 @@ package com.yanny.ali.compatibility;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.compatibility.common.BlockLootType;
-import com.yanny.ali.compatibility.common.EntityLootType;
-import com.yanny.ali.compatibility.common.GameplayLootType;
-import com.yanny.ali.compatibility.common.TradeLootType;
+import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.compatibility.rei.*;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
@@ -19,23 +16,17 @@ import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReason
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.apache.commons.lang3.function.TriFunction;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -47,6 +38,8 @@ public class ReiCompatibility implements REIClientPlugin {
     private final List<Holder<ReiEntityDisplay, EntityLootType, Entity>> entityCategoryList = new LinkedList<>();
     private final List<Holder<ReiGameplayDisplay, GameplayLootType, String>> gameplayCategoryList = new LinkedList<>();
     private final List<Holder<ReiTradeDisplay, TradeLootType, String>> tradeCategoryList = new LinkedList<>();
+
+    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
@@ -95,10 +88,11 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> registerData(registry, lootData, tradeData));
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
+        futureData.thenAccept((pair) -> registerData(registry, pair.getLeft(), pair.getRight()));
     }
 
-    private void registerData(DisplayRegistry registry, Map<ResourceKey<LootTable>, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
+    private void registerData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         ClientLevel level = Minecraft.getInstance().level;
 
@@ -110,99 +104,52 @@ public class ReiCompatibility implements REIClientPlugin {
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
             Map<Holder<ReiTradeDisplay, TradeLootType, String>, List<TradeLootType>> tradeRecipeTypes = new HashMap<>();
 
-            for (Block block : BuiltInRegistries.BLOCK) {
-                block.getLootTable().ifPresent((location) -> {
-                    IDataNode node = lootData.get(location);
-
-                if (node != null) {
-                    for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
-                        if (holder.category.getLootCategory().validate(block)) {
-                            blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, clientRegistry.getLootItems(location), Collections.emptyList()));
-                            break;
-                        }
-                    }
-
-                        lootData.remove(location);
-                    }
-                });
-            }
-
-            for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
-                List<Entity> entityList = clientRegistry.createEntities(entityType, level);
-
-                for (Entity entity : entityList) {
-                    if (entity instanceof Mob mob) {
-                        mob.getLootTable().ifPresent((location) -> {
-                            IDataNode node = lootData.get(location);
-
-                        if (node != null) {
-                            for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
-                                if (holder.category.getLootCategory().validate(entity)) {
-                                    entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, clientRegistry.getLootItems(location), Collections.emptyList()));
-                                    break;
-                                }
+            GenericUtils.processData(
+                    level,
+                    clientRegistry,
+                    lootData,
+                    tradeData,
+                    (node, location, block, outputs) -> {
+                        for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategoryList) {
+                            if (holder.category.getLootCategory().validate(block)) {
+                                blockRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new BlockLootType(block, node, Collections.emptyList(), outputs));
+                                break;
                             }
-
-                                lootData.remove(location);
+                        }
+                    },
+                    (node, location, entity, outputs) -> {
+                        for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
+                            if (holder.category.getLootCategory().validate(entity)) {
+                                entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, Collections.emptyList(), outputs));
+                                break;
                             }
-                        });
-                    }
-                }
-            }
-
-            for (Map.Entry<ResourceKey<LootTable>, IDataNode> entry : new HashMap<>(lootData).entrySet()) {
-                ResourceKey<LootTable> location = entry.getKey();
-
-                for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
-                    if (holder.category.getLootCategory().validate(location.location().getPath())) {
-                        gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(entry.getValue(), "/" + location.location().getPath(), clientRegistry.getLootItems(location), Collections.emptyList()));
-                        break;
-                    }
-                }
-
-                lootData.remove(location);
-            }
-
-            List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = BuiltInRegistries.VILLAGER_PROFESSION.entrySet()
-                    .stream()
-                    .sorted(Comparator.comparing(a -> a.getKey().location().getPath()))
-                    .toList();
-
-            for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
-                ResourceLocation location = entry.getKey().location();
-                IDataNode tradeEntry = tradeData.get(location);
-
-                if (tradeEntry != null) {
-                    List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
-                    List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
-
-                    for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategoryList) {
-                        if (holder.category.getLootCategory().validate(location.getPath())) {
-                            tradeRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new TradeLootType(tradeEntry, location.getPath(), inputs, outputs));
-                            break;
+                        }
+                    },
+                    (node, location, outputs) -> {
+                        for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
+                            if (holder.category.getLootCategory().validate(location.getPath())) {
+                                gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, "/" + location.getPath(), Collections.emptyList(), outputs));
+                                break;
+                            }
+                        }
+                    },
+                    (tradeEntry, location, inputs, outputs) -> {
+                        for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategoryList) {
+                            if (holder.category.getLootCategory().validate(location.getPath())) {
+                                tradeRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new TradeLootType(tradeEntry, location.getPath(), inputs, outputs));
+                                break;
+                            }
+                        }
+                    },
+                    (tradeEntry, location, inputs, outputs) -> {
+                        for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategoryList) {
+                            if (holder.category.getLootCategory().validate(location.getPath())) {
+                                tradeRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new TradeLootType(tradeEntry, location.getPath(), inputs, outputs));
+                                break;
+                            }
                         }
                     }
-
-                    tradeData.remove(location);
-                }
-            }
-
-            for (Map.Entry<ResourceLocation, IDataNode> entry : tradeData.entrySet()) {
-                ResourceLocation location = entry.getKey();
-                IDataNode tradeEntry = tradeData.get(location);
-
-                if (tradeEntry != null) {
-                    List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
-                    List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
-
-                    for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategoryList) {
-                        if (holder.category.getLootCategory().validate(location.getPath())) {
-                            tradeRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new TradeLootType(tradeEntry, location.getPath(), inputs, outputs));
-                            break;
-                        }
-                    }
-                }
-            }
+            );
 
             for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
                 registry.registerFillerWithReason(blockPredicate(entry.getValue()), entry.getKey().filler());
@@ -223,11 +170,8 @@ public class ReiCompatibility implements REIClientPlugin {
                 registry.registerFillerWithReason(tradePredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }
-        }
-
-        if (!me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().isReloading()) {
-            LOGGER.info("Loot information was added too late, requesting reload REI");
-            me.shedaniel.rei.api.common.plugins.PluginManager.getClientInstance().startReload();
+        } else {
+            LOGGER.warn("REI integration was not loaded! Level is null!");
         }
     }
 
