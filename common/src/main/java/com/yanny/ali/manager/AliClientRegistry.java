@@ -3,14 +3,12 @@ package com.yanny.ali.manager;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootTable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -21,8 +19,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
-    private final Map<ResourceKey<LootTable>, List<ItemStack>> lootItemMap = new HashMap<>();
-    private final Map<ResourceKey<LootTable>, IDataNode> lootNodeMap = new HashMap<>();
+    private final Map<ResourceLocation, List<ItemStack>> lootItemMap = new HashMap<>();
+    private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
     private final Map<ResourceLocation, IDataNode> lootTradeMap = new HashMap<>();
     private final Map<ResourceLocation, List<Item>> tradeInputItemMap = new HashMap<>();
     private final Map<ResourceLocation, List<Item>> tradeOutputItemMap = new HashMap<>();
@@ -35,7 +33,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         this.utils = utils;
     }
 
-    public void addLootData(ResourceKey<LootTable> resourceLocation, IDataNode node, List<ItemStack> items) {
+    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<ItemStack> items) {
         lootItemMap.put(resourceLocation, items);
         lootNodeMap.put(resourceLocation, node);
     }
@@ -159,7 +157,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public List<ItemStack> getLootItems(ResourceKey<LootTable> location) {
+    public List<ItemStack> getLootItems(ResourceLocation location) {
         return lootItemMap.getOrDefault(location, Collections.emptyList());
     }
 

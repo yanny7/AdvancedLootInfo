@@ -8,12 +8,11 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -22,12 +21,12 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public record SyncLootTableMessage(ResourceKey<LootTable> location, List<ItemStack> items, IDataNode node) implements CustomPacketPayload {
+public record SyncLootTableMessage(ResourceLocation location, List<ItemStack> items, IDataNode node) implements CustomPacketPayload {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final Type<SyncLootTableMessage> TYPE = new Type<>(Utils.modLoc("loot_table_sync"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncLootTableMessage> CODEC = StreamCodec.composite(
-            ResourceKey.streamCodec(Registries.LOOT_TABLE), (l) -> l.location,
+            ResourceLocation.STREAM_CODEC, (l) -> l.location,
             ItemStack.OPTIONAL_LIST_STREAM_CODEC, (l) -> l.items,
             StreamCodec.of(
                     (b, l) -> {
