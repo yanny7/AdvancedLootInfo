@@ -22,6 +22,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -161,7 +162,9 @@ public class GenericUtils {
             ResourceLocation location = entry.getKey();
             List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-            gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+            if (outputs != null) {
+                gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+            }
         }
 
         lootData.clear();
