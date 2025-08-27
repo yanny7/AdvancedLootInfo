@@ -1,4 +1,4 @@
-## []
+## [1.3.2]
 
 - Fixed crash when used LootJS with Table/Type Modifier
 
