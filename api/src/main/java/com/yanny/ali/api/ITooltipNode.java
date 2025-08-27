@@ -12,5 +12,7 @@ public interface ITooltipNode {
 
     Component getContent();
 
+    boolean isAdvancedTooltip();
+
     void encode(FriendlyByteBuf buf);
 }
