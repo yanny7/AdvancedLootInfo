@@ -1,4 +1,4 @@
-## []
+## [1.3.1]
 
 - Display duplicit information only when Advanced tooltip is enabled
 - Fixed crash when NULL loot table
