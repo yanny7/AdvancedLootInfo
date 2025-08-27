@@ -119,13 +119,16 @@ public class GenericUtils {
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
         for (Block block : BuiltInRegistries.BLOCK) {
             ResourceLocation location = block.getLootTable();
-            IDataNode lootEntry = lootData.get(location);
 
-            if (lootEntry != null) {
+            //noinspection ConstantValue
+            if (location != null) {
+                IDataNode lootEntry = lootData.get(location);
                 List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-                blockConsumer.accept(lootEntry, location, block, outputs);
-                lootData.remove(location);
+                if (lootEntry != null && outputs != null) {
+                    blockConsumer.accept(lootEntry, location, block, outputs);
+                    lootData.remove(location);
+                }
             }
         }
 
@@ -135,15 +138,18 @@ public class GenericUtils {
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
                     ResourceLocation location = mob.getLootTable();
-                    IDataNode lootEntry = lootData.get(location);
 
-                    if (lootEntry != null) {
+                    //noinspection ConstantValue
+                    if (location != null) {
+                        IDataNode lootEntry = lootData.get(location);
                         List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-                        entityConsumer.accept(lootEntry, location, entity, outputs);
-                    }
+                        if (lootEntry != null && outputs != null) {
+                            entityConsumer.accept(lootEntry, location, entity, outputs);
+                        }
 
-                    lootData.remove(location);
+                        lootData.remove(location);
+                    }
                 }
             }
         }
@@ -152,7 +158,9 @@ public class GenericUtils {
             ResourceLocation location = entry.getKey();
             List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-            gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+            if (outputs != null) {
+                gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+            }
         }
 
         lootData.clear();

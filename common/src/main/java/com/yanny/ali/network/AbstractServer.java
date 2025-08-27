@@ -148,18 +148,22 @@ public abstract class AbstractServer {
 
         for (Block block : BuiltInRegistries.BLOCK) {
             ResourceLocation location = block.getLootTable();
-            LootTable lootTable = lootTables.remove(location);
-            List<Item> items = lootTableItems.get(location);
 
-            if (lootTable != null) {
-                List<ILootModifier<?>> lootModifiers = Stream.concat(
-                        blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
-                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                ).toList();
+            //noinspection ConstantValue
+            if (location != null) {
+                LootTable lootTable = lootTables.remove(location);
+                List<Item> items = lootTableItems.get(location);
 
-                lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-            } else {
-                LOGGER.debug("Missing block loot table for {}", block);
+                if (lootTable != null && items != null) {
+                    List<ILootModifier<?>> lootModifiers = Stream.concat(
+                            blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
+                            lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                    ).toList();
+
+                    lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                } else {
+                    LOGGER.debug("Missing block loot table for {}", block);
+                }
             }
         }
 
@@ -178,18 +182,22 @@ public abstract class AbstractServer {
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
                     ResourceLocation location = mob.getLootTable();
-                    LootTable lootTable = lootTables.remove(location);
-                    List<Item> items = lootTableItems.get(location);
 
-                    if (lootTable != null) {
-                        List<ILootModifier<?>> lootModifiers = Stream.concat(
-                                entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
-                                lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                        ).toList();
+                    //noinspection ConstantValue
+                    if (location != null) {
+                        LootTable lootTable = lootTables.remove(location);
+                        List<Item> items = lootTableItems.get(location);
 
-                        lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-                    } else {
-                        LOGGER.debug("Missing entity loot table for {}", entity);
+                        if (lootTable != null && items != null) {
+                            List<ILootModifier<?>> lootModifiers = Stream.concat(
+                                    entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
+                                    lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                            ).toList();
+
+                            lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                        } else {
+                            LOGGER.debug("Missing entity loot table for {}", entity);
+                        }
                     }
                 }
             }
