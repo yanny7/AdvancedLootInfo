@@ -21,6 +21,7 @@ import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
@@ -121,14 +122,18 @@ public class GenericUtils {
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
         for (Block block : BuiltInRegistries.BLOCK) {
-            ResourceLocation location = block.getLootTable().location();
-            IDataNode lootEntry = lootData.get(location);
+            ResourceKey<LootTable> resourceKey = block.getLootTable();
 
-            if (lootEntry != null) {
+            //noinspection ConstantValue
+            if (resourceKey != null) {
+                ResourceLocation location = resourceKey.location();
+                IDataNode lootEntry = lootData.get(location);
                 List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-                blockConsumer.accept(lootEntry, location, block, outputs);
-                lootData.remove(location);
+                if (lootEntry != null && outputs != null) {
+                    blockConsumer.accept(lootEntry, location, block, outputs);
+                    lootData.remove(location);
+                }
             }
         }
 
@@ -137,16 +142,20 @@ public class GenericUtils {
 
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
-                    ResourceLocation location = mob.getLootTable().location();
-                    IDataNode lootEntry = lootData.get(location);
+                    ResourceKey<LootTable> resourceKey = mob.getLootTable();
 
-                    if (lootEntry != null) {
+                    //noinspection ConstantValue
+                    if (resourceKey != null) {
+                        ResourceLocation location = resourceKey.location();
+                        IDataNode lootEntry = lootData.get(location);
                         List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-                        entityConsumer.accept(lootEntry, location, entity, outputs);
-                    }
+                        if (lootEntry != null && outputs != null) {
+                            entityConsumer.accept(lootEntry, location, entity, outputs);
+                        }
 
-                    lootData.remove(location);
+                        lootData.remove(location);
+                    }
                 }
             }
         }
@@ -155,7 +164,9 @@ public class GenericUtils {
             ResourceLocation location = entry.getKey();
             List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-            gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+            if (outputs != null) {
+                gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
+            }
         }
 
         lootData.clear();

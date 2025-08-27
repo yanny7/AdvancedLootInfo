@@ -1,3 +1,8 @@
+## [1.3.1]
+
+- Display duplicit information only when Advanced tooltip is enabled
+- Fixed crash when NULL loot table
+
 ## [1.3.0]
 
 - Added Trade info support for vanilla

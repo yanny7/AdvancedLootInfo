@@ -86,7 +86,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY, h.rect.getX() + 1, h.rect.getY() + 1)
                     .setSlotName(String.valueOf(i))
                     .addTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                            -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0)));
+                            -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
             Optional<ItemStack> left = h.item.left();
             Optional<TagKey<Item>> right = h.item.right();
 
