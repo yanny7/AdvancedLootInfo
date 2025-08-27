@@ -105,7 +105,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance"), true);
 
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.chance", cond.chance()));
 
@@ -114,7 +114,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getRandomChanceWithEnchantedBonusTooltip(IServerUtils utils, LootItemRandomChanceWithEnchantedBonusCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_enchanted_bonus"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_enchanted_bonus"), true);
 
         tooltip.add(getFloatTooltip(utils, "ali.property.value.unenchanted_chance", cond.unenchantedChance()));
         tooltip.add(getLevelBasedValueTooltip(utils, "ali.property.branch.enchanted_chance", cond.enchantedChance()));
@@ -137,7 +137,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getTableBonusTooltip(IServerUtils utils, BonusLevelTableCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.table_bonus"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.table_bonus"), true);
         List<String> list = cond.values().stream().mapToDouble(aFloat -> aFloat).mapToObj(FLOAT_FORMAT::format).toList();
 
         tooltip.add(getHolderTooltip(utils, "ali.property.value.enchantment", cond.enchantment(), RegistriesTooltipUtils::getEnchantmentTooltip));
