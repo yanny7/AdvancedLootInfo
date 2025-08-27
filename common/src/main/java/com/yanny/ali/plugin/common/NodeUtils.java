@@ -62,25 +62,27 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static List<Component> toComponents(List<ITooltipNode> tooltip, int pad) {
+    public static List<Component> toComponents(List<ITooltipNode> tooltip, int pad, boolean showAdvancedTooltip) {
         List<Component> components = new ArrayList<>();
 
         for (ITooltipNode node : tooltip) {
-            components.addAll(toComponents(node, pad));
+            if (!node.isAdvancedTooltip() || showAdvancedTooltip) {
+                components.addAll(toComponents(node, pad, showAdvancedTooltip));
+            }
         }
 
         return components;
     }
 
     @NotNull
-    public static List<Component> toComponents(ITooltipNode tooltip, int pad) {
+    public static List<Component> toComponents(ITooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
         List<Component> components = new ArrayList<>();
 
         if (tooltip.getContent().getContents() != ComponentContents.EMPTY) {
             components.add(GenericTooltipUtils.pad(pad, tooltip.getContent()));
-            components.addAll(toComponents(tooltip.getChildren(), pad + 1));
+            components.addAll(toComponents(tooltip.getChildren(), pad + 1, showAdvancedTooltip));
         } else {
-            components.addAll(toComponents(tooltip.getChildren(), pad));
+            components.addAll(toComponents(tooltip.getChildren(), pad, showAdvancedTooltip));
         }
 
         return components;
