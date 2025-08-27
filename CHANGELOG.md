@@ -1,3 +1,7 @@
+## []
+
+- Display duplicit information only when Advanced tooltip is enabled
+
 ## [1.3.0]
 
 - Added Trade info support for vanilla

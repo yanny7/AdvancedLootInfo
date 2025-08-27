@@ -15,7 +15,7 @@ import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getApplyBonusTooltip(IServerUtils utils, ApplyBonusCount fun) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.apply_bonus"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.apply_bonus"), true);
 
         tooltip.add(RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.value.enchantment", fun.enchantment));
         tooltip.add(getFormulaTooltip(utils, "ali.property.value.formula", fun.formula));
@@ -129,7 +129,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getLimitCountTooltip(IServerUtils utils, LimitCount fun) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.limit_count"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.limit_count"), true);
 
         tooltip.add(getIntRangeTooltip(utils, "ali.property.value.limit", fun.limiter));
         tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(fun.predicates)));
@@ -139,7 +139,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getLootingEnchantTooltip(IServerUtils utils, LootingEnchantFunction fun) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.looting_enchant"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.looting_enchant"), true);
 
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.value", fun.value));
 
@@ -201,7 +201,7 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getSetCountTooltip(IServerUtils utils, SetItemCountFunction fun) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.set_count"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.set_count"), true);
 
         tooltip.add(getNumberProviderTooltip(utils, "ali.property.value.count", fun.value));
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.add", fun.add));

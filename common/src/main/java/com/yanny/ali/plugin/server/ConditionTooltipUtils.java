@@ -99,7 +99,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance"), true);
 
         tooltip.add(getFloatTooltip(utils, "ali.property.value.probability", cond.probability));
 
@@ -108,7 +108,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getRandomChanceWithLootingTooltip(IServerUtils utils, LootItemRandomChanceWithLootingCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_looting"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.random_chance_with_looting"), true);
 
         tooltip.add(getFloatTooltip(utils, "ali.property.value.percent", cond.percent));
         tooltip.add(getFloatTooltip(utils, "ali.property.value.multiplier", cond.lootingMultiplier));
@@ -130,7 +130,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getTableBonusTooltip(IServerUtils utils, BonusLevelTableCondition cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.table_bonus"));
+        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.table_bonus"), true);
         List<String> list = IntStream.range(0, cond.values.length).mapToDouble(i -> cond.values[i]).mapToObj(FLOAT_FORMAT::format).toList();
 
         tooltip.add(getEnchantmentTooltip(utils, "ali.property.value.enchantment", cond.enchantment));
