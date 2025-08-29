@@ -1,6 +1,7 @@
 ## []
 
 - Display merchant offer if it's possible to determine it's content even without mod support
+- Added compatibility for Farmer's Delight
 
 ## [1.3.1]
 

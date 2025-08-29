@@ -26,6 +26,7 @@
         "ali": [
             "com.yanny.ali.plugin.Plugin",
             "com.yanny.ali.plugin.lootjs.LootJsPlugin",
+            "com.yanny.ali.plugin.farmers_delight_refabricated.Plugin",
             "com.yanny.ali.plugin.FabricLootJsPlugin"
         ],
         "emi": [

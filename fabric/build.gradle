@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'fabric-loom'
+    id 'lol.bai.explosion'
 }
 
 base {
@@ -9,7 +10,9 @@ base {
 }
 
 fabricApi {
-    configureDataGeneration()
+    configureDataGeneration {
+        modId = "ali"
+    }
 }
 
 dependencies {
@@ -41,6 +44,9 @@ dependencies {
     modImplementation "curse.maven:rhino-416294:6186969"
     modImplementation "curse.maven:architectury-api-419699:5137936"
     modImplementation "curse.maven:lootjs-570630:5404564"
+
+    // Farmers delight
+    modImplementation explosion.fabric("curse.maven:farmers-delight-refabricated-993166:6626608")
 
     // Testing
 //    modLocalRuntime "curse.maven:supplementaries-412082:6889002"
@@ -80,6 +86,7 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
     source(project(":common-lootjs").sourceSets.main.allSource)
+    source(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -87,10 +94,12 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
     from(project(":common-lootjs").sourceSets.main.allSource)
+    from(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 processResources {
     from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources
     from project(":common-lootjs").sourceSets.main.resources
+    from project(":compatibility-farmers-delight").sourceSets.main.resources
 }

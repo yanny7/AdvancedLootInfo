@@ -343,6 +343,8 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemCollector = (BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>>) tradeItemCollectorMap.get(entry.getClass());
 
         if (itemCollector != null) {
+            return itemCollector.apply(utils, entry);
+        } else {
             try {
                 // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
                 //noinspection DataFlowIssue
@@ -352,8 +354,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                     return ItemsToItemsNode.collectItems(utils, offer);
                 }
             } catch (Throwable ignored) {}
-
-            return itemCollector.apply(utils, entry);
         }
 
         return new Pair<>(Collections.emptyList(), Collections.emptyList());

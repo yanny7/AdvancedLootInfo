@@ -13,6 +13,12 @@ pluginManagement {
             name = 'Sponge Snapshots'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
         }
+        maven {
+            url "https://maven2.bai.lol"
+            content {
+                includeGroup "lol.bai.explosion"
+            }
+        }
     }
 }
 
@@ -28,3 +34,7 @@ include("common-rei")
 include("common-lootjs")
 include("fabric")
 include("forge")
+
+//include("compatibility-template")
+
+include("compatibility-farmers-delight")

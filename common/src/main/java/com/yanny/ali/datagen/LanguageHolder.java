@@ -109,6 +109,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.custom_player", "Custom Player Modifier:");
         TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
 
+        // Farmer's delight
+        TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
+        TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
+
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
 
