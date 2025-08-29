@@ -56,6 +56,7 @@ public class Plugin implements IPlugin {
         registry.registerWidget(EnchantBookForEmeraldsNode.ID, ItemListingWidget::new);
         registry.registerWidget(DyedArmorForEmeraldsNode.ID, ItemListingWidget::new);
         registry.registerWidget(EmeraldsForVillagerTypeItemNode.ID, EmeraldForVillagerTypeItemWidget::new);
+        registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
         registry.registerNode(LootTableNode.ID, LootTableNode::new);
         registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
@@ -82,6 +83,7 @@ public class Plugin implements IPlugin {
         registry.registerNode(EnchantBookForEmeraldsNode.ID, EnchantBookForEmeraldsNode::new);
         registry.registerNode(DyedArmorForEmeraldsNode.ID, DyedArmorForEmeraldsNode::new);
         registry.registerNode(EmeraldsForVillagerTypeItemNode.ID, EmeraldsForVillagerTypeItemNode::new);
+        registry.registerNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
     }
 
     @Override

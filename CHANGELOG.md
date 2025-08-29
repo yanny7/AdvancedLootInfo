@@ -1,3 +1,7 @@
+## []
+
+- Display merchant offer if it's possible to determine it's content even without mod support
+
 ## [1.3.1]
 
 - Display duplicit information only when Advanced tooltip is enabled

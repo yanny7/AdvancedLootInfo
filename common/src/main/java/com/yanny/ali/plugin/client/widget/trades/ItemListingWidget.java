@@ -20,15 +20,11 @@ public class ItemListingWidget implements IWidget {
         ListNode node = (ListNode) entry;
 
         widgets = new ArrayList<>();
-        widgets.add(new ItemWidget(utils, node.nodes().get(0), new RelativeRect(0, 0, 18, 18, rect), maxWidth));
-        widgets.add(new ItemWidget(utils, node.nodes().get(1), new RelativeRect(20, 0, 18, 18, rect), maxWidth));
-        widgets.add(WidgetUtils.getArrowWidget(new RelativeRect(40, 0, 24, 18, rect), entry));
 
-        if (node.nodes().get(2) instanceof ItemStackNode itemStackNode) {
-            widgets.add(new ItemStackWidget(utils, itemStackNode, new RelativeRect(66, 0, 18, 18, rect), maxWidth));
-        } else {
-            widgets.add(new ItemWidget(utils, node.nodes().get(2), new RelativeRect(66, 0, 18, 18, rect), maxWidth));
-        }
+        addWidget(utils, rect, node.nodes().get(0), 0, maxWidth);
+        addWidget(utils, rect, node.nodes().get(1), 20, maxWidth);
+        widgets.add(WidgetUtils.getArrowWidget(new RelativeRect(40, 0, 24, 18, rect), entry));
+        addWidget(utils, rect, node.nodes().get(2), 66, maxWidth);
 
         bounds = rect;
         bounds.setDimensions(maxWidth, 18);
@@ -78,6 +74,14 @@ public class ItemListingWidget implements IWidget {
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         for (IWidget widget : widgets) {
             widget.render(guiGraphics, mouseX, mouseY);
+        }
+    }
+
+    private void addWidget(IWidgetUtils utils, RelativeRect rect, IDataNode node, int offsetX, int maxWidth) {
+        if (node instanceof ItemStackNode itemStackNode) {
+            widgets.add(new ItemStackWidget(utils, itemStackNode, new RelativeRect(offsetX, 0, 18, 18, rect), maxWidth));
+        } else {
+            widgets.add(new ItemWidget(utils, node, new RelativeRect(offsetX, 0, 18, 18, rect), maxWidth));
         }
     }
 }
