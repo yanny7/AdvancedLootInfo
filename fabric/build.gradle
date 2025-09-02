@@ -45,6 +45,12 @@ dependencies {
     modImplementation "curse.maven:architectury-api-419699:5137936"
     modImplementation "curse.maven:lootjs-570630:5404564"
 
+    // Aether
+    modImplementation explosion.fabric("curse.maven:aether-255308:6800393")
+    modImplementation explosion.fabric("curse.maven:accessories-938917:6304691")
+    modImplementation explosion.fabric("curse.maven:owo-lib-532610:4749199")
+    modImplementation "curse.maven:cloth-config-348521:5729104"
+
     // Charm Forked
     modImplementation explosion.fabric("curse.maven:charm-forked-1016482:6492694")
 
@@ -90,6 +96,7 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-rei").sourceSets.main.allSource)
     source(project(":common-lootjs").sourceSets.main.allSource)
 
+    source(project(":compatibility-aether").sourceSets.main.allSource)
     source(project(":compatibility-charm-forked").sourceSets.main.allSource)
     source(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
@@ -100,6 +107,7 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-rei").sourceSets.main.allSource)
     from(project(":common-lootjs").sourceSets.main.allSource)
 
+    from(project(":compatibility-aether").sourceSets.main.allSource)
     from(project(":compatibility-charm-forked").sourceSets.main.allSource)
     from(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
@@ -109,6 +117,7 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-lootjs").sourceSets.main.resources
 
+    from project(":compatibility-aether").sourceSets.main.resources
     from project(":compatibility-charm-forked").sourceSets.main.resources
     from project(":compatibility-farmers-delight").sourceSets.main.resources
 }

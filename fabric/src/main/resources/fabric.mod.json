@@ -26,6 +26,7 @@
         "ali": [
             "com.yanny.ali.plugin.Plugin",
             "com.yanny.ali.plugin.lootjs.LootJsPlugin",
+            "com.yanny.ali.plugin.aether.Plugin",
             "com.yanny.ali.plugin.charm_forked.Plugin",
             "com.yanny.ali.plugin.farmers_delight_refabricated.Plugin",
             "com.yanny.ali.plugin.FabricLootJsPlugin"
@@ -44,6 +45,7 @@
         "ali.mixins.json",
         "ali.lootjs.mixins.json",
         "ali.fabric.mixins.json",
+        "ali.aether.mixins.json",
         "ali.charm_forked.mixins.json"
     ],
     "depends": {
