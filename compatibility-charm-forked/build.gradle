@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'fabric-loom'
+    id 'lol.bai.explosion'
 }
 
 dependencies {
@@ -14,7 +15,7 @@ dependencies {
     implementation project(":api")
     implementation project(":common")
 
-    modCompileOnly "curse.maven:chefs-delight-fabric-736986:4751399"
+    modCompileOnly explosion.fabric("curse.maven:charm-forked-1016482:6492694")
 }
 
 loom {

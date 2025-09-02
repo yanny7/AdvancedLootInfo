@@ -128,6 +128,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.all", "All:");
         TRANSLATION_MAP.put("ali.property.branch.any", "Any:");
         TRANSLATION_MAP.put("ali.property.branch.banner_patterns", "Banner Patterns:");
+        TRANSLATION_MAP.put("ali.property.branch.bees", "Bees:");
         TRANSLATION_MAP.put("ali.property.branch.biomes", "Biomes:");
         TRANSLATION_MAP.put("ali.property.branch.block_predicate", "Block Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");

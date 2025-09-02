@@ -37,4 +37,5 @@ include("forge")
 
 //include("compatibility-template")
 
+include("compatibility-charm-forked")
 include("compatibility-farmers-delight")

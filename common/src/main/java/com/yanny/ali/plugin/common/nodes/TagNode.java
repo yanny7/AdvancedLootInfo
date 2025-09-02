@@ -32,6 +32,19 @@ public class TagNode implements IDataNode, IItemNode {
     private final RangeValue count;
     private final float chance;
 
+    public TagNode(IServerUtils utils, TagKey<Item> tag, RangeValue count) {
+        this(utils, tag, count, Collections.emptyList());
+    }
+
+    public TagNode(IServerUtils ignoredUtils, TagKey<Item> tag, RangeValue count, List<ITooltipNode> tooltip) {
+        this.tag = tag;
+        this.tooltip = tooltip;
+        this.count = count;
+        conditions = Collections.emptyList();
+        functions = Collections.emptyList();
+        chance = 1;
+    }
+
     public TagNode(IServerUtils utils, TagEntry entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this.conditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
         this.functions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();

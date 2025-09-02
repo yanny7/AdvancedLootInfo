@@ -5,8 +5,8 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.resources.ResourceLocation;
@@ -328,7 +328,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 MerchantOffer offer = entry.getOffer(null, null);
 
                 if (offer != null) {
-                    return new ItemsToItemsNode(utils, offer, conditions);
+                    return TradeUtils.getNode(utils, offer, conditions);
                 }
             } catch (Throwable ignored) {}
 
@@ -351,7 +351,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 MerchantOffer offer = entry.getOffer(null, null);
 
                 if (offer != null) {
-                    return ItemsToItemsNode.collectItems(utils, offer);
+                    return TradeUtils.collectItems(utils, offer);
                 }
             } catch (Throwable ignored) {}
         }

@@ -4,7 +4,9 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.client.widget.ItemStackWidget;
 import com.yanny.ali.plugin.client.widget.ItemWidget;
+import com.yanny.ali.plugin.client.widget.TagWidget;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
+import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
@@ -80,6 +82,8 @@ public class ItemListingWidget implements IWidget {
     private void addWidget(IWidgetUtils utils, RelativeRect rect, IDataNode node, int offsetX, int maxWidth) {
         if (node instanceof ItemStackNode itemStackNode) {
             widgets.add(new ItemStackWidget(utils, itemStackNode, new RelativeRect(offsetX, 0, 18, 18, rect), maxWidth));
+        } else if (node instanceof TagNode tagNode) {
+            widgets.add(new TagWidget(utils, tagNode, new RelativeRect(offsetX, 0, 18, 18, rect), maxWidth));
         } else {
             widgets.add(new ItemWidget(utils, node, new RelativeRect(offsetX, 0, 18, 18, rect), maxWidth));
         }

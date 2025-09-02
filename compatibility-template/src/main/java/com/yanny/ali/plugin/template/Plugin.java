@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.template;
+package com.yanny.ali.plugin.charm_forked;
 
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;

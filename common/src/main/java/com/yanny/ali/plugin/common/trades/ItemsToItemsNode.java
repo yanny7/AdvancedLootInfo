@@ -1,17 +1,19 @@
 package com.yanny.ali.plugin.common.trades;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
+import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.trading.MerchantOffer;
-import org.jetbrains.annotations.NotNull;
-import oshi.util.tuples.Pair;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFloatTooltip;
@@ -22,14 +24,53 @@ public class ItemsToItemsNode extends ListNode {
 
     private final List<ITooltipNode> tooltip;
 
-    public ItemsToItemsNode(IServerUtils utils, MerchantOffer offer, List<ITooltipNode> conditions) {
-        addChildren(new ItemStackNode(utils, offer.getBaseCostA(), new RangeValue(offer.getBaseCostA().getCount())));
-        addChildren(new ItemStackNode(utils, offer.getCostB(), new RangeValue(offer.getCostB().getCount())));
-        addChildren(new ItemStackNode(utils, offer.getResult(), new RangeValue(offer.getResult().getCount())));
+    public ItemsToItemsNode(IServerUtils utils,
+                            Either<ItemStack, TagKey<Item>> input1,
+                            RangeValue input1Count,
+                            Either<ItemStack, TagKey<Item>> output,
+                            RangeValue outputCount,
+                            int maxUses,
+                            int xp,
+                            float priceMultiplier,
+                            List<ITooltipNode> conditions) {
+        this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), new RangeValue(), output, outputCount, maxUses, xp, priceMultiplier, conditions);
+    }
+
+    public ItemsToItemsNode(IServerUtils utils,
+                            Either<ItemStack, TagKey<Item>> input1,
+                            RangeValue input1Count,
+                            Either<ItemStack, TagKey<Item>> input2,
+                            RangeValue input2Count,
+                            Either<ItemStack, TagKey<Item>> output,
+                            RangeValue outputCount,
+                            int maxUses,
+                            int xp,
+                            float priceMultiplier,
+                            List<ITooltipNode> conditions) {
+        this(utils, input1, input1Count, Collections.emptyList(), input2, input2Count, Collections.emptyList(), output, outputCount, Collections.emptyList(), maxUses, xp, priceMultiplier, conditions);
+    }
+
+    public ItemsToItemsNode(IServerUtils utils,
+                            Either<ItemStack, TagKey<Item>> input1,
+                            RangeValue input1Count,
+                            List<ITooltipNode> input1Conditions,
+                            Either<ItemStack, TagKey<Item>> input2,
+                            RangeValue input2Count,
+                            List<ITooltipNode> input2Conditions,
+                            Either<ItemStack, TagKey<Item>> output,
+                            RangeValue outputCount,
+                            List<ITooltipNode> outputConditions,
+                            int maxUses,
+                            int xp,
+                            float priceMultiplier,
+                            List<ITooltipNode> conditions) {
+        addChildren(getChildren(utils, input1, input1Count, input1Conditions));
+        addChildren(getChildren(utils, input2, input2Count, input2Conditions));
+        addChildren(getChildren(utils, output, outputCount, outputConditions));
         tooltip = new ArrayList<>(conditions);
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", offer.getMaxUses()));
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", offer.getXp()));
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", offer.getPriceMultiplier()));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.uses", maxUses));
+        tooltip.add(getIntegerTooltip(utils, "ali.property.value.villager_xp", xp));
+        tooltip.add(getFloatTooltip(utils, "ali.property.value.price_multiplier", priceMultiplier));
     }
 
     public ItemsToItemsNode(IClientUtils utils, FriendlyByteBuf buf) {
@@ -52,11 +93,10 @@ public class ItemsToItemsNode extends ListNode {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, MerchantOffer offer) {
-        return new Pair<>(
-                List.of(offer.getBaseCostA().getItem(), offer.getCostB().getItem()),
-                List.of(offer.getResult().getItem())
+    private static IDataNode getChildren(IServerUtils utils, Either<ItemStack, TagKey<Item>> item, RangeValue count, List<ITooltipNode> conditions) {
+        return item.map(
+                (i) -> new ItemStackNode(utils, i, count, conditions),
+                (t) -> new TagNode(utils, t, count, conditions)
         );
     }
 }
