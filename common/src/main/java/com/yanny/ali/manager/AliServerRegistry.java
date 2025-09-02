@@ -5,6 +5,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -320,6 +322,16 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (itemListingFactory != null) {
             return itemListingFactory.apply(utils, entry, conditions);
         } else {
+            try {
+                // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
+                //noinspection DataFlowIssue
+                MerchantOffer offer = entry.getOffer(null, null);
+
+                if (offer != null) {
+                    return TradeUtils.getNode(utils, offer, conditions);
+                }
+            } catch (Throwable ignored) {}
+
             missingItemListingFactories.add(entry.getClass());
             return new MissingNode();
         }
@@ -332,6 +344,16 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
         if (itemCollector != null) {
             return itemCollector.apply(utils, entry);
+        } else {
+            try {
+                // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
+                //noinspection DataFlowIssue
+                MerchantOffer offer = entry.getOffer(null, null);
+
+                if (offer != null) {
+                    return TradeUtils.collectItems(utils, offer);
+                }
+            } catch (Throwable ignored) {}
         }
 
         return new Pair<>(Collections.emptyList(), Collections.emptyList());

@@ -10,9 +10,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -29,16 +29,16 @@ public class ItemTagNode implements IDataNode, IItemNode {
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
-    private final TagKey<Item> tag;
+    private final TagKey<? extends ItemLike> tag;
     private final RangeValue count;
     private final float chance;
     private final boolean modified;
 
-    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
+    public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
         this(utils, entry, chance, false, functions, conditions, preserveCount);
     }
 
-    public ItemTagNode(IServerUtils utils, TagKey<Item> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
+    public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, boolean modified, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
         this.conditions = conditions;
         this.functions = functions;
         this.tag = entry;
@@ -70,7 +70,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public Either<ItemStack, TagKey<Item>> getModifiedItem() {
+    public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return Either.right(tag);
     }
 

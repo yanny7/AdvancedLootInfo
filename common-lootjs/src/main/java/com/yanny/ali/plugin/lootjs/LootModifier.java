@@ -16,8 +16,8 @@ import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.*;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.slf4j.Logger;
@@ -96,7 +96,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                         IItemNode node = (IItemNode) c;
                         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), node.getConditions().stream()).toList();
                         List<LootItemFunction> allFunctions = new ArrayList<>();
-                        Either<ItemStack, TagKey<Item>> either = node.getModifiedItem();
+                        Either<ItemStack, TagKey<? extends ItemLike>> either = node.getModifiedItem();
 
                         allFunctions.add(new ModifiedItemFunction());
                         allFunctions.addAll(Stream.concat(functions.stream(), node.getFunctions().stream()).toList());
@@ -125,7 +125,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
         return operations;
     }
 
-    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<Item>> either, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static IDataNode constructEither(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> either, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return either.map(
                 (itemStack) -> new ItemStackNode(utils, itemStack, chance, true, functions, conditions, true),
                 (tagKey) -> new ItemTagNode(utils, tagKey, chance, true, functions, conditions, true)
