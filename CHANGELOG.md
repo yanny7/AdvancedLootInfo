@@ -4,6 +4,7 @@
 - Added compatibility for Farmer's Delight mod
 - Added compatibility for Charm Forked mod
 - Added compatibility for Aether mod
+- Added zh_cn translation (ZetaY)
 
 ## [1.3.1]
 
