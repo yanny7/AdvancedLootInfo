@@ -10,6 +10,7 @@ import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,6 +25,7 @@ import svenhjol.charm.CharmTags;
 import svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers;
 import svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers;
 import svenhjol.charmony.helper.GenericTradeOffers;
+import svenhjol.charmony.helper.TagHelper;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -335,8 +337,9 @@ public class TradeUtils {
         ServerLevel level = utils.getServerLevel();
 
         if (level != null) {
+            TagKey<Item> tag = CharmTags.BEEKEEPER_SELLS_FLOWERS;
             return new Pair<>(
-                    utils.getServerLevel().registryAccess().registryOrThrow(CharmTags.BEEKEEPER_SELLS_FLOWERS.registry()).stream().toList(),
+                    TagHelper.getValues(level.registryAccess().registryOrThrow(tag.registry()), tag).stream().map(ItemLike::asItem).toList(),
                     List.of(Items.EMERALD)
             );
         } else {
@@ -390,8 +393,9 @@ public class TradeUtils {
 
         if (level != null) {
             //noinspection unchecked
+            TagKey<T> tag = ((MixinEmeraldsForTag<T>) listing).getTag();
             return new Pair<>(
-                    level.registryAccess().registryOrThrow(((MixinEmeraldsForTag<T>) listing).getTag().registry()).stream().map(ItemLike::asItem).toList(),
+                    TagHelper.getValues(level.registryAccess().registryOrThrow(tag.registry()), tag).stream().map(ItemLike::asItem).toList(),
                     List.of(Items.EMERALD)
             );
         } else {
@@ -405,10 +409,13 @@ public class TradeUtils {
 
         if (level != null) {
             //noinspection unchecked
+            TagKey<T> tag1 = ((MixinEmeraldsForTwoTags<T, U>) listing).getTag1();
+            //noinspection unchecked
+            TagKey<U> tag2 = ((MixinEmeraldsForTwoTags<T, U>) listing).getTag2();
             return new Pair<>(
                     Stream.concat(
-                            utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTwoTags<T, U>) listing).getTag1().registry()).stream().map(ItemLike::asItem),
-                            utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTwoTags<T, U>) listing).getTag2().registry()).stream().map(ItemLike::asItem)
+                            TagHelper.getValues(level.registryAccess().registryOrThrow(tag1.registry()), tag1).stream().map(ItemLike::asItem),
+                            TagHelper.getValues(level.registryAccess().registryOrThrow(tag2.registry()), tag2).stream().map(ItemLike::asItem)
                     ).toList(),
                     List.of(Items.EMERALD)
             );
@@ -431,9 +438,10 @@ public class TradeUtils {
 
         if (level != null) {
             //noinspection unchecked
+            TagKey<T> tag = ((MixinTagForEmeralds<T>) listing).getTag();
             return new Pair<>(
                     List.of(Items.EMERALD),
-                    utils.getServerLevel().registryAccess().registryOrThrow(((MixinTagForEmeralds<T>) listing).getTag().registry()).stream().map(ItemLike::asItem).toList()
+                    TagHelper.getValues(level.registryAccess().registryOrThrow(tag.registry()), tag).stream().map(ItemLike::asItem).toList()
             );
         } else {
             return new Pair<>(Collections.emptyList(), Collections.emptyList());
