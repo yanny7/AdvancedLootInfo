@@ -9,6 +9,7 @@ import com.yanny.ali.mixin.*;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -195,74 +196,46 @@ public class TradeUtils {
 
     @NotNull
     public static <T extends ItemLike> IDataNode getNode(IServerUtils utils, GenericTradeOffers.EmeraldsForTag<T> entry, List<ITooltipNode> conditions) {
-        //FIXME use tag
         //noinspection unchecked
         MixinEmeraldsForTag<T> mixin = (MixinEmeraldsForTag<T>) entry;
-        List<T> blocks = utils.getServerLevel().registryAccess().registryOrThrow(mixin.getTag().registry()).stream().toList();
 
-        return new SubTradesNode<>(utils, entry, conditions) {
-            @Override
-            public List<IDataNode> getSubTrades(IServerUtils utils, GenericTradeOffers.EmeraldsForTag<T> listing) {
-                List<IDataNode> nodes = new ArrayList<>();
-
-                for (T e : blocks) {
-                    nodes.add(new ItemsToItemsNode(
-                            utils,
-                            Either.left(e.asItem().getDefaultInstance()),
-                            new RangeValue(mixin.getBaseCost(), mixin.getBaseCost() + mixin.getExtraCost()),
-                            Either.left(Items.EMERALD.getDefaultInstance()),
-                            new RangeValue(mixin.getBaseEmeralds(), mixin.getBaseEmeralds() + mixin.getExtraEmeralds()),
-                            mixin.getMaxUses(),
-                            mixin.getVillagerXp(),
-                            0.05F,
-                            Collections.emptyList()
-                    ));
-                }
-
-                return nodes;
-            }
-        };
+        return new ItemsToItemsNode(
+                utils,
+                Either.right(mixin.getTag()),
+                new RangeValue(mixin.getBaseCost(), mixin.getBaseCost() + mixin.getExtraCost()),
+                Either.left(Items.EMERALD.getDefaultInstance()),
+                new RangeValue(mixin.getBaseEmeralds(), mixin.getBaseEmeralds() + mixin.getExtraEmeralds()),
+                mixin.getMaxUses(),
+                mixin.getVillagerXp(),
+                0.05F,
+                conditions
+        );
     }
 
     @NotNull
     public static <T extends ItemLike, U extends ItemLike> IDataNode getNode(IServerUtils utils, GenericTradeOffers.EmeraldsForTwoTags<T, U> entry, List<ITooltipNode> conditions) {
-        //FIXME use tag
         //noinspection unchecked
         MixinEmeraldsForTwoTags<T, U> mixin = (MixinEmeraldsForTwoTags<T, U>) entry;
-        List<T> blocks1 = utils.getServerLevel().registryAccess().registryOrThrow(mixin.getTag1().registry()).stream().toList();
-        List<U> blocks2 = utils.getServerLevel().registryAccess().registryOrThrow(mixin.getTag2().registry()).stream().toList();
 
-        return new SubTradesNode<>(utils, entry, conditions) {
-            @Override
-            public List<IDataNode> getSubTrades(IServerUtils utils, GenericTradeOffers.EmeraldsForTwoTags<T, U> listing) {
-                List<IDataNode> nodes = new ArrayList<>();
-
-                for (T e : blocks1) {
-                    for (U f : blocks2) {
-                        nodes.add(new ItemsToItemsNode(
-                                utils,
-                                Either.left(e.asItem().getDefaultInstance()),
-                                new RangeValue(mixin.getBaseCost(), mixin.getBaseCost() + mixin.getExtraCost()),
-                                Either.left(f.asItem().getDefaultInstance()),
-                                new RangeValue(mixin.getBaseCost(), mixin.getBaseCost() + mixin.getExtraCost()),
-                                Either.left(Items.EMERALD.getDefaultInstance()),
-                                new RangeValue(mixin.getBaseEmeralds(), mixin.getBaseEmeralds() + mixin.getExtraEmeralds()),
-                                mixin.getMaxUses(),
-                                mixin.getVillagerXp(),
-                                0.05F,
-                                Collections.emptyList()
-                        ));
-                    }
-                }
-
-                return nodes;
-            }
-        };
+        return new ItemsToItemsNode(
+                utils,
+                Either.right(mixin.getTag1()),
+                new RangeValue(mixin.getBaseCost(), mixin.getBaseCost() + mixin.getExtraCost()),
+                Either.right(mixin.getTag2()),
+                new RangeValue(mixin.getBaseCost(), mixin.getBaseCost() + mixin.getExtraCost()),
+                Either.left(Items.EMERALD.getDefaultInstance()),
+                new RangeValue(mixin.getBaseEmeralds(), mixin.getBaseEmeralds() + mixin.getExtraEmeralds()),
+                mixin.getMaxUses(),
+                mixin.getVillagerXp(),
+                0.05F,
+                conditions
+        );
     }
 
     @NotNull
     public static IDataNode getNode(IServerUtils utils, GenericTradeOffers.EmeraldsForItems entry, List<ITooltipNode> conditions) {
         MixinEmeraldsForItems mixin = (MixinEmeraldsForItems) entry;
+
         return new ItemsToItemsNode(
                 utils,
                 Either.left(mixin.getItemLike().asItem().getDefaultInstance()),
@@ -278,38 +251,26 @@ public class TradeUtils {
 
     @NotNull
     public static <T extends ItemLike> IDataNode getNode(IServerUtils utils, GenericTradeOffers.TagForEmeralds<T> entry, List<ITooltipNode> conditions) {
-        //FIXME use tag
         //noinspection unchecked
         MixinTagForEmeralds<T> mixin = (MixinTagForEmeralds<T>) entry;
-        List<T> blocks = utils.getServerLevel().registryAccess().registryOrThrow(mixin.getTag().registry()).stream().toList();
 
-        return new SubTradesNode<>(utils, entry, conditions) {
-            @Override
-            public List<IDataNode> getSubTrades(IServerUtils utils, GenericTradeOffers.TagForEmeralds<T> listing) {
-                List<IDataNode> nodes = new ArrayList<>();
-
-                for (T e : blocks) {
-                    nodes.add(new ItemsToItemsNode(
-                            utils,
-                            Either.left(Items.EMERALD.getDefaultInstance()),
-                            new RangeValue(mixin.getBaseEmeralds(), mixin.getBaseEmeralds() + mixin.getExtraEmeralds()),
-                            Either.left(e.asItem().getDefaultInstance()),
-                            new RangeValue(mixin.getBaseItems(), mixin.getBaseItems() + mixin.getExtraItems()),
-                            mixin.getMaxUses(),
-                            mixin.getVillagerXp(),
-                            0.05F,
-                            Collections.emptyList()
-                    ));
-                }
-
-                return nodes;
-            }
-        };
+        return new ItemsToItemsNode(
+                utils,
+                Either.left(Items.EMERALD.getDefaultInstance()),
+                new RangeValue(mixin.getBaseEmeralds(), mixin.getBaseEmeralds() + mixin.getExtraEmeralds()),
+                Either.right(mixin.getTag()),
+                new RangeValue(mixin.getBaseItems(), mixin.getBaseItems() + mixin.getExtraItems()),
+                mixin.getMaxUses(),
+                mixin.getVillagerXp(),
+                0.05F,
+                conditions
+        );
     }
 
     @NotNull
     public static IDataNode getNode(IServerUtils utils, GenericTradeOffers.ItemsForEmeralds entry, List<ITooltipNode> conditions) {
         MixinItemsForEmeralds mixin = (MixinItemsForEmeralds) entry;
+
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
@@ -326,6 +287,7 @@ public class TradeUtils {
     @NotNull
     public static IDataNode getNode(IServerUtils utils, GenericTradeOffers.ItemsForItems entry, List<ITooltipNode> conditions) {
         MixinItemsForItems mixin = (MixinItemsForItems) entry;
+
         return new ItemsToItemsNode(
                 utils,
                 Either.left(mixin.getInputItem().asItem().getDefaultInstance()),
@@ -370,10 +332,16 @@ public class TradeUtils {
 
     @NotNull
     public static Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, BeekeeperTradeOffers.EmeraldsForFlowers ignoredListing) {
-        return new Pair<>(
-                utils.getServerLevel().registryAccess().registryOrThrow(CharmTags.BEEKEEPER_SELLS_FLOWERS.registry()).stream().toList(),
-                List.of(Items.EMERALD)
-        );
+        ServerLevel level = utils.getServerLevel();
+
+        if (level != null) {
+            return new Pair<>(
+                    utils.getServerLevel().registryAccess().registryOrThrow(CharmTags.BEEKEEPER_SELLS_FLOWERS.registry()).stream().toList(),
+                    List.of(Items.EMERALD)
+            );
+        } else {
+            return new Pair<>(Collections.emptyList(), Collections.emptyList());
+        }
     }
 
     @NotNull
@@ -418,23 +386,35 @@ public class TradeUtils {
 
     @NotNull
     public static <T extends ItemLike> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, GenericTradeOffers.EmeraldsForTag<T> listing) {
-        //noinspection unchecked
-        return new Pair<>(
-                utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTag<T>) listing).getTag().registry()).stream().map(ItemLike::asItem).toList(),
-                List.of(Items.EMERALD)
-        );
+        ServerLevel level = utils.getServerLevel();
+
+        if (level != null) {
+            //noinspection unchecked
+            return new Pair<>(
+                    level.registryAccess().registryOrThrow(((MixinEmeraldsForTag<T>) listing).getTag().registry()).stream().map(ItemLike::asItem).toList(),
+                    List.of(Items.EMERALD)
+            );
+        } else {
+            return new Pair<>(Collections.emptyList(), Collections.emptyList());
+        }
     }
 
     @NotNull
     public static <T extends ItemLike, U extends ItemLike> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, GenericTradeOffers.EmeraldsForTwoTags<T, U> listing) {
-        //noinspection unchecked
-        return new Pair<>(
-                Stream.concat(
-                        utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTwoTags<T, U>) listing).getTag1().registry()).stream().map(ItemLike::asItem),
-                        utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTwoTags<T, U>) listing).getTag2().registry()).stream().map(ItemLike::asItem)
-                ).toList(),
-                List.of(Items.EMERALD)
-        );
+        ServerLevel level = utils.getServerLevel();
+
+        if (level != null) {
+            //noinspection unchecked
+            return new Pair<>(
+                    Stream.concat(
+                            utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTwoTags<T, U>) listing).getTag1().registry()).stream().map(ItemLike::asItem),
+                            utils.getServerLevel().registryAccess().registryOrThrow(((MixinEmeraldsForTwoTags<T, U>) listing).getTag2().registry()).stream().map(ItemLike::asItem)
+                    ).toList(),
+                    List.of(Items.EMERALD)
+            );
+        } else {
+            return new Pair<>(Collections.emptyList(), Collections.emptyList());
+        }
     }
 
     @NotNull
@@ -447,11 +427,17 @@ public class TradeUtils {
 
     @NotNull
     public static <T extends ItemLike> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, GenericTradeOffers.TagForEmeralds<T> listing) {
-        //noinspection unchecked
-        return new Pair<>(
-                List.of(Items.EMERALD),
-                utils.getServerLevel().registryAccess().registryOrThrow(((MixinTagForEmeralds<T>) listing).getTag().registry()).stream().map(ItemLike::asItem).toList()
-        );
+        ServerLevel level = utils.getServerLevel();
+
+        if (level != null) {
+            //noinspection unchecked
+            return new Pair<>(
+                    List.of(Items.EMERALD),
+                    utils.getServerLevel().registryAccess().registryOrThrow(((MixinTagForEmeralds<T>) listing).getTag().registry()).stream().map(ItemLike::asItem).toList()
+            );
+        } else {
+            return new Pair<>(Collections.emptyList(), Collections.emptyList());
+        }
     }
 
     @NotNull

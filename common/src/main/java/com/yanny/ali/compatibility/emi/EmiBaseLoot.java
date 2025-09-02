@@ -12,9 +12,9 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -75,11 +75,11 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
         return new ClientUtils() {
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotWidgets.add(new Holder(this, item, entry, rect, recipe));
             }
         };
     }
 
-    private record Holder(IWidgetUtils utils, Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
+    private record Holder(IWidgetUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
 }

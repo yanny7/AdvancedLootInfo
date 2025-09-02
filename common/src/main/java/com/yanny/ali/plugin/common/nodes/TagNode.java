@@ -10,8 +10,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.TagEntry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -28,15 +28,15 @@ public class TagNode implements IDataNode, IItemNode {
     private final List<ITooltipNode> tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
-    private final TagKey<Item> tag;
+    private final TagKey<? extends ItemLike> tag;
     private final RangeValue count;
     private final float chance;
 
-    public TagNode(IServerUtils utils, TagKey<Item> tag, RangeValue count) {
+    public TagNode(IServerUtils utils, TagKey<? extends ItemLike> tag, RangeValue count) {
         this(utils, tag, count, Collections.emptyList());
     }
 
-    public TagNode(IServerUtils ignoredUtils, TagKey<Item> tag, RangeValue count, List<ITooltipNode> tooltip) {
+    public TagNode(IServerUtils ignoredUtils, TagKey<? extends ItemLike> tag, RangeValue count, List<ITooltipNode> tooltip) {
         this.tag = tag;
         this.tooltip = tooltip;
         this.count = count;
@@ -65,7 +65,7 @@ public class TagNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public Either<ItemStack, TagKey<Item>> getModifiedItem() {
+    public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return Either.right(tag);
     }
 

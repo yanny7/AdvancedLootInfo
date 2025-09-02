@@ -9,8 +9,8 @@ import com.yanny.ali.plugin.common.nodes.TagNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,9 +25,9 @@ public class ItemsToItemsNode extends ListNode {
     private final List<ITooltipNode> tooltip;
 
     public ItemsToItemsNode(IServerUtils utils,
-                            Either<ItemStack, TagKey<Item>> input1,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input1,
                             RangeValue input1Count,
-                            Either<ItemStack, TagKey<Item>> output,
+                            Either<ItemStack, TagKey<? extends ItemLike>> output,
                             RangeValue outputCount,
                             int maxUses,
                             int xp,
@@ -37,11 +37,11 @@ public class ItemsToItemsNode extends ListNode {
     }
 
     public ItemsToItemsNode(IServerUtils utils,
-                            Either<ItemStack, TagKey<Item>> input1,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input1,
                             RangeValue input1Count,
-                            Either<ItemStack, TagKey<Item>> input2,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input2,
                             RangeValue input2Count,
-                            Either<ItemStack, TagKey<Item>> output,
+                            Either<ItemStack, TagKey<? extends ItemLike>> output,
                             RangeValue outputCount,
                             int maxUses,
                             int xp,
@@ -51,13 +51,13 @@ public class ItemsToItemsNode extends ListNode {
     }
 
     public ItemsToItemsNode(IServerUtils utils,
-                            Either<ItemStack, TagKey<Item>> input1,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input1,
                             RangeValue input1Count,
                             List<ITooltipNode> input1Conditions,
-                            Either<ItemStack, TagKey<Item>> input2,
+                            Either<ItemStack, TagKey<? extends ItemLike>> input2,
                             RangeValue input2Count,
                             List<ITooltipNode> input2Conditions,
-                            Either<ItemStack, TagKey<Item>> output,
+                            Either<ItemStack, TagKey<? extends ItemLike>> output,
                             RangeValue outputCount,
                             List<ITooltipNode> outputConditions,
                             int maxUses,
@@ -93,7 +93,7 @@ public class ItemsToItemsNode extends ListNode {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 
-    private static IDataNode getChildren(IServerUtils utils, Either<ItemStack, TagKey<Item>> item, RangeValue count, List<ITooltipNode> conditions) {
+    private static IDataNode getChildren(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, List<ITooltipNode> conditions) {
         return item.map(
                 (i) -> new ItemStackNode(utils, i, count, conditions),
                 (t) -> new TagNode(utils, t, count, conditions)
