@@ -14,6 +14,7 @@ mixin {
     config("${mod_id}.mixins.json")
 //    config("${mod_id}.lootjs.mixins.json")
     config("${mod_id}.forge.mixins.json")
+    config("${mod_id}.aether.mixins.json")
 }
 
 minecraft {
@@ -105,6 +106,12 @@ dependencies {
 //    implementation fg.deobf("curse.maven:rhino-416294:6186971")
 //    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
 
+    // Aether
+//    implementation fg.deobf("curse.maven:aether-255308:6134920")
+
+    // Farmer's Delight
+//    implementation fg.deobf("curse.maven:farmers-delight-398521:6917255")
+
     // Testing
 //    implementation fg.deobf("curse.maven:botania-225643:6366547")
 //    implementation fg.deobf("curse.maven:curios-309927:6418456")
@@ -128,6 +135,8 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
 //    source(project(":common-lootjs").sourceSets.main.allSource)
+//    source(project(":compatibility-aether").sourceSets.main.allSource)
+//    source(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -136,6 +145,8 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
 //    from(project(":common-lootjs").sourceSets.main.allSource)
+//    from(project(":compatibility-aether").sourceSets.main.allSource)
+//    from(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 tasks.named('compileTestJava') {
@@ -151,6 +162,8 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
 //    from project(":common-lootjs").sourceSets.main.resources
+//    from project(":compatibility-aether").sourceSets.main.resources
+//    from project(":compatibility-farmers-delight").sourceSets.main.resources
 }
 
 jar.finalizedBy('reobfJar')

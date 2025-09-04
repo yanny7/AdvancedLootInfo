@@ -4,12 +4,15 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.PlainTextContents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -145,7 +148,7 @@ public class NodeUtils {
         if (node instanceof ListNode listNode) {
             return listNode.nodes().stream().anyMatch(NodeUtils::hasItems);
         } else {
-            return node instanceof IItemNode itemNode;
+            return node instanceof IItemNode;
         }
     }
 
@@ -155,14 +158,24 @@ public class NodeUtils {
         }
     }
 
-    private static boolean predicateEither(IItemNode itemNode, Predicate<ItemStack> predicate) {
+    private static <T extends ItemLike> boolean predicateEither(IItemNode itemNode, Predicate<ItemStack> predicate) {
         return itemNode.getModifiedItem().map(
                 predicate::test,
-                (tagKey) -> BuiltInRegistries.ITEM
-                        .getTag(tagKey)
-                        .map((holders) -> holders.stream().map(Holder::value))
-                        .orElse(Stream.of())
-                        .map(Item::getDefaultInstance)
-                        .allMatch(predicate));
+                (tagKey) -> {
+                    //noinspection unchecked
+                    Registry<T> registry = (Registry<T>)BuiltInRegistries.REGISTRY.get(tagKey.registry().location());
+
+                    if (registry != null) {
+                        //noinspection unchecked
+                        return registry
+                                .getTag((TagKey<T>) tagKey)
+                                .map((holders) -> holders.stream().map(Holder::value))
+                                .orElse(Stream.of())
+                                .map((i) -> i.asItem().getDefaultInstance())
+                                .allMatch(predicate);
+                    } else {
+                        return false;
+                    }
+                });
     }
 }

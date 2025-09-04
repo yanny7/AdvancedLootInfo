@@ -110,6 +110,17 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.custom_player", "Custom Player Modifier:");
         TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
 
+        // Aether
+        TRANSLATION_MAP.put("ali.type.function.spawn_xp", "Spawn XP");
+        TRANSLATION_MAP.put("ali.type.function.spawn_tnt", "Spawn TNT");
+        TRANSLATION_MAP.put("ali.type.function.double_drops", "Double Drops");
+        TRANSLATION_MAP.put("ali.type.function.whirlwind_spawn_entity", "Whirlwind Spawn Entity");
+        TRANSLATION_MAP.put("ali.type.function.config_enabled", "Must Be Enabled In Config");
+
+        // Farmer's delight
+        TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
+        TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
+
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
 
@@ -125,6 +136,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.all", "All:");
         TRANSLATION_MAP.put("ali.property.branch.any", "Any:");
         TRANSLATION_MAP.put("ali.property.branch.banner_patterns", "Banner Patterns:");
+        TRANSLATION_MAP.put("ali.property.branch.bees", "Bees:");
         TRANSLATION_MAP.put("ali.property.branch.biomes", "Biomes:");
         TRANSLATION_MAP.put("ali.property.branch.block_predicate", "Block Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");

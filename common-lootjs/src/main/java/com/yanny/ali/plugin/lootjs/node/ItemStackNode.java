@@ -9,9 +9,9 @@ import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -69,7 +69,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public Either<ItemStack, TagKey<Item>> getModifiedItem() {
+    public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return Either.left(itemStack);
     }
 
