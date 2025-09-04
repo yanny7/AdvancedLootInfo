@@ -24,6 +24,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
@@ -90,10 +91,10 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
             Optional<ItemStack> left = h.item.left();
-            Optional<TagKey<Item>> right = h.item.right();
+            Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
             left.ifPresent(slotBuilder::addItemStack);
-            right.ifPresent((t) -> slotBuilder.addIngredients(Ingredient.of(t)));
+            right.ifPresent((t) -> slotBuilder.addIngredients(Ingredient.of((TagKey<Item>) t)));
         }
     }
 
@@ -173,12 +174,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotParams.add(new Holder(item, entry, rect));
             }
         };
     }
 
-    public record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+    public record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
     }
 }

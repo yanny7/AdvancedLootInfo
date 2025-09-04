@@ -10,6 +10,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
@@ -289,9 +291,17 @@ public abstract class AbstractServer {
         tradeMessages.add(new SyncTradeMessage(wanderingTraderNode, wanderingTraderItems));
     }
 
-    private static List<ItemStack> toItemStacks(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.getTag(tag)
-                .map(holders -> holders.stream().map(Holder::value).map(Item::getDefaultInstance).toList())
-                .orElse(Collections.emptyList());
+    private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<T> tag) {
+        //noinspection unchecked
+        Registry<T> registry = (Registry<T>)BuiltInRegistries.REGISTRY.get(tag.registry().location());
+
+        if (registry != null) {
+            return registry
+                    .getTag(tag)
+                    .map(holders -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
+                    .orElse(Collections.emptyList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
