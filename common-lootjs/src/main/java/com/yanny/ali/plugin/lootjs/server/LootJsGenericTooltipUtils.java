@@ -82,7 +82,7 @@ public class LootJsGenericTooltipUtils {
                     tooltip.add(getResourceLocationTooltip(utils, "ali.property.value.enchantment", byLocation.get(0).location()));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(getIntRangeTooltip(utils, "ali.property.levels", IntRange.range(min, max)));
+                        tooltip.add(getIntRangeTooltip(utils, "ali.property.value.levels", IntRange.range(min, max)));
                     }
 
                     return tooltip;
@@ -102,7 +102,7 @@ public class LootJsGenericTooltipUtils {
                     tooltip.add(getStringTooltip(utils, "ali.property.value.enchantment", byPattern.get(0).toString()));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(getIntRangeTooltip(utils, "ali.property.levels", IntRange.range(min, max)));
+                        tooltip.add(getIntRangeTooltip(utils, "ali.property.value.levels", IntRange.range(min, max)));
                     }
 
                     return tooltip;

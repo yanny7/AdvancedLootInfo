@@ -8,6 +8,8 @@
         "${mod_author}"
     ],
     "contact": {
+        "issues": "https://github.com/yanny7/advancedlootinfo/issues",
+        "sources": "https://github.com/yanny7/advancedlootinfo"
     },
     "license": "${license}",
     "icon": "logo.png",

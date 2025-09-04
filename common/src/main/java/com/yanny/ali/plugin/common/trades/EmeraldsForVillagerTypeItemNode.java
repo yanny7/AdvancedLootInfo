@@ -1,12 +1,8 @@
 package com.yanny.ali.plugin.common.trades;
 
-import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.ListNode;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
@@ -16,43 +12,30 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStringTooltip;
 
-public class EmeraldsForVillagerTypeItemNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "emerald_for_villager_type_item");
-
+public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrades.EmeraldsForVillagerTypeItem> {
     public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing, List<ITooltipNode> conditions) {
+        super(utils, listing, conditions);
+    }
+
+    @Override
+    public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing) {
+        List<IDataNode> nodes = new ArrayList<>();
+
         for (Map.Entry<VillagerType, Item> entry : listing.trades.entrySet()) {
             VillagerType type = entry.getKey();
             Item item = entry.getValue();
-            List<ITooltipNode> cond = new ArrayList<>(conditions);
+            List<ITooltipNode> cond = new ArrayList<>();
 
             cond.add(getStringTooltip(utils, "ali.property.value.villager_type", type.toString()));
-            addChildren(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
+            nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }
-    }
 
-    public EmeraldsForVillagerTypeItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        super(utils, buf);
-    }
-
-    @Override
-    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-
-    }
-
-    @Override
-    public List<ITooltipNode> getTooltip() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return ID;
+        return nodes;
     }
 
     @NotNull

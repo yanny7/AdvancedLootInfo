@@ -1,7 +1,7 @@
 modLoader = "javafml" #mandatory
 loaderVersion = "${neoforge_loader_version_range}" #mandatory
 license = "${license}" # Review your options at https://choosealicense.com/.
-issueTrackerURL="https://github.com/yanny7/advanced_loot_info/issues" #optional
+issueTrackerURL="https://github.com/yanny7/advancedlootinfo/issues" #optional
 
 [[mods]] #mandatory
 modId = "ali" #mandatory
