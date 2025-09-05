@@ -15,7 +15,6 @@ import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
@@ -27,10 +26,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<RecipeHolder<T>> {
@@ -80,8 +82,8 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
         recipe.setWidgetWrapper(new JeiWidgetWrapper(getRootWidget(utils, recipe.type().entry(), rect, CATEGORY_WIDTH)));
         recipe.setHolders(slotParams);
-        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
-        recipe.type().outputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(i));
+        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(i));
+        recipe.type().outputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(i));
 
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
@@ -92,10 +94,10 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
             Optional<ItemStack> left = h.item.left();
-            Optional<TagKey<Item>> right = h.item.right();
+            Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
             left.ifPresent(slotBuilder::add);
-            right.ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get(t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
+            right.ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get((TagKey<Item>) t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
         }
     }
 
@@ -173,12 +175,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotParams.add(new Holder(item, entry, rect));
             }
         };
     }
 
-    public record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+    public record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
     }
 }
