@@ -5,15 +5,13 @@ import com.almostreliable.lootjs.core.filters.IdFilter;
 import com.almostreliable.lootjs.core.filters.LootTableFilter;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.yanny.ali.api.IServerUtils;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TableLootModifier extends AbstractLootModifier<ResourceKey<LootTable>> {
+public class TableLootModifier extends AbstractLootModifier<ResourceLocation> {
     private final List<Predicate<ResourceLocation>> predicates = new ArrayList<>();
 
     public TableLootModifier(IServerUtils utils, LootModifier modifier, LootModifier.TableFiltered tableFiltered) {
@@ -37,12 +35,12 @@ public class TableLootModifier extends AbstractLootModifier<ResourceKey<LootTabl
     }
 
     @Override
-    public boolean predicate(ResourceKey<LootTable> value) {
-        return predicates.stream().anyMatch((p) -> p.test(value.location()));
+    public boolean predicate(ResourceLocation value) {
+        return predicates.stream().anyMatch((p) -> p.test(value));
     }
 
     @Override
-    public IType<ResourceKey<LootTable>> getType() {
+    public IType<ResourceLocation> getType() {
         return IType.LOOT_TABLE;
     }
 }
