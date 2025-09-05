@@ -1,0 +1,25 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.yanny.ali.mixin",
+  "refmap": "ali.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MixinAnvilRepair",
+    "MixinBarkForLogs",
+    "MixinEmeraldForFlowers",
+    "MixinEmeraldsForItems",
+    "MixinEmeraldsForTag",
+    "MixinEmeraldsForTwoTags",
+    "MixinEnchantedShearsForEmeralds",
+    "MixinItemsForEmeralds",
+    "MixinItemsForItems",
+    "MixinPopulatedBeehiveForEmeralds",
+    "MixinSaplingsForEmeralds",
+    "MixinTagForEmeralds",
+    "MixinTallFlowerForEmeralds"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
