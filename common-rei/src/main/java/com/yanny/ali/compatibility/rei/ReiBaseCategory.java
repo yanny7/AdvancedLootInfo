@@ -23,8 +23,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +76,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         widgets.add(widgetWrapper);
         slotWidgets.forEach((h) -> {
             Optional<ItemStack> left = h.item.left();
-            Optional<TagKey<Item>> right = h.item.right();
+            Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
             if (left.isPresent()) {
                 ItemStack itemStack = left.get();
@@ -85,7 +85,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 stack.tooltip(NodeUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
             } else if (right.isPresent()) {
-                TagKey<Item> tagKey = right.get();
+                TagKey<? extends ItemLike> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
                 ingredient.map((stack) -> stack.tooltip(NodeUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
@@ -101,13 +101,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     private IWidgetUtils getUtils(List<Holder> widgets) {
         return new ClientUtils() {
             @Override
-            public void addSlotWidget(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {
+            public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 widgets.add(new Holder(item, entry, rect));
             }
         };
     }
 
-    private record Holder(Either<ItemStack, TagKey<Item>> item, IDataNode entry, RelativeRect rect) {}
+    private record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {}
 
     private static class SlotCountRenderer implements Renderer {
         @Nullable

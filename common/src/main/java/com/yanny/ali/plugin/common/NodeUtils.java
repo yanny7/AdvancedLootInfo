@@ -4,12 +4,14 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.PlainTextContents;
-import net.minecraft.world.item.Item;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -145,7 +148,7 @@ public class NodeUtils {
         if (node instanceof ListNode listNode) {
             return listNode.nodes().stream().anyMatch(NodeUtils::hasItems);
         } else {
-            return node instanceof IItemNode itemNode;
+            return node instanceof IItemNode;
         }
     }
 
@@ -155,13 +158,26 @@ public class NodeUtils {
         }
     }
 
-    private static boolean predicateEither(IItemNode itemNode, Predicate<ItemStack> predicate) {
+    private static <T extends ItemLike> boolean predicateEither(IItemNode itemNode, Predicate<ItemStack> predicate) {
         return itemNode.getModifiedItem().map(
                 predicate::test,
-                (tagKey) -> BuiltInRegistries.ITEM
-                        .get(tagKey)
-                        .map((named) -> named.stream().map(Holder::value).map(Item::getDefaultInstance))
-                        .orElse(Stream.of())
-                        .allMatch(predicate));
+                (tagKey) -> {
+                    Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tagKey.registry().location());
+
+                    if (registry.isPresent()) {
+                        //noinspection unchecked
+                        Holder.Reference<? extends Registry<T>> reference = (Holder.Reference<? extends Registry<T>>) registry.get();
+                        //noinspection unchecked
+                        return reference
+                                .value()
+                                .get((TagKey<T>) tagKey)
+                                .map((holders) -> holders.stream().map(Holder::value))
+                                .orElse(Stream.of())
+                                .map((i) -> i.asItem().getDefaultInstance())
+                                .allMatch(predicate);
+                    } else {
+                        return false;
+                    }
+                });
     }
 }

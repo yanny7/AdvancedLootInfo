@@ -27,6 +27,7 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
@@ -284,7 +285,19 @@ public abstract class AbstractServer {
         tradeMessages.add(new SyncTradeMessage(wanderingTraderNode, wanderingTraderItems));
     }
 
-    private static List<ItemStack> toItemStacks(TagKey<Item> tag) {
-        return BuiltInRegistries.ITEM.get(tag).map((named) -> named.stream().map(Holder::value).map(Item::getDefaultInstance).toList()).orElse(Collections.emptyList());
+    private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<T> tag) {
+        Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tag.registry().location());
+
+        if (registry.isPresent()) {
+            //noinspection unchecked
+            Holder.Reference<? extends Registry<T>> reference = (Holder.Reference<? extends Registry<T>>) registry.get();
+            return reference
+                    .value()
+                    .get(tag)
+                    .map(holders -> holders.stream().map(Holder::value).map((i) -> i.asItem().getDefaultInstance()).toList())
+                    .orElse(Collections.emptyList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
