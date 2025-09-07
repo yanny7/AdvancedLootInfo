@@ -1,9 +1,6 @@
-## []
+## [1.3.3]
 
 - Display merchant offer if it's possible to determine it's content even without mod support
-- Added compatibility for Farmer's Delight mod
-- Added compatibility for Charm Forked mod
-- Added compatibility for Aether mod
 - Added zh_cn translation (ZetaY)
 
 ## [1.3.2]
