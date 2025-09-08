@@ -9,6 +9,11 @@ import vectorwing.farmersdelight.common.loot.function.CopySkilletFunction;
 @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "farmersdelight";
+    }
+
+    @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerFunctionTooltip(CopySkilletFunction.class, Plugin::getCopySkilletTooltip);
         registry.registerFunctionTooltip(CopyMealFunction.class, Plugin::getCopyMealTooltip);

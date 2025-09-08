@@ -2,7 +2,6 @@ package com.yanny.ali.platform;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IPlugin;
-import com.yanny.ali.manager.PluginHolder;
 import com.yanny.ali.mixin.MixinLootTableFabric;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
@@ -23,15 +22,17 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public List<PluginHolder> getPlugins() {
-        List<PluginHolder> plugins = new LinkedList<>();
+    public List<IPlugin> getPlugins() {
+        List<IPlugin> plugins = new LinkedList<>();
 
         for (EntrypointContainer<IPlugin> container : FabricLoader.getInstance().getEntrypointContainers("ali", IPlugin.class)) {
             try {
                 IPlugin plugin = container.getEntrypoint();
 
-                plugins.add(new PluginHolder(container.getProvider().getMetadata().getId(), plugin));
-                LOGGER.info("Registered plugin {}", plugin.getClass().getCanonicalName());
+                if (FabricLoader.getInstance().isModLoaded(plugin.getModId())) {
+                    plugins.add(plugin);
+                    LOGGER.info("Registered ALI plugin [{}] {}", plugin.getModId(), plugin.getClass().getCanonicalName());
+                }
             } catch (Throwable t) {
                 LOGGER.warn("Failed to load plugin with error: {}", t.getMessage());
             }

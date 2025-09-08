@@ -12,6 +12,11 @@ import com.yanny.ali.api.IServerRegistry;
 @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "aether";
+    }
+
+    @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerFunctionTooltip(SpawnTNT.class, TooltipUtils::getSpawnTntTooltip);
         registry.registerFunctionTooltip(SpawnXP.class, TooltipUtils::getSpawnXpTooltip);

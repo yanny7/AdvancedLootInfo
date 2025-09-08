@@ -8,6 +8,11 @@ import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 @AliEntrypoint
 public class FabricLootJsPlugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "fabric";
+    }
+
+    @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerIngredientTooltip(CustomIngredientImpl.class, LootJsIngredientTooltipUtils::getCustomIngredientTooltip);
     }

@@ -12,6 +12,11 @@ import svenhjol.charmony.helper.GenericTradeOffers;
 @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "charm";
+    }
+
+    @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerItemListing(BeekeeperTradeOffers.EmeraldsForFlowers.class, TradeUtils::getNode);
         registry.registerItemListing(BeekeeperTradeOffers.EnchantedShearsForEmeralds.class, TradeUtils::getNode);
