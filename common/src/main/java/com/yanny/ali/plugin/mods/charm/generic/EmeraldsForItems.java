@@ -1,0 +1,57 @@
+package com.yanny.ali.plugin.mods.charm.generic;
+
+import com.mojang.datafixers.util.Either;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.mods.ClassAccessor;
+import com.yanny.ali.plugin.mods.FieldAccessor;
+import com.yanny.ali.plugin.mods.IItemListing;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Pair;
+
+import java.util.List;
+
+@ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$EmeraldsForItems")
+public class EmeraldsForItems implements IItemListing {
+    @FieldAccessor("villagerXp")
+    private int villagerXp;
+    @FieldAccessor("baseCost")
+    private int baseCost;
+    @FieldAccessor("extraCost")
+    private int extraCost;
+    @FieldAccessor("baseEmeralds")
+    private int baseEmeralds;
+    @FieldAccessor("extraEmeralds")
+    private int extraEmeralds;
+    @FieldAccessor("maxUses")
+    private int maxUses;
+    @FieldAccessor("itemLike")
+    private ItemLike itemLike;
+
+    @NotNull
+    @Override
+    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+        return new ItemsToItemsNode(
+                utils,
+                Either.left(itemLike.asItem().getDefaultInstance()),
+                new RangeValue(baseCost, baseCost + extraCost),
+                Either.left(Items.EMERALD.getDefaultInstance()),
+                new RangeValue(baseEmeralds, baseEmeralds + extraEmeralds),
+                maxUses,
+                villagerXp,
+                0.05F,
+                conditions
+        );
+    }
+
+    @Override
+    public Pair<List<Item>, List<Item>> collectItems(IServerUtils utils) {
+        return new Pair<>(List.of(itemLike.asItem()), List.of(Items.EMERALD));
+    }
+}

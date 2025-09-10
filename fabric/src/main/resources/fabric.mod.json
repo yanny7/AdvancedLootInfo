@@ -28,9 +28,10 @@
         "ali": [
             "com.yanny.ali.plugin.Plugin",
             "com.yanny.ali.plugin.lootjs.LootJsPlugin",
-            "com.yanny.ali.plugin.aether.Plugin",
-            "com.yanny.ali.plugin.charm_forked.Plugin",
-            "com.yanny.ali.plugin.farmers_delight_refabricated.Plugin",
+            "com.yanny.ali.plugin.mods.aether.Plugin",
+            "com.yanny.ali.plugin.mods.charm.Plugin",
+            "com.yanny.ali.plugin.mods.farmers_delight.Plugin",
+            "com.yanny.ali.plugin.mods.porting_lib_tools.Plugin",
             "com.yanny.ali.plugin.FabricLootJsPlugin"
         ],
         "emi": [
@@ -47,8 +48,7 @@
         "ali.mixins.json",
         "ali.lootjs.mixins.json",
         "ali.fabric.mixins.json",
-        "ali.aether.mixins.json",
-        "ali.charm_forked.mixins.json"
+        "ali.aether.mixins.json"
     ],
     "depends": {
         "fabricloader": "*",

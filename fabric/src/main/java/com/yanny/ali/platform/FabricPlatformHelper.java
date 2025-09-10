@@ -35,6 +35,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
                 }
             } catch (Throwable t) {
                 LOGGER.warn("Failed to load plugin with error: {}", t.getMessage());
+                t.printStackTrace();
             }
         }
 
