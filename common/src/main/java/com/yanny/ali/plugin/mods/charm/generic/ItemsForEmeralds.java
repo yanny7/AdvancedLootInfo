@@ -19,19 +19,19 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$ItemsForEmeralds")
 public class ItemsForEmeralds implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseItems")
+    @FieldAccessor
     private int baseItems;
-    @FieldAccessor("extraItems")
+    @FieldAccessor
     private int extraItems;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("itemLike")
+    @FieldAccessor
     private ItemLike itemLike;
 
     @NotNull

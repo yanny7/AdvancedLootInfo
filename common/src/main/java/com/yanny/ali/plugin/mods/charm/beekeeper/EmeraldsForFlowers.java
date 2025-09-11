@@ -24,17 +24,17 @@ import java.util.List;
 public class EmeraldsForFlowers implements IItemListing {
     private static final TagKey<Item> BEEKEEPER_SELLS_FLOWERS = TagKey.create(Registries.ITEM, new ResourceLocation("charm", "beekeeper_sells_flowers"));
 
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseCost")
+    @FieldAccessor
     private int baseCost;
-    @FieldAccessor("extraCost")
+    @FieldAccessor
     private int extraCost;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
 
     @NotNull

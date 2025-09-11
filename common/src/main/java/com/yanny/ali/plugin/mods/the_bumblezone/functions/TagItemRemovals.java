@@ -17,7 +17,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.loot.functions.TagItemRemovals")
 public class TagItemRemovals extends ConditionalFunction implements IFunctionTooltip {
-    @FieldAccessor("tagKey")
+    @FieldAccessor
     private TagKey<Item> tagKey;
 
     public TagItemRemovals(LootItemConditionalFunction conditionalFunction) {

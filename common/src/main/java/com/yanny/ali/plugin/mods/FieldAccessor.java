@@ -8,7 +8,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface FieldAccessor {
-    String value();
-
     Class<?> clazz() default Object.class;
 }

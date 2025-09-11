@@ -16,9 +16,9 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("net.mehvahdjukaar.supplementaries.common.items.loot.RandomArrowFunction")
 public class RandomArrowFunction extends ConditionalFunction implements IFunctionTooltip {
-    @FieldAccessor("min")
+    @FieldAccessor
     private int min;
-    @FieldAccessor("max")
+    @FieldAccessor
     private int max;
 
     public RandomArrowFunction(LootItemConditionalFunction conditionalFunction) {

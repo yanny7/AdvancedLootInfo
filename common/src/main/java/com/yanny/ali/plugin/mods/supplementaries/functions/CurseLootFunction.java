@@ -18,10 +18,10 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("net.mehvahdjukaar.supplementaries.common.items.loot.CurseLootFunction")
 public class CurseLootFunction extends ConditionalFunction implements IFunctionTooltip {
-    @FieldAccessor("CURSES")
+    @FieldAccessor
     private List<Enchantment> CURSES;
 
-    @FieldAccessor("chance")
+    @FieldAccessor
     private double chance;
 
     public CurseLootFunction(LootItemConditionalFunction conditionalFunction) {

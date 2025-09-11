@@ -18,17 +18,17 @@ import java.util.List;
 
 @ClassAccessor("net.mehvahdjukaar.supplementaries.common.entities.trades.RandomAdventurerMapListing")
 public class RandomAdventurerMapListing implements IItemListing {
-    @FieldAccessor("emerald")
+    @FieldAccessor
     private Item emerald;
-    @FieldAccessor("priceMin")
+    @FieldAccessor
     private int priceMin;
-    @FieldAccessor("priceMax")
+    @FieldAccessor
     private int priceMax;
-    @FieldAccessor("priceSecondary")
+    @FieldAccessor
     private ItemStack priceSecondary;
-    @FieldAccessor("maxTrades")
+    @FieldAccessor
     private int maxTrades;
-    @FieldAccessor("priceMult")
+    @FieldAccessor
     private float priceMult;
 
     @Override

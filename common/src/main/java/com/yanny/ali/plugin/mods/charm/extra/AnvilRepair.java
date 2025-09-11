@@ -21,9 +21,9 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charm.feature.extra_trades.ExtraTrades$AnvilRepair")
 public class AnvilRepair implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
 
     @NotNull

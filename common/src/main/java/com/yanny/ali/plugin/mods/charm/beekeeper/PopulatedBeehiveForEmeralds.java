@@ -24,13 +24,13 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$PopulatedBeehiveForEmeralds")
 public class PopulatedBeehiveForEmeralds implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
 
     @NotNull

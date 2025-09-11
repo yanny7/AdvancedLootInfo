@@ -17,11 +17,11 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.loot.functions.HoneyCompassLocateStructure")
 public class HoneyCompassLocateStructure extends ConditionalFunction implements IFunctionTooltip {
-    @FieldAccessor("destination")
+    @FieldAccessor
     private TagKey<Structure> destination;
-    @FieldAccessor("searchRadius")
+    @FieldAccessor
     private int searchRadius;
-    @FieldAccessor("skipKnownStructures")
+    @FieldAccessor
     private boolean skipKnownStructures;
 
     public HoneyCompassLocateStructure(LootItemConditionalFunction conditionalFunction) {

@@ -21,19 +21,19 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$TagForEmeralds")
 public class TagForEmeralds<T extends ItemLike> implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseItems")
+    @FieldAccessor
     private int baseItems;
-    @FieldAccessor("extraItems")
+    @FieldAccessor
     private int extraItems;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("tag")
+    @FieldAccessor
     private TagKey<T> tag;
 
     @NotNull

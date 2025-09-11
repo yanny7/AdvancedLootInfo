@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.server.GenericTooltipUtils;
 
 @ClassAccessor("io.github.fabricators_of_create.porting_lib.tool.loot.CanToolPerformAction")
 public class CanToolPerformAction implements IConditionTooltip {
-    @FieldAccessor(value = "action", clazz = ToolAction.class)
+    @FieldAccessor(clazz = ToolAction.class)
     public ToolAction action;
 
     @Override
@@ -19,7 +19,7 @@ public class CanToolPerformAction implements IConditionTooltip {
 
     @ClassAccessor("io.github.fabricators_of_create.porting_lib.tool.ToolAction")
     public static class ToolAction {
-        @FieldAccessor("name")
+        @FieldAccessor
         public String name;
     }
 }

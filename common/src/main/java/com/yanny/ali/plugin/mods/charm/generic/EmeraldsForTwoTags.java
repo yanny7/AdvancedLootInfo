@@ -22,21 +22,21 @@ import java.util.stream.Stream;
 
 @ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$EmeraldsForTwoTags")
 public class EmeraldsForTwoTags<T extends ItemLike, U extends ItemLike> implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseCost")
+    @FieldAccessor
     private int baseCost;
-    @FieldAccessor("extraCost")
+    @FieldAccessor
     private int extraCost;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("tag1")
+    @FieldAccessor
     private TagKey<T> tag1;
-    @FieldAccessor("tag2")
+    @FieldAccessor
     private TagKey<U> tag2;
 
     @NotNull

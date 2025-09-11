@@ -18,15 +18,15 @@ import java.util.List;
 
 @ClassAccessor("dev.sterner.culturaldelights.CulturalDelights$EmeraldToItemOffer")
 public class EmeraldToItemOffer implements IItemListing {
-    @FieldAccessor("sell")
+    @FieldAccessor
     private ItemStack sell;
-    @FieldAccessor("price")
+    @FieldAccessor
     private int price;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("experience")
+    @FieldAccessor
     private int experience;
-    @FieldAccessor("multiplier")
+    @FieldAccessor
     private float multiplier;
 
     @Override

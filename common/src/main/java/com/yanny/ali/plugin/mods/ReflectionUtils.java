@@ -22,7 +22,7 @@ public class ReflectionUtils {
 
                     if (fieldAnnotation != null) {
                         // Find the corresponding field in the inaccessible class
-                        Field targetField = targetClass.getDeclaredField(fieldAnnotation.value());
+                        Field targetField = targetClass.getDeclaredField(myField.getName());
 
                         targetField.setAccessible(true);
                         myField.setAccessible(true);

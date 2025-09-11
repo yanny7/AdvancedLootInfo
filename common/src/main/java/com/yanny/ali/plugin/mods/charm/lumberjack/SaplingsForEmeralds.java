@@ -21,15 +21,15 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers$SaplingsForEmeralds")
 public class SaplingsForEmeralds implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("saplings")
+    @FieldAccessor
     private List<Item> saplings;
 
     @NotNull

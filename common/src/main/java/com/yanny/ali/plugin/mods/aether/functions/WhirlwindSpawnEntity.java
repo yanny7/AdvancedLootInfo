@@ -17,9 +17,9 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("com.aetherteam.aether.loot.functions.WhirlwindSpawnEntity")
 public class WhirlwindSpawnEntity extends ConditionalFunction implements IFunctionTooltip {
-    @FieldAccessor("entityType")
+    @FieldAccessor
     private EntityType<?> entityType;
-    @FieldAccessor("count")
+    @FieldAccessor
     private int count;
 
     public WhirlwindSpawnEntity(LootItemConditionalFunction conditionalFunction) {

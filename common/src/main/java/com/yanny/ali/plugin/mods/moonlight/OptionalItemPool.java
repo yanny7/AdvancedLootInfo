@@ -19,7 +19,7 @@ import java.util.List;
 
 @ClassAccessor("net.mehvahdjukaar.moonlight.core.loot.OptionalItemPool")
 public class OptionalItemPool extends SingletonContainer implements IEntry {
-    @FieldAccessor("item")
+    @FieldAccessor
     @Nullable
     private Item item;
 

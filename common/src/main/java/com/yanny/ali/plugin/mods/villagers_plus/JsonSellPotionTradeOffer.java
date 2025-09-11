@@ -27,17 +27,17 @@ import java.util.List;
 public class JsonSellPotionTradeOffer implements IItemListing {
     private static final List<Potion> POTIONS = BuiltInRegistries.POTION.stream().filter((potion) -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
 
-    @FieldAccessor("buy")
+    @FieldAccessor
     private ItemStack buy;
-    @FieldAccessor("sell")
+    @FieldAccessor
     private ItemStack sell;
-    @FieldAccessor("currency")
+    @FieldAccessor
     private ItemStack currency;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("experience")
+    @FieldAccessor
     private int experience;
-    @FieldAccessor("multiplier")
+    @FieldAccessor
     private float multiplier;
 
     @Override

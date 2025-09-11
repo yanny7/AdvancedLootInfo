@@ -23,13 +23,13 @@ import java.util.List;
 public class TallFlowerForEmeralds implements IItemListing {
     private static final List<Item> FLOWERS = List.of(Items.SUNFLOWER, Items.PEONY, Items.LILAC, Items.ROSE_BUSH);
 
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
 
     @NotNull

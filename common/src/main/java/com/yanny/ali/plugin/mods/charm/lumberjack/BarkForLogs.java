@@ -21,13 +21,13 @@ import java.util.*;
 
 @ClassAccessor("svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers$BarkForLogs")
 public class BarkForLogs implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseCost")
+    @FieldAccessor
     private int baseCost;
-    @FieldAccessor("extraCost")
+    @FieldAccessor
     private int extraCost;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
 
     @NotNull

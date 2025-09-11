@@ -18,21 +18,21 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$ItemsForItems")
 public class ItemsForItems implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseInput")
+    @FieldAccessor
     private int baseInput;
-    @FieldAccessor("extraInput")
+    @FieldAccessor
     private int extraInput;
-    @FieldAccessor("baseOutput")
+    @FieldAccessor
     private int baseOutput;
-    @FieldAccessor("extraOutput")
+    @FieldAccessor
     private int extraOutput;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
-    @FieldAccessor("inputItem")
+    @FieldAccessor
     private ItemLike inputItem;
-    @FieldAccessor("outputItem")
+    @FieldAccessor
     private ItemLike outputItem;
 
     @NotNull

@@ -25,13 +25,13 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntRangeTooltip
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$EnchantedShearsForEmeralds")
 public class EnchantedShearsForEmeralds implements IItemListing {
-    @FieldAccessor("villagerXp")
+    @FieldAccessor
     private int villagerXp;
-    @FieldAccessor("baseEmeralds")
+    @FieldAccessor
     private int baseEmeralds;
-    @FieldAccessor("extraEmeralds")
+    @FieldAccessor
     private int extraEmeralds;
-    @FieldAccessor("maxUses")
+    @FieldAccessor
     private int maxUses;
 
     @NotNull
