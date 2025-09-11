@@ -14,7 +14,6 @@ mixin {
     config("${mod_id}.mixins.json")
     config("${mod_id}.lootjs.mixins.json")
     config("${mod_id}.forge.mixins.json")
-    config("${mod_id}.aether.mixins.json")
 }
 
 minecraft {

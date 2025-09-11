@@ -1,3 +1,11 @@
+## []
+
+- Added compatibility for Supplementaries
+- Added compatibility for Moonlight
+- Added compatibility for The Bumblezone
+- Added compatibility for Villagers Plus
+- Added compatibility for Cultural Delights
+
 ## [1.3.3]
 
 - Display merchant offer if it's possible to determine it's content even without mod support

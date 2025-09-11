@@ -10,6 +10,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.slf4j.Logger;
@@ -29,12 +30,12 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<LootItemFunction> functionClass = (Class<LootItemFunction>) Class.forName(classAnnotation.value());
                 registry.registerFunctionTooltip(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
-            } catch (ClassNotFoundException e) {
-                LOGGER.warn("Failed to register simple function tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register function tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
                 e.printStackTrace();
             }
         } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for function tooltip" + clazz.getName());
+            throw new IllegalStateException("Missing ClassAccessor annotation for function tooltip " + clazz.getName());
         }
     }
 
@@ -46,12 +47,29 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<LootItemCondition> conditionClass = (Class<LootItemCondition>) Class.forName(classAnnotation.value());
                 registry.registerConditionTooltip(conditionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 LOGGER.warn("Failed to register condition tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
                 e.printStackTrace();
             }
         } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for condition tooltip" + clazz.getName());
+            throw new IllegalStateException("Missing ClassAccessor annotation for condition tooltip " + clazz.getName());
+        }
+    }
+
+    public static <T extends IEntry> void registerEntry(IServerRegistry registry, Class<T> clazz) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                //noinspection unchecked
+                Class<LootPoolEntryContainer> conditionClass = (Class<LootPoolEntryContainer>) Class.forName(classAnnotation.value());
+                registry.registerEntry(conditionClass, (u, e, r, w, f, c) -> ReflectionUtils.copyClassData(clazz, e).create(u, r, w, f, c));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register entry for {} with error {}", classAnnotation.value(), e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for entry " + clazz.getName());
         }
     }
 
@@ -63,7 +81,7 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<VillagerTrades.ItemListing> conditionClass = (Class<VillagerTrades.ItemListing>) Class.forName(classAnnotation.value());
                 registry.registerItemListing(conditionClass, (u, c, t) -> ReflectionUtils.copyClassData(clazz, c).getNode(u, t));
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 LOGGER.warn("Failed to register item listing for {} with error {}", classAnnotation.value(), e.getMessage());
                 e.printStackTrace();
             }
@@ -80,7 +98,7 @@ public class PluginUtils {
                 //noinspection unchecked
                 Class<VillagerTrades.ItemListing> conditionClass = (Class<VillagerTrades.ItemListing>) Class.forName(classAnnotation.value());
                 registry.registerItemListingCollector(conditionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).collectItems(u));
-            } catch (ClassNotFoundException e) {
+            } catch (Throwable e) {
                 LOGGER.warn("Failed to register item listing collector for {} with error {}", classAnnotation.value(), e.getMessage());
                 e.printStackTrace();
             }

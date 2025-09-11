@@ -628,6 +628,12 @@ public class GenericTooltipUtils {
 
     @Unmodifiable
     @NotNull
+    public static ITooltipNode getDoubleTooltip(IServerUtils ignoredUtils, String key, Double value) {
+        return new TooltipNode(translatable(key, value(value)));
+    }
+
+    @Unmodifiable
+    @NotNull
     public static ITooltipNode getEnumTooltip(IServerUtils ignoredUtils, String key, Enum<?> value) {
         return new TooltipNode(translatable(key, value(value.name())));
     }

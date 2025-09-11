@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.aether.conditions;
+package com.yanny.ali.plugin.mods.the_bumblezone.conditions;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -8,10 +8,10 @@ import com.yanny.ali.plugin.mods.IConditionTooltip;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
-@ClassAccessor("com.aetherteam.aether.loot.conditions.ConfigEnabled")
-public class ConfigEnabled implements IConditionTooltip {
+@ClassAccessor("com.telepathicgrunt.the_bumblezone.loot.conditions.EssenceOnlySpawn")
+public class EssenceOnlySpawn implements IConditionTooltip {
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return new TooltipNode(translatable("ali.type.condition.config_enabled"));
+        return new TooltipNode(translatable("ali.type.condition.essence_only_spawn"));
     }
 }

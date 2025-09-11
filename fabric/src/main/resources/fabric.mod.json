@@ -32,6 +32,11 @@
             "com.yanny.ali.plugin.mods.charm.Plugin",
             "com.yanny.ali.plugin.mods.farmers_delight.Plugin",
             "com.yanny.ali.plugin.mods.porting_lib_tools.Plugin",
+            "com.yanny.ali.plugin.mods.supplementaries.Plugin",
+            "com.yanny.ali.plugin.mods.moonlight.Plugin",
+            "com.yanny.ali.plugin.mods.the_bumblezone.Plugin",
+            "com.yanny.ali.plugin.mods.villagers_plus.Plugin",
+            "com.yanny.ali.plugin.mods.cultural_delights.Plugin",
             "com.yanny.ali.plugin.FabricLootJsPlugin"
         ],
         "emi": [
@@ -47,8 +52,7 @@
     "mixins": [
         "ali.mixins.json",
         "ali.lootjs.mixins.json",
-        "ali.fabric.mixins.json",
-        "ali.aether.mixins.json"
+        "ali.fabric.mixins.json"
     ],
     "depends": {
         "fabricloader": "*",

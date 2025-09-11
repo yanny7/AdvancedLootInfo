@@ -57,6 +57,22 @@ dependencies {
     // Farmer's Delight
     modImplementation explosion.fabric("curse.maven:farmers-delight-refabricated-993166:6626608")
 
+    // Supplementaries
+    modCompileOnly "curse.maven:supplementaries-412082:6889002"
+    modCompileOnly "curse.maven:selene-499980:6978610"
+
+    // Sawmill
+    modCompileOnly "curse.maven:sawmill-964817:6948520"
+
+    // The Bumblezone
+    modCompileOnly "curse.maven:the-bumblezone-fabric-363949:6960934"
+
+    // Villagers plus
+    modCompileOnly "curse.maven:villagersplus-fabric-809542:4996993"
+
+    // Cultural Delights
+    modCompileOnly "curse.maven:cultural-delights-fabric-807107:5510598"
+
     // Testing
 //    modLocalRuntime "curse.maven:supplementaries-412082:6889002"
 //    modLocalRuntime "curse.maven:selene-499980:6902843"
