@@ -6,10 +6,12 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,7 +26,7 @@ import java.util.List;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntRangeTooltip;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$EnchantedShearsForEmeralds")
-public class EnchantedShearsForEmeralds implements IItemListing {
+public class EnchantedShearsForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;
     @FieldAccessor
@@ -33,6 +35,10 @@ public class EnchantedShearsForEmeralds implements IItemListing {
     private int extraEmeralds;
     @FieldAccessor
     private int maxUses;
+
+    public EnchantedShearsForEmeralds(VillagerTrades.ItemListing parent) {
+        super(parent);
+    }
 
     @NotNull
     @Override

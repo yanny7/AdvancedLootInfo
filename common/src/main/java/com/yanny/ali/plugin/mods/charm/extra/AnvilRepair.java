@@ -7,9 +7,11 @@ import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
+import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
@@ -20,11 +22,15 @@ import java.util.Collections;
 import java.util.List;
 
 @ClassAccessor("svenhjol.charm.feature.extra_trades.ExtraTrades$AnvilRepair")
-public class AnvilRepair implements IItemListing {
+public class AnvilRepair extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;
     @FieldAccessor
     private int maxUses;
+
+    public AnvilRepair(VillagerTrades.ItemListing parent) {
+        super(parent);
+    }
 
     @NotNull
     @Override

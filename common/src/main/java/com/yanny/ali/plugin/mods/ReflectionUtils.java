@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class ReflectionUtils {
-    public static <T> T copyClassData(Class<T> myClass, Object targetObject) {
+    public static <T extends BaseAccessor<?>> T copyClassData(Class<T> myClass, Object targetObject) {
         try {
             ClassAccessor classAnnotation = myClass.getAnnotation(ClassAccessor.class);
 
@@ -33,7 +33,8 @@ public class ReflectionUtils {
                         if (fieldAnnotation.clazz() == Object.class) {
                             myField.set(myObject, value);
                         } else {
-                            myField.set(myObject, copyClassData(myField.getType(), value));
+                            //noinspection unchecked
+                            myField.set(myObject, copyClassData((Class<? extends BaseAccessor<?>>) myField.getType(), value));
                         }
                     }
                 }

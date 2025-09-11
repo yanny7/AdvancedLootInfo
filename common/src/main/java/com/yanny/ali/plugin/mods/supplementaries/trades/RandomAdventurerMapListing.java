@@ -6,9 +6,11 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,7 +19,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 
 @ClassAccessor("net.mehvahdjukaar.supplementaries.common.entities.trades.RandomAdventurerMapListing")
-public class RandomAdventurerMapListing implements IItemListing {
+public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private Item emerald;
     @FieldAccessor
@@ -30,6 +32,10 @@ public class RandomAdventurerMapListing implements IItemListing {
     private int maxTrades;
     @FieldAccessor
     private float priceMult;
+
+    public RandomAdventurerMapListing(VillagerTrades.ItemListing parent) {
+        super(parent);
+    }
 
     @Override
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {

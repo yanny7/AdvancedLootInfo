@@ -6,11 +6,9 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
-import com.yanny.ali.plugin.mods.ClassAccessor;
-import com.yanny.ali.plugin.mods.FieldAccessor;
-import com.yanny.ali.plugin.mods.IItemListing;
-import com.yanny.ali.plugin.mods.PluginUtils;
+import com.yanny.ali.plugin.mods.*;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -20,7 +18,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 
 @ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$TagForEmeralds")
-public class TagForEmeralds<T extends ItemLike> implements IItemListing {
+public class TagForEmeralds<T extends ItemLike> extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;
     @FieldAccessor
@@ -35,6 +33,10 @@ public class TagForEmeralds<T extends ItemLike> implements IItemListing {
     private int maxUses;
     @FieldAccessor
     private TagKey<T> tag;
+
+    public TagForEmeralds(VillagerTrades.ItemListing parent) {
+        super(parent);
+    }
 
     @NotNull
     @Override

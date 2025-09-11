@@ -22,7 +22,7 @@ import java.util.stream.StreamSupport;
 public class PluginUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static <T extends IFunctionTooltip> void registerFunctionTooltip(IServerRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IFunctionTooltip> void registerFunctionTooltip(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
@@ -39,7 +39,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends IConditionTooltip> void registerConditionTooltip(IServerRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IConditionTooltip> void registerConditionTooltip(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
@@ -56,7 +56,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends IEntry> void registerEntry(IServerRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IEntry> void registerEntry(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
@@ -73,7 +73,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends IItemListing> void registerItemListing(IServerRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IItemListing> void registerItemListing(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
@@ -90,7 +90,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends IItemListing> void registerItemListingCollector(IServerRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IItemListing> void registerItemListingCollector(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {

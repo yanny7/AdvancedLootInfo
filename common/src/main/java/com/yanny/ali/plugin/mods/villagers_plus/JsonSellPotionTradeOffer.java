@@ -6,12 +6,14 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -24,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 @ClassAccessor("com.lion.villagersplus.tradeoffers.trades.JsonSellPotionTradeOffer$Factory")
-public class JsonSellPotionTradeOffer implements IItemListing {
+public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     private static final List<Potion> POTIONS = BuiltInRegistries.POTION.stream().filter((potion) -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
 
     @FieldAccessor
@@ -39,6 +41,10 @@ public class JsonSellPotionTradeOffer implements IItemListing {
     private int experience;
     @FieldAccessor
     private float multiplier;
+
+    public JsonSellPotionTradeOffer(VillagerTrades.ItemListing parent) {
+        super(parent);
+    }
 
     @Override
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
