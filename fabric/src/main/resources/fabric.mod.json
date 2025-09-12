@@ -37,6 +37,7 @@
             "com.yanny.ali.plugin.mods.the_bumblezone.Plugin",
             "com.yanny.ali.plugin.mods.villagers_plus.Plugin",
             "com.yanny.ali.plugin.mods.cultural_delights.Plugin",
+            "com.yanny.ali.plugin.mods.sawmill.Plugin",
             "com.yanny.ali.plugin.FabricLootJsPlugin"
         ],
         "emi": [

@@ -5,6 +5,7 @@
 - Added compatibility for The Bumblezone
 - Added compatibility for Villagers Plus
 - Added compatibility for Cultural Delights
+- Added compatibility for Sawmill
 
 ## [1.3.3]
 
