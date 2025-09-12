@@ -11,6 +11,7 @@
 - Added compatibility for Deeper And Darker
 - Added compatibility for Repurposed Structures
 - Fixed crash when registry is unavailable
+- Fixed unwanted modification of components
 
 ## [1.3.3]
 

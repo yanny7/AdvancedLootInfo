@@ -665,7 +665,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getComponentTooltip(IServerUtils ignoredUtils, String key, Component component) {
-        return new TooltipNode(translatable(key, value(component)));
+        return new TooltipNode(translatable(key, value(component.copy())));
     }
 
     @NotNull
