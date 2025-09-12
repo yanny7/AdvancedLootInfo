@@ -80,6 +80,9 @@ public class LanguageHolder {
         // The Bumblezone
         TRANSLATION_MAP.put("ali.type.condition.essence_only_spawn", "Essence Only Spawn");
 
+        // Moonlight
+        TRANSLATION_MAP.put("ali.type.condition.optional_property", "Optional Property");
+
         /*
          * MODIFIERS
          */
@@ -134,6 +137,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.honey_compass_locate_structure", "Honey Compass Locate Structure");
         TRANSLATION_MAP.put("ali.type.function.tag_item_removals", "Tag Item Removals");
         TRANSLATION_MAP.put("ali.type.function.uniquify_if_has_items", "Uniquify If Has Items");
+
+        // Deeper and Darker
+        TRANSLATION_MAP.put("ali.type.function.set_painting_variant", "Set Painting Variant");
 
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");

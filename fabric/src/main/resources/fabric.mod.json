@@ -40,6 +40,7 @@
             "com.yanny.ali.plugin.mods.sawmill.Plugin",
             "com.yanny.ali.plugin.mods.hybrid_aquatic.Plugin",
             "com.yanny.ali.plugin.mods.snow_real_magic.Plugin",
+            "com.yanny.ali.plugin.mods.deeper_and_darker.Plugin",
             "com.yanny.ali.plugin.FabricLootJsPlugin"
         ],
         "emi": [

@@ -8,6 +8,7 @@
 - Added compatibility for Sawmill
 - Added compatibility for Hybrid Aquatic
 - Added compatibility for Snow! Real Magic!
+- Added compatibility for Deeper And Darker
 
 ## [1.3.3]
 
