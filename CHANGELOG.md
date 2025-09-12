@@ -10,6 +10,7 @@
 - Added compatibility for Snow! Real Magic!
 - Added compatibility for Deeper And Darker
 - Added compatibility for Repurposed Structures
+- Fixed crash when registry is unavailable
 
 ## [1.3.3]
 

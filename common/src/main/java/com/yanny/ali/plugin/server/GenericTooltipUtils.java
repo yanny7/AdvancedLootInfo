@@ -647,7 +647,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static <T> ITooltipNode getBuiltInRegistryTooltip(IServerUtils utils, String key, Registry<T> registry, T value) {
-        return getResourceLocationTooltip(utils, key, Objects.requireNonNull(registry.getKey(value)));
+        return getOptionalTooltip(utils, key, registry.getKey(value), GenericTooltipUtils::getResourceLocationTooltip);
     }
 
     @Unmodifiable
