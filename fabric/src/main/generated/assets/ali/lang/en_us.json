@@ -10,6 +10,7 @@
   "ali.enum.group_type.dynamic": "Dynamic block-specific drops",
   "ali.enum.group_type.empty": "Drops nothing",
   "ali.enum.group_type.missing": "Not implemented",
+  "ali.enum.group_type.normalize": "Drops block buried in snow",
   "ali.enum.group_type.random": "Selects random entry",
   "ali.enum.group_type.sequence": "Selects entries sequentially until first failed",
   "ali.property.branch.advancements": "Advancements:",

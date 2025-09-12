@@ -7,6 +7,7 @@
 - Added compatibility for Cultural Delights
 - Added compatibility for Sawmill
 - Added compatibility for Hybrid Aquatic
+- Added compatibility for Snow! Real Magic!
 
 ## [1.3.3]
 

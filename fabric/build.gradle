@@ -74,6 +74,9 @@ dependencies {
 
     // Hybrid Aquatic
     modCompileOnly "curse.maven:hybrid-aquatic-834427:6497302"
+
+    // Snow! Real Magic!
+    modCompileOnly "curse.maven:snow-real-magic-fabric-560441:6779484"
 }
 
 loom {

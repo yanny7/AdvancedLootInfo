@@ -146,6 +146,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
         TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
 
+        // Snow Real Magic
+        TRANSLATION_MAP.put("ali.enum.group_type.normalize", "Drops block buried in snow");
+
         TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");
         TRANSLATION_MAP.put("ali.property.branch.all", "All:");
         TRANSLATION_MAP.put("ali.property.branch.any", "Any:");

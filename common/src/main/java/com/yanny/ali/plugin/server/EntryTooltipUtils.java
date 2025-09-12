@@ -54,12 +54,14 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static List<ITooltipNode> getDynamicTooltip(DynamicLoot entry, float chance, int sumWeight) {
+    public static List<ITooltipNode> getDynamicTooltip(IServerUtils utils, DynamicLoot entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<ITooltipNode> tooltip = new ArrayList<>();
 
         tooltip.add(new TooltipNode(translatable("ali.enum.group_type.dynamic")));
         tooltip.add(getQualityTooltip(entry.quality));
         tooltip.add(getChanceTooltip(getBaseMap(chance * entry.weight / sumWeight * 100)));
+        tooltip.addAll(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
+        tooltip.addAll(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
 
         return tooltip;
     }
