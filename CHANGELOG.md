@@ -9,6 +9,7 @@
 - Added compatibility for Hybrid Aquatic
 - Added compatibility for Snow! Real Magic!
 - Added compatibility for Deeper And Darker
+- Added compatibility for Repurposed Structures
 
 ## [1.3.3]
 

@@ -80,6 +80,9 @@ dependencies {
 
     // Deeper and Darker
     modCompileOnly "curse.maven:deeperdarker-659011:6007575"
+
+    // Repurposed Structures
+    modCompileOnly "curse.maven:repurposed-structures-fabric-391366:6797350"
 }
 
 loom {
