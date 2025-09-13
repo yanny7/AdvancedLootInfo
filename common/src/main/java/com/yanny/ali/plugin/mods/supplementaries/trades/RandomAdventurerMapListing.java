@@ -10,6 +10,7 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -42,7 +43,7 @@ public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.Item
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
         ItemStack map = Items.MAP.getDefaultInstance();
 
-        map.setHoverName(Component.translatable("filled_map.adventure"));
+        map.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.adventure"));
         return new ItemsToItemsNode(
                 utils,
                 Either.left(emerald.getDefaultInstance()),

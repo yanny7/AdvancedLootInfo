@@ -7,7 +7,7 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -35,13 +35,13 @@ public class NormalizeNode implements IDataNode, IItemNode {
         this.chance = chance;
     }
 
-    public NormalizeNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public NormalizeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         chance = 1;
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
     }
 

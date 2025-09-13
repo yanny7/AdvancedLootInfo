@@ -10,6 +10,8 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
+import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -18,7 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.saveddata.maps.MapDecoration;
+import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
     @FieldAccessor
     private String displayName;
     @FieldAccessor
-    private MapDecoration.Type destinationType;
+    private MapDecorationType destinationType;
     @FieldAccessor
     private int maxUses;
     @FieldAccessor
@@ -61,9 +63,9 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
             tooltip.add(getResourceKeyTooltip(utils, "ali.property.value.destination", destination));
         }
 
-        tooltip.add(getEnumTooltip(utils, "ali.property.value.map_decoration", destinationType));
+        tooltip.add(RegistriesTooltipUtils.getMapDecorationTypeTooltip(utils, "ali.property.value.map_decoration", destinationType));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.search_radius", spawnRegionSearchRadius));
-        map.setHoverName(Component.translatable(displayName));
+        map.set(DataComponents.ITEM_NAME, Component.translatable(displayName));
 
         return new ItemsToItemsNode(
                 utils,

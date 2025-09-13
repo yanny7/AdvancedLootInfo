@@ -18,7 +18,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import oshi.util.tuples.Pair;
 
