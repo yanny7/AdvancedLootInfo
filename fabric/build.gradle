@@ -44,43 +44,43 @@ dependencies {
     modImplementation "curse.maven:architectury-api-419699:5137936"
     modImplementation "curse.maven:lootjs-570630:5404564"
 
-    // Aether
+    // Aether https://www.curseforge.com/minecraft/mc-mods/aether
     modCompileOnly "curse.maven:aether-255308:6800393"
 
-    // Charm Forked
+    // Charm Forked https://www.curseforge.com/minecraft/mc-mods/charm-forked
     modCompileOnly "curse.maven:charm-forked-1016482:6492694"
 
-    // Farmer's Delight
+    // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight-refabricated
     modCompileOnly "curse.maven:farmers-delight-refabricated-993166:6626608"
 
-    // Supplementaries
+    // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
     modCompileOnly "curse.maven:supplementaries-412082:6889002"
 
-    // Moonlight
+    // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
     modCompileOnly "curse.maven:selene-499980:6978610"
 
-    // Sawmill
+    // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
     modCompileOnly "curse.maven:sawmill-964817:6948520"
 
-    // The Bumblezone
+    // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-fabric
     modCompileOnly "curse.maven:the-bumblezone-fabric-363949:6960934"
 
-    // Villagers plus
+    // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-fabric
     modCompileOnly "curse.maven:villagersplus-fabric-809542:4996993"
 
-    // Cultural Delights
+    // Cultural Delights https://www.curseforge.com/minecraft/mc-mods/cultural-delights-fabric
     modCompileOnly "curse.maven:cultural-delights-fabric-807107:5510598"
 
-    // Hybrid Aquatic
+    // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
     modCompileOnly "curse.maven:hybrid-aquatic-834427:6497302"
 
-    // Snow! Real Magic!
+    // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic-fabric
     modCompileOnly "curse.maven:snow-real-magic-fabric-560441:6779484"
 
-    // Deeper and Darker
+    // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
     modCompileOnly "curse.maven:deeperdarker-659011:6007575"
 
-    // Repurposed Structures
+    // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures-fabric
     modCompileOnly "curse.maven:repurposed-structures-fabric-391366:6797350"
 }
 
