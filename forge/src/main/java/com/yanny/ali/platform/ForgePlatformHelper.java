@@ -3,7 +3,6 @@ package com.yanny.ali.platform;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
-import com.yanny.ali.manager.PluginHolder;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.ModFileScanData;

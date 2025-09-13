@@ -29,7 +29,7 @@ public class TagItemRemovals extends ConditionalFunction implements IFunctionToo
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.tag_item_removals"));
 
         tooltip.add(getTagKeyTooltip(utils, "ali.property.value.tag", tagKey));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

@@ -32,7 +32,7 @@ public class WhirlwindSpawnEntity extends ConditionalFunction implements IFuncti
 
         tooltip.add(RegistriesTooltipUtils.getEntityTypeTooltip(utils, "ali.property.value.entity_type", entityType));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.count", count));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

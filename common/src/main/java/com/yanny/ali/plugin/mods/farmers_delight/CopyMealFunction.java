@@ -23,7 +23,7 @@ public class CopyMealFunction extends ConditionalFunction implements IFunctionTo
     public ITooltipNode getTooltip(IServerUtils utils) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.copy_meal"));
 
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

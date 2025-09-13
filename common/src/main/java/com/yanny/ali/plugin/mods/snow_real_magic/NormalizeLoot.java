@@ -9,7 +9,6 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -21,8 +20,8 @@ public class NormalizeLoot extends SingletonContainer implements IEntry {
 
     @Override
     public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(this.conditions)).toList();
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(this.functions)).toList();
+        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), this.conditions.stream()).toList();
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), this.functions.stream()).toList();
         float c = chance * weight / sumWeight;
 
         return new NormalizeNode(utils, c, quality, allFunctions, allConditions);

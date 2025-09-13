@@ -11,8 +11,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.loot.functions.HoneyCompassLocateStructure")
@@ -35,7 +33,7 @@ public class HoneyCompassLocateStructure extends ConditionalFunction implements 
         tooltip.add(getTagKeyTooltip(utils, "ali.property.value.destination", destination));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.search_radius", searchRadius));
         tooltip.add(getBooleanTooltip(utils, "ali.property.value.skip_known_structures", skipKnownStructures));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

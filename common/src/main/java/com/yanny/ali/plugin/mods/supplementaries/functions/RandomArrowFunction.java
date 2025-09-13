@@ -30,7 +30,7 @@ public class RandomArrowFunction extends ConditionalFunction implements IFunctio
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.random_arrow"));
 
         tooltip.add(getIntRangeTooltip(utils, "ali.property.value.amount", IntRange.range(min, max)));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

@@ -23,7 +23,7 @@ public class DoubleDrops extends ConditionalFunction implements IFunctionTooltip
     public ITooltipNode getTooltip(IServerUtils utils) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.double_drops"));
 
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

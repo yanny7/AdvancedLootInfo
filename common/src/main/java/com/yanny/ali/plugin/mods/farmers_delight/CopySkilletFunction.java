@@ -23,7 +23,7 @@ public class CopySkilletFunction extends ConditionalFunction implements IFunctio
     public ITooltipNode getTooltip(IServerUtils utils) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.copy_skillet"));
 
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

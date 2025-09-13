@@ -34,7 +34,7 @@ public class CurseLootFunction extends ConditionalFunction implements IFunctionT
 
         tooltip.add(getDoubleTooltip(utils, "ali.property.value.chance", chance));
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.enchantments", "ali.property.value.null", CURSES, RegistriesTooltipUtils::getEnchantmentTooltip));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

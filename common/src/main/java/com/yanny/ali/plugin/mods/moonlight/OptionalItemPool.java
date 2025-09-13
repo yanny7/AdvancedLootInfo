@@ -15,7 +15,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -31,8 +30,8 @@ public class OptionalItemPool extends SingletonContainer implements IEntry {
 
     @Override
     public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(this.conditions)).toList();
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(this.functions)).toList();
+        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), this.conditions.stream()).toList();
+        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), this.functions.stream()).toList();
         LootItem lootItem = (LootItem) LootItem.lootTableItem(item != null ? item : Items.AIR).setWeight(weight).setQuality(quality).build();
 
         return new ItemNode(utils, lootItem, chance, sumWeight, allFunctions, allConditions);

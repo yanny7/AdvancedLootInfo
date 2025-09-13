@@ -23,7 +23,7 @@ public class DropContainerItems extends ConditionalFunction implements IFunction
     public ITooltipNode getTooltip(IServerUtils utils) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.drop_container_items"));
 
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }
