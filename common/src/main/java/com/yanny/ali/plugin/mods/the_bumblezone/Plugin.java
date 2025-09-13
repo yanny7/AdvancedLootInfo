@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.mods.the_bumblezone;
 
-import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
@@ -10,7 +9,7 @@ import com.yanny.ali.plugin.mods.the_bumblezone.functions.HoneyCompassLocateStru
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.TagItemRemovals;
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.UniquifyIfHasItems;
 
-@AliEntrypoint
+//@AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

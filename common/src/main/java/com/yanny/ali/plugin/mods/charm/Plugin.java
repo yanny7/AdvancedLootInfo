@@ -1,6 +1,5 @@
 package com.yanny.ali.plugin.mods.charm;
 
-import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
@@ -13,7 +12,7 @@ import com.yanny.ali.plugin.mods.charm.generic.*;
 import com.yanny.ali.plugin.mods.charm.lumberjack.BarkForLogs;
 import com.yanny.ali.plugin.mods.charm.lumberjack.SaplingsForEmeralds;
 
-@AliEntrypoint
+//@AliEntrypoint
 public class Plugin implements IPlugin {
 
     @Override
