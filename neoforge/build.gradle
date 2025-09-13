@@ -62,6 +62,44 @@ dependencies {
 //    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
     implementation "dev.architectury:architectury-neoforge:${architectury_version}"
+
+    // LootJS
+//    implementation "curse.maven:kubejs-238086:5853326"
+//    implementation "curse.maven:rhino-416294:6186971"
+//    implementation "curse.maven:lootjs-570630:5404565"
+
+    // Aether https://www.curseforge.com/minecraft/mc-mods/aether
+//    compileOnly "curse.maven:aether-255308:6134920"
+
+    // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
+//    compileOnly "curse.maven:farmers-delight-398521:6917255"
+
+    // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
+//    compileOnly "curse.maven:supplementaries-412082:6974860"
+
+    // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
+//    compileOnly "curse.maven:selene-499980:6983934"
+
+    // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
+//    compileOnly "curse.maven:sawmill-964817:6948522"
+
+    // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
+//    compileOnly "curse.maven:the-bumblezone-forge-362479:6960926"
+
+    // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
+//    compileOnly "curse.maven:villagersplus-forge-817272:4996995"
+
+    // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
+//    compileOnly "curse.maven:hybrid-aquatic-834427:6497304"
+
+    // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
+//    compileOnly "curse.maven:snow-real-magic-308663:6888541"
+
+    // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
+//    compileOnly "curse.maven:deeperdarker-659011:5906086"
+
+    // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
+//    compileOnly "curse.maven:repurposed-structures-368293:6797349"
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code

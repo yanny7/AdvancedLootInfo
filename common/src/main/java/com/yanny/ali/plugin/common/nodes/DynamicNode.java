@@ -25,7 +25,7 @@ public class DynamicNode implements IDataNode {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
 
-        tooltip = EntryTooltipUtils.getDynamicTooltip(entry, chance, sumWeight);
+        tooltip = EntryTooltipUtils.getDynamicTooltip(utils, entry, chance, sumWeight, allFunctions, allConditions);
     }
 
     public DynamicNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

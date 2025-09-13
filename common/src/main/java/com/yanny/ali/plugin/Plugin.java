@@ -24,6 +24,11 @@ import org.jetbrains.annotations.NotNull;
 @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "ali";
+    }
+
+    @Override
     public void registerCommon(ICommonRegistry registry) {
         registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
     }

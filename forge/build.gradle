@@ -14,7 +14,6 @@ mixin {
     config("${mod_id}.mixins.json")
 //    config("${mod_id}.lootjs.mixins.json")
     config("${mod_id}.forge.mixins.json")
-    config("${mod_id}.aether.mixins.json")
 }
 
 minecraft {
@@ -102,27 +101,38 @@ dependencies {
 //    implementation fg.deobf("curse.maven:rhino-416294:6186971")
 //    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
 
-    // Aether
-//    implementation fg.deobf("curse.maven:aether-255308:6134920")
+    // Aether https://www.curseforge.com/minecraft/mc-mods/aether
+//    compileOnly fg.deobf("curse.maven:aether-255308:6134920")
 
-    // Farmer's Delight
-//    implementation fg.deobf("curse.maven:farmers-delight-398521:6917255")
+    // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
+//    compileOnly fg.deobf("curse.maven:deeperdarker-659011:5906086")
 
-    // Testing
-//    implementation fg.deobf("curse.maven:botania-225643:6366547")
-//    implementation fg.deobf("curse.maven:curios-309927:6418456")
-//    implementation fg.deobf("curse.maven:patchouli-306770:6164575")
-//    implementation fg.deobf("curse.maven:alexs-caves-924854:5848216")
-//    implementation fg.deobf("curse.maven:citadel-331936:6702068")
-//    implementation fg.deobf("curse.maven:alexs-mobs-426558:5698791")
-}
+    // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
+//    compileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
 
-tasks.named('compileTestJava') {
-    it.enabled = false
-}
+    // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
+//    compileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497304")
 
-tasks.named('test') {
-    it.enabled = false
+    // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
+//    compileOnly fg.deobf("curse.maven:selene-499980:6983934")
+
+    // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
+//    compileOnly fg.deobf("curse.maven:repurposed-structures-368293:6797349")
+
+    // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
+//    compileOnly fg.deobf("curse.maven:sawmill-964817:6948522")
+
+    // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
+//    compileOnly fg.deobf("curse.maven:snow-real-magic-308663:6888541")
+
+    // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
+//    compileOnly fg.deobf("curse.maven:supplementaries-412082:6974860")
+
+    // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
+//    compileOnly fg.deobf("curse.maven:the-bumblezone-forge-362479:6960926")
+
+    // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
+//    compileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -131,8 +141,6 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-jei").sourceSets.main.allSource)
 //    source(project(":common-rei").sourceSets.main.allSource)
 //    source(project(":common-lootjs").sourceSets.main.allSource)
-//    source(project(":compatibility-aether").sourceSets.main.allSource)
-//    source(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -141,8 +149,6 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-jei").sourceSets.main.allSource)
 //    from(project(":common-rei").sourceSets.main.allSource)
 //    from(project(":common-lootjs").sourceSets.main.allSource)
-//    from(project(":compatibility-aether").sourceSets.main.allSource)
-//    from(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 tasks.named('compileTestJava') {
@@ -158,8 +164,6 @@ processResources {
     from project(":common").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
 //    from project(":common-lootjs").sourceSets.main.resources
-//    from project(":compatibility-aether").sourceSets.main.resources
-//    from project(":compatibility-farmers-delight").sourceSets.main.resources
 }
 
 jar.finalizedBy('reobfJar')
