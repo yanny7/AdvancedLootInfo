@@ -2,7 +2,6 @@ plugins {
     id 'java'
     id 'idea'
     id 'fabric-loom'
-    id 'lol.bai.explosion'
 }
 
 base {
@@ -46,13 +45,13 @@ dependencies {
     modImplementation "curse.maven:lootjs-570630:5404564"
 
     // Aether
-    modCompileOnly explosion.fabric("curse.maven:aether-255308:6800393")
+    modCompileOnly "curse.maven:aether-255308:6800393"
 
     // Charm Forked
-    modCompileOnly explosion.fabric("curse.maven:charm-forked-1016482:6492694")
+    modCompileOnly "curse.maven:charm-forked-1016482:6492694"
 
     // Farmer's Delight
-    modCompileOnly explosion.fabric("curse.maven:farmers-delight-refabricated-993166:6626608")
+    modCompileOnly "curse.maven:farmers-delight-refabricated-993166:6626608"
 
     // Supplementaries
     modCompileOnly "curse.maven:supplementaries-412082:6889002"
