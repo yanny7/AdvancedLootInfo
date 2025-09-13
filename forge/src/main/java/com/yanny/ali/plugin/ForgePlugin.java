@@ -10,6 +10,11 @@ import org.jetbrains.annotations.Unmodifiable;
 @AliEntrypoint
 public class ForgePlugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "forge";
+    }
+
+    @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerConditionTooltip(CanToolPerformAction.class, ForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, ForgePlugin::getLootTableIdTooltip);
