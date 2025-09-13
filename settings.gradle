@@ -41,9 +41,3 @@ include("common-rei")
 include("fabric")
 include("forge")
 include("neoforge")
-
-//include("compatibility-template")
-
-//include("compatibility-aether")
-//include("compatibility-charm-forked")
-//include("compatibility-farmers-delight")
