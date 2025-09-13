@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.mods.PluginUtils;
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {
-        return "villagersplus";
+        return "culturaldelights";
     }
 
     @Override
