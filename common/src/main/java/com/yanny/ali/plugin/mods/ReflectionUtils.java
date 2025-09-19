@@ -43,7 +43,7 @@ public class ReflectionUtils {
             }
 
             throw new IllegalStateException("Class is not annotated with @ClassAccessor");
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             throw new IllegalStateException(e.getMessage());
         }
