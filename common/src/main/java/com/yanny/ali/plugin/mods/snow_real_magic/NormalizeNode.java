@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 public class NormalizeNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation("snowrealmagic", "item_stack");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("snowrealmagic", "item_stack");
 
     private final List<ITooltipNode> tooltip;
     private final float chance;

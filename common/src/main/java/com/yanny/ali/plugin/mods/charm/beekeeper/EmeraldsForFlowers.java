@@ -20,7 +20,7 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$EmeraldsForFlowers")
 public class EmeraldsForFlowers extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
-    private static final TagKey<Item> BEEKEEPER_SELLS_FLOWERS = TagKey.create(Registries.ITEM, new ResourceLocation("charm", "beekeeper_sells_flowers"));
+    private static final TagKey<Item> BEEKEEPER_SELLS_FLOWERS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("charm", "beekeeper_sells_flowers"));
 
     @FieldAccessor
     private int villagerXp;

@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,7 +44,7 @@ public class EnchantedShearsForEmeralds extends BaseAccessor<VillagerTrades.Item
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        ITooltipNode tooltip = RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.value.enchantment", Enchantments.UNBREAKING);
+        ITooltipNode tooltip = RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.value.enchantment", utils.lookupProvider().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.UNBREAKING).orElseThrow().value());
 
         tooltip.add(getIntRangeTooltip(utils, "ali.property.value.levels", IntRange.range(1, 3)));
 
