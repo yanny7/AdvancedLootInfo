@@ -10,15 +10,9 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
-import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.Potions;
 import oshi.util.tuples.Pair;
 
 import java.util.Collections;
@@ -26,7 +20,7 @@ import java.util.List;
 
 @ClassAccessor("com.lion.villagersplus.tradeoffers.trades.JsonSellPotionTradeOffer$Factory")
 public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
-    private static final List<Potion> POTIONS = BuiltInRegistries.POTION.stream().filter((potion) -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
+//    private static final List<Potion> POTIONS = BuiltInRegistries.POTION.stream().filter((potion) -> !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion)).toList();
 
     @FieldAccessor
     private ItemStack buy;
@@ -49,7 +43,7 @@ public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemLi
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(PotionUtils.setPotion(buy, Potions.WATER)),
+                Either.left(ItemStack.EMPTY), // Either.left(PotionUtils.setPotion(buy, Potions.WATER)),
                 new RangeValue(buy.getCount()),
                 Collections.emptyList(),
                 Either.left(currency),
@@ -57,7 +51,7 @@ public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemLi
                 Collections.emptyList(),
                 Either.left(sell),
                 new RangeValue(),
-                List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
+                List.of(), // List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
                 maxUses,
                 experience,
                 multiplier,
