@@ -1,8 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'fabric-loom' version '1.10-SNAPSHOT'
-//    id 'lol.bai.explosion' version "0.3.1"
+    id 'fabric-loom' version '1.11-SNAPSHOT'
 }
 
 base {
@@ -47,23 +46,44 @@ dependencies {
 //    modImplementation "curse.maven:architectury-api-419699:5137936"
 //    modImplementation "curse.maven:lootjs-570630:5404564"
 
-    // Aether
-//    modImplementation explosion.fabric("curse.maven:aether-255308:6800393")
-//    modImplementation explosion.fabric("curse.maven:accessories-938917:6304691")
-//    modImplementation explosion.fabric("curse.maven:owo-lib-532610:4749199")
-//    modImplementation "curse.maven:cloth-config-348521:5729104"
+    // Aether https://www.curseforge.com/minecraft/mc-mods/aether
+//    modCompileOnly "curse.maven:aether-255308:6800393"
 
-    // Charm Forked
-//    modImplementation explosion.fabric("curse.maven:charm-forked-1016482:6492694")
+    // Charm Forked https://www.curseforge.com/minecraft/mc-mods/charm-forked
+//    modCompileOnly "curse.maven:charm-forked-1016482:6492694"
 
-    // Farmer's Delight
-//    modImplementation explosion.fabric("curse.maven:farmers-delight-refabricated-993166:6626608")
+    // Cultural Delights https://www.curseforge.com/minecraft/mc-mods/cultural-delights-fabric
+//    modCompileOnly "curse.maven:cultural-delights-fabric-807107:5510598"
 
-    // Testing
-//    modLocalRuntime "curse.maven:supplementaries-412082:6889002"
-//    modLocalRuntime "curse.maven:selene-499980:6902843"
-//    include "curse.maven:c2me-533097:6181291"
-//    modLocalRuntime "curse.maven:c2me-533097:6181291"
+    // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
+//    modCompileOnly "curse.maven:deeperdarker-659011:5072875"
+
+    // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight-refabricated
+//    modCompileOnly "curse.maven:farmers-delight-refabricated-993166:6626608"
+
+    // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
+//    modCompileOnly "curse.maven:hybrid-aquatic-834427:6497302"
+
+    // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
+//    modCompileOnly "curse.maven:selene-499980:6978610"
+
+    // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures-fabric
+//    modCompileOnly "curse.maven:repurposed-structures-fabric-391366:6797350"
+
+    // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
+//    modCompileOnly "curse.maven:sawmill-964817:6948520"
+
+    // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic-fabric
+//    modCompileOnly "curse.maven:snow-real-magic-fabric-560441:6779484"
+
+    // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
+//    modCompileOnly "curse.maven:supplementaries-412082:6889002"
+
+    // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-fabric
+//    modCompileOnly "curse.maven:the-bumblezone-fabric-363949:6960934"
+
+    // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-fabric
+//    modCompileOnly "curse.maven:villagersplus-fabric-809542:4996993"
 }
 
 loom {
@@ -107,10 +127,6 @@ tasks.withType(JavaCompile).configureEach {
     source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
 //    source(project(":common-lootjs").sourceSets.main.allSource)
-//
-//    source(project(":compatibility-aether").sourceSets.main.allSource)
-//    source(project(":compatibility-charm-forked").sourceSets.main.allSource)
-//    source(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
@@ -120,10 +136,6 @@ tasks.named("sourcesJar", Jar) {
     from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
 //    from(project(":common-lootjs").sourceSets.main.allSource)
-//
-//    from(project(":compatibility-aether").sourceSets.main.allSource)
-//    from(project(":compatibility-charm-forked").sourceSets.main.allSource)
-//    from(project(":compatibility-farmers-delight").sourceSets.main.allSource)
 }
 
 processResources {
@@ -132,8 +144,4 @@ processResources {
     from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
 //    from project(":common-lootjs").sourceSets.main.resources
-//
-//    from project(":compatibility-aether").sourceSets.main.resources
-//    from project(":compatibility-charm-forked").sourceSets.main.resources
-//    from project(":compatibility-farmers-delight").sourceSets.main.resources
 }

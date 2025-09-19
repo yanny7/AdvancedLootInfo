@@ -29,6 +29,11 @@ public class LootJsPlugin implements IPlugin {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @Override
+    public String getModId() {
+        return "lootjs";
+    }
+
     @NotNull
     public static List<ILootModifier<?>> registerModifiers(IServerUtils utils) {
         List<ILootModifier<?>> modifiers = new ArrayList<>();
