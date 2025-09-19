@@ -115,7 +115,7 @@ dependencies {
 //    compileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
 
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
-//    compileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497304")
+//    compileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497306")
 
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
 //    compileOnly fg.deobf("curse.maven:selene-499980:6983934")
