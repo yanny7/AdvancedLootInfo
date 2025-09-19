@@ -56,7 +56,7 @@ dependencies {
 //    modCompileOnly "curse.maven:cultural-delights-fabric-807107:5510598"
 
     // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-//    modCompileOnly "curse.maven:deeperdarker-659011:6007575"
+    modCompileOnly "curse.maven:deeperdarker-659011:5072875"
 
     // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight-refabricated
 //    modCompileOnly "curse.maven:farmers-delight-refabricated-993166:6626608"
