@@ -989,7 +989,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static <T> ITooltipNode getBuiltInRegistryTooltip(IServerUtils utils, String key, Registry<T> registry, T value) {
-        return getResourceLocationTooltip(utils, key, Objects.requireNonNull(registry.getKey(value)));
+        return getOptionalTooltip(utils, key, Optional.ofNullable(registry.getKey(value)), GenericTooltipUtils::getResourceLocationTooltip);
     }
 
     @Unmodifiable
@@ -1027,7 +1027,7 @@ public class GenericTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getComponentTooltip(IServerUtils ignoredUtils, String key, Component component) {
-        return new TooltipNode(translatable(key, value(component)));
+        return new TooltipNode(translatable(key, value(component.copy())));
     }
 
     @NotNull
