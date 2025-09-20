@@ -25,7 +25,7 @@ import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
-@ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$PopulatedBeehiveForEmeralds")
+@ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$PopulatedBeehiveForEmeralds")
 public class PopulatedBeehiveForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

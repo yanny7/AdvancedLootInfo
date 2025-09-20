@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@ClassAccessor("svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers$SaplingsForEmeralds")
+@ClassAccessor("svenhjol.charm.feature.lumberjacks.common.Trades$SaplingsForEmeralds")
 public class SaplingsForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@ClassAccessor("svenhjol.charm.feature.extra_trades.ExtraTrades$AnvilRepair")
+@ClassAccessor("svenhjol.charm.feature.trade_improvements.common.Registers$AnvilRepair")
 public class AnvilRepair extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

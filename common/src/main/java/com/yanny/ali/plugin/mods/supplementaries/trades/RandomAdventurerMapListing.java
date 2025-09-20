@@ -16,9 +16,12 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ClassAccessor("net.mehvahdjukaar.supplementaries.common.entities.trades.RandomAdventurerMapListing")
 public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -28,8 +31,9 @@ public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.Item
     private int priceMin;
     @FieldAccessor
     private int priceMax;
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @FieldAccessor
-    private ItemStack priceSecondary;
+    private Optional<ItemCost> priceSecondary;
     @FieldAccessor
     private int maxTrades;
     @FieldAccessor
@@ -48,8 +52,8 @@ public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.Item
                 utils,
                 Either.left(emerald.getDefaultInstance()),
                 new RangeValue(priceMax, priceMax + priceMin),
-                Either.left(priceSecondary),
-                new RangeValue(),
+                Either.left(priceSecondary.map((u) -> u.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
+                new RangeValue(priceSecondary.map(ItemCost::count).orElse(1)),
                 Either.left(map),
                 new RangeValue(),
                 maxTrades,
@@ -61,6 +65,11 @@ public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.Item
 
     @Override
     public Pair<List<Item>, List<Item>> collectItems(IServerUtils utils) {
-        return new Pair<>(List.of(emerald, priceSecondary.getItem()), List.of(Items.MAP));
+        List<Item> input = new ArrayList<>();
+
+        input.add(emerald);
+        priceSecondary.ifPresent((i) -> input.add(i.item().value()));
+
+        return new Pair<>(input, List.of(Items.MAP));
     }
 }

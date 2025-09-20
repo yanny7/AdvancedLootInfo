@@ -1,11 +1,16 @@
 package com.yanny.ali.plugin.mods;
 
+import com.mojang.logging.LogUtils;
+import org.slf4j.Logger;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class ReflectionUtils {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     public static <T extends BaseAccessor<?>> T copyClassData(Class<T> myClass, Object targetObject) {
         try {
             ClassAccessor classAnnotation = myClass.getAnnotation(ClassAccessor.class);
@@ -21,20 +26,25 @@ public class ReflectionUtils {
                     FieldAccessor fieldAnnotation = myField.getAnnotation(FieldAccessor.class);
 
                     if (fieldAnnotation != null) {
-                        // Find the corresponding field in the inaccessible class
-                        Field targetField = targetClass.getDeclaredField(myField.getName());
+                        try {
+                            // Find the corresponding field in the inaccessible class
+                            Field targetField = targetClass.getDeclaredField(myField.getName());
 
-                        targetField.setAccessible(true);
-                        myField.setAccessible(true);
+                            targetField.setAccessible(true);
+                            myField.setAccessible(true);
 
-                        // Copy the value from the inaccessible field to your field
-                        Object value = targetField.get(targetObject);
+                            // Copy the value from the inaccessible field to your field
+                            Object value = targetField.get(targetObject);
 
-                        if (fieldAnnotation.clazz() == Object.class) {
-                            myField.set(myObject, value);
-                        } else {
-                            //noinspection unchecked
-                            myField.set(myObject, copyClassData((Class<? extends BaseAccessor<?>>) myField.getType(), value));
+                            if (fieldAnnotation.clazz() == Object.class) {
+                                myField.set(myObject, value);
+                            } else {
+                                //noinspection unchecked
+                                myField.set(myObject, copyClassData((Class<? extends BaseAccessor<?>>) myField.getType(), value));
+                            }
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                            LOGGER.warn("Failed to copy field {} of class {} with error: {}", myField.getName(), myClass.getName(), e.getMessage());
                         }
                     }
                 }

@@ -69,34 +69,34 @@ dependencies {
     implementation "curse.maven:lootjs-570630:6792267"
 
     // Aether https://www.curseforge.com/minecraft/mc-mods/aether
-//    compileOnly "curse.maven:aether-255308:5889512"
+    compileOnly "curse.maven:aether-255308:6894706"
 
     // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-//    compileOnly "curse.maven:deeperdarker-659011:5906086"
+    compileOnly "curse.maven:deeperdarker-659011:6463247"
 
     // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
-//    compileOnly "curse.maven:farmers-delight-398521:6917255"
+    compileOnly "curse.maven:farmers-delight-398521:6917256"
 
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
 //    compileOnly "curse.maven:hybrid-aquatic-834427:6497304"
 
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
-//    compileOnly "curse.maven:selene-499980:6983934"
+    compileOnly "curse.maven:selene-499980:7007381"
 
     // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
-//    compileOnly "curse.maven:repurposed-structures-368293:6797349"
+    compileOnly "curse.maven:repurposed-structures-368293:6797352"
 
     // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
-//    compileOnly "curse.maven:sawmill-964817:6948522"
+    compileOnly "curse.maven:sawmill-964817:6979313"
 
     // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
-//    compileOnly "curse.maven:snow-real-magic-308663:6888541"
+    compileOnly "curse.maven:snow-real-magic-308663:6783557"
 
     // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-//    compileOnly "curse.maven:supplementaries-412082:6974860"
+    compileOnly "curse.maven:supplementaries-412082:7008519"
 
     // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
-//    compileOnly "curse.maven:the-bumblezone-forge-362479:6960926"
+    compileOnly "curse.maven:the-bumblezone-forge-362479:6960939"
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
 //    compileOnly "curse.maven:villagersplus-forge-817272:4996995"

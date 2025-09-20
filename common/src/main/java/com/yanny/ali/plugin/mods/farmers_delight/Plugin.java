@@ -1,10 +1,11 @@
 package com.yanny.ali.plugin.mods.farmers_delight;
 
+import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
 
-//@AliEntrypoint
+@AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {
@@ -14,7 +15,9 @@ public class Plugin implements IPlugin {
     @Override
     public void registerServer(IServerRegistry registry) {
         PluginUtils.registerFunctionTooltip(registry, CopySkilletFunction.class);
-        PluginUtils.registerFunctionTooltip(registry, CopyMealFunction.class);
+        PluginUtils.registerFunctionTooltip(registry, SmokerCookFunction.class);
+
+        PluginUtils.registerConditionTooltip(registry, CanItemPerformAbilityCondition.class);
 
         //TODO modifiers!
     }

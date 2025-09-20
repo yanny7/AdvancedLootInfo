@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$TallFlowerForEmeralds")
+@ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$TallFlowerForEmeralds")
 public class TallFlowerForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     private static final List<Item> FLOWERS = List.of(Items.SUNFLOWER, Items.PEONY, Items.LILAC, Items.ROSE_BUSH);
 

@@ -1,11 +1,12 @@
 package com.yanny.ali.plugin.mods.snow_real_magic;
 
+import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
 
-//@AliEntrypoint
+@AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

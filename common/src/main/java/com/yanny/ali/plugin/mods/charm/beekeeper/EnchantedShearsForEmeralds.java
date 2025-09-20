@@ -26,7 +26,7 @@ import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntRangeTooltip;
 
-@ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$EnchantedShearsForEmeralds")
+@ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$EnchantedShearsForEmeralds")
 public class EnchantedShearsForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

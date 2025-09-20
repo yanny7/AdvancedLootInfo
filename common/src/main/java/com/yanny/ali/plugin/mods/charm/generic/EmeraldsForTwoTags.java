@@ -18,7 +18,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.stream.Stream;
 
-@ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$EmeraldsForTwoTags")
+@ClassAccessor("svenhjol.charm.charmony.common.villages.GenericTrades$EmeraldsForTwoTags")
 public class EmeraldsForTwoTags<T extends ItemLike, U extends ItemLike> extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

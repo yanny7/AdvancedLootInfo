@@ -15,7 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStringTooltip;
 @ClassAccessor("net.mehvahdjukaar.sawmill.CarpenterTrades$LogStrippingListing")
 public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
-    private ItemStack price;
+    private ItemCost price;
     @FieldAccessor
     private int amount;
     @FieldAccessor
@@ -62,8 +62,8 @@ public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing
                                         utils,
                                         Either.left(log.getDefaultInstance()),
                                         new RangeValue(amount),
-                                        Either.left(price),
-                                        new RangeValue(price.getCount()),
+                                        Either.left(price.item().value().getDefaultInstance()),
+                                        new RangeValue(price.count()),
                                         Either.left(stripped.getDefaultInstance()),
                                         new RangeValue(amount),
                                         maxTrades,
@@ -102,7 +102,7 @@ public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing
                 }))
                 .toList();
 
-        inputs.add(price.getItem());
+        inputs.add(price.item().value());
         return new Pair<>(inputs, outputs);
     }
 }

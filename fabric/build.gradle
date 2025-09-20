@@ -47,40 +47,40 @@ dependencies {
 //    modImplementation "curse.maven:lootjs-570630:5404564"
 
     // Aether https://www.curseforge.com/minecraft/mc-mods/aether
-//    modCompileOnly "curse.maven:aether-255308:6800393"
+    modCompileOnly "curse.maven:aether-255308:6894657"
 
     // Charm Forked https://www.curseforge.com/minecraft/mc-mods/charm-forked
-//    modCompileOnly "curse.maven:charm-forked-1016482:6492694"
+    modCompileOnly "curse.maven:charm-forked-1016482:6143797"
 
     // Cultural Delights https://www.curseforge.com/minecraft/mc-mods/cultural-delights-fabric
 //    modCompileOnly "curse.maven:cultural-delights-fabric-807107:5510598"
 
     // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-//    modCompileOnly "curse.maven:deeperdarker-659011:5072875"
+    modCompileOnly "curse.maven:deeperdarker-659011:6007579"
 
     // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight-refabricated
-//    modCompileOnly "curse.maven:farmers-delight-refabricated-993166:6626608"
+    modCompileOnly "curse.maven:farmers-delight-refabricated-993166:6955339"
 
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
 //    modCompileOnly "curse.maven:hybrid-aquatic-834427:6497302"
 
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
-//    modCompileOnly "curse.maven:selene-499980:6978610"
+    modCompileOnly "curse.maven:selene-499980:7007382"
 
     // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures-fabric
-//    modCompileOnly "curse.maven:repurposed-structures-fabric-391366:6797350"
+    modCompileOnly "curse.maven:repurposed-structures-fabric-391366:6797358"
 
     // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
-//    modCompileOnly "curse.maven:sawmill-964817:6948520"
+    modCompileOnly "curse.maven:sawmill-964817:6964417"
 
     // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic-fabric
-//    modCompileOnly "curse.maven:snow-real-magic-fabric-560441:6779484"
+    modCompileOnly "curse.maven:snow-real-magic-fabric-560441:6783623"
 
     // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-//    modCompileOnly "curse.maven:supplementaries-412082:6889002"
+    modCompileOnly "curse.maven:supplementaries-412082:7008518"
 
     // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-fabric
-//    modCompileOnly "curse.maven:the-bumblezone-fabric-363949:6960934"
+    modCompileOnly "curse.maven:the-bumblezone-fabric-363949:6960934"
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-fabric
 //    modCompileOnly "curse.maven:villagersplus-fabric-809542:4996993"

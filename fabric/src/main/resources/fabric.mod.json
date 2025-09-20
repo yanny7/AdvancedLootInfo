@@ -26,7 +26,21 @@
             "com.yanny.ali.datagen.DataGeneration"
         ],
         "ali": [
-            "com.yanny.ali.plugin.Plugin"
+            "com.yanny.ali.plugin.Plugin",
+            "com.yanny.ali.plugin.mods.aether.Plugin",
+            "com.yanny.ali.plugin.mods.charm.Plugin",
+            "com.yanny.ali.plugin.mods.cultural_delights.Plugin",
+            "com.yanny.ali.plugin.mods.deeper_and_darker.Plugin",
+            "com.yanny.ali.plugin.mods.farmers_delight.Plugin",
+            "com.yanny.ali.plugin.mods.hybrid_aquatic.Plugin",
+            "com.yanny.ali.plugin.mods.moonlight.Plugin",
+            "com.yanny.ali.plugin.mods.porting_lib_tools.Plugin",
+            "com.yanny.ali.plugin.mods.repurposed_structures.Plugin",
+            "com.yanny.ali.plugin.mods.sawmill.Plugin",
+            "com.yanny.ali.plugin.mods.snow_real_magic.Plugin",
+            "com.yanny.ali.plugin.mods.supplementaries.Plugin",
+            "com.yanny.ali.plugin.mods.the_bumblezone.Plugin",
+            "com.yanny.ali.plugin.mods.villagers_plus.Plugin"
         ],
         "emi": [
             "com.yanny.ali.compatibility.EmiCompatibility"

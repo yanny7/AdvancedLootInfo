@@ -18,7 +18,7 @@ import oshi.util.tuples.Pair;
 
 import java.util.List;
 
-@ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$EmeraldsForFlowers")
+@ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$EmeraldsForFlowers")
 public class EmeraldsForFlowers extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     private static final TagKey<Item> BEEKEEPER_SELLS_FLOWERS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("charm", "beekeeper_sells_flowers"));
 

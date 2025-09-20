@@ -19,7 +19,7 @@ import oshi.util.tuples.Pair;
 
 import java.util.List;
 
-@ClassAccessor("svenhjol.charmony.helper.GenericTradeOffers$ItemsForEmeralds")
+@ClassAccessor("svenhjol.charm.charmony.common.villages.GenericTrades$ItemsForEmeralds")
 public class ItemsForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

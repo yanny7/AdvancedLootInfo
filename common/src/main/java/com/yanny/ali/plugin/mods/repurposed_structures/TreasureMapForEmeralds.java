@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -40,7 +41,7 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
     @FieldAccessor
     private String displayName;
     @FieldAccessor
-    private MapDecorationType destinationType;
+    private Holder.Reference<MapDecorationType> destinationType;
     @FieldAccessor
     private int maxUses;
     @FieldAccessor
@@ -63,7 +64,7 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
             tooltip.add(getResourceKeyTooltip(utils, "ali.property.value.destination", destination));
         }
 
-        tooltip.add(RegistriesTooltipUtils.getMapDecorationTypeTooltip(utils, "ali.property.value.map_decoration", destinationType));
+        tooltip.add(RegistriesTooltipUtils.getMapDecorationTypeTooltip(utils, "ali.property.value.map_decoration", destinationType.value()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.search_radius", spawnRegionSearchRadius));
         map.set(DataComponents.ITEM_NAME, Component.translatable(displayName));
 

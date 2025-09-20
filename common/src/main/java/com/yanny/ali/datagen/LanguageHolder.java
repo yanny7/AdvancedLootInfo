@@ -141,15 +141,15 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.whirlwind_spawn_entity", "Whirlwind Spawn Entity");
 
         // Farmer's delight
-        TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
         TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
+        TRANSLATION_MAP.put("ali.type.function.smoker_cook", "Smoker Cook");
 
         // Supplementaries
         TRANSLATION_MAP.put("ali.type.function.random_arrow", "Random Arrow");
         TRANSLATION_MAP.put("ali.type.function.curse_loot", "Curse Loot");
 
         // The Bumblezone
-        TRANSLATION_MAP.put("ali.type.function.drop_container_items", "Drop Container Items");
+        TRANSLATION_MAP.put("ali.type.function.drop_container_loot", "Drop Container Loot");
         TRANSLATION_MAP.put("ali.type.function.honey_compass_locate_structure", "Honey Compass Locate Structure");
         TRANSLATION_MAP.put("ali.type.function.tag_item_removals", "Tag Item Removals");
         TRANSLATION_MAP.put("ali.type.function.uniquify_if_has_items", "Uniquify If Has Items");
@@ -180,6 +180,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.player", "Player:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.raider", "Raider:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.slime", "Slime:");
+
+        // The Bumblezone
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.honey_slime", "Honey Slime:");
 
         TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
         TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");

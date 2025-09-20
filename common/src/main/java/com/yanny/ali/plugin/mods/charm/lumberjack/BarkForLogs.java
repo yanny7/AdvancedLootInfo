@@ -21,7 +21,7 @@ import oshi.util.tuples.Pair;
 
 import java.util.*;
 
-@ClassAccessor("svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers$BarkForLogs")
+@ClassAccessor("svenhjol.charm.feature.lumberjacks.common.Trades$BarkForLogs")
 public class BarkForLogs extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
     private int villagerXp;

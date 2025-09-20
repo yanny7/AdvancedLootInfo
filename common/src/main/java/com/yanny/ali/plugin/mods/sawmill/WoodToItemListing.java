@@ -13,7 +13,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
@@ -34,7 +34,7 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
     @FieldAccessor
     private int woodPrice;
     @FieldAccessor
-    private ItemStack emeralds;
+    private ItemCost emeralds;
     @FieldAccessor
     private int maxTrades;
     @FieldAccessor
@@ -98,17 +98,17 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
         if (typeDependant) {
             if (buys) {
                 inputs.addAll(typed);
-                outputs.add(emeralds.getItem());
+                outputs.add(emeralds.item().value());
             } else {
-                inputs.add(emeralds.getItem());
+                inputs.add(emeralds.item().value());
                 outputs.addAll(typed);
             }
         } else {
             if (buys) {
                 inputs.addAll(allTypes);
-                outputs.add(emeralds.getItem());
+                outputs.add(emeralds.item().value());
             } else {
-                inputs.add(emeralds.getItem());
+                inputs.add(emeralds.item().value());
                 outputs.addAll(allTypes);
             }
         }
@@ -129,8 +129,8 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
                             utils,
                             Either.left(w.getDefaultInstance()),
                             new RangeValue(woodPrice),
-                            Either.left(emeralds),
-                            new RangeValue(emeralds.getCount()),
+                            Either.left(emeralds.item().value().getDefaultInstance()),
+                            new RangeValue(emeralds.count()),
                             maxTrades,
                             xp,
                             priceMult,
@@ -139,8 +139,8 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
                 } else {
                     nodes.add(new ItemsToItemsNode(
                             utils,
-                            Either.left(emeralds),
-                            new RangeValue(emeralds.getCount()),
+                            Either.left(emeralds.item().value().getDefaultInstance()),
+                            new RangeValue(emeralds.count()),
                             Either.left(w.getDefaultInstance()),
                             new RangeValue(woodPrice),
                             maxTrades,
