@@ -12,6 +12,11 @@ import org.jetbrains.annotations.Unmodifiable;
 @AliEntrypoint
 public class NeoForgePlugin implements IPlugin {
     @Override
+    public String getModId() {
+        return "neoforge";
+    }
+
+    @Override
     public void registerServer(IServerRegistry registry) {
         registry.registerConditionTooltip(CanItemPerformAbility.class, NeoForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdTooltip);
