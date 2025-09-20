@@ -130,7 +130,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends BaseAccessor<?> & IItemSubPredicate> void registerItemSubPredicateTooltip(IServerRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IItemSubPredicateTooltip> void registerItemSubPredicateTooltip(IServerRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
@@ -147,7 +147,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends BaseAccessor<?> & IEntitySubPredicate> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<T> codec) {
+    public static <T extends BaseAccessor<?> & IEntitySubPredicateTooltip> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<T> codec) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
@@ -163,7 +163,7 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends BaseAccessor<?> & IDataComponentType> void registerDataComponentTypeTooltip(IServerRegistry registry, Class<T> clazz, DataComponentType<T> type) {
+    public static <T extends BaseAccessor<?> & IDataComponentTypeTooltip> void registerDataComponentTypeTooltip(IServerRegistry registry, Class<T> clazz, DataComponentType<T> type) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
