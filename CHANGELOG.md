@@ -12,6 +12,7 @@
 - Added compatibility for Repurposed Structures
 - Fixed crash when registry is unavailable
 - Fixed unwanted modification of components
+- Fixed missing item stack modifications for LootJS items
 
 ## [1.3.3]
 

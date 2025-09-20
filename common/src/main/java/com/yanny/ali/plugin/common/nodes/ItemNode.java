@@ -35,7 +35,7 @@ public class ItemNode implements IDataNode, IItemNode {
         this.conditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
         this.functions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         this.chance = chance * entry.weight / sumWeight;
-        itemStack = TooltipUtils.getItemStack(utils, entry.item, this.functions);
+        itemStack = TooltipUtils.getItemStack(utils, entry.item.getDefaultInstance(), this.functions);
         tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);
         count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
     }
