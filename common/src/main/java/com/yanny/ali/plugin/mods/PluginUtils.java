@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.mods;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
@@ -123,6 +124,23 @@ public class PluginUtils {
             }
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for ingredient tooltip " + clazz.getName());
+        }
+    }
+
+    public static <T extends BaseAccessor<?> & IItemSubPredicate> void registerItemSubPredicateTooltip(IServerRegistry registry, Class<T> clazz) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                //noinspection unchecked
+                Class<ItemSubPredicate> predicateClass = (Class<ItemSubPredicate>) Class.forName(classAnnotation.value());
+                registry.registerItemSubPredicateTooltip(predicateClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register item sub predicate tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for item sub predicate " + clazz.getName());
         }
     }
 
