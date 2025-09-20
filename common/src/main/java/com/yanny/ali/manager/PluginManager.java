@@ -1,6 +1,7 @@
 package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.Services;
 import org.slf4j.Logger;
 
@@ -12,7 +13,7 @@ public class PluginManager {
     public static AliClientRegistry CLIENT_REGISTRY;
     public static AliServerRegistry SERVER_REGISTRY;
     public static AliCommonRegistry COMMON_REGISTRY;
-    private static List<PluginHolder> PLUGINS;
+    private static List<IPlugin> PLUGINS;
 
     public static void registerClientEvent() {
         registerClientData();
@@ -24,11 +25,11 @@ public class PluginManager {
         LOGGER.info("Registering common plugin data...");
         COMMON_REGISTRY = new AliCommonRegistry();
 
-        for (PluginHolder plugin : PLUGINS) {
+        for (IPlugin plugin : PLUGINS) {
             try {
-                plugin.plugin().registerCommon(COMMON_REGISTRY);
+                plugin.registerCommon(COMMON_REGISTRY);
             } catch (Throwable throwable) {
-                LOGGER.error("Failed to register {} common part with error: {}", plugin.modId(), throwable.getMessage());
+                LOGGER.error("Failed to register {} common part with error: {}", plugin.getModId(), throwable.getMessage());
             }
         }
 
@@ -44,11 +45,11 @@ public class PluginManager {
         LOGGER.info("Reloading server plugin data...");
         SERVER_REGISTRY.clearData();
 
-        for (PluginHolder plugin : PLUGINS) {
+        for (IPlugin plugin : PLUGINS) {
             try {
-                plugin.plugin().registerServer(SERVER_REGISTRY);
+                plugin.registerServer(SERVER_REGISTRY);
             } catch (Throwable throwable) {
-                LOGGER.error("Failed to reload {} server part with error: {}", plugin.modId(), throwable.getMessage());
+                LOGGER.error("Failed to reload {} server part with error: {}", plugin.getModId(), throwable.getMessage());
             }
         }
 
@@ -68,11 +69,11 @@ public class PluginManager {
         LOGGER.info("Registering client plugin data...");
         CLIENT_REGISTRY = new AliClientRegistry(COMMON_REGISTRY);
 
-        for (PluginHolder plugin : PLUGINS) {
+        for (IPlugin plugin : PLUGINS) {
             try {
-                plugin.plugin().registerClient(CLIENT_REGISTRY);
+                plugin.registerClient(CLIENT_REGISTRY);
             } catch (Throwable throwable) {
-                LOGGER.error("Failed to register {} client part with error: {}", plugin.modId(), throwable.getMessage());
+                LOGGER.error("Failed to register {} client part with error: {}", plugin.getModId(), throwable.getMessage());
             }
         }
 
@@ -84,11 +85,11 @@ public class PluginManager {
         LOGGER.info("Registering server plugin data...");
         SERVER_REGISTRY = new AliServerRegistry(COMMON_REGISTRY);
 
-        for (PluginHolder plugin : PLUGINS) {
+        for (IPlugin plugin : PLUGINS) {
             try {
-                plugin.plugin().registerServer(SERVER_REGISTRY);
+                plugin.registerServer(SERVER_REGISTRY);
             } catch (Throwable throwable) {
-                LOGGER.error("Failed to register {} server part with error: {}", plugin.modId(), throwable.getMessage());
+                LOGGER.error("Failed to register {} server part with error: {}", plugin.getModId(), throwable.getMessage());
             }
         }
 

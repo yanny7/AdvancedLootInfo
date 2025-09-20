@@ -76,6 +76,15 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.match_player_custom", "Match Player Custom:");
         TRANSLATION_MAP.put("ali.type.condition.match_structure", "Match Structure:");
 
+        // Aether
+        TRANSLATION_MAP.put("ali.type.condition.config_enabled", "Must Be Enabled In Config");
+
+        // The Bumblezone
+        TRANSLATION_MAP.put("ali.type.condition.essence_only_spawn", "Essence Only Spawn");
+
+        // Moonlight
+        TRANSLATION_MAP.put("ali.type.condition.optional_property", "Optional Property");
+
         /*
          * MODIFIERS
          */
@@ -131,11 +140,23 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.spawn_tnt", "Spawn TNT");
         TRANSLATION_MAP.put("ali.type.function.double_drops", "Double Drops");
         TRANSLATION_MAP.put("ali.type.function.whirlwind_spawn_entity", "Whirlwind Spawn Entity");
-        TRANSLATION_MAP.put("ali.type.function.config_enabled", "Must Be Enabled In Config");
 
         // Farmer's delight
-        TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
         TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
+        TRANSLATION_MAP.put("ali.type.function.smoker_cook", "Smoker Cook");
+
+        // Supplementaries
+        TRANSLATION_MAP.put("ali.type.function.random_arrow", "Random Arrow");
+        TRANSLATION_MAP.put("ali.type.function.curse_loot", "Curse Loot");
+
+        // The Bumblezone
+        TRANSLATION_MAP.put("ali.type.function.drop_container_loot", "Drop Container Loot");
+        TRANSLATION_MAP.put("ali.type.function.honey_compass_locate_structure", "Honey Compass Locate Structure");
+        TRANSLATION_MAP.put("ali.type.function.tag_item_removals", "Tag Item Removals");
+        TRANSLATION_MAP.put("ali.type.function.uniquify_if_has_items", "Uniquify If Has Items");
+
+        // Deeper and Darker
+        TRANSLATION_MAP.put("ali.type.function.set_painting_variant", "Set Painting Variant");
 
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
@@ -146,6 +167,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.raider", "Raider:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.sheep", "Sheep:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.slime", "Slime:");
+
+        // The Bumblezone
+        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.honey_slime", "Honey Slime:");
 
         TRANSLATION_MAP.put("ali.type.consume_effect.apply_effects", "Apply Effects:");
         TRANSLATION_MAP.put("ali.type.consume_effect.clear_all_effects", "Clear All Effects:");
@@ -160,6 +184,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
         TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
         TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
+
+        // Snow Real Magic
+        TRANSLATION_MAP.put("ali.enum.group_type.normalize", "Drops block buried in snow");
 
         TRANSLATION_MAP.put("ali.property.branch.abilities", "Abilities:");
         TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");

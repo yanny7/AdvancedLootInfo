@@ -7,6 +7,7 @@ import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
@@ -163,7 +164,12 @@ public abstract class AbstractServer {
                             lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
                     ).toList();
 
-                    lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                    try {
+                        lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
+                    }
                 } else {
                     LOGGER.debug("Missing block loot table for {}", block);
                 }
@@ -195,7 +201,12 @@ public abstract class AbstractServer {
                                     lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
                             ).toList();
 
-                            lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                            try {
+                                lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
+                            }
                         } else {
                             LOGGER.debug("Missing entity loot table for {}", entity);
                         }
@@ -218,7 +229,12 @@ public abstract class AbstractServer {
             List<Item> items = lootTableItems.get(location);
             List<ILootModifier<?>> lootModifiers = lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)).toList();
 
-            lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+            try {
+                lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+            } catch (Throwable e) {
+                e.printStackTrace();
+                LOGGER.warn("Failed to parse loot table {} with error {}", location, e.getMessage());
+            }
         }
 
         return lootNodes;
@@ -233,8 +249,13 @@ public abstract class AbstractServer {
             Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = VillagerTrades.TRADES.get(entry.getKey());
 
             if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
-                nodes.put(location, serverRegistry.parseTrade(itemListingMap));
-                tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
+                try {
+                    nodes.put(location, serverRegistry.parseTrade(itemListingMap));
+                    tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    LOGGER.warn("Failed to parse trade for villager {} with error {}", entry.getValue().name(), e.getMessage());
+                }
             } else {
                 LOGGER.warn("No trades defined for {}", location);
             }
@@ -245,7 +266,13 @@ public abstract class AbstractServer {
 
     @NotNull
     private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry) {
-        return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+        try {
+            return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage());
+            return new MissingNode();
+        }
     }
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
