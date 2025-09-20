@@ -1,3 +1,18 @@
+## []
+
+- Added compatibility for Supplementaries
+- Added compatibility for Moonlight
+- Added compatibility for The Bumblezone
+- Added compatibility for Villagers Plus
+- Added compatibility for Cultural Delights
+- Added compatibility for Sawmill
+- Added compatibility for Hybrid Aquatic
+- Added compatibility for Snow! Real Magic!
+- Added compatibility for Deeper And Darker
+- Added compatibility for Repurposed Structures
+- Fixed crash when registry is unavailable
+- Fixed unwanted modification of components
+
 ## [1.3.3]
 
 - Display merchant offer if it's possible to determine it's content even without mod support

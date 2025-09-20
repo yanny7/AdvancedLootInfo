@@ -30,9 +30,8 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
         for (Map.Entry<ResourceKey<VillagerType>, Item> entry : listing.trades.entrySet()) {
             ResourceKey<VillagerType> type = entry.getKey();
             Item item = entry.getValue();
-            List<ITooltipNode> cond = new ArrayList<>();
+            List<ITooltipNode> cond = List.of(getResourceKeyTooltip(utils, "ali.property.value.villager_type", type));
 
-            cond.add(getResourceKeyTooltip(utils, "ali.property.value.villager_type", type));
             nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }
 

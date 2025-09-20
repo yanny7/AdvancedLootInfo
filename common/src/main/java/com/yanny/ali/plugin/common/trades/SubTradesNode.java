@@ -5,11 +5,10 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.VillagerTrades;
 
 import java.util.List;
 
-public class SubTradesNode<T extends VillagerTrades.ItemListing> extends ListNode {
+public class SubTradesNode<T> extends ListNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "sub_trades");
 
     private final List<ITooltipNode> tooltip;
