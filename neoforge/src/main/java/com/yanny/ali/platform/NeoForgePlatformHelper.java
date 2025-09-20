@@ -3,7 +3,6 @@ package com.yanny.ali.platform;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
-import com.yanny.ali.manager.PluginHolder;
 import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.minecraft.client.gui.GuiGraphics;
@@ -19,8 +18,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
-    public List<PluginHolder> getPlugins() {
-        List<PluginHolder> plugins = new LinkedList<>();
+    public List<IPlugin> getPlugins() {
+        List<IPlugin> plugins = new LinkedList<>();
         Type type = Type.getType(AliEntrypoint.class);
 
         for (ModFileScanData scanData : ModList.get().getAllScanData()) {
@@ -32,20 +31,23 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
                         if (IPlugin.class.isAssignableFrom(clazz)) {
                             Class<? extends IPlugin> pluginClass = clazz.asSubclass(IPlugin.class);
                             IPlugin plugin = pluginClass.getConstructor().newInstance();
-                            String modId = scanData.getIModInfoData().get(0).getMods().get(0).getModId();
 
-                            plugins.add(new PluginHolder(modId, plugin));
+                            if (ModList.get().isLoaded(plugin.getModId())) {
+                                plugins.add(plugin);
+                                LOGGER.info("Registered ALI plugin [{}] {}", plugin.getModId(), plugin.getClass().getCanonicalName());
+                            }
                         } else {
                             LOGGER.warn("{} doesn't implement {}", annotationData.memberName(), IPlugin.class.getName());
                         }
                     } catch (Throwable t) {
                         LOGGER.warn("Failed to load plugin with error: {}", t.getMessage());
+                        t.printStackTrace();
                     }
                 }
             }
         }
 
-        LOGGER.info("Found {} plugin(s", plugins.size());
+        LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
     }
 
