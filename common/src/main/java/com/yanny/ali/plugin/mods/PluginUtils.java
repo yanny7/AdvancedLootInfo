@@ -147,12 +147,13 @@ public class PluginUtils {
         }
     }
 
-    public static <T extends BaseAccessor<?> & IEntitySubPredicate> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<EntitySubPredicate> codec) {
+    public static <T extends BaseAccessor<?> & IEntitySubPredicate> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<T> codec) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
             try {
-                registry.registerEntitySubPredicateTooltip(codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+                //noinspection unchecked
+                registry.registerEntitySubPredicateTooltip((MapCodec<? extends EntitySubPredicate>) codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register entity sub predicate tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
                 e.printStackTrace();
