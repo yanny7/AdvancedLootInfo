@@ -1,11 +1,14 @@
 package com.yanny.ali.plugin.mods;
 
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -141,6 +144,36 @@ public class PluginUtils {
             }
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for item sub predicate " + clazz.getName());
+        }
+    }
+
+    public static <T extends BaseAccessor<?> & IEntitySubPredicate> void registerEntitySubPredicateTooltip(IServerRegistry registry, Class<T> clazz, MapCodec<EntitySubPredicate> codec) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                registry.registerEntitySubPredicateTooltip(codec, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register entity sub predicate tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for entity sub predicate " + clazz.getName());
+        }
+    }
+
+    public static <T extends BaseAccessor<?> & IDataComponentType> void registerDataComponentTypeTooltip(IServerRegistry registry, Class<T> clazz, DataComponentType<T> type) {
+        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
+
+        if (classAnnotation != null) {
+            try {
+                registry.registerDataComponentTypeTooltip(type, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getTooltip(u));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to register data component type tooltip for {} with error {}", classAnnotation.value(), e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            throw new IllegalStateException("Missing ClassAccessor annotation for data component type tooltip " + clazz.getName());
         }
     }
 
