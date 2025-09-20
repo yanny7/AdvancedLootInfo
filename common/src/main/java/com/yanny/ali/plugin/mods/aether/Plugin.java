@@ -10,7 +10,7 @@ import com.yanny.ali.plugin.mods.aether.functions.SpawnTNT;
 import com.yanny.ali.plugin.mods.aether.functions.SpawnXP;
 import com.yanny.ali.plugin.mods.aether.functions.WhirlwindSpawnEntity;
 
-@AliEntrypoint
+// @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

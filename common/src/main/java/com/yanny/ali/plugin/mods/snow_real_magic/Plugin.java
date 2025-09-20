@@ -6,7 +6,7 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
 
-@AliEntrypoint
+// @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

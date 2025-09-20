@@ -13,7 +13,7 @@ import com.yanny.ali.plugin.mods.charm.generic.*;
 import com.yanny.ali.plugin.mods.charm.lumberjack.BarkForLogs;
 import com.yanny.ali.plugin.mods.charm.lumberjack.SaplingsForEmeralds;
 
-@AliEntrypoint
+// @AliEntrypoint
 public class Plugin implements IPlugin {
 
     @Override

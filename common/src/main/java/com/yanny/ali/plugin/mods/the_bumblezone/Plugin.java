@@ -11,7 +11,7 @@ import com.yanny.ali.plugin.mods.the_bumblezone.functions.TagItemRemovals;
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.UniquifyIfHasItems;
 import com.yanny.ali.plugin.mods.the_bumblezone.predicates.HoneySlimePredicate;
 
-@AliEntrypoint
+// @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.mods.supplementaries.functions.RandomEnchantFunction
 import com.yanny.ali.plugin.mods.supplementaries.functions.SetChargesFunction;
 import com.yanny.ali.plugin.mods.supplementaries.trades.RandomAdventurerMapListing;
 
-@AliEntrypoint
+// @AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

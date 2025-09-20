@@ -284,7 +284,7 @@ public class PluginUtils {
         ServerLevel level = utils.getServerLevel();
 
         if (level != null) {
-            Registry<T> registry = level.registryAccess().registryOrThrow(tag.registry());
+            Registry<T> registry = level.registryAccess().lookupOrThrow(tag.registry());
 
             return StreamSupport.stream(registry.getTagOrEmpty(tag).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
         }
