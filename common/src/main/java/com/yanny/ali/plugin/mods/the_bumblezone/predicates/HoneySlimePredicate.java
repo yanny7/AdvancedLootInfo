@@ -8,7 +8,7 @@ import com.yanny.ali.api.TooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
-import com.yanny.ali.plugin.mods.IEntitySubPredicate;
+import com.yanny.ali.plugin.mods.IEntitySubPredicateTooltip;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import org.slf4j.Logger;
 
@@ -18,7 +18,7 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getBooleanTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.entities.subpredicates.HoneySlimePredicate")
-public class HoneySlimePredicate extends BaseAccessor<EntitySubPredicate> implements IEntitySubPredicate {
+public class HoneySlimePredicate extends BaseAccessor<EntitySubPredicate> implements IEntitySubPredicateTooltip {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final MapCodec<HoneySlimePredicate> CODEC;
