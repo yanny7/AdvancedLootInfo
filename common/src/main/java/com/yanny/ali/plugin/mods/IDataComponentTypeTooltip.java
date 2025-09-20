@@ -3,6 +3,6 @@ package com.yanny.ali.plugin.mods;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 
-public interface IEntitySubPredicate {
+public interface IDataComponentTypeTooltip {
     ITooltipNode getTooltip(IServerUtils utils);
 }
