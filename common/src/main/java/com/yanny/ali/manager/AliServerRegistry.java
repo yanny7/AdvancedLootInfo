@@ -142,7 +142,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<?> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier) {
+    public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier) {
         //noinspection unchecked
         entryItemCollectorMap.put(type, (u, e) -> itemSupplier.apply(u, (T) e));
     }

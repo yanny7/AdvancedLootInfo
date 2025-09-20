@@ -4,9 +4,6 @@ import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
-import net.minecraft.world.item.Items;
-
-import java.util.List;
 
 //@AliEntrypoint
 public class Plugin implements IPlugin {
@@ -23,7 +20,7 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerItemCollector(NormalizeNode.class, (u, c) -> List.of(Items.CAKE));
         PluginUtils.registerEntry(registry, NormalizeLoot.class);
+        PluginUtils.registerEntryItemCollector(registry, NormalizeLoot.class);
     }
 }
