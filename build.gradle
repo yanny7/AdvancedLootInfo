@@ -60,12 +60,6 @@ subprojects {
                 includeGroup "curse.maven"
             }
         }
-        maven { // Explosion Lib
-            url "https://maven2.bai.lol"
-            content {
-                includeGroup "lol.bai.explosion"
-            }
-        }
         maven { // KubeJS
             // Shedaniel's maven (Architectury API)
             url = "https://maven.architectury.dev"

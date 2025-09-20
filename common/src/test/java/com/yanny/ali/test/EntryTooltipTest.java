@@ -46,7 +46,7 @@ public class EntryTooltipTest {
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(EntryTooltipUtils.getDynamicTooltip((DynamicLoot) DynamicLoot.dynamicEntry(ResourceLocation.withDefaultNamespace("test")).setWeight(3).setQuality(10).build(), 0.3f, 3), List.of(
+        assertTooltip(EntryTooltipUtils.getDynamicTooltip(UTILS, (DynamicLoot) DynamicLoot.dynamicEntry(ResourceLocation.withDefaultNamespace("test")).setWeight(3).setQuality(10).build(), 0.3f, 3, List.of(), List.of()), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
