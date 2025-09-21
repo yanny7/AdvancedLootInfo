@@ -9,6 +9,7 @@ import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -30,7 +31,7 @@ public class OreveinMapForEmeralds extends BaseAccessor<VillagerTrades.ItemListi
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
         ItemStack map = Items.MAP.getDefaultInstance();
 
-        map.setHoverName(Component.translatable("item.immersiveengineering.map_orevein"));
+        map.set(DataComponents.ITEM_NAME, Component.translatable("item.immersiveengineering.map_orevein"));
 
         return new ItemsToItemsNode(
                 utils,
