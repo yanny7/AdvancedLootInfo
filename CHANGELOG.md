@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash on Forge 47.4.0+
+
 ## [1.3.4]
 
 - Added compatibility for Supplementaries
