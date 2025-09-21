@@ -34,7 +34,7 @@ public class ReflectionUtils {
                             myField.set(myObject, value);
                         } else {
                             //noinspection unchecked
-                            myField.set(myObject, copyClassData((Class<? extends BaseAccessor<?>>) myField.getType(), value));
+                            myField.set(myObject, copyClassData((Class<T>) fieldAnnotation.clazz(), value));
                         }
                     }
                 }

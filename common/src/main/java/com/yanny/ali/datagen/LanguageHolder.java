@@ -142,6 +142,13 @@ public class LanguageHolder {
         // Deeper and Darker
         TRANSLATION_MAP.put("ali.type.function.set_painting_variant", "Set Painting Variant");
 
+        // Immersive Engineering
+        TRANSLATION_MAP.put("ali.type.function.bluprintz", "Bluprintz Easter Egg");
+        TRANSLATION_MAP.put("ali.type.function.conveyor_cover", "Apply Conveyor Cover");
+        TRANSLATION_MAP.put("ali.type.function.property_count", "Get Count From Property");
+        TRANSLATION_MAP.put("ali.type.function.revolver_perk", "Revolver Perk");
+        TRANSLATION_MAP.put("ali.type.function.windmill", "Set Windmill Sails");
+
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
 
