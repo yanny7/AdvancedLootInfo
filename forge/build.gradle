@@ -117,6 +117,9 @@ dependencies {
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
 //    compileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497306")
 
+    // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
+//    compileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
 //    compileOnly fg.deobf("curse.maven:selene-499980:6983934")
 

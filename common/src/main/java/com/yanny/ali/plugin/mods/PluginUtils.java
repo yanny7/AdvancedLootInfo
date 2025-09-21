@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.mods;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -9,14 +10,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
@@ -238,5 +243,45 @@ public class PluginUtils {
         }
 
         return Collections.emptyList();
+    }
+
+    public static <T extends ItemLike> List<Item> getItems(IServerUtils utils, Either<ItemStack, TagKey<T>> either) {
+        ServerLevel level = utils.getServerLevel();
+
+        if (level != null) {
+            return either.map(
+                    (i) -> List.of(i.getItem()),
+                    (t) -> {
+                        Registry<T> registry = level.registryAccess().registryOrThrow(t.registry());
+                        return StreamSupport.stream(registry.getTagOrEmpty(t).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
+                    }
+            );
+        }
+
+        return Collections.emptyList();
+    }
+
+    @NotNull
+    public static <T> List<T> getCapturedInstances(Object predicate, Class<T> requiredType) {
+        List<T> instances = new ArrayList<>();
+
+        try {
+            Field[] fields = predicate.getClass().getDeclaredFields();
+
+            for (Field field : fields) {
+                field.setAccessible(true);
+                Object entry = field.get(predicate);
+
+                if (requiredType.isInstance(entry)) {
+                    instances.add(requiredType.cast(entry));
+                }
+            }
+        } catch (IllegalAccessException e) {
+            System.err.println("Error while accessing field: " + e.getMessage());
+        } catch (SecurityException e) {
+            System.err.println("Security error while accessing field: " + e.getMessage());
+        }
+
+        return instances;
     }
 }
