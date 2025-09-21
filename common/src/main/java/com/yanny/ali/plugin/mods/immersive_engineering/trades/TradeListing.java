@@ -26,52 +26,65 @@ import java.util.List;
 public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final Object EMERALD_FOR_ITEM;
-    private static final Object ONE_ITEM_FOR_EMERALDS;
-    private static final Object ITEMS_FOR_ONE_EMERALD;
+    private static final Object SELL_FOR_ONE_EMERALD;
+    private static final Object SELL_FOR_MANY_EMERALDS;
+    private static final Object BUY_FOR_ONE_EMERALD;
+    private static final Object BUY_FOR_MANY_EMERALDS;
 
     static {
-        Object emeraldForItem = null;
-        Object oneItemForEmeralds = null;
-        Object itemsForOneEmerald = null;
+        Object sellForOneEmerald = null;
+        Object sellForManyEmeralds = null;
+        Object buyForOneEmerald = null;
+        Object buyForManyEmeralds = null;
 
         try {
             Class<?> tradesClass = Class.forName("blusunrize.immersiveengineering.common.world.Villages");
-            Field typeMapField = tradesClass.getDeclaredField("EMERALD_FOR_ITEM");
+            Field typeMapField = tradesClass.getDeclaredField("SELL_FOR_ONE_EMERALD");
 
             typeMapField.setAccessible(true);
-            emeraldForItem = typeMapField.get(null);
+            sellForOneEmerald = typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain trade outline EMERALD_FOR_ITEM: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain trade outline SELL_FOR_ONE_EMERALD: {}", e.getMessage());
         }
 
         try {
             Class<?> tradesClass = Class.forName("blusunrize.immersiveengineering.common.world.Villages");
-            Field typeMapField = tradesClass.getDeclaredField("ONE_ITEM_FOR_EMERALDS");
+            Field typeMapField = tradesClass.getDeclaredField("SELL_FOR_MANY_EMERALDS");
 
             typeMapField.setAccessible(true);
-            oneItemForEmeralds = typeMapField.get(null);
+            sellForManyEmeralds = typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain trade outline ONE_ITEM_FOR_EMERALDS: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain trade outline SELL_FOR_MANY_EMERALDS: {}", e.getMessage());
         }
 
         try {
             Class<?> tradesClass = Class.forName("blusunrize.immersiveengineering.common.world.Villages");
-            Field typeMapField = tradesClass.getDeclaredField("ITEMS_FOR_ONE_EMERALD");
+            Field typeMapField = tradesClass.getDeclaredField("BUY_FOR_ONE_EMERALD");
 
             typeMapField.setAccessible(true);
-            itemsForOneEmerald = typeMapField.get(null);
+            buyForOneEmerald = typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain trade outline ITEMS_FOR_ONE_EMERALD: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain trade outline BUY_FOR_ONE_EMERALD: {}", e.getMessage());
         }
 
-        EMERALD_FOR_ITEM = emeraldForItem;
-        ONE_ITEM_FOR_EMERALDS = oneItemForEmeralds;
-        ITEMS_FOR_ONE_EMERALD = itemsForOneEmerald;
+        try {
+            Class<?> tradesClass = Class.forName("blusunrize.immersiveengineering.common.world.Villages");
+            Field typeMapField = tradesClass.getDeclaredField("BUY_FOR_MANY_EMERALDS");
+
+            typeMapField.setAccessible(true);
+            buyForOneEmerald = typeMapField.get(null);
+        } catch (Throwable e) {
+            LOGGER.warn("Unable to obtain trade outline BUY_FOR_MANY_EMERALDS: {}", e.getMessage());
+        }
+
+        SELL_FOR_ONE_EMERALD = sellForOneEmerald;
+        SELL_FOR_MANY_EMERALDS = sellForManyEmeralds;
+        BUY_FOR_ONE_EMERALD = buyForOneEmerald;
+        BUY_FOR_MANY_EMERALDS = buyForManyEmeralds;
     }
 
-    @FieldAccessor(clazz = PriceInterval.class)
-    private PriceInterval priceInfo;
+    @FieldAccessor
+    private int price;
     @FieldAccessor
     private Object outline;
     @FieldAccessor(clazz = LazyItemStack.class)
@@ -92,11 +105,11 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
     public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
         Either<ItemStack, TagKey<? extends ItemLike>> item = lazyItem.getItem();
 
-        if (outline == EMERALD_FOR_ITEM) {
+        if (outline == SELL_FOR_ONE_EMERALD) {
             return new ItemsToItemsNode(
                     utils,
                     item,
-                    new RangeValue(priceInfo.min, priceInfo.max),
+                    new RangeValue(price),
                     Either.left(Items.EMERALD.getDefaultInstance()),
                     new RangeValue(1),
                     maxUses,
@@ -104,25 +117,37 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
                     priceMultiplier,
                     conditions
             );
-        } else if (outline == ONE_ITEM_FOR_EMERALDS) {
+        } else if (outline == SELL_FOR_MANY_EMERALDS) {
             return new ItemsToItemsNode(
                     utils,
-                    Either.left(Items.EMERALD.getDefaultInstance()),
-                    new RangeValue(priceInfo.min, priceInfo.max),
                     item,
                     new RangeValue(1),
+                    Either.left(Items.EMERALD.getDefaultInstance()),
+                    new RangeValue(price),
                     maxUses,
                     xp,
                     priceMultiplier,
                     conditions
             );
-        } else if (outline == ITEMS_FOR_ONE_EMERALD) {
+        } else if (outline == BUY_FOR_ONE_EMERALD) {
             return new ItemsToItemsNode(
                     utils,
                     Either.left(Items.EMERALD.getDefaultInstance()),
                     new RangeValue(1),
                     item,
-                    new RangeValue(priceInfo.min, priceInfo.max),
+                    new RangeValue(price),
+                    maxUses,
+                    xp,
+                    priceMultiplier,
+                    conditions
+            );
+        } else if (outline == BUY_FOR_MANY_EMERALDS) {
+            return new ItemsToItemsNode(
+                    utils,
+                    Either.left(Items.EMERALD.getDefaultInstance()),
+                    new RangeValue(price),
+                    item,
+                    new RangeValue(1),
                     maxUses,
                     xp,
                     priceMultiplier,
@@ -138,9 +163,9 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
         //noinspection unchecked
         List<Item> items = PluginUtils.getItems(utils, (Either<ItemStack, TagKey<ItemLike>>) (Object) lazyItem.getItem());
 
-        if (outline == EMERALD_FOR_ITEM) {
+        if (outline == SELL_FOR_ONE_EMERALD || outline == SELL_FOR_MANY_EMERALDS) {
             return new Pair<>(items, List.of(Items.EMERALD));
-        } else if (outline == ONE_ITEM_FOR_EMERALDS || outline == ITEMS_FOR_ONE_EMERALD) {
+        } else if (outline == BUY_FOR_ONE_EMERALD || outline == BUY_FOR_MANY_EMERALDS) {
             return new Pair<>(List.of(Items.EMERALD), items);
         }
 

@@ -5,8 +5,8 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
 import com.yanny.ali.plugin.mods.immersive_engineering.functions.*;
-import com.yanny.ali.plugin.mods.immersive_engineering.trades.OreveinMapForEmeralds;
-import com.yanny.ali.plugin.mods.immersive_engineering.trades.RevolverPieceForEmeralds;
+import com.yanny.ali.plugin.mods.immersive_engineering.trades.GroupedListing;
+import com.yanny.ali.plugin.mods.immersive_engineering.trades.RerollingItemListing;
 import com.yanny.ali.plugin.mods.immersive_engineering.trades.TradeListing;
 
 @AliEntrypoint
@@ -25,11 +25,11 @@ public class Plugin implements IPlugin {
         PluginUtils.registerFunctionTooltip(registry, WindmillLootFunction.class);
 
         PluginUtils.registerItemListing(registry, TradeListing.class);
-        PluginUtils.registerItemListing(registry, OreveinMapForEmeralds.class);
-        PluginUtils.registerItemListing(registry, RevolverPieceForEmeralds.class);
+        PluginUtils.registerItemListing(registry, RerollingItemListing.class);
+        PluginUtils.registerItemListing(registry, GroupedListing.class);
 
         PluginUtils.registerItemListingCollector(registry, TradeListing.class);
-        PluginUtils.registerItemListingCollector(registry, OreveinMapForEmeralds.class);
-        PluginUtils.registerItemListingCollector(registry, RevolverPieceForEmeralds.class);
+        PluginUtils.registerItemListingCollector(registry, RerollingItemListing.class);
+        PluginUtils.registerItemListingCollector(registry, GroupedListing.class);
     }
 }
