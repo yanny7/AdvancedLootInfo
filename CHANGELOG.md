@@ -1,4 +1,4 @@
-## []
+## [1.3.4]
 
 - Added compatibility for Supplementaries
 - Added compatibility for Moonlight
