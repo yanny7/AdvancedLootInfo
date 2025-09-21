@@ -9,8 +9,6 @@ import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("blusunrize.immersiveengineering.common.util.loot.PropertyCountLootFunction")
@@ -27,7 +25,7 @@ public class PropertyCountLootFunction extends ConditionalFunction implements IF
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.property_count"));
 
         tooltip.add(getStringTooltip(utils, "ali.property.value.name", propertyName));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }
