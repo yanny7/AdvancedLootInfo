@@ -81,6 +81,9 @@ dependencies {
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
 //    compileOnly "curse.maven:hybrid-aquatic-834427:6497304"
 
+    // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
+    compileOnly "curse.maven:immersive-engineering-231951:6733669"
+
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
 //    compileOnly "curse.maven:selene-499980:7007381"
 

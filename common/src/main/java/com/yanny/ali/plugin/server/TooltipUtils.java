@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
@@ -62,9 +61,7 @@ public class TooltipUtils {
         return count;
     }
 
-    public static ItemStack getItemStack(IServerUtils utils, Holder<Item> item, List<LootItemFunction> functions) {
-        ItemStack itemStack = item.value().getDefaultInstance();
-
+    public static ItemStack getItemStack(IServerUtils utils, ItemStack itemStack, List<LootItemFunction> functions) {
         for (LootItemFunction function : functions) {
             itemStack = utils.applyItemStackModifier(utils, function, itemStack);
         }
