@@ -1,4 +1,4 @@
-## []
+## [1.3.5]
 
 - Fixed crash on Forge 47.4.0+
 
