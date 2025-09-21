@@ -10,6 +10,7 @@
 - Added compatibility for Snow! Real Magic!
 - Added compatibility for Deeper And Darker
 - Added compatibility for Repurposed Structures
+- Added compatibility for Immersive Engineering
 - Fixed crash when registry is unavailable
 - Fixed unwanted modification of components
 - Fixed missing item stack modifications for LootJS items
