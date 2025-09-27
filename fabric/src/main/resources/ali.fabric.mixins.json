@@ -11,6 +11,7 @@
     "MixinLootTableFabric"
   ],
   "client": [
+    "MixinMinecraft",
     "MixinRecipeScreen"
   ],
   "injectors": {

@@ -20,7 +20,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@ public class EmiCompatibility implements EmiPlugin {
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
             ));
-            Map<LootCategory<Entity>, EmiRecipeCategory> entityCategoryMap = LootCategories.ENTITY_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
+            Map<LootCategory<EntityType<?>>, EmiRecipeCategory> entityCategoryMap = LootCategories.ENTITY_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getValue,
                     (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
             ));
@@ -105,12 +105,12 @@ public class EmiCompatibility implements EmiPlugin {
                             }
                         }
 
-                        registry.addRecipe(new EmiBlockLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), block, node, outputs));
+                        registry.addRecipe(new EmiBlockLoot(category, location, block, node, outputs));
                     },
                     (node, location, entity, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<Entity>, EmiRecipeCategory> entry : entityCategoryMap.entrySet()) {
+                        for (Map.Entry<LootCategory<EntityType<?>>, EmiRecipeCategory> entry : entityCategoryMap.entrySet()) {
                             if (entry.getKey().validate(entity)) {
                                 category = entry.getValue();
                             }
@@ -120,7 +120,7 @@ public class EmiCompatibility implements EmiPlugin {
                             category = entityCategory;
                         }
 
-                        registry.addRecipe(new EmiEntityLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), entity, node, outputs));
+                        registry.addRecipe(new EmiEntityLoot(category, location, entity, node, outputs));
                     },
                     (node, location, outputs) -> {
                         EmiRecipeCategory category = null;
@@ -135,7 +135,7 @@ public class EmiCompatibility implements EmiPlugin {
                             category = gameplayCategory;
                         }
 
-                        registry.addRecipe(new EmiGameplayLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), node, outputs));
+                        registry.addRecipe(new EmiGameplayLoot(category, location, node, outputs));
                     },
                     (tradeEntry, location, inputs, outputs) -> {
                         EmiRecipeCategory category = null;

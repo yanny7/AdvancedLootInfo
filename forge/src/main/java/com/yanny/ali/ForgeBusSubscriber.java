@@ -1,7 +1,10 @@
 package com.yanny.ali;
 
+import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.manager.PluginManager;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -23,5 +26,12 @@ public class ForgeBusSubscriber {
     @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
         AliMod.INFO_PROPAGATOR.server().syncLootTables(event.getEntity());
+    }
+
+    @SubscribeEvent
+    public static void onClientLevelUnload(LevelEvent.Unload event) {
+        if (event.getLevel() instanceof ClientLevel) {
+            EntityStorage.onUnloadLevel();
+        }
     }
 }

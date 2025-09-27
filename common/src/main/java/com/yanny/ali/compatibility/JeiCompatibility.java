@@ -126,7 +126,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                            entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, node, Collections.emptyList(), outputs));
+                            entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, location, node, Collections.emptyList(), outputs));
                         }
                     },
                     (node, location, outputs) -> {
