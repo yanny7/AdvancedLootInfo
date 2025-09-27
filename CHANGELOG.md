@@ -1,6 +1,7 @@
 ## []
 
 - Fixed memory leak of ClientLevel
+- Fixed reload caused missing loot entries
 
 ## [1.3.5]
 

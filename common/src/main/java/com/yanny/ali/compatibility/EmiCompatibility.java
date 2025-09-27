@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @EmiEntrypoint
@@ -39,7 +40,25 @@ public class EmiCompatibility implements EmiPlugin {
     @Override
     public void register(EmiRegistry emiRegistry) {
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
-        futureData.thenAccept((pair) -> registerData(emiRegistry, pair.getLeft(), pair.getRight()));
+
+        futureData.thenAccept((pair) -> {
+            try {
+                registerData(emiRegistry, pair.getLeft(), pair.getRight());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to register data with error {}", e.getMessage());
+            }
+        });
+
+        if (!futureData.isDone()) {
+            LOGGER.info("Blocking this thread until all data are received!");
+        }
+
+        try {
+            futureData.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
+        }
     }
 
     private void registerData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {

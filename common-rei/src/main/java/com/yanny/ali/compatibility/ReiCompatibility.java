@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -84,12 +85,32 @@ public class ReiCompatibility implements REIClientPlugin {
         for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategoryList) {
             registry.add(holder.category);
         }
+
+        LOGGER.info("Registered ALI categories");
     }
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
-        futureData.thenAccept((pair) -> registerData(registry, pair.getLeft(), pair.getRight()));
+
+        futureData.thenAccept((pair) -> {
+            try {
+                registerData(registry, pair.getLeft(), pair.getRight());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to register data with error {}", e.getMessage());
+            }
+        });
+
+        if (!futureData.isDone()) {
+            LOGGER.info("Blocking this thread until all data are received!");
+        }
+
+        try {
+            futureData.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
+        }
     }
 
     private void registerData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
@@ -154,21 +175,25 @@ public class ReiCompatibility implements REIClientPlugin {
             for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
                 registry.registerFiller(blockPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
+                LOGGER.info("Registered {} block recipes", entry.getValue().size());
             }
 
             for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
                 registry.registerFiller(entityPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
+                LOGGER.info("Registered {} entity recipes", entry.getValue().size());
             }
 
             for (Map.Entry<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
                 registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
+                LOGGER.info("Registered {} gameplay recipes", entry.getValue().size());
             }
 
             for (Map.Entry<Holder<ReiTradeDisplay, TradeLootType, String>, List<TradeLootType>> entry : tradeRecipeTypes.entrySet()) {
                 registry.registerFiller(tradePredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
+                LOGGER.info("Registered {} trades", entry.getValue().size());
             }
         } else {
             LOGGER.warn("REI integration was not loaded! Level is null!");
