@@ -85,8 +85,6 @@ public class ReiCompatibility implements REIClientPlugin {
         for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategoryList) {
             registry.add(holder.category);
         }
-
-        LOGGER.info("Registered ALI categories");
     }
 
     @Override
@@ -175,25 +173,21 @@ public class ReiCompatibility implements REIClientPlugin {
             for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
                 registry.registerFiller(blockPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
-                LOGGER.info("Registered {} block recipes", entry.getValue().size());
             }
 
             for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
                 registry.registerFiller(entityPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
-                LOGGER.info("Registered {} entity recipes", entry.getValue().size());
             }
 
             for (Map.Entry<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
                 registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
-                LOGGER.info("Registered {} gameplay recipes", entry.getValue().size());
             }
 
             for (Map.Entry<Holder<ReiTradeDisplay, TradeLootType, String>, List<TradeLootType>> entry : tradeRecipeTypes.entrySet()) {
                 registry.registerFiller(tradePredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
-                LOGGER.info("Registered {} trades", entry.getValue().size());
             }
         } else {
             LOGGER.warn("REI integration was not loaded! Level is null!");
