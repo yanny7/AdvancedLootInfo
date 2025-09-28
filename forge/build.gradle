@@ -145,6 +145,9 @@ dependencies {
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
 //    compileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
+
+    // Mantle https://www.curseforge.com/minecraft/mc-mods/mantle
+//    compileOnly fg.deobf("curse.maven:mantle-74924:6819217")
 }
 
 tasks.withType(JavaCompile).configureEach {

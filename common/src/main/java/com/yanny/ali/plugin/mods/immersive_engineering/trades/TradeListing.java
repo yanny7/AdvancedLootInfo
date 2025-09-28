@@ -42,6 +42,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
             typeMapField.setAccessible(true);
             emeraldForItem = typeMapField.get(null);
         } catch (Throwable e) {
+            e.printStackTrace();
             LOGGER.warn("Unable to obtain trade outline EMERALD_FOR_ITEM: {}", e.getMessage());
         }
 
@@ -52,6 +53,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
             typeMapField.setAccessible(true);
             oneItemForEmeralds = typeMapField.get(null);
         } catch (Throwable e) {
+            e.printStackTrace();
             LOGGER.warn("Unable to obtain trade outline ONE_ITEM_FOR_EMERALDS: {}", e.getMessage());
         }
 
@@ -62,6 +64,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
             typeMapField.setAccessible(true);
             itemsForOneEmerald = typeMapField.get(null);
         } catch (Throwable e) {
+            e.printStackTrace();
             LOGGER.warn("Unable to obtain trade outline ITEMS_FOR_ONE_EMERALD: {}", e.getMessage());
         }
 
