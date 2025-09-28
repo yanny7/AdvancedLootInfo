@@ -2,6 +2,7 @@
 
 - Fixed memory leak of ClientLevel
 - Fixed reload caused missing loot entries
+- Added compatibility for Mantle
 
 ## [1.3.5]
 

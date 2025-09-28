@@ -45,6 +45,7 @@ public class EmiCompatibility implements EmiPlugin {
             try {
                 registerData(emiRegistry, pair.getLeft(), pair.getRight());
             } catch (Throwable e) {
+                e.printStackTrace();
                 LOGGER.error("Failed to register data with error {}", e.getMessage());
             }
         });

@@ -87,6 +87,7 @@ public class JeiCompatibility implements IModPlugin {
             try {
                 registerData(registration, pair.getLeft(), pair.getRight());
             } catch (Throwable e) {
+                e.printStackTrace();
                 LOGGER.error("Failed to register data with error {}", e.getMessage());
             }
         });

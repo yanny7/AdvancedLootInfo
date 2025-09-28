@@ -95,6 +95,7 @@ public class ReiCompatibility implements REIClientPlugin {
             try {
                 registerData(registry, pair.getLeft(), pair.getRight());
             } catch (Throwable e) {
+                e.printStackTrace();
                 LOGGER.error("Failed to register data with error {}", e.getMessage());
             }
         });
