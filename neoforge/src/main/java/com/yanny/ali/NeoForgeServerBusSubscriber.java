@@ -8,7 +8,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
 @Mod.EventBusSubscriber(modid = Utils.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class NeoForgeBusSubscriber {
+public class NeoForgeServerBusSubscriber {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
         PluginManager.registerServerEvent();
