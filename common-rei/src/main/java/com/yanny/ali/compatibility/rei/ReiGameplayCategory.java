@@ -35,9 +35,9 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Str
     @Override
     public List<Widget> setupDisplay(ReiGameplayDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
-        String key = "ali/loot_table/" + display.getId().substring(1);
-        Component lootName = GenericUtils.ellipsis( key, display.getId(), bounds.width);
-        Component fullText = Component.translatableWithFallback(key, display.getId());
+        String key = "ali/loot_table/" + display.getId();
+        Component lootName = GenericUtils.ellipsis( key, "/" + display.getId(), bounds.width);
+        Component fullText = Component.translatableWithFallback(key, "/" + display.getId());
         int textWidth = Minecraft.getInstance().font.width(lootName);
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), OFFSET);
         int with = Mth.clamp(holder.bounds().width, textWidth, bounds.width);
