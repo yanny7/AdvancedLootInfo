@@ -55,7 +55,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
             widgets.add(new JeiLootSlotWidget(slotDrawable, CATEGORY_WIDTH / 2 - 9, 0, new RangeValue(1)));
             slotDrawables.add(slotDrawable);
         }));
-        widgets.add(createTextWidget(recipe.entity().getDisplayName(), CATEGORY_WIDTH / 2, true));
+        widgets.add(createTextWidget(recipe.entityType().getDescription(), CATEGORY_WIDTH / 2, true));
         widgets.add(new IRecipeWidget() {
             private static final int WIDGET_SIZE = 36;
             final Rect rect = new Rect((CATEGORY_WIDTH - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE);
@@ -66,8 +66,8 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
                 Level level = Minecraft.getInstance().level;
 
                 if (level != null) {
-                    Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, recipe.type().entityType(), level, recipe.type().variant());
-                    GenericUtils.renderEntity(entity, new Rect((9 * 18 - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE), 9 * 18, guiGraphics, (int) mouseX, (int) mouseY);
+                    Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, recipe.entityType(), level, recipe.variant());
+                    GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, guiGraphics, (int) mouseX, (int) mouseY);
                 }
             }
 
