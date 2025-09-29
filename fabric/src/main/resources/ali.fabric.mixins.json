@@ -9,6 +9,7 @@
     "MixinBushBlock"
   ],
   "client": [
+    "MixinMinecraft",
     "MixinRecipeScreen"
   ],
   "injectors": {

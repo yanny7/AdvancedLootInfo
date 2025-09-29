@@ -92,6 +92,7 @@ public abstract class AbstractServer {
                 try {
                     sendSyncLootTableMessage(serverPlayer, message);
                 } catch (Throwable e) {
+                    e.printStackTrace();
                     LOGGER.warn("Failed to send message for loot table {} with error: {}", message.location(), e.getMessage());
                 }
             }
@@ -100,6 +101,7 @@ public abstract class AbstractServer {
                 try {
                     sendSyncTradeMessage(serverPlayer, message);
                 } catch (Throwable e) {
+                    e.printStackTrace();
                     LOGGER.warn("Failed to send message for trade {} with error: {}", message.location(), e.getMessage());
                 }
             }

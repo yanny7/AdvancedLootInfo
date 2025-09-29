@@ -83,6 +83,11 @@ public class LanguageHolder {
         // Moonlight
         TRANSLATION_MAP.put("ali.type.condition.optional_property", "Optional Property");
 
+        // Mantle
+        TRANSLATION_MAP.put("ali.type.condition.block_tag", "Block Tag");
+        TRANSLATION_MAP.put("ali.type.condition.contains_item", "Contains Item");
+        TRANSLATION_MAP.put("ali.type.condition.empty", "Empty");
+
         /*
          * MODIFIERS
          */
@@ -161,6 +166,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.property_count", "Get Count From Property");
         TRANSLATION_MAP.put("ali.type.function.revolver_perk", "Revolver Perk");
         TRANSLATION_MAP.put("ali.type.function.windmill", "Set Windmill Sails");
+
+        // Mantle
+        TRANSLATION_MAP.put("ali.type.function.retexture_block_entity", "Retexture Block Entity");
+        TRANSLATION_MAP.put("ali.type.function.set_fluid", "Set Fluid");
 
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
