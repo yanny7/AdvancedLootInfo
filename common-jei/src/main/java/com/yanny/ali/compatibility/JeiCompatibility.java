@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @JeiPlugin
@@ -81,7 +82,26 @@ public class JeiCompatibility implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
-        futureData.thenAccept((pair) -> registerData(registration, pair.getLeft(), pair.getRight()));
+
+        futureData.thenAccept((pair) -> {
+            try {
+                registerData(registration, pair.getLeft(), pair.getRight());
+            } catch (Throwable e) {
+                e.printStackTrace();
+                LOGGER.error("Failed to register data with error {}", e.getMessage());
+            }
+        });
+
+        if (!futureData.isDone()) {
+            LOGGER.info("Blocking this thread until all data are received!");
+        }
+
+        try {
+            futureData.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
+        }
     }
 
     private void registerData(IRecipeRegistration registration, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
@@ -126,7 +146,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                            entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, node, Collections.emptyList(), outputs));
+                            entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, location, node, Collections.emptyList(), outputs));
                         }
                     },
                     (node, location, outputs) -> {

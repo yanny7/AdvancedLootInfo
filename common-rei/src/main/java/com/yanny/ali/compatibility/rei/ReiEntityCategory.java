@@ -1,7 +1,9 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -14,13 +16,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.Level;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity> {
+public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityType<?>> {
     private static final int WIDGET_SIZE = 36;
     private static final int TEXT_OFFSET = 10;
     private static final int OFFSET = TEXT_OFFSET + WIDGET_SIZE + PADDING;
@@ -29,7 +33,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
     private final Component title;
     private final ItemStack icon;
 
-    public ReiEntityCategory(CategoryIdentifier<ReiEntityDisplay> identifier, Component title, LootCategory<Entity> lootCategory) {
+    public ReiEntityCategory(CategoryIdentifier<ReiEntityDisplay> identifier, Component title, LootCategory<EntityType<?>> lootCategory) {
         super(lootCategory);
         this.identifier = identifier;
         this.title = title;
@@ -41,8 +45,8 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
     public List<Widget> setupDisplay(ReiEntityDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
         Rect rect = new Rect(0, 0, WIDGET_SIZE, WIDGET_SIZE);
-        Component entityLabel = display.getEntity().getDisplayName();
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntity().getType());
+        Component entityLabel = display.getEntityType().getDescription();
+        SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntityType());
         int textWidth = Minecraft.getInstance().font.width(entityLabel);
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), OFFSET);
         int with = Mth.clamp(Math.max(holder.bounds().width, textWidth), WIDGET_SIZE + (SLOT_SIZE + PADDING) * 2, bounds.width);
@@ -58,12 +62,18 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, Entity>
         }
 
         innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
-            graphics.pose().pushPose();
-            graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-            GenericUtils.renderEntity(display.getEntity(), rect, CATEGORY_WIDTH, graphics, mouseX + innerBounds.width / 2, mouseY);
-            graphics.pose().popPose();
+            Level level = Minecraft.getInstance().level;
+
+            if (level != null) {
+                Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, display.getEntityType(), level, display.getVariant());
+
+                graphics.pose().pushPose();
+                graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
+                GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, graphics, mouseX + innerBounds.width / 2, mouseY);
+                graphics.pose().popPose();
+            }
         }));
-        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntity().getDisplayName()));
+        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
         widgets.add(Widgets.createCategoryBase(fullBounds));
 

@@ -10,7 +10,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,13 +27,13 @@ import java.util.regex.Pattern;
 
 public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<Block>> BLOCK_LOOT_CATEGORIES = new HashMap<>();
-    public static final Map<ResourceLocation, LootCategory<Entity>> ENTITY_LOOT_CATEGORIES = new HashMap<>();
+    public static final Map<ResourceLocation, LootCategory<EntityType<?>>> ENTITY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> GAMEPLAY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> TRADE_LOOT_CATEGORIES = new HashMap<>();
 
     public static final LootCategory<Block> PLANT_LOOT = getBlockCategory("plant_loot", Items.DIAMOND_HOE, (block) -> block instanceof BushBlock);
     public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory("block_loot", Items.DIAMOND_PICKAXE, (block) -> true);
-    public static final LootCategory<Entity> ENTITY_LOOT = getEntityCategory("entity_loot", Items.SKELETON_SKULL, (entity) -> true);
+    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory("entity_loot", Items.SKELETON_SKULL, (entity) -> true);
     public static final LootCategory<String> TRADE_LOOT = getTradeCategory("trade_loot", Items.EMERALD_BLOCK, (entity) -> true);
     public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory((path) -> true);
 
@@ -45,7 +45,7 @@ public class LootCategories {
     }
 
     @NotNull
-    private static LootCategory<Entity> getEntityCategory(String key, Item icon, Predicate<Entity> validator) {
+    private static LootCategory<EntityType<?>> getEntityCategory(String key, Item icon, Predicate<EntityType<?>> validator) {
         return new LootCategory<>(key, new ItemStack(icon), LootCategory.Type.ENTITY, validator);
     }
 
@@ -83,7 +83,7 @@ public class LootCategories {
 
                         switch (type) {
                             case BLOCK -> BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, (block) -> true));
-                            case ENTITY -> ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(key, icon, (entity) -> true));
+                            case ENTITY -> ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(key, icon, (entityType) -> true));
                             case TRADE -> TRADE_LOOT_CATEGORIES.put(location, getTradeCategory(key, icon, (entity) -> true));
                             case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(key, icon,
                                     GsonHelper.getAsJsonArray(jsonObject, "prefix").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
