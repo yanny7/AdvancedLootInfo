@@ -2,7 +2,9 @@ package com.yanny.ali.compatibility.jei;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.EntityLootType;
+import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -14,19 +16,22 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
-    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<EntityLootType>> recipeType, LootCategory<Entity> lootCategory, Component title, IDrawable icon) {
+public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
+    public JeiEntityLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<EntityLootType>> recipeType, LootCategory<EntityType<?>> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 
@@ -34,7 +39,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<EntityLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.type().entity().getType());
+        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.type().entityType());
 
         if (spawnEgg != null) {
             builder.addSlot(RecipeIngredientRole.CATALYST).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").addItemLike(spawnEgg);
@@ -58,7 +63,12 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, Entity> {
 
             @Override
             public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-                GenericUtils.renderEntity(recipe.entity(), rect, CATEGORY_WIDTH, guiGraphics, (int) mouseX, (int) mouseY);
+                Level level = Minecraft.getInstance().level;
+
+                if (level != null) {
+                    Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, recipe.type().entityType(), level, recipe.type().variant());
+                    GenericUtils.renderEntity(entity, new Rect((9 * 18 - WIDGET_SIZE) / 2, 10, WIDGET_SIZE, WIDGET_SIZE), 9 * 18, guiGraphics, (int) mouseX, (int) mouseY);
+                }
             }
 
             @NotNull
