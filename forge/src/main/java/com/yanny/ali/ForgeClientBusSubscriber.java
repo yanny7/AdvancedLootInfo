@@ -1,7 +1,7 @@
 package com.yanny.ali;
 
 import com.yanny.ali.compatibility.common.EntityStorage;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -10,7 +10,9 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeClientBusSubscriber {
     @SubscribeEvent
     public static void onClientLevelUnload(LevelEvent.Unload event) {
-        if (event.getLevel() instanceof ClientLevel) {
+        LevelAccessor level = event.getLevel();
+
+        if (level.isClientSide()) {
             EntityStorage.onUnloadLevel();
         }
     }
