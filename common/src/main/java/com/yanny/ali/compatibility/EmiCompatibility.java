@@ -170,7 +170,7 @@ public class EmiCompatibility implements EmiPlugin {
                             category = tradeCategory;
                         }
 
-                        registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
+                        registry.addRecipe(new EmiTradeLoot(category, location, tradeEntry, inputs, outputs));
                     },
                     (tradeEntry, location, inputs, outputs) -> {
                         EmiRecipeCategory category = null;
@@ -185,7 +185,7 @@ public class EmiCompatibility implements EmiPlugin {
                             category = tradeCategory;
                         }
 
-                        registry.addRecipe(new EmiTradeLoot(category, new ResourceLocation(location.getNamespace(), "/" + location.getPath()), location.getPath(), tradeEntry, inputs, outputs));
+                        registry.addRecipe(new EmiTradeLoot(category, location, tradeEntry, inputs, outputs));
                     }
             );
         } else {

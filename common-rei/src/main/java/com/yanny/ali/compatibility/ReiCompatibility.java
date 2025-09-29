@@ -148,7 +148,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     (node, location, outputs) -> {
                         for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
                             if (holder.category.getLootCategory().validate(location.getPath())) {
-                                gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, "/" + location.getPath(), Collections.emptyList(), outputs));
+                                gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, location.getPath(), Collections.emptyList(), outputs));
                                 break;
                             }
                         }
