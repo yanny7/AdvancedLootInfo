@@ -3,10 +3,10 @@ package com.yanny.ali;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.level.LevelEvent;
 
-@Mod.EventBusSubscriber(modid = Utils.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = Utils.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class NeoForgeClientBusSubscriber {
     @SubscribeEvent
     public static void onClientLevelUnload(LevelEvent.Unload event) {
