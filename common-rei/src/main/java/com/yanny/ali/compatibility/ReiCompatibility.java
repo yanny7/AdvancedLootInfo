@@ -18,7 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.commons.lang3.tuple.Pair;
@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class ReiCompatibility implements REIClientPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final List<Holder<ReiBlockDisplay, BlockLootType, Block>> blockCategoryList = new LinkedList<>();
-    private final List<Holder<ReiEntityDisplay, EntityLootType, Entity>> entityCategoryList = new LinkedList<>();
+    private final List<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>> entityCategoryList = new LinkedList<>();
     private final List<Holder<ReiGameplayDisplay, GameplayLootType, String>> gameplayCategoryList = new LinkedList<>();
     private final List<Holder<ReiTradeDisplay, TradeLootType, String>> tradeCategoryList = new LinkedList<>();
 
@@ -73,7 +74,7 @@ public class ReiCompatibility implements REIClientPlugin {
             registry.add(holder.category);
         }
 
-        for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
+        for (Holder<ReiEntityDisplay, EntityLootType, EntityType<?>> holder : entityCategoryList) {
             registry.add(holder.category);
         }
 
@@ -89,7 +90,26 @@ public class ReiCompatibility implements REIClientPlugin {
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
-        futureData.thenAccept((pair) -> registerData(registry, pair.getLeft(), pair.getRight()));
+
+        futureData.thenAccept((pair) -> {
+            try {
+                registerData(registry, pair.getLeft(), pair.getRight());
+            } catch (Throwable e) {
+                e.printStackTrace();
+                LOGGER.error("Failed to register data with error {}", e.getMessage());
+            }
+        });
+
+        if (!futureData.isDone()) {
+            LOGGER.info("Blocking this thread until all data are received!");
+        }
+
+        try {
+            futureData.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
+        }
     }
 
     private void registerData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
@@ -100,7 +120,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
         if (level != null) {
             Map<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> blockRecipeTypes = new HashMap<>();
-            Map<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
+            Map<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>, List<EntityLootType>> entityRecipeTypes = new HashMap<>();
             Map<Holder<ReiGameplayDisplay, GameplayLootType, String>, List<GameplayLootType>> gameplayRecipeTypes = new HashMap<>();
             Map<Holder<ReiTradeDisplay, TradeLootType, String>, List<TradeLootType>> tradeRecipeTypes = new HashMap<>();
 
@@ -118,9 +138,9 @@ public class ReiCompatibility implements REIClientPlugin {
                         }
                     },
                     (node, location, entity, outputs) -> {
-                        for (Holder<ReiEntityDisplay, EntityLootType, Entity> holder : entityCategoryList) {
+                        for (Holder<ReiEntityDisplay, EntityLootType, EntityType<?>> holder : entityCategoryList) {
                             if (holder.category.getLootCategory().validate(entity)) {
-                                entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, node, Collections.emptyList(), outputs));
+                                entityRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new EntityLootType(entity, location, node, Collections.emptyList(), outputs));
                                 break;
                             }
                         }
@@ -128,7 +148,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     (node, location, outputs) -> {
                         for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategoryList) {
                             if (holder.category.getLootCategory().validate(location.getPath())) {
-                                gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, "/" + location.getPath(), Collections.emptyList(), outputs));
+                                gameplayRecipeTypes.computeIfAbsent(holder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, location.getPath(), Collections.emptyList(), outputs));
                                 break;
                             }
                         }
@@ -156,7 +176,7 @@ public class ReiCompatibility implements REIClientPlugin {
                 entry.getValue().forEach(registry::add);
             }
 
-            for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, Entity>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
+            for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
                 registry.registerFillerWithReason(entityPredicate(entry.getValue()), entry.getKey().filler());
                 entry.getValue().forEach(registry::add);
             }

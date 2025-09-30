@@ -1,3 +1,13 @@
+## []
+
+- Fixed memory leak of ClientLevel
+- Fixed reload caused missing loot entries
+- Added compatibility for Mantle
+
+## [1.3.5]
+
+- Fixed crash on Forge 47.4.0+
+
 ## [1.3.4]
 
 - Added compatibility for Supplementaries

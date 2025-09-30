@@ -28,7 +28,16 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
         List<Entity> entities = new ArrayList<>();
 
         if (factory == null) {
-            factory = (l) -> Collections.singletonList(type.create(l, EntitySpawnReason.LOAD));
+            factory = (l) -> {
+                Entity entity = type.create(l, EntitySpawnReason.LOAD);
+
+                if (entity != null) {
+                    return Collections.singletonList(entity);
+                } else {
+                    LOGGER.warn("Failed to create entity: {} (NULL)", type);
+                    return Collections.emptyList();
+                }
+            };
         }
 
         try {

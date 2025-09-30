@@ -56,6 +56,7 @@ public class LootJsPlugin implements IPlugin {
                             LOGGER.error("Skipping unexpected modification type {}", actions.getClass().getCanonicalName());
                 }
             } catch (Throwable e) {
+                e.printStackTrace();
                 LOGGER.error("Failed to process loot modification {}: {}", action.name(), e.getMessage());
             }
         }
