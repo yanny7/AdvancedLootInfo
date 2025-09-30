@@ -162,6 +162,7 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
             //noinspection unchecked
             return ((Collection<Object>) registryClass.getMethod("getTypes").invoke(null)).stream().map((e) -> ReflectionUtils.copyClassData(WoodType.class, e)).toList();
         } catch (Throwable e) {
+            e.printStackTrace();
             LOGGER.warn("Unable to obtain all wood types: {}", e.getMessage());
             return Collections.emptyList();
         }

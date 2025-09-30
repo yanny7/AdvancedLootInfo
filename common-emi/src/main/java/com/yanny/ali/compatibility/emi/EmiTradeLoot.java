@@ -20,9 +20,9 @@ import java.util.function.BiFunction;
 public class EmiTradeLoot extends EmiBaseLoot {
     private final String path;
 
-    public EmiTradeLoot(EmiRecipeCategory category, ResourceLocation id, String path, IDataNode trade, List<ItemStack> inputs, List<ItemStack> outputs) {
+    public EmiTradeLoot(EmiRecipeCategory category, ResourceLocation id,  IDataNode trade, List<ItemStack> inputs, List<ItemStack> outputs) {
         super(category, id, trade, 0, 10, inputs, outputs);
-        this.path = path;
+        this.path = id.getPath();
     }
 
     @Override
