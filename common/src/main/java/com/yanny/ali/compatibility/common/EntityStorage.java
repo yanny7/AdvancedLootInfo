@@ -26,7 +26,7 @@ public class EntityStorage {
 
             for (Entity entity : variants) {
                 if (entity instanceof Mob mob) {
-                    variantMap.put(mob.getLootTable().location(), entity);
+                    mob.getLootTable().ifPresent((location) -> variantMap.put(location.location(), entity));
                 }
             }
 
