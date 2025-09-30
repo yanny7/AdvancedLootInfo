@@ -31,6 +31,7 @@ public class Utils {
                     .map((e) -> Map.entry(e.getKey(), e.getValue().stream().map((w) -> ReflectionUtils.copyClassData(WoodType.class, w)).toList()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
         } catch (Throwable e) {
+            e.printStackTrace();
             LOGGER.warn("Unable to obtain wood type mapping: {}", e.getMessage());
         }
     }
