@@ -119,7 +119,7 @@ public class GenericUtils {
     public static void processData(ClientLevel level, AliClientRegistry clientRegistry,
                                    Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData,
                                    QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
-                                   QuadConsumer<IDataNode, ResourceLocation, Entity, List<ItemStack>> entityConsumer,
+                                   QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
                                    TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
@@ -149,7 +149,9 @@ public class GenericUtils {
                         if (lootEntry != null) {
                             List<ItemStack> outputs = clientRegistry.getLootItems(location);
 
-                            entityConsumer.accept(lootEntry, location, entity, outputs);
+                            if (outputs != null) {
+                                entityConsumer.accept(lootEntry, location, entityType, outputs);
+                            }
                         }
 
                         lootData.remove(location);
