@@ -1,4 +1,4 @@
-## []
+## [1.3.6]
 
 - Fixed memory leak of ClientLevel
 - Fixed reload caused missing loot entries
