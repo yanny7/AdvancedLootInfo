@@ -27,7 +27,8 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
@@ -39,8 +40,6 @@ public class ReiCompatibility implements REIClientPlugin {
     private final List<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>> entityCategoryList = new LinkedList<>();
     private final List<Holder<ReiGameplayDisplay, GameplayLootType, String>> gameplayCategoryList = new LinkedList<>();
     private final List<Holder<ReiTradeDisplay, TradeLootType, String>> tradeCategoryList = new LinkedList<>();
-
-    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
@@ -89,24 +88,23 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
+        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
-        futureData.thenAccept((pair) -> {
-            try {
-                registerData(registry, pair.getLeft(), pair.getRight());
-            } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.error("Failed to register data with error {}", e.getMessage());
-            }
-        });
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
 
         if (!futureData.isDone()) {
             LOGGER.info("Blocking this thread until all data are received!");
         }
 
         try {
-            futureData.get();
-        } catch (InterruptedException | ExecutionException e) {
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(30, TimeUnit.SECONDS);
+
+            registerData(registry, pair.getLeft(), pair.getRight());
+        } catch (TimeoutException e) {
+            futureData.cancel(true);
+            PluginManager.CLIENT_REGISTRY.clearLootData();
+            LOGGER.error("Failed to received data in 30 seconds, registration aborted!");
+        } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
         }
