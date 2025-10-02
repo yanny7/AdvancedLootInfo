@@ -41,8 +41,6 @@ public class ReiCompatibility implements REIClientPlugin {
     private final List<Holder<ReiGameplayDisplay, GameplayLootType, String>> gameplayCategoryList = new LinkedList<>();
     private final List<Holder<ReiTradeDisplay, TradeLootType, String>> tradeCategoryList = new LinkedList<>();
 
-    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
-
     @Override
     public void registerCategories(CategoryRegistry registry) {
         blockCategoryList.clear();
@@ -90,6 +88,8 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
+        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
+
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
 
         if (!futureData.isDone()) {
@@ -97,13 +97,13 @@ public class ReiCompatibility implements REIClientPlugin {
         }
 
         try {
-            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(10, TimeUnit.SECONDS);
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(30, TimeUnit.SECONDS);
 
             registerData(registry, pair.getLeft(), pair.getRight());
         } catch (TimeoutException e) {
             futureData.cancel(true);
             PluginManager.CLIENT_REGISTRY.clearLootData();
-            LOGGER.error("Failed to received data in 10 seconds, registration aborted!");
+            LOGGER.error("Failed to received data in 30 seconds, registration aborted!");
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with error {}", e.getMessage());

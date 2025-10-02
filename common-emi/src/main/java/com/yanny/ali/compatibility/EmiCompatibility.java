@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
 public class EmiCompatibility implements EmiPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
-
     @Override
     public void register(EmiRegistry emiRegistry) {
+        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
+
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
 
         if (!futureData.isDone()) {
@@ -47,13 +47,13 @@ public class EmiCompatibility implements EmiPlugin {
         }
 
         try {
-            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(10, TimeUnit.SECONDS);
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(30, TimeUnit.SECONDS);
 
             registerData(emiRegistry, pair.getLeft(), pair.getRight());
         } catch (TimeoutException e) {
             futureData.cancel(true);
             PluginManager.CLIENT_REGISTRY.clearLootData();
-            LOGGER.error("Failed to received data in 10 seconds, registration aborted!");
+            LOGGER.error("Failed to received data in 30 seconds, registration aborted!");
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
