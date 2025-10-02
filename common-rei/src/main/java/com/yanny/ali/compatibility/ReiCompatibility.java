@@ -26,7 +26,8 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -91,22 +92,19 @@ public class ReiCompatibility implements REIClientPlugin {
     public void registerDisplays(DisplayRegistry registry) {
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
 
-        futureData.thenAccept((pair) -> {
-            try {
-                registerData(registry, pair.getLeft(), pair.getRight());
-            } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.error("Failed to register data with error {}", e.getMessage());
-            }
-        });
-
         if (!futureData.isDone()) {
             LOGGER.info("Blocking this thread until all data are received!");
         }
 
         try {
-            futureData.get();
-        } catch (InterruptedException | ExecutionException e) {
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(10, TimeUnit.SECONDS);
+
+            registerData(registry, pair.getLeft(), pair.getRight());
+        } catch (TimeoutException e) {
+            futureData.cancel(true);
+            PluginManager.CLIENT_REGISTRY.clearLootData();
+            LOGGER.error("Failed to received data in 10 seconds, registration aborted!");
+        } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
         }
