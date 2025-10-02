@@ -26,7 +26,8 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 @JeiPlugin
@@ -37,8 +38,6 @@ public class JeiCompatibility implements IModPlugin {
     private final List<JeiEntityLoot> entityCategoryList = new LinkedList<>();
     private final List<JeiGameplayLoot> gameplayCategoryList = new LinkedList<>();
     private final List<JeiTradeLoot> tradeCategoryList = new LinkedList<>();
-
-    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
     @Override
     public void onRuntimeUnavailable() {
@@ -81,24 +80,23 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
+        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
 
-        futureData.thenAccept((pair) -> {
-            try {
-                registerData(registration, pair.getLeft(), pair.getRight());
-            } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.error("Failed to register data with error {}", e.getMessage());
-            }
-        });
+        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
 
         if (!futureData.isDone()) {
             LOGGER.info("Blocking this thread until all data are received!");
         }
 
         try {
-            futureData.get();
-        } catch (InterruptedException | ExecutionException e) {
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(30, TimeUnit.SECONDS);
+
+            registerData(registration, pair.getLeft(), pair.getRight());
+        } catch (TimeoutException e) {
+            futureData.cancel(true);
+            PluginManager.CLIENT_REGISTRY.clearLootData();
+            LOGGER.error("Failed to received data in 30 seconds, registration aborted!");
+        } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
         }
