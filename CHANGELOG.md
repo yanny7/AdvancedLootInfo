@@ -1,3 +1,7 @@
+## []
+
+- Finally fixed bug with /reload
+
 ## [1.3.6]
 
 - Fixed memory leak of ClientLevel
