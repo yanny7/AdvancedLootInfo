@@ -39,8 +39,6 @@ public class JeiCompatibility implements IModPlugin {
     private final List<JeiGameplayLoot> gameplayCategoryList = new LinkedList<>();
     private final List<JeiTradeLoot> tradeCategoryList = new LinkedList<>();
 
-    private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
-
     @Override
     public void onRuntimeUnavailable() {
         blockCategoryList.clear();
@@ -82,6 +80,8 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
+
         PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
 
         if (!futureData.isDone()) {
@@ -89,13 +89,13 @@ public class JeiCompatibility implements IModPlugin {
         }
 
         try {
-            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(10, TimeUnit.SECONDS);
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(30, TimeUnit.SECONDS);
 
             registerData(registration, pair.getLeft(), pair.getRight());
         } catch (TimeoutException e) {
             futureData.cancel(true);
             PluginManager.CLIENT_REGISTRY.clearLootData();
-            LOGGER.error("Failed to received data in 10 seconds, registration aborted!");
+            LOGGER.error("Failed to received data in 30 seconds, registration aborted!");
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
