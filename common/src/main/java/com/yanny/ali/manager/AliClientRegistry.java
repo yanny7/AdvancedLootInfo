@@ -44,14 +44,23 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         tradeOutputItemMap.put(resourceLocation, outputs);
     }
 
-    public synchronized void clearLootData() {
+    public synchronized void startLootData() {
         dataReceived = false;
-        listener = null;
         lootNodeMap.clear();
         lootTradeMap.clear();
         lootItemMap.clear();
 
         LOGGER.info("Started receiving loot data");
+    }
+
+    public synchronized void clearLootData() {
+        listener = null;
+        dataReceived = false;
+        lootNodeMap.clear();
+        lootTradeMap.clear();
+        lootItemMap.clear();
+
+        LOGGER.info("Cleared Loot data");
     }
 
     public synchronized void doneLootData() {
