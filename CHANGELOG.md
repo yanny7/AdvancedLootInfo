@@ -1,4 +1,4 @@
-## []
+## [1.3.8]
 
 - Fixed deadlock while receiving loot data on Fabric
 
