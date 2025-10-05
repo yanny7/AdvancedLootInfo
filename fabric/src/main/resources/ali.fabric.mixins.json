@@ -7,10 +7,11 @@
   "mixins": [
     "MixinBushBlock"
   ],
+  "client": [
+    "MixinClientPlayNetworkAddon",
+    "MixinMinecraft"
+  ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "MixinMinecraft"
-  ]
+  }
 }
