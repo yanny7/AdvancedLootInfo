@@ -9,6 +9,7 @@
     "MixinBushBlock"
   ],
   "client": [
+    "MixinClientPlayNetworkAddon",
     "MixinMinecraft",
     "MixinRecipeScreen"
   ],

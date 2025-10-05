@@ -1,3 +1,7 @@
+## []
+
+- Fixed deadlock while receiving loot data on Fabric
+
 ## [1.3.7]
 
 - Finally fixed bug with /reload
