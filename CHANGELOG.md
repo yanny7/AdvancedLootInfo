@@ -1,3 +1,7 @@
+## [1.3.9]
+
+- Fixed crash on failed mixin
+
 ## [1.3.8]
 
 - Fixed deadlock while receiving loot data on Fabric

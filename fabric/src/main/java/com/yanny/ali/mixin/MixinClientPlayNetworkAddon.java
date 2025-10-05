@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = ClientPlayNetworkAddon.class, remap = false)
+@Mixin(value = ClientPlayNetworkAddon.class)
 public class MixinClientPlayNetworkAddon {
     @Inject(
             method = "Lnet/fabricmc/fabric/impl/networking/client/ClientPlayNetworkAddon;receive(Lnet/fabricmc/fabric/api/client/networking/v1/ClientPlayNetworking$PlayPayloadHandler;Lnet/minecraft/network/protocol/common/custom/CustomPacketPayload;)V",
