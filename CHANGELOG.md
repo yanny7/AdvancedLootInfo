@@ -1,4 +1,4 @@
-## []
+## [1.3.9]
 
 - Fixed crash on failed mixin
 
