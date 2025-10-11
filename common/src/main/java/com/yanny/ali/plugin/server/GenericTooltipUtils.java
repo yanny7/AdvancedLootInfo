@@ -808,7 +808,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getBeehiveBlockEntityOccupantTooltip(IServerUtils utils, String key, BeehiveBlockEntity.Occupant occupant) {
         ITooltipNode tooltip = new TooltipNode(translatable(key));
 
-        tooltip.add(getStringTooltip(utils, "ali.property.value.entity_data", occupant.entityData().copyTag().toString()));
+        tooltip.add(getStringTooltip(utils, "ali.property.value.entity_data", occupant.entityData().copyTagWithoutId().toString()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.ticks_in_hive", occupant.ticksInHive()));
         tooltip.add(getIntegerTooltip(utils, "ali.property.value.min_ticks_in_hive", occupant.minTicksInHive()));
 

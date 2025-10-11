@@ -1,6 +1,5 @@
 package com.yanny.ali.test;
 
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -65,7 +64,10 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -841,32 +843,6 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testProfileTooltip() {
-        PropertyMap map = new PropertyMap();
-
-        map.put("Hello", new com.mojang.authlib.properties.Property("asdf", "jklo", "sign"));
-        map.put("World", new com.mojang.authlib.properties.Property("qwer", "uiop", "help"));
-
-        assertTooltip(DataComponentTooltipUtils.getProfileTooltip(UTILS, new ResolvableProfile(
-                Optional.of("Hello"),
-                Optional.of(UUID.nameUUIDFromBytes(new byte[]{1, 1, 1, 1})),
-                map
-        )), List.of(
-                "Name: Hello",
-                "UUID: 3b5b9852-567e-3761-8aac-7f5f2d74ef74",
-                "Properties:",
-                "  -> Hello",
-                "    -> Name: asdf",
-                "    -> Value: jklo",
-                "    -> Signature: sign",
-                "  -> World",
-                "    -> Name: qwer",
-                "    -> Value: uiop",
-                "    -> Signature: help"
-        ));
-    }
-
-    @Test
     public void testResourceLocationTooltip() {
         assertTooltip(DataComponentTooltipUtils.getResourceLocationTooltip(UTILS, ResourceLocation.withDefaultNamespace("test")), List.of("Value: minecraft:test"));
     }
@@ -978,8 +954,8 @@ public class DataComponentTooltipTest {
     @Test
     public void testBeesTooltip() {
         assertTooltip(DataComponentTooltipUtils.getBeesTooltip(UTILS, new Bees(List.of(
-                new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 100, 20),
-                new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 1000, 30)
+                new BeehiveBlockEntity.Occupant(TypedEntityData.of(EntityType.BEE, new CompoundTag()), 100, 20),
+                new BeehiveBlockEntity.Occupant(TypedEntityData.of(EntityType.BEE, new CompoundTag()), 1000, 30)
         ))), List.of(
                 "Bees:",
                 "  -> Occupant:",

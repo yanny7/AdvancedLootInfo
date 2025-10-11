@@ -426,8 +426,6 @@ public class DataComponentTooltipUtils {
         ITooltipNode tooltip = new TooltipNode();
 
         tooltip.add(getOptionalTooltip(utils, "ali.property.value.name", value.name(), GenericTooltipUtils::getStringTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.uuid", value.id(), GenericTooltipUtils::getUUIDTooltip));
-        tooltip.add(getMapTooltip(utils, "ali.property.branch.properties", value.properties().asMap(), GenericTooltipUtils::getPropertiesEntryTooltip));
 
         return tooltip;
     }
@@ -547,5 +545,11 @@ public class DataComponentTooltipUtils {
     @NotNull
     public static ITooltipNode getCatVariantTooltip(IServerUtils utils, Holder<CatVariant> catVariant) {
         return getHolderTooltip(utils, "ali.property.value.type", catVariant, RegistriesTooltipUtils::getCatVariantTooltip);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getTypedEntityDataTooltip(IServerUtils utils, TypedEntityData<?> value) {
+        return getStringTooltip(utils, "ali.property.value.tag", value.copyTagWithoutId().toString());
     }
 }

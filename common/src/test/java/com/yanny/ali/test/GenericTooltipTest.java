@@ -968,7 +968,7 @@ public class GenericTooltipTest {
         tag.putInt("test", 5);
 
         assertTooltip(GenericTooltipUtils.getBeehiveBlockEntityOccupantTooltip(UTILS, "ali.property.branch.occupant", new BeehiveBlockEntity.Occupant(
-                CustomData.of(tag),
+                TypedEntityData.of(EntityType.BEE, tag),
                 2,
                 3
         )), List.of(

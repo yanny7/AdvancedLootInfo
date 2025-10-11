@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class NetworkUtils {
     public static DistHolder<AbstractClient, AbstractServer> registerLootInfoPropagator(PayloadRegistrar registrar) {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             return registerClientLootInfoPropagator(registrar);
         } else {
             return registerServerLootInfoPropagator(registrar);

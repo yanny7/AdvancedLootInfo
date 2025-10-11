@@ -42,7 +42,7 @@ accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantedCountIncreaseFunction enchantment Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantedCountIncreaseFunction limit I
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantedCountIncreaseFunction value Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
-accessible field net/minecraft/world/level/storage/loot/functions/CopyNameFunction source Lnet/minecraft/world/level/storage/loot/functions/CopyNameFunction$NameSource;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNameFunction source Lnet/minecraft/world/level/storage/loot/functions/CopyNameFunction$Source;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyBlockState block Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyBlockState properties Ljava/util/Set;
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction onlyCompatible Z

@@ -26,7 +26,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getCopyNameTooltip(IServerUtils utils, CopyNameFunction fun) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.copy_name"));
 
-        tooltip.add(getEnumTooltip(utils, "ali.property.value.source", fun.source));
+        tooltip.add(getResourceLocationTooltip(utils, "ali.property.value.source", fun.source.param().name()));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));
 
         return tooltip;
@@ -358,7 +358,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getCopyComponentsTooltip(IServerUtils utils, CopyComponentsFunction fun) {
         ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.copy_components"));
 
-        tooltip.add(getEnumTooltip(utils, "ali.property.value.source", fun.source));
+        tooltip.add(getResourceLocationTooltip(utils, "ali.property.value.source", fun.source.contextParam().name()));
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.include", "ali.property.value.null", fun.include, RegistriesTooltipUtils::getDataComponentTypeTooltip));
         tooltip.add(getCollectionTooltip(utils, "ali.property.branch.exclude", "ali.property.value.null", fun.exclude, RegistriesTooltipUtils::getDataComponentTypeTooltip));
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates));

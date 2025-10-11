@@ -16,6 +16,7 @@ import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.InstrumentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.StructureTags;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -61,9 +62,9 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyNameTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, (CopyNameFunction) CopyNameFunction.copyName(CopyNameFunction.NameSource.THIS).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, (CopyNameFunction) CopyNameFunction.copyName(new CopyNameFunction.Source(new ContextKey<>(ResourceLocation.withDefaultNamespace("this")))).build()), List.of(
                 "Copy Name:",
-                "  -> Source: THIS"
+                "  -> Source: minecraft:this"
         ));
     }
 
@@ -488,7 +489,7 @@ public class FunctionTooltipTest {
     @Test
     public void testCopyComponentsTooltip() {
         assertTooltip(FunctionTooltipUtils.getCopyComponentsTooltip(UTILS, (CopyComponentsFunction) CopyComponentsFunction
-                .copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                .copyComponentsFromBlockEntity(new ContextKey<>(ResourceLocation.withDefaultNamespace("block_entity")))
                 .include(DataComponents.DAMAGE)
                 .include(DataComponents.FOOD)
                 .exclude(DataComponents.BEES)
@@ -496,7 +497,7 @@ public class FunctionTooltipTest {
                 .build()
         ), List.of(
                 "Copy Components:",
-                "  -> Source: BLOCK_ENTITY",
+                "  -> Source: minecraft:block_entity",
                 "  -> Include:",
                 "    -> minecraft:damage",
                 "    -> minecraft:food",
