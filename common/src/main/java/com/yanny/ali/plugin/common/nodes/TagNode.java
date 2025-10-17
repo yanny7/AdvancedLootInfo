@@ -58,10 +58,10 @@ public class TagNode implements IDataNode, IItemNode {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
+        chance = buf.readFloat();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
-        chance = 1;
     }
 
     @Override
@@ -94,6 +94,7 @@ public class TagNode implements IDataNode, IItemNode {
         buf.writeResourceLocation(tag.location());
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
+        buf.writeFloat(chance);
     }
 
     @Override

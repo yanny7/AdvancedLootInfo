@@ -22,6 +22,7 @@ public class ReferenceNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "reference");
 
     private final List<ITooltipNode> tooltip;
+    private final float chance;
 
     public ReferenceNode(IServerUtils utils, LootTableReference entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
@@ -34,17 +35,20 @@ public class ReferenceNode extends ListNode {
             addChildren(new MissingNode());
         }
 
+        this.chance = chance * entry.weight / sumWeight;
         tooltip = EntryTooltipUtils.getReferenceTooltip(entry, chance, sumWeight);
     }
 
     public ReferenceNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        chance = buf.readFloat();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        buf.writeFloat(chance);
     }
 
     @Override
@@ -55,5 +59,10 @@ public class ReferenceNode extends ListNode {
     @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    @Override
+    public float getChance() {
+        return chance;
     }
 }

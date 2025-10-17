@@ -57,10 +57,10 @@ public class ItemNode implements IDataNode, IItemNode {
         itemStack = buf.readItem();
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
+        chance = buf.readFloat();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
-        chance = 1;
     }
 
     @Override
@@ -93,6 +93,7 @@ public class ItemNode implements IDataNode, IItemNode {
         buf.writeItem(itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
+        buf.writeFloat(chance);
     }
 
     @Override

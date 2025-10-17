@@ -21,21 +21,25 @@ public class DynamicNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "dynamic");
 
     private final List<ITooltipNode> tooltip;
+    private final float chance;
 
     public DynamicNode(IServerUtils utils, DynamicLoot entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
 
+        this.chance = chance * entry.weight / sumWeight;
         tooltip = EntryTooltipUtils.getDynamicTooltip(utils, entry, chance, sumWeight, allFunctions, allConditions);
     }
 
     public DynamicNode(IClientUtils utils, FriendlyByteBuf buf) {
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        chance = buf.readFloat();
     }
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        buf.writeFloat(chance);
     }
 
     @Override
@@ -46,5 +50,10 @@ public class DynamicNode implements IDataNode {
     @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    @Override
+    public float getChance() {
+        return chance;
     }
 }

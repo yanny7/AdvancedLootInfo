@@ -1,3 +1,7 @@
+## []
+
+- Sort loot by chance, descending (highest chance first).
+
 ## [1.3.8]
 
 - Fixed subsequent /reload doesn't block registration thread (Hope that this is final fix for /reload bug)
