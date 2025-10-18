@@ -90,13 +90,11 @@ public class EmiCompatibility implements EmiPlugin {
             tradeCategoryMap.values().forEach(registry::addCategory);
 
             EmiRecipeCategory blockCategory = createCategory(LootCategories.BLOCK_LOOT);
-            EmiRecipeCategory plantCategory = createCategory(LootCategories.PLANT_LOOT);
             EmiRecipeCategory entityCategory = createCategory(LootCategories.ENTITY_LOOT);
             EmiRecipeCategory gameplayCategory = createCategory(LootCategories.GAMEPLAY_LOOT);
             EmiRecipeCategory tradeCategory = createCategory(LootCategories.TRADE_LOOT);
 
             registry.addCategory(blockCategory);
-            registry.addCategory(plantCategory);
             registry.addCategory(entityCategory);
             registry.addCategory(gameplayCategory);
             registry.addCategory(tradeCategory);
@@ -109,18 +107,14 @@ public class EmiCompatibility implements EmiPlugin {
                     (node, location, block, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        if (LootCategories.PLANT_LOOT.validate(block)) {
-                            category = plantCategory;
-                        } else {
-                            for (Map.Entry<LootCategory<Block>, EmiRecipeCategory> entry : blockCategoryMap.entrySet()) {
-                                if (entry.getKey().validate(block)) {
-                                    category = entry.getValue();
-                                }
+                        for (Map.Entry<LootCategory<Block>, EmiRecipeCategory> entry : blockCategoryMap.entrySet()) {
+                            if (entry.getKey().validate(block)) {
+                                category = entry.getValue();
                             }
+                        }
 
-                            if (category == null) {
-                                category = blockCategory;
-                            }
+                        if (category == null) {
+                            category = blockCategory;
                         }
 
                         registry.addRecipe(new EmiBlockLoot(category, location, block, node, outputs));

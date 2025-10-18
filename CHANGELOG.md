@@ -1,6 +1,7 @@
 ## []
 
 - Sort loot by chance, descending (highest chance first).
+- Configurable categories using resources
 
 ## [1.3.8]
 

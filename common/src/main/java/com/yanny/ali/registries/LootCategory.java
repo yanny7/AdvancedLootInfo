@@ -1,21 +1,34 @@
 package com.yanny.ali.registries;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Predicate;
-
-public class LootCategory<T> {
+public abstract class LootCategory<T> {
     private final String key;
     private final ItemStack icon;
     private final Type type;
-    private final Predicate<T> validator;
 
-    public LootCategory(String key, ItemStack icon, Type type, Predicate<T> validator) {
+    public LootCategory(String key, ItemStack icon, Type type) {
         this.key = key;
         this.icon = icon;
         this.type = type;
-        this.validator = validator;
     }
+
+    public LootCategory(ResourceLocation location, JsonElement element) {
+        JsonObject jsonObject = GsonHelper.convertToJsonObject(element, location.toString());
+        type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
+        key = GsonHelper.getAsString(jsonObject, "key");
+        icon = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon"))));
+    }
+
+    protected abstract void toJson(JsonObject object);
+
+    public abstract boolean validate(T t);
 
     public String getKey() {
         return key;
@@ -29,8 +42,16 @@ public class LootCategory<T> {
         return type;
     }
 
-    public boolean validate(T t) {
-        return validator.test(t);
+    @NotNull
+    public final JsonElement toJson() {
+        JsonObject object = new JsonObject();
+
+        object.addProperty("type", type.name());
+        object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon.getItem()).toString());
+        object.addProperty("key", key);
+
+        toJson(object);
+        return object;
     }
 
     public enum Type {

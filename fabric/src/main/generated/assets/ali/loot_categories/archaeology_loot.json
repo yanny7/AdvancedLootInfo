@@ -2,7 +2,7 @@
   "type": "GAMEPLAY",
   "icon": "minecraft:decorated_pot",
   "key": "archaeology_loot",
-  "prefix": [
+  "pattern": [
     "^archaeology/.*$"
   ]
 }

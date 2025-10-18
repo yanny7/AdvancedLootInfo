@@ -51,7 +51,6 @@ public class JeiCompatibility implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
-        blockCategoryList.add(createCategory(guiHelper, LootCategories.PLANT_LOOT, JeiBlockLoot::new));
         blockCategoryList.addAll(LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream()
                 .map((e) -> createCategory(guiHelper, e, JeiBlockLoot::new))
                 .collect(Collectors.toSet()));

@@ -1,24 +1,21 @@
 package com.yanny.ali.datagen;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.yanny.ali.Utils;
+import com.yanny.ali.registries.BlockLootCategory;
 import com.yanny.ali.registries.GameplayLootCategory;
 import com.yanny.ali.registries.LootCategory;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.BushBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
@@ -32,14 +29,20 @@ public class LootCategoryProvider implements DataProvider {
     }
 
     public void generate() {
+        addBlockCategory("plant_loot", Items.DIAMOND_HOE, List.of(BushBlock.class));
+
         addGameplayCategory("chest_loot", Items.CHEST, List.of(Pattern.compile("^chests/.*$")));
         addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("^gameplay/fishing.*$")));
         addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("^archaeology/.*$")));
         addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("^gameplay/hero_of_the_village/.*$")));
     }
 
-    protected void addGameplayCategory(String key, Item icon, List<Pattern> prefix) {
-        categories.add(new GameplayLootCategory(key, new ItemStack(icon), LootCategory.Type.GAMEPLAY, prefix));
+    protected void addGameplayCategory(String key, Item icon, List<Pattern> patterns) {
+        categories.add(new GameplayLootCategory(key, new ItemStack(icon), patterns));
+    }
+
+    protected void addBlockCategory(String key, Item icon, List<Class<?>> classes) {
+        categories.add(new BlockLootCategory(key, new ItemStack(icon), classes));
     }
 
     @NotNull
@@ -51,7 +54,7 @@ public class LootCategoryProvider implements DataProvider {
                 categories.stream()
                         .map((category) -> {
                             Path output = generator.getOutputFolder().resolve(String.format("assets/%s/loot_categories/%s.json", Utils.MOD_ID, category.getKey()));
-                            return DataProvider.saveStable(cachedOutput, toJson(category), output);
+                            return DataProvider.saveStable(cachedOutput, category.toJson(), output);
                         })
                         .toArray(CompletableFuture[]::new)
         );
@@ -61,25 +64,5 @@ public class LootCategoryProvider implements DataProvider {
     @Override
     public String getName() {
         return "loot_categories";
-    }
-
-    @NotNull
-    private static JsonElement toJson(LootCategory<?> category) {
-        JsonObject object = new JsonObject();
-
-        object.addProperty("type", category.getType().name());
-        object.addProperty("icon", BuiltInRegistries.ITEM.getKey(category.getIcon().getItem()).toString());
-        object.addProperty("key", category.getKey());
-
-        if (Objects.requireNonNull(category.getType()) == LootCategory.Type.GAMEPLAY) {
-            if (category instanceof GameplayLootCategory lootCategory && lootCategory.getPrefix() != null) {
-                JsonArray array = new JsonArray();
-
-                lootCategory.getPrefix().forEach((p) -> array.add(p.pattern()));
-                object.add("prefix", array);
-            }
-        }
-
-        return object;
     }
 }

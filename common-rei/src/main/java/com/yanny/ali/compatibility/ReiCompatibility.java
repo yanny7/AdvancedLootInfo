@@ -48,7 +48,6 @@ public class ReiCompatibility implements REIClientPlugin {
         gameplayCategoryList.clear();
         tradeCategoryList.clear();
 
-        blockCategoryList.add(createCategory(LootCategories.PLANT_LOOT, ReiBlockDisplay::new, ReiBlockCategory::new));
         blockCategoryList.addAll(LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream()
                 .map((e) -> createCategory(e, ReiBlockDisplay::new, ReiBlockCategory::new))
                 .collect(Collectors.toSet()));
