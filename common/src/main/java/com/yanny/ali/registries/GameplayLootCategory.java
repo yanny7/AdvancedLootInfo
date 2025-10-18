@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class GameplayLootCategory extends LootCategory<String> {
@@ -26,5 +27,10 @@ public class GameplayLootCategory extends LootCategory<String> {
     @Override
     public boolean validate(String path) {
         return patterns.stream().anyMatch((p) -> p.matcher(path).find());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), patterns);
     }
 }

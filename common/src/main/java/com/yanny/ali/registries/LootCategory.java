@@ -8,6 +8,8 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public abstract class LootCategory<T> {
     private final String key;
     private final ItemStack icon;
@@ -29,6 +31,21 @@ public abstract class LootCategory<T> {
     protected abstract void toJson(JsonObject object);
 
     public abstract boolean validate(T t);
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+
+        LootCategory<?> that = (LootCategory<?>) o;
+        return Objects.equals(key, that.key) && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, icon, type);
+    }
 
     public String getKey() {
         return key;

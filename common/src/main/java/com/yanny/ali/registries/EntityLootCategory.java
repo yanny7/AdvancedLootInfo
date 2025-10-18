@@ -6,6 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private final List<Class<?>> classes;
@@ -26,5 +27,10 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
     @Override
     public boolean validate(EntityType<?> entityType) {
         return classes.stream().anyMatch((p) -> p.isAssignableFrom(entityType.getClass()));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), classes);
     }
 }
