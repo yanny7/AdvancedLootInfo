@@ -140,12 +140,20 @@ public class JeiCompatibility implements IModPlugin {
 
                         for (JeiBlockLoot recipeCategory : blockCategories.values()) {
                             if (recipeCategory.getLootCategory().validate(block)) {
+                                if (recipeCategory.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeType = recipeCategory.getRecipeType();
                                 break;
                             }
                         }
 
                         if (recipeType == null) {
+                            if (LootCategories.BLOCK_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeType = defaultBlockLoot.getValue().getRecipeType();
                         }
 
@@ -156,12 +164,20 @@ public class JeiCompatibility implements IModPlugin {
 
                         for (JeiEntityLoot recipeCategory : entityCategories.values()) {
                             if (recipeCategory.getLootCategory().validate(entity)) {
+                                if (recipeCategory.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeType = recipeCategory.getRecipeType();
                                 break;
                             }
                         }
 
                         if (recipeType == null) {
+                            if (LootCategories.ENTITY_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeType = defaultEntityLoot.getValue().getRecipeType();
                         }
 
@@ -172,12 +188,20 @@ public class JeiCompatibility implements IModPlugin {
 
                         for (JeiGameplayLoot recipeCategory : gameplayCategories.values()) {
                             if (recipeCategory.getLootCategory().validate(location.getPath())) {
+                                if (recipeCategory.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeType = recipeCategory.getRecipeType();
                                 break;
                             }
                         }
 
                         if (recipeType == null) {
+                            if (LootCategories.GAMEPLAY_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeType = defaultGameplayLoot.getValue().getRecipeType();
                         }
 
@@ -188,12 +212,20 @@ public class JeiCompatibility implements IModPlugin {
 
                         for (JeiTradeLoot recipeCategory : tradeCategories.values()) {
                             if (recipeCategory.getLootCategory().validate(location.getPath())) {
+                                if (recipeCategory.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeType = recipeCategory.getRecipeType();
                                 break;
                             }
                         }
 
                         if (recipeType == null) {
+                            if (LootCategories.TRADE_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeType = defaultTradeLoot.getValue().getRecipeType();
                         }
 
@@ -204,12 +236,20 @@ public class JeiCompatibility implements IModPlugin {
 
                         for (JeiTradeLoot recipeCategory : tradeCategories.values()) {
                             if (recipeCategory.getLootCategory().validate(location.getPath())) {
+                                if (recipeCategory.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeType = recipeCategory.getRecipeType();
                                 break;
                             }
                         }
 
                         if (recipeType == null) {
+                            if (LootCategories.TRADE_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeType = defaultTradeLoot.getValue().getRecipeType();
                         }
 

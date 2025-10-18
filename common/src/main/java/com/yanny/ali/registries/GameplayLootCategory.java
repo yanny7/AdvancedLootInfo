@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 public class GameplayLootCategory extends LootCategory<String> {
     private final List<Pattern> patterns;
 
-    public GameplayLootCategory(ResourceLocation key, ItemStack icon, List<Pattern> patterns) {
-        super(key, icon, Type.GAMEPLAY);
+    public GameplayLootCategory(ResourceLocation key, ItemStack icon, boolean hide, List<Pattern> patterns) {
+        super(key, icon, Type.GAMEPLAY, hide);
         this.patterns = patterns;
     }
 

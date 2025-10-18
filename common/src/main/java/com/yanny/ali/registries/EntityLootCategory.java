@@ -12,8 +12,8 @@ import java.util.Objects;
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private final List<Class<?>> classes;
 
-    public EntityLootCategory(ResourceLocation key, ItemStack icon, List<Class<?>> classes) {
-        super(key, icon, Type.ENTITY);
+    public EntityLootCategory(ResourceLocation key, ItemStack icon, boolean hide, List<Class<?>> classes) {
+        super(key, icon, Type.ENTITY, hide);
         this.classes = classes;
     }
 

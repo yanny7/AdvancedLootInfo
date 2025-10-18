@@ -1,5 +1,6 @@
 {
   "type": "GAMEPLAY",
+  "hide": false,
   "icon": "minecraft:decorated_pot",
   "pattern": [
     "^archaeology/.*$"

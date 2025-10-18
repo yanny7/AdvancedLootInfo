@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @EmiEntrypoint
@@ -66,22 +67,10 @@ public class EmiCompatibility implements EmiPlugin {
         LOGGER.info("Adding loot information to EMI");
 
         if (level != null) {
-            Map<LootCategory<Block>, EmiRecipeCategory> blockCategories = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getValue,
-                    (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
-            ));
-            Map<LootCategory<EntityType<?>>, EmiRecipeCategory> entityCategories = LootCategories.ENTITY_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getValue,
-                    (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
-            ));
-            Map<LootCategory<String>, EmiRecipeCategory> gameplayCategories = LootCategories.GAMEPLAY_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getValue,
-                    (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
-            ));
-            Map<LootCategory<String>, EmiRecipeCategory> tradeCategories = LootCategories.TRADE_LOOT_CATEGORIES.entrySet().stream().collect(Collectors.toMap(
-                    Map.Entry::getValue,
-                    (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
-            ));
+            Map<LootCategory<Block>, EmiRecipeCategory> blockCategories = LootCategories.BLOCK_LOOT_CATEGORIES.entrySet().stream().collect(getCollector());
+            Map<LootCategory<EntityType<?>>, EmiRecipeCategory> entityCategories = LootCategories.ENTITY_LOOT_CATEGORIES.entrySet().stream().collect(getCollector());
+            Map<LootCategory<String>, EmiRecipeCategory> gameplayCategories = LootCategories.GAMEPLAY_LOOT_CATEGORIES.entrySet().stream().collect(getCollector());
+            Map<LootCategory<String>, EmiRecipeCategory> tradeCategories = LootCategories.TRADE_LOOT_CATEGORIES.entrySet().stream().collect(getCollector());
 
             blockCategories.values().forEach(registry::addCategory);
             entityCategories.values().forEach(registry::addCategory);
@@ -103,11 +92,19 @@ public class EmiCompatibility implements EmiPlugin {
 
                         for (Map.Entry<LootCategory<Block>, EmiRecipeCategory> entry : blockCategories.entrySet()) {
                             if (entry.getKey().validate(block)) {
+                                if (entry.getKey().isHidden()) {
+                                    return;
+                                }
+
                                 category = entry.getValue();
                             }
                         }
 
                         if (category == null) {
+                            if (LootCategories.BLOCK_LOOT.isHidden()) {
+                                return;
+                            }
+
                             category = defaultBlockCategory;
                         }
 
@@ -118,11 +115,19 @@ public class EmiCompatibility implements EmiPlugin {
 
                         for (Map.Entry<LootCategory<EntityType<?>>, EmiRecipeCategory> entry : entityCategories.entrySet()) {
                             if (entry.getKey().validate(entity)) {
+                                if (entry.getKey().isHidden()) {
+                                    return;
+                                }
+
                                 category = entry.getValue();
                             }
                         }
 
                         if (category == null) {
+                            if (LootCategories.ENTITY_LOOT.isHidden()) {
+                                return;
+                            }
+
                             category = defaultEntityCategory;
                         }
 
@@ -131,13 +136,21 @@ public class EmiCompatibility implements EmiPlugin {
                     (node, location, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> gameplayEntry : gameplayCategories.entrySet()) {
-                            if (gameplayEntry.getKey().validate(location.getPath())) {
-                                category = gameplayEntry.getValue();
+                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> entry : gameplayCategories.entrySet()) {
+                            if (entry.getKey().validate(location.getPath())) {
+                                if (entry.getKey().isHidden()) {
+                                    return;
+                                }
+
+                                category = entry.getValue();
                             }
                         }
 
                         if (category == null) {
+                            if (LootCategories.GAMEPLAY_LOOT.isHidden()) {
+                                return;
+                            }
+
                             category = defaultGameplayCategory;
                         }
 
@@ -146,13 +159,21 @@ public class EmiCompatibility implements EmiPlugin {
                     (tradeEntry, location, inputs, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategories.entrySet()) {
-                            if (e.getKey().validate(location.getPath())) {
-                                category = e.getValue();
+                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
+                            if (entry.getKey().validate(location.getPath())) {
+                                if (entry.getKey().isHidden()) {
+                                    return;
+                                }
+
+                                category = entry.getValue();
                             }
                         }
 
                         if (category == null) {
+                            if (LootCategories.TRADE_LOOT.isHidden()) {
+                                return;
+                            }
+
                             category = defaultTradeCategory;
                         }
 
@@ -161,13 +182,21 @@ public class EmiCompatibility implements EmiPlugin {
                     (tradeEntry, location, inputs, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> e : tradeCategories.entrySet()) {
-                            if (e.getKey().validate(location.getPath())) {
-                                category = e.getValue();
+                        for (Map.Entry<LootCategory<String>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
+                            if (entry.getKey().validate(location.getPath())) {
+                                if (entry.getKey().isHidden()) {
+                                    return;
+                                }
+
+                                category = entry.getValue();
                             }
                         }
 
                         if (category == null) {
+                            if (LootCategories.TRADE_LOOT.isHidden()) {
+                                return;
+                            }
+
                             category = defaultTradeCategory;
                         }
 
@@ -180,7 +209,7 @@ public class EmiCompatibility implements EmiPlugin {
     }
 
     @NotNull
-    private <T> EmiRecipeCategory getDefaultCategory(EmiRegistry registry, Map<LootCategory<T>, EmiRecipeCategory> categories, LootCategory<T> defaultCategory) {
+    private static <T> EmiRecipeCategory getDefaultCategory(EmiRegistry registry, Map<LootCategory<T>, EmiRecipeCategory> categories, LootCategory<T> defaultCategory) {
         EmiRecipeCategory recipeCategory = categories.remove(defaultCategory);
 
         if (recipeCategory != null) {
@@ -190,5 +219,13 @@ public class EmiCompatibility implements EmiPlugin {
             registry.addCategory(defaultRecipeCategory);
             return defaultRecipeCategory;
         }
+    }
+
+    @NotNull
+    private static  <T> Collector<Map.Entry<ResourceLocation, LootCategory<T>>, ?, Map<LootCategory<T>, EmiRecipeCategory>> getCollector() {
+        return Collectors.toMap(
+                Map.Entry::getValue,
+                (r) -> new EmiRecipeCategory(r.getKey(), EmiStack.of(r.getValue().getIcon()))
+        );
     }
 }

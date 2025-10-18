@@ -29,31 +29,31 @@ public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<String>> GAMEPLAY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> TRADE_LOOT_CATEGORIES = new HashMap<>();
 
-    public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, Collections.singletonList(Block.class));
-    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, Collections.singletonList(Entity.class));
-    public static final LootCategory<String> TRADE_LOOT = getTradeCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, Collections.singletonList(Pattern.compile(".*")));
-    public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, Collections.singletonList(Pattern.compile(".*")));
+    public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, true, Collections.singletonList(Block.class));
+    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, true, Collections.singletonList(Entity.class));
+    public static final LootCategory<String> TRADE_LOOT = getTradeCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, true, Collections.singletonList(Pattern.compile(".*")));
+    public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, true, Collections.singletonList(Pattern.compile(".*")));
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    private static LootCategory<Block> getBlockCategory(ResourceLocation key, Item icon, List<Class<?>> classes) {
-        return new BlockLootCategory(key, new ItemStack(icon), classes);
+    private static LootCategory<Block> getBlockCategory(ResourceLocation key, Item icon, boolean enabled, List<Class<?>> classes) {
+        return new BlockLootCategory(key, new ItemStack(icon), enabled, classes);
     }
 
     @NotNull
-    private static LootCategory<EntityType<?>> getEntityCategory(ResourceLocation key, Item icon, List<Class<?>> classes) {
-        return new EntityLootCategory(key, new ItemStack(icon), classes);
+    private static LootCategory<EntityType<?>> getEntityCategory(ResourceLocation key, Item icon, boolean enabled, List<Class<?>> classes) {
+        return new EntityLootCategory(key, new ItemStack(icon), enabled, classes);
     }
 
     @NotNull
-    private static LootCategory<String> getTradeCategory(ResourceLocation key, Item icon, List<Pattern> validator) {
-        return new TradeLootCategory(key, new ItemStack(icon), validator);
+    private static LootCategory<String> getTradeCategory(ResourceLocation key, Item icon, boolean enabled, List<Pattern> validator) {
+        return new TradeLootCategory(key, new ItemStack(icon), enabled, validator);
     }
 
     @NotNull
-    private static LootCategory<String> getGameplayCategory(ResourceLocation key, Item icon, List<Pattern> prefix) {
-        return new GameplayLootCategory(key, new ItemStack(icon), prefix);
+    private static LootCategory<String> getGameplayCategory(ResourceLocation key, Item icon, boolean enabled, List<Pattern> prefix) {
+        return new GameplayLootCategory(key, new ItemStack(icon), enabled, prefix);
     }
 
     @NotNull
@@ -71,6 +71,7 @@ public class LootCategories {
                         JsonObject jsonObject = GsonHelper.convertToJsonObject(value, location.toString());
                         LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
                         Item icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
+                        boolean hide = GsonHelper.getAsBoolean(jsonObject, "hide");
 
                         switch (type) {
                             case BLOCK -> {
@@ -83,7 +84,7 @@ public class LootCategories {
                                         return null;
                                     }
                                 }).filter(Objects::nonNull).toList();
-                                BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(location, icon, classes));
+                                BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(location, icon, hide, classes));
                             }
                             case ENTITY -> {
                                 //noinspection unchecked
@@ -95,11 +96,11 @@ public class LootCategories {
                                         return null;
                                     }
                                 }).filter(Objects::nonNull).toList();
-                                ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(location, icon, classes));
+                                ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(location, icon, hide, classes));
                             }
-                            case TRADE -> TRADE_LOOT_CATEGORIES.put(location, getTradeCategory(location, icon,
+                            case TRADE -> TRADE_LOOT_CATEGORIES.put(location, getTradeCategory(location, icon, hide,
                                     GsonHelper.getAsJsonArray(jsonObject, "pattern").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
-                            case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(location, icon,
+                            case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(location, icon, hide,
                                     GsonHelper.getAsJsonArray(jsonObject, "pattern").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
                         }
 

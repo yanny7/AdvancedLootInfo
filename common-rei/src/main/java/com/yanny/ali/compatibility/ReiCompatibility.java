@@ -134,12 +134,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                         for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategories.values()) {
                             if (holder.category.getLootCategory().validate(block)) {
+                                if (holder.category.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeHolder = holder;
                                 break;
                             }
                         }
 
                         if (recipeHolder == null) {
+                            if (LootCategories.BLOCK_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeHolder = defaultBlockLoot.getValue();
                         }
 
@@ -150,12 +158,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                         for (Holder<ReiEntityDisplay, EntityLootType, EntityType<?>> holder : entityCategories.values()) {
                             if (holder.category.getLootCategory().validate(entity)) {
+                                if (holder.category.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeHolder = holder;
                                 break;
                             }
                         }
 
                         if (recipeHolder == null) {
+                            if (LootCategories.ENTITY_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeHolder = defaultEntityLoot.getValue();
                         }
 
@@ -166,12 +182,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                         for (Holder<ReiGameplayDisplay, GameplayLootType, String> holder : gameplayCategories.values()) {
                             if (holder.category.getLootCategory().validate(location.getPath())) {
+                                if (holder.category.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeHolder = holder;
                                 break;
                             }
                         }
 
                         if (recipeHolder == null) {
+                            if (LootCategories.GAMEPLAY_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeHolder = defaultGameplayLoot.getValue();
                         }
 
@@ -182,12 +206,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                         for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategories.values()) {
                             if (holder.category.getLootCategory().validate(location.getPath())) {
+                                if (holder.category.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeHolder = holder;
                                 break;
                             }
                         }
 
                         if (recipeHolder == null) {
+                            if (LootCategories.TRADE_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeHolder = defaultTradeLoot.getValue();
                         }
 
@@ -198,12 +230,20 @@ public class ReiCompatibility implements REIClientPlugin {
 
                         for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategories.values()) {
                             if (holder.category.getLootCategory().validate(location.getPath())) {
+                                if (holder.category.getLootCategory().isHidden()) {
+                                    return;
+                                }
+
                                 recipeHolder = holder;
                                 break;
                             }
                         }
 
                         if (recipeHolder == null) {
+                            if (LootCategories.TRADE_LOOT.isHidden()) {
+                                return;
+                            }
+
                             recipeHolder = defaultTradeLoot.getValue();
                         }
 

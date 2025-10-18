@@ -12,8 +12,8 @@ import java.util.Objects;
 public class BlockLootCategory extends LootCategory<Block> {
     private final List<Class<?>> classes;
 
-    public BlockLootCategory(ResourceLocation key, ItemStack icon, List<Class<?>> classes) {
-        super(key, icon, Type.BLOCK);
+    public BlockLootCategory(ResourceLocation key, ItemStack icon, boolean hide, List<Class<?>> classes) {
+        super(key, icon, Type.BLOCK, hide);
         this.classes = classes;
     }
 

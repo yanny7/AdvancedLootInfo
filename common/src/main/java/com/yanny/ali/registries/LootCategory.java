@@ -14,17 +14,21 @@ public abstract class LootCategory<T> {
     private final ResourceLocation key;
     private final ItemStack icon;
     private final Type type;
+    private final boolean hide;
 
-    public LootCategory(ResourceLocation key, ItemStack icon, Type type) {
+    public LootCategory(ResourceLocation key, ItemStack icon, Type type, boolean hide) {
         this.key = key;
         this.icon = icon;
         this.type = type;
+        this.hide = hide;
     }
 
     public LootCategory(ResourceLocation location, JsonElement element) {
         JsonObject jsonObject = GsonHelper.convertToJsonObject(element, location.toString());
+
         type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
         icon = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon"))));
+        hide = GsonHelper.getAsBoolean(jsonObject, "enabled");
         key = location;
     }
 
@@ -59,12 +63,17 @@ public abstract class LootCategory<T> {
         return type;
     }
 
+    public boolean isHidden() {
+        return hide;
+    }
+
     @NotNull
     public final JsonElement toJson() {
         JsonObject object = new JsonObject();
 
         object.addProperty("type", type.name());
         object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon.getItem()).toString());
+        object.addProperty("hide", hide);
 
         toJson(object);
         return object;
