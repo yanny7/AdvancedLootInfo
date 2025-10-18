@@ -38,11 +38,11 @@ public class LootCategoryProvider implements DataProvider {
     }
 
     protected void addGameplayCategory(String key, Item icon, List<Pattern> patterns) {
-        categories.add(new GameplayLootCategory(key, new ItemStack(icon), patterns));
+        categories.add(new GameplayLootCategory(Utils.modLoc(key), new ItemStack(icon), patterns));
     }
 
     protected void addBlockCategory(String key, Item icon, List<Class<?>> classes) {
-        categories.add(new BlockLootCategory(key, new ItemStack(icon), classes));
+        categories.add(new BlockLootCategory(Utils.modLoc(key), new ItemStack(icon), classes));
     }
 
     @NotNull
@@ -53,7 +53,7 @@ public class LootCategoryProvider implements DataProvider {
         return CompletableFuture.allOf(
                 categories.stream()
                         .map((category) -> {
-                            Path output = generator.getOutputFolder().resolve(String.format("assets/%s/loot_categories/%s.json", Utils.MOD_ID, category.getKey()));
+                            Path output = generator.getOutputFolder().resolve(String.format("assets/%s/loot_categories/%s.json", category.getKey().getNamespace(), category.getKey().getPath()));
                             return DataProvider.saveStable(cachedOutput, category.toJson(), output);
                         })
                         .toArray(CompletableFuture[]::new)

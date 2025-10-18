@@ -3,6 +3,5 @@
   "classes": [
     "net.minecraft.world.level.block.BushBlock"
   ],
-  "icon": "minecraft:diamond_hoe",
-  "key": "plant_loot"
+  "icon": "minecraft:diamond_hoe"
 }

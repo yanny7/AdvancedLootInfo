@@ -2,6 +2,7 @@ package com.yanny.ali.registries;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private final List<Class<?>> classes;
 
-    public EntityLootCategory(String key, ItemStack icon, List<Class<?>> classes) {
+    public EntityLootCategory(ResourceLocation key, ItemStack icon, List<Class<?>> classes) {
         super(key, icon, Type.ENTITY);
         this.classes = classes;
     }

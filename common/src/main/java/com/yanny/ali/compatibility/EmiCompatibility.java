@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
@@ -187,7 +186,7 @@ public class EmiCompatibility implements EmiPlugin {
         if (recipeCategory != null) {
             return recipeCategory;
         } else {
-            EmiRecipeCategory defaultRecipeCategory = new EmiRecipeCategory(Utils.modLoc(defaultCategory.getKey()), EmiStack.of(defaultCategory.getIcon()));
+            EmiRecipeCategory defaultRecipeCategory = new EmiRecipeCategory(defaultCategory.getKey(), EmiStack.of(defaultCategory.getIcon()));
             registry.addCategory(defaultRecipeCategory);
             return defaultRecipeCategory;
         }

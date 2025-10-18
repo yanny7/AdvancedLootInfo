@@ -1,7 +1,6 @@
 {
   "type": "GAMEPLAY",
   "icon": "minecraft:emerald",
-  "key": "hero_loot",
   "pattern": [
     "^gameplay/hero_of_the_village/.*$"
   ]

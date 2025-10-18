@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public abstract class LootCategory<T> {
-    private final String key;
+    private final ResourceLocation key;
     private final ItemStack icon;
     private final Type type;
 
-    public LootCategory(String key, ItemStack icon, Type type) {
+    public LootCategory(ResourceLocation key, ItemStack icon, Type type) {
         this.key = key;
         this.icon = icon;
         this.type = type;
@@ -24,8 +24,8 @@ public abstract class LootCategory<T> {
     public LootCategory(ResourceLocation location, JsonElement element) {
         JsonObject jsonObject = GsonHelper.convertToJsonObject(element, location.toString());
         type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
-        key = GsonHelper.getAsString(jsonObject, "key");
         icon = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon"))));
+        key = location;
     }
 
     protected abstract void toJson(JsonObject object);
@@ -47,7 +47,7 @@ public abstract class LootCategory<T> {
         return Objects.hash(key, icon, type);
     }
 
-    public String getKey() {
+    public ResourceLocation getKey() {
         return key;
     }
 
@@ -65,7 +65,6 @@ public abstract class LootCategory<T> {
 
         object.addProperty("type", type.name());
         object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon.getItem()).toString());
-        object.addProperty("key", key);
 
         toJson(object);
         return object;

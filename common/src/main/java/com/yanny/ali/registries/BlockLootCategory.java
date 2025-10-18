@@ -2,6 +2,7 @@ package com.yanny.ali.registries;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
 public class BlockLootCategory extends LootCategory<Block> {
     private final List<Class<?>> classes;
 
-    public BlockLootCategory(String key, ItemStack icon, List<Class<?>> classes) {
+    public BlockLootCategory(ResourceLocation key, ItemStack icon, List<Class<?>> classes) {
         super(key, icon, Type.BLOCK);
         this.classes = classes;
     }

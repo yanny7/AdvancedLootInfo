@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.compatibility.rei.*;
@@ -251,8 +250,8 @@ public class ReiCompatibility implements REIClientPlugin {
     private <D extends ReiBaseDisplay, T, U> Holder<D, T, U> createCategory(LootCategory<U> lootCategory,
                                                                             BiFunction<T, CategoryIdentifier<D>, D> displayFactory,
                                                                             TriFunction<CategoryIdentifier<D>, Component, LootCategory<U>, ReiBaseCategory<D, U>> categoryFactory) {
-        CategoryIdentifier<D> identifier = CategoryIdentifier.of(Utils.MOD_ID, lootCategory.getKey());
-        Component title = Component.translatable("emi.category." + Utils.MOD_ID + "." + lootCategory.getKey().replace('/', '.'));
+        CategoryIdentifier<D> identifier = CategoryIdentifier.of(lootCategory.getKey());
+        Component title = Component.translatable("emi.category." + lootCategory.getKey().getNamespace() + "." + lootCategory.getKey().getPath().replace('/', '.'));
         Function<T, D> filler = (type) -> displayFactory.apply(type, identifier);
         return new Holder<>(identifier, categoryFactory.apply(identifier, title, lootCategory), filler);
     }

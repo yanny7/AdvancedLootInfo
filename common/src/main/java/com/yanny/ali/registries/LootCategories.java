@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
+import com.yanny.ali.Utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -28,30 +29,30 @@ public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<String>> GAMEPLAY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> TRADE_LOOT_CATEGORIES = new HashMap<>();
 
-    public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory("block_loot", Items.DIAMOND_PICKAXE, Collections.singletonList(Block.class));
-    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory("entity_loot", Items.SKELETON_SKULL, Collections.singletonList(Entity.class));
-    public static final LootCategory<String> TRADE_LOOT = getTradeCategory("trade_loot", Items.EMERALD_BLOCK, Collections.singletonList(Pattern.compile(".*")));
-    public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory("gameplay_loot", Items.COMPASS, Collections.singletonList(Pattern.compile(".*")));
+    public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, Collections.singletonList(Block.class));
+    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, Collections.singletonList(Entity.class));
+    public static final LootCategory<String> TRADE_LOOT = getTradeCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, Collections.singletonList(Pattern.compile(".*")));
+    public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, Collections.singletonList(Pattern.compile(".*")));
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    private static LootCategory<Block> getBlockCategory(String key, Item icon, List<Class<?>> classes) {
+    private static LootCategory<Block> getBlockCategory(ResourceLocation key, Item icon, List<Class<?>> classes) {
         return new BlockLootCategory(key, new ItemStack(icon), classes);
     }
 
     @NotNull
-    private static LootCategory<EntityType<?>> getEntityCategory(String key, Item icon, List<Class<?>> classes) {
+    private static LootCategory<EntityType<?>> getEntityCategory(ResourceLocation key, Item icon, List<Class<?>> classes) {
         return new EntityLootCategory(key, new ItemStack(icon), classes);
     }
 
     @NotNull
-    private static LootCategory<String> getTradeCategory(String key, Item icon, List<Pattern> validator) {
+    private static LootCategory<String> getTradeCategory(ResourceLocation key, Item icon, List<Pattern> validator) {
         return new TradeLootCategory(key, new ItemStack(icon), validator);
     }
 
     @NotNull
-    private static LootCategory<String> getGameplayCategory(String key, Item icon, List<Pattern> prefix) {
+    private static LootCategory<String> getGameplayCategory(ResourceLocation key, Item icon, List<Pattern> prefix) {
         return new GameplayLootCategory(key, new ItemStack(icon), prefix);
     }
 
@@ -69,7 +70,6 @@ public class LootCategories {
                     try {
                         JsonObject jsonObject = GsonHelper.convertToJsonObject(value, location.toString());
                         LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
-                        String key = GsonHelper.getAsString(jsonObject, "key");
                         Item icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
 
                         switch (type) {
@@ -79,11 +79,11 @@ public class LootCategories {
                                     try {
                                         return Class.forName(className);
                                     } catch (ClassNotFoundException e) {
-                                        LOGGER.warn("Failed to resolve class {} for loot category {} with error {}", className, key, e.getException());
+                                        LOGGER.warn("Failed to resolve class {} for loot category {} with error {}", className, location, e.getException());
                                         return null;
                                     }
                                 }).filter(Objects::nonNull).toList();
-                                BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(key, icon, classes));
+                                BLOCK_LOOT_CATEGORIES.put(location, getBlockCategory(location, icon, classes));
                             }
                             case ENTITY -> {
                                 //noinspection unchecked
@@ -91,15 +91,15 @@ public class LootCategories {
                                     try {
                                         return Class.forName(className);
                                     } catch (ClassNotFoundException e) {
-                                        LOGGER.warn("Failed to resolve class {} for loot category {} with error {}", className, key, e.getException());
+                                        LOGGER.warn("Failed to resolve class {} for loot category {} with error {}", className, location, e.getException());
                                         return null;
                                     }
                                 }).filter(Objects::nonNull).toList();
-                                ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(key, icon, classes));
+                                ENTITY_LOOT_CATEGORIES.put(location, getEntityCategory(location, icon, classes));
                             }
-                            case TRADE -> TRADE_LOOT_CATEGORIES.put(location, getTradeCategory(key, icon,
+                            case TRADE -> TRADE_LOOT_CATEGORIES.put(location, getTradeCategory(location, icon,
                                     GsonHelper.getAsJsonArray(jsonObject, "pattern").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
-                            case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(key, icon,
+                            case GAMEPLAY -> GAMEPLAY_LOOT_CATEGORIES.put(location, getGameplayCategory(location, icon,
                                     GsonHelper.getAsJsonArray(jsonObject, "pattern").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
                         }
 
