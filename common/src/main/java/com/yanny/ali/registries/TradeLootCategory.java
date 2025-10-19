@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class TradeLootCategory extends LootCategory<String> {
@@ -28,10 +27,5 @@ public class TradeLootCategory extends LootCategory<String> {
     @Override
     public boolean validate(String path) {
         return patterns.stream().anyMatch((p) -> p.matcher(path).find());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), patterns);
     }
 }

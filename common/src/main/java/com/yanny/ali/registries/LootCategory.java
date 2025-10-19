@@ -48,7 +48,7 @@ public abstract class LootCategory<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(key, icon, type);
+        return Objects.hash(key, type);
     }
 
     public ResourceLocation getKey() {

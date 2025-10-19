@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
-import java.util.Objects;
 
 public class BlockLootCategory extends LootCategory<Block> {
     private final List<Class<?>> classes;
@@ -28,10 +27,5 @@ public class BlockLootCategory extends LootCategory<Block> {
     @Override
     public boolean validate(Block block) {
         return classes.stream().anyMatch((p) -> p.isAssignableFrom(block.getClass()));
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), classes);
     }
 }
