@@ -1,0 +1,8 @@
+{
+  "type": "GAMEPLAY",
+  "hide": false,
+  "icon": "minecraft:compass",
+  "pattern": [
+    ".*"
+  ]
+}

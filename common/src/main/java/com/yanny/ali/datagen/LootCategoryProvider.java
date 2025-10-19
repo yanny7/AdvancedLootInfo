@@ -3,6 +3,7 @@ package com.yanny.ali.datagen;
 import com.yanny.ali.Utils;
 import com.yanny.ali.registries.BlockLootCategory;
 import com.yanny.ali.registries.GameplayLootCategory;
+import com.yanny.ali.registries.LootCategories;
 import com.yanny.ali.registries.LootCategory;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -30,11 +31,17 @@ public class LootCategoryProvider implements DataProvider {
 
     public void generate() {
         addBlockCategory("plant_loot", Items.DIAMOND_HOE, List.of(BushBlock.class));
+        categories.add(LootCategories.BLOCK_LOOT);
+
+        categories.add(LootCategories.ENTITY_LOOT);
 
         addGameplayCategory("chest_loot", Items.CHEST, List.of(Pattern.compile("^chests/.*$")));
         addGameplayCategory("fishing_loot", Items.FISHING_ROD, List.of(Pattern.compile("^gameplay/fishing.*$")));
         addGameplayCategory("archaeology_loot", Items.DECORATED_POT, List.of(Pattern.compile("^archaeology/.*$")));
         addGameplayCategory("hero_loot", Items.EMERALD, List.of(Pattern.compile("^gameplay/hero_of_the_village/.*$")));
+        categories.add(LootCategories.GAMEPLAY_LOOT);
+
+        categories.add(LootCategories.TRADE_LOOT);
     }
 
     protected void addGameplayCategory(String key, Item icon, List<Pattern> patterns) {

@@ -29,31 +29,31 @@ public class LootCategories {
     public static final Map<ResourceLocation, LootCategory<String>> GAMEPLAY_LOOT_CATEGORIES = new HashMap<>();
     public static final Map<ResourceLocation, LootCategory<String>> TRADE_LOOT_CATEGORIES = new HashMap<>();
 
-    public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, true, Collections.singletonList(Block.class));
-    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, true, Collections.singletonList(Entity.class));
-    public static final LootCategory<String> TRADE_LOOT = getTradeCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, true, Collections.singletonList(Pattern.compile(".*")));
-    public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, true, Collections.singletonList(Pattern.compile(".*")));
+    public static final LootCategory<Block> BLOCK_LOOT = getBlockCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, false, Collections.singletonList(Block.class));
+    public static final LootCategory<EntityType<?>> ENTITY_LOOT = getEntityCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, false, Collections.singletonList(Entity.class));
+    public static final LootCategory<String> TRADE_LOOT = getTradeCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, false, Collections.singletonList(Pattern.compile(".*")));
+    public static final LootCategory<String> GAMEPLAY_LOOT = getGameplayCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, false, Collections.singletonList(Pattern.compile(".*")));
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    private static LootCategory<Block> getBlockCategory(ResourceLocation key, Item icon, boolean enabled, List<Class<?>> classes) {
-        return new BlockLootCategory(key, new ItemStack(icon), enabled, classes);
+    private static LootCategory<Block> getBlockCategory(ResourceLocation key, Item icon, boolean hide, List<Class<?>> classes) {
+        return new BlockLootCategory(key, new ItemStack(icon), hide, classes);
     }
 
     @NotNull
-    private static LootCategory<EntityType<?>> getEntityCategory(ResourceLocation key, Item icon, boolean enabled, List<Class<?>> classes) {
-        return new EntityLootCategory(key, new ItemStack(icon), enabled, classes);
+    private static LootCategory<EntityType<?>> getEntityCategory(ResourceLocation key, Item icon, boolean hide, List<Class<?>> classes) {
+        return new EntityLootCategory(key, new ItemStack(icon), hide, classes);
     }
 
     @NotNull
-    private static LootCategory<String> getTradeCategory(ResourceLocation key, Item icon, boolean enabled, List<Pattern> validator) {
-        return new TradeLootCategory(key, new ItemStack(icon), enabled, validator);
+    private static LootCategory<String> getTradeCategory(ResourceLocation key, Item icon, boolean hide, List<Pattern> validator) {
+        return new TradeLootCategory(key, new ItemStack(icon), hide, validator);
     }
 
     @NotNull
-    private static LootCategory<String> getGameplayCategory(ResourceLocation key, Item icon, boolean enabled, List<Pattern> prefix) {
-        return new GameplayLootCategory(key, new ItemStack(icon), enabled, prefix);
+    private static LootCategory<String> getGameplayCategory(ResourceLocation key, Item icon, boolean hide, List<Pattern> prefix) {
+        return new GameplayLootCategory(key, new ItemStack(icon), hide, prefix);
     }
 
     @NotNull
@@ -104,7 +104,7 @@ public class LootCategories {
                                     GsonHelper.getAsJsonArray(jsonObject, "pattern").asList().stream().map(JsonElement::getAsString).map(Pattern::compile).toList()));
                         }
 
-                        LOGGER.info("Loaded LootCategory resource: {}", location);
+                        LOGGER.info("Loaded LootCategory resource: {} [Hide:{}]", location, hide);
                     } catch (Exception e) {
                         LOGGER.error("Failed to load LootCategory resource: {}", location, e);
                     }
