@@ -1,8 +1,8 @@
 {
   "type": "GAMEPLAY",
+  "hide": false,
   "icon": "minecraft:shears",
-  "key": "shearing_loot",
-  "prefix": [
+  "pattern": [
     "^shearing/.*$"
   ]
 }

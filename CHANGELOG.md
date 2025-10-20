@@ -1,3 +1,8 @@
+## []
+
+- Sort loot by chance, descending (highest chance first).
+- Configurable custom categories using resources
+
 ## [1.3.9]
 
 - Fixed crash on failed mixin
@@ -5,6 +10,7 @@
 ## [1.3.8]
 
 - Fixed deadlock while receiving loot data on Fabric
+- Fixed subsequent /reload doesn't block registration thread (Hope that this is final fix for /reload bug)
 
 ## [1.3.7]
 
