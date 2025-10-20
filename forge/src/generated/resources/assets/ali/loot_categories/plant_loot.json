@@ -1,0 +1,8 @@
+{
+  "type": "BLOCK",
+  "classes": [
+    "net.minecraft.world.level.block.BushBlock"
+  ],
+  "hide": false,
+  "icon": "minecraft:diamond_hoe"
+}

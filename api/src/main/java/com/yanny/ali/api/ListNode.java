@@ -3,6 +3,7 @@ package com.yanny.ali.api;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class ListNode implements IDataNode {
@@ -14,12 +15,14 @@ public abstract class ListNode implements IDataNode {
 
     public ListNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         int count = buf.readInt();
-
-        nodes = new ArrayList<>(count);
+        List<IDataNode> nodes = new ArrayList<>(count);
 
         for (int i = 0; i < count; i++) {
             nodes.add(utils.getNodeFactory(buf.readResourceLocation()).create(utils, buf));
         }
+
+        Collections.sort(nodes);
+        this.nodes = Collections.unmodifiableList(nodes);
     }
 
     public List<IDataNode> nodes() {
