@@ -1,8 +1,8 @@
 {
   "type": "GAMEPLAY",
   "hide": false,
-  "icon": "minecraft:shears",
+  "icon": "minecraft:compass",
   "pattern": [
-    "^shearing/.*$"
+    ".*"
   ]
 }
