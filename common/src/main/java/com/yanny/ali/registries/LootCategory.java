@@ -27,7 +27,7 @@ public abstract class LootCategory<T> {
         JsonObject jsonObject = GsonHelper.convertToJsonObject(element, location.toString());
 
         type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
-        icon = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon"))));
+        icon = new ItemStack(BuiltInRegistries.ITEM.get(ResourceLocation.parse(GsonHelper.getAsString(jsonObject, "icon"))));
         hide = GsonHelper.getAsBoolean(jsonObject, "enabled");
         key = location;
     }
