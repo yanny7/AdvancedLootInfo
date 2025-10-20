@@ -1,8 +1,8 @@
 {
   "type": "GAMEPLAY",
   "hide": false,
-  "icon": "minecraft:decorated_pot",
+  "icon": "minecraft:compass",
   "pattern": [
-    "^archaeology/.*$"
+    ".*"
   ]
 }

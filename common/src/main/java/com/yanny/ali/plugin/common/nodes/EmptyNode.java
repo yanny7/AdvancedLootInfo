@@ -19,18 +19,22 @@ public class EmptyNode implements IDataNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "empty");
 
     private final List<ITooltipNode> tooltip;
+    private final float chance;
 
     public EmptyNode(IServerUtils utils, EmptyLootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this.chance = chance * entry.weight / sumWeight;
         tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry, chance, sumWeight, functions, conditions);
     }
 
     public EmptyNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        chance = buf.readFloat();
     }
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        buf.writeFloat(chance);
     }
 
     @Override
@@ -41,5 +45,10 @@ public class EmptyNode implements IDataNode {
     @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    @Override
+    public float getChance() {
+        return chance;
     }
 }
