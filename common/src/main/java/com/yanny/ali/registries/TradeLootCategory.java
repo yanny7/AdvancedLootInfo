@@ -8,11 +8,11 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class GameplayLootCategory extends LootCategory<String> {
+public class TradeLootCategory extends LootCategory<String> {
     private final List<Pattern> patterns;
 
-    public GameplayLootCategory(ResourceLocation key, ItemStack icon, boolean hide, List<Pattern> patterns) {
-        super(key, icon, Type.GAMEPLAY, hide);
+    public TradeLootCategory(ResourceLocation key, ItemStack icon, boolean hide, List<Pattern> patterns) {
+        super(key, icon, Type.TRADE, hide);
         this.patterns = patterns;
     }
 
