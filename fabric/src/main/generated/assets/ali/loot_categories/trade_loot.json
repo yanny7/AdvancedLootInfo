@@ -1,0 +1,8 @@
+{
+  "type": "TRADE",
+  "hide": false,
+  "icon": "minecraft:emerald_block",
+  "pattern": [
+    ".*"
+  ]
+}
