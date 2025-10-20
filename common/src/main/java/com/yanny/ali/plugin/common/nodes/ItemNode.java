@@ -56,10 +56,10 @@ public class ItemNode implements IDataNode, IItemNode {
         itemStack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
+        chance = buf.readFloat();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
-        chance = 1;
     }
 
     @Override
@@ -92,6 +92,7 @@ public class ItemNode implements IDataNode, IItemNode {
         ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, itemStack);
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
+        buf.writeFloat(chance);
     }
 
     @Override
