@@ -1,0 +1,8 @@
+{
+  "type": "ENTITY",
+  "classes": [
+    "net.minecraft.world.entity.Entity"
+  ],
+  "hide": false,
+  "icon": "minecraft:skeleton_skull"
+}

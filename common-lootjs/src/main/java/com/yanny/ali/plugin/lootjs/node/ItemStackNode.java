@@ -58,10 +58,10 @@ public class ItemStackNode implements IDataNode, IItemNode {
         tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
+        chance = buf.readFloat();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
-        chance = 1;
     }
 
     public boolean isModified() {
@@ -99,6 +99,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
         NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
         count.encode(buf);
         buf.writeBoolean(modified);
+        buf.writeFloat(chance);
     }
 
     @Override
