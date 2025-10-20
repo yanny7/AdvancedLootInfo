@@ -66,11 +66,6 @@ public class ReiCompatibility implements REIClientPlugin {
                 .map((e) -> new AbstractMap.SimpleEntry<>(e.getValue(), createCategory(e, ReiTradeDisplay::new, ReiTradeCategory::new)))
                 .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
 
-        defaultBlockLoot.setValue(getDefaultCategory(ReiBlockDisplay::new, ReiBlockCategory::new, registry, blockCategories, LootCategories.BLOCK_LOOT));
-        defaultEntityLoot.setValue(getDefaultCategory(ReiEntityDisplay::new, ReiEntityCategory::new, registry, entityCategories, LootCategories.ENTITY_LOOT));
-        defaultGameplayLoot.setValue(getDefaultCategory(ReiGameplayDisplay::new, ReiGameplayCategory::new, registry, gameplayCategories, LootCategories.GAMEPLAY_LOOT));
-        defaultTradeLoot.setValue(getDefaultCategory(ReiTradeDisplay::new, ReiTradeCategory::new, registry, tradeCategories, LootCategories.TRADE_LOOT));
-
         for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategories.values()) {
             registry.add(holder.category);
         }
@@ -86,6 +81,11 @@ public class ReiCompatibility implements REIClientPlugin {
         for (Holder<ReiTradeDisplay, TradeLootType, String> holder : tradeCategories.values()) {
             registry.add(holder.category);
         }
+
+        defaultBlockLoot.setValue(getDefaultCategory(ReiBlockDisplay::new, ReiBlockCategory::new, registry, blockCategories, LootCategories.BLOCK_LOOT));
+        defaultEntityLoot.setValue(getDefaultCategory(ReiEntityDisplay::new, ReiEntityCategory::new, registry, entityCategories, LootCategories.ENTITY_LOOT));
+        defaultGameplayLoot.setValue(getDefaultCategory(ReiGameplayDisplay::new, ReiGameplayCategory::new, registry, gameplayCategories, LootCategories.GAMEPLAY_LOOT));
+        defaultTradeLoot.setValue(getDefaultCategory(ReiTradeDisplay::new, ReiTradeCategory::new, registry, tradeCategories, LootCategories.TRADE_LOOT));
     }
 
     @Override
