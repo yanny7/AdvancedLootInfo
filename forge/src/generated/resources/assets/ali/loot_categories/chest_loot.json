@@ -1,8 +1,8 @@
 {
   "type": "GAMEPLAY",
+  "hide": false,
   "icon": "minecraft:chest",
-  "key": "chest_loot",
-  "prefix": [
+  "pattern": [
     "^chests/.*$"
   ]
 }

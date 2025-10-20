@@ -1,3 +1,12 @@
+## []
+
+- Sort loot by chance, descending (highest chance first).
+- Configurable custom categories using resources
+
+## [1.3.8]
+
+- Fixed subsequent /reload doesn't block registration thread (Hope that this is final fix for /reload bug)
+
 ## [1.3.7]
 
 - Finally fixed bug with /reload
