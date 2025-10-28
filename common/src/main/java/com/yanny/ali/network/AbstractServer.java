@@ -46,6 +46,7 @@ public abstract class AbstractServer {
     private final List<SyncTradeMessage> tradeMessages = new LinkedList<>();
 
     public final void readLootTables(LootDataManager manager, ServerLevel level) {
+        LOGGER.info("Started reading loot info");
         AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
         Map<ResourceLocation, LootTable> lootTables = collectLootTables(manager);
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
@@ -86,7 +87,8 @@ public abstract class AbstractServer {
 
     public final void syncLootTables(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            sendClearMessage(serverPlayer, new ClearMessage());
+            LOGGER.info("Started syncing loot info to {}", player.getScoreboardName());
+            sendClearMessage(serverPlayer, new ClearMessage(lootTableMessages.size() + tradeMessages.size()));
 
             for (SyncLootTableMessage message : lootTableMessages) {
                 try {
@@ -107,6 +109,7 @@ public abstract class AbstractServer {
             }
 
             sendDoneMessage(serverPlayer, new DoneMessage());
+            LOGGER.info("Finished syncing loot info to {}", player.getScoreboardName());
         }
     }
 

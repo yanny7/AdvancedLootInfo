@@ -2,6 +2,7 @@
 
 - Sort loot by chance, descending (highest chance first).
 - Configurable custom categories using resources
+- Improved loot data synchronization and logging
 
 ## [1.3.8]
 

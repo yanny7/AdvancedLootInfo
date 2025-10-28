@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -90,25 +90,32 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = new CompletableFuture<>();
+        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
 
-        PluginManager.CLIENT_REGISTRY.setOnDoneListener((lootData, tradeData) -> futureData.complete(Pair.of(lootData, tradeData)));
-
-        if (!futureData.isDone()) {
+        if (futureData.isDone()) {
+            LOGGER.info("Data already received, processing instantly.");
+        } else {
             LOGGER.info("Blocking this thread until all data are received!");
         }
 
         try {
-            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get(30, TimeUnit.SECONDS);
+            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get();
 
             registerData(registry, pair.getLeft(), pair.getRight());
-        } catch (TimeoutException e) {
-            futureData.cancel(true);
-            PluginManager.CLIENT_REGISTRY.clearLootData();
-            LOGGER.error("Failed to received data in 30 seconds, registration aborted!");
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+
+            if (cause instanceof TimeoutException) {
+                futureData.cancel(true);
+                PluginManager.CLIENT_REGISTRY.clearLootData();
+                LOGGER.error("Failed to received data: Inactivity timeout occurred. Registration aborted!");
+            } else {
+                LOGGER.error("Failed to finish registering data with error {}", cause.getMessage());
+                cause.printStackTrace();
+            }
         } catch (Throwable e) {
             e.printStackTrace();
-            LOGGER.error("Failed to finish registering data with error {}", e.getMessage());
+            LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage());
         }
     }
 
