@@ -1,35 +1,33 @@
-package com.yanny.ali.registries;
+package com.yanny.ali.configuration;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public abstract class LootCategory<T> {
     private final ResourceLocation key;
-    private final ItemStack icon;
+    private final Item icon;
     private final Type type;
     private final boolean hide;
 
-    public LootCategory(ResourceLocation key, ItemStack icon, Type type, boolean hide) {
+    public LootCategory(ResourceLocation key, Item icon, Type type, boolean hide) {
         this.key = key;
         this.icon = icon;
         this.type = type;
         this.hide = hide;
     }
 
-    public LootCategory(ResourceLocation location, JsonElement element) {
-        JsonObject jsonObject = GsonHelper.convertToJsonObject(element, location.toString());
-
-        type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
-        icon = new ItemStack(BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon"))));
-        hide = GsonHelper.getAsBoolean(jsonObject, "enabled");
-        key = location;
+    public LootCategory(LootCategory.Type type, JsonObject jsonObject) {
+        this.type = type;
+        key = ResourceLocation.tryParse(GsonHelper.getAsString(jsonObject, "key"));
+        icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
+        hide = GsonHelper.getAsBoolean(jsonObject, "hide");
     }
 
     protected abstract void toJson(JsonObject object);
@@ -55,7 +53,7 @@ public abstract class LootCategory<T> {
         return key;
     }
 
-    public ItemStack getIcon() {
+    public Item getIcon() {
         return icon;
     }
 
@@ -71,8 +69,9 @@ public abstract class LootCategory<T> {
     public final JsonElement toJson() {
         JsonObject object = new JsonObject();
 
+        object.addProperty("key", key.toString());
         object.addProperty("type", type.name());
-        object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon.getItem()).toString());
+        object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon).toString());
         object.addProperty("hide", hide);
 
         toJson(object);
