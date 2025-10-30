@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 public class JeiCompatibility implements IModPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<LootCategory<Block>, JeiBlockLoot> blockCategories = new HashMap<>();
-    private final Map<LootCategory<EntityType<?>>, JeiEntityLoot> entityCategories = new HashMap<>();
-    private final Map<LootCategory<ResourceLocation>, JeiGameplayLoot> gameplayCategories = new HashMap<>();
-    private final Map<LootCategory<ResourceLocation>, JeiTradeLoot> tradeCategories = new HashMap<>();
+    private final Map<LootCategory<Block>, JeiBlockLoot> blockCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<EntityType<?>>, JeiEntityLoot> entityCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<ResourceLocation>, JeiGameplayLoot> gameplayCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<ResourceLocation>, JeiTradeLoot> tradeCategories = new LinkedHashMap<>();
 
     @Override
     public void onRuntimeUnavailable() {
