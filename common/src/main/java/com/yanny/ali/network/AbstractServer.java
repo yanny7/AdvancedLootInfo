@@ -5,6 +5,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
@@ -46,6 +47,11 @@ public abstract class AbstractServer {
     private final List<SyncTradeMessage> tradeMessages = new LinkedList<>();
 
     public final void readLootTables(LootDataManager manager, ServerLevel level) {
+        LOGGER.info("Started reading loot info");
+
+        long startTime = System.currentTimeMillis();
+        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
+
         AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
         Map<ResourceLocation, LootTable> lootTables = collectLootTables(manager);
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
@@ -63,30 +69,33 @@ public abstract class AbstractServer {
         IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
 
         serverRegistry.setServerLevel(level);
-        lootTables.forEach(serverRegistry::addLootTable);
+        lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = lootTables.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, AbstractServer::getItems));
 
         lootTableMessages.clear();
         tradeMessages.clear();
 
         // apply modifiers
-        lootNodes.putAll(processBlocks(serverRegistry, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, level, unprocessedLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processLootTables(serverRegistry, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processEntities(serverRegistry, config, level, unprocessedLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
         lootTables = removeEmptyLootTable(lootTables, lootTableItemStacks);
-        tradeNodes = new HashMap<>(processTrades(serverRegistry, tradeItems));
+        tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
 
         sendLootData(lootTables, lootTableItemStacks, lootNodes);
         sendTradeData(tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
 
+        serverRegistry.clearLootTables(); // not needed anymore
         serverRegistry.printRuntimeInfo();
+        LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
     }
 
     public final void syncLootTables(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
-            sendClearMessage(serverPlayer, new ClearMessage());
+            LOGGER.info("Started syncing loot info to {}", player.getScoreboardName());
+            sendClearMessage(serverPlayer, new ClearMessage(lootTableMessages.size() + tradeMessages.size()));
 
             for (SyncLootTableMessage message : lootTableMessages) {
                 try {
@@ -107,6 +116,7 @@ public abstract class AbstractServer {
             }
 
             sendDoneMessage(serverPlayer, new DoneMessage());
+            LOGGER.info("Finished syncing loot info to {}", player.getScoreboardName());
         }
     }
 
@@ -126,15 +136,17 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, LootTable> removeEmptyLootTable(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<ItemStack>> items) {
         Map<ResourceLocation, LootTable> result = new HashMap<>();
+        int emptyLootTables = 0;
 
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
             if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
                 result.put(entry.getKey(), entry.getValue());
             } else {
-                LOGGER.info("Skipping empty loot table {}", entry.getKey());
+                emptyLootTables++;
             }
         }
 
+        LOGGER.info("Skipped {} empty or hidden loot tables", emptyLootTables);
         return result;
     }
 
@@ -146,7 +158,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processBlocks(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<ResourceLocation, IDataNode> processBlocks(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, LootTable> lootTables,
                                                                   List<ILootModifier<?>> blockLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
                                                                   Map<ResourceLocation, List<Item>> lootTableItems) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
@@ -157,22 +169,27 @@ public abstract class AbstractServer {
             //noinspection ConstantValue
             if (location != null) {
                 LootTable lootTable = lootTables.remove(location);
-                List<Item> items = lootTableItems.get(location);
 
-                if (lootTable != null && items != null) {
-                    List<ILootModifier<?>> lootModifiers = Stream.concat(
-                            blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
-                            lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                    ).toList();
+                if (config.blockCategories.stream().filter((f) -> f.validate(block)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
+                    List<Item> items = lootTableItems.get(location);
 
-                    try {
-                        lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                        LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
+                    if (lootTable != null && items != null) {
+                        List<ILootModifier<?>> lootModifiers = Stream.concat(
+                                blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
+                                lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                        ).toList();
+
+                        try {
+                            lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                            LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
+                        }
+                    } else {
+                        LOGGER.debug("Missing block loot table for {}", block);
                     }
                 } else {
-                    LOGGER.debug("Missing block loot table for {}", block);
+                    lootTables.remove(location);
                 }
             }
         }
@@ -181,7 +198,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
                                                                     List<ILootModifier<?>> entityLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
                                                                     Map<ResourceLocation, List<Item>> lootTableItems) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
@@ -196,22 +213,25 @@ public abstract class AbstractServer {
                     //noinspection ConstantValue
                     if (location != null) {
                         LootTable lootTable = lootTables.remove(location);
-                        List<Item> items = lootTableItems.get(location);
 
-                        if (lootTable != null && items != null) {
-                            List<ILootModifier<?>> lootModifiers = Stream.concat(
-                                    entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
-                                    lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                            ).toList();
+                        if (config.entityCategories.stream().filter((f) -> f.validate(entityType)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
+                            List<Item> items = lootTableItems.get(location);
 
-                            try {
-                                lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-                            } catch (Throwable e) {
-                                e.printStackTrace();
-                                LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
+                            if (lootTable != null && items != null) {
+                                List<ILootModifier<?>> lootModifiers = Stream.concat(
+                                        entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
+                                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                                ).toList();
+
+                                try {
+                                    lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                                } catch (Throwable e) {
+                                    e.printStackTrace();
+                                    LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
+                                }
+                            } else {
+                                LOGGER.debug("Missing entity loot table for {}", entity);
                             }
-                        } else {
-                            LOGGER.debug("Missing entity loot table for {}", entity);
                         }
                     }
                 }
@@ -222,45 +242,52 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processLootTables(AliServerRegistry serverRegistry, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<ResourceLocation, IDataNode> processLootTables(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, LootTable> lootTables,
                                                                       List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
             ResourceLocation location = entry.getKey();
-            LootTable lootTable = entry.getValue();
-            List<Item> items = lootTableItems.get(location);
-            List<ILootModifier<?>> lootModifiers = lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)).toList();
 
-            try {
-                lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-            } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.warn("Failed to parse loot table {} with error {}", location, e.getMessage());
+            if (config.gameplayCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
+                LootTable lootTable = entry.getValue();
+                List<Item> items = lootTableItems.get(location);
+                List<ILootModifier<?>> lootModifiers = lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items)).toList();
+
+                try {
+                    lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    LOGGER.warn("Failed to parse loot table {} with error {}", location, e.getMessage());
+                }
             }
         }
 
+        lootTables.clear();
         return lootNodes;
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
+    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
         Map<ResourceLocation, IDataNode> nodes = new HashMap<>();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             ResourceLocation location = entry.getKey().location();
-            Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = VillagerTrades.TRADES.get(entry.getValue());
 
-            if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
-                try {
-                    nodes.put(location, serverRegistry.parseTrade(itemListingMap));
-                    tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                    LOGGER.warn("Failed to parse trade for villager {} with error {}", entry.getValue().name(), e.getMessage());
+            if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
+                Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = VillagerTrades.TRADES.get(entry.getValue());
+
+                if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
+                    try {
+                        nodes.put(location, serverRegistry.parseTrade(itemListingMap));
+                        tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        LOGGER.warn("Failed to parse trade for villager {} with error {}", entry.getValue().name(), e.getMessage());
+                    }
+                } else {
+                    LOGGER.warn("No trades defined for {}", location);
                 }
-            } else {
-                LOGGER.warn("No trades defined for {}", location);
             }
         }
 

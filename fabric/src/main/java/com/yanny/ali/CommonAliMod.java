@@ -5,10 +5,7 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
-import com.yanny.ali.registries.FabricReloadListener;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.server.packs.PackType;
 
 public class CommonAliMod implements ModInitializer {
     public static final DistHolder<AbstractClient, AbstractServer> INFO_PROPAGATOR;
@@ -19,7 +16,6 @@ public class CommonAliMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(FabricReloadListener.onResourceReload());
         FabricBusSubscriber.registerEvents();
         NetworkUtils.registerLootInfoPropagator();
         PluginManager.registerCommonEvent();
