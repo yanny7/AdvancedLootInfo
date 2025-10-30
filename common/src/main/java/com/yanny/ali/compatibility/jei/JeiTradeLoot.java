@@ -3,8 +3,8 @@ package com.yanny.ali.compatibility.jei;
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.common.TradeLootType;
+import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
-import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
@@ -14,13 +14,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
 
-public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, String> {
-    public JeiTradeLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<TradeLootType>> recipeType, LootCategory<String> lootCategory, Component title, IDrawable icon) {
+public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, ResourceLocation> {
+    public JeiTradeLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<TradeLootType>> recipeType, LootCategory<ResourceLocation> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 

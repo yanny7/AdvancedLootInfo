@@ -108,6 +108,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         lootTableMap.put(resourceLocation, lootTable);
     }
 
+    public void clearLootTables() {
+        lootTableMap.clear();
+    }
+
     public void prepareLootModifiers() {
         for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
             lootModifierMap.addAll(lootModifierGetter.apply(this));
@@ -438,6 +442,5 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getName()));
         missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
         missingNumberConverters.forEach((t) -> LOGGER.warn("Missing number converters for {}", t.getName()));
-        LOGGER.info("Prepared {} loot tables and {} trades", lootTableMap.size(), itemListingFactoryMap.size());
     }
 }

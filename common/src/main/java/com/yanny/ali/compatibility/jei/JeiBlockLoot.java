@@ -2,8 +2,8 @@ package com.yanny.ali.compatibility.jei;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.BlockLootType;
+import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
-import com.yanny.ali.registries.LootCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

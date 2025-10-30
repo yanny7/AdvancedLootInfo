@@ -8,10 +8,12 @@ import com.yanny.ali.platform.services.IPlatformHelper;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,5 +57,10 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
+    }
+
+    @Override
+    public Path getConfiguration() {
+        return FMLPaths.CONFIGDIR.get();
     }
 }
