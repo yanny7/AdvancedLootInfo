@@ -9,9 +9,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -26,36 +30,79 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<ResourceLocation, List<Item>> tradeOutputItemMap = new HashMap<>();
     private final ICommonUtils utils;
 
-    private IOnDoneListener listener = null;
-    private volatile boolean dataReceived = false;
+    private final AtomicInteger receivedMessages = new AtomicInteger(0);
+    private final AtomicInteger receivedMessagesPerSecond = new AtomicInteger(0);
+    private ScheduledExecutorService loggerScheduler;
+
+    private volatile DataReceiver currentDataReceiver = null;
 
     public AliClientRegistry(ICommonUtils utils) {
         this.utils = utils;
     }
 
+    public CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> getCurrentDataFuture() {
+        DataReceiver receiver = currentDataReceiver;
+
+        if (receiver == null) {
+            return CompletableFuture.completedFuture(Pair.of(Collections.emptyMap(), Collections.emptyMap()));
+        }
+
+        return receiver.getFuture();
+    }
+
     public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<ItemStack> items) {
+        DataReceiver receiver = currentDataReceiver;
+
+        if (receiver == null) {
+            return;
+        }
+
         lootItemMap.put(resourceLocation, items);
         lootNodeMap.put(resourceLocation, node);
+        receivedMessages.incrementAndGet();
+        receivedMessagesPerSecond.incrementAndGet();
+
+        receiver.messageReceived();
     }
 
     public void addTradeData(ResourceLocation resourceLocation, IDataNode node, List<Item> inputs, List<Item> outputs) {
+        DataReceiver receiver = currentDataReceiver;
+
+        if (receiver == null) {
+            return;
+        }
+
         lootTradeMap.put(resourceLocation, node);
         tradeInputItemMap.put(resourceLocation, inputs);
         tradeOutputItemMap.put(resourceLocation, outputs);
+        receivedMessages.incrementAndGet();
+        receivedMessagesPerSecond.incrementAndGet();
+
+        receiver.messageReceived();
     }
 
-    public synchronized void startLootData() {
-        dataReceived = false;
+    public synchronized void startLootData(int totalMessages) {
+        if (currentDataReceiver != null && !currentDataReceiver.getFuture().isDone()) {
+            LOGGER.warn("Tried to start data reception while another operation is in progress.");
+            return;
+        }
+
+        currentDataReceiver = new DataReceiver(totalMessages, lootNodeMap, lootTradeMap);
+
         lootNodeMap.clear();
         lootTradeMap.clear();
         lootItemMap.clear();
+        startLogging();
 
         LOGGER.info("Started receiving loot data");
     }
 
     public synchronized void clearLootData() {
-        listener = null;
-        dataReceived = false;
+        if (currentDataReceiver != null) {
+            currentDataReceiver.cancelOperation();
+            currentDataReceiver = null;
+        }
+
         lootNodeMap.clear();
         lootTradeMap.clear();
         lootItemMap.clear();
@@ -64,26 +111,15 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     public synchronized void doneLootData() {
-        dataReceived = true;
-        LOGGER.info("Finished receiving loot data");
+        DataReceiver receiver = currentDataReceiver;
 
-        if (listener != null) {
-            LOGGER.info("Received data {}/{}", lootNodeMap.size(), lootTradeMap.size());
-            listener.onDone(lootNodeMap, lootTradeMap);
-            listener = null;
-            dataReceived = false;
+        if (receiver == null) {
+            return;
         }
-    }
 
-    public synchronized void setOnDoneListener(IOnDoneListener listener) {
-        if (dataReceived) {
-            LOGGER.info("Already done receiving data {}/{}", lootNodeMap.size(), lootTradeMap.size());
-            listener.onDone(lootNodeMap, lootTradeMap);
-            dataReceived = false;
-        } else {
-            LOGGER.info("Registered done listener");
-            this.listener = listener;
-        }
+        receiver.forceDone();
+        stopLogging();
+        LOGGER.info("Finished receiving loot data [{}/{}]", lootNodeMap.size(), lootTradeMap.size());
     }
 
     @Override
@@ -189,5 +225,138 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Registered {} widgets", widgetMap.size());
         LOGGER.info("Registered {} node factories", nodeFactoryMap.size());
         LOGGER.info("Registered {} trade factories", lootTradeMap.size());
+    }
+
+    private void startLogging() {
+        Runnable logTask = () -> {
+            long count = receivedMessagesPerSecond.getAndSet(0);
+
+            LOGGER.info("Received {} messages per second", count);
+        };
+
+        receivedMessages.set(0);
+        receivedMessagesPerSecond.set(0);
+        loggerScheduler = Executors.newSingleThreadScheduledExecutor();
+        loggerScheduler.scheduleAtFixedRate(logTask, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private void stopLogging() {
+        if (loggerScheduler != null) {
+            long count = receivedMessagesPerSecond.getAndSet(0);
+
+            LOGGER.info("Received last {} messages", count);
+            loggerScheduler.shutdownNow();
+
+            try {
+                if (!loggerScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    LOGGER.warn("Logging scheduler didn't stop in time!");
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
+    private static class DataReceiver {
+        private static final long INACTIVITY_TIMEOUT_SECONDS = 30;
+
+        private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> dataFuture = new CompletableFuture<>();
+        private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        private final AtomicReference<ScheduledFuture<?>> timeoutHandleRef = new AtomicReference<>();
+        private final Map<ResourceLocation, IDataNode> lootNodes;
+        private final Map<ResourceLocation, IDataNode> tradeNodes;
+
+        private final CountDownLatch completionLatch;
+
+        public DataReceiver(int expectedMessageCount, Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, IDataNode> tradeNodes) {
+            this.completionLatch = new CountDownLatch(expectedMessageCount);
+            this.lootNodes = lootNodes;
+            this.tradeNodes = tradeNodes;
+
+            resetInactivityTimeout();
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    completionLatch.await();
+
+                    if (!dataFuture.isDone()) {
+                        completeFuture();
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    dataFuture.completeExceptionally(e);
+                    shutdownScheduler();
+                }
+            });
+        }
+
+        public void messageReceived() {
+            if (dataFuture.isDone()) {
+                return;
+            }
+
+            resetInactivityTimeout();
+            completionLatch.countDown();
+        }
+
+        public void forceDone() {
+            while (completionLatch.getCount() > 0) {
+                completionLatch.countDown();
+            }
+
+            if (!dataFuture.isDone()) {
+                completeFuture();
+            }
+        }
+
+        private void completeFuture() {
+            dataFuture.complete(Pair.of(lootNodes, tradeNodes));
+            shutdownScheduler();
+        }
+
+        private void resetInactivityTimeout() {
+            Runnable timeoutTask = () -> {
+                if (!dataFuture.isDone()) {
+                    String msg = String.format("Data reception failed due to inactivity timeout (%ds). Expected %d, received %d.",
+                            INACTIVITY_TIMEOUT_SECONDS,
+                            (completionLatch.getCount() + lootNodes.size() + tradeNodes.size()),
+                            (lootNodes.size() + tradeNodes.size()));
+
+                    dataFuture.completeExceptionally(new TimeoutException(msg));
+                    shutdownScheduler();
+                }
+            };
+
+            ScheduledFuture<?> previousHandle = timeoutHandleRef.getAndSet(null);
+
+            if (previousHandle != null) {
+                previousHandle.cancel(false);
+            }
+
+            ScheduledFuture<?> newHandle = scheduler.schedule(timeoutTask, INACTIVITY_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+            timeoutHandleRef.set(newHandle);
+        }
+
+        public void cancelOperation() {
+            if (!dataFuture.isDone()) {
+                dataFuture.cancel(true);
+            }
+
+            shutdownScheduler();
+        }
+
+        private void shutdownScheduler() {
+            ScheduledFuture<?> currentHandle = timeoutHandleRef.getAndSet(null);
+
+            if (currentHandle != null) {
+                currentHandle.cancel(false);
+            }
+
+            scheduler.shutdownNow();
+        }
+
+        public CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> getFuture() {
+            return dataFuture;
+        }
     }
 }

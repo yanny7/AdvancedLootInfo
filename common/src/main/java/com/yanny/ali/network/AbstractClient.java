@@ -12,7 +12,7 @@ public abstract class AbstractClient {
     }
 
     protected void onClear(ClearMessage msg) {
-        PluginManager.CLIENT_REGISTRY.startLootData();
+        PluginManager.CLIENT_REGISTRY.startLootData(msg.totalMessages);
     }
 
     protected void onDone(DoneMessage msg) {
