@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
 public class ReiCompatibility implements REIClientPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<LootCategory<Block>, Holder<ReiBlockDisplay, BlockLootType, Block>> blockCategories = new HashMap<>();
-    private final Map<LootCategory<EntityType<?>>, Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>> entityCategories = new HashMap<>();
-    private final Map<LootCategory<ResourceLocation>, Holder<ReiGameplayDisplay, GameplayLootType, ResourceLocation>> gameplayCategories = new HashMap<>();
-    private final Map<LootCategory<ResourceLocation>, Holder<ReiTradeDisplay, TradeLootType, ResourceLocation>> tradeCategories = new HashMap<>();
+    private final Map<LootCategory<Block>, Holder<ReiBlockDisplay, BlockLootType, Block>> blockCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<EntityType<?>>, Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>> entityCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<ResourceLocation>, Holder<ReiGameplayDisplay, GameplayLootType, ResourceLocation>> gameplayCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<ResourceLocation>, Holder<ReiTradeDisplay, TradeLootType, ResourceLocation>> tradeCategories = new LinkedHashMap<>();
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
