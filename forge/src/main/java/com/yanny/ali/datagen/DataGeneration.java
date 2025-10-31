@@ -10,6 +10,5 @@ public class DataGeneration {
         PackOutput packOutput = generator.getPackOutput();
 
         generator.addProvider(event.includeClient(), new LanguageProvider(packOutput, "en_us"));
-        generator.addProvider(event.includeClient(), new LootCategoryProvider(packOutput));
     }
 }
