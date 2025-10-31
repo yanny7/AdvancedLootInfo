@@ -89,11 +89,25 @@ public class ConfigUtils {
         }
     }
 
+    private static class ResourceLocationAdapter implements JsonSerializer<ResourceLocation>, JsonDeserializer<ResourceLocation> {
+        @NotNull
+        @Override
+        public ResourceLocation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return ResourceLocation.parse(json.getAsString());
+        }
+
+        @NotNull
+        @Override
+        public JsonElement serialize(ResourceLocation location, Type typeOfT, JsonSerializationContext context) {
+            return new JsonPrimitive(location.toString());
+        }
+    }
+
     @NotNull
     private static Gson createGson() {
         return new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+                .registerTypeAdapter(ResourceLocation.class, new ResourceLocationAdapter())
                 .registerTypeAdapter(LootCategory.class, new LootCategoryAdapter())
                 .registerTypeAdapter(BlockLootCategory.class, new LootCategoryAdapter())
                 .registerTypeAdapter(EntityLootCategory.class, new LootCategoryAdapter())
