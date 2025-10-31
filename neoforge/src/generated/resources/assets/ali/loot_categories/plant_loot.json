@@ -1,8 +1,0 @@
-{
-  "type": "BLOCK",
-  "classes": [
-    "net.minecraft.world.level.block.VegetationBlock"
-  ],
-  "hide": false,
-  "icon": "minecraft:diamond_hoe"
-}

@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.ali.registries;
+package com.yanny.ali.configuration;
 
 import javax.annotation.ParametersAreNonnullByDefault;
