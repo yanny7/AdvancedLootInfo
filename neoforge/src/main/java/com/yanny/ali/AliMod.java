@@ -6,7 +6,6 @@ import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
-import com.yanny.ali.registries.NeoForgeReloadListener;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -23,7 +22,6 @@ public class AliMod {
         modEventBus.addListener(AliMod::registerCommonEvent);
         modEventBus.addListener(AliMod::registerClientEvent);
         modEventBus.addListener(AliMod::registerPayloadHandler);
-        modEventBus.addListener(NeoForgeReloadListener::onResourceReload);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {

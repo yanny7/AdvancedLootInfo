@@ -1,8 +1,0 @@
-{
-  "type": "GAMEPLAY",
-  "hide": false,
-  "icon": "minecraft:fishing_rod",
-  "pattern": [
-    "^gameplay/fishing.*$"
-  ]
-}
