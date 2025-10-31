@@ -81,6 +81,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Set<Class<?>> missingDataComponentTypeTooltips = new HashSet<>();
     private final Set<Class<?>> missingConsumeEffectTooltips = new HashSet<>();
     private final Set<Class<?>> missingItemListingFactories = new HashSet<>();
+    private final Set<Class<?>> missingNumberConverters = new HashSet<>();
 
     private final ICommonUtils utils;
 
@@ -125,10 +126,15 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingDataComponentTypeTooltips.clear();
         missingConsumeEffectTooltips.clear();
         missingItemListingFactories.clear();
+        missingNumberConverters.clear();
     }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
+    }
+
+    public void clearLootTables() {
+        lootTableMap.clear();
     }
 
     public void prepareLootModifiers() {
@@ -463,7 +469,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                     LOGGER.warn("Failed to convert number with error {}", throwable.getMessage());
                 }
             } else {
-                LOGGER.warn("Number converter for {} was not registered", numberProvider.getClass().getCanonicalName());
+                missingNumberConverters.add(numberProvider.getClass());
             }
         }
 
@@ -535,6 +541,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingDataComponentTypeTooltips.forEach((t) -> LOGGER.warn("Missing data component type tooltip for {}", t.getCanonicalName()));
         missingConsumeEffectTooltips.forEach((t) -> LOGGER.warn("Missing consume effect tooltip for {}", t.getCanonicalName()));
         missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
-        LOGGER.info("Prepared {} loot tables", lootTableMap.size());
+        missingNumberConverters.forEach((t) -> LOGGER.warn("Missing number converters for {}", t.getName()));
     }
 }
