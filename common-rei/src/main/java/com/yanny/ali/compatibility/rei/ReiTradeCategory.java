@@ -1,7 +1,7 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.yanny.ali.compatibility.common.GenericUtils;
-import com.yanny.ali.registries.LootCategory;
+import com.yanny.ali.configuration.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -11,24 +11,25 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, String> {
+public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, ResourceLocation> {
     private static final int OFFSET = 10;
 
     private final CategoryIdentifier<ReiTradeDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
 
-    public ReiTradeCategory(CategoryIdentifier<ReiTradeDisplay> identifier, Component title, LootCategory<String> lootCategory) {
+    public ReiTradeCategory(CategoryIdentifier<ReiTradeDisplay> identifier, Component title, LootCategory<ResourceLocation> lootCategory) {
         super(lootCategory);
         this.identifier = identifier;
         this.title = title;
-        this.icon = lootCategory.getIcon();
+        this.icon = lootCategory.getIcon().getDefaultInstance();
     }
 
     @SuppressWarnings("UnstableApiUsage")

@@ -3,8 +3,8 @@ package com.yanny.ali.compatibility.rei;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
+import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.registries.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -37,7 +37,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         super(lootCategory);
         this.identifier = identifier;
         this.title = title;
-        this.icon = lootCategory.getIcon();
+        this.icon = lootCategory.getIcon().getDefaultInstance();
     }
 
     @SuppressWarnings("UnstableApiUsage")
