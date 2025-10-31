@@ -9,6 +9,7 @@ import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.client.gui.GuiGraphics;
 import org.slf4j.Logger;
 
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +36,11 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
+    }
+
+    @Override
+    public Path getConfiguration() {
+        return FabricLoader.getInstance().getConfigDir();
     }
 
     @Override

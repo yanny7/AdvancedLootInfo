@@ -22,13 +22,18 @@ public class ClearMessage implements CustomPacketPayload {
         }
     };
 
-    public ClearMessage() {
+    public final int totalMessages;
+
+    public ClearMessage(int totalMessages) {
+        this.totalMessages = totalMessages;
     }
 
     public ClearMessage(FriendlyByteBuf buf) {
+        totalMessages = buf.readInt();
     }
 
     public void write(FriendlyByteBuf buf) {
+        buf.writeInt(totalMessages);
     }
 
     @NotNull

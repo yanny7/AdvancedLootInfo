@@ -24,6 +24,7 @@ public class PluginManager {
 
         LOGGER.info("Registering common plugin data...");
         COMMON_REGISTRY = new AliCommonRegistry();
+        COMMON_REGISTRY.loadConfiguration();
 
         for (IPlugin plugin : PLUGINS) {
             try {
