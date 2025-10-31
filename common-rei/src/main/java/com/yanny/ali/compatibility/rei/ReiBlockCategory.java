@@ -3,7 +3,7 @@ package com.yanny.ali.compatibility.rei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yanny.ali.mixin.MixinVegetationBlock;
-import com.yanny.ali.registries.LootCategory;
+import com.yanny.ali.configuration.LootCategory;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -37,7 +37,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         super(lootCategory);
         this.identifier = identifier;
         this.title = title;
-        this.icon = lootCategory.getIcon();
+        this.icon = lootCategory.getIcon().getDefaultInstance();
     }
 
     @SuppressWarnings("UnstableApiUsage")

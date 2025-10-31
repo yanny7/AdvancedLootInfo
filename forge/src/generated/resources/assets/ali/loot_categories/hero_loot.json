@@ -1,8 +1,0 @@
-{
-  "type": "GAMEPLAY",
-  "hide": false,
-  "icon": "minecraft:emerald",
-  "pattern": [
-    "^gameplay/hero_of_the_village/.*$"
-  ]
-}

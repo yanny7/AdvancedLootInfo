@@ -5,10 +5,12 @@ import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,5 +49,10 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
+    }
+
+    @Override
+    public Path getConfiguration() {
+        return FMLPaths.CONFIGDIR.get();
     }
 }
