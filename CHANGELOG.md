@@ -1,7 +1,8 @@
-## []
+## [1.4.0]
 
 - Sort loot by chance, descending (highest chance first).
 - Configurable custom categories using JSON configuration file (client and server side)
+- Removed resource pack configuration
 - Improved loot data synchronization and logging
 
 ## [1.3.9]
