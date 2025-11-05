@@ -8,7 +8,10 @@ import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
+import com.yanny.ali.plugin.server.ConditionTooltipUtils;
+import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.IngredientTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
@@ -80,6 +83,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Set<Class<?>> missingItemListingFactories = new HashSet<>();
     private final Set<Class<?>> missingNumberConverters = new HashSet<>();
 
+    private final FunctionStatsTracker entryTracker = new FunctionStatsTracker(EntryFactory.class);
+    private final FunctionStatsTracker functionTracker = new FunctionStatsTracker(FunctionTooltipUtils.class);
+    private final FunctionStatsTracker conditionTracker = new FunctionStatsTracker(ConditionTooltipUtils.class);
+    private final FunctionStatsTracker ingredientTracker = new FunctionStatsTracker(IngredientTooltipUtils.class);
+
     private final ICommonUtils utils;
 
     private ServerLevel serverLevel;
@@ -122,6 +130,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingDataComponentTypeTooltips.clear();
         missingItemListingFactories.clear();
         missingNumberConverters.clear();
+
+        entryTracker.clearStats();
+        functionTracker.clearStats();
+        conditionTracker.clearStats();
+        ingredientTracker.clearStats();
     }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
@@ -269,6 +282,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         EntryFactory<T> entryFactory = (EntryFactory<T>) entryFactoryMap.get(type.getClass());
 
         if (entryFactory != null) {
+            entryTracker.incrementCallCount(type.getClass());
             return entryFactory;
         } else {
             missingEntryFactories.add(type.getClass());
@@ -281,6 +295,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         BiFunction<IServerUtils, LootItemFunction, ITooltipNode> entryTooltipGetter = functionTooltipMap.get(function.getClass());
 
         if (entryTooltipGetter != null) {
+            functionTracker.incrementCallCount(function.getClass());
             return entryTooltipGetter.apply(utils, function);
         } else {
             missingFunctionTooltips.add(function.getClass());
@@ -299,6 +314,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         BiFunction<IServerUtils, LootItemCondition, ITooltipNode> entryTooltipGetter = conditionTooltipMap.get(condition.getClass());
 
         if (entryTooltipGetter != null) {
+            conditionTracker.incrementCallCount(condition.getClass());
             return entryTooltipGetter.apply(utils, condition);
         } else {
             missingConditionTooltips.add(condition.getClass());
@@ -317,6 +333,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         BiFunction<IServerUtils, Ingredient, ITooltipNode> ingredientTooltipGetter = ingredientTooltipMap.get(ingredient.getClass());
 
         if (ingredientTooltipGetter != null) {
+            ingredientTracker.incrementCallCount(ingredient.getClass());
             return ingredientTooltipGetter.apply(utils, ingredient);
         } else {
             missingIngredientTooltips.add(ingredient.getClass());
@@ -518,5 +535,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingDataComponentTypeTooltips.forEach((t) -> LOGGER.warn("Missing data component type tooltip for {}", t.getCanonicalName()));
         missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
         missingNumberConverters.forEach((t) -> LOGGER.warn("Missing number converters for {}", t.getName()));
+
+        entryTracker.logStats();
+        functionTracker.logStats();
+        conditionTracker.logStats();
+        ingredientTracker.logStats();
     }
 }

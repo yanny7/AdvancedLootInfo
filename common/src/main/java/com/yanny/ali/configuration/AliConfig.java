@@ -17,6 +17,8 @@ public class AliConfig {
     public List<GameplayLootCategory> gameplayCategories;
     public List<TradeLootCategory> tradeCategories;
 
+    public boolean logMoreStatistics = false;
+
     public AliConfig() {
         blockCategories = new ArrayList<>();
         blockCategories.add(new BlockLootCategory(Utils.modLoc("plant_loot"), Items.DIAMOND_HOE, false, List.of(BushBlock.class)));
