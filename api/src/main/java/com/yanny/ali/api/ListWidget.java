@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,23 +31,36 @@ public abstract class ListWidget implements IWidget {
     public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth, IDataNode tooltipNode) {
         IWidget groupWidget = getLootGroupWidget(rect, tooltipNode);
         boolean hasGroupWidget = groupWidget != null;
+        List<IWidget> children = null;
 
         groupWidgetWidth = hasGroupWidget ? groupWidget.getRect().width : 0;
-        widgets = new ArrayList<>();
         bounds = rect;
 
         if (hasGroupWidget) {
-            widgets.add(groupWidget);
+            children = new ArrayList<>();
+            children.add(groupWidget);
         }
 
         if (entry instanceof ListNode listNode) {
             RelativeRect subRect = new RelativeRect(groupWidgetWidth, 0, rect.width - groupWidgetWidth, 0, rect);
+            List<IDataNode> nodes = listNode.nodes();
 
-            widgets.addAll(utils.createWidgets(utils, listNode.nodes(), subRect, maxWidth));
+            if (!nodes.isEmpty()) {
+                List<IWidget> widgetList = utils.createWidgets(utils, nodes, subRect, maxWidth);
+
+                if (children != null) {
+                    children.addAll(widgetList);
+                } else {
+                    children = new ArrayList<>(widgetList);
+                }
+            }
+
             bounds.setDimensions(subRect.width + groupWidgetWidth, subRect.height);
         } else {
             bounds.setDimensions(GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         }
+
+        widgets = children != null ? children : Collections.emptyList();
     }
 
     @Nullable

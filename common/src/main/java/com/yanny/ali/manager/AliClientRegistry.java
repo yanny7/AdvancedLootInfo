@@ -135,7 +135,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     @Override
     public List<IWidget> createWidgets(IWidgetUtils utils, List<IDataNode> entries, RelativeRect parent, int maxWidth) {
         int posX = 0, posY = 0;
-        List<IWidget> widgets = new LinkedList<>();
+        List<IWidget> widgets = new ArrayList<>(entries.size());
         WidgetDirection lastDirection = null;
 
         for (IDataNode entry : entries) {
