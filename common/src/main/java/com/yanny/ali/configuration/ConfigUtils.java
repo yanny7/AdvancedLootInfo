@@ -49,8 +49,9 @@ public class ConfigUtils {
         return load(configFile, gson);
     }
 
-    private static AliConfig load (Path configFilePath, Gson gson) {
+    private static AliConfig load(Path configFilePath, Gson gson) {
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
+            LOGGER.info("Loading configuration file {}", configFilePath);
             return gson.fromJson(reader, AliConfig.class);
         } catch (Exception e) {
             LOGGER.warn("Error while reading configuration file: {}", e.getMessage());
@@ -61,6 +62,7 @@ public class ConfigUtils {
     private static void saveConfig(Path configFilePath, Gson gson) {
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
             gson.toJson(new AliConfig(), writer);
+            LOGGER.info("Created new configuration file {}", configFilePath);
         } catch (IOException e) {
             LOGGER.warn("Error while writing configuration file: {}", e.getMessage());
             e.printStackTrace();
