@@ -3,10 +3,8 @@ package com.yanny.ali.api;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.List;
-
 public interface IDataNode extends Comparable<IDataNode> {
-    List<ITooltipNode> getTooltip();
+    ITooltipNode getTooltip();
 
     ResourceLocation getId();
 

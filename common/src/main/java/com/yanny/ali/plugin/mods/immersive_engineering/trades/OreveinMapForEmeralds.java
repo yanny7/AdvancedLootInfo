@@ -27,7 +27,7 @@ public class OreveinMapForEmeralds extends BaseAccessor<VillagerTrades.ItemListi
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
         ItemStack map = Items.MAP.getDefaultInstance();
 
         map.setHoverName(Component.translatable("item.immersiveengineering.map_orevein"));
@@ -41,7 +41,7 @@ public class OreveinMapForEmeralds extends BaseAccessor<VillagerTrades.ItemListi
                 30,
                 1,
                 0.5F,
-                conditions
+                condition
         );
     }
 

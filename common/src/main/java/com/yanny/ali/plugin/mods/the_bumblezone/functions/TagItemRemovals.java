@@ -1,8 +1,8 @@
 package com.yanny.ali.plugin.mods.the_bumblezone.functions;
 
+import com.yanny.ali.api.BranchTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 
 import java.util.Arrays;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.loot.functions.TagItemRemovals")
 public class TagItemRemovals extends ConditionalFunction implements IFunctionTooltip {
@@ -26,11 +26,8 @@ public class TagItemRemovals extends ConditionalFunction implements IFunctionToo
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.tag_item_removals"));
-
-        tooltip.add(getTagKeyTooltip(utils, "ali.property.value.tag", tagKey));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
-
-        return tooltip;
+        return BranchTooltipNode.branch("ali.type.function.tag_item_removals")
+                .add(utils.getValueTooltip(utils, tagKey).key("ali.property.value.tag"))
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
     }
 }

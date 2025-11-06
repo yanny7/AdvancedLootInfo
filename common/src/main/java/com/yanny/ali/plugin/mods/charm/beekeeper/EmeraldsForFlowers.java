@@ -41,7 +41,7 @@ public class EmeraldsForFlowers extends BaseAccessor<VillagerTrades.ItemListing>
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
                 Either.right(BEEKEEPER_SELLS_FLOWERS),

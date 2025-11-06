@@ -1,11 +1,7 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.ListNode;
-import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +17,7 @@ import java.util.stream.Stream;
 public class ReferenceNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "reference");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final float chance;
 
     public ReferenceNode(IServerUtils utils, LootTableReference entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
@@ -41,18 +37,18 @@ public class ReferenceNode extends ListNode {
 
     public ReferenceNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = TooltipNode.decodeNode(buf);
         chance = buf.readFloat();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        TooltipNode.encodeNode(tooltip, buf);
         buf.writeFloat(chance);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

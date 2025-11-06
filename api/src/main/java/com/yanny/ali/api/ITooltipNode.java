@@ -6,11 +6,7 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public interface ITooltipNode {
-    List<ITooltipNode> getChildren();
-
-    void add(ITooltipNode node);
-
-    Component getContent();
+    List<Component> getComponents(int pad, boolean showAdvancedTooltip);
 
     boolean isAdvancedTooltip();
 

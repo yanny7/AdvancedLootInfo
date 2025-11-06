@@ -1,9 +1,7 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinCombinedIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
@@ -12,8 +10,6 @@ import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AnyIngredient;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class LootJsIngredientTooltipUtils {
@@ -26,7 +22,7 @@ public class LootJsIngredientTooltipUtils {
         if (i instanceof AnyIngredient anyIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) anyIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
-            ITooltipNode tooltip = new TooltipNode(translatable("ali.property.branch.any"));
+            IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.property.branch.any");
 
             for (Ingredient i2 : ingredients) {
                 tooltip.add(utils.getIngredientTooltip(utils, i2));
@@ -36,7 +32,7 @@ public class LootJsIngredientTooltipUtils {
         } else if (i instanceof AllIngredient allIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) allIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
-            ITooltipNode tooltip = new TooltipNode(translatable("ali.property.branch.all"));
+            IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.property.branch.all");
 
             for (Ingredient i2 : ingredients) {
                 tooltip.add(utils.getIngredientTooltip(utils, i2));
@@ -45,11 +41,11 @@ public class LootJsIngredientTooltipUtils {
             return tooltip;
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
-            return new TooltipNode();
+            return EmptyTooltipNode.EMPTY;
         } else {
             LOGGER.warn("Missing tooltip for fabric custom ingredient {}", i.getClass().getCanonicalName());
         }
 
-        return new TooltipNode();
+        return EmptyTooltipNode.EMPTY;
     }
 }

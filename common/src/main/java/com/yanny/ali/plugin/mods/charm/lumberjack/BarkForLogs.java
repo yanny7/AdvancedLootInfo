@@ -1,10 +1,7 @@
 package com.yanny.ali.plugin.mods.charm.lumberjack;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
@@ -19,7 +16,10 @@ import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @ClassAccessor("svenhjol.charm.feature.lumberjacks.LumberjackTradeOffers$BarkForLogs")
 public class BarkForLogs extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -38,7 +38,7 @@ public class BarkForLogs extends BaseAccessor<VillagerTrades.ItemListing> implem
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new SubTradesNode<>(utils, this, conditions) {
             @Override
             public List<IDataNode> getSubTrades(IServerUtils utils, BarkForLogs listing) {
@@ -65,7 +65,7 @@ public class BarkForLogs extends BaseAccessor<VillagerTrades.ItemListing> implem
                             maxUses,
                             villagerXp,
                             0.2F,
-                            Collections.emptyList()
+                            EmptyTooltipNode.EMPTY
                     ));
                 }
 

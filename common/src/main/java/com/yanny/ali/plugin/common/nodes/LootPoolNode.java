@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class LootPoolNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "loot_pool");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
 
     public LootPoolNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootPool lootPool, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootPool.functions)).toList();
@@ -34,16 +34,16 @@ public class LootPoolNode extends ListNode {
 
     public LootPoolNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = TooltipNode.decodeNode(buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        TooltipNode.encodeNode(tooltip, buf);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

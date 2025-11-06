@@ -1,16 +1,12 @@
 package com.yanny.ali.plugin.mods.charm.beekeeper;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
-import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,10 +15,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.Collections;
 import java.util.List;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.BeekeeperTradeOffers$PopulatedBeehiveForEmeralds")
 public class PopulatedBeehiveForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -41,22 +34,21 @@ public class PopulatedBeehiveForEmeralds extends BaseAccessor<VillagerTrades.Ite
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        ITooltipNode tooltip = RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.branch.bees", Enchantments.UNBREAKING);
-
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.count", 2));
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
+        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING).key("ali.property.branch.bees")
+                .add(utils.getValueTooltip(utils, 2).key("ali.property.value.count"));
 
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(baseEmeralds, baseEmeralds + extraEmeralds),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(ItemStack.EMPTY),
                 new RangeValue(),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(Items.BEEHIVE.getDefaultInstance()),
                 new RangeValue(),
-                List.of(tooltip),
+                tooltip,
                 maxUses,
                 villagerXp,
                 0.2F,

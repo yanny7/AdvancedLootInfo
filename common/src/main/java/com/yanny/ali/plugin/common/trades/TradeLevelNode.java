@@ -6,12 +6,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
-import java.util.Collections;
-import java.util.List;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.value;
-
 public class TradeLevelNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "trade_level");
 
@@ -22,7 +16,7 @@ public class TradeLevelNode extends ListNode {
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {
-                addChildren(utils.getItemListing(utils, itemListing, Collections.emptyList()));
+                addChildren(utils.getItemListing(utils, itemListing, EmptyTooltipNode.EMPTY));
             }
         }
     }
@@ -38,8 +32,8 @@ public class TradeLevelNode extends ListNode {
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
-        return List.of(new TooltipNode(translatable("ali.property.value.level", value(level))));
+    public ITooltipNode getTooltip() {
+        return ValueTooltipNode.value(level).key("ali.property.value.level");
     }
 
     @Override

@@ -92,7 +92,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
         Either<ItemStack, TagKey<? extends ItemLike>> item = lazyItem.getItem();
 
         if (outline == EMERALD_FOR_ITEM) {
@@ -105,7 +105,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
                     maxUses,
                     xp,
                     priceMultiplier,
-                    conditions
+                    condition
             );
         } else if (outline == ONE_ITEM_FOR_EMERALDS) {
             return new ItemsToItemsNode(
@@ -117,7 +117,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
                     maxUses,
                     xp,
                     priceMultiplier,
-                    conditions
+                    condition
             );
         } else if (outline == ITEMS_FOR_ONE_EMERALD) {
             return new ItemsToItemsNode(
@@ -129,7 +129,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
                     maxUses,
                     xp,
                     priceMultiplier,
-                    conditions
+                    condition
             );
         }
 

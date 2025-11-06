@@ -39,10 +39,10 @@ dependencies {
 //    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
 
     // LootJS
-    modImplementation "curse.maven:kubejs-238086:5853321"
-    modImplementation "curse.maven:rhino-416294:6186969"
-    modImplementation "curse.maven:architectury-api-419699:5137936"
-    modImplementation "curse.maven:lootjs-570630:5404564"
+    modCompileOnly "curse.maven:kubejs-238086:5853321"
+    modCompileOnly "curse.maven:rhino-416294:6186969"
+    modCompileOnly "curse.maven:architectury-api-419699:5137936"
+    modCompileOnly "curse.maven:lootjs-570630:5404564"
 
     // Aether https://www.curseforge.com/minecraft/mc-mods/aether
     modCompileOnly "curse.maven:aether-255308:6800393"

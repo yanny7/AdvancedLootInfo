@@ -1,10 +1,7 @@
 package com.yanny.ali.plugin.mods.charm.extra;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
@@ -18,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @ClassAccessor("svenhjol.charm.feature.extra_trades.ExtraTrades$AnvilRepair")
@@ -34,7 +30,7 @@ public class AnvilRepair extends BaseAccessor<VillagerTrades.ItemListing> implem
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new SubTradesNode<>(utils, this, conditions) {
             @Override
             public List<IDataNode> getSubTrades(IServerUtils utils, AnvilRepair listing) {
@@ -53,7 +49,7 @@ public class AnvilRepair extends BaseAccessor<VillagerTrades.ItemListing> implem
                             maxUses,
                             villagerXp,
                             0.2F,
-                            Collections.emptyList()
+                            EmptyTooltipNode.EMPTY
                     ));
                 }
 

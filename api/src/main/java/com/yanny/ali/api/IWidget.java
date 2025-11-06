@@ -10,8 +10,6 @@ public interface IWidget {
 
     WidgetDirection getDirection();
 
-//    ResourceLocation getNodeId();
-
     default void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
     }
 

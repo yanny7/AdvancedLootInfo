@@ -45,8 +45,7 @@ public class ItemCollectorUtils {
 
         return result;
     }
-    
-    @Unmodifiable
+
     @NotNull
     public static List<Item> collectItems(IServerUtils utils, LootItem entry) {
         LinkedList<Item> result = new LinkedList<>(List.of(entry.item));
@@ -56,7 +55,6 @@ public class ItemCollectorUtils {
         return result;
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Item> collectTags(IServerUtils utils, TagEntry entry) {
         LinkedList<Item> result = new LinkedList<>(BuiltInRegistries.ITEM.getTag(entry.tag).map((tag) -> tag.stream().map(Holder::value).toList()).orElse(List.of()));
