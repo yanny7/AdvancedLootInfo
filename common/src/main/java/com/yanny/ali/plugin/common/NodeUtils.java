@@ -2,13 +2,10 @@ package com.yanny.ali.plugin.common;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -25,26 +22,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class NodeUtils {
-    public static void encodeTooltipNodes(IServerUtils ignoredUtils, FriendlyByteBuf buf, List<ITooltipNode> nodes) {
-        buf.writeInt(nodes.size());
-
-        for (ITooltipNode node : nodes) {
-            node.encode(buf);
-        }
-    }
-
-    @NotNull
-    public static List<ITooltipNode> decodeTooltipNodes(IClientUtils ignoredUtils, FriendlyByteBuf buf) {
-        int count = buf.readInt();
-        List<ITooltipNode> nodes = new ArrayList<>(count);
-
-        for (int i = 0; i < count; i++) {
-            nodes.add(new TooltipNode(buf));
-        }
-
-        return nodes;
-    }
-
     public static int getTotalWeight(List<LootPoolEntryContainer> entries) {
         int sum = 0;
 
@@ -68,9 +45,7 @@ public class NodeUtils {
         List<Component> components = new ArrayList<>();
 
         for (ITooltipNode node : tooltip) {
-            if (!node.isAdvancedTooltip() || showAdvancedTooltip) {
-                components.addAll(toComponents(node, pad, showAdvancedTooltip));
-            }
+            components.addAll(toComponents(node, pad, showAdvancedTooltip));
         }
 
         return components;
@@ -78,16 +53,7 @@ public class NodeUtils {
 
     @NotNull
     public static List<Component> toComponents(ITooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
-        List<Component> components = new ArrayList<>();
-
-        if (tooltip.getContent().getContents() != ComponentContents.EMPTY) {
-            components.add(GenericTooltipUtils.pad(pad, tooltip.getContent()));
-            components.addAll(toComponents(tooltip.getChildren(), pad + 1, showAdvancedTooltip));
-        } else {
-            components.addAll(toComponents(tooltip.getChildren(), pad, showAdvancedTooltip));
-        }
-
-        return components;
+        return tooltip.getComponents(pad, showAdvancedTooltip);
     }
 
     public static void processLootModifier(IServerUtils utils, ILootModifier<?> modifier, LootTableNode node) {

@@ -15,7 +15,7 @@ public class Plugin implements IPlugin {
     @Override
     public void registerClient(IClientRegistry registry) {
         registry.registerWidget(NormalizeNode.ID, NormalizeWidget::new);
-        registry.registerNode(NormalizeNode.ID, NormalizeNode::new);
+        registry.registerDataNode(NormalizeNode.ID, NormalizeNode::new);
     }
 
     @Override

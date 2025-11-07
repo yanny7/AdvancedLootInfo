@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStringTooltip;
-
 @ClassAccessor("net.mehvahdjukaar.sawmill.CarpenterTrades$LogStrippingListing")
 public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
     @FieldAccessor
@@ -43,8 +41,8 @@ public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing
     }
 
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        return new SubTradesNode<>(utils, this, conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
+        return new SubTradesNode<>(utils, this, condition) {
             @Override
             public List<IDataNode> getSubTrades(IServerUtils utils, LogStrippingListing listing) {
                 List<IDataNode> nodes = new ArrayList<>();
@@ -69,7 +67,7 @@ public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing
                                         maxTrades,
                                         xp,
                                         priceMult,
-                                        List.of(getStringTooltip(utils, "ali.property.value.villager_type", type.toString()))
+                                        utils.getValueTooltip(utils, type.toString()).key("ali.property.value.villager_type")
                                 ));
                             }
                         }

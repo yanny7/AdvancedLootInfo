@@ -14,16 +14,18 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class IngredientTooltipTest {
     @Test
     public void ingredientTest() {
-        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)), List.of(
-                "Item:",
-                "  -> Item: minecraft:acacia_fence",
-                "  -> Count: 1",
-                "Item:",
-                "  -> Item: minecraft:acacia_door",
-                "  -> Count: 1"
+        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)).key("ali.property.branch.items"), List.of(
+                "Items:",
+                "  -> Item:",
+                "    -> Item: minecraft:acacia_fence",
+                "    -> Count: 1",
+                "  -> Item:",
+                "    -> Item: minecraft:acacia_door",
+                "    -> Count: 1"
         ));
-        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(ItemTags.ACACIA_LOGS)), List.of(
-                "Tag: minecraft:acacia_logs"
+        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(ItemTags.ACACIA_LOGS)).key("ali.property.branch.items"), List.of(
+                "Items:",
+                "  -> Tag: minecraft:acacia_logs"
         ));
     }
 }

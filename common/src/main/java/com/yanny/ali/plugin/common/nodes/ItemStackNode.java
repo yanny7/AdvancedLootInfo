@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -18,15 +18,15 @@ import java.util.List;
 public class ItemStackNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item_stack");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final ItemStack itemStack;
     private final RangeValue count;
 
     public ItemStackNode(IServerUtils utils, ItemStack item, RangeValue count) {
-        this(utils, item, count, Collections.emptyList());
+        this(utils, item, count, EmptyTooltipNode.EMPTY);
     }
 
-    public ItemStackNode(IServerUtils ignoredUtils, ItemStack item, RangeValue count, List<ITooltipNode> tooltip) {
+    public ItemStackNode(IServerUtils ignoredUtils, ItemStack item, RangeValue count, ITooltipNode tooltip) {
         itemStack = item;
         this.tooltip = tooltip;
         this.count = count;
@@ -34,7 +34,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
     }
 
@@ -66,12 +66,12 @@ public class ItemStackNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeItem(itemStack);
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

@@ -2,11 +2,10 @@ package com.yanny.ali.plugin.mods.snow_real_magic;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -17,7 +16,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,28 +23,28 @@ import java.util.Map;
 public class NormalizeNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation("snowrealmagic", "item_stack");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final float chance;
 
     public NormalizeNode(IServerUtils utils, float chance, int quality, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        tooltip = new ArrayList<>();
-        tooltip.add(new TooltipNode(GenericTooltipUtils.translatable("ali.enum.group_type.normalize")));
-        tooltip.addAll(getItemTooltip(utils, chance, quality, functions, conditions));
+        tooltip = ArrayTooltipNode.array()
+                .add(LiteralTooltipNode.translatable("ali.enum.group_type.normalize"))
+                .add(getItemTooltip(utils, chance, quality, functions, conditions));
         this.chance = chance;
     }
 
     public NormalizeNode(IClientUtils utils, FriendlyByteBuf buf) {
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         chance = 1;
     }
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -56,16 +54,16 @@ public class NormalizeNode implements IDataNode, IItemNode {
     }
 
     @NotNull
-    private static List<ITooltipNode> getItemTooltip(IServerUtils utils, float chance, int quality, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = getCount(utils, 1, functions);
+    private static ITooltipNode getItemTooltip(IServerUtils utils, float chance, int quality, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
+        Map<Enchantment, Map<Integer, RangeValue>> countMap = getCount(utils, 1, functions);
 
         return EntryTooltipUtils.getTooltip(utils, quality, chanceMap, countMap, functions, conditions);
     }
 
     @NotNull
-    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getCount(IServerUtils utils, int baseCount, List<LootItemFunction> functions) {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
+    public static Map<Enchantment, Map<Integer, RangeValue>> getCount(IServerUtils utils, int baseCount, List<LootItemFunction> functions) {
+        Map<Enchantment, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
 
         count.put(null, Map.of(0, new RangeValue(baseCount)));
 

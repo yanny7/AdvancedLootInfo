@@ -9,7 +9,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 
 public interface IItemListing {
-    IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions);
+    IDataNode getNode(IServerUtils utils, ITooltipNode conditions);
 
     Pair<List<Item>, List<Item>> collectItems(IServerUtils utils);
 }

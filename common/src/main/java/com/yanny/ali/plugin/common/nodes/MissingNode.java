@@ -5,11 +5,9 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-
-import java.util.Collections;
-import java.util.List;
 
 public class MissingNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "missing");
@@ -21,8 +19,8 @@ public class MissingNode implements IDataNode {
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
-        return Collections.emptyList();
+    public ITooltipNode getTooltip() {
+        return EmptyTooltipNode.EMPTY; // FIXME error node?
     }
 
     @Override
