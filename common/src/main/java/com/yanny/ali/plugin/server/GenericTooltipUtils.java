@@ -1,6 +1,9 @@
 package com.yanny.ali.plugin.server;
 
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.plugin.common.tooltip.*;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.MobEffectsPredicate;
 import net.minecraft.advancements.critereon.PlayerPredicate;

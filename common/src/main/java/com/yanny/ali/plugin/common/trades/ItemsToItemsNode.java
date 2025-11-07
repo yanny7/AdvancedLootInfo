@@ -5,6 +5,8 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
 import com.yanny.ali.plugin.common.nodes.TagNode;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -68,7 +70,7 @@ public class ItemsToItemsNode extends ListNode {
 
     public ItemsToItemsNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decodeNode(buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     @Override
@@ -83,7 +85,7 @@ public class ItemsToItemsNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        TooltipNode.encodeNode(tooltip, buf);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     private static IDataNode getChildren(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, ITooltipNode condition) {

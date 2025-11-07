@@ -54,7 +54,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
-        tooltip = TooltipNode.decodeNode(buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -95,7 +95,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeItem(itemStack);
-        TooltipNode.encodeNode(tooltip, buf);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);

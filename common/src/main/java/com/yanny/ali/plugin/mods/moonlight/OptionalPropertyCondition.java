@@ -1,9 +1,9 @@
 package com.yanny.ali.plugin.mods.moonlight;
 
-import com.yanny.ali.api.BranchTooltipNode;
-import com.yanny.ali.api.EmptyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;

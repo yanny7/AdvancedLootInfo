@@ -1,7 +1,12 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.api.ListNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;

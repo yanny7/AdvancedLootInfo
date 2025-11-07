@@ -37,12 +37,12 @@ public class GroupLootNode extends ListNode {
 
     public GroupLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decodeNode(buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        TooltipNode.encodeNode(tooltip, buf);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     @Override

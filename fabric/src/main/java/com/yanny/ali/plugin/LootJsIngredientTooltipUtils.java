@@ -1,8 +1,12 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.mixin.MixinCombinedIngredient;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AllIngredient;

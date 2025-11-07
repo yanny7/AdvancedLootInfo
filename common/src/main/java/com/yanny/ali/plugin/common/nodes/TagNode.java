@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
@@ -55,7 +56,7 @@ public class TagNode implements IDataNode, IItemNode {
 
     public TagNode(IClientUtils utils, FriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
-        tooltip = TooltipNode.decodeNode(buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
 
@@ -91,7 +92,7 @@ public class TagNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
-        TooltipNode.encodeNode(tooltip, buf);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeFloat(chance);
     }

@@ -9,6 +9,7 @@ import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
@@ -77,23 +78,31 @@ public class Plugin implements IPlugin {
         registry.registerWidget(SubTradesNode.ID, SubTradesWidget::new);
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
-        registry.registerNode(LootTableNode.ID, LootTableNode::new);
-        registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
-        registry.registerNode(ItemNode.ID, ItemNode::new);
-        registry.registerNode(TagNode.ID, TagNode::new);
-        registry.registerNode(AlternativesNode.ID, AlternativesNode::new);
-        registry.registerNode(SequenceNode.ID, SequenceNode::new);
-        registry.registerNode(GroupNode.ID, GroupNode::new);
-        registry.registerNode(EmptyNode.ID, EmptyNode::new);
-        registry.registerNode(DynamicNode.ID, DynamicNode::new);
-        registry.registerNode(ReferenceNode.ID, ReferenceNode::new);
-        registry.registerNode(MissingNode.ID, MissingNode::new);
+        registry.registerDataNode(LootTableNode.ID, LootTableNode::new);
+        registry.registerDataNode(LootPoolNode.ID, LootPoolNode::new);
+        registry.registerDataNode(ItemNode.ID, ItemNode::new);
+        registry.registerDataNode(TagNode.ID, TagNode::new);
+        registry.registerDataNode(AlternativesNode.ID, AlternativesNode::new);
+        registry.registerDataNode(SequenceNode.ID, SequenceNode::new);
+        registry.registerDataNode(GroupNode.ID, GroupNode::new);
+        registry.registerDataNode(EmptyNode.ID, EmptyNode::new);
+        registry.registerDataNode(DynamicNode.ID, DynamicNode::new);
+        registry.registerDataNode(ReferenceNode.ID, ReferenceNode::new);
+        registry.registerDataNode(MissingNode.ID, MissingNode::new);
 
-        registry.registerNode(TradeNode.ID, TradeNode::new);
-        registry.registerNode(TradeLevelNode.ID, TradeLevelNode::new);
-        registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
-        registry.registerNode(SubTradesNode.ID, SubTradesNode::new);
-        registry.registerNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
+        registry.registerDataNode(TradeNode.ID, TradeNode::new);
+        registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
+        registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
+        registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
+
+        registry.registerTooltipNode(ArrayTooltipNode.ID, ArrayTooltipNode::decode);
+        registry.registerTooltipNode(BranchTooltipNode.ID, BranchTooltipNode::decode);
+        registry.registerTooltipNode(ComponentTooltipNode.ID, ComponentTooltipNode::decode);
+        registry.registerTooltipNode(EmptyTooltipNode.ID, EmptyTooltipNode::decode);
+        registry.registerTooltipNode(ErrorTooltipNode.ID, ErrorTooltipNode::decode);
+        registry.registerTooltipNode(LiteralTooltipNode.ID, LiteralTooltipNode::decode);
+        registry.registerTooltipNode(ValueTooltipNode.ID, ValueTooltipNode::decode);
     }
 
     @Override

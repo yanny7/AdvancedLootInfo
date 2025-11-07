@@ -1,7 +1,13 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;

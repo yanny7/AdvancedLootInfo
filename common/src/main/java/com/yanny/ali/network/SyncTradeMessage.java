@@ -47,7 +47,7 @@ public class SyncTradeMessage {
 
         try {
             IClientUtils utils = PluginManager.CLIENT_REGISTRY;
-            dataNode = utils.getNodeFactory(TradeNode.ID).create(utils, buf);
+            dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, buf);
         } catch (Throwable e) {
             LOGGER.error("Failed to decode node for trade {} with error: {}", location, e.getMessage());
             dataNode = new MissingNode();

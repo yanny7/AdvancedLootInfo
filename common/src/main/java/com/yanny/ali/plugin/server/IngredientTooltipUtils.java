@@ -1,9 +1,9 @@
 package com.yanny.ali.plugin.server;
 
-import com.yanny.ali.api.BranchTooltipNode;
-import com.yanny.ali.api.ErrorTooltipNode;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 

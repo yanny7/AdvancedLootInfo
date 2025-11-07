@@ -2,6 +2,8 @@ package com.yanny.ali.plugin.mods.snow_real_magic;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -32,13 +34,13 @@ public class NormalizeNode implements IDataNode, IItemNode {
     }
 
     public NormalizeNode(IClientUtils utils, FriendlyByteBuf buf) {
-        tooltip = TooltipNode.decodeNode(buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         chance = 1;
     }
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        TooltipNode.encodeNode(tooltip, buf);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     @Override

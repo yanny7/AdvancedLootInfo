@@ -1,23 +1,30 @@
-package com.yanny.ali.api;
+package com.yanny.ali.plugin.common.tooltip;
 
+import com.yanny.ali.Utils;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yanny.ali.api.ITooltipNode.pad;
+
 public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode {
-    static {
-        registerFactory(ValueTooltipNode.class, () -> ValueTooltipNode::new);
-    }
+    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "value");
 
     private final List<String> values;
     private final boolean isKeyValue;
     private String key = null;
 
     private ValueTooltipNode(boolean isKeyValue, Object... values) {
+        super(new ArrayList<>());
         this.isKeyValue = isKeyValue;
 
         if (values.length == 1) {
@@ -31,22 +38,11 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
         }
     }
 
-    public ValueTooltipNode(FriendlyByteBuf buf) {
-        super(buf);
-        int size = buf.readInt();
-
-        if (size == 1) {
-            values = Collections.singletonList(buf.readUtf());
-        } else {
-            values = new ArrayList<>();
-
-            for (int i = 0; i < size; i++) {
-                values.add(buf.readUtf());
-            }
-        }
-
-        isKeyValue = buf.readBoolean();
-        key = buf.readNullable(FriendlyByteBuf::readUtf);
+    public ValueTooltipNode(List<ITooltipNode> children, @Nullable String key, List<String> values, boolean isKeyValue) {
+        super(children);
+        this.key = key;
+        this.values = values;
+        this.isKeyValue = isKeyValue;
     }
 
     @Override
@@ -83,10 +79,6 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
             throw new IllegalStateException("Key was not set! values:" + values);
         }
 
-        if (isAdvancedTooltip() && !showAdvancedTooltip) {
-            return Collections.emptyList();
-        }
-
         List<Component> children = super.getComponents(pad + 1, showAdvancedTooltip);
         List<Component> components = new ArrayList<>(children.size() + 1);
 
@@ -100,6 +92,11 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
 
         components.addAll(children);
         return components;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return ID;
     }
 
     @NotNull
@@ -124,5 +121,26 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
         }
 
         return Component.literal(v).withStyle(PARAM_STYLE);
+    }
+
+    public static ValueTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+        List<ITooltipNode> children = ListTooltipNode.decodeChildren(utils, buf);
+        int size = buf.readInt();
+        List<String> values;
+
+        if (size == 1) {
+            values = Collections.singletonList(buf.readUtf());
+        } else {
+            values = new ArrayList<>();
+
+            for (int i = 0; i < size; i++) {
+                values.add(buf.readUtf());
+            }
+        }
+
+        boolean isKeyValue = buf.readBoolean();
+        String key = buf.readNullable(FriendlyByteBuf::readUtf);
+
+        return new ValueTooltipNode(children, key, values, isKeyValue);
     }
 }

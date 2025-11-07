@@ -46,9 +46,7 @@ public class NodeUtils {
         List<Component> components = new ArrayList<>();
 
         for (ITooltipNode node : tooltip) {
-            if (!node.isAdvancedTooltip() || showAdvancedTooltip) {
-                components.addAll(toComponents(node, pad, showAdvancedTooltip));
-            }
+            components.addAll(toComponents(node, pad, showAdvancedTooltip));
         }
 
         return components;

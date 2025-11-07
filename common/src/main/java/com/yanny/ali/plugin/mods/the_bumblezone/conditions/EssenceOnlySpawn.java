@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.mods.the_bumblezone.conditions;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.LiteralTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.IConditionTooltip;

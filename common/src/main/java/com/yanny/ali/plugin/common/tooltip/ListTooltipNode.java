@@ -1,5 +1,8 @@
-package com.yanny.ali.api;
+package com.yanny.ali.plugin.common.tooltip;
 
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -9,28 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class ListTooltipNode extends TooltipNode {
+public abstract class ListTooltipNode implements ITooltipNode {
     @Nullable
-    private List<ITooltipNode> children = null;
+    private List<ITooltipNode> children;
 
-    public ListTooltipNode() {
-    }
-
-    public ListTooltipNode(FriendlyByteBuf buf) {
-        super(buf);
-        int count = buf.readInt();
-
-        if (count == 0) {
-            children = Collections.emptyList();
-        } else if (count == 1) {
-            children = Collections.singletonList(decodeNode(buf));
-        } else {
-            children = new ArrayList<>(count);
-
-            for (int i = 0; i < count; i++) {
-                children.add(decodeNode(buf));
-            }
-        }
+    public ListTooltipNode(List<ITooltipNode> children) {
+        this.children = children;
     }
 
     abstract void encodeNode(FriendlyByteBuf buf);
@@ -49,10 +36,6 @@ public abstract class ListTooltipNode extends TooltipNode {
 
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
-        if (isAdvancedTooltip() && !showAdvancedTooltip) {
-            return Collections.emptyList();
-        }
-
         List<ITooltipNode> children = getChildren();
         List<Component> components;
         int count = children.size();
@@ -73,15 +56,33 @@ public abstract class ListTooltipNode extends TooltipNode {
     }
 
     @Override
-    public void encodeData(FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         List<ITooltipNode> children = getChildren();
 
         buf.writeInt(children.size());
 
         for (ITooltipNode child : children) {
-            encodeNode(child, buf);
+            ITooltipNode.encodeNode(utils, child, buf);
         }
 
         encodeNode(buf);
+    }
+
+    public static List<ITooltipNode> decodeChildren(IClientUtils utils, FriendlyByteBuf buf) {
+        int count = buf.readInt();
+
+        if (count == 0) {
+            return Collections.emptyList();
+        } else if (count == 1) {
+            return Collections.singletonList(ITooltipNode.decodeNode(utils, buf));
+        } else {
+            List<ITooltipNode> children = new ArrayList<>(count);
+
+            for (int i = 0; i < count; i++) {
+                children.add(ITooltipNode.decodeNode(utils, buf));
+            }
+
+            return children;
+        }
     }
 }

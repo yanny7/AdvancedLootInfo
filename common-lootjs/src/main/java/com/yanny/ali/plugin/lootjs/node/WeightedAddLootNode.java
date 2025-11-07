@@ -5,6 +5,9 @@ import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinWeightedAddLootAction;
 import com.yanny.ali.mixin.MixinWeightedRandomList;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import com.yanny.ali.plugin.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.lootjs.Utils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -37,12 +40,12 @@ public class WeightedAddLootNode extends ListNode {
 
     public WeightedAddLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decodeNode(buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        TooltipNode.encodeNode(tooltip, buf);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     @Override
