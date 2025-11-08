@@ -6,6 +6,7 @@ import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +76,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
         List<Component> children = super.getComponents(pad + 1, showAdvancedTooltip);
         List<Component> components = new ArrayList<>(children.size() + 1);
 
-        components.add(pad(pad, Component.translatable(key, values.toArray()).withStyle(TEXT_STYLE))); //TODO store as array?
+        components.add(pad(pad, Component.translatable(key, values.stream().map(ComponentTooltipNode::transform).toArray()).withStyle(TEXT_STYLE))); //TODO store as array?
         components.addAll(children);
         return components;
     }
@@ -108,5 +109,13 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
 
         String key = buf.readNullable(FriendlyByteBuf::readUtf);
         return new ComponentTooltipNode(children, key, values);
+    }
+
+    private static Component transform(Component component) {
+        if (component instanceof MutableComponent mutableComponent) {
+            return mutableComponent.withStyle(ITooltipNode.PARAM_STYLE);
+        }
+
+        return component;
     }
 }
