@@ -5,6 +5,8 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
@@ -23,11 +25,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import oshi.util.tuples.Pair;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("com.telepathicgrunt.repurposedstructures.misc.maptrades.StructureSpecificMaps$TreasureMapForEmeralds")
 public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -53,35 +51,35 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
     }
 
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        List<ITooltipNode> tooltip = new ArrayList<>();
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
+        ArrayTooltipNode tooltip = ArrayTooltipNode.array();
         ItemStack map = Items.MAP.getDefaultInstance();
 
         if (destinationTag != null) {
-            tooltip.add(getTagKeyTooltip(utils, "ali.property.value.destination", destinationTag));
+            tooltip.add(utils.getValueTooltip(utils, destinationTag).key("ali.property.value.destination"));
         } else {
-            tooltip.add(getResourceKeyTooltip(utils, "ali.property.value.destination", destination));
+            tooltip.add(utils.getValueTooltip(utils, destination).key("ali.property.value.destination"));
         }
 
-        tooltip.add(RegistriesTooltipUtils.getMapDecorationTypeTooltip(utils, "ali.property.value.map_decoration", destinationType));
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.search_radius", spawnRegionSearchRadius));
+        tooltip.add(utils.getValueTooltip(utils, destinationType).key("ali.property.value.map_decoration"));
+        tooltip.add(utils.getValueTooltip(utils, spawnRegionSearchRadius).key("ali.property.value.search_radius"));
         map.set(DataComponents.ITEM_NAME, Component.translatable(displayName));
 
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(emeraldCost),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(Items.COMPASS.getDefaultInstance()),
                 new RangeValue(),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(map),
                 new RangeValue(),
                 tooltip,
                 maxUses,
                 villagerXp,
                 0.2F,
-                Collections.emptyList()
+                EmptyTooltipNode.EMPTY
         );
     }
 

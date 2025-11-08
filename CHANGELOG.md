@@ -1,3 +1,8 @@
+## []
+
+- Registrable value type
+- Decreased memory consumption
+
 ## [1.4.0]
 
 - Sort loot by chance, descending (highest chance first).

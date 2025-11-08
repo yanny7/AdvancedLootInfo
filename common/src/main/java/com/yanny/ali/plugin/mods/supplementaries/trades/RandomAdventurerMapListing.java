@@ -40,7 +40,7 @@ public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.Item
     }
 
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
         ItemStack map = Items.MAP.getDefaultInstance();
 
         map.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.adventure"));
@@ -55,7 +55,7 @@ public class RandomAdventurerMapListing extends BaseAccessor<VillagerTrades.Item
                 maxTrades,
                 (int)((6 * 12) / (float) maxTrades),
                 priceMult,
-                conditions
+                condition
         );
     }
 

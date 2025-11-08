@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin;
 
+import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
@@ -8,18 +9,43 @@ import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BannerPattern;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
@@ -53,23 +79,31 @@ public class Plugin implements IPlugin {
         registry.registerWidget(SubTradesNode.ID, SubTradesWidget::new);
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
-        registry.registerNode(LootTableNode.ID, LootTableNode::new);
-        registry.registerNode(LootPoolNode.ID, LootPoolNode::new);
-        registry.registerNode(ItemNode.ID, ItemNode::new);
-        registry.registerNode(TagNode.ID, TagNode::new);
-        registry.registerNode(AlternativesNode.ID, AlternativesNode::new);
-        registry.registerNode(SequenceNode.ID, SequenceNode::new);
-        registry.registerNode(GroupNode.ID, GroupNode::new);
-        registry.registerNode(EmptyNode.ID, EmptyNode::new);
-        registry.registerNode(DynamicNode.ID, DynamicNode::new);
-        registry.registerNode(ReferenceNode.ID, ReferenceNode::new);
-        registry.registerNode(MissingNode.ID, MissingNode::new);
+        registry.registerDataNode(LootTableNode.ID, LootTableNode::new);
+        registry.registerDataNode(LootPoolNode.ID, LootPoolNode::new);
+        registry.registerDataNode(ItemNode.ID, ItemNode::new);
+        registry.registerDataNode(TagNode.ID, TagNode::new);
+        registry.registerDataNode(AlternativesNode.ID, AlternativesNode::new);
+        registry.registerDataNode(SequenceNode.ID, SequenceNode::new);
+        registry.registerDataNode(GroupNode.ID, GroupNode::new);
+        registry.registerDataNode(EmptyNode.ID, EmptyNode::new);
+        registry.registerDataNode(DynamicNode.ID, DynamicNode::new);
+        registry.registerDataNode(ReferenceNode.ID, ReferenceNode::new);
+        registry.registerDataNode(MissingNode.ID, MissingNode::new);
 
-        registry.registerNode(TradeNode.ID, TradeNode::new);
-        registry.registerNode(TradeLevelNode.ID, TradeLevelNode::new);
-        registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
-        registry.registerNode(SubTradesNode.ID, SubTradesNode::new);
-        registry.registerNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
+        registry.registerDataNode(TradeNode.ID, TradeNode::new);
+        registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
+        registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
+        registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
+
+        registry.registerTooltipNode(ArrayTooltipNode.ID, ArrayTooltipNode::decode);
+        registry.registerTooltipNode(BranchTooltipNode.ID, BranchTooltipNode::decode);
+        registry.registerTooltipNode(ComponentTooltipNode.ID, ComponentTooltipNode::decode);
+        registry.registerTooltipNode(EmptyTooltipNode.ID, EmptyTooltipNode::decode);
+        registry.registerTooltipNode(ErrorTooltipNode.ID, ErrorTooltipNode::decode);
+        registry.registerTooltipNode(LiteralTooltipNode.ID, LiteralTooltipNode::decode);
+        registry.registerTooltipNode(ValueTooltipNode.ID, ValueTooltipNode::decode);
     }
 
     @Override
@@ -253,6 +287,70 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.CONTAINER_LOOT, DataComponentTooltipUtils::getContainerLootTooltip);
 
         registry.registerIngredientTooltip(Ingredient.class, IngredientTooltipUtils::getIngredientTooltip);
+
+        registry.registerValueTooltip(LootItemFunctionType.class, RegistriesTooltipUtils::getFunctionTypeTooltip);
+        registry.registerValueTooltip(LootItemConditionType.class, RegistriesTooltipUtils::getConditionTypeTooltip);
+        registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
+        registry.registerValueTooltip(Item.class, RegistriesTooltipUtils::getItemTooltip);
+        registry.registerValueTooltip(EntityType.class, RegistriesTooltipUtils::getEntityTypeTooltip);
+        registry.registerValueTooltip(BannerPattern.class, RegistriesTooltipUtils::getBannerPatternTooltip);
+        registry.registerValueTooltip(BlockEntityType.class, RegistriesTooltipUtils::getBlockEntityTypeTooltip);
+        registry.registerValueTooltip(Potion.class, RegistriesTooltipUtils::getPotionTooltip);
+        registry.registerValueTooltip(MobEffect.class, RegistriesTooltipUtils::getMobEffectTooltip);
+        registry.registerValueTooltip(LootNbtProviderType.class, RegistriesTooltipUtils::getLootNbtProviderTypeTooltip);
+        registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
+        registry.registerValueTooltip(Enchantment.class, RegistriesTooltipUtils::getEnchantmentTooltip);
+        registry.registerValueTooltip(Attribute.class, RegistriesTooltipUtils::getAttributeTooltip);
+
+        registry.registerValueTooltip(ResourceLocation.class, ValueTooltipUtils::getResourceLocationTooltip);
+        registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
+        registry.registerValueTooltip(Holder.class, ValueTooltipUtils::getHolderTooltip);
+        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
+        registry.registerValueTooltip(Optional.class, ValueTooltipUtils::getOptionalTooltip);
+        registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
+        registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
+        registry.registerValueTooltip(TagPredicate.class, ValueTooltipUtils::getTagPredicateTooltip);
+        registry.registerValueTooltip(EntityPredicate.class, ValueTooltipUtils::getEntityPredicateTooltip);
+        registry.registerValueTooltip(EntityTypePredicate.class, ValueTooltipUtils::getEntityTypePredicateTooltip);
+        registry.registerValueTooltip(DistancePredicate.class, ValueTooltipUtils::getDistancePredicateTooltip);
+        registry.registerValueTooltip(LocationPredicate.class, ValueTooltipUtils::getLocationPredicateTooltip);
+        registry.registerValueTooltip(LightPredicate.class, ValueTooltipUtils::getLightPredicateTooltip);
+        registry.registerValueTooltip(BlockPredicate.class, ValueTooltipUtils::getBlockPredicateTooltip);
+        registry.registerValueTooltip(NbtPredicate.class, ValueTooltipUtils::getNbtPredicateTooltip);
+        registry.registerValueTooltip(FluidPredicate.class, ValueTooltipUtils::getFluidPredicateTooltip);
+        registry.registerValueTooltip(MobEffectsPredicate.class, ValueTooltipUtils::getMobEffectPredicateTooltip);
+        registry.registerValueTooltip(EntityFlagsPredicate.class, ValueTooltipUtils::getEntityFlagsPredicateTooltip);
+        registry.registerValueTooltip(EntityEquipmentPredicate.class, ValueTooltipUtils::getEntityEquipmentPredicateTooltip);
+        registry.registerValueTooltip(ItemPredicate.class, ValueTooltipUtils::getItemPredicateTooltip);
+        registry.registerValueTooltip(EnchantmentPredicate.class, ValueTooltipUtils::getEnchantmentPredicateTooltip);
+        registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
+        registry.registerValueTooltip(BlockPos.class, ValueTooltipUtils::getBlockPosTooltip);
+        registry.registerValueTooltip(CopyNbtFunction.CopyOperation.class, ValueTooltipUtils::getCopyOperationTooltip);
+        registry.registerValueTooltip(CompoundTag.class, ValueTooltipUtils::getCompoundTagTooltip);
+        registry.registerValueTooltip(PlayerPredicate.AdvancementPredicate.class, ValueTooltipUtils::getAdvancementPredicateTooltip);
+        registry.registerValueTooltip(ItemStack.class, ValueTooltipUtils::getItemStackTooltip);
+        registry.registerValueTooltip(MinMaxBounds.Ints.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
+        registry.registerValueTooltip(MinMaxBounds.Doubles.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
+        registry.registerValueTooltip(ResourceKey.class, ValueTooltipUtils::getResourceKeyTooltip);
+        registry.registerValueTooltip(TagKey.class, ValueTooltipUtils::getTagKeyTooltip);
+        registry.registerValueTooltip(ApplyBonusCount.Formula.class, ValueTooltipUtils::getFormulaTooltip);
+        registry.registerValueTooltip(Property.class, ValueTooltipUtils::getPropertyTooltip);
+        registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
+        registry.registerValueTooltip(UUID.class, ValueTooltipUtils::getUUIDTooltip);
+        registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
+        registry.registerValueTooltip(Collection.class, ValueTooltipUtils::getCollectionTooltip);
+        registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
+        registry.registerValueTooltip(Component.class, ValueTooltipUtils::getComponentTooltip);
+        registry.registerValueTooltip(String.class, ValueTooltipUtils::getStringTooltip);
+        registry.registerValueTooltip(Boolean.class, ValueTooltipUtils::getBooleanTooltip);
+        registry.registerValueTooltip(Integer.class, ValueTooltipUtils::getIntegerTooltip);
+        registry.registerValueTooltip(Long.class, ValueTooltipUtils::getLongTooltip);
+        registry.registerValueTooltip(Float.class, ValueTooltipUtils::getFloatTooltip);
+        registry.registerValueTooltip(Double.class, ValueTooltipUtils::getDoubleTooltip);
+        registry.registerValueTooltip(Byte.class, ValueTooltipUtils::getByteTooltip);
+        registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
+        registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
+        registry.registerValueTooltip(SetStewEffectFunction.EffectEntry.class, ValueTooltipUtils::getEffectEntryTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithLootingCondition.class, TooltipUtils::applyRandomChanceWithLooting);

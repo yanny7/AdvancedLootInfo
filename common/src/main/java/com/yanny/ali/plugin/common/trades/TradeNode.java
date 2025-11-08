@@ -5,6 +5,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -39,8 +40,8 @@ public class TradeNode extends ListNode {
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
-        return List.of();
+    public ITooltipNode getTooltip() {
+        return EmptyTooltipNode.EMPTY;
     }
 
     @Override

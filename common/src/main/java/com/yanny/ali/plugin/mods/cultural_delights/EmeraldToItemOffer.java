@@ -36,7 +36,7 @@ public class EmeraldToItemOffer extends BaseAccessor<VillagerTrades.ItemListing>
     }
 
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
@@ -46,7 +46,7 @@ public class EmeraldToItemOffer extends BaseAccessor<VillagerTrades.ItemListing>
                 maxUses,
                 experience,
                 multiplier,
-                conditions
+                condition
         );
     }
 

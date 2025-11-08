@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -11,10 +10,10 @@ import java.util.List;
 public class SubTradesNode<T> extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "sub_trades");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
 
-    public SubTradesNode(IServerUtils utils, T listing, List<ITooltipNode> conditions) {
-        this.tooltip = conditions;
+    public SubTradesNode(IServerUtils utils, T listing, ITooltipNode condition) {
+        this.tooltip = condition;
 
         for (IDataNode subTrade : getSubTrades(utils, listing)) {
             addChildren(subTrade);
@@ -23,7 +22,7 @@ public class SubTradesNode<T> extends ListNode {
 
     public SubTradesNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     public List<IDataNode> getSubTrades(IServerUtils ignoredUtils, T ignoredListing) {
@@ -32,11 +31,11 @@ public class SubTradesNode<T> extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 
