@@ -11,8 +11,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.loot.functions.TagItemRemovals")
@@ -28,6 +26,6 @@ public class TagItemRemovals extends ConditionalFunction implements IFunctionToo
     public ITooltipNode getTooltip(IServerUtils utils) {
         return BranchTooltipNode.branch("ali.type.function.tag_item_removals")
                 .add(utils.getValueTooltip(utils, tagKey).key("ali.property.value.tag"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

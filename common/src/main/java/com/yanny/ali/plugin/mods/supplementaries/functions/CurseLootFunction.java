@@ -32,6 +32,6 @@ public class CurseLootFunction extends ConditionalFunction implements IFunctionT
         return BranchTooltipNode.branch("ali.type.function.curse_loot")
                 .add(utils.getValueTooltip(utils, chance).key("ali.property.value.chance"))
                 .add(utils.getValueTooltip(utils, CURSES).key("ali.property.branch.enchantments"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

@@ -12,7 +12,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
@@ -32,7 +31,7 @@ public class SetPaintingVariantFunction extends ConditionalFunction implements I
         IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.type.function.set_painting_variant");
 
         validPaintings.ifPresent((tagKey) -> tooltip.add(utils.getValueTooltip(utils, tagKey).key("ali.property.value.tag")));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;
     }

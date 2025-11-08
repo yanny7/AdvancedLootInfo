@@ -28,6 +28,6 @@ public class SetFluidLootFunction extends ConditionalFunction implements IFuncti
         return BranchTooltipNode.branch("ali.type.function.set_fluid")
                 .add(utils.getValueTooltip(utils, fluid.getFluid()).key("ali.property.value.fluid"))
                 .add(utils.getValueTooltip(utils, fluid.getAmount()).key("ali.property.value.amount"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

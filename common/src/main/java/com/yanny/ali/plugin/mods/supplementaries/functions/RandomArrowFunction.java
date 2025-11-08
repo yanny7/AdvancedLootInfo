@@ -10,8 +10,6 @@ import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("net.mehvahdjukaar.supplementaries.common.items.loot.RandomArrowFunction")
@@ -29,6 +27,6 @@ public class RandomArrowFunction extends ConditionalFunction implements IFunctio
     public ITooltipNode getTooltip(IServerUtils utils) {
         return BranchTooltipNode.branch("ali.type.function.random_arrow")
                 .add(utils.getValueTooltip(utils, IntRange.range(min, max)).key("ali.property.value.amount"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

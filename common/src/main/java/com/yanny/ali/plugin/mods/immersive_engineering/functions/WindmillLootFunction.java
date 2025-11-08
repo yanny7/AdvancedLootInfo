@@ -8,8 +8,6 @@ import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("blusunrize.immersiveengineering.common.util.loot.WindmillLootFunction")
@@ -21,6 +19,6 @@ public class WindmillLootFunction extends ConditionalFunction implements IFuncti
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
         return BranchTooltipNode.branch("ali.type.function.windmill")
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

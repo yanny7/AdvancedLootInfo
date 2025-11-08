@@ -10,8 +10,6 @@ import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("com.aetherteam.aether.loot.functions.WhirlwindSpawnEntity")
@@ -30,6 +28,6 @@ public class WhirlwindSpawnEntity extends ConditionalFunction implements IFuncti
         return BranchTooltipNode.branch("ali.type.function.whirlwind_spawn_entity")
                 .add(utils.getValueTooltip(utils, entityType).key("ali.property.value.entity_type"))
                 .add(utils.getValueTooltip(utils, count).key("ali.property.value.count"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

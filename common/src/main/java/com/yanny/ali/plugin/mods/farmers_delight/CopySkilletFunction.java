@@ -8,8 +8,6 @@ import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("vectorwing.farmersdelight.common.loot.function.CopySkilletFunction")
@@ -21,6 +19,6 @@ public class CopySkilletFunction extends ConditionalFunction implements IFunctio
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
         return BranchTooltipNode.branch("ali.type.function.copy_skillet")
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

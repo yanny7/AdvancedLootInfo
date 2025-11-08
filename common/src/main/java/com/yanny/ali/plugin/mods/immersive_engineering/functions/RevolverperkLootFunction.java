@@ -8,8 +8,6 @@ import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("blusunrize.immersiveengineering.common.util.loot.RevolverperkLootFunction")
@@ -21,6 +19,6 @@ public class RevolverperkLootFunction extends ConditionalFunction implements IFu
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
         return BranchTooltipNode.branch("ali.type.function.revolver_perk")
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

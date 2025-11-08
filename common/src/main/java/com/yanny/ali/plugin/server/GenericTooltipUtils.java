@@ -8,8 +8,9 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.MobEffectsPredicate;
 import net.minecraft.advancements.critereon.PlayerPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.stats.Stat;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -22,10 +23,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getConditionTypeTooltip;
@@ -122,24 +120,26 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
-        if (propertyMatcher instanceof StatePropertiesPredicate.ExactPropertyMatcher matcher) {
-            return ValueTooltipNode.value(matcher.name, matcher.value).key("ali.util.advanced_loot_info.key_value"); //FIXME all key_value -> vyfarbenie nefunguje!
-        }
-        if (propertyMatcher instanceof StatePropertiesPredicate.RangedPropertyMatcher matcher) {
-            String min = matcher.minValue;
-            String max = matcher.maxValue;
+        String name = propertyMatcher.name();
 
-            if (min != null) {
-                if (max != null) {
-                    return ValueTooltipNode.value(matcher.name, min, max).key("ali.property.value.ranged_property_both");
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
+            return ValueTooltipNode.keyValue(name, matcher.value()).key("ali.property.value.null"); //FIXME all key_value -> vyfarbenie nefunguje!
+        }
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
+            Optional<String> min = matcher.minValue();
+            Optional<String> max = matcher.maxValue();
+
+            if (min.isPresent()) {
+                if (max.isPresent()) {
+                    return ValueTooltipNode.value(name, min.get(), max.get()).key("ali.property.value.ranged_property_both");
                 } else {
-                    return ValueTooltipNode.value(matcher.name, min).key("ali.property.value.ranged_property_gte");
+                    return ValueTooltipNode.value(name, min.get()).key("ali.property.value.ranged_property_gte");
                 }
             } else {
-                if (max != null) {
-                    return ValueTooltipNode.value(matcher.name, max).key("ali.property.value.ranged_property_lte");
+                if (max.isPresent()) {
+                    return ValueTooltipNode.value(name, max.get()).key("ali.property.value.ranged_property_lte");
                 } else {
-                    return ValueTooltipNode.value(matcher.name).key("ali.property.value.ranged_property_any");
+                    return ValueTooltipNode.value(name).key("ali.property.value.ranged_property_any");
                 }
             }
         }
@@ -148,40 +148,28 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getStatsTooltip(IServerUtils utils, Map<Stat<?>, MinMaxBounds.Ints> statIntsMap) {
-        if (!statIntsMap.isEmpty()) {
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
+    public static IKeyTooltipNode getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
+        String key = ValueTooltipNode.translate(((TranslatableContents) stat.type().getDisplayName().getContents()).getKey());
+        Holder<?> value = stat.value();
+        IKeyTooltipNode tooltip;
 
-            statIntsMap.forEach((stat, ints) -> {
-                Object value = stat.getValue();
-
-                if (value instanceof Item item) {
-                    IKeyTooltipNode itemTooltip = utils.getValueTooltip(utils, item).key("ali.property.value.item");
-
-                    itemTooltip.add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(stat.getType().getTranslationKey()), toString(ints)).key("ali.property.value.null"));
-                    tooltip.add(itemTooltip);
-                } else if (value instanceof Block block) {
-                    IKeyTooltipNode blockTooltip = utils.getValueTooltip(utils, block).key("ali.property.value.block");
-
-                    blockTooltip.add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(stat.getType().getTranslationKey()), toString(ints)).key("ali.property.value.null"));
-                    tooltip.add(blockTooltip);
-                } else if (value instanceof EntityType<?> entityType) {
-                    IKeyTooltipNode entityTooltip = utils.getValueTooltip(utils, entityType).key("ali.property.value.entity_type");
-
-                    entityTooltip.add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(stat.getType().getTranslationKey()), toString(ints)).key("ali.property.value.null"));
-                    tooltip.add(entityTooltip);
-                } else if (value instanceof ResourceLocation resourceLocation) {
-                    IKeyTooltipNode locationTooltip = utils.getValueTooltip(utils, resourceLocation).key("ali.property.value.id");
-
-                    locationTooltip.add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(resourceLocation)), toString(ints)).key("ali.property.value.null"));
-                    tooltip.add(locationTooltip);
-                }
-            });
-
-            return tooltip;
+        if (value.value() instanceof Item item) {
+            tooltip = utils.getValueTooltip(utils, item).key("ali.property.value.item");
+            tooltip.add(ValueTooltipNode.keyValue(key, toString(stat.range())).key("ali.property.value.null"));
+        } else if (value.value() instanceof Block block) {
+            tooltip = utils.getValueTooltip(utils, block).key("ali.property.value.block");
+            tooltip.add(ValueTooltipNode.keyValue(key, toString(stat.range())).key("ali.property.value.null"));
+        } else if (value.value() instanceof EntityType<?> entityType) {
+            tooltip = utils.getValueTooltip(utils, entityType).key("ali.property.value.entity_type");
+            tooltip.add(ValueTooltipNode.keyValue(key, toString(stat.range())).key("ali.property.value.null"));
+        } else if (value.value() instanceof ResourceLocation resourceLocation) {
+            tooltip = utils.getValueTooltip(utils, resourceLocation).key("ali.property.value.id");
+            tooltip.add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(resourceLocation)), toString(stat.range())).key("ali.property.value.null"));
+        } else {
+            tooltip = EmptyTooltipNode.EMPTY;
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return tooltip;
     }
 
     @NotNull
@@ -242,16 +230,16 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getMobEffectPredicateEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, MobEffectsPredicate.MobEffectInstancePredicate> entry) {
+    public static IKeyTooltipNode getMobEffectPredicateEntryTooltip(IServerUtils utils, Map.Entry<Holder<MobEffect>, MobEffectsPredicate.MobEffectInstancePredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue().amplifier).key("ali.property.value.amplifier"))
-                .add(utils.getValueTooltip(utils, entry.getValue().duration).key("ali.property.value.duration"))
-                .add(utils.getValueTooltip(utils, entry.getValue().ambient).key("ali.property.value.is_ambient"))
-                .add(utils.getValueTooltip(utils, entry.getValue().visible).key("ali.property.value.is_visible"));
+                .add(utils.getValueTooltip(utils, entry.getValue().amplifier()).key("ali.property.value.amplifier"))
+                .add(utils.getValueTooltip(utils, entry.getValue().duration()).key("ali.property.value.duration"))
+                .add(utils.getValueTooltip(utils, entry.getValue().ambient()).key("ali.property.value.is_ambient"))
+                .add(utils.getValueTooltip(utils, entry.getValue().visible()).key("ali.property.value.is_visible"));
     }
 
     @NotNull
-    public static IKeyTooltipNode getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Enchantment, NumberProvider> entry) {
+    public static IKeyTooltipNode getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
                 .add(utils.getValueTooltip(utils, entry.getValue()).key("ali.property.value.levels"));
     }
@@ -278,49 +266,41 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static String toString(MinMaxBounds.Doubles doubles) {
-        Double min = doubles.getMin();
-        Double max = doubles.getMax();
+        Optional<Double> min = doubles.min();
+        Optional<Double> max = doubles.max();
 
-        if (min != null) {
-            if (max != null) {
-                if (!Objects.equals(min, max)) {
-                    return String.format("%.1f-%.1f", min, max);
+        if (min.isPresent()) {
+            if (max.isPresent()) {
+                if (!Objects.equals(min.get(), max.get())) {
+                    return String.format("%.1f-%.1f", min.get(), max.get());
                 } else {
-                    return String.format("=%.1f", min);
+                    return String.format("=%.1f", min.get());
                 }
             } else {
-                return String.format("≥%.1f", min);
+                return String.format("≥%.1f", min.get());
             }
         } else {
-            if (max != null) {
-                return String.format("≤%.1f", max);
-            }
-
-            return "???";
+            return max.map(aDouble -> String.format("≤%.1f", aDouble)).orElse("???");
         }
     }
 
     @NotNull
     public static String toString(MinMaxBounds.Ints ints) {
-        Integer min = ints.getMin();
-        Integer max = ints.getMax();
+        Optional<Integer> min = ints.min();
+        Optional<Integer> max = ints.max();
 
-        if (min != null) {
-            if (max != null) {
-                if (!Objects.equals(min, max)) {
-                    return String.format("%d-%d", min, max);
+        if (min.isPresent()) {
+            if (max.isPresent()) {
+                if (!Objects.equals(min.get(), max.get())) {
+                    return String.format("%d-%d", min.get(), max.get());
                 } else {
-                    return String.format("=%d", min);
+                    return String.format("=%d", min.get());
                 }
             } else {
-                return String.format("≥%d", min);
+                return String.format("≥%d", min.get());
             }
         } else {
-            if (max != null) {
-                return String.format("≤%d", max);
-            }
-
-            return "???";
+            return max.map(integer -> String.format("≤%d", integer)).orElse("???");
         }
     }
 

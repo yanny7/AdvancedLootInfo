@@ -8,6 +8,7 @@ import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
+import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -63,8 +64,8 @@ public class TradeUtils {
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.EmeraldForItems listing, ITooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
-                Either.left(listing.item.getDefaultInstance()),
-                new RangeValue(listing.cost),
+                Either.left(listing.itemStack),
+                new RangeValue(listing.itemStack.getCount()),
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(),
                 listing.maxUses,
@@ -123,11 +124,11 @@ public class TradeUtils {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(listing.fromItem),
-                new RangeValue(listing.fromCount),
+                new RangeValue(listing.fromItem.getCount()),
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(listing.emeraldCost),
                 Either.left(listing.toItem),
-                new RangeValue(listing.toCount),
+                new RangeValue(listing.toItem.getCount()),
                 listing.maxUses,
                 listing.villagerXp,
                 listing.priceMultiplier,
@@ -142,7 +143,7 @@ public class TradeUtils {
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(listing.emeraldCost),
                 Either.left(listing.itemStack),
-                new RangeValue(listing.numberOfItems),
+                new RangeValue(listing.itemStack.getCount()),
                 listing.maxUses,
                 listing.villagerXp,
                 listing.priceMultiplier,
@@ -154,7 +155,7 @@ public class TradeUtils {
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.SuspiciousStewForEmerald listing, ITooltipNode condition) {
         ItemStack stew = Items.SUSPICIOUS_STEW.getDefaultInstance();
 
-        SuspiciousStewItem.saveMobEffect(stew, listing.effect, listing.duration);
+        SuspiciousStewItem.saveMobEffects(stew, listing.effects);
 
         return new ItemsToItemsNode(
                 utils,
@@ -166,10 +167,8 @@ public class TradeUtils {
                 EmptyTooltipNode.EMPTY,
                 Either.left(stew),
                 new RangeValue(),
-                ArrayTooltipNode.array()
-                        .add(utils.getValueTooltip(utils, listing.effect).key("ali.property.value.effect"))
-                        .add(utils.getValueTooltip(utils, listing.duration).key("ali.property.value.duration"))
-                ,
+                GenericTooltipUtils.getCollectionTooltip(utils, listing.effects, (u, effect) -> utils.getValueTooltip(utils, effect.effect()).key("ali.property.value.effect")
+                        .add(utils.getValueTooltip(utils, effect.duration()).key("ali.property.value.duration"))).key("ali.type.function.set_stew_effect"),
                 12,
                 listing.xp,
                 listing.priceMultiplier,
@@ -239,7 +238,7 @@ public class TradeUtils {
     @NotNull
     public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrades.EmeraldForItems listing) {
         return new Pair<>(
-                List.of(listing.item),
+                List.of(listing.itemStack.getItem()),
                 List.of(Items.EMERALD)
         );
     }

@@ -14,9 +14,9 @@ public class IngredientTooltipUtils {
 
         for (Ingredient.Value value : ingredient.values) {
             if (value instanceof Ingredient.ItemValue itemValue) {
-                tooltip.add(utils.getValueTooltip(utils, itemValue.item).key("ali.property.branch.item"));
+                tooltip.add(utils.getValueTooltip(utils, itemValue.item()).key("ali.property.branch.item"));
             } else if (value instanceof Ingredient.TagValue tagValue) {
-                tooltip.add(utils.getValueTooltip(utils, tagValue.tag).key("ali.property.value.tag"));
+                tooltip.add(utils.getValueTooltip(utils, tagValue.tag()).key("ali.property.value.tag"));
             } else {
                 tooltip.add(ErrorTooltipNode.error(value.getClass().getSimpleName()));
             }

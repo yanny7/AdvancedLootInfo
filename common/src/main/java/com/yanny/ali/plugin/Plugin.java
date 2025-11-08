@@ -15,6 +15,7 @@ import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -198,6 +199,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ResourceLocation.class, ValueTooltipUtils::getResourceLocationTooltip);
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
         registry.registerValueTooltip(Holder.class, ValueTooltipUtils::getHolderTooltip);
+        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
         registry.registerValueTooltip(Optional.class, ValueTooltipUtils::getOptionalTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
@@ -241,6 +243,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Double.class, ValueTooltipUtils::getDoubleTooltip);
         registry.registerValueTooltip(Byte.class, ValueTooltipUtils::getByteTooltip);
         registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
+        registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
+        registry.registerValueTooltip(SetStewEffectFunction.EffectEntry.class, ValueTooltipUtils::getEffectEntryTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithLootingCondition.class, TooltipUtils::applyRandomChanceWithLooting);
