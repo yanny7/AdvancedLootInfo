@@ -125,7 +125,7 @@ public class GenericTooltipUtils {
         String name = propertyMatcher.name();
 
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
-            return ValueTooltipNode.keyValue(name, matcher.value()).key("ali.property.value.null"); //FIXME all key_value -> vyfarbenie nefunguje!
+            return ValueTooltipNode.keyValue(name, matcher.value()).key("ali.property.value.null");
         }
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
             Optional<String> min = matcher.minValue();
@@ -280,12 +280,6 @@ public class GenericTooltipUtils {
     public static IKeyTooltipNode getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
                 .add(utils.getValueTooltip(utils, entry.getValue()).key("ali.property.value.levels"));
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getMobEffectDurationEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, NumberProvider> entry) {
-        return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).key("ali.property.value.duration"));
     }
 
     @NotNull
