@@ -31,7 +31,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getCopyNbtTooltip(IServerUtils utils, CopyNbtFunction fun) {
         return BranchTooltipNode.branch("ali.type.function.copy_nbt")
                 .add(utils.getValueTooltip(utils, fun.source.getType()).key("ali.property.value.nbt_provider"))
-                .add(getCollectionTooltip(utils, "ali.property.branch.operations", "ali.property.branch.operation", fun.operations))
+                .add(getCollectionTooltip(utils, "ali.property.branch.operation", fun.operations).key("ali.property.branch.operations"))
                 .add(getSubConditionsTooltip(utils, Arrays.asList(fun.predicates)).key("ali.property.branch.conditions"));
     }
 
@@ -127,7 +127,7 @@ public class FunctionTooltipUtils {
         IKeyTooltipNode tooltip;
 
         if (!fun.modifiers.isEmpty()) {
-            tooltip = getCollectionTooltip(utils, "ali.type.function.set_attributes", "ali.property.branch.modifier", fun.modifiers);
+            tooltip = getCollectionTooltip(utils, "ali.property.branch.modifier", fun.modifiers).key("ali.type.function.set_attributes");
         } else {
             tooltip = BranchTooltipNode.branch("ali.type.function.set_attributes");
         }
