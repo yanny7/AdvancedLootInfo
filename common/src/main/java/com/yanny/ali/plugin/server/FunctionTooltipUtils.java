@@ -30,7 +30,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getCopyCustomDataTooltip(IServerUtils utils, CopyNbtFunction fun) {
         return BranchTooltipNode.branch("ali.type.function.copy_custom_data")
                 .add(utils.getValueTooltip(utils, fun.source.getType()).key("ali.property.value.source"))
-                .add(getCollectionTooltip(utils, "ali.property.branch.copy_operations", "ali.property.branch.operation", fun.operations))
+                .add(getCollectionTooltip(utils, "ali.property.branch.operation", fun.operations).key("ali.property.branch.copy_operations"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).key("ali.property.branch.conditions"));
     }
 

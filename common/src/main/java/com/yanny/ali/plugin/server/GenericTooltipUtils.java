@@ -217,12 +217,12 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getCollectionTooltip(IServerUtils utils, String key, String value, @Nullable Collection<?> collection) {
+    public static IKeyTooltipNode getCollectionTooltip(IServerUtils utils, String value, @Nullable Collection<?> collection) {
         if (collection == null || collection.isEmpty()) {
             return EmptyTooltipNode.EMPTY;
         }
 
-        BranchTooltipNode tooltip = BranchTooltipNode.branch(key);
+        BranchTooltipNode tooltip = BranchTooltipNode.branch();
 
         for (Object o : collection) {
             tooltip.add(utils.getValueTooltip(utils, o).key(value));
