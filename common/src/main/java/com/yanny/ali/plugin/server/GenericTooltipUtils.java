@@ -123,7 +123,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
         if (propertyMatcher instanceof StatePropertiesPredicate.ExactPropertyMatcher matcher) {
-            return ValueTooltipNode.value(matcher.name, matcher.value).key("ali.util.advanced_loot_info.key_value"); //FIXME all key_value -> vyfarbenie nefunguje!
+            return ValueTooltipNode.value(matcher.name, matcher.value).key("ali.util.advanced_loot_info.key_value");
         }
         if (propertyMatcher instanceof StatePropertiesPredicate.RangedPropertyMatcher matcher) {
             String min = matcher.minValue;
