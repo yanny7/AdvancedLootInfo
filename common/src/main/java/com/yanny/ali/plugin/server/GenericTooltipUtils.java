@@ -245,12 +245,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getMobEffectDurationEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, NumberProvider> entry) {
-        return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).key("ali.property.value.duration"));
-    }
-
-    @NotNull
     public static IKeyTooltipNode getAdvancementEntryTooltip(IServerUtils utils, Map.Entry<ResourceLocation, PlayerPredicate.AdvancementPredicate> entry) {
         IKeyTooltipNode tooltip = utils.getValueTooltip(utils, entry.getKey());
         IKeyTooltipNode value = utils.getValueTooltip(utils, entry.getValue());
