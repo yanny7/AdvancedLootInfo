@@ -17,8 +17,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
         TRANSLATION_MAP.put("emi.category.ali.trade_loot", "Trading Loot");
 
-        TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s");
-        TRANSLATION_MAP.put("ali.description.chance", "Chance: %s");
+        TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
+        TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");
         TRANSLATION_MAP.put("ali.description.chance_bonus", "%s (%s %s)");
         TRANSLATION_MAP.put("ali.description.count", "Count: %s");
         TRANSLATION_MAP.put("ali.description.count_bonus", "%s (%s %s)");
@@ -182,6 +182,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
         TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
         TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
+        TRANSLATION_MAP.put("ali.property.branch.criterions", "Criterions:");
         TRANSLATION_MAP.put("ali.property.branch.dimensions", "Dimensions:");
         TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
         TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
@@ -346,6 +347,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.any", "ANY");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
         TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city", "Ancient City Chest");

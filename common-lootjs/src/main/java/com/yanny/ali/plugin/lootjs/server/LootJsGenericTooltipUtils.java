@@ -3,9 +3,10 @@ package com.yanny.ali.plugin.lootjs.server;
 import com.almostreliable.lootjs.filters.ItemFilter;
 import com.almostreliable.lootjs.filters.ResourceLocationFilter;
 import com.almostreliable.lootjs.loot.condition.AnyStructure;
+import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import com.yanny.ali.plugin.lootjs.Utils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -15,58 +16,56 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
-
 public class LootJsGenericTooltipUtils {
     @NotNull
-    public static ITooltipNode getItemFilterTooltip(IServerUtils utils, String key, Predicate<ItemStack> predicate) {
+    public static IKeyTooltipNode getItemFilterTooltip(IServerUtils utils, Predicate<ItemStack> predicate) {
         if (predicate instanceof ItemFilter) {
             if (predicate == ItemFilter.ALWAYS_FALSE) {
-                return new TooltipNode(translatable(key, value("ALWAYS_FALSE")));
+                return ValueTooltipNode.value("ALWAYS_FALSE");
             } else if (predicate == ItemFilter.ALWAYS_TRUE) {
-                return new TooltipNode(translatable(key, value("ALWAYS_TRUE")));
+                return ValueTooltipNode.value("ALWAYS_TRUE");
             } else if (predicate == ItemFilter.SWORD) {
-                return new TooltipNode(translatable(key, value("SWORD")));
+                return ValueTooltipNode.value("SWORD");
             } else if (predicate == ItemFilter.PICKAXE) {
-                return new TooltipNode(translatable(key, value("PICKAXE")));
+                return ValueTooltipNode.value("PICKAXE");
             } else if (predicate == ItemFilter.AXE) {
-                return new TooltipNode(translatable(key, value("AXE")));
+                return ValueTooltipNode.value("AXE");
             } else if (predicate == ItemFilter.SHOVEL) {
-                return new TooltipNode(translatable(key, value("SHOVEL")));
+                return ValueTooltipNode.value("SHOVEL");
             } else if (predicate == ItemFilter.HOE) {
-                return new TooltipNode(translatable(key, value("HOE")));
+                return ValueTooltipNode.value("HOE");
             } else if (predicate == ItemFilter.TOOL) {
-                return new TooltipNode(translatable(key, value("TOOL")));
+                return ValueTooltipNode.value("TOOL");
             } else if (predicate == ItemFilter.POTION) {
-                return new TooltipNode(translatable(key, value("POTION")));
+                return ValueTooltipNode.value("POTION");
             } else if (predicate == ItemFilter.HAS_TIER) {
-                return new TooltipNode(translatable(key, value("HAS_TIER")));
+                return ValueTooltipNode.value("HAS_TIER");
             } else if (predicate == ItemFilter.PROJECTILE_WEAPON) {
-                return new TooltipNode(translatable(key, value("PROJECTILE_WEAPON")));
+                return ValueTooltipNode.value("PROJECTILE_WEAPON");
             } else if (predicate == ItemFilter.ARMOR) {
-                return new TooltipNode(translatable(key, value("ARMOR")));
+                return ValueTooltipNode.value("ARMOR");
             } else if (predicate == ItemFilter.WEAPON) {
-                return new TooltipNode(translatable(key, value("WEAPON")));
+                return ValueTooltipNode.value("WEAPON");
             } else if (predicate == ItemFilter.HEAD_ARMOR) {
-                return new TooltipNode(translatable(key, value("HEAD_ARMOR")));
+                return ValueTooltipNode.value("HEAD_ARMOR");
             } else if (predicate == ItemFilter.CHEST_ARMOR) {
-                return new TooltipNode(translatable(key, value("CHEST_ARMOR")));
+                return ValueTooltipNode.value("CHEST_ARMOR");
             } else if (predicate == ItemFilter.LEGS_ARMOR) {
-                return new TooltipNode(translatable(key, value("LEGS_ARMOR")));
+                return ValueTooltipNode.value("LEGS_ARMOR");
             } else if (predicate == ItemFilter.FEET_ARMOR) {
-                return new TooltipNode(translatable(key, value("FEET_ARMOR")));
+                return ValueTooltipNode.value("FEET_ARMOR");
             } else if (predicate == ItemFilter.FOOD) {
-                return new TooltipNode(translatable(key, value("FOOD")));
+                return ValueTooltipNode.value("FOOD");
             } else if (predicate == ItemFilter.DAMAGEABLE) {
-                return new TooltipNode(translatable(key, value("DAMAGEABLE")));
+                return ValueTooltipNode.value("DAMAGEABLE");
             } else if (predicate == ItemFilter.DAMAGED) {
-                return new TooltipNode(translatable(key, value("DAMAGED")));
+                return ValueTooltipNode.value("DAMAGED");
             } else if (predicate == ItemFilter.ENCHANTABLE) {
-                return new TooltipNode(translatable(key, value("ENCHANTABLE")));
+                return ValueTooltipNode.value("ENCHANTABLE");
             } else if (predicate == ItemFilter.ENCHANTED) {
-                return new TooltipNode(translatable(key, value("ENCHANTED")));
+                return ValueTooltipNode.value("ENCHANTED");
             } else if (predicate == ItemFilter.BLOCK) {
-                return new TooltipNode(translatable(key, value("BLOCK")));
+                return ValueTooltipNode.value("BLOCK");
             }
 
             List<ResourceLocationFilter.ByLocation> byLocation = Utils.getCapturedInstances(predicate, ResourceLocationFilter.ByLocation.class);
@@ -75,14 +74,14 @@ public class LootJsGenericTooltipUtils {
                 List<Integer> minMax = Utils.getCapturedInstances(predicate, Integer.class);
 
                 if (minMax.size() == 2) {
-                    ITooltipNode tooltip = new TooltipNode(translatable(key, value("HAS_ENCHANTMENT")));
+                    IKeyTooltipNode tooltip = ValueTooltipNode.value("HAS_ENCHANTMENT");
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(getResourceLocationTooltip(utils, "ali.property.value.enchantment", byLocation.get(0).location()));
+                    tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).key("ali.property.value.enchantment"));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(getIntRangeTooltip(utils, "ali.property.value.levels", IntRange.range(min, max)));
+                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).key("ali.property.value.levels"));
                     }
 
                     return tooltip;
@@ -95,14 +94,14 @@ public class LootJsGenericTooltipUtils {
                 List<Integer> minMax = Utils.getCapturedInstances(predicate, Integer.class);
 
                 if (minMax.size() == 2) {
-                    ITooltipNode tooltip = new TooltipNode(translatable(key, value("HAS_ENCHANTMENT")));
+                    IKeyTooltipNode tooltip = ValueTooltipNode.value("HAS_ENCHANTMENT");
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(getStringTooltip(utils, "ali.property.value.enchantment", byPattern.get(0).toString()));
+                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).toString()).key("ali.property.value.enchantment"));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(getIntRangeTooltip(utils, "ali.property.value.levels", IntRange.range(min, max)));
+                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).key("ali.property.value.levels"));
                     }
 
                     return tooltip;
@@ -115,26 +114,23 @@ public class LootJsGenericTooltipUtils {
                 Ingredient i = ingredient.get(0);
 
                 if (!i.isEmpty()) {
-                    ITooltipNode tooltip = new TooltipNode(translatable(key, value("INGREDIENT")));
-
-                    tooltip.add(utils.getIngredientTooltip(utils, i));
-
-                    return tooltip;
+                    return ValueTooltipNode.value("INGREDIENT")
+                            .add(utils.getIngredientTooltip(utils, i));
                 }
             }
         }
 
-        return new TooltipNode(translatable(key, value("UNKNOWN")));
+        return ValueTooltipNode.value("UNKNOWN");
     }
 
     @NotNull
-    public static ITooltipNode getStructureLocatorTooltip(IServerUtils utils, String key, AnyStructure.StructureLocator structureLocator) {
+    public static IKeyTooltipNode getStructureLocatorTooltip(IServerUtils utils, AnyStructure.StructureLocator structureLocator) {
         if (structureLocator instanceof AnyStructure.ById byId) {
-            return getResourceKeyTooltip(utils, key, byId.id());
+            return utils.getValueTooltip(utils, byId.id());
         } else if (structureLocator instanceof AnyStructure.ByTag byTag) {
-            return getTagKeyTooltip(utils, key, byTag.tag());
+            return utils.getValueTooltip(utils, byTag.tag());
         }
 
-        return new TooltipNode();
+        return EmptyTooltipNode.EMPTY;
     }
 }

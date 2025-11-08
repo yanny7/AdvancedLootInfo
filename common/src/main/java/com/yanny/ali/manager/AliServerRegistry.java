@@ -4,12 +4,11 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
-import com.yanny.ali.plugin.server.ConditionTooltipUtils;
-import com.yanny.ali.plugin.server.FunctionTooltipUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
-import com.yanny.ali.plugin.server.IngredientTooltipUtils;
+import com.yanny.ali.plugin.server.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -50,6 +49,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
+    private final ClassKeyedMap<BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltipMap = new ClassKeyedMap<>();
 
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
@@ -59,13 +59,14 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
-    private final Map<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, List<ITooltipNode>, IDataNode>> itemListingFactoryMap = new HashMap<>();
+    private final Map<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, ITooltipNode, IDataNode>> itemListingFactoryMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectorMap = new HashMap<>();
 
     private final Set<Class<?>> missingEntryFactories = new HashSet<>();
     private final Set<Class<?>> missingFunctionTooltips = new HashSet<>();
     private final Set<Class<?>> missingConditionTooltips = new HashSet<>();
     private final Set<Class<?>> missingIngredientTooltips = new HashSet<>();
+    private final Set<Class<?>> missingValueTooltips = new HashSet<>();
     private final Set<Class<?>> missingItemListingFactories = new HashSet<>();
     private final Set<Class<?>> missingNumberConverters = new HashSet<>();
 
@@ -181,6 +182,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
+    public <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, IKeyTooltipNode> getter) {
+        //noinspection unchecked
+        valueTooltipMap.put(type, (u, v) -> getter.apply(u, (T) v));
+    }
+
+    @Override
     public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
         //noinspection unchecked
         numberConverterMap.put(type, (u, t) -> converter.apply(u, (T) t));
@@ -210,7 +217,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, List<ITooltipNode>, IDataNode> tradeFactory) {
+    public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, ITooltipNode, IDataNode> tradeFactory) {
         //noinspection unchecked
         itemListingFactoryMap.put(type, (u, i, c) -> tradeFactory.apply(u, (T) i, c));
     }
@@ -271,7 +278,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 return GenericTooltipUtils.getMissingFunction(utils, function);
             } catch (Throwable e) {
                 LOGGER.warn("Function type {} was not registered", function.getClass().getCanonicalName());
-                return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", function.getClass().getSimpleName());
+                return ValueTooltipUtils.getStringTooltip(utils, function.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
             }
         }
     }
@@ -290,7 +297,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 return GenericTooltipUtils.getMissingCondition(utils, condition);
             } catch (Throwable e) {
                 LOGGER.warn("Condition type for {} was not registered", condition.getClass().getCanonicalName());
-                return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", condition.getClass().getSimpleName());
+                return ValueTooltipUtils.getStringTooltip(utils, condition.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
             }
         }
     }
@@ -304,7 +311,23 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return ingredientTooltipGetter.apply(utils, ingredient);
         } else {
             missingIngredientTooltips.add(ingredient.getClass());
-            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", ingredient.getClass().getSimpleName());
+            return ValueTooltipUtils.getStringTooltip(utils, ingredient.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
+        }
+    }
+
+    @Override
+    public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
+        if (value == null) {
+            return EmptyTooltipNode.EMPTY;
+        }
+
+        BiFunction<IServerUtils, Object, IKeyTooltipNode> valueTooltipGetter = valueTooltipMap.get(value.getClass());
+
+        if (valueTooltipGetter != null) {
+            return valueTooltipGetter.apply(utils, value);
+        } else {
+            missingValueTooltips.add(value.getClass());
+            return ErrorTooltipNode.error("[" + value.getClass().getName() + "]");
         }
     }
 
@@ -338,12 +361,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions) {
+    public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
         //noinspection unchecked
-        TriFunction<IServerUtils, T, List<ITooltipNode>, IDataNode> itemListingFactory = (TriFunction<IServerUtils, T, List<ITooltipNode>, IDataNode>) itemListingFactoryMap.get(entry.getClass());
+        TriFunction<IServerUtils, T, ITooltipNode, IDataNode> itemListingFactory = (TriFunction<IServerUtils, T, ITooltipNode, IDataNode>) itemListingFactoryMap.get(entry.getClass());
 
         if (itemListingFactory != null) {
-            return itemListingFactory.apply(utils, entry, conditions);
+            return itemListingFactory.apply(utils, entry, condition);
         } else {
             try {
                 // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
@@ -351,7 +374,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 MerchantOffer offer = entry.getOffer(null, null);
 
                 if (offer != null) {
-                    return TradeUtils.getNode(utils, offer, conditions);
+                    return TradeUtils.getNode(utils, offer, condition);
                 }
             } catch (Throwable ignored) {}
 
@@ -452,6 +475,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingFunctionTooltips.forEach((t) -> LOGGER.warn("Missing function tooltip for {}", t.getName()));
         missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getName()));
         missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getName()));
+        missingValueTooltips.forEach((t) -> LOGGER.warn("Missing value tooltip for {}", t.getName()));
         missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
         missingNumberConverters.forEach((t) -> LOGGER.warn("Missing number converters for {}", t.getName()));
 

@@ -1,8 +1,9 @@
 package com.yanny.ali.plugin.mods.deeper_and_darker;
 
+import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -11,10 +12,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
 import java.util.Optional;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("com.kyanite.deeperdarker.util.SetPaintingVariantFunction")
 public class SetPaintingVariantFunction extends ConditionalFunction implements IFunctionTooltip {
@@ -28,9 +28,9 @@ public class SetPaintingVariantFunction extends ConditionalFunction implements I
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.set_painting_variant"));
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.type.function.set_painting_variant");
 
-        validPaintings.ifPresent((tagKey) -> tooltip.add(getTagKeyTooltip(utils, "ali.property.value.tag", tagKey)));
+        validPaintings.ifPresent((tagKey) -> tooltip.add(utils.getValueTooltip(utils, tagKey).key("ali.property.value.tag")));
         tooltip.add(getSubConditionsTooltip(utils, predicates));
 
         return tooltip;

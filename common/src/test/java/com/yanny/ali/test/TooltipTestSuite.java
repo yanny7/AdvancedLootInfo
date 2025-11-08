@@ -119,6 +119,11 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
+                return PluginManager.SERVER_REGISTRY.getValueTooltip(utils, value);
+            }
+
+            @Override
             public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
                 PluginManager.SERVER_REGISTRY.applyCountModifier(utils, function, count);
             }
@@ -134,8 +139,8 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions) {
-                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, conditions);
+            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
+                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, condition);
             }
 
             @Override

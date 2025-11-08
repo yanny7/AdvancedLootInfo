@@ -22,7 +22,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final int PADDING = 2;
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
-    private final Map<ResourceLocation, NodeFactory<?>> nodeFactoryMap = new HashMap<>();
+    private final Map<ResourceLocation, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
+    private final Map<ResourceLocation, TooltipFactory<?>> tooltipNodeFactoryMap = new HashMap<>();
     private final Map<ResourceLocation, List<ItemStack>> lootItemMap = new HashMap<>();
     private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
     private final Map<ResourceLocation, IDataNode> lootTradeMap = new HashMap<>();
@@ -128,8 +129,13 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends IDataNode> void registerNode(ResourceLocation id, NodeFactory<T> nodeFactory) {
-        nodeFactoryMap.put(id, nodeFactory);
+    public <T extends IDataNode> void registerDataNode(ResourceLocation id, DataFactory<T> dataFactory) {
+        dataNodeFactoryMap.put(id, dataFactory);
+    }
+
+    @Override
+    public <T extends ITooltipNode> void registerTooltipNode(ResourceLocation id, TooltipFactory<T> tooltipFactory) {
+        tooltipNodeFactoryMap.put(id, tooltipFactory);
     }
 
     @Override
@@ -192,12 +198,22 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends IDataNode> NodeFactory<T> getNodeFactory(ResourceLocation id) {
+    public <T extends IDataNode> DataFactory<T> getDataNodeFactory(ResourceLocation id) {
         //noinspection unchecked
-        NodeFactory<T> nodeFactory = (NodeFactory<T>) nodeFactoryMap.get(id);
+        DataFactory<T> dataFactory = (DataFactory<T>) dataNodeFactoryMap.get(id);
 
-        return Objects.requireNonNullElseGet(nodeFactory, () -> {
-            throw new IllegalStateException(String.format("Failed to construct node - node {%s} was not registered!", id));
+        return Objects.requireNonNullElseGet(dataFactory, () -> {
+            throw new IllegalStateException(String.format("Failed to construct data node - node {%s} was not registered!", id));
+        });
+    }
+
+    @Override
+    public <T extends ITooltipNode> TooltipFactory<T> getTooltipNodeFactory(ResourceLocation id) {
+        //noinspection unchecked
+        TooltipFactory<T> tooltipFactory = (TooltipFactory<T>) tooltipNodeFactoryMap.get(id);
+
+        return Objects.requireNonNullElseGet(tooltipFactory, () -> {
+            throw new IllegalStateException(String.format("Failed to construct tooltip node - node {%s} was not registered!", id));
         });
     }
 
@@ -223,7 +239,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     public void printRegistrationInfo() {
         LOGGER.info("Registered {} widgets", widgetMap.size());
-        LOGGER.info("Registered {} node factories", nodeFactoryMap.size());
+        LOGGER.info("Registered {} data node factories", dataNodeFactoryMap.size());
+        LOGGER.info("Registered {} tooltip node factories", tooltipNodeFactoryMap.size());
         LOGGER.info("Registered {} trade factories", lootTradeMap.size());
     }
 

@@ -5,6 +5,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
@@ -19,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @ClassAccessor("blusunrize.immersiveengineering.common.world.Villages$RevolverPieceForEmeralds")
@@ -32,8 +32,8 @@ public class RevolverPieceForEmeralds extends BaseAccessor<VillagerTrades.ItemLi
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        return new SubTradesNode<>(utils, this, conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
+        return new SubTradesNode<>(utils, this, condition) {
             @Override
             public List<IDataNode> getSubTrades(IServerUtils utils, RevolverPieceForEmeralds listing) {
                 List<IDataNode> nodes = new ArrayList<>();
@@ -48,7 +48,7 @@ public class RevolverPieceForEmeralds extends BaseAccessor<VillagerTrades.ItemLi
                             30,
                             1,
                             0.5F,
-                            Collections.emptyList()
+                            EmptyTooltipNode.EMPTY
                     ));
                 }
 

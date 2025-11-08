@@ -43,7 +43,7 @@ public class EmeraldsForTwoTags<T extends ItemLike, U extends ItemLike> extends 
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
                 Either.right(tag1),
