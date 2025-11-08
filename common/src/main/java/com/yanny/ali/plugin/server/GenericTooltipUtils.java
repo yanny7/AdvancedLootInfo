@@ -123,7 +123,7 @@ public class GenericTooltipUtils {
         String name = propertyMatcher.name();
 
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher matcher) {
-            return ValueTooltipNode.keyValue(name, matcher.value()).key("ali.property.value.null"); //FIXME all key_value -> vyfarbenie nefunguje!
+            return ValueTooltipNode.keyValue(name, matcher.value()).key("ali.property.value.null");
         }
         if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher matcher) {
             Optional<String> min = matcher.minValue();
