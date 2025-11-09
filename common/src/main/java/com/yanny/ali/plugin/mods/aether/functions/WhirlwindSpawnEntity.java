@@ -2,24 +2,22 @@ package com.yanny.ali.plugin.mods.aether.functions;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
-import net.minecraft.advancements.critereon.EntityTypePredicate;
-import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 @ClassAccessor("com.aetherteam.aether.loot.functions.WhirlwindSpawnEntity")
 public class WhirlwindSpawnEntity extends ConditionalFunction implements IFunctionTooltip {
     @FieldAccessor
-    private EntityTypePredicate entityType;
+    private EntityType<?> entityType;
     @FieldAccessor
-    private IntProvider count;
+    private int count;
 
     public WhirlwindSpawnEntity(LootItemConditionalFunction conditionalFunction) {
         super(conditionalFunction);
@@ -27,12 +25,9 @@ public class WhirlwindSpawnEntity extends ConditionalFunction implements IFuncti
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.whirlwind_spawn_entity"));
-
-        tooltip.add(getEntityTypePredicateTooltip(utils, "ali.property.branch.entity_types", entityType));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.count", RangeValue.rangeToString(new RangeValue(count.getMinValue()), new RangeValue(count.getMaxValue()))));
-        tooltip.add(getSubConditionsTooltip(utils, predicates));
-
-        return tooltip;
+        return BranchTooltipNode.branch("ali.type.function.whirlwind_spawn_entity")
+                .add(utils.getValueTooltip(utils, entityType).key("ali.property.value.entity_type"))
+                .add(utils.getValueTooltip(utils, count).key("ali.property.value.count"))
+                .add(getSubConditionsTooltip(utils, predicates));
     }
 }

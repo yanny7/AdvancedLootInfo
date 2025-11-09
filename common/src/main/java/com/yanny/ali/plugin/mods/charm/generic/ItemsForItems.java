@@ -43,7 +43,7 @@ public class ItemsForItems extends BaseAccessor<VillagerTrades.ItemListing> impl
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(inputItem.asItem().getDefaultInstance()),

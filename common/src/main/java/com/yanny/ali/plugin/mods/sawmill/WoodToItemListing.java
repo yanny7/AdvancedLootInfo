@@ -6,6 +6,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.common.trades.SubTradesNode;
 import com.yanny.ali.plugin.mods.*;
@@ -20,8 +21,6 @@ import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.stream.Stream;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStringTooltip;
 
 @ClassAccessor("net.mehvahdjukaar.sawmill.CarpenterTrades$WoodToItemListing")
 public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -49,7 +48,7 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
     }
 
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new SubTradesNode<>(utils, this, conditions) {
             @Override
             public List<IDataNode> getSubTrades(IServerUtils utils, WoodToItemListing listing) {
@@ -60,13 +59,11 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
                         List<WoodType> woodTypes = Utils.WOOD_TYPES.get(type);
 
                         if (woodTypes != null) {
-                            List<ITooltipNode> cond = List.of(getStringTooltip(utils, "ali.property.value.villager_type", type.toString()));
-
-                            nodes.addAll(getNodes(utils, woodTypes, cond));
+                            nodes.addAll(getNodes(utils, woodTypes, utils.getValueTooltip(utils, type.toString()).key("ali.property.value.villager_type")));
                         }
                     }
                 } else {
-                    nodes.addAll(getNodes(utils, getAllWoodTypes(), Collections.emptyList()));
+                    nodes.addAll(getNodes(utils, getAllWoodTypes(), EmptyTooltipNode.EMPTY));
                 }
 
                 return nodes;
@@ -117,7 +114,7 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
     }
 
     @NotNull
-    private List<IDataNode> getNodes(IServerUtils utils, Collection<WoodType> woodTypes, List<ITooltipNode> cond) {
+    private List<IDataNode> getNodes(IServerUtils utils, Collection<WoodType> woodTypes, ITooltipNode cond) {
         List<IDataNode> nodes = new ArrayList<>();
 
         for (WoodType woodType : woodTypes) {

@@ -66,9 +66,9 @@ public class LootJsPlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
-        registry.registerNode(ItemTagNode.ID, ItemTagNode::new);
-        registry.registerNode(ModifiedNode.ID, ModifiedNode::new);
+        registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerDataNode(ItemTagNode.ID, ItemTagNode::new);
+        registry.registerDataNode(ModifiedNode.ID, ModifiedNode::new);
 
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);

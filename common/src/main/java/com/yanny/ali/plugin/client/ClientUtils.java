@@ -18,8 +18,13 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public <T extends IDataNode> IClientRegistry.NodeFactory<T> getNodeFactory(ResourceLocation id) {
-        return PluginManager.CLIENT_REGISTRY.getNodeFactory(id);
+    public <T extends IDataNode> IClientRegistry.DataFactory<T> getDataNodeFactory(ResourceLocation id) {
+        return PluginManager.CLIENT_REGISTRY.getDataNodeFactory(id);
+    }
+
+    @Override
+    public <T extends ITooltipNode> IClientRegistry.TooltipFactory<T> getTooltipNodeFactory(ResourceLocation id) {
+        return PluginManager.CLIENT_REGISTRY.getTooltipNodeFactory(id);
     }
 
     @Override

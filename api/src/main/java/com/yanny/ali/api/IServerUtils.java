@@ -38,6 +38,8 @@ public interface IServerUtils extends ICommonUtils {
 
     <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
+    <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value);
+
     <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate);
 
     <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
@@ -50,7 +52,7 @@ public interface IServerUtils extends ICommonUtils {
 
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
-    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions);
+    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition);
 
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);
 

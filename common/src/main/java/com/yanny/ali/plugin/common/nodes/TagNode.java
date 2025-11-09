@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.Registries;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 public class TagNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "tag");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final TagKey<? extends ItemLike> tag;
@@ -32,10 +32,10 @@ public class TagNode implements IDataNode, IItemNode {
     private final float chance;
 
     public TagNode(IServerUtils utils, TagKey<? extends ItemLike> tag, RangeValue count) {
-        this(utils, tag, count, Collections.emptyList());
+        this(utils, tag, count, EmptyTooltipNode.EMPTY);
     }
 
-    public TagNode(IServerUtils ignoredUtils, TagKey<? extends ItemLike> tag, RangeValue count, List<ITooltipNode> tooltip) {
+    public TagNode(IServerUtils ignoredUtils, TagKey<? extends ItemLike> tag, RangeValue count, ITooltipNode tooltip) {
         this.tag = tag;
         this.tooltip = tooltip;
         this.count = count;
@@ -55,7 +55,7 @@ public class TagNode implements IDataNode, IItemNode {
 
     public TagNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
 
@@ -91,13 +91,13 @@ public class TagNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeFloat(chance);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

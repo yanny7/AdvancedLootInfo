@@ -650,13 +650,17 @@ public class DataComponentTooltipTest {
                 "UUID: 3b5b9852-567e-3761-8aac-7f5f2d74ef74",
                 "Properties:",
                 "  -> Hello",
-                "    -> Name: asdf",
-                "    -> Value: jklo",
-                "    -> Signature: sign",
+                "    -> Properties:",
+                "      -> Property:",
+                "        -> Name: asdf",
+                "        -> Value: jklo",
+                "        -> Signature: sign",
                 "  -> World",
-                "    -> Name: qwer",
-                "    -> Value: uiop",
-                "    -> Signature: help"
+                "    -> Properties:",
+                "      -> Property:",
+                "        -> Name: qwer",
+                "        -> Value: uiop",
+                "        -> Signature: help"
         ));
     }
 

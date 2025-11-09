@@ -25,7 +25,7 @@ import java.util.List;
 
 public record SyncTradeMessage(ResourceLocation location, IDataNode node, List<Item> inputs, List<Item> outputs) implements CustomPacketPayload {
     private static final Logger LOGGER = LogUtils.getLogger();
-    
+
     public static final Type<SyncTradeMessage> TYPE = new Type<>(Utils.modLoc("trade_sync"));
     public static final StreamCodec<RegistryFriendlyByteBuf, SyncTradeMessage> CODEC = StreamCodec.composite(
             ResourceLocation.STREAM_CODEC, (l) -> l.location,
