@@ -5,6 +5,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
     }
 
     @Override
-    public void encodeNode(FriendlyByteBuf buf) {
+    public void encodeNode(RegistryFriendlyByteBuf buf) {
         buf.writeInt(values.size());
 
         for (String value : values) {
@@ -123,7 +124,7 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
         return Component.literal(v).withStyle(PARAM_STYLE);
     }
 
-    public static ValueTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static ValueTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         List<ITooltipNode> children = ListTooltipNode.decodeChildren(utils, buf);
         int size = buf.readInt();
         List<String> values;

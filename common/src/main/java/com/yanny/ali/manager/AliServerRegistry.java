@@ -372,7 +372,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return itemSubPredicateTooltipGetter.apply(utils, predicate);
         } else {
             missingItemSubPredicateTooltips.add(predicate.getClass());
-            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
+            return utils.getValueTooltip(utils, predicate.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
         }
     }
 
@@ -384,7 +384,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return entitySubPredicateTooltipGetter.apply(utils, predicate);
         } else {
             missingEntitySubPredicateTooltips.add(predicate.getClass());
-            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", predicate.getClass().getSimpleName());
+            return utils.getValueTooltip(utils, predicate.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
         }
     }
 
@@ -396,7 +396,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return dataComponentTypeTooltipGetter.apply(utils, value);
         } else {
             missingDataComponentTypeTooltips.add(type.getClass());
-            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", type.getClass().getSimpleName());
+            return utils.getValueTooltip(utils, type.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
         }
     }
 

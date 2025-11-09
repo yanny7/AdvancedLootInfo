@@ -5,7 +5,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -17,7 +17,7 @@ public class EmptyTooltipNode implements ITooltipNode, IKeyTooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "empty");
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
 
     }
 
@@ -41,7 +41,7 @@ public class EmptyTooltipNode implements ITooltipNode, IKeyTooltipNode {
         throw new IllegalStateException("Trying to add children to empty node!");
     }
 
-    public static EmptyTooltipNode decode(IClientUtils ignoredUtils, FriendlyByteBuf ignoredBuf) {
+    public static EmptyTooltipNode decode(IClientUtils ignoredUtils, RegistryFriendlyByteBuf ignoredBuf) {
         return EMPTY;
     }
 }

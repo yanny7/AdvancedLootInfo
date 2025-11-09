@@ -5,7 +5,9 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -57,11 +59,11 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
     }
 
     @Override
-    public void encodeNode(FriendlyByteBuf buf) {
+    public void encodeNode(RegistryFriendlyByteBuf buf) {
         buf.writeInt(values.size());
 
         for (Component value : values) {
-            buf.writeComponent(value);
+            ComponentSerialization.STREAM_CODEC.encode(buf, value);
         }
 
         buf.writeNullable(key, FriendlyByteBuf::writeUtf);
@@ -92,18 +94,18 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
     }
 
     @NotNull
-    public static ComponentTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static ComponentTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         List<ITooltipNode> children = ListTooltipNode.decodeChildren(utils, buf);
         int size = buf.readInt();
         List<Component> values;
 
         if (size == 1) {
-            values = Collections.singletonList(buf.readComponent());
+            values = Collections.singletonList(ComponentSerialization.STREAM_CODEC.decode(buf));
         } else {
             values = new ArrayList<>();
 
             for (int i = 0; i < size; i++) {
-                values.add(buf.readComponent());
+                values.add(ComponentSerialization.STREAM_CODEC.decode(buf));
             }
         }
 

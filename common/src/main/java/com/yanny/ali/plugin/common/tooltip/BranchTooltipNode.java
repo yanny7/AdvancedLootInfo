@@ -5,6 +5,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +48,7 @@ public class BranchTooltipNode extends ListTooltipNode implements IKeyTooltipNod
     }
 
     @Override
-    void encodeNode(FriendlyByteBuf buf) {
+    void encodeNode(RegistryFriendlyByteBuf buf) {
         buf.writeNullable(key, FriendlyByteBuf::writeUtf);
         buf.writeBoolean(advancedTooltip);
     }
@@ -97,7 +98,7 @@ public class BranchTooltipNode extends ListTooltipNode implements IKeyTooltipNod
     }
 
     @NotNull
-    public static BranchTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static BranchTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         List<ITooltipNode> children = ListTooltipNode.decodeChildren(utils, buf);
         String key = buf.readNullable(FriendlyByteBuf::readUtf);
         boolean advancedTooltip = buf.readBoolean();

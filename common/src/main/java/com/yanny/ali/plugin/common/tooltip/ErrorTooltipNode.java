@@ -6,7 +6,7 @@ import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +39,7 @@ public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeUtf(value);
     }
 
@@ -54,7 +54,7 @@ public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
     }
 
     @NotNull
-    public static ErrorTooltipNode decode(IClientUtils ignoredUtils, FriendlyByteBuf buf) {
+    public static ErrorTooltipNode decode(IClientUtils ignoredUtils, RegistryFriendlyByteBuf buf) {
         String value = buf.readUtf();
         return new ErrorTooltipNode(value);
     }

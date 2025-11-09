@@ -61,7 +61,7 @@ public class EntitySubPredicateTooltipTest {
         assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
                 .checkAdvancementDone(new ResourceLocation("test"), true)
                 .addRecipe(new ResourceLocation("test"), false)
-                .checkAdvancementCriterions(new ResourceLocation("criterion"), Map.of("test", true))
+                .checkAdvancementCriterions(new ResourceLocation("criterion"), Map.of("test", true, "test2", false))
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(100))
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
@@ -80,7 +80,9 @@ public class EntitySubPredicateTooltipTest {
                 "    -> minecraft:test",
                 "      -> Done: true",
                 "    -> minecraft:criterion",
-                "      -> test: true",
+                "      -> Criterions:",
+                "        -> test2: false",
+                "        -> test: true",
                 "  -> Looking At:",
                 "    -> Entity Types:",
                 "      -> minecraft:warden"
@@ -121,7 +123,7 @@ public class EntitySubPredicateTooltipTest {
         )), List.of(
                 "Type: minecraft:cat",
                 "  -> Variants:",
-                "    -> Variant: minecraft:calico"
+                "    -> minecraft:calico"
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.PAINTING.createPredicate(
@@ -129,7 +131,7 @@ public class EntitySubPredicateTooltipTest {
         )), List.of(
                 "Type: minecraft:painting",
                 "  -> Variants:",
-                "    -> Variant: minecraft:bomb"
+                "    -> minecraft:bomb"
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.frogVariant(
@@ -137,7 +139,7 @@ public class EntitySubPredicateTooltipTest {
         )), List.of(
                 "Type: minecraft:frog",
                 "  -> Variants:",
-                "    -> Variant: minecraft:temperate"
+                "    -> minecraft:temperate"
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.wolfVariant(
@@ -145,7 +147,7 @@ public class EntitySubPredicateTooltipTest {
         )), List.of(
                 "Type: minecraft:wolf",
                 "  -> Variants:",
-                "    -> Variant: minecraft:ashen"
+                "    -> minecraft:ashen"
         ));
     }
 }

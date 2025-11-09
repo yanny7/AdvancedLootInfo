@@ -7,7 +7,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public class LiteralTooltipNode implements ITooltipNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeUtf(text);
     }
 
@@ -52,7 +52,7 @@ public class LiteralTooltipNode implements ITooltipNode {
     }
 
     @NotNull
-    public static LiteralTooltipNode decode(IClientUtils ignoredUtils, FriendlyByteBuf buf) {
+    public static LiteralTooltipNode decode(IClientUtils ignoredUtils, RegistryFriendlyByteBuf buf) {
         String text = buf.readUtf();
         try {
             return CACHE.get(text);

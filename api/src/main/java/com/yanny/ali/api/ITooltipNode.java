@@ -14,12 +14,12 @@ public interface ITooltipNode {
     ChatFormatting TEXT_STYLE = ChatFormatting.GOLD; //TODO use these or add config
     ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 
-    static void encodeNode(IServerUtils utils, ITooltipNode node, FriendlyByteBuf buf) {
+    static void encodeNode(IServerUtils utils, ITooltipNode node, RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(node.getId());
         node.encode(utils, buf);
     }
 
-    static ITooltipNode decodeNode(IClientUtils utils, FriendlyByteBuf buf) {
+    static ITooltipNode decodeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         ResourceLocation name = buf.readResourceLocation();
         IClientRegistry.TooltipFactory<?> factory = utils.getTooltipNodeFactory(name);
 

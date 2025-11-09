@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common.tooltip;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +20,7 @@ public abstract class ListTooltipNode implements ITooltipNode {
         this.children = children;
     }
 
-    abstract void encodeNode(FriendlyByteBuf buf);
+    abstract void encodeNode(RegistryFriendlyByteBuf buf);
 
     public void addNode(ITooltipNode node) {
         if (children == null) {
@@ -56,7 +56,7 @@ public abstract class ListTooltipNode implements ITooltipNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         List<ITooltipNode> children = getChildren();
 
         buf.writeInt(children.size());
@@ -68,7 +68,7 @@ public abstract class ListTooltipNode implements ITooltipNode {
         encodeNode(buf);
     }
 
-    public static List<ITooltipNode> decodeChildren(IClientUtils utils, FriendlyByteBuf buf) {
+    public static List<ITooltipNode> decodeChildren(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         int count = buf.readInt();
 
         if (count == 0) {

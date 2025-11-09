@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import org.jetbrains.annotations.NotNull;
 
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getRegistryTooltip;
 import static com.yanny.ali.plugin.server.ValueTooltipUtils.getBuiltInRegistryTooltip;
 
 public class RegistriesTooltipUtils {
@@ -62,7 +62,7 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getBannerPatternTooltip(IServerUtils utils, BannerPattern bannerPattern) {
-        return getBuiltInRegistryTooltip(utils, Registries.BANNER_PATTERN, bannerPattern);
+        return getRegistryTooltip(utils, Registries.BANNER_PATTERN, bannerPattern);
     }
 
     @NotNull
@@ -100,75 +100,63 @@ public class RegistriesTooltipUtils {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ATTRIBUTE, attribute);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, String key, DataComponentType<?> type) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.DATA_COMPONENT_TYPE, type);
+    public static IKeyTooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.DATA_COMPONENT_TYPE, type);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getInstrumentTooltip(IServerUtils utils, String key, Instrument value) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.INSTRUMENT, value);
+    public static IKeyTooltipNode getInstrumentTooltip(IServerUtils utils, Instrument value) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.INSTRUMENT, value);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, String key, EntitySubPredicate predicate) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec());
+    public static IKeyTooltipNode getEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec());
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getCatVariantTooltip(IServerUtils utils, String key, CatVariant catVariant) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.CAT_VARIANT, catVariant);
+    public static IKeyTooltipNode getCatVariantTooltip(IServerUtils utils, CatVariant catVariant) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.CAT_VARIANT, catVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getPaintingVariantTooltip(IServerUtils utils, String key, PaintingVariant paintingVariant) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.PAINTING_VARIANT, paintingVariant);
+    public static IKeyTooltipNode getPaintingVariantTooltip(IServerUtils utils, PaintingVariant paintingVariant) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.PAINTING_VARIANT, paintingVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getFrogVariantTooltip(IServerUtils utils, String key, FrogVariant frogVariant) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.FROG_VARIANT, frogVariant);
+    public static IKeyTooltipNode getFrogVariantTooltip(IServerUtils utils, FrogVariant frogVariant) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FROG_VARIANT, frogVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getWolfVariantTooltip(IServerUtils utils, String key, WolfVariant wolfVariant) {
-        return getRegistryTooltip(utils, key, Registries.WOLF_VARIANT, wolfVariant);
+    public static IKeyTooltipNode getWolfVariantTooltip(IServerUtils utils, WolfVariant wolfVariant) {
+        return getRegistryTooltip(utils, Registries.WOLF_VARIANT, wolfVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getMapDecorationTypeTooltip(IServerUtils utils, String key, MapDecorationType mapDecorationType) {
-        return getRegistryTooltip(utils, key, Registries.MAP_DECORATION_TYPE, mapDecorationType);
+    public static IKeyTooltipNode getMapDecorationTypeTooltip(IServerUtils utils, MapDecorationType mapDecorationType) {
+        return getRegistryTooltip(utils, Registries.MAP_DECORATION_TYPE, mapDecorationType);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getBiomeTooltip(IServerUtils utils, String key, Biome biome) {
-        return getRegistryTooltip(utils, key, Registries.BIOME, biome);
+    public static IKeyTooltipNode getBiomeTooltip(IServerUtils utils, Biome biome) {
+        return getRegistryTooltip(utils, Registries.BIOME, biome);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getStructureTooltip(IServerUtils utils, String key, Structure structure) {
-        return getRegistryTooltip(utils, key, Registries.STRUCTURE, structure);
+    public static IKeyTooltipNode getStructureTooltip(IServerUtils utils, Structure structure) {
+        return getRegistryTooltip(utils, Registries.STRUCTURE, structure);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getTrimMaterialTooltip(IServerUtils utils, String key, TrimMaterial material) {
-        return getRegistryTooltip(utils, key, Registries.TRIM_MATERIAL, material);
+    public static IKeyTooltipNode getTrimMaterialTooltip(IServerUtils utils, TrimMaterial material) {
+        return getRegistryTooltip(utils, Registries.TRIM_MATERIAL, material);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getTrimPatternTooltip(IServerUtils utils, String key, TrimPattern pattern) {
-        return getRegistryTooltip(utils, key, Registries.TRIM_PATTERN, pattern);
+    public static IKeyTooltipNode getTrimPatternTooltip(IServerUtils utils, TrimPattern pattern) {
+        return getRegistryTooltip(utils, Registries.TRIM_PATTERN, pattern);
     }
 }
