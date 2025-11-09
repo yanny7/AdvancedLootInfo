@@ -16,14 +16,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.inventory.SlotRange;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -156,12 +152,6 @@ public class GenericTooltipUtils {
         return EmptyTooltipNode.EMPTY;
     }
 
-    @Unmodifiable
-    @NotNull
-    public static ITooltipNode getGameTypePredicateTooltip(IServerUtils utils, String key, GameTypePredicate gameType) {
-        return getCollectionTooltip(utils, key, "ali.property.value.null", gameType.types(), GenericTooltipUtils::getEnumTooltip);
-    }
-
     @NotNull
     public static IKeyTooltipNode getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
         String key = ValueTooltipNode.translate(((TranslatableContents) stat.type().getDisplayName().getContents()).getKey());
@@ -214,85 +204,6 @@ public class GenericTooltipUtils {
         }
 
         return tooltips;
-    }
-
-    @NotNull
-    public static ITooltipNode getLevelBasedValueTooltip(IServerUtils utils, String key, LevelBasedValue levelBasedValue) {
-        ITooltipNode tooltip = new TooltipNode(translatable(key));
-
-        switch (levelBasedValue) {
-            case LevelBasedValue.Constant(float value) ->
-                    tooltip.add(getFloatTooltip(utils, "ali.property.value.constant", value));
-            case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
-                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.clamped"));
-
-                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.value", value));
-                t.add(getFloatTooltip(utils, "ali.property.value.min", min));
-                t.add(getFloatTooltip(utils, "ali.property.value.max", max));
-                tooltip.add(t);
-            }
-            case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
-                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.fraction"));
-
-                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.numerator", numerator));
-                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.denominator", denominator));
-                tooltip.add(t);
-            }
-            case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
-                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.linear"));
-
-                t.add(getFloatTooltip(utils, "ali.property.value.base", base));
-                t.add(getFloatTooltip(utils, "ali.property.value.per_level", perLevelAboveFirst));
-                tooltip.add(t);
-            }
-            case LevelBasedValue.LevelsSquared(float added) -> {
-                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.level_squared"));
-
-                t.add(getFloatTooltip(utils, "ali.property.value.added", added));
-                tooltip.add(t);
-            }
-            case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
-                ITooltipNode t = new TooltipNode(translatable("ali.property.branch.lookup"));
-
-                t.add(getStringTooltip(utils, "ali.property.value.values", values.toString()));
-                t.add(getLevelBasedValueTooltip(utils, "ali.property.branch.fallback", fallback));
-                tooltip.add(t);
-            }
-            default -> {
-            }
-        }
-
-        return tooltip;
-    }
-
-    @NotNull
-    public static ITooltipNode getLocationWrapperTooltip(IServerUtils utils, String key, EntityPredicate.LocationWrapper locationWrapper) {
-        if (locationWrapper.located().isPresent() || locationWrapper.affectsMovement().isPresent() || locationWrapper.steppingOn().isPresent()) {
-            ITooltipNode tooltip = new TooltipNode(translatable(key));
-
-            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.located", locationWrapper.located(), GenericTooltipUtils::getLocationPredicateTooltip));
-            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.stepping_on_location", locationWrapper.steppingOn(), GenericTooltipUtils::getLocationPredicateTooltip));
-            tooltip.add(getOptionalTooltip(utils, "ali.property.branch.affects_movement", locationWrapper.affectsMovement(), GenericTooltipUtils::getLocationPredicateTooltip));
-
-            return tooltip;
-        }
-
-        return new TooltipNode();
-    }
-
-    @NotNull
-    public static ITooltipNode getMovementPredicateTooltip(IServerUtils utils, String key, MovementPredicate predicate) {
-        ITooltipNode tooltip = new TooltipNode(translatable(key));
-
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.x", predicate.x()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.y", predicate.y()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.z", predicate.z()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.speed", predicate.speed()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.horizontal_speed", predicate.horizontalSpeed()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.vertical_speed", predicate.verticalSpeed()));
-        tooltip.add(getMinMaxBoundsTooltip(utils, "ali.property.value.fall_distance", predicate.fallDistance()));
-
-        return tooltip;
     }
 
     @NotNull
@@ -424,6 +335,13 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getItemSubPredicateEntryTooltip(IServerUtils utils, Map.Entry<ItemSubPredicate.Type<?>, ItemSubPredicate> entry) {
         return utils.getItemSubPredicateTooltip(utils, entry.getValue());
+    }
+
+    @NotNull
+    public static ITooltipNode getSlotRangePredicateEntryTooltip(IServerUtils utils, Map.Entry<SlotRange, ItemPredicate> entry) {
+//        return utils.getValueTooltip(utils, entry.getKey().slots())
+        return ValueTooltipNode.keyValue(entry.getKey().toString(), entry.getKey().slots().toString()).key("ali.property.value.null")
+                .add(utils.getValueTooltip(utils, entry.getValue()).key("ali.property.branch.predicate"));
     }
 
     @NotNull

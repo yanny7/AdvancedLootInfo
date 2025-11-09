@@ -161,9 +161,8 @@ public class RegistriesTooltipUtils {
         return getRegistryTooltip(utils, Registries.TRIM_PATTERN, pattern);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getJukeboxSongTooltip(IServerUtils utils, String key, JukeboxSong pattern) {
-        return getRegistryTooltip(utils, key, Registries.JUKEBOX_SONG, pattern);
+    public static IKeyTooltipNode getJukeboxSongTooltip(IServerUtils utils, JukeboxSong pattern) {
+        return getRegistryTooltip(utils, Registries.JUKEBOX_SONG, pattern);
     }
 }

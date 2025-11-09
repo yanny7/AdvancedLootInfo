@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class BranchTooltipNode extends ListTooltipNode implements IKeyTooltipNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "branch");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "branch");
 
     private String key;
     private boolean advancedTooltip;

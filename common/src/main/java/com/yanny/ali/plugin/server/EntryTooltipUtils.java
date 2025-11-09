@@ -9,6 +9,7 @@ import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -140,11 +141,12 @@ public class EntryTooltipUtils {
             if (enchantment != null) {
                 for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
                     int level = levelEntry.getKey();
+                    String key = ((TranslatableContents) enchantment.value().description().getContents()).getKey();
                     RangeValue value = levelEntry.getValue();
 
                     tooltip.add(ValueTooltipNode.value(
                             value.toString() + "%",
-                            ValueTooltipNode.translate(enchantment.value().description()),
+                            ValueTooltipNode.translate(key),
                             ValueTooltipNode.translate("enchantment.level." + level)
                     ).key("ali.description.chance_bonus"));
                 }
@@ -165,11 +167,12 @@ public class EntryTooltipUtils {
             if (enchantment != null) {
                 for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
                     int level = levelEntry.getKey();
+                    String key = ((TranslatableContents) enchantment.value().description().getContents()).getKey();
                     RangeValue value = levelEntry.getValue();
 
                     tooltip.add(ValueTooltipNode.value(
                             value,
-                            ValueTooltipNode.translate(enchantment.value().description()),
+                            ValueTooltipNode.translate(key),
                             ValueTooltipNode.translate("enchantment.level." + level)
                     ).key("ali.description.count_bonus"));
                 }

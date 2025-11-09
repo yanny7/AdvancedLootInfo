@@ -142,7 +142,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
                     maxUses,
                     xp,
                     priceMultiplier,
-                    conditions
+                    condition
             );
         } else if (outline == BUY_FOR_MANY_EMERALDS) {
             return new ItemsToItemsNode(

@@ -45,7 +45,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getEnchantRandomlyTooltip(IServerUtils utils, EnchantRandomlyFunction fun) {
         return BranchTooltipNode.branch("ali.type.function.enchant_randomly")
                 .add(utils.getValueTooltip(utils, fun.options).key("ali.property.branch.enchantments"))
-                .add(utils.getValueTooltip(utils, fun.onlyCompatible).key("ali.value.branch.only_compatible"))
+                .add(utils.getValueTooltip(utils, fun.onlyCompatible).key("ali.property.value.only_compatible"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).key("ali.property.branch.conditions"));
     }
 

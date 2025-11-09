@@ -18,7 +18,7 @@ import java.util.List;
 import static com.yanny.ali.api.ITooltipNode.pad;
 
 public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "value");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "value");
 
     private final List<String> values;
     private final boolean isKeyValue;

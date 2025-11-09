@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
@@ -26,8 +27,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -69,11 +72,10 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getModifierTooltip(IServerUtils utils, SetAttributesFunction.Modifier modifier) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, modifier.name()).key("ali.property.value.name"))
                 .add(utils.getValueTooltip(utils, modifier.attribute()).key("ali.property.value.attribute"))
                 .add(utils.getValueTooltip(utils, modifier.operation()).key("ali.property.value.operation"))
                 .add(utils.getValueTooltip(utils, modifier.amount()).key("ali.property.value.amount"))
-                .add(utils.getValueTooltip(utils, modifier.id()).key("ali.property.value.uuid"))
+                .add(utils.getValueTooltip(utils, modifier.id()).key("ali.property.value.id"))
                 .add(utils.getValueTooltip(utils, modifier.slots()).key("ali.property.branch.equipment_slots"));
     }
 
@@ -100,7 +102,8 @@ public class ValueTooltipUtils {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, damagePredicate.tags()).key("ali.property.branch.tags"))
                 .add(utils.getValueTooltip(utils, damagePredicate.directEntity()).key("ali.property.branch.direct_entity"))
-                .add(utils.getValueTooltip(utils, damagePredicate.sourceEntity()).key("ali.property.branch.source_entity"));
+                .add(utils.getValueTooltip(utils, damagePredicate.sourceEntity()).key("ali.property.branch.source_entity"))
+                .add(utils.getValueTooltip(utils, damagePredicate.isDirect()).key("ali.property.value.is_direct"));
     }
 
     @NotNull
@@ -114,7 +117,8 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, entityPredicate.entityType()).key("ali.property.branch.entity_types"))
                 .add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer()).key("ali.property.branch.distance_to_player"))
                 .add(utils.getValueTooltip(utils, entityPredicate.location()).key("ali.property.branch.location"))
-                .add(utils.getValueTooltip(utils, entityPredicate.steppingOnLocation()).key("ali.property.branch.stepping_on_location"))
+                .add(utils.getValueTooltip(utils, entityPredicate.movement()).key("ali.property.branch.movement"))
+                .add(utils.getValueTooltip(utils, entityPredicate.periodicTick()).key("ali.property.value.periodic_tick"))
                 .add(utils.getValueTooltip(utils, entityPredicate.effects()).key("ali.property.branch.mob_effects"))
                 .add(utils.getValueTooltip(utils, entityPredicate.nbt()).key("ali.property.value.nbt"))
                 .add(utils.getValueTooltip(utils, entityPredicate.flags()).key("ali.property.branch.entity_flags"))
@@ -123,7 +127,8 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, entityPredicate.vehicle()).key("ali.property.branch.vehicle"))
                 .add(utils.getValueTooltip(utils, entityPredicate.passenger()).key("ali.property.branch.passenger"))
                 .add(utils.getValueTooltip(utils, entityPredicate.targetedEntity()).key("ali.property.branch.targeted_entity"))
-                .add(utils.getValueTooltip(utils, entityPredicate.team()).key("ali.property.value.team"));
+                .add(utils.getValueTooltip(utils, entityPredicate.team()).key("ali.property.value.team"))
+                .add(utils.getValueTooltip(utils, entityPredicate.slots()).key("ali.property.branch.slots"));
     }
 
     @NotNull
@@ -151,7 +156,8 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, locationPredicate.smokey()).key("ali.property.value.smokey"))
                 .add(utils.getValueTooltip(utils, locationPredicate.light()).key("ali.property.value.light"))
                 .add(utils.getValueTooltip(utils, locationPredicate.block()).key("ali.property.branch.block_predicate"))
-                .add(utils.getValueTooltip(utils, locationPredicate.fluid()).key("ali.property.branch.fluid_predicate"));
+                .add(utils.getValueTooltip(utils, locationPredicate.fluid()).key("ali.property.branch.fluid_predicate"))
+                .add(utils.getValueTooltip(utils, locationPredicate.canSeeSky()).key("ali.property.value.can_see_sky"));
     }
 
     @NotNull
@@ -195,11 +201,13 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getEntityFlagsPredicateTooltip(IServerUtils utils, EntityFlagsPredicate predicate) {
         return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, predicate.isOnGround()).key("ali.property.value.is_on_ground"))
                 .add(utils.getValueTooltip(utils, predicate.isOnFire()).key("ali.property.value.is_on_fire"))
                 .add(utils.getValueTooltip(utils, predicate.isBaby()).key("ali.property.value.is_baby"))
                 .add(utils.getValueTooltip(utils, predicate.isCrouching()).key("ali.property.value.is_crouching"))
                 .add(utils.getValueTooltip(utils, predicate.isSprinting()).key("ali.property.value.is_sprinting"))
-                .add(utils.getValueTooltip(utils, predicate.isSwimming()).key("ali.property.value.is_swimming"));
+                .add(utils.getValueTooltip(utils, predicate.isSwimming()).key("ali.property.value.is_swimming"))
+                .add(utils.getValueTooltip(utils, predicate.isFlying()).key("ali.property.value.is_flying"));
     }
 
     @NotNull
@@ -209,6 +217,7 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, predicate.chest()).key("ali.property.branch.chest"))
                 .add(utils.getValueTooltip(utils, predicate.legs()).key("ali.property.branch.legs"))
                 .add(utils.getValueTooltip(utils, predicate.feet()).key("ali.property.branch.feet"))
+                .add(utils.getValueTooltip(utils, predicate.body()).key("ali.property.branch.body"))
                 .add(utils.getValueTooltip(utils, predicate.mainhand()).key("ali.property.branch.mainhand"))
                 .add(utils.getValueTooltip(utils, predicate.offhand()).key("ali.property.branch.offhand"));
     }
@@ -224,7 +233,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getEnchantmentPredicateTooltip(IServerUtils utils, EnchantmentPredicate enchantmentPredicate) {
-        return utils.getValueTooltip(utils, (enchantmentPredicate.enchantment().isPresent() ? enchantmentPredicate.enchantment() : Component.translatable("ali.util.advanced_loot_info.any")))
+        return utils.getValueTooltip(utils, (enchantmentPredicate.enchantments().isPresent() ? enchantmentPredicate.enchantments() : Component.translatable("ali.util.advanced_loot_info.any")))
                 .add(utils.getValueTooltip(utils, enchantmentPredicate.level()).key("ali.property.value.level"));
     }
 
@@ -475,8 +484,7 @@ public class ValueTooltipUtils {
     public static IKeyTooltipNode getEntryPredicateTooltip(IServerUtils utils, ItemAttributeModifiersPredicate.EntryPredicate predicate) {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, predicate.attribute()).key("ali.property.branch.attributes"))
-                .add(utils.getValueTooltip(utils, predicate.id()).key("ali.property.value.uuid"))
-                .add(utils.getValueTooltip(utils, predicate.name()).key("ali.property.value.name"))
+                .add(utils.getValueTooltip(utils, predicate.id()).key("ali.property.value.id"))
                 .add(utils.getValueTooltip(utils, predicate.amount()).key("ali.property.value.amount"))
                 .add(utils.getValueTooltip(utils, predicate.operation()).key("ali.property.value.operation"))
                 .add(utils.getValueTooltip(utils, predicate.slot()).key("ali.property.value.slot"));
@@ -513,8 +521,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getAttributeModifierTooltip(IServerUtils utils, AttributeModifier modifier) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, modifier.id()).key("ali.property.value.uuid"))
-                .add(utils.getValueTooltip(utils, modifier.name()).key("ali.property.value.name"))
+                .add(utils.getValueTooltip(utils, modifier.id()).key("ali.property.value.id"))
                 .add(utils.getValueTooltip(utils, modifier.amount()).key("ali.property.value.amount"))
                 .add(utils.getValueTooltip(utils, modifier.operation()).key("ali.property.value.operation"));
     }
@@ -626,5 +633,88 @@ public class ValueTooltipUtils {
     public static IKeyTooltipNode getBannerPatternLayerTooltip(IServerUtils utils, BannerPatternLayers.Layer layer) {
         return utils.getValueTooltip(utils, layer.pattern())
                 .add(utils.getValueTooltip(utils, layer.color()).key("ali.property.value.color"));
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getGameTypePredicateTooltip(IServerUtils utils, GameTypePredicate gameType) {
+        return utils.getValueTooltip(utils, gameType.types());
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getLevelBasedValueTooltip(IServerUtils utils, LevelBasedValue levelBasedValue) {
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
+
+        switch (levelBasedValue) {
+            case LevelBasedValue.Constant(float value) ->
+                    tooltip.add(utils.getValueTooltip(utils, value).key("ali.property.value.constant"));
+            case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
+                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.clamped")
+                        .add(utils.getValueTooltip(utils, value).key("ali.property.branch.value"))
+                        .add(utils.getValueTooltip(utils, min).key("ali.property.value.min"))
+                        .add(utils.getValueTooltip(utils, max).key("ali.property.value.max"));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
+                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.fraction")
+                        .add(utils.getValueTooltip(utils, numerator).key("ali.property.branch.numerator"))
+                        .add(utils.getValueTooltip(utils, denominator).key("ali.property.branch.denominator"));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
+                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.linear")
+                        .add(utils.getValueTooltip(utils, base).key("ali.property.value.base"))
+                        .add(utils.getValueTooltip(utils, perLevelAboveFirst).key("ali.property.value.per_level"));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.LevelsSquared(float added) -> {
+                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.level_squared")
+                        .add(utils.getValueTooltip(utils, added).key("ali.property.value.added"));
+                tooltip.add(t);
+            }
+            case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
+                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.lookup")
+                        .add(utils.getValueTooltip(utils, values.toString()).key("ali.property.value.values"))
+                        .add(utils.getValueTooltip(utils, fallback).key("ali.property.branch.fallback"));
+                tooltip.add(t);
+            }
+            default -> {
+            }
+        }
+
+        return tooltip;
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getLocationWrapperTooltip(IServerUtils utils, EntityPredicate.LocationWrapper locationWrapper) {
+        if (locationWrapper.located().isPresent() || locationWrapper.affectsMovement().isPresent() || locationWrapper.steppingOn().isPresent()) {
+            return BranchTooltipNode.branch()
+                    .add(utils.getValueTooltip(utils, locationWrapper.located()).key("ali.property.branch.located"))
+                    .add(utils.getValueTooltip(utils, locationWrapper.steppingOn()).key("ali.property.branch.stepping_on_location"))
+                    .add(utils.getValueTooltip(utils, locationWrapper.affectsMovement()).key("ali.property.branch.affects_movement"));
+        }
+
+        return EmptyTooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getMovementPredicateTooltip(IServerUtils utils, MovementPredicate predicate) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, predicate.x()).key("ali.property.value.x"))
+                .add(utils.getValueTooltip(utils, predicate.y()).key("ali.property.value.y"))
+                .add(utils.getValueTooltip(utils, predicate.z()).key("ali.property.value.z"))
+                .add(utils.getValueTooltip(utils, predicate.speed()).key("ali.property.value.speed"))
+                .add(utils.getValueTooltip(utils, predicate.horizontalSpeed()).key("ali.property.value.horizontal_speed"))
+                .add(utils.getValueTooltip(utils, predicate.verticalSpeed()).key("ali.property.value.vertical_speed"))
+                .add(utils.getValueTooltip(utils, predicate.fallDistance()).key("ali.property.value.fall_distance"));
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getSlotPredicateTooltip(IServerUtils utils, SlotsPredicate predicate) {
+        return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
+    }
+
+    @NotNull
+    public static <T> IKeyTooltipNode getEitherHolderTooltip(IServerUtils utils, EitherHolder<T> holder) {
+        return holder.asEither().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
     }
 }

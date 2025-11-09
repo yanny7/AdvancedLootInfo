@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "error");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "error");
 
     private final String value;
 

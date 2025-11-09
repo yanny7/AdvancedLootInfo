@@ -291,7 +291,7 @@ public class GenericTooltipTest {
                 "    -> Team: red",
                 "  -> Team: orange",
                 "  -> Slots:",
-                "    -> [1, 2]",
+                "    -> test: [1, 2]",
                 "      -> Predicate:",
                 "        -> Items:",
                 "          -> minecraft:granite"
@@ -611,7 +611,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testGameTypeTooltip() {
-        assertTooltip(GenericTooltipUtils.getGameTypePredicateTooltip(UTILS, "ali.property.branch.game_types", GameTypePredicate.of(GameType.SPECTATOR)), List.of(
+        assertTooltip(ValueTooltipUtils.getGameTypePredicateTooltip(UTILS, GameTypePredicate.of(GameType.SPECTATOR)).key("ali.property.branch.game_types"), List.of(
                 "Game Types:",
                 "  -> SPECTATOR"
         ));
@@ -1023,11 +1023,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testLevelBasedValueTooltip() {
-        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, "ali.property.branch.enchanted_chance", LevelBasedValue.constant(2.5F)), List.of(
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, LevelBasedValue.constant(2.5F)).key("ali.property.branch.enchanted_chance"), List.of(
                 "Enchanted Chance:",
                 "  -> Constant: 2.5"
         ));
-        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, "ali.property.branch.enchanted_chance", new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)), List.of(
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Clamped(LevelBasedValue.constant(2.5F), 0.5F, 5F)).key("ali.property.branch.enchanted_chance"), List.of(
                 "Enchanted Chance:",
                 "  -> Clamped:",
                 "    -> Value:",
@@ -1035,7 +1035,7 @@ public class GenericTooltipTest {
                 "    -> Min: 0.5",
                 "    -> Max: 5.0"
         ));
-        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, "ali.property.branch.enchanted_chance", new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))), List.of(
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Fraction(LevelBasedValue.constant(2), LevelBasedValue.constant(3))).key("ali.property.branch.enchanted_chance"), List.of(
                 "Enchanted Chance:",
                 "  -> Fraction:",
                 "    -> Numerator:",
@@ -1043,18 +1043,18 @@ public class GenericTooltipTest {
                 "    -> Denominator:",
                 "      -> Constant: 3.0"
         ));
-        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, "ali.property.branch.enchanted_chance", new LevelBasedValue.Linear(0.5F, 5F)), List.of(
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Linear(0.5F, 5F)).key("ali.property.branch.enchanted_chance"), List.of(
                 "Enchanted Chance:",
                 "  -> Linear:",
                 "    -> Base: 0.5",
                 "    -> Per Level: 5.0"
         ));
-        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, "ali.property.branch.enchanted_chance", new LevelBasedValue.LevelsSquared(0.5F)), List.of(
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.LevelsSquared(0.5F)).key("ali.property.branch.enchanted_chance"), List.of(
                 "Enchanted Chance:",
                 "  -> Squared Level:",
                 "    -> Added: 0.5"
         ));
-        assertTooltip(GenericTooltipUtils.getLevelBasedValueTooltip(UTILS, "ali.property.branch.enchanted_chance", new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))), List.of(
+        assertTooltip(ValueTooltipUtils.getLevelBasedValueTooltip(UTILS, new LevelBasedValue.Lookup(List.of(0.5F, 1.5F, 2.5F), LevelBasedValue.constant(3.3F))).key("ali.property.branch.enchanted_chance"), List.of(
                 "Enchanted Chance:",
                 "  -> Lookup:",
                 "    -> Values: [0.5, 1.5, 2.5]",
@@ -1065,7 +1065,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testMovementPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getMovementPredicateTooltip(UTILS, "ali.property.branch.movement", new MovementPredicate(
+        assertTooltip(ValueTooltipUtils.getMovementPredicateTooltip(UTILS, new MovementPredicate(
                 MinMaxBounds.Doubles.atMost(3),
                 MinMaxBounds.Doubles.between(1, 2),
                 MinMaxBounds.Doubles.atLeast(3),
@@ -1073,7 +1073,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.atLeast(1.5F),
                 MinMaxBounds.Doubles.atLeast(0.5F),
                 MinMaxBounds.Doubles.atLeast(10)
-        )), List.of(
+        )).key("ali.property.branch.movement"), List.of(
                 "Movement:",
                 "  -> X: ≤3.0",
                 "  -> Y: 1.0-2.0",
@@ -1092,13 +1092,13 @@ public class GenericTooltipTest {
         map.put(SlotRange.of("test", IntList.of(1, 2, 3)), ItemPredicate.Builder.item().of(Items.ANDESITE).build());
         map.put(SlotRange.of("help", IntList.of(2, 1, 0)), ItemPredicate.Builder.item().of(Items.DIORITE, Items.GRANITE).build());
 
-        assertTooltip(GenericTooltipUtils.getSlotPredicateTooltip(UTILS, "ali.property.branch.slots", new SlotsPredicate(map)), List.of(
+        assertTooltip(ValueTooltipUtils.getSlotPredicateTooltip(UTILS, new SlotsPredicate(map)).key("ali.property.branch.slots"), List.of(
                 "Slots:",
-                "  -> [1, 2, 3]",
+                "  -> test: [1, 2, 3]",
                 "    -> Predicate:",
                 "      -> Items:",
                 "        -> minecraft:andesite",
-                "  -> [2, 1, 0]",
+                "  -> help: [2, 1, 0]",
                 "    -> Predicate:",
                 "      -> Items:",
                 "        -> minecraft:diorite",

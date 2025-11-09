@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class LiteralTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "literal");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "literal");
     private static final LoadingCache<String, LiteralTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from(LiteralTooltipNode::new));
 

@@ -152,6 +152,6 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testJukeboxSongTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getJukeboxSongTooltip(UTILS, "ali.property.value.song", LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.CAT).value()), List.of("Song: minecraft:cat"));
+        assertTooltip(RegistriesTooltipUtils.getJukeboxSongTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.CAT).value()).key("ali.property.value.song"), List.of("Song: minecraft:cat"));
     }
 }

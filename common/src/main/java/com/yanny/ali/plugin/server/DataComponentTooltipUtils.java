@@ -218,12 +218,9 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayable value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getEitherHolderTooltip(utils, "ali.property.value.song", value.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.song()).key("ali.property.value.song"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip()).key("ali.property.value.show_in_tooltip"));
     }
 
     @Unmodifiable

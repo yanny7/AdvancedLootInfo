@@ -18,12 +18,12 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static ITooltipNode getItemEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.Enchantments predicate) {
-        return utils.getValueTooltip(utils, predicate.enchantments).key("ali.type.item_sub_predicate.item_enchantments");
+        return GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.enchantments", predicate.enchantments).key("ali.type.item_sub_predicate.item_enchantments");
     }
 
     @NotNull
     public static ITooltipNode getItemStoredEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
-        return utils.getValueTooltip(utils, predicate.enchantments).key("ali.type.item_sub_predicate.item_stored_enchantments");
+        return GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.enchantments", predicate.enchantments).key("ali.type.item_sub_predicate.item_stored_enchantments");
     }
 
     @NotNull

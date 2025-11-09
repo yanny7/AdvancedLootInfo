@@ -42,11 +42,8 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.enchantment_active_check"));
-
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.active", cond.active()));
-
-        return tooltip;
+        return BranchTooltipNode.branch("ali.type.condition.enchantment_active_check")
+                .add(utils.getValueTooltip(utils, cond.active()).key("ali.property.value.active"));
     }
 
     @NotNull

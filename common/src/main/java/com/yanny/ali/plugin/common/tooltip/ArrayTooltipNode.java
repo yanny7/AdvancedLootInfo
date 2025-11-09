@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayTooltipNode extends ListTooltipNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "array");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "array");
 
     private ArrayTooltipNode(List<ITooltipNode> children) {
         super(children);
