@@ -26,14 +26,21 @@ public class ArrayTooltipNode extends ListTooltipNode {
     void encodeNode(FriendlyByteBuf buf) {
     }
 
-    @NotNull
-    public static ArrayTooltipNode array() {
-        return new ArrayTooltipNode(new ArrayList<>());
-    }
-
     @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    @Override
+    public String toString() {
+        return "ArrayTooltipNode{" +
+                "children=" + getChildren() +
+                '}';
+    }
+
+    @NotNull
+    public static ArrayTooltipNode array() {
+        return new ArrayTooltipNode(new ArrayList<>());
     }
 
     @NotNull

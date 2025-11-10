@@ -41,6 +41,11 @@ public class EmptyTooltipNode implements ITooltipNode, IKeyTooltipNode {
         throw new IllegalStateException("Trying to add children to empty node!");
     }
 
+    @Override
+    public String toString() {
+        return "EmptyTooltipNode";
+    }
+
     public static EmptyTooltipNode decode(IClientUtils ignoredUtils, FriendlyByteBuf ignoredBuf) {
         return EMPTY;
     }

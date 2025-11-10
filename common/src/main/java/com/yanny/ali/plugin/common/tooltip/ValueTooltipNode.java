@@ -1,5 +1,8 @@
 package com.yanny.ali.plugin.common.tooltip;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
@@ -13,11 +16,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import static com.yanny.ali.api.ITooltipNode.pad;
 
 public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "value");
+    private static final LoadingCache<CacheKey, ValueTooltipNode> CACHE = CacheBuilder.newBuilder()
+            .build(CacheLoader.from(cacheKey -> cacheKey != null ? new ValueTooltipNode(cacheKey) : null));
 
     private final List<String> values;
     private final boolean isKeyValue;
@@ -38,11 +45,11 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
         }
     }
 
-    public ValueTooltipNode(List<ITooltipNode> children, @Nullable String key, List<String> values, boolean isKeyValue) {
-        super(children);
-        this.key = key;
-        this.values = values;
-        this.isKeyValue = isKeyValue;
+    private ValueTooltipNode(CacheKey cacheKey) {
+        super(cacheKey.children);
+        key = cacheKey.key;
+        values = cacheKey.values;
+        isKeyValue = cacheKey.isKeyValue;
     }
 
     @Override
@@ -95,8 +102,31 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ValueTooltipNode that = (ValueTooltipNode) o;
+        return isKeyValue == that.isKeyValue && Objects.equals(values, that.values) && Objects.equals(key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), values, isKeyValue, key);
+    }
+
+    @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    @Override
+    public String toString() {
+        return "ValueTooltipNode{" +
+                "values=" + values +
+                ", isKeyValue=" + isKeyValue +
+                ", key='" + key + '\'' +
+                ", children=" + getChildren() +
+                '}';
     }
 
     @NotNull
@@ -140,7 +170,26 @@ public class ValueTooltipNode extends ListTooltipNode implements IKeyTooltipNode
 
         boolean isKeyValue = buf.readBoolean();
         String key = buf.readNullable(FriendlyByteBuf::readUtf);
+        CacheKey cacheKey = new CacheKey(children, key, values, isKeyValue);
 
-        return new ValueTooltipNode(children, key, values, isKeyValue);
+        try {
+            return CACHE.get(cacheKey);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private record CacheKey(List<ITooltipNode> children, @Nullable String key, List<String> values, boolean isKeyValue) {
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            CacheKey cacheKey = (CacheKey) o;
+            return isKeyValue == cacheKey.isKeyValue && Objects.equals(key, cacheKey.key) && Objects.equals(values, cacheKey.values) && Objects.equals(children, cacheKey.children);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(children, key, values, isKeyValue);
+        }
     }
 }

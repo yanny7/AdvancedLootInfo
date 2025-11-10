@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "error");
@@ -46,6 +47,25 @@ public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
     @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ErrorTooltipNode that = (ErrorTooltipNode) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorTooltipNode{" +
+                "value='" + value + '\'' +
+                '}';
     }
 
     @NotNull

@@ -1,5 +1,8 @@
 package com.yanny.ali.plugin.common.tooltip;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
@@ -12,32 +15,30 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import static com.yanny.ali.api.ITooltipNode.pad;
 
 public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "component");
+    private static final LoadingCache<CacheKey, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
+            .build(CacheLoader.from(cacheKey -> cacheKey != null ? new ComponentTooltipNode(cacheKey) : null));
 
     private final List<Component> values;
     private String key = null;
 
-    private ComponentTooltipNode(Component... values) {
+    private ComponentTooltipNode(List<Component> values) {
         super(new ArrayList<>());
-
-        if (values.length == 1) {
-            this.values = Collections.singletonList(values[0]);
-        } else {
-            this.values = Arrays.asList(values);
-        }
+        this.values = values;
     }
 
-    public ComponentTooltipNode(List<ITooltipNode> children, @Nullable String key, List<Component> values) {
-        super(children);
-        this.key = key;
-        this.values = values;
+    private ComponentTooltipNode(CacheKey cacheKey) {
+        super(cacheKey.children);
+        key = cacheKey.key;
+        values = cacheKey.values;
     }
 
     @Override
@@ -86,9 +87,31 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
         return ID;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ComponentTooltipNode that = (ComponentTooltipNode) o;
+        return Objects.equals(values, that.values) && Objects.equals(key, that.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), values, key);
+    }
+
+    @Override
+    public String toString() {
+        return "ComponentTooltipNode{" +
+                "values=" + values +
+                ", key='" + key + '\'' +
+                ", children=" + getChildren() +
+                '}';
+    }
+
     @NotNull
-    public static ComponentTooltipNode value(Component... values) {
-        return new ComponentTooltipNode(values);
+    public static ComponentTooltipNode value(Component value) {
+        return new ComponentTooltipNode(Collections.singletonList(value));
     }
 
     @NotNull
@@ -108,7 +131,13 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
         }
 
         String key = buf.readNullable(FriendlyByteBuf::readUtf);
-        return new ComponentTooltipNode(children, key, values);
+        CacheKey cacheKey = new CacheKey(children, key, values);
+
+        try {
+            return CACHE.get(cacheKey);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static Component transform(Component component) {
@@ -117,5 +146,19 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
         }
 
         return component;
+    }
+
+    private record CacheKey(List<ITooltipNode> children, @Nullable String key, List<Component> values) {
+        @Override
+        public boolean equals(Object o) {
+            if (o == null || getClass() != o.getClass()) return false;
+            CacheKey cacheKey = (CacheKey) o;
+            return Objects.equals(key, cacheKey.key) && Objects.equals(values, cacheKey.values) && Objects.equals(children, cacheKey.children);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(children, key, values);
+        }
     }
 }

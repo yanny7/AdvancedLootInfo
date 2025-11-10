@@ -68,6 +68,18 @@ public abstract class ListTooltipNode implements ITooltipNode {
         encodeNode(buf);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ListTooltipNode that = (ListTooltipNode) o;
+        return Objects.equals(children, that.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(children);
+    }
+
     public static List<ITooltipNode> decodeChildren(IClientUtils utils, FriendlyByteBuf buf) {
         int count = buf.readInt();
 
