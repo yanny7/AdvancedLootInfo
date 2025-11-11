@@ -81,15 +81,15 @@ public abstract class AbstractServer {
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
-        lootTables = removeEmptyLootTable(lootTables, lootTableItemStacks);
+        lootNodes = removeEmptyLootTable(lootNodes, lootTableItemStacks);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
 
-        sendLootData(lootTables, lootTableItemStacks, lootNodes);
+        sendLootData(lootTableItemStacks, lootNodes);
         sendTradeData(tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
 
         serverRegistry.clearLootTables(); // not needed anymore
         serverRegistry.printRuntimeInfo();
-        LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
+        LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootNodes.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
     }
 
     public final void syncLootTables(Player player) {
@@ -134,11 +134,11 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, LootTable> removeEmptyLootTable(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<ItemStack>> items) {
-        Map<ResourceLocation, LootTable> result = new HashMap<>();
+    private static Map<ResourceLocation, IDataNode> removeEmptyLootTable(Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, List<ItemStack>> items) {
+        Map<ResourceLocation, IDataNode> result = new HashMap<>();
         int emptyLootTables = 0;
 
-        for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
+        for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
             if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
                 result.put(entry.getKey(), entry.getValue());
             } else {
@@ -171,22 +171,23 @@ public abstract class AbstractServer {
                 LootTable lootTable = lootTables.remove(location);
 
                 if (config.blockCategories.stream().filter((f) -> f.validate(block)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                    List<Item> items = lootTableItems.get(location);
+                    List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
+                    List<ILootModifier<?>> lootModifiers = Stream.concat(
+                            blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
+                            lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                    ).toList();
 
-                    if (lootTable != null && items != null) {
-                        List<ILootModifier<?>> lootModifiers = Stream.concat(
-                                blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
-                                lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                        ).toList();
-
-                        try {
+                    try {
+                        if (lootTable != null) {
                             lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-                        } catch (Throwable e) {
-                            e.printStackTrace();
-                            LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
+                        } else if (!lootModifiers.isEmpty()) {
+                            lootNodes.put(location, serverRegistry.parseTable(lootModifiers));
+                        } else {
+                            LOGGER.debug("Missing block loot table for {}", block);
                         }
-                    } else {
-                        LOGGER.debug("Missing block loot table for {}", block);
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                        LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
                     }
                 } else {
                     lootTables.remove(location);
@@ -215,22 +216,23 @@ public abstract class AbstractServer {
                         LootTable lootTable = lootTables.remove(location);
 
                         if (config.entityCategories.stream().filter((f) -> f.validate(entityType)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                            List<Item> items = lootTableItems.get(location);
+                            List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
+                            List<ILootModifier<?>> lootModifiers = Stream.concat(
+                                    entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
+                                    lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                            ).toList();
 
-                            if (lootTable != null && items != null) {
-                                List<ILootModifier<?>> lootModifiers = Stream.concat(
-                                        entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
-                                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                                ).toList();
-
-                                try {
+                            try {
+                                if (lootTable != null) {
                                     lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
-                                } catch (Throwable e) {
-                                    e.printStackTrace();
-                                    LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
+                                } else if (!lootModifiers.isEmpty()) {
+                                    lootNodes.put(location, serverRegistry.parseTable(lootModifiers));
+                                } else {
+                                    LOGGER.debug("Missing entity loot table for {}", entity);
                                 }
-                            } else {
-                                LOGGER.debug("Missing entity loot table for {}", entity);
+                            } catch (Throwable e) {
+                                e.printStackTrace();
+                                LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
                             }
                         }
                     }
@@ -333,8 +335,8 @@ public abstract class AbstractServer {
         return itemStacks;
     }
 
-    private void sendLootData(Map<ResourceLocation, LootTable> lootTables, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        lootTables.forEach((location, lootTable) -> lootTableMessages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNodes.get(location))));
+    private void sendLootData(Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
+        lootNodes.forEach((location, lootNode) -> lootTableMessages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNode)));
     }
 
     private void sendTradeData(Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {

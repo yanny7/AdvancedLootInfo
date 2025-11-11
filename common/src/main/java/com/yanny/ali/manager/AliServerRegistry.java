@@ -451,6 +451,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return new LootTableNode(modifiers, this, lootTable);
     }
 
+    public IDataNode parseTable(List<ILootModifier<?>> modifiers) {
+        return new LootTableNode(modifiers, this);
+    }
+
     public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
         return new TradeNode(this, itemListingMap);
     }

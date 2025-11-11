@@ -43,6 +43,14 @@ public class LootTableNode extends ListNode {
         }
     }
 
+    public LootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils) {
+        tooltip = EntryTooltipUtils.getLootTableTooltip();
+
+        for (ILootModifier<?> modifier : modifiers) {
+            NodeUtils.processLootModifier(utils, modifier, this);
+        }
+    }
+
     public LootTableNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = ITooltipNode.decodeNode(utils, buf);
