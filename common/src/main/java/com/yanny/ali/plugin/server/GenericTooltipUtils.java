@@ -82,7 +82,7 @@ public class GenericTooltipUtils {
                     .add(getConditionListTooltip(utils, conditions));
         }
 
-        return EmptyTooltipNode.empty().build();
+        return EmptyTooltipNode.empty().build("");
     }
 
     @NotNull
@@ -113,7 +113,7 @@ public class GenericTooltipUtils {
                     .add(getFunctionListTooltip(utils, functions));
         }
 
-        return EmptyTooltipNode.empty().build();
+        return EmptyTooltipNode.empty().build("");
     }
 
     @NotNull
@@ -140,7 +140,7 @@ public class GenericTooltipUtils {
             }
         }
 
-        return EmptyTooltipNode.empty().build();
+        return EmptyTooltipNode.empty().build("");
     }
 
     @NotNull

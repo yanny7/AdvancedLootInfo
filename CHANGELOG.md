@@ -2,6 +2,7 @@
 
 - Registrable value type
 - Decreased memory consumption
+- Fixed not correctly displayed item count for LootJS loot table
 
 ## [1.4.0]
 
