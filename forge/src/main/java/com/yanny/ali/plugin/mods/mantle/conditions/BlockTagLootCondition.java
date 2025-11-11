@@ -26,8 +26,9 @@ public class BlockTagLootCondition extends BaseAccessor<LootItemCondition> imple
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.condition.block_tag")
-                .add(utils.getValueTooltip(utils, tag).key("ali.property.value.tag"))
-                .add(utils.getValueTooltip(utils, properties).key("ali.property.branch.properties"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, tag).build("ali.property.value.tag"))
+                .add(utils.getValueTooltip(utils, properties).build("ali.property.branch.properties"))
+                .build("ali.type.condition.block_tag");
     }
 }

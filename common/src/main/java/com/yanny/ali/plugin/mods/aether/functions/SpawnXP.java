@@ -20,7 +20,8 @@ public class SpawnXP extends ConditionalFunction implements IFunctionTooltip {
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.spawn_xp")
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                .build("ali.type.function.spawn_xp");
     }
 }

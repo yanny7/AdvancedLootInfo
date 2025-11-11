@@ -20,7 +20,8 @@ public class CopySkilletFunction extends ConditionalFunction implements IFunctio
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.copy_skillet")
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                .build("ali.type.function.copy_skillet");
     }
 }

@@ -30,10 +30,11 @@ public class HoneyCompassLocateStructure extends ConditionalFunction implements 
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.honey_compass_locate_structure")
-                .add(utils.getValueTooltip(utils, destination).key("ali.property.value.destination"))
-                .add(utils.getValueTooltip(utils, searchRadius).key("ali.property.value.search_radius"))
-                .add(utils.getValueTooltip(utils, skipKnownStructures).key("ali.property.value.skip_known_structures"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, destination).build("ali.property.value.destination"))
+                .add(utils.getValueTooltip(utils, searchRadius).build("ali.property.value.search_radius"))
+                .add(utils.getValueTooltip(utils, skipKnownStructures).build("ali.property.value.skip_known_structures"))
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                .build("ali.type.function.honey_compass_locate_structure");
     }
 }

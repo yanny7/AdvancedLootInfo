@@ -5,56 +5,30 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import static com.yanny.ali.api.ITooltipNode.pad;
 
-public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltipNode {
+public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "component");
     private static final LoadingCache<CacheKey, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from(cacheKey -> cacheKey != null ? new ComponentTooltipNode(cacheKey) : null));
 
     private final List<Component> values;
-    private String key = null;
-
-    private ComponentTooltipNode(List<Component> values) {
-        super(new ArrayList<>());
-        this.values = values;
-    }
+    private final String key;
 
     private ComponentTooltipNode(CacheKey cacheKey) {
         super(cacheKey.children);
         key = cacheKey.key;
         values = cacheKey.values;
-    }
-
-    @Override
-    public ComponentTooltipNode key(String key) {
-        if (this.key == null) {
-            this.key = key;
-            return this;
-        }
-
-        throw new IllegalStateException("Double key write!");
-    }
-
-    @Override
-    public IKeyTooltipNode add(ITooltipNode node) {
-        super.addNode(node);
-        return this;
     }
 
     @Override
@@ -65,7 +39,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
             buf.writeComponent(value);
         }
 
-        buf.writeNullable(key, FriendlyByteBuf::writeUtf);
+        buf.writeUtf(key);
     }
 
     @Override
@@ -110,8 +84,8 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
     }
 
     @NotNull
-    public static ComponentTooltipNode value(Component value) {
-        return new ComponentTooltipNode(Collections.singletonList(value));
+    public static Builder values(Component... values) {
+        return new Builder(Arrays.asList(values));
     }
 
     @NotNull
@@ -130,7 +104,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
             }
         }
 
-        String key = buf.readNullable(FriendlyByteBuf::readUtf);
+        String key = buf.readUtf();
         CacheKey cacheKey = new CacheKey(children, key, values);
 
         try {
@@ -142,13 +116,31 @@ public class ComponentTooltipNode extends ListTooltipNode implements IKeyTooltip
 
     private static Component transform(Component component) {
         if (component instanceof MutableComponent mutableComponent) {
-            return mutableComponent.withStyle(ITooltipNode.PARAM_STYLE);
+            return mutableComponent.copy().withStyle(ITooltipNode.PARAM_STYLE);
         }
 
         return component;
     }
 
-    private record CacheKey(List<ITooltipNode> children, @Nullable String key, List<Component> values) {
+    public static class Builder extends ListTooltipNode.Builder {
+        private final List<Component> values;
+
+        public Builder(List<Component> values) {
+            this.values = values;
+        }
+
+        public ComponentTooltipNode build(String key) {
+            CacheKey cacheKey = new CacheKey(children, key, values);
+
+            try {
+                return CACHE.get(cacheKey);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private record CacheKey(List<ITooltipNode> children, String key, List<Component> values) {
         @Override
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) return false;

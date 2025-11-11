@@ -24,8 +24,9 @@ public class PropertyCountLootFunction extends ConditionalFunction implements IF
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.property_count")
-                .add(utils.getValueTooltip(utils, propertyName).key("ali.property.value.name"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, propertyName).build("ali.property.value.name"))
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                .build("ali.type.function.property_count");
     }
 }

@@ -278,7 +278,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 return GenericTooltipUtils.getMissingFunction(utils, function);
             } catch (Throwable e) {
                 LOGGER.warn("Function type {} was not registered", function.getClass().getCanonicalName());
-                return ValueTooltipUtils.getStringTooltip(utils, function.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
+                return ValueTooltipUtils.getStringTooltip(utils, function.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
             }
         }
     }
@@ -297,7 +297,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 return GenericTooltipUtils.getMissingCondition(utils, condition);
             } catch (Throwable e) {
                 LOGGER.warn("Condition type for {} was not registered", condition.getClass().getCanonicalName());
-                return ValueTooltipUtils.getStringTooltip(utils, condition.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
+                return ValueTooltipUtils.getStringTooltip(utils, condition.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
             }
         }
     }
@@ -311,14 +311,14 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return ingredientTooltipGetter.apply(utils, ingredient);
         } else {
             missingIngredientTooltips.add(ingredient.getClass());
-            return ValueTooltipUtils.getStringTooltip(utils, ingredient.getClass().getSimpleName()).key("ali.util.advanced_loot_info.missing");
+            return ErrorTooltipNode.error("[" + ingredient.getClass().getName() + "]").build();
         }
     }
 
     @Override
     public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
         if (value == null) {
-            return EmptyTooltipNode.EMPTY;
+            return EmptyTooltipNode.empty();
         }
 
         BiFunction<IServerUtils, Object, IKeyTooltipNode> valueTooltipGetter = valueTooltipMap.get(value.getClass());

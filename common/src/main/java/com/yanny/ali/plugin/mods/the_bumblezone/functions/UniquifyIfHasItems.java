@@ -20,7 +20,8 @@ public class UniquifyIfHasItems extends ConditionalFunction implements IFunction
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.uniquify_if_has_items")
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                .build("ali.type.function.uniquify_if_has_items");
     }
 }

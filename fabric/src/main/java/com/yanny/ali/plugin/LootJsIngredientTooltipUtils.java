@@ -26,23 +26,23 @@ public class LootJsIngredientTooltipUtils {
         if (i instanceof AnyIngredient anyIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) anyIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.property.branch.any");
+            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
             for (Ingredient i2 : ingredients) {
                 tooltip.add(utils.getIngredientTooltip(utils, i2));
             }
 
-            return tooltip;
+            return tooltip.build("ali.property.branch.any");
         } else if (i instanceof AllIngredient allIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) allIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.property.branch.all");
+            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
             for (Ingredient i2 : ingredients) {
                 tooltip.add(utils.getIngredientTooltip(utils, i2));
             }
 
-            return tooltip;
+            return tooltip.build("ali.property.branch.all");
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
             return EmptyTooltipNode.EMPTY;

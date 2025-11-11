@@ -27,9 +27,10 @@ public class WhirlwindSpawnEntity extends ConditionalFunction implements IFuncti
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.whirlwind_spawn_entity")
-                .add(utils.getValueTooltip(utils, entityType).key("ali.property.value.entity_type"))
-                .add(utils.getValueTooltip(utils, count).key("ali.property.value.count"))
-                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, entityType).build("ali.property.value.entity_type"))
+                .add(utils.getValueTooltip(utils, count).build("ali.property.value.count"))
+                .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                .build("ali.type.function.whirlwind_spawn_entity");
     }
 }

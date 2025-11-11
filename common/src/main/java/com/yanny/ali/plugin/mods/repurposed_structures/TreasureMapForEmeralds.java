@@ -54,13 +54,13 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
         ItemStack map = Items.MAP.getDefaultInstance();
 
         if (destinationTag != null) {
-            tooltip.add(utils.getValueTooltip(utils, destinationTag).key("ali.property.value.destination"));
+            tooltip.add(utils.getValueTooltip(utils, destinationTag).build("ali.property.value.destination"));
         } else {
-            tooltip.add(utils.getValueTooltip(utils, destination).key("ali.property.value.destination"));
+            tooltip.add(utils.getValueTooltip(utils, destination).build("ali.property.value.destination"));
         }
 
-        tooltip.add(utils.getValueTooltip(utils, destinationType).key("ali.property.value.map_decoration"));
-        tooltip.add(utils.getValueTooltip(utils, spawnRegionSearchRadius).key("ali.property.value.search_radius"));
+        tooltip.add(utils.getValueTooltip(utils, destinationType).build("ali.property.value.map_decoration"));
+        tooltip.add(utils.getValueTooltip(utils, spawnRegionSearchRadius).build("ali.property.value.search_radius"));
         map.setHoverName(Component.translatable(displayName));
 
         return new ItemsToItemsNode(

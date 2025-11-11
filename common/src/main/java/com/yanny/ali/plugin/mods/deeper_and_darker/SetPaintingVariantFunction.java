@@ -29,11 +29,11 @@ public class SetPaintingVariantFunction extends ConditionalFunction implements I
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.type.function.set_painting_variant");
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
-        validPaintings.ifPresent((tagKey) -> tooltip.add(utils.getValueTooltip(utils, tagKey).key("ali.property.value.tag")));
-        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)));
+        validPaintings.ifPresent((tagKey) -> tooltip.add(utils.getValueTooltip(utils, tagKey).build("ali.property.value.tag")));
+        tooltip.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"));
 
-        return tooltip;
+        return tooltip.build("ali.type.function.set_painting_variant");
     }
 }
