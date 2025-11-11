@@ -65,13 +65,13 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getConditionListTooltip(IServerUtils utils, List<LootItemCondition> conditions) {
-        ArrayTooltipNode array = ArrayTooltipNode.array();
+        ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
 
         for (LootItemCondition condition : conditions) {
             array.add(utils.getConditionTooltip(utils, condition));
         }
 
-        return array;
+        return array.build();
     }
 
     @NotNull
@@ -79,10 +79,11 @@ public class GenericTooltipUtils {
         if (!conditions.isEmpty()) {
             return ArrayTooltipNode.array()
                     .add(LiteralTooltipNode.translatable("ali.util.advanced_loot_info.delimiter.conditions"))
-                    .add(getConditionListTooltip(utils, conditions));
+                    .add(getConditionListTooltip(utils, conditions))
+                    .build();
         }
 
-        return EmptyTooltipNode.empty().build("");
+        return EmptyTooltipNode.empty().build();
     }
 
     @NotNull
@@ -96,13 +97,13 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getFunctionListTooltip(IServerUtils utils, List<LootItemFunction> functions) {
-        ArrayTooltipNode array = ArrayTooltipNode.array();
+        ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
 
         for (LootItemFunction function : functions) {
             array.add(utils.getFunctionTooltip(utils, function));
         }
 
-        return array;
+        return array.build();
     }
 
     @NotNull
@@ -110,10 +111,11 @@ public class GenericTooltipUtils {
         if (!functions.isEmpty()) {
             return ArrayTooltipNode.array()
                     .add(LiteralTooltipNode.translatable("ali.util.advanced_loot_info.delimiter.functions"))
-                    .add(getFunctionListTooltip(utils, functions));
+                    .add(getFunctionListTooltip(utils, functions))
+                    .build();
         }
 
-        return EmptyTooltipNode.empty().build("");
+        return EmptyTooltipNode.empty().build();
     }
 
     @NotNull
@@ -140,7 +142,7 @@ public class GenericTooltipUtils {
             }
         }
 
-        return EmptyTooltipNode.empty().build("");
+        return EmptyTooltipNode.empty().build();
     }
 
     @NotNull

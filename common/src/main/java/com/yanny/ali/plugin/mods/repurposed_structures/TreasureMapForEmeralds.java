@@ -50,7 +50,7 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
 
     @Override
     public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
-        ArrayTooltipNode tooltip = ArrayTooltipNode.array();
+        ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
         ItemStack map = Items.MAP.getDefaultInstance();
 
         if (destinationTag != null) {
@@ -73,7 +73,7 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
                 EmptyTooltipNode.EMPTY,
                 Either.left(map),
                 new RangeValue(),
-                tooltip,
+                tooltip.build(),
                 maxUses,
                 villagerXp,
                 0.2F,

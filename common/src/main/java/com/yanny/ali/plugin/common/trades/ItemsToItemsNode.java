@@ -65,7 +65,8 @@ public class ItemsToItemsNode extends ListNode {
                 .add(condition)
                 .add(utils.getValueTooltip(utils, maxUses).build("ali.property.value.uses"))
                 .add(utils.getValueTooltip(utils, xp).build("ali.property.value.villager_xp"))
-                .add(utils.getValueTooltip(utils, priceMultiplier).build("ali.property.value.price_multiplier"));
+                .add(utils.getValueTooltip(utils, priceMultiplier).build("ali.property.value.price_multiplier"))
+                .build();
     }
 
     public ItemsToItemsNode(IClientUtils utils, FriendlyByteBuf buf) {

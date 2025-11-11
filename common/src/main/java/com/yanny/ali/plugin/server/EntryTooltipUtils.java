@@ -30,14 +30,16 @@ public class EntryTooltipUtils {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                 .add(getQualityTooltip(entry.quality))
-                .add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)));
+                .add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getLootPoolTooltip(RangeValue rolls, RangeValue bonusRolls) {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.random"))
-                .add(getRolls(rolls, bonusRolls));
+                .add(getRolls(rolls, bonusRolls))
+                .build();
     }
 
     @NotNull
@@ -52,7 +54,8 @@ public class EntryTooltipUtils {
                 .add(getQualityTooltip(entry.quality))
                 .add(getChanceTooltip(getBaseMap(chance * entry.weight / sumWeight * 100)))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
+                .build();
     }
 
     @NotNull
@@ -81,7 +84,8 @@ public class EntryTooltipUtils {
                 .add(getQualityTooltip(entry.quality))
                 .add(getChanceTooltip(chanceMap))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, allConditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, allFunctions));
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, allFunctions))
+                .build();
     }
 
     @NotNull
@@ -107,7 +111,8 @@ public class EntryTooltipUtils {
                 .add(getChanceTooltip(chance))
                 .add(getCountTooltip(count))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
+                .build();
     }
 
     @NotNull

@@ -170,7 +170,7 @@ public class TradeUtils {
                 ArrayTooltipNode.array()
                         .add(utils.getValueTooltip(utils, listing.effect).build("ali.property.value.effect"))
                         .add(utils.getValueTooltip(utils, listing.duration).build("ali.property.value.duration"))
-                ,
+                        .build(),
                 12,
                 listing.xp,
                 listing.priceMultiplier,
@@ -213,7 +213,8 @@ public class TradeUtils {
                 new RangeValue(),
                 ArrayTooltipNode.array()
                         .add(utils.getValueTooltip(utils, listing.destination).build("ali.property.value.destination"))
-                        .add(utils.getValueTooltip(utils, listing.destinationType).build("ali.property.value.map_decoration")),
+                        .add(utils.getValueTooltip(utils, listing.destinationType).build("ali.property.value.map_decoration"))
+                        .build(),
                 listing.maxUses,
                 listing.villagerXp,
                 0.2F,
