@@ -143,7 +143,7 @@ public class FunctionTooltipUtils {
         return BranchTooltipNode.branch()
                 .add(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.modifier", fun.modifiers).build("ali.property.branch.modifiers"))
                 .add(utils.getValueTooltip(utils, fun.replace).build("ali.property.value.replace"))
-                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"));
+                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_attributes");
     }
 
@@ -235,7 +235,7 @@ public class FunctionTooltipUtils {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, fun.tag.getAsString()).build("ali.property.value.tag"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
-                .build("ali.type.function.set_nbt");
+                .build("ali.type.function.set_custom_data");
     }
 
     @NotNull

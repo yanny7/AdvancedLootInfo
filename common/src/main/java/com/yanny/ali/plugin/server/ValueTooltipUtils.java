@@ -451,7 +451,7 @@ public class ValueTooltipUtils {
         if (dataComponentPredicate != DataComponentPredicate.EMPTY) {
             return utils.getValueTooltip(utils, dataComponentPredicate.expectedComponents);
         } else {
-            return EmptyTooltipNode.EMPTY;
+            return EmptyTooltipNode.empty();
         }
     }
 
@@ -468,7 +468,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getPagePredicateTooltip(IServerUtils ignoredUtils, ItemWrittenBookPredicate.PagePredicate predicate) {
-        return ComponentTooltipNode.value(predicate.contents());
+        return ComponentTooltipNode.values(predicate.contents());
     }
 
     @NotNull
@@ -565,16 +565,16 @@ public class ValueTooltipUtils {
             IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
             map.forEach((action) -> {
-                IKeyTooltipNode t = utils.getValueTooltip(utils, action.type()).build("ali.property.value.null");
+                IKeyTooltipNode t = utils.getValueTooltip(utils, action.type());
 
                 t.add(utils.getDataComponentTypeTooltip(utils, action.type(), action.value()));
-                tooltip.add(t);
+                tooltip.add(t.build("ali.property.value.null"));
             });
 
             return tooltip;
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return EmptyTooltipNode.empty();
     }
 
     @NotNull
