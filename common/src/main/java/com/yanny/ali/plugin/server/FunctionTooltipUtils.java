@@ -109,15 +109,14 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getEnchantedCountIncreaseTooltip(IServerUtils utils, EnchantedCountIncreaseFunction fun) {
         IKeyTooltipNode tooltip = BranchTooltipNode.branch(true)
                 .add(utils.getValueTooltip(utils, fun.enchantment).build("ali.property.value.enchantment"))
-                .add(utils.getValueTooltip(utils, fun.value).build("ali.property.value.value"))
-                .build("ali.type.function.enchanted_count_increase");
+                .add(utils.getValueTooltip(utils, fun.value).build("ali.property.value.value"));
 
         if (fun.limit > 0) {
             tooltip.add(utils.getValueTooltip(utils, fun.limit).build("ali.property.value.limit"));
         }
 
         tooltip.add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"));
-        return tooltip.build("ali.type.function.looting_enchant");
+        return tooltip.build("ali.type.function.enchanted_count_increase");
     }
 
     @NotNull

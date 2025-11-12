@@ -2,8 +2,8 @@ package com.yanny.ali.plugin.mods.the_bumblezone.predicates;
 
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
-import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
@@ -45,8 +45,9 @@ public class HoneySlimePredicate extends BaseAccessor<EntitySubPredicate> implem
     }
 
     @Override
-    public IKeyTooltipNode getTooltip(IServerUtils utils) {
-        return  BranchTooltipNode.branch("ali.type.entity_sub_predicate.honey_slime")
-                .add(utils.getValueTooltip(utils, isBaby).key("ali.property.value.is_baby"));
+    public ITooltipNode getTooltip(IServerUtils utils) {
+        return  BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, isBaby).build("ali.property.value.is_baby"))
+                .build("ali.type.entity_sub_predicate.honey_slime");
     }
 }

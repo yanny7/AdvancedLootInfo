@@ -43,8 +43,9 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
-        return BranchTooltipNode.branch("ali.type.condition.enchantment_active_check")
-                .add(utils.getValueTooltip(utils, cond.active()).key("ali.property.value.active"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.active()).build("ali.property.value.active"))
+                .build("ali.type.condition.enchantment_active_check");
     }
 
     @NotNull
@@ -96,7 +97,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static ITooltipNode getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
         return BranchTooltipNode.branch(true)
-                .add(utils.getValueTooltip(utils, cond.chance()).key("ali.property.value.chance"))
+                .add(utils.getValueTooltip(utils, cond.chance()).build("ali.property.value.chance"))
                 .build("ali.type.condition.random_chance");
     }
 
@@ -106,7 +107,7 @@ public class ConditionTooltipUtils {
                 .add(utils.getValueTooltip(utils, cond.unenchantedChance()).build("ali.property.value.unenchanted_chance"))
                 .add(utils.getValueTooltip(utils, cond.enchantedChance()).build("ali.property.branch.enchanted_chance"))
                 .add(utils.getValueTooltip(utils, cond.enchantment()).build("ali.property.value.enchantment"))
-                .build("ali.type.condition.random_chance_with_looting");
+                .build("ali.type.condition.random_chance_with_enchanted_bonus");
     }
 
     @NotNull

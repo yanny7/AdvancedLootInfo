@@ -20,8 +20,9 @@ public class CanItemPerformAbilityCondition extends BaseAccessor<LootItemConditi
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.condition.can_item_perform_ability")
-                .add(utils.getValueTooltip(utils, ability.toString()).key("ali.property.value.value"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, ability.toString()).build("ali.property.value.value"))
+                .build("ali.type.condition.can_item_perform_ability");
     }
 
     @ClassAccessor("vectorwing.farmersdelight.refabricated.ItemAbility")

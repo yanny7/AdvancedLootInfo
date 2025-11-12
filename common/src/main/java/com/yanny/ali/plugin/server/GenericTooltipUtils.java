@@ -352,8 +352,9 @@ public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getSlotRangePredicateEntryTooltip(IServerUtils utils, Map.Entry<SlotRange, ItemPredicate> entry) {
 //        return utils.getValueTooltip(utils, entry.getKey().slots())
-        return ValueTooltipNode.keyValue(entry.getKey().toString(), entry.getKey().slots().toString()).key("ali.property.value.null")
-                .add(utils.getValueTooltip(utils, entry.getValue()).key("ali.property.branch.predicate"));
+        return ValueTooltipNode.keyValue(entry.getKey().toString(), entry.getKey().slots().toString())
+                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.branch.predicate"))
+                .build("ali.property.value.null");
     }
 
     @NotNull

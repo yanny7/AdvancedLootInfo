@@ -25,7 +25,7 @@ public class EntitySubPredicateTooltipUtils {
 
     @NotNull
     public static ITooltipNode getPlayerPredicateTooltip(IServerUtils utils, PlayerPredicate predicate) {
-        return BranchTooltipNode.branch("ali.type.entity_sub_predicate.player")
+        return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, predicate.level()).build("ali.property.value.level"))
                 .add(utils.getValueTooltip(utils, predicate.gameType()).build("ali.property.branch.game_types"))
                 .add(GenericTooltipUtils.getCollectionTooltip(utils, predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip).build("ali.property.branch.stats"))

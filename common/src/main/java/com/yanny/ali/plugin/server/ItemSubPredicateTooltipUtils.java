@@ -93,7 +93,8 @@ public class ItemSubPredicateTooltipUtils {
 
     @NotNull
     public static ITooltipNode getItemJukeboxPlayableTooltip(IServerUtils utils, ItemJukeboxPlayablePredicate predicate) {
-        return BranchTooltipNode.branch("ali.type.item_sub_predicate.item_jukebox_playable")
-                .add(utils.getValueTooltip(utils, predicate.song()).build("ali.property.branch.songs"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, predicate.song()).build("ali.property.branch.songs"))
+                .build("ali.type.item_sub_predicate.item_jukebox_playable");
     }
 }

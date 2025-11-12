@@ -648,33 +648,38 @@ public class ValueTooltipUtils {
             case LevelBasedValue.Constant(float value) ->
                     tooltip.add(utils.getValueTooltip(utils, value).build("ali.property.value.constant"));
             case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
-                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.clamped")
+                ITooltipNode t = BranchTooltipNode.branch()
                         .add(utils.getValueTooltip(utils, value).build("ali.property.branch.value"))
                         .add(utils.getValueTooltip(utils, min).build("ali.property.value.min"))
-                        .add(utils.getValueTooltip(utils, max).build("ali.property.value.max"));
+                        .add(utils.getValueTooltip(utils, max).build("ali.property.value.max"))
+                        .build("ali.property.branch.clamped");
                 tooltip.add(t);
             }
             case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
-                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.fraction")
+                ITooltipNode t = BranchTooltipNode.branch()
                         .add(utils.getValueTooltip(utils, numerator).build("ali.property.branch.numerator"))
-                        .add(utils.getValueTooltip(utils, denominator).build("ali.property.branch.denominator"));
+                        .add(utils.getValueTooltip(utils, denominator).build("ali.property.branch.denominator"))
+                        .build("ali.property.branch.fraction");
                 tooltip.add(t);
             }
             case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
-                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.linear")
+                ITooltipNode t = BranchTooltipNode.branch()
                         .add(utils.getValueTooltip(utils, base).build("ali.property.value.base"))
-                        .add(utils.getValueTooltip(utils, perLevelAboveFirst).build("ali.property.value.per_level"));
+                        .add(utils.getValueTooltip(utils, perLevelAboveFirst).build("ali.property.value.per_level"))
+                        .build("ali.property.branch.linear");
                 tooltip.add(t);
             }
             case LevelBasedValue.LevelsSquared(float added) -> {
-                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.level_squared")
-                        .add(utils.getValueTooltip(utils, added).build("ali.property.value.added"));
+                ITooltipNode t = BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, added).build("ali.property.value.added"))
+                        .build("ali.property.branch.level_squared");
                 tooltip.add(t);
             }
             case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
-                ITooltipNode t = BranchTooltipNode.branch("ali.property.branch.lookup")
+                ITooltipNode t = BranchTooltipNode.branch()
                         .add(utils.getValueTooltip(utils, values.toString()).build("ali.property.value.values"))
-                        .add(utils.getValueTooltip(utils, fallback).build("ali.property.branch.fallback"));
+                        .add(utils.getValueTooltip(utils, fallback).build("ali.property.branch.fallback"))
+                        .build("ali.property.branch.lookup");
                 tooltip.add(t);
             }
             default -> {
@@ -693,7 +698,7 @@ public class ValueTooltipUtils {
                     .add(utils.getValueTooltip(utils, locationWrapper.affectsMovement()).build("ali.property.branch.affects_movement"));
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return EmptyTooltipNode.empty();
     }
 
     @NotNull

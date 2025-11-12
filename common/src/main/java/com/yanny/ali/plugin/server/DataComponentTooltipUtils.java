@@ -229,8 +229,9 @@ public class DataComponentTooltipUtils {
     @NotNull
     public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayable value) {
         return ArrayTooltipNode.array()
-                .add(utils.getValueTooltip(utils, value.song()).key("ali.property.value.song"))
-                .add(utils.getValueTooltip(utils, value.showInTooltip()).key("ali.property.value.show_in_tooltip"));
+                .add(utils.getValueTooltip(utils, value.song()).build("ali.property.value.song"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip()).build("ali.property.value.show_in_tooltip"))
+                .build();
     }
 
     @Unmodifiable

@@ -47,43 +47,43 @@ public class LootJsGenericTooltipUtils {
             return ValueTooltipNode.value("BLOCK_ITEM");
         } else if (predicate instanceof ItemFilterImpl.HasEnchantment(IdFilter filter, MinMaxBounds.Ints levelBounds, DataComponentType<ItemEnchantments> type)) {
             return ValueTooltipNode.value("HAS_ENCHANTMENT")
-                    .add(utils.getValueTooltip(utils, filter).key("ali.property.branch.filter"))
-                    .add(utils.getValueTooltip(utils, levelBounds).key("ali.property.value.levels"))
-                    .add(utils.getValueTooltip(utils, type).key("ali.property.value.component"));
+                    .add(utils.getValueTooltip(utils, filter).build("ali.property.branch.filter"))
+                    .add(utils.getValueTooltip(utils, levelBounds).build("ali.property.value.levels"))
+                    .add(utils.getValueTooltip(utils, type).build("ali.property.value.component"));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlot(EquipmentSlot equipmentSlot)) {
             return ValueTooltipNode.value("EQUIPMENT_SLOT")
-                    .add(utils.getValueTooltip(utils, equipmentSlot).key("ali.property.value.slot"));
+                    .add(utils.getValueTooltip(utils, equipmentSlot).build("ali.property.value.slot"));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlotGroup(EquipmentSlotGroup equipmentSlotGroup)) {
             return ValueTooltipNode.value("EQUIPMENT_SLOT_GROUP")
-                    .add(utils.getValueTooltip(utils, equipmentSlotGroup).key("ali.property.value.slot_group"));
+                    .add(utils.getValueTooltip(utils, equipmentSlotGroup).build("ali.property.value.slot_group"));
         } else if (predicate instanceof ItemFilterImpl.ByItem(ItemStack itemStack, boolean checkComponents)) {
             return ValueTooltipNode.value("ITEM")
-                    .add(utils.getValueTooltip(utils, itemStack).key("ali.property.branch.item"))
-                    .add(utils.getValueTooltip(utils, checkComponents).key("ali.property.value.check_components"));
+                    .add(utils.getValueTooltip(utils, itemStack).build("ali.property.branch.item"))
+                    .add(utils.getValueTooltip(utils, checkComponents).build("ali.property.value.check_components"));
         } else if (predicate instanceof ItemFilterImpl.ByIngredient(Ingredient ingredient)) {
             return ValueTooltipNode.value("INGREDIENT")
                     .add(utils.getIngredientTooltip(utils, ingredient));
         } else if (predicate instanceof ItemFilterImpl.ByTag(TagKey<Item> tag)) {
             return ValueTooltipNode.value("TAG")
-                    .add(utils.getValueTooltip(utils, tag).key("ali.property.value.null"));
+                    .add(utils.getValueTooltip(utils, tag).build("ali.property.value.null"));
         } else if (predicate instanceof ItemFilterImpl.AnyOfToolAction toolAction) {
             return ValueTooltipNode.value("ANY_OF_TOOL_ACTION")
-                    .add(utils.getValueTooltip(utils, toolAction.toolActions()).key("ali.property.branch.abilities"));
+                    .add(utils.getValueTooltip(utils, toolAction.toolActions()).build("ali.property.branch.abilities"));
         } else if (predicate instanceof ItemFilterImpl.AllOfToolAction toolAction) {
             return ValueTooltipNode.value("ALL_OF_TOOL_ACTION")
-                    .add(utils.getValueTooltip(utils, toolAction.toolActions()).key("ali.property.branch.abilities"));
+                    .add(utils.getValueTooltip(utils, toolAction.toolActions()).build("ali.property.branch.abilities"));
         } else if (predicate instanceof ItemFilterImpl.Not(ItemFilter itemFilter)) {
             return ValueTooltipNode.value("NOT")
-                    .add(utils.getValueTooltip(utils, itemFilter).key("ali.property.branch.filter"));
+                    .add(utils.getValueTooltip(utils, itemFilter).build("ali.property.branch.filter"));
         } else if (predicate instanceof ItemFilterImpl.AllOf allOf) {
             return ValueTooltipNode.value("ALL_OF")
-                    .add(getCollectionTooltip(utils, "ali.property.value.filter", Arrays.asList(allOf.itemFilters())).key("ali.property.branch.filters"));
+                    .add(getCollectionTooltip(utils, "ali.property.value.filter", Arrays.asList(allOf.itemFilters())).build("ali.property.branch.filters"));
         } else if (predicate instanceof ItemFilterImpl.AnyOf allOf) {
             return ValueTooltipNode.value("ANY_OF")
-                    .add(getCollectionTooltip(utils, "ali.property.value.filter", Arrays.asList(allOf.itemFilters())).key("ali.property.branch.filters"));
+                    .add(getCollectionTooltip(utils, "ali.property.value.filter", Arrays.asList(allOf.itemFilters())).build("ali.property.branch.filters"));
         } else if (predicate instanceof ItemFilterImpl.Custom custom) {
             return ValueTooltipNode.value("CUSTOM")
-                    .add(utils.getValueTooltip(utils, Optional.ofNullable(custom.description())).key("ali.property.value.description"));
+                    .add(utils.getValueTooltip(utils, Optional.ofNullable(custom.description())).build("ali.property.value.description"));
         }
 
         return ValueTooltipNode.value("UNKNOWN");
@@ -94,10 +94,10 @@ public class LootJsGenericTooltipUtils {
         IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
         switch (filter) {
-            case IdFilter.ByLocation byLocation -> tooltip.add(utils.getValueTooltip(utils, byLocation.location()).key("ali.property.value.null"));
-            case IdFilter.ByPattern byPattern -> tooltip.add(utils.getValueTooltip(utils, byPattern.toString()).key("ali.property.value.pattern"));
-            case IdFilter.ByMod byMod -> tooltip.add(utils.getValueTooltip(utils, byMod.mod()).key("ali.property.value.mod"));
-            case IdFilter.Or or -> tooltip.add(utils.getValueTooltip(utils, or.filters()).key("ali.property.branch.or"));
+            case IdFilter.ByLocation byLocation -> tooltip.add(utils.getValueTooltip(utils, byLocation.location()).build("ali.property.value.null"));
+            case IdFilter.ByPattern byPattern -> tooltip.add(utils.getValueTooltip(utils, byPattern.toString()).build("ali.property.value.pattern"));
+            case IdFilter.ByMod byMod -> tooltip.add(utils.getValueTooltip(utils, byMod.mod()).build("ali.property.value.mod"));
+            case IdFilter.Or or -> tooltip.add(utils.getValueTooltip(utils, or.filters()).build("ali.property.branch.or"));
             default -> throw new IllegalStateException("Unexpected IdFilter type: " + filter);
         }
 
