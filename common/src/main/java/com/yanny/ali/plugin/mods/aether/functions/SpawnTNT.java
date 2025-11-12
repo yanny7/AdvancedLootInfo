@@ -18,7 +18,8 @@ public class SpawnTNT extends ConditionalFunction implements IFunctionTooltip {
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.spawn_tnt")
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.spawn_tnt");
     }
 }

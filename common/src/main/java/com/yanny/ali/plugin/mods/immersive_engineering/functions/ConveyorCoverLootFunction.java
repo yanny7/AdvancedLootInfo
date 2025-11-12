@@ -20,7 +20,8 @@ public class ConveyorCoverLootFunction extends ConditionalFunction implements IF
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.conveyor_cover")
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.conveyor_cover");
     }
 }

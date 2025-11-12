@@ -28,9 +28,10 @@ public class OptionalPropertyCondition extends BaseAccessor<LootItemCondition> i
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
         if (block != null) {
-            return BranchTooltipNode.branch("ali.type.condition.optional_property")
-                    .add(utils.getValueTooltip(utils, block).key("ali.property.value.block"))
-                    .add(utils.getValueTooltip(utils, properties).key("ali.property.branch.properties"));
+            return BranchTooltipNode.branch()
+                    .add(utils.getValueTooltip(utils, block).build("ali.property.value.block"))
+                    .add(utils.getValueTooltip(utils, properties).build("ali.property.branch.properties"))
+                    .build("ali.type.condition.optional_property");
         } else {
             return EmptyTooltipNode.EMPTY;
         }

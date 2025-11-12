@@ -25,8 +25,9 @@ public class RandomArrowFunction extends ConditionalFunction implements IFunctio
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.random_arrow")
-                .add(utils.getValueTooltip(utils, IntRange.range(min, max)).key("ali.property.value.amount"))
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, IntRange.range(min, max)).build("ali.property.value.amount"))
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.random_arrow");
     }
 }

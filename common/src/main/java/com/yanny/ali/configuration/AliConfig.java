@@ -1,6 +1,7 @@
 package com.yanny.ali.configuration;
 
 import com.yanny.ali.Utils;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +17,8 @@ public class AliConfig {
     public List<EntityLootCategory> entityCategories;
     public List<GameplayLootCategory> gameplayCategories;
     public List<TradeLootCategory> tradeCategories;
+
+    public List<ResourceLocation> disabledEntities;
 
     public boolean logMoreStatistics = false;
 
@@ -36,5 +39,7 @@ public class AliConfig {
 
         tradeCategories = new ArrayList<>();
         tradeCategories.add(new TradeLootCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, false, Collections.singletonList(Pattern.compile(".*"))));
+
+        disabledEntities = new ArrayList<>();
     }
 }

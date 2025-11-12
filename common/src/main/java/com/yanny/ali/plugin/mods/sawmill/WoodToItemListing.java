@@ -59,7 +59,7 @@ public class WoodToItemListing extends BaseAccessor<VillagerTrades.ItemListing> 
                         List<WoodType> woodTypes = Utils.WOOD_TYPES.get(type);
 
                         if (woodTypes != null) {
-                            nodes.addAll(getNodes(utils, woodTypes, utils.getValueTooltip(utils, type.toString()).key("ali.property.value.villager_type")));
+                            nodes.addAll(getNodes(utils, woodTypes, utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type")));
                         }
                     }
                 } else {

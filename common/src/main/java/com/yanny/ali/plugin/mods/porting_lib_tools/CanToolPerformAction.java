@@ -19,7 +19,7 @@ public class CanToolPerformAction extends BaseAccessor<LootItemCondition> implem
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return utils.getValueTooltip(utils, action.name).key("ali.type.condition.can_tool_perform_action");
+        return utils.getValueTooltip(utils, action.name).build("ali.type.condition.can_tool_perform_action");
     }
 
     @ClassAccessor("io.github.fabricators_of_create.porting_lib.tool.ToolAction")
