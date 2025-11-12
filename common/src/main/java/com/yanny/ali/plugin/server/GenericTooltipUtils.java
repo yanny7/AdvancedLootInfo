@@ -83,7 +83,7 @@ public class GenericTooltipUtils {
                     .build();
         }
 
-        return EmptyTooltipNode.empty().build();
+        return EmptyTooltipNode.EMPTY;
     }
 
     @NotNull
@@ -115,7 +115,7 @@ public class GenericTooltipUtils {
                     .build();
         }
 
-        return EmptyTooltipNode.empty().build();
+        return EmptyTooltipNode.EMPTY;
     }
 
     @NotNull
@@ -142,7 +142,7 @@ public class GenericTooltipUtils {
             }
         }
 
-        return EmptyTooltipNode.empty().build();
+        return EmptyTooltipNode.EMPTY;
     }
 
     @NotNull
