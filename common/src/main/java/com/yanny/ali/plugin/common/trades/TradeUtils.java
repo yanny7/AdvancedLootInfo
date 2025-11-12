@@ -168,8 +168,9 @@ public class TradeUtils {
                 EmptyTooltipNode.EMPTY,
                 Either.left(stew),
                 new RangeValue(),
-                GenericTooltipUtils.getCollectionTooltip(utils, listing.effects, (u, effect) -> utils.getValueTooltip(utils, effect.effect()).key("ali.property.value.effect")
-                        .add(utils.getValueTooltip(utils, effect.duration()).key("ali.property.value.duration"))).key("ali.type.function.set_stew_effect"),
+                GenericTooltipUtils.getCollectionTooltip(utils, listing.effects, (u, effect) -> utils.getValueTooltip(utils, effect.effect())
+                        .add(utils.getValueTooltip(utils, effect.duration()).build("ali.property.value.duration"))
+                        .build("ali.property.value.effect")).build("ali.type.function.set_stew_effect"),
                 12,
                 listing.xp,
                 listing.priceMultiplier,

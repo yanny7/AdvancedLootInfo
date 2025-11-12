@@ -132,6 +132,13 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
+    public static ITooltipNode getSequenceTooltip(IServerUtils utils, SequenceFunction fun) {
+        return BranchTooltipNode.branch()
+                .add(GenericTooltipUtils.getFunctionListTooltip(utils, fun.functions))
+                .build("ali.type.function.sequence");
+    }
+
+    @NotNull
     public static ITooltipNode getSetAttributesTooltip(IServerUtils utils, SetAttributesFunction fun) {
         IKeyTooltipNode tooltip;
 
@@ -247,8 +254,8 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getSetStewEffectTooltip(IServerUtils utils, SetStewEffectFunction fun) {
         IKeyTooltipNode tooltip;
 
-        if (!fun.effectDurationMap.isEmpty()) {
-            tooltip = getMapTooltip(utils, fun.effectDurationMap, GenericTooltipUtils::getMobEffectDurationEntryTooltip);
+        if (!fun.effects.isEmpty()) {
+            tooltip = utils.getValueTooltip(utils, fun.effects);
         } else {
             tooltip = BranchTooltipNode.branch();
         }

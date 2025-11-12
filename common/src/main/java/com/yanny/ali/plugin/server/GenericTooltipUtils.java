@@ -146,23 +146,27 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
+    public static ITooltipNode getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
         String key = ValueTooltipNode.translate(((TranslatableContents) stat.type().getDisplayName().getContents()).getKey());
         Holder<?> value = stat.value();
-        IKeyTooltipNode tooltip;
+        ITooltipNode tooltip;
 
         if (value.value() instanceof Item item) {
-            tooltip = utils.getValueTooltip(utils, item).key("ali.property.value.item");
-            tooltip.add(ValueTooltipNode.keyValue(key, toString(stat.range())).key("ali.property.value.null"));
+            tooltip = utils.getValueTooltip(utils, item)
+                    .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("ali.property.value.null"))
+                    .build("ali.property.value.item");
         } else if (value.value() instanceof Block block) {
-            tooltip = utils.getValueTooltip(utils, block).key("ali.property.value.block");
-            tooltip.add(ValueTooltipNode.keyValue(key, toString(stat.range())).key("ali.property.value.null"));
+            tooltip = utils.getValueTooltip(utils, block)
+                    .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("ali.property.value.null"))
+                    .build("ali.property.value.block");
         } else if (value.value() instanceof EntityType<?> entityType) {
-            tooltip = utils.getValueTooltip(utils, entityType).key("ali.property.value.entity_type");
-            tooltip.add(ValueTooltipNode.keyValue(key, toString(stat.range())).key("ali.property.value.null"));
+            tooltip = utils.getValueTooltip(utils, entityType)
+                    .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("ali.property.value.null"))
+                    .build("ali.property.value.entity_type");
         } else if (value.value() instanceof ResourceLocation resourceLocation) {
-            tooltip = utils.getValueTooltip(utils, resourceLocation).key("ali.property.value.id");
-            tooltip.add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(resourceLocation)), toString(stat.range())).key("ali.property.value.null"));
+            tooltip = utils.getValueTooltip(utils, resourceLocation)
+                    .add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(resourceLocation)), toString(stat.range())).build("ali.property.value.null"))
+                    .build("ali.property.value.id");
         } else {
             tooltip = EmptyTooltipNode.EMPTY;
         }
@@ -229,7 +233,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getMobEffectPredicateEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, MobEffectsPredicate.MobEffectInstancePredicate> entry) {
+    public static ITooltipNode getMobEffectPredicateEntryTooltip(IServerUtils utils, Map.Entry<Holder<MobEffect>, MobEffectsPredicate.MobEffectInstancePredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
                 .add(utils.getValueTooltip(utils, entry.getValue().amplifier()).build("ali.property.value.amplifier"))
                 .add(utils.getValueTooltip(utils, entry.getValue().duration()).build("ali.property.value.duration"))
@@ -239,7 +243,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Enchantment, NumberProvider> entry) {
+    public static ITooltipNode getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
                 .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.levels"))
                 .build("ali.property.value.null");

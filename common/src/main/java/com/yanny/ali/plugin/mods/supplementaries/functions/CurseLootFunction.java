@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-\
+
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;

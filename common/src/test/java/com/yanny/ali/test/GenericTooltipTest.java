@@ -336,7 +336,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.atLeast(3),
                 MinMaxBounds.Doubles.between(1, 2),
                 MinMaxBounds.Doubles.atMost(4)
-        )).key("ali.property.branch.position"), List.of(
+        )).build("ali.property.branch.position"), List.of(
                 "Position:",
                 "  -> X: ≥3.0",
                 "  -> Y: 1.0-2.0",
@@ -608,7 +608,7 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getEffectEntryTooltip(UTILS, new SetStewEffectFunction.EffectEntry(
                 Holder.direct(MobEffects.LUCK),
                 ConstantValue.exactly(3)
-        )).key("ali.property.value.mob_effect"), List.of(
+        )).build("ali.property.value.mob_effect"), List.of(
                 "Mob Effect: minecraft:luck",
                 "  -> Duration: 3"
         ));
