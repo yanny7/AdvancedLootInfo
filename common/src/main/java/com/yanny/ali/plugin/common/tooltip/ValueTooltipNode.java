@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.common.tooltip;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -22,7 +23,7 @@ import static com.yanny.ali.api.ITooltipNode.pad;
 public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "value");
     private static final LoadingCache<CacheKey, ValueTooltipNode> CACHE = CacheBuilder.newBuilder()
-            .build(CacheLoader.from(cacheKey -> cacheKey != null ? new ValueTooltipNode(cacheKey) : null));
+            .build(CacheLoader.from((data) -> data != null ? new ValueTooltipNode(data) : null));
 
     private final List<String> values;
     private final boolean isKeyValue;
@@ -57,7 +58,11 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         List<Component> components = new ArrayList<>(children.size() + 1);
 
         if (isKeyValue) {
-            components.add(pad(pad, Component.translatable(key, Component.translatable("ali.util.advanced_loot_info.key_value", transform(values.get(0)), transform(values.get(1))).withStyle(PARAM_STYLE)).withStyle(TEXT_STYLE)));
+            Component k = transform(values.get(0));
+            Component value = transform(values.get(1));
+            Component keyValue = Component.translatable("ali.util.advanced_loot_info.key_value", k, value).withStyle(PARAM_STYLE);
+
+            components.add(pad(pad, Component.translatable(key, keyValue).withStyle(TEXT_STYLE)));
         } else {
             Object[] val = values.stream().map(ValueTooltipNode::transform).toArray();
 
@@ -70,8 +75,14 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
 
     @Override
     public boolean equals(Object o) {
-        if (getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+
+        if (!super.equals(o)) {
+            return false;
+        }
+
         ValueTooltipNode that = (ValueTooltipNode) o;
         return isKeyValue == that.isKeyValue && Objects.equals(values, that.values) && Objects.equals(key, that.key);
     }
@@ -89,9 +100,9 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
     @Override
     public String toString() {
         return "ValueTooltipNode{" +
-                "values=" + values +
+                "key='" + key + '\'' +
+                ", values=" + values +
                 ", isKeyValue=" + isKeyValue +
-                ", key='" + key + '\'' +
                 ", children=" + getChildren() +
                 '}';
     }
@@ -174,7 +185,8 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         }
 
         public ValueTooltipNode build(String key) {
-            CacheKey cacheKey = new CacheKey(children, key, values, isKeyValue);
+            String internKey = key.intern();
+            CacheKey cacheKey = new CacheKey(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values), isKeyValue);
 
             try {
                 return CACHE.get(cacheKey);
@@ -187,7 +199,10 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
     private record CacheKey(List<ITooltipNode> children, String key, List<String> values, boolean isKeyValue) {
         @Override
         public boolean equals(Object o) {
-            if (o == null || getClass() != o.getClass()) return false;
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
             CacheKey cacheKey = (CacheKey) o;
             return isKeyValue == cacheKey.isKeyValue && Objects.equals(key, cacheKey.key) && Objects.equals(values, cacheKey.values) && Objects.equals(children, cacheKey.children);
         }

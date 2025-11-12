@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.common.tooltip;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -18,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 public class ArrayTooltipNode extends ListTooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "array");
     private static final LoadingCache<CacheKey, ArrayTooltipNode> CACHE = CacheBuilder.newBuilder()
-            .build(CacheLoader.from(cacheKey -> cacheKey != null ? new ArrayTooltipNode(cacheKey) : null));
+            .build(CacheLoader.from((data) -> data != null ? new ArrayTooltipNode(data) : null));
 
     private ArrayTooltipNode(CacheKey cacheKey) {
         super(cacheKey.children);
@@ -71,7 +72,7 @@ public class ArrayTooltipNode extends ListTooltipNode {
         }
 
         public ArrayTooltipNode build() {
-            CacheKey cacheKey = new CacheKey(children);
+            CacheKey cacheKey = new CacheKey(ImmutableList.copyOf(children));
 
             try {
                 return CACHE.get(cacheKey);
@@ -84,7 +85,10 @@ public class ArrayTooltipNode extends ListTooltipNode {
     private record CacheKey(List<ITooltipNode> children) {
         @Override
         public boolean equals(Object o) {
-            if (o == null || getClass() != o.getClass()) return false;
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
             CacheKey cacheKey = (CacheKey) o;
             return Objects.equals(children, cacheKey.children);
         }

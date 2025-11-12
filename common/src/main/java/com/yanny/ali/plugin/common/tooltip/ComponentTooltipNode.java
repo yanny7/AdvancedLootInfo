@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.common.tooltip;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.collect.ImmutableList;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -20,7 +21,7 @@ import static com.yanny.ali.api.ITooltipNode.pad;
 public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "component");
     private static final LoadingCache<CacheKey, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
-            .build(CacheLoader.from(cacheKey -> cacheKey != null ? new ComponentTooltipNode(cacheKey) : null));
+            .build(CacheLoader.from((data) -> data != null ? new ComponentTooltipNode(data) : null));
 
     private final List<Component> values;
     private final String key;
@@ -50,8 +51,9 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
 
         List<Component> children = super.getComponents(pad + 1, showAdvancedTooltip);
         List<Component> components = new ArrayList<>(children.size() + 1);
+        Object[] values = this.values.stream().map(ComponentTooltipNode::transform).toArray();
 
-        components.add(pad(pad, Component.translatable(key, values.stream().map(ComponentTooltipNode::transform).toArray()).withStyle(TEXT_STYLE))); //TODO store as array?
+        components.add(pad(pad, Component.translatable(key, values).withStyle(TEXT_STYLE)));
         components.addAll(children);
         return components;
     }
@@ -63,8 +65,14 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
 
     @Override
     public boolean equals(Object o) {
-        if (getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (getClass() != o.getClass()) {
+            return false;
+        }
+
+        if (!super.equals(o)) {
+            return false;
+        }
+
         ComponentTooltipNode that = (ComponentTooltipNode) o;
         return Objects.equals(values, that.values) && Objects.equals(key, that.key);
     }
@@ -77,8 +85,8 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
     @Override
     public String toString() {
         return "ComponentTooltipNode{" +
-                "values=" + values +
-                ", key='" + key + '\'' +
+                "key='" + key + '\'' +
+                ", values=" + values +
                 ", children=" + getChildren() +
                 '}';
     }
@@ -130,7 +138,8 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
         }
 
         public ComponentTooltipNode build(String key) {
-            CacheKey cacheKey = new CacheKey(children, key, values);
+            String internKey = key.intern();
+            CacheKey cacheKey = new CacheKey(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values));
 
             try {
                 return CACHE.get(cacheKey);
@@ -143,7 +152,10 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
     private record CacheKey(List<ITooltipNode> children, String key, List<Component> values) {
         @Override
         public boolean equals(Object o) {
-            if (o == null || getClass() != o.getClass()) return false;
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
             CacheKey cacheKey = (CacheKey) o;
             return Objects.equals(key, cacheKey.key) && Objects.equals(values, cacheKey.values) && Objects.equals(children, cacheKey.children);
         }

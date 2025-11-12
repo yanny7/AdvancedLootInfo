@@ -71,7 +71,10 @@ public abstract class ListTooltipNode implements ITooltipNode {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         ListTooltipNode that = (ListTooltipNode) o;
         return Objects.equals(children, that.children);
     }

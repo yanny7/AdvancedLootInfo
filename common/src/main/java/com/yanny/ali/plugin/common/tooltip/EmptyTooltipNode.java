@@ -33,7 +33,7 @@ public class EmptyTooltipNode implements ITooltipNode {
 
     @Override
     public String toString() {
-        return "EmptyTooltipNode";
+        return "EmptyTooltipNode{}";
     }
 
     @NotNull

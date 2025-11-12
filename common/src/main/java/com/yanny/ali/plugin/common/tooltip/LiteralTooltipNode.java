@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class LiteralTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "literal");
     private static final LoadingCache<String, LiteralTooltipNode> CACHE = CacheBuilder.newBuilder()
-            .build(CacheLoader.from(text1 -> text1 != null ? new LiteralTooltipNode(text1) : null));
+            .build(CacheLoader.from((data) -> data != null ? new LiteralTooltipNode(data) : null));
 
     private final String text;
 
@@ -45,7 +45,10 @@ public class LiteralTooltipNode implements ITooltipNode {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
         LiteralTooltipNode that = (LiteralTooltipNode) o;
         return Objects.equals(text, that.text);
     }
