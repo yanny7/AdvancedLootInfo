@@ -9,7 +9,9 @@ import java.util.List;
 public interface IClientUtils extends ICommonUtils {
     List<IWidget> createWidgets(IWidgetUtils registry, List<IDataNode> entries, RelativeRect parent, int maxWidth);
 
-    <T extends IDataNode> IClientRegistry.NodeFactory<T> getNodeFactory(ResourceLocation id);
+    <T extends IDataNode> IClientRegistry.DataFactory<T> getDataNodeFactory(ResourceLocation id);
+
+    <T extends ITooltipNode> IClientRegistry.TooltipFactory<T> getTooltipNodeFactory(ResourceLocation id);
 
     List<ItemStack> getLootItems(ResourceLocation location);
 

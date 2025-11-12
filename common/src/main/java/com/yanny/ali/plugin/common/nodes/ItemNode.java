@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final ItemStack itemStack;
@@ -40,10 +40,10 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     public ItemNode(IServerUtils utils, Item item, RangeValue count) {
-        this(utils, item, count, Collections.emptyList());
+        this(utils, item, count, EmptyTooltipNode.EMPTY);
     }
 
-    public ItemNode(IServerUtils ignoredUtils, Item item, RangeValue count, List<ITooltipNode> tooltip) {
+    public ItemNode(IServerUtils ignoredUtils, Item item, RangeValue count, ITooltipNode tooltip) {
         this.conditions = Collections.emptyList();
         this.functions = Collections.emptyList();
         chance = 1;
@@ -54,7 +54,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         itemStack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
 
@@ -90,13 +90,13 @@ public class ItemNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, itemStack);
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeFloat(chance);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

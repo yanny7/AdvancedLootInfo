@@ -5,7 +5,6 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -19,7 +18,7 @@ import java.util.stream.Stream;
 public class DynamicNode implements IDataNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "dynamic");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final float chance;
 
     public DynamicNode(IServerUtils utils, DynamicLoot entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
@@ -31,18 +30,18 @@ public class DynamicNode implements IDataNode {
     }
 
     public DynamicNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         chance = buf.readFloat();
     }
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         buf.writeFloat(chance);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

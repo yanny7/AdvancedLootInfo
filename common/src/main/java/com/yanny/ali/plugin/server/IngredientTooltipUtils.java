@@ -1,24 +1,23 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getHolderTooltip;
-
 public class IngredientTooltipUtils {
     @NotNull
     public static ITooltipNode getIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
-        ITooltipNode tooltip = new TooltipNode();
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
         for (Holder<Item> value : ingredient.values) {
-            tooltip.add(getHolderTooltip(utils, "ali.property.value.item", value, RegistriesTooltipUtils::getItemTooltip));
+            tooltip.add(utils.getValueTooltip(utils, value).build("ali.property.value.item"));
         }
 
-        return tooltip;
+        return tooltip.build("ali.property.branch.items");
     }
 }
