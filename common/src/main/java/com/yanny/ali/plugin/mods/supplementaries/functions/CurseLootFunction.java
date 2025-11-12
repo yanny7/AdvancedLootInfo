@@ -10,7 +10,6 @@ import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
@@ -29,9 +28,10 @@ public class CurseLootFunction extends ConditionalFunction implements IFunctionT
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.curse_loot")
-                .add(utils.getValueTooltip(utils, chance).key("ali.property.value.chance"))
-                .add(utils.getValueTooltip(utils, CURSES).key("ali.property.branch.enchantments"))
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, chance).build("ali.property.value.chance"))
+                .add(utils.getValueTooltip(utils, CURSES).build("ali.property.branch.enchantments"))
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.curse_loot");
     }
 }

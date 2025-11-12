@@ -34,14 +34,16 @@ public class EntryTooltipUtils {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                 .add(getQualityTooltip(entry.quality))
-                .add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)));
+                .add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getLootPoolTooltip(RangeValue rolls, RangeValue bonusRolls) {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.random"))
-                .add(getRolls(rolls, bonusRolls));
+                .add(getRolls(rolls, bonusRolls))
+                .build();
     }
 
     @NotNull
@@ -56,7 +58,8 @@ public class EntryTooltipUtils {
                 .add(getQualityTooltip(entry.quality))
                 .add(getChanceTooltip(getBaseMap(chance * entry.weight / sumWeight * 100)))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
+                .build();
     }
 
     @NotNull
@@ -85,7 +88,8 @@ public class EntryTooltipUtils {
                 .add(getQualityTooltip(entry.quality))
                 .add(getChanceTooltip(chanceMap))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, allConditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, allFunctions));
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, allFunctions))
+                .build();
     }
 
     @NotNull
@@ -111,13 +115,14 @@ public class EntryTooltipUtils {
                 .add(getChanceTooltip(chance))
                 .add(getCountTooltip(count))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getQualityTooltip(int quality) {
         if (quality != LootPoolSingletonContainer.DEFAULT_QUALITY) {
-            return ValueTooltipNode.value(quality).key("ali.description.quality");
+            return ValueTooltipNode.value(quality).build("ali.description.quality");
         }
 
         return EmptyTooltipNode.EMPTY;
@@ -131,7 +136,7 @@ public class EntryTooltipUtils {
             return EmptyTooltipNode.EMPTY;
         }
 
-        IKeyTooltipNode tooltip = ValueTooltipNode.value(chance.get(null).get(0), "%").key("ali.description.chance");
+        IKeyTooltipNode tooltip = ValueTooltipNode.value(chance.get(null).get(0), "%");
 
         for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceEntry : chance.entrySet()) {
             Holder<Enchantment> enchantment = chanceEntry.getKey();
@@ -146,17 +151,17 @@ public class EntryTooltipUtils {
                             value.toString() + "%",
                             ValueTooltipNode.translate(enchantment.value().getDescriptionId()),
                             ValueTooltipNode.translate("enchantment.level." + level)
-                    ).key("ali.description.chance_bonus"));
+                    ).build("ali.description.chance_bonus"));
                 }
             }
         }
 
-        return tooltip;
+        return tooltip.build("ali.description.chance");
     }
 
     @NotNull
     public static ITooltipNode getCountTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        IKeyTooltipNode tooltip = ValueTooltipNode.value(count.get(null).get(0)).key("ali.description.count");
+        IKeyTooltipNode tooltip = ValueTooltipNode.value(count.get(null).get(0));
 
         for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceEntry : count.entrySet()) {
             Holder<Enchantment> enchantment = chanceEntry.getKey();
@@ -171,12 +176,12 @@ public class EntryTooltipUtils {
                             value,
                             ValueTooltipNode.translate(enchantment.value().getDescriptionId()),
                             ValueTooltipNode.translate("enchantment.level." + level)
-                    ).key("ali.description.count_bonus"));
+                    ).build("ali.description.count_bonus"));
                 }
             }
         }
 
-        return tooltip;
+        return tooltip.build("ali.description.count");
     }
 
     @NotNull
@@ -197,7 +202,7 @@ public class EntryTooltipUtils {
 
     @NotNull
     public static ITooltipNode getRolls(RangeValue rolls, RangeValue bonusRolls) {
-        return ValueTooltipNode.value(getTotalRolls(rolls, bonusRolls).toIntString(), "x").key("ali.description.rolls");
+        return ValueTooltipNode.value(getTotalRolls(rolls, bonusRolls).toIntString(), "x").build("ali.description.rolls");
     }
 
     private static RangeValue getTotalRolls(RangeValue rolls, RangeValue bonusRolls) {

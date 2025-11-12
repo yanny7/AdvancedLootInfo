@@ -67,7 +67,7 @@ public class LogStrippingListing extends BaseAccessor<VillagerTrades.ItemListing
                                         maxTrades,
                                         xp,
                                         priceMult,
-                                        utils.getValueTooltip(utils, type.toString()).key("ali.property.value.villager_type")
+                                        utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type")
                                 ));
                             }
                         }

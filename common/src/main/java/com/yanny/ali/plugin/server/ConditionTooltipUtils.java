@@ -20,44 +20,48 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
-        return getSubConditionsTooltip(utils, cond.terms).key("ali.type.condition.all_of");
+        return getSubConditionsTooltip(utils, cond.terms).build("ali.type.condition.all_of");
     }
 
     @NotNull
     public static ITooltipNode getAnyOfTooltip(IServerUtils utils, AnyOfCondition cond) {
-        return getSubConditionsTooltip(utils, cond.terms).key("ali.type.condition.any_of");
+        return getSubConditionsTooltip(utils, cond.terms).build("ali.type.condition.any_of");
     }
 
     @NotNull
     public static ITooltipNode getBlockStatePropertyTooltip(IServerUtils utils, LootItemBlockStatePropertyCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.block_state_property")
-                .add(utils.getValueTooltip(utils, cond.block()).key("ali.property.value.block"))
-                .add(utils.getValueTooltip(utils, cond.properties()).key("ali.property.branch.properties"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.block()).build("ali.property.value.block"))
+                .add(utils.getValueTooltip(utils, cond.properties()).build("ali.property.branch.properties"))
+                .build("ali.type.condition.block_state_property");
     }
 
     @NotNull
     public static ITooltipNode getDamageSourcePropertiesTooltip(IServerUtils utils, DamageSourceCondition cond) {
-        return utils.getValueTooltip(utils, cond.predicate()).key("ali.type.condition.damage_source_properties");
+        return utils.getValueTooltip(utils, cond.predicate()).build("ali.type.condition.damage_source_properties");
     }
 
     @NotNull
     public static ITooltipNode getEntityPropertiesTooltip(IServerUtils utils, LootItemEntityPropertyCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.entity_properties")
-                .add(utils.getValueTooltip(utils, cond.entityTarget()).key("ali.property.value.target"))
-                .add(utils.getValueTooltip(utils, cond.predicate()).key("ali.property.branch.predicate"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.entityTarget()).build("ali.property.value.target"))
+                .add(utils.getValueTooltip(utils, cond.predicate()).build("ali.property.branch.predicate"))
+                .build("ali.type.condition.entity_properties");
     }
 
     @NotNull
     public static ITooltipNode getEntityScoresTooltip(IServerUtils utils, EntityHasScoreCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.entity_scores")
-                .add(utils.getValueTooltip(utils, cond.entityTarget()).key("ali.property.value.target"))
-                .add(getMapTooltip(utils, cond.scores(), GenericTooltipUtils::getIntRangeEntryTooltip).key("ali.property.branch.scores"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.entityTarget()).build("ali.property.value.target"))
+                .add(getMapTooltip(utils, cond.scores(), GenericTooltipUtils::getIntRangeEntryTooltip).build("ali.property.branch.scores"))
+                .build("ali.type.condition.entity_scores");
     }
 
     @NotNull
     public static ITooltipNode getInvertedTooltip(IServerUtils utils, InvertedLootItemCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.inverted")
-                .add(utils.getConditionTooltip(utils, cond.term()));
+        return BranchTooltipNode.branch()
+                .add(utils.getConditionTooltip(utils, cond.term()))
+                .build("ali.type.condition.inverted");
     }
 
     @NotNull
@@ -67,38 +71,40 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getLocationCheckTooltip(IServerUtils utils, LocationCheck cond) {
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch("ali.type.condition.location_check");
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
-        tooltip.add(utils.getValueTooltip(utils, cond.predicate()).key("ali.property.branch.location"));
+        tooltip.add(utils.getValueTooltip(utils, cond.predicate()).build("ali.property.branch.location"));
 
         if (!cond.offset().equals(BlockPos.ZERO)) {
-            tooltip.add(utils.getValueTooltip(utils, cond.offset()).key("ali.property.multi.offset"));
+            tooltip.add(utils.getValueTooltip(utils, cond.offset()).build("ali.property.multi.offset"));
         }
 
-        return tooltip;
+        return tooltip.build("ali.type.condition.location_check");
     }
 
     @NotNull
     public static ITooltipNode getMatchToolTooltip(IServerUtils utils, MatchTool cond) {
-        return utils.getValueTooltip(utils, cond.predicate()).key("ali.type.condition.match_tool");
+        return utils.getValueTooltip(utils, cond.predicate()).build("ali.type.condition.match_tool");
     }
 
     @NotNull
     public static ITooltipNode getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.random_chance", true)
-                .add(utils.getValueTooltip(utils, cond.probability()).key("ali.property.value.probability"));
+        return BranchTooltipNode.branch(true)
+                .add(utils.getValueTooltip(utils, cond.probability()).build("ali.property.value.probability"))
+                .build("ali.type.condition.random_chance");
     }
 
     @NotNull
     public static ITooltipNode getRandomChanceWithLootingTooltip(IServerUtils utils, LootItemRandomChanceWithLootingCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.random_chance_with_looting", true)
-                .add(utils.getValueTooltip(utils, cond.percent()).key("ali.property.value.percent"))
-                .add(utils.getValueTooltip(utils, cond.lootingMultiplier()).key("ali.property.value.multiplier"));
+        return BranchTooltipNode.branch(true)
+                .add(utils.getValueTooltip(utils, cond.percent()).build("ali.property.value.percent"))
+                .add(utils.getValueTooltip(utils, cond.lootingMultiplier()).build("ali.property.value.multiplier"))
+                .build("ali.type.condition.random_chance_with_looting");
     }
 
     @NotNull
     public static ITooltipNode getReferenceTooltip(IServerUtils utils, ConditionReference cond) {
-        return utils.getValueTooltip(utils, cond.name()).key("ali.type.condition.reference");
+        return utils.getValueTooltip(utils, cond.name()).build("ali.type.condition.reference");
     }
 
     @NotNull
@@ -110,29 +116,33 @@ public class ConditionTooltipUtils {
     public static ITooltipNode getTableBonusTooltip(IServerUtils utils, BonusLevelTableCondition cond) {
         List<String> list = cond.values().stream().mapToDouble(aFloat -> aFloat).mapToObj(FLOAT_FORMAT::format).toList();
 
-        return BranchTooltipNode.branch("ali.type.condition.table_bonus", true)
-                .add(utils.getValueTooltip(utils, cond.enchantment()).key("ali.property.value.enchantment"))
-                .add(utils.getValueTooltip(utils, list.toString()).key("ali.property.value.values"));
+        return BranchTooltipNode.branch(true)
+                .add(utils.getValueTooltip(utils, cond.enchantment()).build("ali.property.value.enchantment"))
+                .add(utils.getValueTooltip(utils, list.toString()).build("ali.property.value.values"))
+                .build("ali.type.condition.table_bonus");
     }
 
     @NotNull
     public static ITooltipNode getTimeCheckTooltip(IServerUtils utils, TimeCheck cond) {
-        return BranchTooltipNode.branch("ali.type.condition.time_check")
-                .add(utils.getValueTooltip(utils, cond.period()).key("ali.property.value.period"))
-                .add(utils.getValueTooltip(utils, cond.value()).key("ali.property.value.value"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.period()).build("ali.property.value.period"))
+                .add(utils.getValueTooltip(utils, cond.value()).build("ali.property.value.value"))
+                .build("ali.type.condition.time_check");
     }
 
     @NotNull
     public static ITooltipNode getValueCheckTooltip(IServerUtils utils, ValueCheckCondition cond) {
-        return BranchTooltipNode.branch("ali.type.condition.value_check")
-                .add(utils.getValueTooltip(utils, cond.provider()).key("ali.property.value.provider"))
-                .add(utils.getValueTooltip(utils, cond.range()).key("ali.property.value.range"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.provider()).build("ali.property.value.provider"))
+                .add(utils.getValueTooltip(utils, cond.range()).build("ali.property.value.range"))
+                .build("ali.type.condition.value_check");
     }
 
     @NotNull
     public static ITooltipNode getWeatherCheckTooltip(IServerUtils utils, WeatherCheck cond) {
-        return BranchTooltipNode.branch("ali.type.condition.weather_check")
-                .add(utils.getValueTooltip(utils, cond.isRaining()).key("ali.property.value.is_raining"))
-                .add(utils.getValueTooltip(utils, cond.isThundering()).key("ali.property.value.is_thundering"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.isRaining()).build("ali.property.value.is_raining"))
+                .add(utils.getValueTooltip(utils, cond.isThundering()).build("ali.property.value.is_thundering"))
+                .build("ali.type.condition.weather_check");
     }
 }

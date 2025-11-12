@@ -25,9 +25,10 @@ public class SetFluidLootFunction extends ConditionalFunction implements IFuncti
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.set_fluid")
-                .add(utils.getValueTooltip(utils, fluid.getFluid()).key("ali.property.value.fluid"))
-                .add(utils.getValueTooltip(utils, fluid.getAmount()).key("ali.property.value.amount"))
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, fluid.getFluid()).build("ali.property.value.fluid"))
+                .add(utils.getValueTooltip(utils, fluid.getAmount()).build("ali.property.value.amount"))
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.set_fluid");
     }
 }

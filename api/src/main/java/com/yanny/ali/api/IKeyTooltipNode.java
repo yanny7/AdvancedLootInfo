@@ -1,7 +1,7 @@
 package com.yanny.ali.api;
 
-public interface IKeyTooltipNode extends ITooltipNode {
-    IKeyTooltipNode key(String key);
-
+public interface IKeyTooltipNode {
     IKeyTooltipNode add(ITooltipNode node);
+
+    ITooltipNode build(String key);
 }

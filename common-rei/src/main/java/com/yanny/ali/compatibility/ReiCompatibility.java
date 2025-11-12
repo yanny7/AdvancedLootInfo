@@ -4,9 +4,9 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.compatibility.rei.*;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.AliClientRegistry;
-import com.yanny.ali.manager.AliCommonRegistry;
 import com.yanny.ali.manager.PluginManager;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -43,17 +43,17 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
-        AliCommonRegistry commonRegistry = PluginManager.COMMON_REGISTRY;
+        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
 
         blockCategories.clear();
         entityCategories.clear();
         gameplayCategories.clear();
         tradeCategories.clear();
 
-        blockCategories.putAll(commonRegistry.getConfiguration().blockCategories.stream().collect(getCollector(ReiBlockDisplay::new, ReiBlockCategory::new)));
-        entityCategories.putAll(commonRegistry.getConfiguration().entityCategories.stream().collect(getCollector(ReiEntityDisplay::new, ReiEntityCategory::new)));
-        gameplayCategories.putAll(commonRegistry.getConfiguration().gameplayCategories.stream().collect(getCollector(ReiGameplayDisplay::new, ReiGameplayCategory::new)));
-        tradeCategories.putAll(commonRegistry.getConfiguration().tradeCategories.stream().collect(getCollector(ReiTradeDisplay::new, ReiTradeCategory::new)));
+        blockCategories.putAll(config.blockCategories.stream().collect(getCollector(ReiBlockDisplay::new, ReiBlockCategory::new)));
+        entityCategories.putAll(config.entityCategories.stream().collect(getCollector(ReiEntityDisplay::new, ReiEntityCategory::new)));
+        gameplayCategories.putAll(config.gameplayCategories.stream().collect(getCollector(ReiGameplayDisplay::new, ReiGameplayCategory::new)));
+        tradeCategories.putAll(config.tradeCategories.stream().collect(getCollector(ReiTradeDisplay::new, ReiTradeCategory::new)));
 
         for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategories.values()) {
             registry.add(holder.category);
@@ -105,6 +105,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
     private void registerData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
+        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to REI");
@@ -118,6 +119,7 @@ public class ReiCompatibility implements REIClientPlugin {
             GenericUtils.processData(
                     level,
                     clientRegistry,
+                    config,
                     lootData,
                     tradeData,
                     (node, location, block, outputs) -> {

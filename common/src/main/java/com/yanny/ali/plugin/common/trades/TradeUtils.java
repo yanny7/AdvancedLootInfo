@@ -97,9 +97,10 @@ public class TradeUtils {
 
     @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.EnchantedItemForEmeralds listing, ITooltipNode condition) {
-        ITooltipNode tooltip = BranchTooltipNode.branch("ali.type.function.enchant_with_levels")
-                .add(utils.getValueTooltip(utils, UniformGenerator.between(5, 19)).key("ali.property.value.levels"))
-                .add(utils.getValueTooltip(utils, false).key("ali.property.value.treasure"));
+        ITooltipNode tooltip = BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, UniformGenerator.between(5, 19)).build("ali.property.value.levels"))
+                .add(utils.getValueTooltip(utils, false).build("ali.property.value.treasure"))
+                .build("ali.type.function.enchant_with_levels");
 
         return new ItemsToItemsNode(
                 utils,
@@ -167,8 +168,9 @@ public class TradeUtils {
                 EmptyTooltipNode.EMPTY,
                 Either.left(stew),
                 new RangeValue(),
-                GenericTooltipUtils.getCollectionTooltip(utils, listing.effects, (u, effect) -> utils.getValueTooltip(utils, effect.effect()).key("ali.property.value.effect")
-                        .add(utils.getValueTooltip(utils, effect.duration()).key("ali.property.value.duration"))).key("ali.type.function.set_stew_effect"),
+                GenericTooltipUtils.getCollectionTooltip(utils, listing.effects, (u, effect) -> utils.getValueTooltip(utils, effect.effect())
+                        .add(utils.getValueTooltip(utils, effect.duration()).build("ali.property.value.duration"))
+                        .build("ali.property.value.effect")).build("ali.type.function.set_stew_effect"),
                 12,
                 listing.xp,
                 listing.priceMultiplier,
@@ -210,8 +212,9 @@ public class TradeUtils {
                 Either.left(map),
                 new RangeValue(),
                 ArrayTooltipNode.array()
-                        .add(utils.getValueTooltip(utils, listing.destination).key("ali.property.value.destination"))
-                        .add(utils.getValueTooltip(utils, listing.destinationType).key("ali.property.value.map_decoration")),
+                        .add(utils.getValueTooltip(utils, listing.destination).build("ali.property.value.destination"))
+                        .add(utils.getValueTooltip(utils, listing.destinationType).build("ali.property.value.map_decoration"))
+                        .build(),
                 listing.maxUses,
                 listing.villagerXp,
                 0.2F,

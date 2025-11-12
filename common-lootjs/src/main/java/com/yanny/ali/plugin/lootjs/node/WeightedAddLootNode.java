@@ -34,7 +34,7 @@ public class WeightedAddLootNode extends ListNode {
         tooltip = getTooltip(utils, action);
 
         for (WeightedEntry.Wrapper<LootEntry> wrapper : weightedList.getItems()) {
-            addChildren(Utils.getEntry(utils, wrapper.getData(), sumWeight, functions, conditions, true));
+            addChildren(Utils.getEntry(utils, wrapper.getData(), sumWeight, functions, conditions, false));
         }
     }
 
@@ -63,6 +63,7 @@ public class WeightedAddLootNode extends ListNode {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.random"))
                 .add(EntryTooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)))
-                .add(ValueTooltipNode.value(action.getAllowDuplicateLoot()).key("ali.property.value.allow_duplicate_loot"));
+                .add(ValueTooltipNode.value(action.getAllowDuplicateLoot()).build("ali.property.value.allow_duplicate_loot"))
+                .build();
     }
 }

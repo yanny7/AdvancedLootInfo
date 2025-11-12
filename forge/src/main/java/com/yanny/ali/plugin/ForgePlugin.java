@@ -20,11 +20,11 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     public static ITooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
-        return utils.getValueTooltip(utils, cond.action.name()).key("ali.type.condition.can_tool_perform_action");
+        return utils.getValueTooltip(utils, cond.action.name()).build("ali.type.condition.can_tool_perform_action");
     }
 
     @NotNull
     public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
-        return utils.getValueTooltip(utils, cond.id()).key("ali.type.condition.loot_table_id");
+        return utils.getValueTooltip(utils, cond.id()).build("ali.type.condition.loot_table_id");
     }
 }
