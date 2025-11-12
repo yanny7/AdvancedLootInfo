@@ -38,7 +38,7 @@ public class TradeLevelNode extends ListNode {
 
     @Override
     public ITooltipNode getTooltip() {
-        return ValueTooltipNode.value(level).key("ali.property.value.level");
+        return ValueTooltipNode.value(level).build("ali.property.value.level");
     }
 
     @Override

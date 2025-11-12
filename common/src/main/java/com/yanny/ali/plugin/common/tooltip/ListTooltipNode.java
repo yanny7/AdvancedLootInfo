@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.common.tooltip;
 
 import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -68,6 +69,21 @@ public abstract class ListTooltipNode implements ITooltipNode {
         encodeNode(buf);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ListTooltipNode that = (ListTooltipNode) o;
+        return Objects.equals(children, that.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(children);
+    }
+
     public static List<ITooltipNode> decodeChildren(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         int count = buf.readInt();
 
@@ -83,6 +99,15 @@ public abstract class ListTooltipNode implements ITooltipNode {
             }
 
             return children;
+        }
+    }
+
+    public abstract static class Builder implements IKeyTooltipNode {
+        protected final List<ITooltipNode> children = new ArrayList<>();
+
+        public Builder add(ITooltipNode node) {
+            children.add(node);
+            return this;
         }
     }
 }

@@ -11,8 +11,9 @@ import org.jetbrains.annotations.NotNull;
 public class LootJsFunctionTooltipUtils {
     @NotNull
     public static ITooltipNode customPlayerTooltip(IServerUtils utils, CustomPlayerFunction function) {
-        return BranchTooltipNode.branch("ali.type.function.player_action")
-                .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"));
+        return BranchTooltipNode.branch()
+                .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"))
+                .build("ali.type.function.player_action");
     }
 
     @NotNull

@@ -28,9 +28,10 @@ public class RandomEnchantFunction extends ConditionalFunction implements IFunct
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.curse_loot")
-                .add(utils.getValueTooltip(utils, chance).key("ali.property.value.chance"))
-                .add(utils.getValueTooltip(utils, curses).key("ali.property.branch.enchantments"))
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, chance).build("ali.property.value.chance"))
+                .add(utils.getValueTooltip(utils, curses).build("ali.property.branch.enchantments"))
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.curse_loot");
     }
 }

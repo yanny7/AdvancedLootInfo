@@ -41,8 +41,9 @@ public class PopulatedBeehiveForEmeralds extends BaseAccessor<VillagerTrades.Ite
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
-        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING).key("ali.property.branch.bees")
-                .add(utils.getValueTooltip(utils, 2).key("ali.property.value.count"));
+        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING)
+                .add(utils.getValueTooltip(utils, 2).build("ali.property.value.count"))
+                .build("ali.property.branch.bees");
 
         return new ItemsToItemsNode(
                 utils,

@@ -26,13 +26,13 @@ public class NeoForgePlugin implements IPlugin {
     @NotNull
     public static ITooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanItemPerformAbility condition) {
         MixinCanItemPerformAbility cond = (MixinCanItemPerformAbility) condition;
-        return utils.getValueTooltip(utils, cond.getAbility()).key("ali.type.condition.can_item_perform_ability");
+        return utils.getValueTooltip(utils, cond.getAbility()).build("ali.type.condition.can_item_perform_ability");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition condition) {
         MixinLootTableIdCondition cond = (MixinLootTableIdCondition) condition;
-        return utils.getValueTooltip(utils, cond.getTargetLootTableId()).key("ali.type.condition.loot_table_id");
+        return utils.getValueTooltip(utils, cond.getTargetLootTableId()).build("ali.type.condition.loot_table_id");
     }
 }

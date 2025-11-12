@@ -53,17 +53,17 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
 
     @Override
     public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
-        ArrayTooltipNode tooltip = ArrayTooltipNode.array();
+        ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
         ItemStack map = Items.MAP.getDefaultInstance();
 
         if (destinationTag != null) {
-            tooltip.add(utils.getValueTooltip(utils, destinationTag).key("ali.property.value.destination"));
+            tooltip.add(utils.getValueTooltip(utils, destinationTag).build("ali.property.value.destination"));
         } else {
-            tooltip.add(utils.getValueTooltip(utils, destination).key("ali.property.value.destination"));
+            tooltip.add(utils.getValueTooltip(utils, destination).build("ali.property.value.destination"));
         }
 
-        tooltip.add(utils.getValueTooltip(utils, destinationType).key("ali.property.value.map_decoration"));
-        tooltip.add(utils.getValueTooltip(utils, spawnRegionSearchRadius).key("ali.property.value.search_radius"));
+        tooltip.add(utils.getValueTooltip(utils, destinationType).build("ali.property.value.map_decoration"));
+        tooltip.add(utils.getValueTooltip(utils, spawnRegionSearchRadius).build("ali.property.value.search_radius"));
         map.set(DataComponents.ITEM_NAME, Component.translatable(displayName));
 
         return new ItemsToItemsNode(
@@ -76,7 +76,7 @@ public class TreasureMapForEmeralds extends BaseAccessor<VillagerTrades.ItemList
                 EmptyTooltipNode.EMPTY,
                 Either.left(map),
                 new RangeValue(),
-                tooltip,
+                tooltip.build(),
                 maxUses,
                 villagerXp,
                 0.2F,

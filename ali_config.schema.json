@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/aliconfig.schema.json",
+  "title": "Advanced Loot Info Configuration Schema",
+  "description": "Main configuration file for the AdvancedLootInfo mod.",
+  "type": "object",
+  "definitions": {
+    "ResourceLocation": {
+      "type": "string",
+      "description": "A Minecraft Resource Location string, typically formatted as 'namespace:path'.",
+      "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
+    },
+    "LootCategoryType": {
+      "type": "string",
+      "description": "The type of the loot category, corresponding to the list it belongs to.",
+      "enum": [
+        "BLOCK",
+        "ENTITY",
+        "GAMEPLAY",
+        "TRADE"
+      ]
+    },
+    "LootCategoryDefinition": {
+      "type": "object",
+      "description": "Defines the common properties for all loot categories.",
+      "properties": {
+        "key": {
+          "description": "The unique ResourceLocation identifier for this category (e.g., 'ali:plant_loot').",
+          "$ref": "#/definitions/ResourceLocation"
+        },
+        "type": {
+          "description": "The category type (e.g., BLOCK, ENTITY).",
+          "$ref": "#/definitions/LootCategoryType"
+        },
+        "icon": {
+          "description": "The ResourceLocation ID of the item used as the display icon.",
+          "$ref": "#/definitions/ResourceLocation"
+        },
+        "hide": {
+          "type": "boolean",
+          "description": "If true, this category will be hidden from the UI. When set on server, no loot data are sent to client.",
+          "default": false
+        }
+      },
+      "required": ["key", "type", "icon", "hide"],
+      "additionalProperties": false
+    },
+    "BlockAndEntityCategoryDefinition": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LootCategoryDefinition"
+        },
+        {
+          "type": "object",
+          "description": "Loot categories using class names for matching (Block and Entity).",
+          "properties": {
+            "classes": {
+              "type": "array",
+              "description": "An array of fully qualified Java class names (FQN) used to match blocks or entities.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["classes"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "GameplayAndTradeCategoryDefinition": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LootCategoryDefinition"
+        },
+        {
+          "type": "object",
+          "description": "Loot categories using regular expression patterns for matching (Gameplay and Trade).",
+          "properties": {
+            "pattern": {
+              "type": "array",
+              "description": "An array of regular expressions (regex) used to match loot table Resource Locations.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": ["pattern"],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "properties": {
+    "blockCategories": {
+      "type": "array",
+      "description": "List of loot categories for blocks.",
+      "items": { "$ref": "#/definitions/BlockAndEntityCategoryDefinition" }
+    },
+    "entityCategories": {
+      "type": "array",
+      "description": "List of loot categories for entities (mobs).",
+      "items": { "$ref": "#/definitions/BlockAndEntityCategoryDefinition" }
+    },
+    "gameplayCategories": {
+      "type": "array",
+      "description": "List of loot categories associated with gameplay mechanics (e.g., fishing, chest loot).",
+      "items": { "$ref": "#/definitions/GameplayAndTradeCategoryDefinition" }
+    },
+    "tradeCategories": {
+      "type": "array",
+      "description": "List of loot categories associated with trading.",
+      "items": { "$ref": "#/definitions/GameplayAndTradeCategoryDefinition" }
+    },
+    "disabledEntities": {
+      "type": "array",
+      "description": "List of entities that will not be used for gathering loot tables.",
+      "items": { "$ref": "#/definitions/ResourceLocation" }
+    },
+    "logMoreStatistics": {
+      "type": "boolean",
+      "description": "If true, logs more detailed statistics.",
+      "default": false
+    }
+  },
+  "required": [],
+  "additionalProperties": false
+}

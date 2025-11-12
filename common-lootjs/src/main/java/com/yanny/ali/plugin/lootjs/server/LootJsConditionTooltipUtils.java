@@ -16,21 +16,24 @@ import java.util.Arrays;
 public class LootJsConditionTooltipUtils {
     @NotNull
     public static ITooltipNode matchBiomeTooltip(IServerUtils utils, MatchBiome condition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_biome")
-               .add(utils.getValueTooltip(utils, condition.biomes()).key("ali.property.branch.biomes"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, condition.biomes()).key("ali.property.branch.biomes"))
+                .build("ali.type.condition.match_biome");
     }
 
     @NotNull
     public static ITooltipNode matchDimensionTooltip(IServerUtils utils, MatchDimension condition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_dimension")
-               .add(utils.getValueTooltip(utils, Arrays.asList(condition.dimensions())).key("ali.property.branch.dimensions"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, Arrays.asList(condition.dimensions())).key("ali.property.branch.dimensions"))
+                .build("ali.type.condition.match_dimension");
     }
 
     @NotNull
     public static ITooltipNode matchStructureTooltip(IServerUtils utils, MatchStructure condition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_structure")
-               .add(utils.getValueTooltip(utils, condition.structures()).key("ali.property.branch.structures"))
-               .add(utils.getValueTooltip(utils, condition.exact()).key("ali.property.value.exact"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, condition.structures()).key("ali.property.branch.structures"))
+                .add(utils.getValueTooltip(utils, condition.exact()).key("ali.property.value.exact"))
+                .build("ali.type.condition.match_structure");
     }
 
     @NotNull
@@ -38,17 +41,21 @@ public class LootJsConditionTooltipUtils {
         MixinCustomParamPredicate<?> cond = (MixinCustomParamPredicate<?>) condition;
 
         if (cond.getParam() == LootContextParams.THIS_ENTITY) {
-            return BranchTooltipNode.branch("ali.type.condition.match_entity_custom")
-                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"));
+            return BranchTooltipNode.branch()
+                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"))
+                    .build("ali.type.condition.match_entity_custom");
         } else if (cond.getParam() == LootContextParams.ATTACKING_ENTITY) {
-            return BranchTooltipNode.branch("ali.type.condition.match_attacker_custom")
-                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"));
+            return BranchTooltipNode.branch()
+                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"))
+                    .build("ali.type.condition.match_attacker_custom");
         } else if (cond.getParam() == LootContextParams.DIRECT_ATTACKING_ENTITY) {
-            return BranchTooltipNode.branch("ali.type.condition.match_direct_attacker_custom")
-                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"));
+            return BranchTooltipNode.branch()
+                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"))
+                    .build("ali.type.condition.match_direct_attacker_custom");
         } else if (cond.getParam() == LootContextParams.BLOCK_ENTITY) {
-            return BranchTooltipNode.branch("ali.type.condition.block_entity")
-                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"));
+            return BranchTooltipNode.branch()
+                    .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"))
+                    .build("ali.type.condition.block_entity");
         } else {
             return EmptyTooltipNode.EMPTY;
         }
@@ -56,67 +63,79 @@ public class LootJsConditionTooltipUtils {
 
     @NotNull
     public static ITooltipNode isLightLevelTooltip(IServerUtils utils, IsLightLevel condition) {
-        return BranchTooltipNode.branch("ali.type.condition.is_light_level")
-               .add(utils.getValueTooltip(utils, IntRange.range(condition.min(), condition.max())).key("ali.property.value.value"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, IntRange.range(condition.min(), condition.max())).key("ali.property.value.value"))
+                .build("ali.type.condition.is_light_level");
     }
 
     @NotNull
     public static ITooltipNode getMatchEquipmentSlotTooltip(IServerUtils utils, MatchEquipmentSlot condition) {
         switch (condition.slot()) {
             case MAINHAND -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_mainhand")
-                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"));
+                return BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
+                        .build("ali.type.condition.match_mainhand");
             }
             case OFFHAND -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_offhand")
-                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"));
+                return BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
+                        .build("ali.type.condition.match_offhand");
             }
             case FEET -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_feet")
-                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"));
+                return BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
+                        .build("ali.type.condition.match_feet");
             }
             case LEGS -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_legs")
-                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"));
+                return BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
+                        .build("ali.type.condition.match_legs");
             }
             case CHEST -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_chest")
-                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"));
+                return BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
+                        .build("ali.type.condition.match_chest");
             }
             case HEAD -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_head")
-                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"));
+                return BranchTooltipNode.branch()
+                        .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
+                        .build("ali.type.condition.match_head");
             }
             default -> {
-                return BranchTooltipNode.branch("ali.type.condition.match_equipment_slot")
+                return BranchTooltipNode.branch()
                         .add(utils.getValueTooltip(utils, condition.itemFilter()).key("ali.property.value.item_filter"))
-                        .add(utils.getValueTooltip(utils, condition.slot()).key("ali.property.value.slot"));
+                        .add(utils.getValueTooltip(utils, condition.slot()).key("ali.property.value.slot"))
+                        .build("ali.type.condition.match_equipment_slot");
             }
         }
     }
 
     @NotNull
     public static ITooltipNode matchKillerDistanceTooltip(IServerUtils utils, MatchKillerDistance condition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_distance")
-               .add(utils.getValueTooltip(utils, condition.predicate()).key("ali.property.value.predicate"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, condition.predicate()).key("ali.property.value.predicate"))
+                .build("ali.type.condition.match_distance");
     }
 
     @NotNull
     public static ITooltipNode matchPlayerTooltip(IServerUtils utils, MatchPlayer condition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_player")
-               .add(utils.getValueTooltip(utils, condition.predicate()).key("ali.property.value.predicate"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, condition.predicate()).key("ali.property.value.predicate"))
+                .build("ali.type.condition.match_player");
     }
 
     @NotNull
     public static ITooltipNode playerParamPredicateTooltip(IServerUtils ignoredUtils, PlayerParamPredicate ignoredCondition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_player_custom")
-               .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"));
+        return BranchTooltipNode.branch()
+                .add(LiteralTooltipNode.translatable("ali.property.value.detail_not_available"))
+                .build("ali.type.condition.match_player_custom");
     }
 
     @NotNull
     public static ITooltipNode matchAnyInventorySlot(IServerUtils utils, MatchAnyInventorySlot condition) {
-        return BranchTooltipNode.branch("ali.type.condition.match_any_inventory_slot")
-               .add(utils.getValueTooltip(utils, condition.filter()).key("ali.property.branch.predicate"))
-               .add(utils.getValueTooltip(utils, condition.hotbar()).key("ali.property.value.hotbar"));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, condition.filter()).key("ali.property.branch.predicate"))
+                .add(utils.getValueTooltip(utils, condition.hotbar()).key("ali.property.value.hotbar"))
+                .build("ali.type.condition.match_any_inventory_slot");
     }
 }

@@ -43,8 +43,9 @@ public class EnchantedShearsForEmeralds extends BaseAccessor<VillagerTrades.Item
     @NotNull
     @Override
     public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
-        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING).key("ali.property.value.enchantment")
-                .add(utils.getValueTooltip(utils, IntRange.range(1, 3)).key("ali.property.value.levels"));
+        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING)
+                .add(utils.getValueTooltip(utils, IntRange.range(1, 3)).build("ali.property.value.levels"))
+                .build("ali.property.value.enchantment");
 
         return new ItemsToItemsNode(
                 utils,

@@ -24,8 +24,9 @@ public class TagItemRemovals extends ConditionalFunction implements IFunctionToo
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.tag_item_removals")
-                .add(utils.getValueTooltip(utils, tagKey).key("ali.property.value.tag"))
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, tagKey).build("ali.property.value.tag"))
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.tag_item_removals");
     }
 }
