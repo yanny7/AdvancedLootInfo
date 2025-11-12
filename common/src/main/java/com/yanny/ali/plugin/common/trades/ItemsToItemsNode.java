@@ -63,9 +63,10 @@ public class ItemsToItemsNode extends ListNode {
         addChildren(getChildren(utils, output, outputCount, outputCondition));
         tooltip = ArrayTooltipNode.array()
                 .add(condition)
-                .add(utils.getValueTooltip(utils, maxUses).key("ali.property.value.uses"))
-                .add(utils.getValueTooltip(utils, xp).key("ali.property.value.villager_xp"))
-                .add(utils.getValueTooltip(utils, priceMultiplier).key("ali.property.value.price_multiplier"));
+                .add(utils.getValueTooltip(utils, maxUses).build("ali.property.value.uses"))
+                .add(utils.getValueTooltip(utils, xp).build("ali.property.value.villager_xp"))
+                .add(utils.getValueTooltip(utils, priceMultiplier).build("ali.property.value.price_multiplier"))
+                .build();
     }
 
     public ItemsToItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

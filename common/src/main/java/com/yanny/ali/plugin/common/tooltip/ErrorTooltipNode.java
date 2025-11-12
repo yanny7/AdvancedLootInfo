@@ -13,24 +13,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
+public class ErrorTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "error");
 
     private final String value;
 
     private ErrorTooltipNode(String value) {
         this.value = value;
-    }
-
-    @Override
-    public IKeyTooltipNode key(String key) {
-        return this;
-    }
-
-    @Override
-    public IKeyTooltipNode add(ITooltipNode node) {
-        return this;
     }
 
     @Override
@@ -48,14 +39,56 @@ public class ErrorTooltipNode implements IKeyTooltipNode, ITooltipNode {
         return ID;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ErrorTooltipNode that = (ErrorTooltipNode) o;
+        return Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(value);
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorTooltipNode{" +
+                "value='" + value + '\'' +
+                '}';
+    }
+
     @NotNull
-    public static ErrorTooltipNode error(String value) {
-        return new ErrorTooltipNode(value);
+    public static ErrorTooltipNode.Builder error(String value) {
+        return new ErrorTooltipNode.Builder(value);
     }
 
     @NotNull
     public static ErrorTooltipNode decode(IClientUtils ignoredUtils, RegistryFriendlyByteBuf buf) {
         String value = buf.readUtf();
         return new ErrorTooltipNode(value);
+    }
+
+    public static class Builder implements IKeyTooltipNode {
+        private final String value;
+
+        public Builder(String value) {
+            this.value = value;
+        }
+
+        public Builder add(ITooltipNode node) {
+            return this;
+        }
+
+        public ErrorTooltipNode build(String key) {
+            return new ErrorTooltipNode(value);
+        }
+
+        public ErrorTooltipNode build() {
+            return new ErrorTooltipNode(value);
+        }
     }
 }

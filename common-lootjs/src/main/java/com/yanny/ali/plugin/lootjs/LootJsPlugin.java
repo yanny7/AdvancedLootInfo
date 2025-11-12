@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.*;
 import com.yanny.ali.plugin.lootjs.server.LootJsConditionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.server.LootJsFunctionTooltipUtils;
+import com.yanny.ali.plugin.lootjs.server.LootJsGenericTooltipUtils;
 import com.yanny.ali.plugin.lootjs.widget.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -99,6 +100,8 @@ public class LootJsPlugin implements IPlugin {
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
+
+        registry.registerValueTooltip(AnyStructure.StructureLocator.class, LootJsGenericTooltipUtils::getStructureLocatorTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);
     }

@@ -20,7 +20,8 @@ public class RetexturedLootFunction extends ConditionalFunction implements IFunc
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.retextured")
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.retextured");
     }
 }

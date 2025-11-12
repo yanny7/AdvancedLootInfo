@@ -30,7 +30,8 @@ public class NormalizeNode implements IDataNode, IItemNode {
     public NormalizeNode(IServerUtils utils, float chance, int quality, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         tooltip = ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.normalize"))
-                .add(getItemTooltip(utils, chance, quality, functions, conditions));
+                .add(getItemTooltip(utils, chance, quality, functions, conditions))
+                .build();
         this.chance = chance;
     }
 

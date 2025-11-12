@@ -78,10 +78,10 @@ public class LootJsGenericTooltipUtils {
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).key("ali.property.value.enchantment"));
+                    tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).build("ali.property.value.enchantment"));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).key("ali.property.value.levels"));
+                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build("ali.property.value.levels"));
                     }
 
                     return tooltip;
@@ -98,10 +98,10 @@ public class LootJsGenericTooltipUtils {
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).toString()).key("ali.property.value.enchantment"));
+                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).toString()).build("ali.property.value.enchantment"));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).key("ali.property.value.levels"));
+                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build("ali.property.value.levels"));
                     }
 
                     return tooltip;
@@ -131,6 +131,6 @@ public class LootJsGenericTooltipUtils {
             return utils.getValueTooltip(utils, byTag.tag());
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return EmptyTooltipNode.empty();
     }
 }

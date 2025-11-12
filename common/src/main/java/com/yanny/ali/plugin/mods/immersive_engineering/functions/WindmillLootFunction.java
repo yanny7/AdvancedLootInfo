@@ -18,7 +18,8 @@ public class WindmillLootFunction extends ConditionalFunction implements IFuncti
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return BranchTooltipNode.branch("ali.type.function.windmill")
-                .add(getSubConditionsTooltip(utils, predicates));
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.windmill");
     }
 }

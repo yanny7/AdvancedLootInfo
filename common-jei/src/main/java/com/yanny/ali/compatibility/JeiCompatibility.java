@@ -5,9 +5,9 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.compatibility.jei.*;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.AliClientRegistry;
-import com.yanny.ali.manager.AliCommonRegistry;
 import com.yanny.ali.manager.PluginManager;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -52,7 +52,7 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        AliCommonRegistry commonRegistry = PluginManager.COMMON_REGISTRY;
+        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         blockCategories.clear();
@@ -60,10 +60,10 @@ public class JeiCompatibility implements IModPlugin {
         gameplayCategories.clear();
         tradeCategories.clear();
 
-        blockCategories.putAll(commonRegistry.getConfiguration().blockCategories.stream().collect(getCollector(guiHelper, JeiBlockLoot::new)));
-        entityCategories.putAll(commonRegistry.getConfiguration().entityCategories.stream().collect(getCollector(guiHelper, JeiEntityLoot::new)));
-        gameplayCategories.putAll(commonRegistry.getConfiguration().gameplayCategories.stream().collect(getCollector(guiHelper, JeiGameplayLoot::new)));
-        tradeCategories.putAll(commonRegistry.getConfiguration().tradeCategories.stream().collect(getCollector(guiHelper, JeiTradeLoot::new)));
+        blockCategories.putAll(config.blockCategories.stream().collect(getCollector(guiHelper, JeiBlockLoot::new)));
+        entityCategories.putAll(config.entityCategories.stream().collect(getCollector(guiHelper, JeiEntityLoot::new)));
+        gameplayCategories.putAll(config.gameplayCategories.stream().collect(getCollector(guiHelper, JeiGameplayLoot::new)));
+        tradeCategories.putAll(config.tradeCategories.stream().collect(getCollector(guiHelper, JeiTradeLoot::new)));
 
         blockCategories.values().forEach(registration::addRecipeCategories);
         entityCategories.values().forEach(registration::addRecipeCategories);
@@ -104,6 +104,7 @@ public class JeiCompatibility implements IModPlugin {
 
     private void registerData(IRecipeRegistration registration, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
+        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to JEI");
@@ -117,6 +118,7 @@ public class JeiCompatibility implements IModPlugin {
             GenericUtils.processData(
                     level,
                     clientRegistry,
+                    config,
                     lootData,
                     tradeData,
                     (node, location, block, outputs) -> {
