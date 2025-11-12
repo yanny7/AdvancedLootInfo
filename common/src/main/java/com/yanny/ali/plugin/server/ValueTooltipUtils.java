@@ -726,4 +726,11 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, predicate.sneak()).build("ali.property.value.sneak"))
                 .add(utils.getValueTooltip(utils, predicate.sprint()).build("ali.property.value.sprint"));
     }
+
+    @NotNull
+    public static <T> IKeyTooltipNode getStandaloneTooltip(IServerUtils utils, ListOperation.StandAlone<T> predicate) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, predicate.value()).build("ali.property.branch.values"))
+                .add(utils.getValueTooltip(utils, predicate.operation()).build("ali.property.value.list_operation"));
+    }
 }

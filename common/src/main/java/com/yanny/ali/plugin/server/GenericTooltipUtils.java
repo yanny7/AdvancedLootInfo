@@ -197,16 +197,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static <T> ITooltipNode getStandaloneTooltip(IServerUtils utils, String key, ListOperation.StandAlone<T> predicate, TriFunction<IServerUtils, String, T, ITooltipNode> mapper) {
-        ITooltipNode components = new TooltipNode(translatable(key));
-
-        components.add(getListOperationTooltip(utils, "ali.property.value.list_operation", predicate.operation()));
-        components.add(getCollectionTooltip(utils, "ali.property.branch.values", predicate.value(), (u, v) -> mapper.apply(u, "ali.property.value.value", v)));
-
-        return components;
-    }
-
-    @NotNull
     public static <T> IKeyTooltipNode getFilterableTooltip(IServerUtils utils, String value, Collection<Filterable<T>> data) {
         IKeyTooltipNode tooltips = BranchTooltipNode.branch();
 
