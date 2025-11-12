@@ -42,7 +42,7 @@ public class EmeraldsForItems extends BaseAccessor<VillagerTrades.ItemListing> i
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(itemLike.asItem().getDefaultInstance()),

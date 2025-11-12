@@ -5,17 +5,18 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import oshi.util.tuples.Pair;
 
-import java.util.Collections;
 import java.util.List;
 
 @ClassAccessor("com.lion.villagersplus.tradeoffers.trades.JsonSellPotionTradeOffer$Factory")
@@ -40,18 +41,18 @@ public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemLi
     }
 
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(ItemStack.EMPTY), // Either.left(PotionUtils.setPotion(buy, Potions.WATER)),
                 new RangeValue(buy.getCount()),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(currency),
                 new RangeValue(currency.getCount()),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(sell),
                 new RangeValue(),
-                List.of(), // List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
+                EmptyTooltipNode.EMPTY, // List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
                 maxUses,
                 experience,
                 multiplier,

@@ -15,10 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStringTooltip;
-
 public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrades.EmeraldsForVillagerTypeItem> {
-    public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing, List<ITooltipNode> conditions) {
+    public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing, ITooltipNode conditions) {
         super(utils, listing, conditions);
     }
 
@@ -29,7 +27,7 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
         for (Map.Entry<VillagerType, Item> entry : listing.trades.entrySet()) {
             VillagerType type = entry.getKey();
             Item item = entry.getValue();
-            List<ITooltipNode> cond = List.of(getStringTooltip(utils, "ali.property.value.villager_type", type.toString()));
+            ITooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
 
             nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }

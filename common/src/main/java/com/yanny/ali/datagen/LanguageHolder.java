@@ -19,8 +19,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.trial_chambers", "Trial Chambers");
         TRANSLATION_MAP.put("emi.category.ali.shearing_loot", "Shearing Loot");
 
-        TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s");
-        TRANSLATION_MAP.put("ali.description.chance", "Chance: %s");
+        TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
+        TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");
         TRANSLATION_MAP.put("ali.description.chance_bonus", "%s (%s %s)");
         TRANSLATION_MAP.put("ali.description.count", "Count: %s");
         TRANSLATION_MAP.put("ali.description.count_bonus", "%s (%s %s)");
@@ -241,6 +241,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.convert_into", "Convert Into:");
         TRANSLATION_MAP.put("ali.property.branch.copy_operations", "Copy Operations:");
         TRANSLATION_MAP.put("ali.property.branch.counts", "Counts:");
+        TRANSLATION_MAP.put("ali.property.branch.criterions", "Criterions:");
         TRANSLATION_MAP.put("ali.property.branch.custom_effects", "Custom Effects:");
         TRANSLATION_MAP.put("ali.property.branch.death_effects", "Death Effects:");
         TRANSLATION_MAP.put("ali.property.branch.decorations", "Decorations:");
@@ -303,6 +304,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.position", "Position:");
         TRANSLATION_MAP.put("ali.property.branch.predicate", "Predicate:");
         TRANSLATION_MAP.put("ali.property.branch.properties", "Properties:");
+        TRANSLATION_MAP.put("ali.property.branch.property", "Property:");
         TRANSLATION_MAP.put("ali.property.branch.recipes", "Recipes:");
         TRANSLATION_MAP.put("ali.property.branch.rule", "Rule:");
         TRANSLATION_MAP.put("ali.property.branch.rules", "Rules:");
@@ -544,6 +546,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.any", "ANY");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.removed", "REMOVED");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");

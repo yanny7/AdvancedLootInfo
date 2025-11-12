@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -13,9 +13,6 @@ import net.minecraft.advancements.critereon.EntitySubPredicate;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getBooleanTooltip;
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.translatable;
 
 @ClassAccessor("com.telepathicgrunt.the_bumblezone.entities.subpredicates.HoneySlimePredicate")
 public class HoneySlimePredicate extends BaseAccessor<EntitySubPredicate> implements IEntitySubPredicateTooltip {
@@ -49,10 +46,8 @@ public class HoneySlimePredicate extends BaseAccessor<EntitySubPredicate> implem
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.entity_sub_predicate.honey_slime"));
-
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.is_baby", isBaby));
-
-        return tooltip;
+        return  BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, isBaby).build("ali.property.value.is_baby"))
+                .build("ali.type.entity_sub_predicate.honey_slime");
     }
 }

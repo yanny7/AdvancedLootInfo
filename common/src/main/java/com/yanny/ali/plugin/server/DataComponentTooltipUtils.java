@@ -2,7 +2,8 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -29,108 +30,98 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
-import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getTrimMaterialTooltip;
-import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getTrimPatternTooltip;
 
 public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCustomDataTooltip(IServerUtils utils, CustomData value) {
-        return getStringTooltip(utils, "ali.property.value.tag", value.copyTag().getAsString());
+        return utils.getValueTooltip(utils, value.copyTag().getAsString()).build("ali.property.value.tag");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getIntTooltip(IServerUtils utils, int value) {
-        return getIntegerTooltip(utils, "ali.property.value.value", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getUnbreakableTooltip(IServerUtils utils, Unbreakable value) {
-        return getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip());
+        return utils.getValueTooltip(utils, value.showInTooltip()).build("ali.property.value.show_in_tooltip");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCustomNameTooltip(IServerUtils utils, Component value) {
-        return getComponentTooltip(utils, "ali.property.value.custom_name", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.custom_name");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getItemNameTooltip(IServerUtils utils, Component value) {
-        return getComponentTooltip(utils, "ali.property.value.item_name", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.item_name");
     }
 
     @NotNull
     public static ITooltipNode getItemLoreTooltip(IServerUtils utils, ItemLore value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.lines", "ali.property.value.null", value.lines(), GenericTooltipUtils::getComponentTooltip));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.styled_lines", "ali.property.value.null", value.styledLines(), GenericTooltipUtils::getComponentTooltip));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.lines()).build("ali.property.branch.lines"))
+                .add(utils.getValueTooltip(utils, value.styledLines()).build("ali.property.branch.styled_lines"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getRarityTooltip(IServerUtils utils, Rarity value) {
-        return getEnumTooltip(utils, "ali.property.value.rarity", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.rarity");
     }
 
     @NotNull
     public static ITooltipNode getItemEnchantmentsTooltip(IServerUtils utils, ItemEnchantments value) {
-        return getMapTooltip(utils, "ali.property.branch.enchantments", value.enchantments, GenericTooltipUtils::getEnchantmentLevelEntryTooltip);
+        return getMapTooltip(utils, value.enchantments, GenericTooltipUtils::getEnchantmentLevelEntryTooltip).build("ali.property.branch.enchantments");
     }
 
     @NotNull
     public static ITooltipNode getAdventureModePredicateTooltip(IServerUtils utils, AdventureModePredicate value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.blocks", "ali.property.branch.predicate", value.predicates, GenericTooltipUtils::getBlockPredicateTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(getCollectionTooltip(utils, "ali.property.branch.predicate", value.predicates).build("ali.property.branch.blocks"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip).build("ali.property.value.show_in_tooltip"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getAttributeModifiersTooltip(IServerUtils utils, ItemAttributeModifiers value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.modifiers", "ali.property.branch.modifier", value.modifiers(), GenericTooltipUtils::getItemAttributeModifiersEntryTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(getCollectionTooltip(utils, "ali.property.branch.modifier", value.modifiers()).build("ali.property.branch.modifiers"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip()).build("ali.property.value.show_in_tooltip"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCustomModelDataTooltip(IServerUtils utils, CustomModelData value) {
-        return getIntegerTooltip(utils, "ali.property.value.value", value.value());
+        return utils.getValueTooltip(utils, value.value()).build("ali.property.value.value");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getEmptyTooltip(IServerUtils ignoredUtils, Unit ignoredValue) {
-        return new TooltipNode();
+        return EmptyTooltipNode.EMPTY;
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getBoolTooltip(IServerUtils utils, boolean value) {
-        return getBooleanTooltip(utils, "ali.property.value.value", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
     @NotNull
     public static ITooltipNode getFoodTooltip(IServerUtils utils, FoodProperties food) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.nutrition", food.nutrition()));
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.saturation", food.saturation()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.can_always_eat", food.canAlwaysEat()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, food.nutrition()).build("ali.property.value.nutrition"))
+                .add(utils.getValueTooltip(utils, food.saturation()).build("ali.property.value.saturation"))
+                .add(utils.getValueTooltip(utils, food.canAlwaysEat()).build("ali.property.value.can_always_eat"))
+                .build();
     }
 
     @NotNull
@@ -169,13 +160,11 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getToolTooltip(IServerUtils utils, Tool tool) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.rules", "ali.property.branch.rule", tool.rules(), GenericTooltipUtils::getRuleTooltip));
-        tooltip.add(getFloatTooltip(utils, "ali.property.value.default_mining_speed", tool.defaultMiningSpeed()));
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.damage_per_block", tool.damagePerBlock()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(getCollectionTooltip(utils, "ali.property.branch.rule", tool.rules()).build("ali.property.branch.rules"))
+                .add(utils.getValueTooltip(utils, tool.defaultMiningSpeed()).build("ali.property.value.default_mining_speed"))
+                .add(utils.getValueTooltip(utils, tool.damagePerBlock()).build("ali.property.value.damage_per_block"))
+                .build();
     }
 
     @Unmodifiable
@@ -215,107 +204,97 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getDyedColorTooltip(IServerUtils utils, DyedItemColor value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.rgb", value.rgb()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.rgb()).build("ali.property.value.rgb"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip()).build("ali.property.value.show_in_tooltip"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getMapColorTooltip(IServerUtils utils, MapItemColor value) {
-        return getIntegerTooltip(utils, "ali.property.value.rgb", value.rgb());
+        return utils.getValueTooltip(utils, value.rgb()).build("ali.property.value.rgb");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getMapIdTooltip(IServerUtils utils, MapId value) {
-        return getIntegerTooltip(utils, "ali.property.value.value", value.id());
+        return utils.getValueTooltip(utils, value.id()).build("ali.property.value.value");
     }
 
     @NotNull
     public static ITooltipNode getMapDecorationsTooltip(IServerUtils utils, MapDecorations value) {
-        return getMapTooltip(utils, "ali.property.branch.decorations", value.decorations(), GenericTooltipUtils::getMapDecorationEntryTooltip);
+        return getMapTooltip(utils, value.decorations(), GenericTooltipUtils::getMapDecorationEntryTooltip).build("ali.property.branch.decorations");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getMapPostProcessingTooltip(IServerUtils utils, MapPostProcessing value) {
-        return getEnumTooltip(utils, "ali.property.value.value", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
     @NotNull
     public static ITooltipNode getChargedProjectilesTooltip(IServerUtils utils, ChargedProjectiles value) {
-        return getCollectionTooltip(utils, "ali.property.branch.items", "ali.property.branch.item", value.getItems(), GenericTooltipUtils::getItemStackTooltip);
+        return getCollectionTooltip(utils, "ali.property.branch.item", value.getItems()).build("ali.property.branch.items");
     }
 
     @NotNull
     public static ITooltipNode getBundleContentsTooltip(IServerUtils utils, BundleContents value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.items", "ali.property.branch.item", value.items, GenericTooltipUtils::getItemStackTooltip));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.fraction", value.weight().toString()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(getCollectionTooltip(utils, "ali.property.branch.item", value.items).build("ali.property.branch.items"))
+                .add(utils.getValueTooltip(utils, value.weight().toString()).build("ali.property.value.fraction"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getPotionContentsTooltip(IServerUtils utils, PotionContents value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getOptionalHolderTooltip(utils, "ali.property.value.potion", value.potion(), RegistriesTooltipUtils::getPotionTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.custom_color", value.customColor(), GenericTooltipUtils::getIntegerTooltip));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.custom_effects", "ali.property.value.null", value.customEffects(), GenericTooltipUtils::getMobEffectInstanceTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.custom_name", value.customName(), GenericTooltipUtils::getStringTooltip));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.potion()).build("ali.property.value.potion"))
+                .add(utils.getValueTooltip(utils, value.customColor()).build("ali.property.value.custom_color"))
+                .add(utils.getValueTooltip(utils, value.customEffects()).build("ali.property.branch.custom_effects"))
+                .add(utils.getValueTooltip(utils, value.customName()).build("ali.property.value.custom_name"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getSuspiciousStewEffectsTooltip(IServerUtils utils, SuspiciousStewEffects value) {
-        return getCollectionTooltip(utils, "ali.property.branch.effects", value.effects(), GenericTooltipUtils::getSuspiciousStewEffectEntryTooltip);
+        return utils.getValueTooltip(utils, value.effects()).build("ali.property.branch.effects");
     }
 
     @NotNull
     public static ITooltipNode getWritableBookContentTooltip(IServerUtils utils, WritableBookContent value) {
-        return getFilterableTooltip(utils, "ali.property.branch.pages", "ali.property.branch.page", value.pages(), GenericTooltipUtils::getStringTooltip);
+        return getFilterableTooltip(utils, "ali.property.branch.page", value.pages()).build("ali.property.branch.pages");
     }
 
     @NotNull
     public static ITooltipNode getWrittenBookContentTooltip(IServerUtils utils, WrittenBookContent value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getFilterableTooltip(utils, "ali.property.branch.title", value.title(), GenericTooltipUtils::getStringTooltip));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.author", value.author()));
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.generation", value.generation()));
-        tooltip.add(getFilterableTooltip(utils, "ali.property.branch.pages", "ali.property.branch.page", value.pages(), GenericTooltipUtils::getComponentTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.resolved", value.resolved()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.title()).build("ali.property.branch.title"))
+                .add(utils.getValueTooltip(utils, value.author()).build("ali.property.value.author"))
+                .add(utils.getValueTooltip(utils, value.generation()).build("ali.property.value.generation"))
+                .add(getFilterableTooltip(utils, "ali.property.branch.page", value.pages()).build("ali.property.branch.pages"))
+                .add(utils.getValueTooltip(utils, value.resolved()).build("ali.property.value.resolved"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getTrimTooltip(IServerUtils utils, ArmorTrim value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getTrimMaterialTooltip(utils, "ali.property.value.material", value.material().value()));
-        tooltip.add(getTrimPatternTooltip(utils, "ali.property.value.pattern", value.pattern().value()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.material().value()).build("ali.property.value.material"))
+                .add(utils.getValueTooltip(utils, value.pattern().value()).build("ali.property.value.pattern"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip()).build("ali.property.value.show_in_tooltip"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getDebugStickStateTooltip(IServerUtils utils, DebugStickState value) {
-        return getMapTooltip(utils, "ali.property.branch.properties", value.properties(), GenericTooltipUtils::getBlockPropertyEntryTooltip);
+        return getMapTooltip(utils, value.properties(), GenericTooltipUtils::getBlockPropertyEntryTooltip).build("ali.property.branch.properties");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getInstrumentTooltip(IServerUtils utils, Holder<Instrument> value) {
-        return RegistriesTooltipUtils.getInstrumentTooltip(utils, "ali.property.value.value", value.value());
+        return utils.getValueTooltip(utils, value.value()).build("ali.property.value.value");
     }
 
     @Unmodifiable
@@ -326,122 +305,108 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayable value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getEitherHolderTooltip(utils, "ali.property.value.song", value.song(), RegistriesTooltipUtils::getJukeboxSongTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.show_in_tooltip", value.showInTooltip()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.song()).build("ali.property.value.song"))
+                .add(utils.getValueTooltip(utils, value.showInTooltip()).build("ali.property.value.show_in_tooltip"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getRecipesTooltip(IServerUtils utils, List<ResourceKey<Recipe<?>>> value) {
-        return getCollectionTooltip(utils, "ali.property.branch.recipes", "ali.property.value.null", value, GenericTooltipUtils::getResourceKeyTooltip);
+        return utils.getValueTooltip(utils, value).build("ali.property.branch.recipes");
     }
 
     @NotNull
     public static ITooltipNode getLodestoneTrackerTooltip(IServerUtils utils, LodestoneTracker value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getOptionalTooltip(utils, "ali.property.branch.global_pos", value.target(), GenericTooltipUtils::getGlobalPosTooltip));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.tracked", value.tracked()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.target()).build("ali.property.branch.global_pos"))
+                .add(utils.getValueTooltip(utils, value.tracked()).build("ali.property.value.tracked"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getFireworkExplosionTooltip(IServerUtils utils, FireworkExplosion value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getEnumTooltip(utils, "ali.property.value.shape", value.shape()));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.colors", value.colors().toString()));
-        tooltip.add(getStringTooltip(utils, "ali.property.value.fade_colors", value.fadeColors().toString()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.has_trail", value.hasTrail()));
-        tooltip.add(getBooleanTooltip(utils, "ali.property.value.has_twinkle", value.hasTwinkle()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.shape()).build("ali.property.value.shape"))
+                .add(utils.getValueTooltip(utils, value.colors().toString()).build("ali.property.value.colors"))
+                .add(utils.getValueTooltip(utils, value.fadeColors().toString()).build("ali.property.value.fade_colors"))
+                .add(utils.getValueTooltip(utils, value.hasTrail()).build("ali.property.value.has_trail"))
+                .add(utils.getValueTooltip(utils, value.hasTwinkle()).build("ali.property.value.has_twinkle"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getFireworksTooltip(IServerUtils utils, Fireworks value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.flight_duration", value.flightDuration()));
-        tooltip.add(getCollectionTooltip(utils, "ali.property.branch.explosions", "ali.property.branch.explosion", value.explosions(), GenericTooltipUtils::getFireworkExplosionTooltip));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.flightDuration()).build("ali.property.value.flight_duration"))
+                .add(getCollectionTooltip(utils, "ali.property.branch.explosion", value.explosions()).build("ali.property.branch.explosions"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getProfileTooltip(IServerUtils utils, ResolvableProfile value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.name", value.name(), GenericTooltipUtils::getStringTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.uuid", value.id(), GenericTooltipUtils::getUUIDTooltip));
-        tooltip.add(getMapTooltip(utils, "ali.property.branch.properties", value.properties().asMap(), GenericTooltipUtils::getPropertiesEntryTooltip));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.name()).build("ali.property.value.name"))
+                .add(utils.getValueTooltip(utils, value.id()).build("ali.property.value.uuid"))
+                .add(getMapTooltip(utils, value.properties().asMap(), GenericTooltipUtils::getPropertiesEntryTooltip).build("ali.property.branch.properties"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getResourceLocationTooltip(IServerUtils utils, ResourceLocation value) {
-        return GenericTooltipUtils.getResourceLocationTooltip(utils, "ali.property.value.value", value);
+    public static ITooltipNode getNoteBlockSoundTooltip(IServerUtils utils, ResourceLocation value) {
+        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getBannerPatternsTooltip(IServerUtils utils, BannerPatternLayers value) {
-        return getBannerPatternLayersTooltip(utils, "ali.property.branch.banner_patterns", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.branch.banner_patterns");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getBaseColorTooltip(IServerUtils utils, DyeColor value) {
-        return getEnumTooltip(utils, "ali.property.value.color", value);
+        return utils.getValueTooltip(utils, value).build("ali.property.value.color");
     }
 
     @NotNull
     public static ITooltipNode getPotDecorationsTooltip(IServerUtils utils, PotDecorations value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.back", value.back(), RegistriesTooltipUtils::getItemTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.left", value.left(), RegistriesTooltipUtils::getItemTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.right", value.right(), RegistriesTooltipUtils::getItemTooltip));
-        tooltip.add(getOptionalTooltip(utils, "ali.property.value.front", value.front(), RegistriesTooltipUtils::getItemTooltip));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.back()).build("ali.property.value.back"))
+                .add(utils.getValueTooltip(utils, value.left()).build("ali.property.value.left"))
+                .add(utils.getValueTooltip(utils, value.right()).build("ali.property.value.right"))
+                .add(utils.getValueTooltip(utils, value.front()).build("ali.property.value.front"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getContainerTooltip(IServerUtils utils, ItemContainerContents value) {
-        return getCollectionTooltip(utils, "ali.property.branch.items", "ali.property.branch.item", value.items, GenericTooltipUtils::getItemStackTooltip);
+        return getCollectionTooltip(utils, "ali.property.branch.item", value.items).build("ali.property.branch.items");
     }
 
     @NotNull
     public static ITooltipNode getBlockStateTooltip(IServerUtils ignoredUtils, BlockItemStateProperties properties) {
-        return getMapTooltip(ignoredUtils, "ali.property.branch.properties", properties.properties(), GenericTooltipUtils::getStringEntryTooltip);
+        return getMapTooltip(ignoredUtils, properties.properties(), GenericTooltipUtils::getStringEntryTooltip).build("ali.property.branch.properties");
     }
 
     @NotNull
     public static ITooltipNode getBeesTooltip(IServerUtils utils, List<BeehiveBlockEntity.Occupant> properties) {
-        return getCollectionTooltip(utils, "ali.property.branch.bees", "ali.property.branch.occupant", properties, GenericTooltipUtils::getBeehiveBlockEntityOccupantTooltip);
+        return getCollectionTooltip(utils, "ali.property.branch.occupant", properties).build("ali.property.branch.bees");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getLockTooltip(IServerUtils utils, LockCode lockCode) {
-        return getItemPredicateTooltip(utils, "ali.property.branch.predicate", lockCode.predicate());
+        return utils.getValueTooltip(utils, lockCode.predicate()).build("ali.property.branch.predicate");
     }
 
     @NotNull
     public static ITooltipNode getContainerLootTooltip(IServerUtils utils, SeededContainerLoot value) {
-        ITooltipNode tooltip = new TooltipNode();
-
-        tooltip.add(getResourceKeyTooltip(utils, "ali.property.value.loot_table", value.lootTable()));
-        tooltip.add(getLongTooltip(utils, "ali.property.value.seed", value.seed()));
-
-        return tooltip;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.lootTable()).build("ali.property.value.loot_table"))
+                .add(utils.getValueTooltip(utils, value.seed()).build("ali.property.value.seed"))
+                .build();
     }
 }
