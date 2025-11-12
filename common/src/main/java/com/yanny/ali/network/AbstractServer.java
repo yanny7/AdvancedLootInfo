@@ -205,6 +205,11 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
+            if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
+                lootTables.remove(entityType.getDefaultLootTable()); // at least remove entity default loot table, otherwise it will end up in gameplay category
+                continue;
+            }
+
             List<Entity> entityList = serverRegistry.createEntities(entityType, level);
 
             for (Entity entity : entityList) {

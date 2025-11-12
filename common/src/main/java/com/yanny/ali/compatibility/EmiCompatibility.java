@@ -7,6 +7,7 @@ import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
 import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
 import com.yanny.ali.compatibility.emi.EmiTradeLoot;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.AliCommonRegistry;
@@ -71,15 +72,16 @@ public class EmiCompatibility implements EmiPlugin {
     private void registerData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AliCommonRegistry commonRegistry = PluginManager.COMMON_REGISTRY;
+        AliConfig config = commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to EMI");
 
         if (level != null) {
-            Map<LootCategory<Block>, EmiRecipeCategory> blockCategories = commonRegistry.getConfiguration().blockCategories.stream().collect(getCollector());
-            Map<LootCategory<EntityType<?>>, EmiRecipeCategory> entityCategories = commonRegistry.getConfiguration().entityCategories.stream().collect(getCollector());
-            Map<LootCategory<ResourceLocation>, EmiRecipeCategory> gameplayCategories = commonRegistry.getConfiguration().gameplayCategories.stream().collect(getCollector());
-            Map<LootCategory<ResourceLocation>, EmiRecipeCategory> tradeCategories = commonRegistry.getConfiguration().tradeCategories.stream().collect(getCollector());
+            Map<LootCategory<Block>, EmiRecipeCategory> blockCategories = config.blockCategories.stream().collect(getCollector());
+            Map<LootCategory<EntityType<?>>, EmiRecipeCategory> entityCategories = config.entityCategories.stream().collect(getCollector());
+            Map<LootCategory<ResourceLocation>, EmiRecipeCategory> gameplayCategories = config.gameplayCategories.stream().collect(getCollector());
+            Map<LootCategory<ResourceLocation>, EmiRecipeCategory> tradeCategories = config.tradeCategories.stream().collect(getCollector());
 
             blockCategories.values().forEach(registry::addCategory);
             entityCategories.values().forEach(registry::addCategory);
@@ -89,6 +91,7 @@ public class EmiCompatibility implements EmiPlugin {
             GenericUtils.processData(
                     level,
                     clientRegistry,
+                    config,
                     lootData,
                     tradeData,
                     (node, location, block, outputs) -> {

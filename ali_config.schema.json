@@ -108,12 +108,17 @@
     },
     "tradeCategories": {
       "type": "array",
-      "description": "List of loot categories associated with trading or special exchanges.",
+      "description": "List of loot categories associated with trading.",
       "items": { "$ref": "#/definitions/GameplayAndTradeCategoryDefinition" }
+    },
+    "disabledEntities": {
+      "type": "array",
+      "description": "List of entities that will not be used for gathering loot tables.",
+      "items": { "$ref": "#/definitions/ResourceLocation" }
     },
     "logMoreStatistics": {
       "type": "boolean",
-      "description": "If true, logs more detailed statistics. Default value in Java is false.",
+      "description": "If true, logs more detailed statistics.",
       "default": false
     }
   },
