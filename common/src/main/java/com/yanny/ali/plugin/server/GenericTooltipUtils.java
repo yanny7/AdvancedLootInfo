@@ -16,11 +16,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.component.MapDecorations;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -254,8 +252,8 @@ public class GenericTooltipUtils {
     // MAP ENTRY
 
     @NotNull
-    public static ITooltipNode getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceLocation, Boolean> entry) {
-        return ValueTooltipNode.keyValue(entry.getKey(), entry.getValue()).build("ali.property.value.null");
+    public static ITooltipNode getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceKey<Recipe<?>>, Boolean> entry) {
+        return ValueTooltipNode.keyValue(entry.getKey().location(), entry.getValue()).build("ali.property.value.null");
     }
 
     @NotNull
@@ -365,7 +363,7 @@ public class GenericTooltipUtils {
         HolderLookup.Provider provider = utils.lookupProvider();
 
         if (provider != null) {
-            Optional<HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
+            Optional<? extends HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
 
             if (lookup.isPresent()) {
                 Optional<Holder.Reference<V>> first = lookup.get().listElements().filter((l) -> l.value() == value).findFirst();

@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.server;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import net.minecraft.advancements.critereon.*;
 import org.jetbrains.annotations.NotNull;

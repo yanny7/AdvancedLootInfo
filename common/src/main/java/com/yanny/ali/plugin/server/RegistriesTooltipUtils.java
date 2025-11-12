@@ -108,7 +108,7 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getInstrumentTooltip(IServerUtils utils, Instrument value) {
+    public static IKeyTooltipNode getInstrumentTooltip(IServerUtils utils, Instrument value) {
         return getRegistryTooltip(utils, Registries.INSTRUMENT, value);
     }
 
@@ -167,9 +167,8 @@ public class RegistriesTooltipUtils {
         return getRegistryTooltip(utils, Registries.JUKEBOX_SONG, pattern);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getSoundEventTooltip(IServerUtils utils, String key, SoundEvent soundEvent) {
-        return getRegistryTooltip(utils, key, Registries.SOUND_EVENT, soundEvent);
+    public static IKeyTooltipNode getSoundEventTooltip(IServerUtils utils, SoundEvent soundEvent) {
+        return getRegistryTooltip(utils, Registries.SOUND_EVENT, soundEvent);
     }
 }

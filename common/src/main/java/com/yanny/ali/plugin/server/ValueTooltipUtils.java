@@ -26,7 +26,6 @@ import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
@@ -527,13 +526,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getPossibleEffectTooltip(IServerUtils utils, FoodProperties.PossibleEffect effect) {
-        return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, effect.effect()).build("ali.property.value.effect"))
-                .add(utils.getValueTooltip(utils, effect.probability()).build("ali.property.value.probability"));
-    }
-
-    @NotNull
     public static IKeyTooltipNode getMobEffectInstanceTooltip(IServerUtils utils, MobEffectInstance effect) {
         IKeyTooltipNode tooltip = utils.getValueTooltip(utils, effect.getEffect());
 
@@ -721,5 +713,17 @@ public class ValueTooltipUtils {
     @NotNull
     public static <T> IKeyTooltipNode getEitherHolderTooltip(IServerUtils utils, EitherHolder<T> holder) {
         return holder.asEither().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getInputPredicateTooltip(IServerUtils utils, InputPredicate predicate) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, predicate.forward()).build("ali.property.value.forward"))
+                .add(utils.getValueTooltip(utils, predicate.backward()).build("ali.property.value.backward"))
+                .add(utils.getValueTooltip(utils, predicate.left()).build("ali.property.value.left"))
+                .add(utils.getValueTooltip(utils, predicate.right()).build("ali.property.value.right"))
+                .add(utils.getValueTooltip(utils, predicate.jump()).build("ali.property.value.jump"))
+                .add(utils.getValueTooltip(utils, predicate.sneak()).build("ali.property.value.sneak"))
+                .add(utils.getValueTooltip(utils, predicate.sprint()).build("ali.property.value.sprint"));
     }
 }

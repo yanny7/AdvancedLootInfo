@@ -15,7 +15,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.stats.Stats;
@@ -37,7 +36,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.*;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -302,11 +300,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, "ali.property.branch.entity_types", EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT)).build("ali.property.branch.entity_types"), List.of(
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT)).build("ali.property.branch.entity_types"), List.of(
                 "Entity Types:",
                 "  -> minecraft:cat"
         ));
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, "ali.property.branch.entity_types", EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS)).build("ali.property.branch.entity_types"), List.of(
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS)).build("ali.property.branch.entity_types"), List.of(
                 "Entity Types:",
                 "  -> Tag: minecraft:skeletons"
         ));
@@ -394,17 +392,17 @@ public class GenericTooltipTest {
 
         compoundTag.putFloat("test", 3F);
 
-        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.DIRT).build()).build("ali.property.branch.block_predicate"), List.of(
+        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.DIRT).build()).build("ali.property.branch.block_predicate"), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
                 "    -> minecraft:dirt"
         ));
-        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, "ali.property.branch.block_predicate", BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), BlockTags.BEDS).build()).build("ali.property.branch.block_predicate"), List.of(
+        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), BlockTags.BEDS).build()).build("ali.property.branch.block_predicate"), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
                 "    -> Tag: minecraft:beds"
         ));
-        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, "ali.property.branch.block_predicate", BlockPredicate.Builder.block()
+        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block()
                 .of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.STONE, Blocks.COBBLESTONE)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST))
                 .hasNbt(compoundTag)
@@ -526,7 +524,7 @@ public class GenericTooltipTest {
 
         compoundTag.putBoolean("healing", true);
 
-        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, "ali.type.condition.match_tool", ItemPredicate.Builder.item()
+        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.AXES)
                 .hasComponents(DataComponentPredicate.builder().expect(DataComponents.BASE_COLOR, DyeColor.BLUE).build())
                 .build()
@@ -538,7 +536,7 @@ public class GenericTooltipTest {
                 "    -> minecraft:base_color",
                 "      -> Color: BLUE"
         ));
-        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, "ali.type.condition.match_tool", ItemPredicate.Builder.item()
+        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.CAKE, Items.NETHERITE_AXE)
                 .withCount(MinMaxBounds.Ints.between(10, 15))
                 .hasComponents(DataComponentPredicate.builder()
@@ -902,7 +900,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testItemStackTooltip() {
-        assertUnorderedTooltip(ValueTooltipUtils.getItemStackTooltip(UTILS, "ali.property.branch.item", new ItemStack(
+        assertUnorderedTooltip(ValueTooltipUtils.getItemStackTooltip(UTILS, new ItemStack(
                 Holder.direct(Items.ANDESITE),
                 10
         )).build("ali.property.branch.item"), List.of(
@@ -1093,7 +1091,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testInputPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getInputPredicateTooltip(UTILS, "ali.property.branch.input", new InputPredicate(
+        assertTooltip(ValueTooltipUtils.getInputPredicateTooltip(UTILS, new InputPredicate(
                 Optional.of(true),
                 Optional.of(true),
                 Optional.of(false),
@@ -1101,7 +1099,7 @@ public class GenericTooltipTest {
                 Optional.of(false),
                 Optional.of(true),
                 Optional.of(true)
-        )), List.of(
+        )).build("ali.property.branch.input"), List.of(
                 "Input:",
                 "  -> Forward: true",
                 "  -> Backward: true",

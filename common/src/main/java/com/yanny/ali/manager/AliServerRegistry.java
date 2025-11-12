@@ -419,7 +419,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return consumeEffectTooltipGetter.apply(utils, effect);
         } else {
             missingConsumeEffectTooltips.add(effect.getClass());
-            return GenericTooltipUtils.getStringTooltip(utils, "ali.util.advanced_loot_info.missing", effect.getClass().getSimpleName());
+            return utils.getValueTooltip(utils, effect.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
         }
     }
 

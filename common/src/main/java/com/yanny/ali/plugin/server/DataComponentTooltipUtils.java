@@ -126,36 +126,32 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getConsumableTooltip(IServerUtils utils, Consumable consumable) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getFloatTooltip(utils, "ali.property.value.consume_seconds", consumable.consumeSeconds()));
-        components.add(getEnumTooltip(utils, "ali.property.value.animation", consumable.animation()));
-        components.add(getHolderTooltip(utils, "ali.property.value.sound", consumable.sound(), RegistriesTooltipUtils::getSoundEventTooltip));
-        components.add(getBooleanTooltip(utils, "ali.property.value.has_custom_particles", consumable.hasConsumeParticles()));
-        components.add(getCollectionTooltip(utils, "ali.property.branch.on_consume_effects", consumable.onConsumeEffects(), utils::getConsumeEffectTooltip));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, consumable.consumeSeconds()).build("ali.property.value.consume_seconds"))
+                .add(utils.getValueTooltip(utils, consumable.animation()).build("ali.property.value.animation"))
+                .add(utils.getValueTooltip(utils, consumable.sound()).build("ali.property.value.sound"))
+                .add(utils.getValueTooltip(utils, consumable.hasConsumeParticles()).build("ali.property.value.has_custom_particles"))
+                .add(GenericTooltipUtils.getCollectionTooltip(utils, consumable.onConsumeEffects(), utils::getConsumeEffectTooltip).build("ali.property.branch.on_consume_effects"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getUseRemainderTooltip(IServerUtils utils, UseRemainder remainder) {
-        return getItemStackTooltip(utils, "ali.property.branch.convert_into", remainder.convertInto());
+        return utils.getValueTooltip(utils, remainder.convertInto()).build("ali.property.branch.convert_into");
     }
 
     @NotNull
     public static ITooltipNode getUseCooldownTooltip(IServerUtils utils, UseCooldown cooldown) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getFloatTooltip(utils, "ali.property.value.seconds", cooldown.seconds()));
-        components.add(getOptionalTooltip(utils, "ali.property.value.cooldown_group", cooldown.cooldownGroup(), GenericTooltipUtils::getResourceLocationTooltip));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, cooldown.seconds()).build("ali.property.value.seconds"))
+                .add(utils.getValueTooltip(utils, cooldown.cooldownGroup()).build("ali.property.value.cooldown_group"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getDamageResistantTooltip(IServerUtils utils, DamageResistant resistant) {
-        return getTagKeyTooltip(utils, "ali.property.value.type", resistant.types());
+        return utils.getValueTooltip(utils, resistant.types()).build("ali.property.value.type");
     }
 
     @NotNull
@@ -170,36 +166,34 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getEnchantableTooltip(IServerUtils utils, Enchantable enchantable) {
-        return getIntegerTooltip(utils, "ali.property.value.value", enchantable.value());
+        return utils.getValueTooltip(utils, enchantable.value()).build("ali.property.value.value");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getEquipableTooltip(IServerUtils utils, Equippable equippable) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getEnumTooltip(utils, "ali.property.value.equipment_slot", equippable.slot()));
-        components.add(getHolderTooltip(utils, "ali.property.value.equip_sound", equippable.equipSound(), RegistriesTooltipUtils::getSoundEventTooltip));
-        components.add(getOptionalTooltip(utils, "ali.property.value.model", equippable.model(), GenericTooltipUtils::getResourceLocationTooltip));
-        components.add(getOptionalTooltip(utils, "ali.property.value.camera_overlay", equippable.cameraOverlay(), GenericTooltipUtils::getResourceLocationTooltip));
-        components.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.allowed_entities", "ali.property.value.null", equippable.allowedEntities(), RegistriesTooltipUtils::getEntityTypeTooltip));
-        components.add(getBooleanTooltip(utils, "ali.property.value.dispensable", equippable.dispensable()));
-        components.add(getBooleanTooltip(utils, "ali.property.value.swappable", equippable.swappable()));
-        components.add(getBooleanTooltip(utils, "ali.property.value.damage_on_hurt", equippable.damageOnHurt()));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, equippable.slot()).build("ali.property.value.equipment_slot"))
+                .add(utils.getValueTooltip(utils, equippable.equipSound()).build("ali.property.value.equip_sound"))
+                .add(utils.getValueTooltip(utils, equippable.model()).build("ali.property.value.model"))
+                .add(utils.getValueTooltip(utils, equippable.cameraOverlay()).build("ali.property.value.camera_overlay"))
+                .add(utils.getValueTooltip(utils, equippable.allowedEntities()).build("ali.property.branch.allowed_entities"))
+                .add(utils.getValueTooltip(utils, equippable.dispensable()).build("ali.property.value.dispensable"))
+                .add(utils.getValueTooltip(utils, equippable.swappable()).build("ali.property.value.swappable"))
+                .add(utils.getValueTooltip(utils, equippable.damageOnHurt()).build("ali.property.value.damage_on_hurt"))
+                .build();
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getRepairableTooltip(IServerUtils utils, Repairable repairable) {
-        return getHolderSetTooltip(utils, "ali.property.branch.items", "ali.property.value.null", repairable.items(), RegistriesTooltipUtils::getItemTooltip);
+        return utils.getValueTooltip(utils, repairable.items()).build("ali.property.branch.items");
     }
 
     @Unmodifiable
     @NotNull
     public static ITooltipNode getDeathProtectionTooltip(IServerUtils utils, DeathProtection protection) {
-        return getCollectionTooltip(utils, "ali.property.branch.death_effects", protection.deathEffects(), utils::getConsumeEffectTooltip);
+        return GenericTooltipUtils.getCollectionTooltip(utils, protection.deathEffects(), utils::getConsumeEffectTooltip).build("ali.property.branch.death_effects");
     }
 
     @NotNull
@@ -300,7 +294,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getOminousBottleAmplifierTooltip(IServerUtils utils, OminousBottleAmplifier value) {
-        return getIntegerTooltip(utils, "ali.property.value.value", value.value());
+        return utils.getValueTooltip(utils, value.value()).build("ali.property.value.value");
     }
 
     @NotNull
@@ -353,9 +347,8 @@ public class DataComponentTooltipUtils {
                 .build();
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getNoteBlockSoundTooltip(IServerUtils utils, ResourceLocation value) {
+    public static ITooltipNode getResourceLocationTooltip(IServerUtils utils, ResourceLocation value) {
         return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
