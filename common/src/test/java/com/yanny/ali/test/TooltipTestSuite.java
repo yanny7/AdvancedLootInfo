@@ -132,6 +132,11 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
+                return PluginManager.SERVER_REGISTRY.getValueTooltip(utils, value);
+            }
+
+            @Override
             public <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
                 return PluginManager.SERVER_REGISTRY.getDataComponentPredicateTooltip(utils, predicate);
             }
@@ -167,8 +172,8 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, List<ITooltipNode> conditions) {
-                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, conditions);
+            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
+                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, condition);
             }
 
             @Override

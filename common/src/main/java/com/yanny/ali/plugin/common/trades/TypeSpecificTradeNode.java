@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getResourceKeyTooltip;
-
 public class TypeSpecificTradeNode extends SubTradesNode<VillagerTrades.TypeSpecificTrade> {
-    public TypeSpecificTradeNode(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing, List<ITooltipNode> conditions) {
+    public TypeSpecificTradeNode(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing, ITooltipNode conditions) {
         super(utils, listing, conditions);
     }
 
@@ -28,10 +26,7 @@ public class TypeSpecificTradeNode extends SubTradesNode<VillagerTrades.TypeSpec
         for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
             ResourceKey<VillagerType> type = entry.getKey();
             VillagerTrades.ItemListing item = entry.getValue();
-            List<ITooltipNode> cond = new ArrayList<>();
-
-            cond.add(getResourceKeyTooltip(utils, "ali.property.value.villager_type", type));
-            nodes.add(utils.getItemListing(utils, item, cond));
+            nodes.add(utils.getItemListing(utils, item, utils.getValueTooltip(utils, type).build("ali.property.value.villager_type")));
         }
 
         return nodes;

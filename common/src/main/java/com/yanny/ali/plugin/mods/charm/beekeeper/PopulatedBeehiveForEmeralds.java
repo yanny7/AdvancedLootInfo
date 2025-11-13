@@ -5,6 +5,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
@@ -20,10 +21,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.Collections;
 import java.util.List;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntegerTooltip;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$PopulatedBeehiveForEmeralds")
 public class PopulatedBeehiveForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -42,22 +40,22 @@ public class PopulatedBeehiveForEmeralds extends BaseAccessor<VillagerTrades.Ite
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        ITooltipNode tooltip = RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.branch.bees", utils.lookupProvider().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.UNBREAKING).orElseThrow().value());
-
-        tooltip.add(getIntegerTooltip(utils, "ali.property.value.count", 2));
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
+        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING)
+                .add(utils.getValueTooltip(utils, 2).build("ali.property.value.count"))
+                .build("ali.property.branch.bees");
 
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(baseEmeralds, baseEmeralds + extraEmeralds),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(ItemStack.EMPTY),
                 new RangeValue(),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(Items.BEEHIVE.getDefaultInstance()),
                 new RangeValue(),
-                List.of(tooltip),
+                tooltip,
                 maxUses,
                 villagerXp,
                 0.2F,
