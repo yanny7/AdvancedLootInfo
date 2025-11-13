@@ -50,7 +50,7 @@ public class AncientToolItemListing extends BaseAccessor<VillagerTrades.ItemList
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
+    public IDataNode getNode(IServerUtils utils, ITooltipNode condition) {
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
@@ -60,7 +60,7 @@ public class AncientToolItemListing extends BaseAccessor<VillagerTrades.ItemList
                 15,
                 1,
                 1.0F,
-                conditions
+                condition
         );
     }
 

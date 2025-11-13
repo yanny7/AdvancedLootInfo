@@ -2,103 +2,96 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import net.minecraft.core.component.predicates.*;
 import org.jetbrains.annotations.NotNull;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getCollectionPredicateTooltip;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getCollectionTooltip;
 
 public class DataComponentPredicateTooltipUtils {
     @NotNull
     public static ITooltipNode getDamagePredicateTooltip(IServerUtils utils, DamagePredicate predicate) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getMinMaxBoundsTooltip(utils, "ali.property.value.damage", predicate.damage()));
-        components.add(getMinMaxBoundsTooltip(utils, "ali.property.value.durability", predicate.durability()));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, predicate.damage()).build("ali.property.value.damage"))
+                .add(utils.getValueTooltip(utils, predicate.durability()).build("ali.property.value.durability"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getEnchantmentsPredicateTooltip(IServerUtils utils, EnchantmentsPredicate.Enchantments predicate) {
-        return getCollectionTooltip(utils, "ali.property.branch.enchantment_predicate", "ali.property.branch.enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, "ali.property.branch.enchantments", predicate.enchantments).build("ali.property.branch.enchantment_predicate");
     }
 
     @NotNull
     public static ITooltipNode getStoredEnchantmentsPredicateTooltip(IServerUtils utils, EnchantmentsPredicate.StoredEnchantments predicate) {
-        return getCollectionTooltip(utils, "ali.property.branch.enchantment_predicate", "ali.property.branch.enchantments", predicate.enchantments, GenericTooltipUtils::getEnchantmentPredicateTooltip);
+        return getCollectionTooltip(utils, "ali.property.branch.enchantments", predicate.enchantments).build("ali.property.branch.enchantment_predicate");
     }
 
     @NotNull
     public static ITooltipNode getPotionsPredicateTooltip(IServerUtils utils, PotionsPredicate predicate) {
-        return getHolderSetTooltip(utils, "ali.property.branch.potions", "ali.property.value.null", predicate.potions(), RegistriesTooltipUtils::getPotionTooltip);
+        return utils.getValueTooltip(utils, predicate.potions()).build("ali.property.branch.potions");
     }
 
     @NotNull
     public static ITooltipNode getCustomDataPredicateTooltip(IServerUtils utils, CustomDataPredicate predicate) {
-        return getNbtPredicateTooltip(utils, "ali.property.value.nbt", predicate.value());
+        return utils.getValueTooltip(utils, predicate.value()).build("ali.property.value.nbt");
     }
 
     @NotNull
     public static ITooltipNode getContainerPredicateTooltip(IServerUtils utils, ContainerPredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", "ali.property.branch.predicate", predicate.items(), GenericTooltipUtils::getItemPredicateTooltip);
+        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", predicate.items()).build("ali.property.branch.predicate");
     }
 
     @NotNull
     public static ITooltipNode getBundlePredicateTooltip(IServerUtils utils, BundlePredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", "ali.property.branch.predicate", predicate.items(), GenericTooltipUtils::getItemPredicateTooltip);
+        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", predicate.items()).build("ali.property.branch.predicate");
     }
 
     @NotNull
     public static ITooltipNode getFireworkExplosionPredicateTooltip(IServerUtils utils, FireworkExplosionPredicate predicate) {
-        return getFireworkPredicateTooltip(utils, "ali.property.branch.predicate", predicate.predicate());
+        return utils.getValueTooltip(utils, predicate.predicate()).build("ali.property.branch.predicate");
     }
 
     @NotNull
     public static ITooltipNode getFireworksPredicateTooltip(IServerUtils utils, FireworksPredicate predicate) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getCollectionPredicateTooltip(utils, "ali.property.branch.explosions", "ali.property.branch.predicate", predicate.explosions(), GenericTooltipUtils::getFireworkPredicateTooltip));
-        components.add(getMinMaxBoundsTooltip(utils, "ali.property.value.flight_duration", predicate.flightDuration()));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", predicate.explosions()).build("ali.property.branch.explosions"))
+                .add(utils.getValueTooltip(utils, predicate.flightDuration()).build("ali.property.value.flight_duration"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getWritableBookPredicateTooltip(IServerUtils utils, WritableBookPredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", "ali.property.value.page", predicate.pages(), GenericTooltipUtils::getPagePredicateTooltip);
+        return getCollectionPredicateTooltip(utils, "ali.property.value.page", predicate.pages()).build("ali.property.branch.predicate");
     }
 
     @NotNull
     public static ITooltipNode getWrittenBookPredicateTooltip(IServerUtils utils, WrittenBookPredicate predicate) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getCollectionPredicateTooltip(utils, "ali.property.branch.pages", "ali.property.value.page", predicate.pages(), GenericTooltipUtils::getPagePredicateTooltip));
-        components.add(getOptionalTooltip(utils, "ali.property.value.author", predicate.author(), GenericTooltipUtils::getStringTooltip));
-        components.add(getOptionalTooltip(utils, "ali.property.value.title", predicate.title(), GenericTooltipUtils::getStringTooltip));
-        components.add(getMinMaxBoundsTooltip(utils, "ali.property.value.generation", predicate.generation()));
-        components.add(getOptionalTooltip(utils, "ali.property.value.resolved", predicate.resolved(), GenericTooltipUtils::getBooleanTooltip));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(getCollectionPredicateTooltip(utils, "ali.property.value.page", predicate.pages()).build("ali.property.branch.pages"))
+                .add(utils.getValueTooltip(utils, predicate.author()).build("ali.property.value.author"))
+                .add(utils.getValueTooltip(utils, predicate.title()).build("ali.property.value.title"))
+                .add(utils.getValueTooltip(utils, predicate.generation()).build("ali.property.value.generation"))
+                .add(utils.getValueTooltip(utils, predicate.resolved()).build("ali.property.value.resolved"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getAttributeModifiersPredicateTooltip(IServerUtils utils, AttributeModifiersPredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", "ali.property.branch.modifier", predicate.modifiers(), GenericTooltipUtils::getEntryPredicateTooltip);
+        return getCollectionPredicateTooltip(utils, "ali.property.branch.modifier", predicate.modifiers()).build("ali.property.branch.predicate");
     }
 
     @NotNull
     public static ITooltipNode getTrimPredicateTooltip(IServerUtils utils, TrimPredicate predicate) {
-        ITooltipNode components = new TooltipNode();
-
-        components.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.materials", "ali.property.value.null", predicate.material(), RegistriesTooltipUtils::getTrimMaterialTooltip));
-        components.add(getOptionalHolderSetTooltip(utils, "ali.property.branch.patterns", "ali.property.value.null", predicate.pattern(), RegistriesTooltipUtils::getTrimPatternTooltip));
-
-        return components;
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, predicate.material()).build("ali.property.branch.materials"))
+                .add(utils.getValueTooltip(utils, predicate.pattern()).build("ali.property.branch.patterns"))
+                .build();
     }
 
     @NotNull
     public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayablePredicate predicate) {
-        return getOptionalHolderSetTooltip(utils, "ali.property.branch.songs", "ali.property.value.null", predicate.song(), RegistriesTooltipUtils::getJukeboxSongTooltip);
+        return utils.getValueTooltip(utils, predicate.song()).build("ali.property.branch.songs");
     }
 }

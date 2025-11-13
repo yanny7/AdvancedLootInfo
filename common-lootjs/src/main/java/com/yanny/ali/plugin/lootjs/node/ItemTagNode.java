@@ -2,7 +2,6 @@ package com.yanny.ali.plugin.lootjs.node;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -27,7 +26,7 @@ import java.util.Map;
 public class ItemTagNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "item_tag");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final TagKey<? extends ItemLike> tag;
@@ -57,7 +56,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
 
     public ItemTagNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -98,14 +97,14 @@ public class ItemTagNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -115,7 +114,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     @NotNull
-    private static List<ITooltipNode> getItemTooltip(IServerUtils utils, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static ITooltipNode getItemTooltip(IServerUtils utils, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = getCount(utils, 1, functions);
 

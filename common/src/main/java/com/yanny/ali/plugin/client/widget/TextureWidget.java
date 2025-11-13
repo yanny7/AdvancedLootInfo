@@ -51,7 +51,7 @@ public class TextureWidget implements IWidget {
         return WidgetDirection.VERTICAL;
     }
 
-    public void tooltipText(List<ITooltipNode> tooltip) {
+    public void tooltipText(ITooltipNode tooltip) {
         this.components.addAll(NodeUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 
