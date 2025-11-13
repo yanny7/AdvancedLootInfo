@@ -1,10 +1,10 @@
 {
-  "ali.description.chance": "概率：%s",
+  "ali.description.chance": "概率：%s%s",
   "ali.description.chance_bonus": "%s（%s %s）",
   "ali.description.count": "数量：%s",
   "ali.description.count_bonus": "%s（%s %s）",
   "ali.description.quality": "质量：%s",
-  "ali.description.rolls": "抽取次数：%s",
+  "ali.description.rolls": "抽取次数：%s%s",
   "ali.enum.group_type.all": "选择所有条目",
   "ali.enum.group_type.alternatives": "仅选择首个成功的条目",
   "ali.enum.group_type.dynamic": "方块特定的动态掉落物",

@@ -6,7 +6,6 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IConditionTooltip;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 @ClassAccessor("io.github.fabricators_of_create.porting_lib.tool.loot.CanToolPerformAction")
@@ -20,7 +19,7 @@ public class CanToolPerformAction extends BaseAccessor<LootItemCondition> implem
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        return GenericTooltipUtils.getStringTooltip(utils, "ali.type.condition.can_tool_perform_action", action.name);
+        return utils.getValueTooltip(utils, action.name).build("ali.type.condition.can_tool_perform_action");
     }
 
     @ClassAccessor("io.github.fabricators_of_create.porting_lib.tool.ToolAction")

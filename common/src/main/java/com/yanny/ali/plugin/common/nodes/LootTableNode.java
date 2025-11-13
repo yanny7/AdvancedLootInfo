@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class LootTableNode extends ListNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "loot_table");
 
-    private final List<ITooltipNode> tooltip;
+    private final ITooltipNode tooltip;
 
     public LootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable lootTable) {
         this(modifiers, utils, lootTable, 1, Collections.emptyList(), Collections.emptyList());
@@ -42,18 +42,26 @@ public class LootTableNode extends ListNode {
         }
     }
 
+    public LootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils) {
+        tooltip = EntryTooltipUtils.getLootTableTooltip();
+
+        for (ILootModifier<?> modifier : modifiers) {
+            NodeUtils.processLootModifier(utils, modifier, this);
+        }
+    }
+
     public LootTableNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = NodeUtils.decodeTooltipNodes(utils, buf);
+        tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        NodeUtils.encodeTooltipNodes(utils, buf, tooltip);
+        ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
     @Override
-    public List<ITooltipNode> getTooltip() {
+    public ITooltipNode getTooltip() {
         return tooltip;
     }
 

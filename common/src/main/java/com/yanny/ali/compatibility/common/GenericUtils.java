@@ -2,6 +2,7 @@ package com.yanny.ali.compatibility.common;
 
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -125,7 +126,7 @@ public class GenericUtils {
         guiGraphics.disableScissor();
     }
 
-    public static void processData(ClientLevel level, AliClientRegistry clientRegistry,
+    public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config,
                                    Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData,
                                    QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
@@ -147,6 +148,11 @@ public class GenericUtils {
         }
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
+            if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
+                lootData.remove(entityType.getDefaultLootTable()); // at least remove entity default loot table
+                continue;
+            }
+
             List<Entity> entityList = clientRegistry.createEntities(entityType, level);
 
             for (Entity entity : entityList) {

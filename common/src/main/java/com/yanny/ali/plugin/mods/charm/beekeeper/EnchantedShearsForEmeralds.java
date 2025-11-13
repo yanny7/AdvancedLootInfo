@@ -5,6 +5,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
@@ -21,10 +22,8 @@ import net.minecraft.world.level.storage.loot.IntRange;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
-import java.util.Collections;
 import java.util.List;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getIntRangeTooltip;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$EnchantedShearsForEmeralds")
 public class EnchantedShearsForEmeralds extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
@@ -43,22 +42,22 @@ public class EnchantedShearsForEmeralds extends BaseAccessor<VillagerTrades.Item
 
     @NotNull
     @Override
-    public IDataNode getNode(IServerUtils utils, List<ITooltipNode> conditions) {
-        ITooltipNode tooltip = RegistriesTooltipUtils.getEnchantmentTooltip(utils, "ali.property.value.enchantment", utils.lookupProvider().lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.UNBREAKING).orElseThrow().value());
-
-        tooltip.add(getIntRangeTooltip(utils, "ali.property.value.levels", IntRange.range(1, 3)));
+    public IDataNode getNode(IServerUtils utils, ITooltipNode conditions) {
+        ITooltipNode tooltip = utils.getValueTooltip(utils, Enchantments.UNBREAKING)
+                .add(utils.getValueTooltip(utils, IntRange.range(1, 3)).build("ali.property.value.levels"))
+                .build("ali.property.value.enchantment");
 
         return new ItemsToItemsNode(
                 utils,
                 Either.left(Items.EMERALD.getDefaultInstance()),
                 new RangeValue(baseEmeralds, baseEmeralds + 3 * 3 + extraEmeralds),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(ItemStack.EMPTY),
                 new RangeValue(),
-                Collections.emptyList(),
+                EmptyTooltipNode.EMPTY,
                 Either.left(Items.SHEARS.getDefaultInstance()),
                 new RangeValue(),
-                List.of(tooltip),
+                tooltip,
                 maxUses,
                 villagerXp,
                 0.2F,

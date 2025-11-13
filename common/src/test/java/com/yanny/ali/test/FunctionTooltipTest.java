@@ -94,7 +94,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyStateTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
+        assertUnorderedTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
                 .copy(BlockStateProperties.LIT)
                 .copy(BlockStateProperties.HORIZONTAL_FACING)
                 .build()
@@ -102,8 +102,10 @@ public class FunctionTooltipTest {
                 "Copy State:",
                 "  -> Block: minecraft:furnace",
                 "  -> Properties:",
-                "    -> lit",
-                "    -> facing"
+                List.of(
+                    "    -> lit",
+                    "    -> facing"
+                )
         ));
     }
 

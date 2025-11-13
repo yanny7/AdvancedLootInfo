@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.mods.mantle.conditions;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -11,8 +11,6 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 @ClassAccessor("slimeknights.mantle.loot.condition.BlockTagLootCondition")
 public class BlockTagLootCondition extends BaseAccessor<LootItemCondition> implements IConditionTooltip {
@@ -28,11 +26,9 @@ public class BlockTagLootCondition extends BaseAccessor<LootItemCondition> imple
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.condition.block_tag"));
-
-        tooltip.add(getTagKeyTooltip(utils, "ali.property.value.tag", tag));
-        tooltip.add(getStatePropertiesPredicateTooltip(utils, "ali.property.branch.properties", properties));
-
-        return tooltip;
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, tag).build("ali.property.value.tag"))
+                .add(utils.getValueTooltip(utils, properties).build("ali.property.branch.properties"))
+                .build("ali.type.condition.block_tag");
     }
 }

@@ -1,5 +1,7 @@
 package com.yanny.ali.plugin.lootjs;
 
+import com.almostreliable.lootjs.core.filters.IdFilter;
+import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.loot.condition.*;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.mojang.logging.LogUtils;
@@ -12,10 +14,12 @@ import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.lootjs.node.ModifiedNode;
 import com.yanny.ali.plugin.lootjs.server.LootJsConditionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.server.LootJsFunctionTooltipUtils;
+import com.yanny.ali.plugin.lootjs.server.LootJsGenericTooltipUtils;
 import com.yanny.ali.plugin.lootjs.widget.ItemStackWidget;
 import com.yanny.ali.plugin.lootjs.widget.ItemTagWidget;
 import com.yanny.ali.plugin.lootjs.widget.ModifiedWidget;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -66,9 +70,9 @@ public class LootJsPlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerNode(ItemStackNode.ID, ItemStackNode::new);
-        registry.registerNode(ItemTagNode.ID, ItemTagNode::new);
-        registry.registerNode(ModifiedNode.ID, ModifiedNode::new);
+        registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
+        registry.registerDataNode(ItemTagNode.ID, ItemTagNode::new);
+        registry.registerDataNode(ModifiedNode.ID, ModifiedNode::new);
 
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);
@@ -90,6 +94,10 @@ public class LootJsPlugin implements IPlugin {
 
         registry.registerFunctionTooltip(CustomPlayerFunction.class, LootJsFunctionTooltipUtils::customPlayerTooltip);
         registry.registerFunctionTooltip(ModifiedItemFunction.class, LootJsFunctionTooltipUtils::modifiedItemTooltip);
+
+        registry.registerValueTooltip(ItemFilter.class, LootJsGenericTooltipUtils::getItemFilterTooltip);
+        registry.registerValueTooltip(IdFilter.class, LootJsGenericTooltipUtils::getIdFilterTooltip);
+        registry.registerValueTooltip(ItemAbility.class, LootJsGenericTooltipUtils::getItemAbilityTooltip);
 
         registry.registerLootModifiers(LootJsPlugin::registerModifiers);
     }

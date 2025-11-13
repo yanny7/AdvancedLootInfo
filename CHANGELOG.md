@@ -1,3 +1,11 @@
+## []
+
+- Registrable value type
+- Decreased memory consumption
+- Fixed not correctly displayed item count for LootJS loot table
+- Fixed entities not showing loot tables added by LootJS
+- Configurable list of entities that will be excluded from creation (causing crash)
+
 ## [1.4.0]
 
 - Sort loot by chance, descending (highest chance first).
