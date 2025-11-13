@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.mods.supplementaries.functions;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.TooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -28,12 +28,10 @@ public class RandomEnchantFunction extends ConditionalFunction implements IFunct
 
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
-        ITooltipNode tooltip = new TooltipNode(translatable("ali.type.function.curse_loot"));
-
-        tooltip.add(getDoubleTooltip(utils, "ali.property.value.chance", chance));
-        tooltip.add(getHolderSetTooltip(utils, "ali.property.branch.enchantments", "ali.property.value.null", curses, RegistriesTooltipUtils::getEnchantmentTooltip));
-        tooltip.add(getSubConditionsTooltip(utils, predicates));
-
-        return tooltip;
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, chance).build("ali.property.value.chance"))
+                .add(utils.getValueTooltip(utils, curses).build("ali.property.branch.enchantments"))
+                .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.curse_loot");
     }
 }

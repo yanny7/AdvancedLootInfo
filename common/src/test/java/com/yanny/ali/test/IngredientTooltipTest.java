@@ -15,11 +15,13 @@ public class IngredientTooltipTest {
     @Test
     public void ingredientTest() {
         assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)), List.of(
-                "Item: minecraft:acacia_fence",
-                "Item: minecraft:acacia_door"
+                "Items:",
+                "  -> Item: minecraft:acacia_fence",
+                "  -> Item: minecraft:acacia_door"
         ));
         assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Blocks.ACACIA_LOG)), List.of(
-                "Item: minecraft:acacia_log"
+                "Items:",
+                "  -> Item: minecraft:acacia_log"
         ));
     }
 }
