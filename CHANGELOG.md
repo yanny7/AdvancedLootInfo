@@ -1,4 +1,4 @@
-## []
+## [1.5.0]
 
 - Registrable value type
 - Decreased memory consumption
