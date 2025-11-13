@@ -17,6 +17,7 @@ import net.minecraft.util.StringDecomposer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
@@ -39,6 +40,10 @@ public class TestUtils {
 
             if (i < expected.size()) {
                 executables.add(() -> assertTooltip(components.get(index), expected.get(index), String.format("Index: %d", index)));
+            } else {
+                executables.add(() -> {
+                    throw new AssertionFailedError(String.format("Index: %d ==> expected: <> but was: <%s>", index, componentToPlainString(components.get(index))));
+                });
             }
         }
 

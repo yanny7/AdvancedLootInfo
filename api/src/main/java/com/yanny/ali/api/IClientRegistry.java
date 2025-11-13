@@ -6,7 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 public interface IClientRegistry {
     void registerWidget(ResourceLocation id, IWidgetFactory factory);
 
-    <T extends IDataNode> void registerNode(ResourceLocation id, NodeFactory<T> nodeFactory);
+    <T extends IDataNode> void registerDataNode(ResourceLocation id, DataFactory<T> dataFactory);
+
+    <T extends ITooltipNode> void registerTooltipNode(ResourceLocation id, TooltipFactory<T> tooltipFactory);
 
     @FunctionalInterface
     interface IWidgetFactory {
@@ -14,7 +16,12 @@ public interface IClientRegistry {
     }
 
     @FunctionalInterface
-    interface NodeFactory<T extends IDataNode> {
+    interface DataFactory<T extends IDataNode> {
+        T create(IClientUtils utils, RegistryFriendlyByteBuf buf);
+    }
+
+    @FunctionalInterface
+    interface TooltipFactory<T extends ITooltipNode> {
         T create(IClientUtils utils, RegistryFriendlyByteBuf buf);
     }
 }
