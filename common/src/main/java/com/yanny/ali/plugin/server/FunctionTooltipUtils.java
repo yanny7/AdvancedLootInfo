@@ -302,7 +302,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getSetFireworksTooltip(IServerUtils utils, SetFireworksFunction fun) {
         return BranchTooltipNode.branch()
-                .add(getStandaloneTooltip(utils, "ali.property.branch.explosion", fun.explosions).build("ali.property.branch.explosions"))
+                .add(GenericTooltipUtils.getStandaloneTooltip(utils, "ali.property.branch.explosion", fun.explosions).build("ali.property.branch.explosions"))
                 .add(utils.getValueTooltip(utils, fun.flightDuration).build("ali.property.value.flight_duration"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_fireworks");

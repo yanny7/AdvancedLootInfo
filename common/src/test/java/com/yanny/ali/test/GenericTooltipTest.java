@@ -1092,22 +1092,22 @@ public class GenericTooltipTest {
 
     @Test
     public void testStandaloneTooltip() {
-        assertTooltip(GenericTooltipUtils.getStandaloneTooltip(UTILS, "ali.property.branch.strings", new ListOperation.StandAlone<>(
+        assertTooltip(ValueTooltipUtils.getStandaloneTooltip(UTILS, new ListOperation.StandAlone<>(
                 List.of("asdf", "jklo"),
                 new ListOperation.Insert(2)
-        ), GenericTooltipUtils::getStringTooltip), List.of(
+        )).build("ali.property.branch.strings"), List.of(
                 "Strings:",
-                "  -> List Operation: INSERT",
-                "    -> Offset: 2",
                 "  -> Values:",
                 "    -> asdf",
-                "    -> jklo"
+                "    -> jklo",
+                "  -> List Operation: INSERT",
+                "    -> Offset: 2"
         ));
     }
 
     @Test
     public void testDamageReductionTooltip() {
-        assertTooltip(GenericTooltipUtils.getDamageReductionTooltip(UTILS, "ali.property.branch.damage_reduction", new BlocksAttacks.DamageReduction(
+        assertTooltip(ValueTooltipUtils.getDamageReductionTooltip(UTILS, new BlocksAttacks.DamageReduction(
                2.5f,
                Optional.of(HolderSet.direct(
                        LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.ARROW),
@@ -1115,7 +1115,7 @@ public class GenericTooltipTest {
                )),
                0.1f,
                3.2f
-        )), List.of(
+        )).build("ali.property.branch.damage_reduction"), List.of(
                 "Damage Reduction:",
                 "  -> Horizontal Blocking Angle: 2.5",
                 "  -> Damage Types:",
@@ -1128,9 +1128,9 @@ public class GenericTooltipTest {
 
     @Test
     public void testItemDamageTooltip() {
-        assertTooltip(GenericTooltipUtils.getItemDamageTooltip(UTILS, "ali.property.branch.item_damage", new BlocksAttacks.ItemDamageFunction(
+        assertTooltip(ValueTooltipUtils.getItemDamageTooltip(UTILS, new BlocksAttacks.ItemDamageFunction(
                1.2f, 3.5f, 2.4f
-        )), List.of(
+        )).build("ali.property.branch.item_damage"), List.of(
                 "Item Damage:",
                 "  -> Threshold: 1.2",
                 "  -> Base: 3.5",

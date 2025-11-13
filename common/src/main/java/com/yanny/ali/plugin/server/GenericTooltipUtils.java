@@ -9,7 +9,9 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +28,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.ListOperation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.ToggleTooltips;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
@@ -182,18 +183,21 @@ public class GenericTooltipUtils {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <T> IKeyTooltipNode getStandaloneTooltip(IServerUtils utils, String value, Optional<ListOperation.StandAlone<T>> standalone) {
-        if (standalone.isPresent()) {
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
-            ListOperation.StandAlone<T> s = standalone.get();
+    public static <T> IKeyTooltipNode getStandaloneTooltip(IServerUtils utils, String value, Optional<ListOperation.StandAlone<T>> predicate) {
+        if (predicate.isPresent()) {
+            ListOperation.StandAlone<T> s = predicate.get();
 
-            tooltip.add(getCollectionTooltip(utils, value, s.value()).build("ali.property.branch.values"));
-            tooltip.add(utils.getValueTooltip(utils, s.operation()).build("ali.property.value.list_operation"));
-
-            return tooltip;
+            return BranchTooltipNode.branch()
+                    .add(GenericTooltipUtils.getCollectionTooltip(utils, value, s.value()).build("ali.property.branch.values"))
+                    .add(utils.getValueTooltip(utils, s.operation()).build("ali.property.value.list_operation"));
         }
 
         return EmptyTooltipNode.empty();
+    }
+
+    @NotNull
+    public static ITooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
+        return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents).build("ali.property.branch.expected_components");
     }
 
     @NotNull
@@ -291,6 +295,13 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
+    public static ITooltipNode getDataComponentEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Boolean> entry) {
+        return getDataComponentTypeTooltip(utils, entry.getKey())
+                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.value"))
+                .build("ali.property.value.null");
+    }
+
+    @NotNull
     public static ITooltipNode getAdvancementEntryTooltip(IServerUtils utils, Map.Entry<ResourceLocation, PlayerPredicate.AdvancementPredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
                 .add(getAdvancementPredicateTooltip(utils, entry.getValue()))
@@ -326,13 +337,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getToggleEntryTooltip(IServerUtils utils, Map.Entry<ToggleTooltips.ComponentToggle<?>, Boolean> entry) {
-        return getDataComponentTypeTooltip(utils, entry.getKey().type())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.value"))
-                .build("ali.property.value.null");
-    }
-
-    @NotNull
     public static ITooltipNode getDataComponentPatchEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Optional<?>> entry) {
         IKeyTooltipNode tooltip = getDataComponentTypeTooltip(utils, entry.getKey());
 
@@ -347,11 +351,9 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getDataComponentPredicateEntryTooltip(IServerUtils utils, Map.Entry<DataComponentPredicate.Type<?>, DataComponentPredicate> entry) {
-        ITooltipNode components = getDataComponentPredicateTypeTooltip(utils, "ali.property.value.null", entry.getKey());
-
-        components.add(utils.getDataComponentPredicateTooltip(utils, entry.getValue()));
-
-        return components;
+        return utils.getValueTooltip(utils, entry.getKey())
+                .add(utils.getDataComponentPredicateTooltip(utils, entry.getValue()))
+                .build("ali.property.value.null");
     }
 
     @NotNull

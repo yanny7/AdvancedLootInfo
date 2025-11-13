@@ -126,7 +126,7 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getCatVariantTooltip(IServerUtils utils, CatVariant catVariant) {
-        return getBuiltInRegistryTooltip(utils, Registries.CAT_VARIANT, catVariant);
+        return getRegistryTooltip(utils, Registries.CAT_VARIANT, catVariant);
     }
 
     @NotNull
@@ -136,7 +136,7 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getFrogVariantTooltip(IServerUtils utils, FrogVariant frogVariant) {
-        return getBuiltInRegistryTooltip(utils, Registries.FROG_VARIANT, frogVariant);
+        return getRegistryTooltip(utils, Registries.FROG_VARIANT, frogVariant);
     }
 
     @NotNull
@@ -179,45 +179,38 @@ public class RegistriesTooltipUtils {
         return getRegistryTooltip(utils, Registries.SOUND_EVENT, soundEvent);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getDamageTypeTooltip(IServerUtils utils, String key, DamageType damageType) {
-        return getRegistryTooltip(utils, key, Registries.DAMAGE_TYPE, damageType);
+    public static IKeyTooltipNode getDamageTypeTooltip(IServerUtils utils, DamageType damageType) {
+        return getRegistryTooltip(utils, Registries.DAMAGE_TYPE, damageType);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getVillagerTypeTooltip(IServerUtils utils, String key, VillagerType villagerType) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.VILLAGER_TYPE, villagerType);
+    public static IKeyTooltipNode getVillagerTypeTooltip(IServerUtils utils, VillagerType villagerType) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.VILLAGER_TYPE, villagerType);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getWolfSoundVariantTooltip(IServerUtils utils, String key, WolfSoundVariant wolfSoundVariant) {
-        return getRegistryTooltip(utils, key, Registries.WOLF_SOUND_VARIANT, wolfSoundVariant);
+    public static IKeyTooltipNode getWolfSoundVariantTooltip(IServerUtils utils, WolfSoundVariant wolfSoundVariant) {
+        return getRegistryTooltip(utils, Registries.WOLF_SOUND_VARIANT, wolfSoundVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getPigVariantTooltip(IServerUtils utils, String key, PigVariant pigVariant) {
-        return getRegistryTooltip(utils, key, Registries.PIG_VARIANT, pigVariant);
+    public static IKeyTooltipNode getPigVariantTooltip(IServerUtils utils, PigVariant pigVariant) {
+        return getRegistryTooltip(utils, Registries.PIG_VARIANT, pigVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getCowVariantTooltip(IServerUtils utils, String key, CowVariant cowVariant) {
-        return getRegistryTooltip(utils, key, Registries.COW_VARIANT, cowVariant);
+    public static IKeyTooltipNode getCowVariantTooltip(IServerUtils utils, CowVariant cowVariant) {
+        return getRegistryTooltip(utils, Registries.COW_VARIANT, cowVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getChickenVariantTooltip(IServerUtils utils, String key, ChickenVariant chickenVariant) {
-        return getRegistryTooltip(utils, key, Registries.CHICKEN_VARIANT, chickenVariant);
+    public static IKeyTooltipNode getChickenVariantTooltip(IServerUtils utils, ChickenVariant chickenVariant) {
+        return getRegistryTooltip(utils, Registries.CHICKEN_VARIANT, chickenVariant);
     }
 
-    @Unmodifiable
     @NotNull
-    public static ITooltipNode getDataComponentPredicateTypeTooltip(IServerUtils utils, String key, DataComponentPredicate.Type<?> type) {
-        return getBuiltInRegistryTooltip(utils, key, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, type);
+    public static IKeyTooltipNode getDataComponentPredicateTypeTooltip(IServerUtils utils, DataComponentPredicate.Type<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, type);
     }
 }
