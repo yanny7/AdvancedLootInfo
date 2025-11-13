@@ -588,7 +588,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getBeehiveBlockEntityOccupantTooltip(IServerUtils utils, BeehiveBlockEntity.Occupant occupant) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, occupant.entityData().copyTag().toString()).build("ali.property.value.entity_data"))
+                .add(utils.getValueTooltip(utils, occupant.entityData().copyTagWithoutId().toString()).build("ali.property.value.entity_data"))
                 .add(utils.getValueTooltip(utils, occupant.ticksInHive()).build("ali.property.value.ticks_in_hive"))
                 .add(utils.getValueTooltip(utils, occupant.minTicksInHive()).build("ali.property.value.min_ticks_in_hive"));
     }
