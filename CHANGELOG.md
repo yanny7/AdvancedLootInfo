@@ -1,3 +1,7 @@
+## []
+
+- Optimized data synchronization
+
 ## [1.5.0]
 
 - Registrable value type

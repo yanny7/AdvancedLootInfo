@@ -3,17 +3,26 @@ package com.yanny.ali.compatibility.common;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
+import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -26,10 +35,14 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
+import oshi.util.tuples.Pair;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
@@ -115,24 +128,65 @@ public class GenericUtils {
         return Component.literal(text);
     }
 
-    public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config,
-                                   Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData,
+    public static Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> decompressLootData(byte[] fullCompressedData, RegistryAccess registryAccess) {
+        Map<ResourceLocation, LootData> lootData = new HashMap<>();
+        Map<ResourceLocation, TradeData> tradeData = new HashMap<>();
+        ByteArrayInputStream bis = new ByteArrayInputStream(fullCompressedData);
+        ByteBuf decompressedBuf = Unpooled.buffer();
+
+        try (GZIPInputStream gzip = new GZIPInputStream(bis)) {
+            decompressedBuf.writeBytes(gzip.readAllBytes());
+//            decompressedBuf.writeBytes(gzip, gzip.available());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        RegistryFriendlyByteBuf readerBuf = new RegistryFriendlyByteBuf(decompressedBuf, registryAccess);
+
+        try {
+            IClientUtils utils = PluginManager.CLIENT_REGISTRY;
+
+            lootData.putAll(readerBuf.readCollection(ArrayList::new, (b) -> {
+                ResourceLocation location = b.readResourceLocation();
+                IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).create(utils, (RegistryFriendlyByteBuf) b);
+                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) b);
+                return new AbstractMap.SimpleEntry<>(location, new LootData(dataNode, items));
+            }).stream().collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+
+            tradeData.putAll(readerBuf.readCollection(ArrayList::new, (b) -> {
+                ResourceLocation location = b.readResourceLocation();
+                IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, (RegistryFriendlyByteBuf) b);
+                List<Item> inputs = b.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+                List<Item> outputs = b.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+                return new AbstractMap.SimpleEntry<>(location, new TradeData(dataNode, inputs, outputs));
+            }).stream().collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+        } finally {
+            readerBuf.release();
+        }
+
+        return new Pair<>(lootData, tradeData);
+    }
+
+    public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config, byte[] fullCompressedData,
                                    QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
                                    TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
+        Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(fullCompressedData, level.registryAccess());
+        Map<ResourceLocation, LootData> lootData = pair.getA();
+        Map<ResourceLocation, TradeData> tradeData = pair.getB();
+
         for (Block block : BuiltInRegistries.BLOCK) {
             ResourceKey<LootTable> resourceKey = block.getLootTable();
 
             //noinspection ConstantValue
             if (resourceKey != null) {
                 ResourceLocation location = resourceKey.location();
-                IDataNode lootEntry = lootData.get(location);
-                List<ItemStack> outputs = clientRegistry.getLootItems(location);
+                LootData data = lootData.get(location);
 
-                if (lootEntry != null && outputs != null) {
-                    blockConsumer.accept(lootEntry, location, block, outputs);
+                if (data != null) {
+                    blockConsumer.accept(data.node, location, block, data.items);
                     lootData.remove(location);
                 }
             }
@@ -140,7 +194,7 @@ public class GenericUtils {
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
-                lootData.remove(entityType.getDefaultLootTable()); // at least remove entity default loot table
+                lootData.remove(entityType.getDefaultLootTable().location()); // at least remove entity default loot table
                 continue;
             }
 
@@ -153,11 +207,10 @@ public class GenericUtils {
                     //noinspection ConstantValue
                     if (resourceKey != null) {
                         ResourceLocation location = resourceKey.location();
-                        IDataNode lootEntry = lootData.get(location);
-                        List<ItemStack> outputs = clientRegistry.getLootItems(location);
+                        LootData data = lootData.get(location);
 
-                        if (lootEntry != null && outputs != null) {
-                            entityConsumer.accept(lootEntry, location, entityType, outputs);
+                        if (data != null) {
+                            entityConsumer.accept(data.node, location, entityType, data.items);
                         }
 
                         lootData.remove(location);
@@ -166,13 +219,8 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootData.entrySet()) {
-            ResourceLocation location = entry.getKey();
-            List<ItemStack> outputs = clientRegistry.getLootItems(location);
-
-            if (outputs != null) {
-                gameplayConsumer.accept(entry.getValue(), entry.getKey(), outputs);
-            }
+        for (Map.Entry<ResourceLocation, LootData> entry : lootData.entrySet()) {
+            gameplayConsumer.accept(entry.getValue().node, entry.getKey(), entry.getValue().items());
         }
 
         lootData.clear();
@@ -184,26 +232,26 @@ public class GenericUtils {
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
             ResourceLocation location = entry.getKey().location();
-            IDataNode tradeEntry = tradeData.get(location);
+            TradeData tradeEntry = tradeData.get(location);
 
             if (tradeEntry != null) {
-                List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
-                List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
+                List<ItemStack> inputs = tradeEntry.inputs.stream().map(Item::getDefaultInstance).toList();
+                List<ItemStack> outputs = tradeEntry.outputs.stream().map(Item::getDefaultInstance).toList();
 
-                traderConsumer.accept(tradeEntry, location, inputs, outputs);
+                traderConsumer.accept(tradeEntry.node, location, inputs, outputs);
                 tradeData.remove(location);
             }
         }
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : tradeData.entrySet()) {
+        for (Map.Entry<ResourceLocation, TradeData> entry : tradeData.entrySet()) {
             ResourceLocation location = entry.getKey();
-            IDataNode tradeEntry = tradeData.get(location);
+            TradeData tradeEntry = tradeData.get(location);
 
             if (tradeEntry != null) {
-                List<ItemStack> inputs = clientRegistry.getTradeInputItems(location).stream().map(Item::getDefaultInstance).toList();
-                List<ItemStack> outputs = clientRegistry.getTradeOutputItems(location).stream().map(Item::getDefaultInstance).toList();
+                List<ItemStack> inputs = tradeEntry.inputs.stream().map(Item::getDefaultInstance).toList();
+                List<ItemStack> outputs = tradeEntry.outputs.stream().map(Item::getDefaultInstance).toList();
 
-                wanderingTraderConsumer.accept(tradeEntry, location, inputs, outputs);
+                wanderingTraderConsumer.accept(tradeEntry.node, location, inputs, outputs);
             }
         }
 
@@ -222,4 +270,8 @@ public class GenericUtils {
                 .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
                 .collect(Collectors.joining(" "));
     }
+
+    public record LootData(IDataNode node, List<ItemStack> items) {}
+
+    public record TradeData(IDataNode node, List<Item> inputs, List<Item> outputs) {}
 }
