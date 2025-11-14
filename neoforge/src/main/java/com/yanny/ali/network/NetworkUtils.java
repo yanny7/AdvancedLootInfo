@@ -20,8 +20,7 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server();
 
-        registrar.executesOn(HandlerThread.NETWORK).playToClient(SyncLootTableMessage.TYPE, SyncLootTableMessage.CODEC, client::onLootInfo);
-        registrar.executesOn(HandlerThread.NETWORK).playToClient(SyncTradeMessage.TYPE, SyncTradeMessage.CODEC, client::onTradeInfo);
+        registrar.executesOn(HandlerThread.NETWORK).playToClient(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC, client::onLootInfo);
         registrar.executesOn(HandlerThread.NETWORK).playToClient(ClearMessage.TYPE, ClearMessage.CODEC, client::onClear);
         registrar.executesOn(HandlerThread.NETWORK).playToClient(DoneMessage.TYPE, DoneMessage.CODEC, client::onDone);
         return new DistHolder<>(client, server);
@@ -31,8 +30,7 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(PayloadRegistrar registrar) {
         Server server = new Server();
 
-        registrar.playToClient(SyncLootTableMessage.TYPE, SyncLootTableMessage.CODEC, (a, b) -> {});
-        registrar.playToClient(SyncTradeMessage.TYPE, SyncTradeMessage.CODEC, (a, b) -> {});
+        registrar.playToClient(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC, (a, b) -> {});
         registrar.playToClient(ClearMessage.TYPE, ClearMessage.CODEC, (a, b) -> {});
         registrar.playToClient(DoneMessage.TYPE, DoneMessage.CODEC, (a, b) -> {});
         return new DistHolder<>(null, server);
