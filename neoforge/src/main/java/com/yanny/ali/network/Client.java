@@ -4,13 +4,8 @@ package com.yanny.ali.network;
 import net.neoforged.neoforge.network.NetworkEvent;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(SyncLootTableMessage msg, NetworkEvent.Context contextSupplier) {
+    public void onLootInfo(LootDataChunkMessage msg, NetworkEvent.Context contextSupplier) {
         super.onLootInfo(msg);
-        contextSupplier.setPacketHandled(true);
-    }
-
-    protected void onTradeInfo(SyncTradeMessage msg, NetworkEvent.Context contextSupplier) {
-        super.onTradeInfo(msg);
         contextSupplier.setPacketHandled(true);
     }
 

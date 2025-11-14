@@ -24,15 +24,10 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
-                .encoder(SyncLootTableMessage::encode)
-                .decoder(SyncLootTableMessage::new)
-                .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
-                .add();
-        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
-                .encoder(SyncTradeMessage::encode)
-                .decoder(SyncTradeMessage::new)
-                .consumerNetworkThread((BiConsumer<SyncTradeMessage, CustomPayloadEvent.Context>) client::onTradeInfo)
+        channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
+                .encoder(LootDataChunkMessage::encode)
+                .decoder(LootDataChunkMessage::new)
+                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)
@@ -51,13 +46,9 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
-                .encoder(SyncLootTableMessage::encode)
-                .decoder(SyncLootTableMessage::new)
-                .add();
-        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
-                .encoder(SyncTradeMessage::encode)
-                .decoder(SyncTradeMessage::new)
+        channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
+                .encoder(LootDataChunkMessage::encode)
+                .decoder(LootDataChunkMessage::new)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)

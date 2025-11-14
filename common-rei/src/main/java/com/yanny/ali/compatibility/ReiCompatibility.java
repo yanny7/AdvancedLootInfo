@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.*;
 import com.yanny.ali.compatibility.rei.*;
 import com.yanny.ali.configuration.AliConfig;
@@ -19,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -74,7 +72,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
+        CompletableFuture<byte[]> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
 
         if (futureData.isDone()) {
             LOGGER.info("Data already received, processing instantly.");
@@ -83,9 +81,9 @@ public class ReiCompatibility implements REIClientPlugin {
         }
 
         try {
-            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get();
+            byte[] fullCompressedData = futureData.get();
 
-            registerData(registry, pair.getLeft(), pair.getRight());
+            registerData(registry, fullCompressedData);
         } catch (ExecutionException e) {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
 
@@ -103,7 +101,7 @@ public class ReiCompatibility implements REIClientPlugin {
         }
     }
 
-    private void registerData(DisplayRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
+    private void registerData(DisplayRegistry registry, byte[] fullCompressedData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
@@ -120,8 +118,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     level,
                     clientRegistry,
                     config,
-                    lootData,
-                    tradeData,
+                    fullCompressedData,
                     (node, location, block, outputs) -> {
                         Holder<ReiBlockDisplay, BlockLootType, Block> recipeHolder = null;
 
