@@ -4,12 +4,8 @@ package com.yanny.ali.network;
 import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(SyncLootTableMessage msg, PlayPayloadContext contextSupplier) {
+    public void onLootInfo(LootDataChunkMessage msg, PlayPayloadContext contextSupplier) {
         super.onLootInfo(msg);
-    }
-
-    public void onTradeInfo(SyncTradeMessage msg, PlayPayloadContext contextSupplier) {
-        super.onTradeInfo(msg);
     }
 
     public void onClear(ClearMessage msg, PlayPayloadContext contextSupplier) {

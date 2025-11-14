@@ -22,16 +22,10 @@ public class NetworkUtils {
         Server server = new Server();
 
         registrar.play(
-                SyncLootTableMessage.ID,
-                SyncLootTableMessage::new,
+                LootDataChunkMessage.ID,
+                LootDataChunkMessage::new,
                 (handler) ->
                         handler.client(client::onLootInfo).server((msg, ctx) -> {})
-        );
-        registrar.play(
-                SyncTradeMessage.ID,
-                SyncTradeMessage::new,
-                (handler) ->
-                        handler.client(client::onTradeInfo).server((msg, ctx) -> {})
         );
         registrar.play(
                 ClearMessage.ID,
@@ -53,13 +47,8 @@ public class NetworkUtils {
         Server server = new Server();
 
         registrar.play(
-                SyncLootTableMessage.ID,
-                SyncLootTableMessage::new,
-                (handler) -> {}
-        );
-        registrar.play(
-                SyncTradeMessage.ID,
-                SyncTradeMessage::new,
+                LootDataChunkMessage.ID,
+                LootDataChunkMessage::new,
                 (handler) -> {}
         );
         registrar.play(
