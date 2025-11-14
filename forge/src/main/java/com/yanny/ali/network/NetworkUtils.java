@@ -21,8 +21,7 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), SyncLootTableMessage.class, SyncLootTableMessage::encode, SyncLootTableMessage::new, client::onLootInfo);
-        channel.registerMessage(getMessageId(), SyncTradeMessage.class, SyncTradeMessage::encode, SyncTradeMessage::new, client::onTradeInfo);
+        channel.registerMessage(getMessageId(), LootDataChunkMessage.class, LootDataChunkMessage::encode, LootDataChunkMessage::new, client::onLootInfo);
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, client::onClear);
         channel.registerMessage(getMessageId(), DoneMessage.class, DoneMessage::encode, DoneMessage::new, client::onDone);
         return new DistHolder<>(client, server);
@@ -32,8 +31,7 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.registerMessage(getMessageId(), SyncLootTableMessage.class, SyncLootTableMessage::encode, SyncLootTableMessage::new, (m, c) -> {});
-        channel.registerMessage(getMessageId(), SyncTradeMessage.class, SyncTradeMessage::encode, SyncTradeMessage::new, (m, c) -> {});
+        channel.registerMessage(getMessageId(), LootDataChunkMessage.class, LootDataChunkMessage::encode, LootDataChunkMessage::new, (m, c) -> {});
         channel.registerMessage(getMessageId(), ClearMessage.class, ClearMessage::encode, ClearMessage::new, (m, c) -> {});
         channel.registerMessage(getMessageId(), DoneMessage.class, DoneMessage::encode, DoneMessage::new, (m, c) -> {});
         return new DistHolder<>(null, server);

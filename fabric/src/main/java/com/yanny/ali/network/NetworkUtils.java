@@ -27,7 +27,6 @@ public class NetworkUtils {
         Server server = new Server();
 
         ClientPlayNetworking.registerGlobalReceiver(NEW_LOOT_INFO_ID, client::onLootInfo);
-        ClientPlayNetworking.registerGlobalReceiver(NEW_TRADE_ID, client::onTradeInfo);
         ClientPlayNetworking.registerGlobalReceiver(CLEAR_LOOT_INFO_ID, client::onClear);
         ClientPlayNetworking.registerGlobalReceiver(DONE_LOOT_INFO_ID, client::onDone);
         return new DistHolder<>(client, server);
