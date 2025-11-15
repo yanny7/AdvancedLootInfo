@@ -2,6 +2,7 @@
 
 - Optimized data synchronization
 - Fixed LootJS missing modifiers and predicates in tooltip
+- Displaying properties of auto-detected modifiers/predicates that doesn't have compatibility
 
 ## [1.5.0]
 
