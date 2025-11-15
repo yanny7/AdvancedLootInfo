@@ -17,12 +17,7 @@ public class Server extends AbstractServer {
     }
 
     @Override
-    protected void sendSyncLootTableMessage(ServerPlayer serverPlayer, SyncLootTableMessage message) {
-        channel.send(message, PacketDistributor.PLAYER.with(serverPlayer));
-    }
-
-    @Override
-    protected void sendSyncTradeMessage(ServerPlayer serverPlayer, SyncTradeMessage message) {
+    protected void sendSyncLootTableMessage(ServerPlayer serverPlayer, LootDataChunkMessage message) {
         channel.send(message, PacketDistributor.PLAYER.with(serverPlayer));
     }
 
