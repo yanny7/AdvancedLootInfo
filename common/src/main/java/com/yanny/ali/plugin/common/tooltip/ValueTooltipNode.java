@@ -28,6 +28,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
 
     private final List<String> values;
     private final boolean isKeyValue;
+    private final boolean translateKey;
     private final String key;
 
     private ValueTooltipNode(CacheKey cacheKey) {
@@ -35,6 +36,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         key = cacheKey.key;
         values = cacheKey.values;
         isKeyValue = cacheKey.isKeyValue;
+        translateKey = cacheKey.translateKey;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         }
 
         buf.writeBoolean(isKeyValue);
+        buf.writeBoolean(translateKey);
         buf.writeUtf(key);
     }
 
@@ -67,7 +70,11 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         } else {
             Object[] val = values.stream().map(ValueTooltipNode::transform).toArray();
 
-            components.add(pad(pad, Component.translatable(key, val).withStyle(TEXT_STYLE)));
+            if (translateKey) {
+                components.add(pad(pad, Component.translatable(key, val).withStyle(TEXT_STYLE)));
+            } else {
+                components.add(pad(pad, Component.translatable("ali.util.advanced_loot_info.key_value", key, val[0]).withStyle(TEXT_STYLE)));
+            }
         }
 
         components.addAll(children);
@@ -85,12 +92,15 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         }
 
         ValueTooltipNode that = (ValueTooltipNode) o;
-        return isKeyValue == that.isKeyValue && Objects.equals(values, that.values) && Objects.equals(key, that.key);
+        return isKeyValue == that.isKeyValue
+                && translateKey == that.translateKey
+                && Objects.equals(values, that.values)
+                && Objects.equals(key, that.key);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), values, isKeyValue, key);
+        return Objects.hash(super.hashCode(), values, isKeyValue, key, translateKey);
     }
 
     @Override
@@ -104,6 +114,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
                 "key='" + key + '\'' +
                 ", values=" + values +
                 ", isKeyValue=" + isKeyValue +
+                ", translateKey=" + translateKey +
                 ", children=" + getChildren() +
                 '}';
     }
@@ -160,8 +171,9 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         }
 
         boolean isKeyValue = buf.readBoolean();
+        boolean translateKey = buf.readBoolean();
         String key = buf.readUtf();
-        CacheKey cacheKey = new CacheKey(children, key, values, isKeyValue);
+        CacheKey cacheKey = new CacheKey(children, key, values, isKeyValue, translateKey);
 
         try {
             return CACHE.get(cacheKey);
@@ -185,8 +197,12 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         }
 
         public ValueTooltipNode build(String key) {
+            return build(key, true);
+        }
+
+        public ValueTooltipNode build(String key, boolean translateKey) {
             String internKey = key.intern();
-            CacheKey cacheKey = new CacheKey(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values), isKeyValue);
+            CacheKey cacheKey = new CacheKey(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values), isKeyValue, translateKey);
 
             try {
                 return CACHE.get(cacheKey);
@@ -196,7 +212,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         }
     }
 
-    private record CacheKey(List<ITooltipNode> children, String key, List<String> values, boolean isKeyValue) {
+    private record CacheKey(List<ITooltipNode> children, String key, List<String> values, boolean isKeyValue, boolean translateKey) {
         @Override
         public boolean equals(Object o) {
             if (o == null || getClass() != o.getClass()) {
@@ -204,12 +220,16 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
             }
 
             CacheKey cacheKey = (CacheKey) o;
-            return isKeyValue == cacheKey.isKeyValue && Objects.equals(key, cacheKey.key) && Objects.equals(values, cacheKey.values) && Objects.equals(children, cacheKey.children);
+            return isKeyValue == cacheKey.isKeyValue
+                    && translateKey == cacheKey.translateKey
+                    && Objects.equals(key, cacheKey.key)
+                    && Objects.equals(values, cacheKey.values)
+                    && Objects.equals(children, cacheKey.children);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(children, key, values, isKeyValue);
+            return Objects.hash(children, key, values, isKeyValue, translateKey);
         }
     }
 }

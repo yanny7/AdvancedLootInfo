@@ -30,6 +30,8 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
@@ -39,33 +41,58 @@ import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 public class GenericTooltipUtils {
     @NotNull
     public static ITooltipNode getMissingFunction(IServerUtils utils, LootItemFunction function) {
-        return getFunctionTypeTooltip(utils, function.getType()).build("ali.util.advanced_loot_info.missing");
+        IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
-//        Field[] fields = function.getClass().getDeclaredFields();
-//        List<Field> names = Arrays.stream(fields).filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
-//
-//        //FIXME !!!!!!!!!!!!!!!
-//        //TODO !!!!!!!!!!
-//
-//        names.forEach((f) -> {
-//            f.setAccessible(true);
-//
-//            try {
-////                tooltip.add(BranchTooltipNode.branch(f.getName()).add(utils.getValueTooltip(utils, f.get(function))));
-//            } catch (IllegalAccessException e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
+        Field[] fields = function.getClass().getDeclaredFields();
+        List<Field> names = Arrays.stream(fields).filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
+
+        names.forEach((f) -> {
+            f.setAccessible(true);
+
+            try {
+                IKeyTooltipNode t = utils.getValueTooltip(utils, f.get(function));
+
+                if (t instanceof ValueTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(f.getName(), false));
+                } else if (t instanceof BranchTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(f.getName(), false));
+                } else if (t instanceof ErrorTooltipNode.Builder) {
+                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "???").build("ali.property.value.null"));
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
     @NotNull
     public static ITooltipNode getMissingCondition(IServerUtils utils, LootItemCondition condition) {
-        return getConditionTypeTooltip(utils, condition.getType()).build("ali.util.advanced_loot_info.missing");
+        IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
-//        Field[] fields = condition.getClass().getDeclaredFields();
-//        List<Field> names = Arrays.stream(fields)
-//                .filter((f) -> !Modifier.isStatic(f.getModifiers()))
-//                .toList();
+        Field[] fields = condition.getClass().getDeclaredFields();
+        List<Field> names = Arrays.stream(fields).filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
+
+        names.forEach((f) -> {
+            f.setAccessible(true);
+
+            try {
+                IKeyTooltipNode t = utils.getValueTooltip(utils, f.get(condition));
+
+                if (t instanceof ValueTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(f.getName(), false));
+                } else if (t instanceof BranchTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(f.getName(), false));
+                } else if (t instanceof ErrorTooltipNode.Builder) {
+                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "???").build("ali.property.value.null"));
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
     @NotNull
