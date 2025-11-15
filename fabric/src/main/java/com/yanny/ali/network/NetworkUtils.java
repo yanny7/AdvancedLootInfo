@@ -20,12 +20,10 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server();
 
-        PayloadTypeRegistry.playS2C().register(SyncLootTableMessage.TYPE, SyncLootTableMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(SyncTradeMessage.TYPE, SyncTradeMessage.CODEC);
+        PayloadTypeRegistry.playS2C().register(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(ClearMessage.TYPE, ClearMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
-        ClientPlayNetworking.registerGlobalReceiver(SyncLootTableMessage.TYPE, client::onLootInfo);
-        ClientPlayNetworking.registerGlobalReceiver(SyncTradeMessage.TYPE, client::onTradeInfo);
+        ClientPlayNetworking.registerGlobalReceiver(LootDataChunkMessage.TYPE, client::onLootInfo);
         ClientPlayNetworking.registerGlobalReceiver(ClearMessage.TYPE, client::onClear);
         ClientPlayNetworking.registerGlobalReceiver(DoneMessage.TYPE, client::onDone);
         return new DistHolder<>(client, server);
@@ -35,8 +33,7 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator() {
         Server server = new Server();
 
-        PayloadTypeRegistry.playS2C().register(SyncLootTableMessage.TYPE, SyncLootTableMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(SyncTradeMessage.TYPE, SyncTradeMessage.CODEC);
+        PayloadTypeRegistry.playS2C().register(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(ClearMessage.TYPE, ClearMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
         return new DistHolder<>(null, server);

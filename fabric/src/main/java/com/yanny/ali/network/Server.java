@@ -10,12 +10,7 @@ public class Server extends AbstractServer {
     }
 
     @Override
-    protected void sendSyncLootTableMessage(ServerPlayer serverPlayer, SyncLootTableMessage message) {
-        ServerPlayNetworking.send(serverPlayer, message);
-    }
-
-    @Override
-    protected void sendSyncTradeMessage(ServerPlayer serverPlayer, SyncTradeMessage message) {
+    protected void sendSyncLootTableMessage(ServerPlayer serverPlayer, LootDataChunkMessage message) {
         ServerPlayNetworking.send(serverPlayer, message);
     }
 
