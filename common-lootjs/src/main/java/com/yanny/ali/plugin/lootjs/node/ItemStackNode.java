@@ -48,8 +48,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
             tooltip = getItemTooltip(utils, 1, chance, functions, conditions);
             count = getCount(utils, 1, functions).get(null).get(0);
         } else {
-            tooltip = getItemTooltip(utils, itemStack.getCount(), chance, Collections.emptyList(), Collections.emptyList());
-            count = getCount(utils, itemStack.getCount(), Collections.emptyList()).get(null).get(0);
+            tooltip = getItemTooltip(utils, itemStack.getCount(), chance, functions, conditions);
+            count = getCount(utils, itemStack.getCount(), functions).get(null).get(0);
         }
     }
 
