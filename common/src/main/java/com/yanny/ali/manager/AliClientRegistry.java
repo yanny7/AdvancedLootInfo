@@ -6,10 +6,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -24,15 +21,10 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
     private final Map<ResourceLocation, TooltipFactory<?>> tooltipNodeFactoryMap = new HashMap<>();
-    private final Map<ResourceLocation, List<ItemStack>> lootItemMap = new HashMap<>();
-    private final Map<ResourceLocation, IDataNode> lootNodeMap = new HashMap<>();
-    private final Map<ResourceLocation, IDataNode> lootTradeMap = new HashMap<>();
-    private final Map<ResourceLocation, List<Item>> tradeInputItemMap = new HashMap<>();
-    private final Map<ResourceLocation, List<Item>> tradeOutputItemMap = new HashMap<>();
     private final ICommonUtils utils;
 
-    private final AtomicInteger receivedMessages = new AtomicInteger(0);
-    private final AtomicInteger receivedMessagesPerSecond = new AtomicInteger(0);
+    private final AtomicInteger receivedChunks = new AtomicInteger(0);
+    private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
     private ScheduledExecutorService loggerScheduler;
 
     private volatile DataReceiver currentDataReceiver = null;
@@ -41,45 +33,26 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         this.utils = utils;
     }
 
-    public CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> getCurrentDataFuture() {
+    public CompletableFuture<byte[]> getCurrentDataFuture() {
         DataReceiver receiver = currentDataReceiver;
 
         if (receiver == null) {
-            return CompletableFuture.completedFuture(Pair.of(Collections.emptyMap(), Collections.emptyMap()));
+            return CompletableFuture.completedFuture(new byte[]{});
         }
 
         return receiver.getFuture();
     }
 
-    public void addLootData(ResourceLocation resourceLocation, IDataNode node, List<ItemStack> items) {
+    public void addChunkData(int index, byte[] data) {
         DataReceiver receiver = currentDataReceiver;
 
         if (receiver == null) {
             return;
         }
 
-        lootItemMap.put(resourceLocation, items);
-        lootNodeMap.put(resourceLocation, node);
-        receivedMessages.incrementAndGet();
-        receivedMessagesPerSecond.incrementAndGet();
-
-        receiver.messageReceived();
-    }
-
-    public void addTradeData(ResourceLocation resourceLocation, IDataNode node, List<Item> inputs, List<Item> outputs) {
-        DataReceiver receiver = currentDataReceiver;
-
-        if (receiver == null) {
-            return;
-        }
-
-        lootTradeMap.put(resourceLocation, node);
-        tradeInputItemMap.put(resourceLocation, inputs);
-        tradeOutputItemMap.put(resourceLocation, outputs);
-        receivedMessages.incrementAndGet();
-        receivedMessagesPerSecond.incrementAndGet();
-
-        receiver.messageReceived();
+        receivedChunks.incrementAndGet();
+        receivedChunksPerSecond.incrementAndGet();
+        receiver.messageReceived(index, data);
     }
 
     public synchronized void startLootData(int totalMessages) {
@@ -88,11 +61,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             return;
         }
 
-        currentDataReceiver = new DataReceiver(totalMessages, lootNodeMap, lootTradeMap);
-
-        lootNodeMap.clear();
-        lootTradeMap.clear();
-        lootItemMap.clear();
+        currentDataReceiver = new DataReceiver(totalMessages);
         startLogging();
 
         LOGGER.info("Started receiving loot data");
@@ -103,10 +72,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
         }
-
-        lootNodeMap.clear();
-        lootTradeMap.clear();
-        lootItemMap.clear();
 
         LOGGER.info("Cleared Loot data");
     }
@@ -120,7 +85,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
         receiver.forceDone();
         stopLogging();
-        LOGGER.info("Finished receiving loot data [{}/{}]", lootNodeMap.size(), lootTradeMap.size());
+        LOGGER.info("Finished receiving loot data");
     }
 
     @Override
@@ -218,21 +183,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public List<ItemStack> getLootItems(ResourceLocation location) {
-        return lootItemMap.getOrDefault(location, Collections.emptyList());
-    }
-
-    @Override
-    public List<Item> getTradeInputItems(ResourceLocation location) {
-        return tradeInputItemMap.getOrDefault(location, Collections.emptyList());
-    }
-
-    @Override
-    public List<Item> getTradeOutputItems(ResourceLocation location) {
-        return tradeOutputItemMap.getOrDefault(location, Collections.emptyList());
-    }
-
-    @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return utils.createEntities(type, level);
     }
@@ -241,27 +191,26 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Registered {} widgets", widgetMap.size());
         LOGGER.info("Registered {} data node factories", dataNodeFactoryMap.size());
         LOGGER.info("Registered {} tooltip node factories", tooltipNodeFactoryMap.size());
-        LOGGER.info("Registered {} trade factories", lootTradeMap.size());
     }
 
     private void startLogging() {
         Runnable logTask = () -> {
-            long count = receivedMessagesPerSecond.getAndSet(0);
+            long count = receivedChunksPerSecond.getAndSet(0);
 
-            LOGGER.info("Received {} messages per second", count);
+            LOGGER.info("Received {} chunk(s) per second", count);
         };
 
-        receivedMessages.set(0);
-        receivedMessagesPerSecond.set(0);
+        receivedChunks.set(0);
+        receivedChunksPerSecond.set(0);
         loggerScheduler = Executors.newSingleThreadScheduledExecutor();
         loggerScheduler.scheduleAtFixedRate(logTask, 1, 1, TimeUnit.SECONDS);
     }
 
     private void stopLogging() {
         if (loggerScheduler != null) {
-            long count = receivedMessagesPerSecond.getAndSet(0);
+            long count = receivedChunksPerSecond.getAndSet(0);
 
-            LOGGER.info("Received last {} messages", count);
+            LOGGER.info("Received last {} chunk(s). Done receiving data.", count);
             loggerScheduler.shutdownNow();
 
             try {
@@ -277,18 +226,15 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static class DataReceiver {
         private static final long INACTIVITY_TIMEOUT_SECONDS = 30;
 
-        private final CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> dataFuture = new CompletableFuture<>();
+        private final CompletableFuture<byte[]> dataFuture = new CompletableFuture<>();
         private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         private final AtomicReference<ScheduledFuture<?>> timeoutHandleRef = new AtomicReference<>();
-        private final Map<ResourceLocation, IDataNode> lootNodes;
-        private final Map<ResourceLocation, IDataNode> tradeNodes;
+        private final Map<Integer, byte[]> chunkMap = new HashMap<>();
 
         private final CountDownLatch completionLatch;
 
-        public DataReceiver(int expectedMessageCount, Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, IDataNode> tradeNodes) {
+        public DataReceiver(int expectedMessageCount) {
             this.completionLatch = new CountDownLatch(expectedMessageCount);
-            this.lootNodes = lootNodes;
-            this.tradeNodes = tradeNodes;
 
             resetInactivityTimeout();
 
@@ -307,11 +253,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             });
         }
 
-        public void messageReceived() {
+        public void messageReceived(int index, byte[] data) {
             if (dataFuture.isDone()) {
                 return;
             }
 
+            chunkMap.put(index, data);
             resetInactivityTimeout();
             completionLatch.countDown();
         }
@@ -327,17 +274,23 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         }
 
         private void completeFuture() {
-            dataFuture.complete(Pair.of(lootNodes, tradeNodes));
+            int totalCompressedSize = chunkMap.values().stream().mapToInt(a -> a.length).sum();
+            byte[] fullCompressedData = new byte[totalCompressedSize];
+            int offset = 0;
+
+            for (byte[] chunk : chunkMap.values()) {
+                System.arraycopy(chunk, 0, fullCompressedData, offset, chunk.length);
+                offset += chunk.length;
+            }
+
+            dataFuture.complete(fullCompressedData);
             shutdownScheduler();
         }
 
         private void resetInactivityTimeout() {
             Runnable timeoutTask = () -> {
                 if (!dataFuture.isDone()) {
-                    String msg = String.format("Data reception failed due to inactivity timeout (%ds). Expected %d, received %d.",
-                            INACTIVITY_TIMEOUT_SECONDS,
-                            (completionLatch.getCount() + lootNodes.size() + tradeNodes.size()),
-                            (lootNodes.size() + tradeNodes.size()));
+                    String msg = String.format("Data reception failed due to inactivity timeout (%ds).", INACTIVITY_TIMEOUT_SECONDS);
 
                     dataFuture.completeExceptionally(new TimeoutException(msg));
                     shutdownScheduler();
@@ -372,7 +325,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             scheduler.shutdownNow();
         }
 
-        public CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> getFuture() {
+        public CompletableFuture<byte[]> getFuture() {
             return dataFuture;
         }
     }
