@@ -1,20 +1,20 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ILootModifier;
-import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerRegistries;
@@ -36,15 +36,20 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractServer {
+    private static final int MAX_CHUNK_SIZE = 1024 * 1024; // 1 MB
+    private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final List<SyncLootTableMessage> lootTableMessages = new LinkedList<>();
-    private final List<SyncTradeMessage> tradeMessages = new LinkedList<>();
+    private final List<LootDataChunkMessage> chunks = new ArrayList<>();
 
     public final void readLootTables(ReloadableServerRegistries.Holder manager, ServerLevel level) {
         LOGGER.info("Started reading loot info");
@@ -72,8 +77,7 @@ public abstract class AbstractServer {
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = lootTables.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, AbstractServer::getItems));
 
-        lootTableMessages.clear();
-        tradeMessages.clear();
+        chunks.clear();
 
         // apply modifiers
         lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
@@ -84,34 +88,31 @@ public abstract class AbstractServer {
         lootNodes = removeEmptyLootTable(lootNodes, lootTableItemStacks);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
 
-        sendLootData(lootTableItemStacks, lootNodes);
-        sendTradeData(tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
+        LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootNodes.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
+
+        // storing and compressing data
+        ByteBuf rawBuf = Unpooled.buffer();
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, level.registryAccess());
+
+        writeLootData(buf, lootTableItemStacks, lootNodes);
+        writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
+        compressAndStoreData(rawBuf);
 
         serverRegistry.clearLootTables(); // not needed anymore
         serverRegistry.printRuntimeInfo();
-        LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootNodes.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
     }
 
     public final void syncLootTables(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             LOGGER.info("Started syncing loot info to {}", player.getScoreboardName());
-            sendClearMessage(serverPlayer, new ClearMessage(lootTableMessages.size() + tradeMessages.size()));
+            sendClearMessage(serverPlayer, new ClearMessage(chunks.size()));
 
-            for (SyncLootTableMessage message : lootTableMessages) {
+            for (LootDataChunkMessage message : chunks) {
                 try {
                     sendSyncLootTableMessage(serverPlayer, message);
                 } catch (Throwable e) {
                     e.printStackTrace();
-                    LOGGER.warn("Failed to send message for loot table {} with error: {}", message.location(), e.getMessage());
-                }
-            }
-
-            for (SyncTradeMessage message : tradeMessages) {
-                try {
-                    sendSyncTradeMessage(serverPlayer, message);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                    LOGGER.warn("Failed to send message for trade {} with error: {}", message.location(), e.getMessage());
+                    LOGGER.warn("Failed to send message with error: {}", e.getMessage());
                 }
             }
 
@@ -122,9 +123,7 @@ public abstract class AbstractServer {
 
     protected abstract void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message);
 
-    protected abstract void sendSyncLootTableMessage(ServerPlayer serverPlayer, SyncLootTableMessage message);
-
-    protected abstract void sendSyncTradeMessage(ServerPlayer serverPlayer, SyncTradeMessage message);
+    protected abstract void sendSyncLootTableMessage(ServerPlayer serverPlayer, LootDataChunkMessage message);
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
@@ -207,7 +206,8 @@ public abstract class AbstractServer {
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
-                lootTables.remove(entityType.getDefaultLootTable()); // at least remove entity default loot table, otherwise it will end up in gameplay category
+                // at least remove entity default loot table, otherwise it will end up in gameplay category
+                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootTables.remove(lootTableResourceKey.location()));
                 continue;
             }
 
@@ -339,13 +339,68 @@ public abstract class AbstractServer {
         return itemStacks;
     }
 
-    private void sendLootData(Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        lootNodes.forEach((location, lootNode) -> lootTableMessages.add(new SyncLootTableMessage(location, lootTableItemStacks.getOrDefault(location, Collections.emptyList()), lootNode)));
+    private void writeLootData(RegistryFriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
+        IServerUtils utils = PluginManager.SERVER_REGISTRY;
+
+        buf.writeCollection(lootNodes.entrySet(), (f, e) -> {
+            f.writeResourceLocation(e.getKey());
+            e.getValue().encode(utils, (RegistryFriendlyByteBuf) f);
+            ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode((RegistryFriendlyByteBuf) f, lootTableItemStacks.getOrDefault(e.getKey(), Collections.emptyList()));
+        });
+
+        lootNodes.clear();
+        lootTableItemStacks.clear();
     }
 
-    private void sendTradeData(Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
-        trades.forEach((location, node) -> tradeMessages.add(new SyncTradeMessage(location, node, items.get(location))));
-        tradeMessages.add(new SyncTradeMessage(wanderingTraderNode, wanderingTraderItems));
+    private void writeTradeData(RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
+        IServerUtils utils = PluginManager.SERVER_REGISTRY;
+
+        buf.writeCollection(trades.entrySet(), (f, e) -> {
+            Pair<List<Item>, List<Item>> pair = items.getOrDefault(e.getKey(), new Pair<>(Collections.emptyList(), Collections.emptyList()));
+
+            f.writeResourceLocation(e.getKey());
+            e.getValue().encode(utils, (RegistryFriendlyByteBuf) f);
+            f.writeCollection(pair.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+            f.writeCollection(pair.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+        });
+
+        wanderingTraderNode.encode(utils, buf);
+        buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+        buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+
+        trades.clear();
+        items.clear();
+    }
+
+    private void compressAndStoreData(ByteBuf rawBuf) {
+        int rawSize = rawBuf.readableBytes();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(rawSize);
+
+        try (GZIPOutputStream gzip = new GZIPOutputStream(bos)) {
+            rawBuf.readBytes(gzip, rawBuf.readableBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+        byte[] compressedData = bos.toByteArray();
+        int totalChunks = (int) Math.ceil((double) compressedData.length / MAX_CHUNK_SIZE);
+
+        for (int i = 0; i < totalChunks; i++) {
+            int offset = i * MAX_CHUNK_SIZE;
+            int length = Math.min(MAX_CHUNK_SIZE, compressedData.length - offset);
+            byte[] chunkData = new byte[length];
+
+            System.arraycopy(compressedData, offset, chunkData, 0, length);
+            chunks.add(new LootDataChunkMessage(i, chunkData));
+        }
+
+        rawBuf.release();
+
+        LOGGER.info("Compressed loot data ({} MB -> {} MB) and stored in {} chunk(s)",
+                DOUBLE_FORMAT.format(rawSize / 1024.0 / 1024.0),
+                DOUBLE_FORMAT.format(compressedData.length / 1024.0 / 1024.0),
+                totalChunks);
     }
 
     private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<T> tag) {

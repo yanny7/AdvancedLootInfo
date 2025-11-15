@@ -1,7 +1,6 @@
 package com.yanny.ali.compatibility;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.compatibility.emi.EmiBlockLoot;
 import com.yanny.ali.compatibility.emi.EmiEntityLoot;
@@ -22,7 +21,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -40,7 +38,7 @@ public class EmiCompatibility implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry emiRegistry) {
-        CompletableFuture<Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>>> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
+        CompletableFuture<byte[]> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
 
         if (futureData.isDone()) {
             LOGGER.info("Data already received, processing instantly.");
@@ -49,9 +47,9 @@ public class EmiCompatibility implements EmiPlugin {
         }
 
         try {
-            Pair<Map<ResourceLocation, IDataNode>, Map<ResourceLocation, IDataNode>> pair = futureData.get();
+            byte[] fullCompressedData = futureData.get();
 
-            registerData(emiRegistry, pair.getLeft(), pair.getRight());
+            registerData(emiRegistry, fullCompressedData);
         } catch (ExecutionException e) {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
 
@@ -69,7 +67,7 @@ public class EmiCompatibility implements EmiPlugin {
         }
     }
 
-    private void registerData(EmiRegistry registry, Map<ResourceLocation, IDataNode> lootData, Map<ResourceLocation, IDataNode> tradeData) {
+    private void registerData(EmiRegistry registry, byte[] fullCompressedData) {
         AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
         AliCommonRegistry commonRegistry = PluginManager.COMMON_REGISTRY;
         AliConfig config = commonRegistry.getConfiguration();
@@ -92,8 +90,7 @@ public class EmiCompatibility implements EmiPlugin {
                     level,
                     clientRegistry,
                     config,
-                    lootData,
-                    tradeData,
+                    fullCompressedData,
                     (node, location, block, outputs) -> {
                         EmiRecipeCategory category = null;
 

@@ -26,13 +26,9 @@ public class NetworkUtils {
         Client client = new Client();
         Server server = new Server(channel);
 
-        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
-                .consumerNetworkThread((BiConsumer<SyncLootTableMessage, CustomPayloadEvent.Context>) client::onLootInfo)
-                .add();
-        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, SyncTradeMessage>)(Object) SyncTradeMessage.CODEC)
-                .consumerNetworkThread((BiConsumer<SyncTradeMessage, CustomPayloadEvent.Context>) client::onTradeInfo)
+        channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, LootDataChunkMessage>)(Object) LootDataChunkMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
@@ -49,11 +45,8 @@ public class NetworkUtils {
     private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(SimpleChannel channel) {
         Server server = new Server(channel);
 
-        channel.messageBuilder(SyncLootTableMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, SyncLootTableMessage>)(Object) SyncLootTableMessage.CODEC)
-                .add();
-        channel.messageBuilder(SyncTradeMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, SyncTradeMessage>)(Object) SyncTradeMessage.CODEC)
+        channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, LootDataChunkMessage>)(Object) LootDataChunkMessage.CODEC)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
