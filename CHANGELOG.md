@@ -1,4 +1,4 @@
-## []
+## [1.5.1]
 
 - Optimized data synchronization
 - Fixed LootJS missing modifiers and predicates in tooltip
