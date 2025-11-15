@@ -1,3 +1,7 @@
+## []
+
+- Fixed missing Wandering Trader trade info
+
 ## [1.5.1]
 
 - Optimized data synchronization
