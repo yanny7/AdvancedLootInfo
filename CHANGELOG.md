@@ -1,6 +1,7 @@
 ## []
 
 - Optimized data synchronization
+- Fixed LootJS missing modifiers and predicates in tooltip
 
 ## [1.5.0]
 
