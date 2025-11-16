@@ -166,7 +166,7 @@ public class GenericUtils {
             List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
             List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
 
-            tradeData.put(new ResourceLocation("empty"), new TradeData(dataNode, inputs, outputs));
+            tradeData.put(ResourceLocation.withDefaultNamespace("empty"), new TradeData(dataNode, inputs, outputs));
         } finally {
             readerBuf.release();
         }
