@@ -1,3 +1,8 @@
+## [1.5.2]
+
+- Fixed missing Wandering Trader trade info
+- Decreased packet size when syncing to avoid timeout in some cases
+
 ## [1.5.1]
 
 - Optimized data synchronization

@@ -157,6 +157,13 @@ public class GenericUtils {
                 List<Item> outputs = b.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
                 return new AbstractMap.SimpleEntry<>(location, new TradeData(dataNode, inputs, outputs));
             }).stream().collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+
+            // wandering trader
+            IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
+            List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+            List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+
+            tradeData.put(new ResourceLocation("empty"), new TradeData(dataNode, inputs, outputs));
         } finally {
             readerBuf.release();
         }
