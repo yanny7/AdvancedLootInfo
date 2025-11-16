@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractServer {
-    private static final int MAX_CHUNK_SIZE = 1024 * 1024; // 1 MB
+    private static final int MAX_CHUNK_SIZE = 32 * 1024; // 32 KB
     private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#0.00");
     private static final Logger LOGGER = LogUtils.getLogger();
 
