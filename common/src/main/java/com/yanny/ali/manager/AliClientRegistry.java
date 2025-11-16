@@ -71,6 +71,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
+            stopLogging();
         }
 
         LOGGER.info("Cleared Loot data");
