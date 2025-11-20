@@ -2,18 +2,18 @@ package com.yanny.ali.plugin;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.mixin.MixinCanItemPerformAbility;
-import com.yanny.ali.mixin.MixinLootTableIdCondition;
-import com.yanny.ali.mixin.MixinNeoForgeEventHandler;
+import com.yanny.ali.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.GlobalLootModifierWidget;
 import com.yanny.ali.plugin.client.widget.SingletonWidget;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
+import com.yanny.ali.plugin.common.nodes.ReferenceNode;
 import com.yanny.ali.plugin.common.nodes.SingletonNode;
-import net.neoforged.neoforge.common.loot.CanItemPerformAbility;
-import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
-import net.neoforged.neoforge.common.loot.LootModifierManager;
-import net.neoforged.neoforge.common.loot.LootTableIdCondition;
+import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
+import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.loot.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
@@ -80,6 +80,19 @@ public class NeoForgePlugin implements IPlugin {
         }
 
         LootModifierManager lootModifierManager = MixinNeoForgeEventHandler.getLootModifierManager();
+
+        forgeRegistry.registerGlobalLootModifier(AddTableLootModifier.class, (u, m) -> {
+            List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getConditions());
+
+            return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+                ITooltipNode tooltip = ArrayTooltipNode.array()
+                        .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
+                        .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+                        .build();
+                IDataNode node = new ReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable(), c, tooltip);
+                return List.of(new IOperation.AddOperation((i) -> true, node));
+            });
+        });
 
         for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
             try {
