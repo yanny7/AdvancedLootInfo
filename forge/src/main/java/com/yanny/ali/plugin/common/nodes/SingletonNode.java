@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class SingletonNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "singleton");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "singleton");
 
     private final ITooltipNode tooltip;
 

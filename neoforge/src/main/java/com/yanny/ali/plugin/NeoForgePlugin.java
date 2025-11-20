@@ -10,7 +10,7 @@ import com.yanny.ali.plugin.client.widget.GlobalLootModifierWidget;
 import com.yanny.ali.plugin.client.widget.SingletonWidget;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.common.nodes.SingletonNode;
-import net.neoforged.neoforge.common.loot.CanToolPerformAction;
+import net.neoforged.neoforge.common.loot.CanItemPerformAbility;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifierManager;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;

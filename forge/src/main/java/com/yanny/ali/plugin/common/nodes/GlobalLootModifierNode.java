@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class GlobalLootModifierNode implements IDataNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "glm");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "glm");
 
     private final ITooltipNode tooltip;
 
