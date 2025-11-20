@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.mods.farmers_delight_glm;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class ModifiedNode extends ListNode {
@@ -17,13 +17,13 @@ public class ModifiedNode extends ListNode {
         addChildren(original);
     }
 
-    public ModifiedNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public ModifiedNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 

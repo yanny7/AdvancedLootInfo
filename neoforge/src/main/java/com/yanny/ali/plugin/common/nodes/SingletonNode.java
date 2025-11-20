@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.common.nodes;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class SingletonNode extends ListNode {
@@ -16,13 +16,13 @@ public class SingletonNode extends ListNode {
         tooltip = EntryTooltipUtils.getGroupTooltip();
     }
 
-    public SingletonNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public SingletonNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 

@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -42,7 +43,7 @@ public class ReferenceNode extends ListNode {
 
     public ReferenceNode(IServerUtils utils, ResourceLocation table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, conditions, 1);
-        LootTable lootTable = utils.getLootTable(table);
+        LootTable lootTable = utils.getLootTable(Either.left(table));
 
         if (lootTable != null) {
             addChildren(new LootTableNode(utils, lootTable, 1, Collections.emptyList(), conditions));
