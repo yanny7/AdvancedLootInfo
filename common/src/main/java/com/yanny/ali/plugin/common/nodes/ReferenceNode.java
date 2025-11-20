@@ -1,20 +1,23 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class ReferenceNode extends ListNode {
@@ -36,6 +39,20 @@ public class ReferenceNode extends ListNode {
 
         this.chance = chance * entry.weight / sumWeight;
         tooltip = EntryTooltipUtils.getReferenceTooltip(entry, chance, sumWeight);
+    }
+
+    public ReferenceNode(IServerUtils utils, ResourceLocation table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, conditions, 1);
+        LootTable lootTable = utils.getLootTable(Either.left(table));
+
+        if (lootTable != null) {
+            addChildren(new LootTableNode(utils, lootTable, 1, Collections.emptyList(), conditions));
+        } else {
+            addChildren(new MissingNode());
+        }
+
+        this.chance = chance.get(null).get(0).min();
+        this.tooltip = tooltip;
     }
 
     public ReferenceNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

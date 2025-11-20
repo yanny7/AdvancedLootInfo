@@ -5,9 +5,12 @@
   "refmap": "ali.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MixinAddTableLootModifier",
     "MixinCanItemPerformAbility",
+    "MixinLootModifier",
     "MixinLootTableIdCondition",
     "MixinMinecraftServer",
+    "MixinNeoForgeEventHandler",
     "MixinVegetationBlock"
   ],
   "injectors": {
