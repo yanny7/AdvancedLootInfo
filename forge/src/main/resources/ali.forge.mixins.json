@@ -8,6 +8,8 @@
   "mixins": [
     "MixinBushBlock",
     "MixinForgeHooks",
+    "MixinForgeInternalHandler",
+    "MixinLootModifier",
     "MixinLootTableForge",
     "MixinLootTableIdCondition",
     "MixinMinecraftServer"

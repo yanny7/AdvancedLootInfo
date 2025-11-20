@@ -1,3 +1,7 @@
+# []
+
+- Added GLM support
+
 ## [1.5.2]
 
 - Fixed missing Wandering Trader trade info

@@ -1,5 +1,6 @@
 package com.yanny.ali.platform;
 
+import com.google.common.base.Suppliers;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
@@ -10,15 +11,19 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.forgespi.language.ModFileScanData;
+import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ForgePlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
+
+    private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
 
     @Override
     public List<LootPool> getLootPools(LootTable table) {
@@ -27,6 +32,16 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public List<IPlugin> getPlugins() {
+        return pluginsSupplier.get();
+    }
+
+    @Override
+    public Path getConfiguration() {
+        return FMLPaths.CONFIGDIR.get();
+    }
+
+    @NotNull
+    private List<IPlugin> loadPlugins() {
         List<IPlugin> plugins = new LinkedList<>();
         Type type = Type.getType(AliEntrypoint.class);
 
@@ -57,10 +72,5 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
         LOGGER.info("Found {} plugin(s)", plugins.size());
         return plugins;
-    }
-
-    @Override
-    public Path getConfiguration() {
-        return FMLPaths.CONFIGDIR.get();
     }
 }
