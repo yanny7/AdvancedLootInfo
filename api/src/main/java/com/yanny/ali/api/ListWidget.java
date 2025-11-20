@@ -54,9 +54,11 @@ public abstract class ListWidget implements IWidget {
                 } else {
                     children = new ArrayList<>(widgetList);
                 }
-            }
 
-            bounds.setDimensions(subRect.width + groupWidgetWidth, subRect.height);
+                bounds.setDimensions(subRect.width + groupWidgetWidth, subRect.height);
+            } else {
+                bounds.setDimensions(subRect.width + groupWidgetWidth, GROUP_WIDGET_HEIGHT);
+            }
         } else {
             bounds.setDimensions(GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
         }
