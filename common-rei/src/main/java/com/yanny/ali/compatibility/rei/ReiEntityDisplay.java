@@ -1,6 +1,7 @@
 package com.yanny.ali.compatibility.rei;
 
 import com.yanny.ali.compatibility.common.EntityLootType;
+import com.yanny.ali.platform.Services;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
@@ -40,7 +41,7 @@ public class ReiEntityDisplay extends ReiBaseDisplay {
     @Unmodifiable
     @NotNull
     private static List<EntryIngredient> getSpawnEgg(EntityLootType entry) {
-        SpawnEggItem item = SpawnEggItem.byId(entry.entityType());
+        SpawnEggItem item = Services.getPlatform().getSpawnEggItem(entry.entityType());
 
         if (item != null) {
             return List.of(EntryIngredients.of(item));
