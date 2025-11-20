@@ -5,8 +5,6 @@ import com.yanny.ali.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
 import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
-import com.yanny.ali.plugin.lootjs.node.ModifiedNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -39,7 +37,7 @@ public class ReplaceItemModifier extends GlobalLootModifier implements IForgeLoo
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
-                if (src instanceof ItemStackNode || src instanceof ItemTagNode || src instanceof ModifiedNode) {
+                if (src instanceof ItemStackNode) {
                     return Collections.singletonList(src); // do not modify self!
                 }
 
