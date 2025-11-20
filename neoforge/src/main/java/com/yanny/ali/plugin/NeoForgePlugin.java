@@ -89,7 +89,7 @@ public class NeoForgePlugin implements IPlugin {
                         .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                         .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
                         .build();
-                IDataNode node = new ReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable(), c, tooltip);
+                IDataNode node = new ReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable().location(), c, tooltip);
                 return List.of(new IOperation.AddOperation((i) -> true, node));
             });
         });
