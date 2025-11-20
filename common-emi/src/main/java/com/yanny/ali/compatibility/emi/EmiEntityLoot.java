@@ -4,6 +4,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
@@ -31,7 +32,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
         this.entityType = entityType;
         this.variant = id;
 
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(entityType);
+        SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(entityType);
 
         if (spawnEgg != null) {
             catalysts = List.of(EmiStack.of(spawnEgg));
