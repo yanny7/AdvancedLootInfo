@@ -6,6 +6,8 @@ import com.yanny.ali.mixin.MixinLootTableFabric;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.slf4j.Logger;
@@ -47,5 +49,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FabricLoader.getInstance().getConfigDir();
+    }
+
+    @Override
+    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
+        return SpawnEggItem.byId(entityType);
     }
 }

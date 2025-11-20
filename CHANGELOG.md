@@ -1,6 +1,7 @@
 # []
 
 - Added GLM support
+- Fixed missing spawn eggs for modded mobs on (Neo)Forge
 
 ## [1.5.2]
 

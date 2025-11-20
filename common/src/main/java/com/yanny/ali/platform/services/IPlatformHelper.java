@@ -1,6 +1,8 @@
 package com.yanny.ali.platform.services;
 
 import com.yanny.ali.api.IPlugin;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 
@@ -13,4 +15,6 @@ public interface IPlatformHelper {
         List<IPlugin> getPlugins();
 
         Path getConfiguration();
+
+        SpawnEggItem getSpawnEggItem(EntityType<?> entityType);
 }

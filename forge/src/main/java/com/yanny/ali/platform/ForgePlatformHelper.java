@@ -6,8 +6,11 @@ import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.mixin.MixinLootTableForge;
 import com.yanny.ali.platform.services.IPlatformHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.forgespi.language.ModFileScanData;
@@ -38,6 +41,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
+    }
+
+    @Override
+    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
+        return ForgeSpawnEggItem.fromEntityType(entityType);
     }
 
     @NotNull
