@@ -6,6 +6,7 @@ import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -35,7 +36,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<EntityLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(recipe.type().entityType());
+        SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(recipe.type().entityType());
 
         if (spawnEgg != null) {
             builder.addSlot(RecipeIngredientRole.CATALYST, 1, 1)

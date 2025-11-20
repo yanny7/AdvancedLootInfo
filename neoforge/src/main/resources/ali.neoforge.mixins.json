@@ -7,8 +7,10 @@
   "mixins": [
     "MixinBushBlock",
     "MixinCanToolPerformAction",
+    "MixinLootModifier",
     "MixinLootTableIdCondition",
-    "MixinMinecraftServer"
+    "MixinMinecraftServer",
+    "MixinNeoForgeEventHandler"
   ],
   "injectors": {
     "defaultRequire": 1

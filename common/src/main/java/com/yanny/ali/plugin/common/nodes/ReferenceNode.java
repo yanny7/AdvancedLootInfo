@@ -4,6 +4,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -38,7 +40,7 @@ public class ReferenceNode extends ListNode {
     }
 
     public ReferenceNode(IServerUtils utils, ResourceLocation table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
-        Map<Enchantment, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, conditions, 1);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, conditions, 1);
         LootTable lootTable = utils.getLootTable(table);
 
         if (lootTable != null) {

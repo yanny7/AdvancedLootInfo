@@ -6,6 +6,7 @@ import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.mixin.MixinLootModifier;
+import com.yanny.ali.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
@@ -22,9 +23,9 @@ import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -154,7 +155,7 @@ public class GlobalLootModifierUtils {
 
     public static boolean tablePredicate(List<LootItemCondition> conditions, ResourceLocation location) {
         return  conditions.stream().anyMatch((c) -> {
-            if (c instanceof LootTableIdCondition condition && condition.id().equals(location)) {
+            if (c instanceof LootTableIdCondition condition && ((MixinLootTableIdCondition) condition).getTargetLootTableId().equals(location)) {
                 return true;
             } else {
                 return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, location);

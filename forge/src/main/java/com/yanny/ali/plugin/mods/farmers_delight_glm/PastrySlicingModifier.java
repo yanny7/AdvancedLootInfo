@@ -10,6 +10,7 @@ import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -31,8 +32,8 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IForgeL
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
-            Map<Enchantment, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, c, 1);
-            Map<Enchantment, Map<Integer, RangeValue>> count = new HashMap<>();
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, c, 1);
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = new HashMap<>();
 
             count.put(null, Map.of(0, new RangeValue(1, 7)));
 
