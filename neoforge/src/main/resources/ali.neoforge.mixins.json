@@ -8,8 +8,10 @@
   "mixins": [
     "MixinBushBlock",
     "MixinCanItemPerformAbility",
+    "MixinLootModifier",
     "MixinLootTableIdCondition",
-    "MixinMinecraftServer"
+    "MixinMinecraftServer",
+    "MixinNeoForgeEventHandler"
   ],
   "client": [
     "MixinRecipeScreen"
