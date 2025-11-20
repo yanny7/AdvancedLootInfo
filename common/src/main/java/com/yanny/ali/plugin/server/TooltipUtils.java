@@ -1,7 +1,11 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.RangeValue;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -22,6 +26,8 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class TooltipUtils {
@@ -272,6 +278,29 @@ public class TooltipUtils {
 
         itemStack = function.apply(itemStack, null);
         return itemStack;
+    }
+
+    public static void addObjectFields(IServerUtils utils, IKeyTooltipNode tooltip, Object object) {
+        Field[] fields = object.getClass().getDeclaredFields();
+        List<Field> names = Arrays.stream(fields).filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
+
+        names.forEach((f) -> {
+            f.setAccessible(true);
+
+            try {
+                IKeyTooltipNode t = utils.getValueTooltip(utils, f.get(object));
+
+                if (t instanceof ValueTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(f.getName(), false));
+                } else if (t instanceof BranchTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(f.getName(), false));
+                } else if (t instanceof ErrorTooltipNode.Builder) {
+                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "???").build("ali.property.value.null"));
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {
