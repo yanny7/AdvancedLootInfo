@@ -1,0 +1,46 @@
+package com.yanny.ali.plugin.mods.farmers_delight_glm;
+
+import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.GlobalLootModifier;
+import com.yanny.ali.plugin.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.IForgeLootModifier;
+import com.yanny.ali.plugin.common.nodes.ItemStackNode;
+import com.yanny.ali.plugin.common.nodes.SingletonNode;
+import com.yanny.ali.plugin.mods.ClassAccessor;
+import com.yanny.ali.plugin.mods.FieldAccessor;
+import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.loot.LootModifier;
+
+import java.util.*;
+
+@ClassAccessor("vectorwing.farmersdelight.common.loot.modifier.PastrySlicingModifier")
+public class PastrySlicingModifier extends GlobalLootModifier implements IForgeLootModifier {
+    @FieldAccessor
+    private Item pastrySlice;
+
+    public PastrySlicingModifier(LootModifier parent) {
+        super(parent);
+    }
+
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+        List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
+
+        return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, c, 1);
+            Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = new HashMap<>();
+
+            count.put(null, Map.of(0, new RangeValue(1, 7)));
+
+            ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
+            IDataNode node = new SingletonNode(utils, new ItemStackNode(utils, pastrySlice.getDefaultInstance(), new RangeValue(1, 7), tooltip));
+
+            return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
+        });
+    }
+}
