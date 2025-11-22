@@ -513,11 +513,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         either.ifRight((lootTable) -> {
             Optional<Map.Entry<ResourceLocation, LootTable>> entry = lootTableMap.entrySet().stream().filter((l) -> l.getValue().equals(lootTable)).findFirst();
 
-            if (entry.isPresent()) {
-                hitMap.compute(entry.get().getKey(), (k, v) -> v == null ? 1 : v + 1);
-            } else {
-                LOGGER.warn("Failed to retrieve LootTable key [{}, {}]", lootTable.pools.size(), lootTable.functions.size());
-            }
+            entry.ifPresent(e -> hitMap.compute(e.getKey(), (k, v) -> v == null ? 1 : v + 1));
         });
         return either.map(lootTableMap::get, lootTable -> lootTable);
     }
