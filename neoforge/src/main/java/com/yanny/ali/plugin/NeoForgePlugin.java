@@ -104,11 +104,18 @@ public class NeoForgePlugin implements IPlugin {
                     if (lootModifier.isPresent()) {
                         lootModifiers.add(lootModifier.get());
                     } else {
-                        LOGGER.warn("Unable to locate destination for GLM {}", globalLootModifier.getClass().getName());
+                        LOGGER.warn("Unable to locate destination for GLM {}", GlobalLootModifierUtils.getName(globalLootModifier));
                     }
                 } else {
+                    Optional<ILootModifier<?>> modifier = GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, globalLootModifier);
+
                     missingGLM.add(globalLootModifier.getClass());
-                    GlobalLootModifierUtils.getMissingGlobalLootModifier(utils, globalLootModifier).ifPresent(lootModifiers::add);
+
+                    if (modifier.isPresent()) {
+                        lootModifiers.add(modifier.get());
+                    } else {
+                        LOGGER.warn("Unable to locate destination for auto GLM {}", GlobalLootModifierUtils.getName(globalLootModifier));
+                    }
                 }
             } catch (Throwable e) {
                 e.printStackTrace();
