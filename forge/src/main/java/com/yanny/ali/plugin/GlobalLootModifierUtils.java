@@ -9,7 +9,6 @@ import com.yanny.ali.mixin.MixinLootModifier;
 import com.yanny.ali.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
@@ -28,6 +27,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -186,7 +186,7 @@ public class GlobalLootModifierUtils {
         if (modifier instanceof LootModifier lootModifier) {
             return getLootModifier(Arrays.asList(((MixinLootModifier) lootModifier).getConditions()), (conditions) -> {
                 ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
-                IKeyTooltipNode fieldsTooltip = ValueTooltipNode.value(lootModifier.getClass().getName());
+                IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, getName(modifier));
 
                 TooltipUtils.addObjectFields(utils, fieldsTooltip, lootModifier);
                 tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
@@ -196,5 +196,9 @@ public class GlobalLootModifierUtils {
         }
 
         return Optional.empty();
+    }
+
+    public static ResourceLocation getName(IGlobalLootModifier modifier) {
+        return ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec());
     }
 }
