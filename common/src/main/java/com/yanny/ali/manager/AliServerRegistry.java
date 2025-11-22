@@ -67,6 +67,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
 
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
+    private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
@@ -508,6 +509,16 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     @Nullable
     @Override
     public LootTable getLootTable(Either<ResourceLocation, LootTable> either) {
+        either.ifLeft((resourceLocation) -> hitMap.compute(resourceLocation, (k, v) -> v == null ? 1 : v + 1));
+        either.ifRight((lootTable) -> {
+            Optional<Map.Entry<ResourceLocation, LootTable>> entry = lootTableMap.entrySet().stream().filter((l) -> l.getValue().equals(lootTable)).findFirst();
+
+            if (entry.isPresent()) {
+                hitMap.compute(entry.get().getKey(), (k, v) -> v == null ? 1 : v + 1);
+            } else {
+                LOGGER.warn("Failed to retrieve LootTable key [{}, {}]", lootTable.pools.size(), lootTable.functions.size());
+            }
+        });
         return either.map(lootTableMap::get, lootTable -> lootTable);
     }
 
@@ -527,6 +538,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
         return new TradeNode(this, itemListingMap);
+    }
+
+    public boolean isSubTable(ResourceLocation resourceLocation) {
+        Integer hitCount = hitMap.get(resourceLocation);
+
+        return hitCount != null && lootTableMap.getOrDefault(resourceLocation, LootTable.EMPTY).getParamSet() == LootTable.DEFAULT_PARAM_SET;
     }
 
     @Override

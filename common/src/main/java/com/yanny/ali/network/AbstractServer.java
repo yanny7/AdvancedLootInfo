@@ -85,7 +85,7 @@ public abstract class AbstractServer {
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, lootTableLootModifiers, lootTableItems));
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
-        lootNodes = removeEmptyLootTable(lootNodes, lootTableItemStacks);
+        lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, lootTableItemStacks);
         tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
 
         LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootNodes.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
@@ -133,19 +133,24 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> removeEmptyLootTable(Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, List<ItemStack>> items) {
+    private static Map<ResourceLocation, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, List<ItemStack>> items) {
         Map<ResourceLocation, IDataNode> result = new HashMap<>();
         int emptyLootTables = 0;
+        int injectedLootTables = 0;
 
         for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
             if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
-                result.put(entry.getKey(), entry.getValue());
+                if (!serverRegistry.isSubTable(entry.getKey())) {
+                    result.put(entry.getKey(), entry.getValue());
+                } else {
+                    injectedLootTables++;
+                }
             } else {
                 emptyLootTables++;
             }
         }
 
-        LOGGER.info("Skipped {} empty or hidden loot tables", emptyLootTables);
+        LOGGER.info("Skipped {} empty or hidden loot tables and {} injected loot tables", emptyLootTables, injectedLootTables);
         return result;
     }
 
