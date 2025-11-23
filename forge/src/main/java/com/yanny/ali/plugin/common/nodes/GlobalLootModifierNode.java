@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public class GlobalLootModifierNode implements IDataNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "glm");
 
-    private ITooltipNode tooltip;
+    private final ITooltipNode tooltip;
 
     public GlobalLootModifierNode(IServerUtils utils, ITooltipNode tooltip) {
         this.tooltip = tooltip;
