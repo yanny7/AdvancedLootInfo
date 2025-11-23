@@ -151,15 +151,14 @@ dependencies {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source(project(":api").sourceSets.main.allSource)
-    source(project(":common").sourceSets.main.allSource)
     source(project(":common-emi").sourceSets.main.allSource)
-    source(project(":common-jei").sourceSets.main.allSource)
     source(project(":common-rei").sourceSets.main.allSource)
 //    source(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.named("sourcesJar", Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-emi").sourceSets.main.allSource)
