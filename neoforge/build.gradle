@@ -117,19 +117,57 @@ tasks.named('test') {
 }
 
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
-    source(project(":api").sourceSets.main.allSource)
-    source(project(":common").sourceSets.main.allSource)
-    source(project(":common-emi").sourceSets.main.allSource)
-    source(project(":common-jei").sourceSets.main.allSource)
-    source(project(":common-rei").sourceSets.main.allSource)
+    def addedPackageInfos = [] as Set
+
+    def sourceProjects = [
+            project(":api"),
+            project(":common"),
+            project(":common-emi"),
+            project(":common-jei"),
+            project(":common-rei"),
+//            project(":common-lootjs")
+    ]
+
+    sourceSets.main.allSource.each { sourceFile ->
+        if (sourceFile.name == 'package-info.java') {
+            def rootDir = sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
+            if (rootDir != null) {
+                def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
+                addedPackageInfos.add(relativePath)
+            }
+        }
+    }
+
+    sourceProjects.each { sourceProject ->
+        source(sourceProject.sourceSets.main.allSource.filter { sourceFile ->
+            if (sourceFile.name == 'package-info.java') {
+                def rootDir = sourceProject.sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
+                if (rootDir != null) {
+                    def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
+
+                    if (addedPackageInfos.contains(relativePath)) {
+                        return false
+                    } else {
+                        addedPackageInfos.add(relativePath)
+                        return true
+                    }
+                }
+            }
+
+            return true
+        })
+    }
 }
 
 tasks.named("sourcesJar", Jar) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     from(project(":api").sourceSets.main.allSource)
     from(project(":common").sourceSets.main.allSource)
     from(project(":common-emi").sourceSets.main.allSource)
     from(project(":common-jei").sourceSets.main.allSource)
     from(project(":common-rei").sourceSets.main.allSource)
+//    from(project(":common-lootjs").sourceSets.main.allSource)
 }
 
 tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
@@ -137,4 +175,5 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
     from project(":common").sourceSets.main.resources
     from project(":common-emi").sourceSets.main.resources
     from project(":common-jei").sourceSets.main.resources
+//    from project(":common-lootjs").sourceSets.main.resources
 }

@@ -261,7 +261,13 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return entryFactory;
         } else {
             missingEntryFactories.add(type.getClass());
-            return (utils1, entry, chance, sumWeight, functions, conditions) ->  new MissingNode();
+
+            try {
+                return (u, e, c, s, f, o) -> new MissingNode(GenericTooltipUtils.getMissingEntryTooltip(u, e));
+            } catch (Throwable t) {
+                LOGGER.warn("Entry type {} was not registered", type.getClass().getCanonicalName());
+                return (u, e, c, s, f, o) -> new MissingNode(EmptyTooltipNode.EMPTY);
+            }
         }
     }
 
@@ -276,7 +282,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             missingFunctionTooltips.add(function.getClass());
 
             try {
-                return GenericTooltipUtils.getMissingFunction(utils, function);
+                return GenericTooltipUtils.getMissingFunctionTooltip(utils, function);
             } catch (Throwable e) {
                 LOGGER.warn("Function type {} was not registered", function.getClass().getCanonicalName());
                 return ValueTooltipUtils.getStringTooltip(utils, function.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
@@ -295,7 +301,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             missingConditionTooltips.add(condition.getClass());
 
             try {
-                return GenericTooltipUtils.getMissingCondition(utils, condition);
+                return GenericTooltipUtils.getMissingConditionTooltip(utils, condition);
             } catch (Throwable e) {
                 LOGGER.warn("Condition type for {} was not registered", condition.getClass().getCanonicalName());
                 return ValueTooltipUtils.getStringTooltip(utils, condition.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
@@ -322,13 +328,19 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             return EmptyTooltipNode.empty();
         }
 
-        BiFunction<IServerUtils, Object, IKeyTooltipNode> valueTooltipGetter = valueTooltipMap.get(value.getClass());
+        Class<?> valueClass = value.getClass();
 
-        if (valueTooltipGetter != null) {
-            return valueTooltipGetter.apply(utils, value);
+        if (valueClass.isArray()) {
+            return TooltipUtils.getArrayTooltip(utils, value);
         } else {
-            missingValueTooltips.add(value.getClass());
-            return ErrorTooltipNode.error("[" + value.getClass().getName() + "]");
+            BiFunction<IServerUtils, Object, IKeyTooltipNode> valueTooltipGetter = valueTooltipMap.get(valueClass);
+
+            if (valueTooltipGetter != null) {
+                return valueTooltipGetter.apply(utils, value);
+            } else {
+                missingValueTooltips.add(valueClass);
+                return ErrorTooltipNode.error("[" + valueClass.getName() + "]");
+            }
         }
     }
 
@@ -380,7 +392,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             } catch (Throwable ignored) {}
 
             missingItemListingFactories.add(entry.getClass());
-            return new MissingNode();
+            try {
+                return new MissingNode(GenericTooltipUtils.getMissingItemListingTooltip(utils, entry));
+            } catch (Throwable e) {
+                return new MissingNode(EmptyTooltipNode.EMPTY);
+            }
         }
     }
 

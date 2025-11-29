@@ -272,6 +272,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.levels", "Levels: %s");
         TRANSLATION_MAP.put("ali.property.value.light", "Light: %s");
         TRANSLATION_MAP.put("ali.property.value.limit", "Limit: %s");
+        TRANSLATION_MAP.put("ali.property.value.loot_table", "Loot Table: %s");
         TRANSLATION_MAP.put("ali.property.value.map_decoration", "Map Decoration: %s");
         TRANSLATION_MAP.put("ali.property.value.merge_strategy", "Merge Strategy: %s");
         TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");

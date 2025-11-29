@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class NetworkUtils {
     public static final ResourceLocation NEW_LOOT_INFO_ID = Utils.modLoc("new_loot_info");
-    public static final ResourceLocation NEW_TRADE_ID = Utils.modLoc("new_trade_info");
     public static final ResourceLocation CLEAR_LOOT_INFO_ID = Utils.modLoc("clear_loot_info");
     public static final ResourceLocation DONE_LOOT_INFO_ID = Utils.modLoc("done_loot_info");
 
