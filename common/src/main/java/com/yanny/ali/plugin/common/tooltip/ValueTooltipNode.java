@@ -10,6 +10,7 @@ import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,9 +63,9 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         List<Component> components = new ArrayList<>(children.size() + 1);
 
         if (isKeyValue) {
-            Component k = transform(values.get(0));
-            Component value = transform(values.get(1));
-            Component keyValue = Component.translatable("ali.util.advanced_loot_info.key_value", k, value).withStyle(PARAM_STYLE);
+            Component k = transform(values.get(0)).withStyle(TEXT_STYLE);
+            Component value = transform(values.get(1)).withStyle(PARAM_STYLE);
+            Component keyValue = Component.translatable("ali.util.advanced_loot_info.key_value", k, value);
 
             components.add(pad(pad, Component.translatable(key, keyValue).withStyle(TEXT_STYLE)));
         } else {
@@ -147,7 +148,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
     }
 
     @NotNull
-    private static Component transform(String v) {
+    private static MutableComponent transform(String v) {
         if (v.charAt(0) == '\uE000') {
             return Component.translatable(v.substring(1)).withStyle(PARAM_STYLE);
         }

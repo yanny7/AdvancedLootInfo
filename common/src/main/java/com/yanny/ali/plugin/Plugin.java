@@ -310,6 +310,7 @@ public class Plugin implements IPlugin {
 
         registry.registerIngredientTooltip(Ingredient.class, IngredientTooltipUtils::getIngredientTooltip);
 
+        registry.registerValueTooltip(LootPoolEntryType.class, RegistriesTooltipUtils::getEntryTypeTooltip);
         registry.registerValueTooltip(LootItemFunctionType.class, RegistriesTooltipUtils::getFunctionTypeTooltip);
         registry.registerValueTooltip(LootItemConditionType.class, RegistriesTooltipUtils::getConditionTypeTooltip);
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);

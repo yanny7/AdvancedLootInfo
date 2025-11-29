@@ -3,6 +3,7 @@
 - Added GLM support
 - Fixed missing spawn eggs for modded mobs on (Neo)Forge
 - Hiding injected loot tables
+- Improved loot info for unknown entries/modifiers/predicates
 
 ## [1.5.2]
 
