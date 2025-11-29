@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.lootjs.modifier;
+package com.yanny.ali.plugin.server;
 
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import org.jetbrains.annotations.NotNull;
