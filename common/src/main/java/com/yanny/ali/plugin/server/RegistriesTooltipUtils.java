@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
@@ -44,6 +45,11 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getRegistryTooltip
 import static com.yanny.ali.plugin.server.ValueTooltipUtils.getBuiltInRegistryTooltip;
 
 public class RegistriesTooltipUtils {
+    @NotNull
+    public static IKeyTooltipNode getEntryTypeTooltip(IServerUtils utils, LootPoolEntryType type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type);
+    }
+
     @NotNull
     public static IKeyTooltipNode getFunctionTypeTooltip(IServerUtils utils, LootItemFunctionType<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_FUNCTION_TYPE, type);
