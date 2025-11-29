@@ -1,5 +1,7 @@
 package com.yanny.ali.compatibility;
 
-//@REIPluginClient
-public class ReiCompatibilityWrapper /*extends ReiCompatibility*/ {
+import me.shedaniel.rei.forge.REIPluginClient;
+
+@REIPluginClient
+public class ReiCompatibilityWrapper extends ReiCompatibility {
 }

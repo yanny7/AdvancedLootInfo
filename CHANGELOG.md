@@ -4,6 +4,7 @@
 - Fixed missing spawn eggs for modded mobs on (Neo)Forge
 - Hiding injected loot tables
 - Improved loot info for unknown entries/modifiers/predicates
+- Added support for REI on 1.21.10
 
 ## [1.5.2]
 

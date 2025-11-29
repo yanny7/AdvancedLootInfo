@@ -8,6 +8,7 @@ import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,8 +43,8 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return widget.mouseClicked((int) mouseX, (int) mouseY, button);
+    public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
+        return widget.mouseClicked((int) mouseButtonEvent.x(), (int) mouseButtonEvent.y(), mouseButtonEvent.button());
     }
 
     @NotNull
