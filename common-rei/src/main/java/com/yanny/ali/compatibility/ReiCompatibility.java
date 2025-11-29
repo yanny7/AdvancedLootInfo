@@ -170,7 +170,7 @@ public class ReiCompatibility implements REIClientPlugin {
                         }
 
                         if (recipeHolder != null) {
-                            gameplayRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, location.getPath(), Collections.emptyList(), outputs));
+                            gameplayRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, location, Collections.emptyList(), outputs));
                         }
                     },
                     (tradeEntry, location, inputs, outputs) -> {

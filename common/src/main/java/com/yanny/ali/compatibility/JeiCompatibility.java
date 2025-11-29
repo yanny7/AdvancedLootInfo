@@ -133,7 +133,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, node, Collections.emptyList(), outputs));
+                            blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, node, Collections.emptyList(), outputs));
                         }
                     },
                     (node, location, entity, outputs) -> {
@@ -169,7 +169,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                            gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(node, location.getPath(), Collections.emptyList(), outputs));
+                            gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(node, location, Collections.emptyList(), outputs));
                         }
                     },
                     (node, location, inputs, outputs) -> {
