@@ -112,6 +112,7 @@
   "ali.property.value.levels": "Levels: %s",
   "ali.property.value.light": "Light: %s",
   "ali.property.value.limit": "Limit: %s",
+  "ali.property.value.loot_table": "Loot Table: %s",
   "ali.property.value.map_decoration": "Map Decoration: %s",
   "ali.property.value.merge_strategy": "Merge Strategy: %s",
   "ali.property.value.mob_effect": "Mob Effect: %s",

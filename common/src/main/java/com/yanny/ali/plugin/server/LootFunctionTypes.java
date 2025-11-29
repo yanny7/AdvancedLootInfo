@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.lootjs.modifier;
+package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;

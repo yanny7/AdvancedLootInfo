@@ -35,7 +35,7 @@ public class LootTableNode extends ListNode {
         tooltip = EntryTooltipUtils.getLootTableTooltip();
 
         for (LootPool lootPool : utils.getLootPools(lootTable)) {
-            addChildren(new LootPoolNode(Collections.emptyList(), utils, lootPool, chance, allFunctions, conditions));
+            addChildren(new LootPoolNode(utils, lootPool, chance, allFunctions, conditions));
         }
 
         for (ILootModifier<?> modifier : modifiers) {

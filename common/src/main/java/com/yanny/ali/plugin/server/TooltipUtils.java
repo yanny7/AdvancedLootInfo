@@ -24,6 +24,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -279,26 +280,77 @@ public class TooltipUtils {
     }
 
     public static void addObjectFields(IServerUtils utils, IKeyTooltipNode tooltip, Object object) {
-        Field[] fields = object.getClass().getDeclaredFields();
-        List<Field> names = Arrays.stream(fields).filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
+        List<Field> fields = TooltipUtils.getAllFields(object.getClass());
+        List<Field> names = fields.stream().filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
 
         names.forEach((f) -> {
             f.setAccessible(true);
 
             try {
-                IKeyTooltipNode t = utils.getValueTooltip(utils, f.get(object));
+                Object obj = f.get(object);
+                IKeyTooltipNode t;
+
+                if (obj instanceof LootItemCondition condition) {
+                    t = BranchTooltipNode.branch().add(GenericTooltipUtils.getConditionListTooltip(utils, Collections.singletonList(condition)));
+                } else if (obj instanceof LootItemFunction function) {
+                    t = BranchTooltipNode.branch().add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
+                } else {
+                    t = utils.getValueTooltip(utils, obj);
+                }
 
                 if (t instanceof ValueTooltipNode.Builder builder) {
                     tooltip.add(builder.build(f.getName(), false));
                 } else if (t instanceof BranchTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(f.getName(), false));
+                    tooltip.add(builder.build(f.getName() + ":", false));
                 } else if (t instanceof ErrorTooltipNode.Builder) {
-                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "???").build("ali.property.value.null"));
+                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "[" + f.getType().getName() + "]").build("ali.property.value.null"));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    public static IKeyTooltipNode getArrayTooltip(IServerUtils utils, Object value) {
+        Class<?> componentType = value.getClass().getComponentType();
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
+        int length = Array.getLength(value);
+
+        if (componentType == LootItemCondition.class) {
+            List<LootItemCondition> values = new ArrayList<>();
+
+            for (int i = 0; i < length; i++) {
+                values.add((LootItemCondition) Array.get(value, i));
+            }
+
+            return GenericTooltipUtils.getSubConditionsTooltip(utils, values);
+        } else {
+            if (length > 0) {
+                for (int i = 0; i < length; i++) {
+                    Object element = Array.get(value, i);
+
+                    if (element instanceof LootItemCondition condition) {
+                        tooltip.add(GenericTooltipUtils.getConditionListTooltip(utils, Collections.singletonList(condition)));
+                    } else if (element instanceof LootItemFunction function) {
+                        tooltip.add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
+                    } else {
+                        IKeyTooltipNode t = utils.getValueTooltip(utils, element);
+
+                        if (t instanceof ValueTooltipNode.Builder builder) {
+                            tooltip.add(builder.build("ali.property.value.null"));
+                        } else if (t instanceof BranchTooltipNode.Builder builder) {
+                            tooltip.add(builder.build("ali.property.branch.values"));
+                        } else if (t instanceof ErrorTooltipNode.Builder) {
+                            tooltip.add(utils.getValueTooltip(utils, element).build("ali.property.value.null"));
+                        }
+                    }
+                }
+            } else {
+                return ValueTooltipNode.value("[]");
+            }
+        }
+
+        return tooltip;
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {
@@ -313,5 +365,20 @@ public class TooltipUtils {
                 value.addMax(uniformBonusCount.bonusMultiplier * level);
             }
         }
+    }
+
+    @NotNull
+    private static List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        Class<?> currentClass = clazz;
+
+        while (currentClass != null && currentClass != Object.class) {
+            Field[] declaredFields = currentClass.getDeclaredFields();
+
+            Collections.addAll(fields, declaredFields);
+            currentClass = currentClass.getSuperclass();
+        }
+
+        return fields;
     }
 }

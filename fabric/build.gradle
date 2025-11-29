@@ -111,8 +111,44 @@ loom {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    source(project(":common-rei").sourceSets.main.allSource)
-    source(project(":common-lootjs").sourceSets.main.allSource)
+    def addedPackageInfos = [] as Set
+
+    def sourceProjects = [
+            project(":api"),
+            project(":common"),
+            project(":common-rei"),
+            project(":common-lootjs")
+    ]
+
+    sourceSets.main.allSource.each { sourceFile ->
+        if (sourceFile.name == 'package-info.java') {
+            def rootDir = sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
+            if (rootDir != null) {
+                def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
+                addedPackageInfos.add(relativePath)
+            }
+        }
+    }
+
+    sourceProjects.each { sourceProject ->
+        source(sourceProject.sourceSets.main.allSource.filter { sourceFile ->
+            if (sourceFile.name == 'package-info.java') {
+                def rootDir = sourceProject.sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
+                if (rootDir != null) {
+                    def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
+
+                    if (addedPackageInfos.contains(relativePath)) {
+                        return false
+                    } else {
+                        addedPackageInfos.add(relativePath)
+                        return true
+                    }
+                }
+            }
+
+            return true
+        })
+    }
 }
 
 tasks.named("sourcesJar", Jar) {

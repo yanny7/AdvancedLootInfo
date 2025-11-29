@@ -1,7 +1,10 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,7 +23,7 @@ public class LootPoolNode extends ListNode {
 
     private final ITooltipNode tooltip;
 
-    public LootPoolNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootPool lootPool, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public LootPoolNode(IServerUtils utils, LootPool lootPool, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), Arrays.stream(lootPool.functions)).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), Arrays.stream(lootPool.conditions)).toList();
         int sumWeight = NodeUtils.getTotalWeight(Arrays.asList(lootPool.entries));

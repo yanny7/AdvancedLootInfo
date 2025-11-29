@@ -32,7 +32,7 @@ public class ReferenceNode extends ListNode {
         if (lootTable != null) {
             addChildren(new LootTableNode(utils, lootTable, chance * entry.weight / sumWeight, allFunctions, allConditions));
         } else {
-            addChildren(new MissingNode());
+            addChildren(new MissingNode(utils.getValueTooltip(utils, entry.name).build("ali.property.value.loot_table")));
         }
 
         this.chance = chance * entry.weight / sumWeight;
@@ -46,7 +46,7 @@ public class ReferenceNode extends ListNode {
         if (lootTable != null) {
             addChildren(new LootTableNode(utils, lootTable, 1, Collections.emptyList(), conditions));
         } else {
-            addChildren(new MissingNode());
+            addChildren(new MissingNode(utils.getValueTooltip(utils, table).build("ali.property.value.loot_table")));
         }
 
         this.chance = chance.get(null).get(0).min();

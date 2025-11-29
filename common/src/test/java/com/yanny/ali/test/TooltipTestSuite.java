@@ -3,13 +3,20 @@ package com.yanny.ali.test;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.server.LootConditionTypes;
+import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.MappedRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
@@ -45,6 +52,7 @@ import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +68,8 @@ import java.util.concurrent.ExecutionException;
         FunctionTooltipTest.class,
         EntryTooltipTest.class,
         IngredientTooltipTest.class,
-        TooltipTest.class
+        TooltipTest.class,
+        ServerUtilsTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -69,9 +78,13 @@ public class TooltipTestSuite {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @BeforeSuite
-    static void beforeAllTests() {
+    static void beforeAllTests() throws NoSuchFieldException, IllegalAccessException {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
         Bootstrap.bootStrap();
+
+        injectLootFunction();
+        injectLootCondition();
+
         ResourceManager resourceManager = loadClientResources();
         Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
 
@@ -210,53 +223,27 @@ public class TooltipTestSuite {
         return resourceManager;
     }
 
-//    private void loadServerResources() {
-//        // 1. Set up ServerPacksSource and PackRepository
-//        ServerPacksSource serverPacksSource = new ServerPacksSource();
-//
-//        // 1. Create a FolderRepositorySource for test resources
-//        FolderRepositorySource folderRepositorySource = new FolderRepositorySource(new File("src/test/resources").toPath(), PackType.CLIENT_RESOURCES, PackSource.DEFAULT); // Use FolderRepositorySource
-//
-//        // 2. Create PackRepository with FolderRepositorySource and ServerPacksSource
-//        PackRepository packRepository = new PackRepository(serverPacksSource, folderRepositorySource); // Pass RepositorySources to constructor
-//        packRepository.reload(); // Reload packs
-//
-//        // 2. Create PackConfig
-//        WorldLoader.PackConfig packConfig = new WorldLoader.PackConfig(
-//                packRepository,
-//                new WorldDataConfiguration(DataPackConfig.DEFAULT, FeatureFlags.DEFAULT_FLAGS), // Use default data pack config and feature flags for test
-//                false, // safeMode = false
-//                false  // initMode = false
-//        );
-//
-//        WorldLoader.InitConfig initConfig = new WorldLoader.InitConfig(
-//                packConfig,
-//                Commands.CommandSelection.ALL,
-//                2
-//        );
-//
-//        AtomicReference<LootDataManager> manager = new AtomicReference<>();
-//
-//        // 5. Load resources using WorldLoader.load() (no changes needed here)
-//        CompletableFuture<WorldLoader.DataLoadOutput<Void>> loadFuture = WorldLoader.load(
-//                initConfig,
-//                (dataLoadContext) -> {
-//                    return new WorldLoader.DataLoadOutput<>(null, RegistryAccess.Frozen.EMPTY);
-//                },
-//                (resourceManager, serverResources, layeredRegistryAccess, unused) -> {
-//                    manager.set(serverResources.getLootData());
-//                    return null;
-//                },
-//                Util.backgroundExecutor(),
-//                Runnable::run
-//        );
-//
-//        // 6. Wait for resource loading to complete (no changes needed here)
-//        try {
-//            loadFuture.get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            // serverResourceManager.close(); // No close() method on WorldLoader. Let GC handle resources.
-//            throw new RuntimeException("Failed to load resources for test setup", e);
-//        }
-//    }
+    private static void injectLootFunction() {
+        try {
+            Field frozenField = MappedRegistry.class.getDeclaredField("frozen");
+            frozenField.setAccessible(true);
+            frozenField.set(BuiltInRegistries.LOOT_FUNCTION_TYPE, false);
+            Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, ResourceKey.create(Registries.LOOT_FUNCTION_TYPE, new ResourceLocation("unknown")), LootFunctionTypes.UNUSED);
+            frozenField.set(BuiltInRegistries.LOOT_FUNCTION_TYPE, true);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void injectLootCondition() {
+        try {
+            Field frozenField = MappedRegistry.class.getDeclaredField("frozen");
+            frozenField.setAccessible(true);
+            frozenField.set(BuiltInRegistries.LOOT_CONDITION_TYPE, false);
+            Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, ResourceKey.create(Registries.LOOT_CONDITION_TYPE, new ResourceLocation("unknown")), LootConditionTypes.UNUSED);
+            frozenField.set(BuiltInRegistries.LOOT_CONDITION_TYPE, true);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
