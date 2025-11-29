@@ -6,6 +6,7 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -312,7 +313,7 @@ public abstract class AbstractServer {
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage());
-            return new MissingNode();
+            return new MissingNode(EmptyTooltipNode.EMPTY);
         }
     }
 
