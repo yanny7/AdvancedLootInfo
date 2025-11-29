@@ -3,13 +3,11 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -37,19 +35,6 @@ public class ItemNode implements IDataNode, IItemNode {
         itemStack = TooltipUtils.getItemStack(utils, entry.item.value().getDefaultInstance(), this.functions);
         tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);
         count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
-    }
-
-    public ItemNode(IServerUtils utils, Item item, RangeValue count) {
-        this(utils, item, count, EmptyTooltipNode.EMPTY);
-    }
-
-    public ItemNode(IServerUtils ignoredUtils, Item item, RangeValue count, ITooltipNode tooltip) {
-        this.conditions = Collections.emptyList();
-        this.functions = Collections.emptyList();
-        chance = 1;
-        itemStack = item.getDefaultInstance();
-        this.tooltip = tooltip;
-        this.count = count;
     }
 
     public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
