@@ -29,18 +29,14 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private volatile DataReceiver currentDataReceiver = null;
 
+    private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
+
     public AliClientRegistry(ICommonUtils utils) {
         this.utils = utils;
     }
 
     public CompletableFuture<byte[]> getCurrentDataFuture() {
-        DataReceiver receiver = currentDataReceiver;
-
-        if (receiver == null) {
-            return CompletableFuture.completedFuture(new byte[]{});
-        }
-
-        return receiver.getFuture();
+        return activeDataPromise.get();
     }
 
     public void addChunkData(int index, byte[] data) {
@@ -62,8 +58,18 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         }
 
         currentDataReceiver = new DataReceiver(totalMessages);
-        startLogging();
 
+        CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
+
+        currentDataReceiver.getFuture().whenComplete((data, throwable) -> {
+            if (throwable != null) {
+                currentPromise.completeExceptionally(throwable);
+            } else {
+                currentPromise.complete(data);
+            }
+        });
+
+        startLogging();
         LOGGER.info("Started receiving loot data");
     }
 
@@ -72,6 +78,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
             stopLogging();
+        }
+
+        CompletableFuture<byte[]> oldPromise = activeDataPromise.getAndSet(new CompletableFuture<>());
+
+        if (!oldPromise.isDone()) {
+            oldPromise.cancel(true);
         }
 
         LOGGER.info("Cleared Loot data");
