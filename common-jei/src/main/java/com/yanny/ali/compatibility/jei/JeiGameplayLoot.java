@@ -29,9 +29,9 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, ResourceLocat
     @Override
     public void draw(RecipeHolder<GameplayLootType> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
-        String key = "ali/loot_table/" + recipe.type().id().substring(1);
-        Component text = GenericUtils.ellipsis(key, recipe.type().id(), 9 * 18);
-        Component fullText = Component.translatableWithFallback(key, recipe.type().id());
+        String key = "ali/loot_table/" + recipe.type().id().getPath();
+        Component text = GenericUtils.ellipsis(key, recipe.type().id().getPath(), CATEGORY_WIDTH);
+        Component fullText = Component.literal(recipe.type().id().toString());
         Rect rect = new Rect(0, 0, 9 * 18, 8);
 
         guiGraphics.drawString(Minecraft.getInstance().font, text, 0, 0, 0, false);

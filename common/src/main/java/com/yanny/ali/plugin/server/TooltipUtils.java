@@ -281,8 +281,8 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static void addObjectFields(IServerUtils utils, IKeyTooltipNode tooltip, Object object) {
-        List<Field> fields = TooltipUtils.getAllFields(object.getClass());
+    public static void addObjectFields(IServerUtils utils, IKeyTooltipNode tooltip, Object object, Class<?> baseClass) {
+        List<Field> fields = TooltipUtils.getAllFields(object.getClass(), baseClass);
         List<Field> names = fields.stream().filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
 
         names.forEach((f) -> {
@@ -370,11 +370,11 @@ public class TooltipUtils {
     }
 
     @NotNull
-    private static List<Field> getAllFields(Class<?> clazz) {
+    private static List<Field> getAllFields(Class<?> clazz, Class<?> baseClass) {
         List<Field> fields = new ArrayList<>();
         Class<?> currentClass = clazz;
 
-        while (currentClass != null && currentClass != Object.class) {
+        while (currentClass != null && currentClass != baseClass && currentClass != Object.class) {
             Field[] declaredFields = currentClass.getDeclaredFields();
 
             Collections.addAll(fields, declaredFields);

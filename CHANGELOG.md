@@ -1,9 +1,11 @@
-# []
+# [1.6.0]
 
-- Added GLM support
+- Added GLM support (Global Loot Modifiers)
 - Fixed missing spawn eggs for modded mobs on (Neo)Forge
 - Hiding injected loot tables
 - Improved loot info for unknown entries/modifiers/predicates
+- Displaying loot table name in gameplay tooltip
+- Fixed occasional no loot information
 
 ## [1.5.2]
 
