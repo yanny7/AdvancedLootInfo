@@ -27,6 +27,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.ListOperation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -46,7 +47,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingEntryTooltip(IServerUtils utils, LootPoolEntryContainer entry) {
         IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, entry);
+        TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -54,7 +55,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingFunctionTooltip(IServerUtils utils, LootItemFunction function) {
         IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, function);
+        TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -62,7 +63,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingConditionTooltip(IServerUtils utils, LootItemCondition condition) {
         IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, condition);
+        TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -70,7 +71,7 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {
         IKeyTooltipNode tooltip = ValueTooltipNode.value(itemListing.getClass().getName());
 
-        TooltipUtils.addObjectFields(utils, tooltip, itemListing);
+        TooltipUtils.addObjectFields(utils, tooltip, itemListing, VillagerTrades.ItemListing.class);
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
