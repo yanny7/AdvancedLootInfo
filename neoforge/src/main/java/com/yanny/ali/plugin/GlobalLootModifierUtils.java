@@ -186,7 +186,7 @@ public class GlobalLootModifierUtils {
                 ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
                 IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, getName(modifier));
 
-                TooltipUtils.addObjectFields(utils, fieldsTooltip, lootModifier);
+                TooltipUtils.addObjectFields(utils, fieldsTooltip, lootModifier, LootModifier.class);
                 tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
                 tooltip.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
                 return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(utils, tooltip.build())));
