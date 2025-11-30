@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -84,17 +85,19 @@ public class JeiCompatibility implements IModPlugin {
             byte[] fullCompressedData = futureData.get();
 
             registerData(registration, fullCompressedData);
+            LOGGER.info("Data registration finished successfully.");
         } catch (ExecutionException e) {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
 
-            if (cause instanceof TimeoutException) {
-                futureData.cancel(true);
-                PluginManager.CLIENT_REGISTRY.clearLootData();
-                LOGGER.error("Failed to received data: Inactivity timeout occurred. Registration aborted!");
+            if (cause instanceof TimeoutException || cause instanceof CancellationException) {
+                LOGGER.error("Failed to receive data: Operation aborted or timed out. Registration aborted!");
             } else {
                 LOGGER.error("Failed to finish registering data with error {}", cause.getMessage());
                 cause.printStackTrace();
             }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOGGER.error("Registration thread interrupted!");
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage());
@@ -134,7 +137,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                        blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, node, Collections.emptyList(), outputs));
+                            blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, node, Collections.emptyList(), outputs));
                         }
                     },
                     (node, location, entity, outputs) -> {
@@ -170,7 +173,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                            gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(node, location.getPath(), Collections.emptyList(), outputs));
+                            gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(node, location, Collections.emptyList(), outputs));
                         }
                     },
                     (node, location, inputs, outputs) -> {

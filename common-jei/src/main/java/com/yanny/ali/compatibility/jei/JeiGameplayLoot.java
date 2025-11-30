@@ -27,9 +27,9 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, ResourceLocat
 
     @Override
     Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, GameplayLootType recipe) {
-        String key = "ali/loot_table/" + recipe.id();
-        Component text = GenericUtils.ellipsis(key, "/" + recipe.id(), CATEGORY_WIDTH);
-        Component fullText = Component.translatableWithFallback(key, "/" + recipe.id());
+        String key = "ali/loot_table/" + recipe.id().getPath();
+        Component text = GenericUtils.ellipsis(key, recipe.id().getPath(), CATEGORY_WIDTH);
+        Component fullText = Component.literal(recipe.id().toString());
         Rect rect = new Rect(0, 0, CATEGORY_WIDTH, 8);
         return new Pair<>(List.of(
                 createTextWidget(text, 0, 0, false),
