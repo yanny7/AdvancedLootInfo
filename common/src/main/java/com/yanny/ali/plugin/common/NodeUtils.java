@@ -1,7 +1,11 @@
 package com.yanny.ali.plugin.common;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.server.EntryTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,11 +13,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
-import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.entries.*;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +27,43 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class NodeUtils {
+    @NotNull
+    public static ItemNode getItemNode(IServerUtils utils, LootItem entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return getItemNode(utils, entry, (f) -> Either.left(TooltipUtils.getItemStack(utils, entry.item.getDefaultInstance(), f)), rawChance, sumWeight, functions, conditions);
+    }
+
+    @NotNull
+    public static ItemNode getTagNode(IServerUtils utils, TagEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return getItemNode(utils, entry, (f) -> Either.right(entry.tag), rawChance, sumWeight, functions, conditions);
+    }
+
+    @NotNull
+    public static ItemNode getItemNode(IServerUtils utils, LootPoolSingletonContainer entry, Function<List<LootItemFunction>, Either<ItemStack, TagKey<? extends ItemLike>>> itemGetter, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
+        float chance = getChance(entry, rawChance, sumWeight);
+        ITooltipNode tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, rawChance, sumWeight, functions, conditions);
+        RangeValue count = TooltipUtils.getCount(utils, allFunctions).get(null).get(0);
+
+        return new ItemNode(chance, count, itemGetter.apply(allFunctions), tooltip, allFunctions, allConditions);
+    }
+
+    public static float getChance(LootPoolSingletonContainer entry, float rawChance, int sumWeight) {
+        return rawChance * entry.weight / sumWeight;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<LootItemCondition> getAllConditions(LootPoolSingletonContainer entry, List<LootItemCondition> conditions) {
+        return Stream.concat(conditions.stream(), Arrays.stream(entry.conditions)).toList();
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<LootItemFunction> getAllFunctions(LootPoolSingletonContainer entry, List<LootItemFunction> functions) {
+        return Stream.concat(functions.stream(), Arrays.stream(entry.functions)).toList();
+    }
+
     public static int getTotalWeight(List<LootPoolEntryContainer> entries) {
         int sum = 0;
 

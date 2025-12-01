@@ -4,7 +4,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
-import com.yanny.ali.plugin.common.nodes.ItemStackNode;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.SingletonNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -37,7 +37,7 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IForgeL
             count.put(null, Map.of(0, new RangeValue(1, 7)));
 
             ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
-            IDataNode node = new SingletonNode(utils, new ItemStackNode(utils, pastrySlice.getDefaultInstance(), new RangeValue(1, 7), tooltip));
+            IDataNode node = new SingletonNode(utils, new ItemNode(1, new RangeValue(1, 7), pastrySlice.getDefaultInstance(), tooltip, Collections.emptyList(), c));
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
         });

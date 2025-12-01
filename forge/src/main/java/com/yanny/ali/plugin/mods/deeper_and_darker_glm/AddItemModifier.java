@@ -4,7 +4,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
-import com.yanny.ali.plugin.common.nodes.ItemStackNode;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.SingletonNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -38,7 +38,7 @@ public class AddItemModifier extends GlobalLootModifier implements IForgeLootMod
             Map<Enchantment, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, c, 1);
             Map<Enchantment, Map<Integer, RangeValue>> count = TooltipUtils.getCount(utils, Collections.emptyList());
             ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
-            IDataNode node = new SingletonNode(utils, new ItemStackNode(utils, item.getDefaultInstance(), new RangeValue(min, max), tooltip));
+            IDataNode node = new SingletonNode(utils, new ItemNode(1, new RangeValue(min, max), item.getDefaultInstance(), tooltip, Collections.emptyList(), c));
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
         });
     }
