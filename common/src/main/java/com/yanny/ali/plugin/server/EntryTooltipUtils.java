@@ -10,14 +10,12 @@ import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,11 +50,11 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getDynamicTooltip(IServerUtils utils, DynamicLoot entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static ITooltipNode getDynamicTooltip(IServerUtils utils, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.dynamic"))
-                .add(getQualityTooltip(entry.quality))
-                .add(getChanceTooltip(getBaseMap(chance * entry.weight / sumWeight * 100)))
+                .add(getQualityTooltip(quality))
+                .add(getChanceTooltip(getBaseMap(chance * 100)))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
                 .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
                 .build();
@@ -73,38 +71,14 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getEmptyTooltip(IServerUtils utils, LootPoolSingletonContainer entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = new ArrayList<>(functions);
-        List<LootItemCondition> allConditions = new ArrayList<>(conditions);
-
-        allFunctions.addAll(entry.functions);
-        allConditions.addAll(entry.conditions);
-
-        float rawChance = chance * entry.weight / sumWeight;
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, allConditions, rawChance);
-
+    public static ITooltipNode getEmptyTooltip(IServerUtils utils, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.empty"))
-                .add(getQualityTooltip(entry.quality))
-                .add(getChanceTooltip(chanceMap))
-                .add(GenericTooltipUtils.getConditionsTooltip(utils, allConditions))
-                .add(GenericTooltipUtils.getFunctionsTooltip(utils, allFunctions))
+                .add(getQualityTooltip(quality))
+                .add(getChanceTooltip(chance))
+                .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
                 .build();
-    }
-
-    @NotNull
-    public static ITooltipNode getSingletonTooltip(IServerUtils utils, LootPoolSingletonContainer entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemFunction> allFunctions = new ArrayList<>(functions);
-        List<LootItemCondition> allConditions = new ArrayList<>(conditions);
-
-        allFunctions.addAll(entry.functions);
-        allConditions.addAll(entry.conditions);
-
-        float rawChance = chance * entry.weight / sumWeight;
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, allConditions, rawChance);
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = TooltipUtils.getCount(utils, allFunctions);
-
-        return getTooltip(utils, entry.quality, chanceMap, countMap, allFunctions, allConditions);
     }
 
     @NotNull

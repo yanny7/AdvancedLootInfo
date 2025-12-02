@@ -8,6 +8,7 @@ import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.*;
@@ -67,7 +68,6 @@ public class Plugin implements IPlugin {
         registry.registerWidget(EmptyNode.ID, EmptyWidget::new);
         registry.registerWidget(ReferenceNode.ID, ReferenceWidget::new);
         registry.registerWidget(DynamicNode.ID, DynamicWidget::new);
-        registry.registerWidget(TagNode.ID, TagWidget::new);
         registry.registerWidget(AlternativesNode.ID, AlternativesWidget::new);
         registry.registerWidget(SequenceNode.ID, SequentialWidget::new);
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
@@ -75,14 +75,12 @@ public class Plugin implements IPlugin {
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
         registry.registerWidget(TradeLevelNode.ID, TradeLevelWidget::new);
-        registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(SubTradesNode.ID, SubTradesWidget::new);
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
         registry.registerDataNode(LootTableNode.ID, LootTableNode::new);
         registry.registerDataNode(LootPoolNode.ID, LootPoolNode::new);
         registry.registerDataNode(ItemNode.ID, ItemNode::new);
-        registry.registerDataNode(TagNode.ID, TagNode::new);
         registry.registerDataNode(AlternativesNode.ID, AlternativesNode::new);
         registry.registerDataNode(SequenceNode.ID, SequenceNode::new);
         registry.registerDataNode(GroupNode.ID, GroupNode::new);
@@ -93,7 +91,6 @@ public class Plugin implements IPlugin {
 
         registry.registerDataNode(TradeNode.ID, TradeNode::new);
         registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
-        registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
         registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
         registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
 
@@ -124,14 +121,14 @@ public class Plugin implements IPlugin {
         registry.registerNumberProvider(BinomialDistributionGenerator.class, Plugin::convertBinomial);
         registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore);
 
-        registry.registerEntry(LootItem.class, ItemNode::new);
-        registry.registerEntry(TagEntry.class, TagNode::new);
-        registry.registerEntry(AlternativesEntry.class, AlternativesNode::new);
-        registry.registerEntry(SequentialEntry.class, SequenceNode::new);
-        registry.registerEntry(EntryGroup.class, GroupNode::new);
-        registry.registerEntry(EmptyLootItem.class, EmptyNode::new);
-        registry.registerEntry(DynamicLoot.class, DynamicNode::new);
-        registry.registerEntry(LootTableReference.class, ReferenceNode::new);
+        registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
+        registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
+        registry.registerEntry(AlternativesEntry.class, NodeUtils::getAlternativesNode);
+        registry.registerEntry(SequentialEntry.class, NodeUtils::getSequenceNode);
+        registry.registerEntry(EntryGroup.class, NodeUtils::getGroupNode);
+        registry.registerEntry(EmptyLootItem.class, NodeUtils::getEmptyNode);
+        registry.registerEntry(DynamicLoot.class, NodeUtils::getDynamicNode);
+        registry.registerEntry(LootTableReference.class, NodeUtils::getReferenceNode);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
