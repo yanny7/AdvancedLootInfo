@@ -2,10 +2,10 @@ package com.yanny.ali.plugin.mods.snow_real_magic;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -56,7 +56,7 @@ public class NormalizeNode implements IDataNode, IItemNode {
 
     @NotNull
     private static ITooltipNode getItemTooltip(IServerUtils utils, float chance, int quality, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
+        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
         Map<Enchantment, Map<Integer, RangeValue>> countMap = getCount(utils, 1, functions);
 
         return EntryTooltipUtils.getTooltip(utils, quality, chanceMap, countMap, functions, conditions);

@@ -122,12 +122,12 @@ public class Plugin implements IPlugin {
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
-        registry.registerEntry(AlternativesEntry.class, AlternativesNode::new);
-        registry.registerEntry(SequentialEntry.class, SequenceNode::new);
-        registry.registerEntry(EntryGroup.class, GroupNode::new);
-        registry.registerEntry(EmptyLootItem.class, EmptyNode::new);
-        registry.registerEntry(DynamicLoot.class, DynamicNode::new);
-        registry.registerEntry(LootTableReference.class, ReferenceNode::new);
+        registry.registerEntry(AlternativesEntry.class, NodeUtils::getAlternativesNode);
+        registry.registerEntry(SequentialEntry.class, NodeUtils::getSequenceNode);
+        registry.registerEntry(EntryGroup.class, NodeUtils::getGroupNode);
+        registry.registerEntry(EmptyLootItem.class, NodeUtils::getEmptyNode);
+        registry.registerEntry(DynamicLoot.class, NodeUtils::getDynamicNode);
+        registry.registerEntry(LootTableReference.class, NodeUtils::getReferenceNode);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);

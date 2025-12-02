@@ -4,11 +4,11 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -40,8 +40,8 @@ public class ReplaceItemModifier extends GlobalLootModifier implements IForgeLoo
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
-                Map<Enchantment, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, allConditions, 1);
-                Map<Enchantment, Map<Integer, RangeValue>> count = TooltipUtils.getCount(utils, Collections.emptyList());
+                Map<Enchantment, Map<Integer, RangeValue>> chance = NodeUtils.getEnchantedChance(utils, allConditions, 1);
+                Map<Enchantment, Map<Integer, RangeValue>> count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
                 ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
 
                 if (!c.isEmpty()) {
