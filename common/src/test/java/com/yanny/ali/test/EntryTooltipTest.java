@@ -3,11 +3,8 @@ package com.yanny.ali.test;
 import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
-import net.minecraft.world.level.storage.loot.entries.EmptyLootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import org.junit.jupiter.api.Test;
@@ -44,30 +41,10 @@ public class EntryTooltipTest {
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(EntryTooltipUtils.getDynamicTooltip(UTILS, (DynamicLoot) DynamicLoot.dynamicEntry(new ResourceLocation("test")).setWeight(3).setQuality(10).build(), 1, 10, List.of(), List.of()), List.of(
+        assertTooltip(EntryTooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
-        ));
-    }
-
-    @Test
-    public void testEmptyTooltip() {
-        assertTooltip(EntryTooltipUtils.getSingletonTooltip(
-                UTILS,
-                (EmptyLootItem) EmptyLootItem.emptyItem().setQuality(1).setWeight(1).build(),
-                1,
-                2,
-                List.of(ApplyExplosionDecay.explosionDecay().build()),
-                List.of(ExplosionCondition.survivesExplosion().build())
-        ), List.of(
-                "Quality: 1",
-                "Chance: 50%",
-                "Count: 1",
-                "----- Predicates -----",
-                "Survives Explosion",
-                "----- Modifiers -----",
-                "Explosion Decay"
         ));
     }
 

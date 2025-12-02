@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.lootjs.node;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -113,7 +114,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     @NotNull
     private static ITooltipNode getItemTooltip(IServerUtils utils, int baseCount, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = TooltipUtils.getChance(utils, conditions, chance);
+        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
         Map<Enchantment, Map<Integer, RangeValue>> countMap = getCount(utils, baseCount, functions);
 
         return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions);
