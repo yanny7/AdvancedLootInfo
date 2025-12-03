@@ -3,42 +3,87 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item");
+    private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Item>> ITEM_TAG_STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.ITEM));
+    private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Block>> BLOCK_TAG_STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.BLOCK));
+    private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<? extends ItemLike>> ITEM_LIKE_TAG_CODEC =
+            new StreamCodec<>() {
+                @NotNull
+                @Override
+                public TagKey<? extends ItemLike> decode(RegistryFriendlyByteBuf buf) {
+                    boolean isItem = buf.readBoolean();
+
+                    if (isItem) {
+                        return ITEM_TAG_STREAM_CODEC.decode(buf);
+                    } else {
+                        return BLOCK_TAG_STREAM_CODEC.decode(buf);
+                    }
+                }
+
+                @Override
+                public void encode(RegistryFriendlyByteBuf buf, TagKey<? extends ItemLike> tag) {
+                    if (tag.registry().equals(Registries.ITEM)) {
+                        buf.writeBoolean(true);
+                        //noinspection unchecked
+                        ITEM_TAG_STREAM_CODEC.encode(buf, (TagKey<Item>) tag);
+                    } else if (tag.registry().equals(Registries.BLOCK)) {
+                        buf.writeBoolean(false);
+                        //noinspection unchecked
+                        BLOCK_TAG_STREAM_CODEC.encode(buf, (TagKey<Block>) tag);
+                    } else {
+                        throw new IllegalArgumentException("Unsupported TagKey registry: " + tag.registry());
+                    }
+                }
+            };
+    private static final StreamCodec<RegistryFriendlyByteBuf, Either<ItemStack, TagKey<? extends ItemLike>>> EITHER_CODEC =
+            ByteBufCodecs.either(ItemStack.OPTIONAL_STREAM_CODEC, ITEM_LIKE_TAG_CODEC);
 
     private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
-    private final ItemStack itemStack;
+    private final Either<ItemStack, TagKey<? extends ItemLike>> item;
     private final RangeValue count;
     private final float chance;
 
-    public ItemNode(IServerUtils utils, LootItem entry, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        this.conditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
-        this.functions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
-        this.chance = chance * entry.weight / sumWeight;
-        itemStack = TooltipUtils.getItemStack(utils, entry.item.value().getDefaultInstance(), this.functions);
-        tooltip = EntryTooltipUtils.getSingletonTooltip(utils, entry, chance, sumWeight, functions, conditions);
-        count = TooltipUtils.getCount(utils, this.functions).get(null).get(0);
+    public ItemNode(float chance, RangeValue count, ItemStack item, ITooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this(chance, count, Either.left(item), tooltip, functions, conditions);
+    }
+
+    public ItemNode(float chance, RangeValue count, TagKey<? extends ItemLike> tag, ITooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this(chance, count, Either.right(tag), tooltip, functions, conditions);
+    }
+
+    public ItemNode(float chance, RangeValue count, Either<ItemStack, TagKey<? extends ItemLike>> item, ITooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        this.chance = chance;
+        this.count = count;
+        this.item = item;
+        this.tooltip = tooltip;
+        this.functions = functions;
+        this.conditions = conditions;
     }
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        itemStack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
+        item = EITHER_CODEC.decode(buf);
         tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
@@ -49,7 +94,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @Override
     public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
-        return Either.left(itemStack);
+        return item;
     }
 
     @Override
@@ -74,7 +119,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, itemStack);
+        EITHER_CODEC.encode(buf, item);
         ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeFloat(chance);

@@ -4,7 +4,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
-import com.yanny.ali.plugin.common.nodes.ReferenceNode;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
@@ -37,7 +37,7 @@ public class FDAddTableLootModifier extends GlobalLootModifier implements IForge
                     .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                     .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
                     .build();
-            IDataNode node = new ReferenceNode(utils, lootTable.location(), c, tooltip);
+            IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.location(), c, tooltip);
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
         });
     }
