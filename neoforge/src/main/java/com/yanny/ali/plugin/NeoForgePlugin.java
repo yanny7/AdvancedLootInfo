@@ -6,8 +6,8 @@ import com.yanny.ali.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.GlobalLootModifierWidget;
 import com.yanny.ali.plugin.client.widget.SingletonWidget;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
-import com.yanny.ali.plugin.common.nodes.ReferenceNode;
 import com.yanny.ali.plugin.common.nodes.SingletonNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
@@ -89,7 +89,7 @@ public class NeoForgePlugin implements IPlugin {
                         .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                         .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
                         .build();
-                IDataNode node = new ReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable(), c, tooltip);
+                IDataNode node = NodeUtils.getReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable(), c, tooltip);
                 return List.of(new IOperation.AddOperation((i) -> true, node));
             });
         });
