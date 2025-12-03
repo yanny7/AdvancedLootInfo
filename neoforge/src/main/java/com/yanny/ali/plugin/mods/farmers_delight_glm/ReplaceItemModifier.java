@@ -4,11 +4,11 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
-import com.yanny.ali.plugin.common.nodes.ItemStackNode;
+import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -38,21 +38,17 @@ public class ReplaceItemModifier extends GlobalLootModifier implements IForgeLoo
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             Function<IDataNode, List<IDataNode>> factory = (src) -> {
-                if (src instanceof ItemStackNode) {
-                    return Collections.singletonList(src); // do not modify self!
-                }
-
                 List<IDataNode> nodes = new ArrayList<>();
                 IItemNode node = (IItemNode) src;
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
-                Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = TooltipUtils.getChance(utils, allConditions, 1);
-                Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = TooltipUtils.getCount(utils, Collections.emptyList());
+                Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = NodeUtils.getEnchantedChance(utils, allConditions, 1);
+                Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
                 ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
 
                 if (!c.isEmpty()) {
-                    nodes.add(new ModifiedNode(utils, src, new ItemStackNode(utils, addedItem.getDefaultInstance(), new RangeValue(addedCount), tooltip)));
+                    nodes.add(new ModifiedNode(utils, src, new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip, Collections.emptyList(), allConditions)));
                 } else {
-                    nodes.add(new ItemStackNode(utils, addedItem.getDefaultInstance(), new RangeValue(addedCount), tooltip));
+                    nodes.add(new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip, Collections.emptyList(), allConditions));
                 }
 
                 return nodes;
