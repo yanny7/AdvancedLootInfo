@@ -5,18 +5,58 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item");
+    private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Item>> ITEM_TAG_STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.ITEM));
+    private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Block>> BLOCK_TAG_STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.BLOCK));
+    private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<? extends ItemLike>> ITEM_LIKE_TAG_CODEC =
+            new StreamCodec<>() {
+                @NotNull
+                @Override
+                public TagKey<? extends ItemLike> decode(RegistryFriendlyByteBuf buf) {
+                    boolean isItem = buf.readBoolean();
+
+                    if (isItem) {
+                        return ITEM_TAG_STREAM_CODEC.decode(buf);
+                    } else {
+                        return BLOCK_TAG_STREAM_CODEC.decode(buf);
+                    }
+                }
+
+                @Override
+                public void encode(RegistryFriendlyByteBuf buf, TagKey<? extends ItemLike> tag) {
+                    if (tag.registry().equals(Registries.ITEM)) {
+                        buf.writeBoolean(true);
+                        //noinspection unchecked
+                        ITEM_TAG_STREAM_CODEC.encode(buf, (TagKey<Item>) tag);
+                    } else if (tag.registry().equals(Registries.BLOCK)) {
+                        buf.writeBoolean(false);
+                        //noinspection unchecked
+                        BLOCK_TAG_STREAM_CODEC.encode(buf, (TagKey<Block>) tag);
+                    } else {
+                        throw new IllegalArgumentException("Unsupported TagKey registry: " + tag.registry());
+                    }
+                }
+            };
+    private static final StreamCodec<RegistryFriendlyByteBuf, Either<ItemStack, TagKey<? extends ItemLike>>> EITHER_CODEC =
+            ByteBufCodecs.either(ItemStack.OPTIONAL_STREAM_CODEC, ITEM_LIKE_TAG_CODEC);
 
     private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
@@ -43,7 +83,7 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        item = ItemStack.OPTIONAL_STREAM_CODEC.decode(buf);
+        item = EITHER_CODEC.decode(buf);
         tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
@@ -79,7 +119,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, item);
+        EITHER_CODEC.encode(buf, item);
         ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeFloat(chance);

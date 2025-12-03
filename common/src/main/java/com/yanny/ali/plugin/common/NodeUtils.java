@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -100,18 +101,18 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static ReferenceNode getReferenceNode(IServerUtils utils, LootTableReference entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static ReferenceNode getReferenceNode(IServerUtils utils, NestedLootTable entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        LootTable lootTable = utils.getLootTable(entry.name);
+        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::location));
         ITooltipNode tooltip = EntryTooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight);
         List<IDataNode> children;
 
         if (lootTable != null) {
             children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, chance, allFunctions, allConditions));
         } else {
-            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, entry.name).build("ali.property.value.loot_table")));
+            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, entry.contents).build("ali.property.value.loot_table")));
         }
 
         return new ReferenceNode(children, chance, tooltip);
@@ -119,7 +120,7 @@ public class NodeUtils {
 
     @NotNull
     public static ReferenceNode getReferenceNode(IServerUtils utils, ResourceLocation table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
-        LootTable lootTable = utils.getLootTable(table);
+        LootTable lootTable = utils.getLootTable(Either.left(table));
         List<IDataNode> children;
 
         if (lootTable != null) {
