@@ -1,22 +1,26 @@
 package com.yanny.ali.plugin.mods.moonlight;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IEntry;
 import com.yanny.ali.plugin.mods.SingletonContainer;
+import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @ClassAccessor("net.mehvahdjukaar.moonlight.core.loot.OptionalItemPool")
 public class OptionalItemPool extends SingletonContainer implements IEntry {
@@ -29,11 +33,12 @@ public class OptionalItemPool extends SingletonContainer implements IEntry {
     }
 
     @Override
-    public IDataNode create(IServerUtils utils, float chance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), this.conditions.stream()).toList();
-        List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), this.functions.stream()).toList();
-        LootItem lootItem = (LootItem) LootItem.lootTableItem(item != null ? item : Items.AIR).setWeight(weight).setQuality(quality).build();
+    public IDataNode create(IServerUtils utils, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return NodeUtils.getItemNode(utils, parent, (f) -> itemGetter(utils, f), rawChance, sumWeight, functions, conditions);
+    }
 
-        return new ItemNode(utils, lootItem, chance, sumWeight, allFunctions, allConditions);
+    @NotNull
+    private Either<ItemStack, TagKey<? extends ItemLike>> itemGetter(IServerUtils utils, List<LootItemFunction> functions) {
+        return Either.left(TooltipUtils.getItemStack(utils, (item != null ? item : Items.AIR).getDefaultInstance(), functions));
     }
 }

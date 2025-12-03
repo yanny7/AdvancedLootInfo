@@ -3,8 +3,7 @@ package com.yanny.ali.plugin.common.trades;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.nodes.ItemStackNode;
-import com.yanny.ali.plugin.common.nodes.TagNode;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -12,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+
+import java.util.Collections;
 
 public class ItemsToItemsNode extends ListNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "items_to_items");
@@ -58,9 +59,9 @@ public class ItemsToItemsNode extends ListNode {
                             int xp,
                             float priceMultiplier,
                             ITooltipNode condition) {
-        addChildren(getChildren(utils, input1, input1Count, input1Condition));
-        addChildren(getChildren(utils, input2, input2Count, input2Condition));
-        addChildren(getChildren(utils, output, outputCount, outputCondition));
+        addChildren(getChildren(input1, input1Count, input1Condition));
+        addChildren(getChildren(input2, input2Count, input2Condition));
+        addChildren(getChildren(output, outputCount, outputCondition));
         tooltip = ArrayTooltipNode.array()
                 .add(condition)
                 .add(utils.getValueTooltip(utils, maxUses).build("ali.property.value.uses"))
@@ -89,10 +90,10 @@ public class ItemsToItemsNode extends ListNode {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
-    private static IDataNode getChildren(IServerUtils utils, Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, ITooltipNode condition) {
+    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, ITooltipNode condition) {
         return item.map(
-                (i) -> new ItemStackNode(utils, i, count, condition),
-                (t) -> new TagNode(utils, t, count, condition)
+                (i) -> new ItemNode(1, count, i, condition, Collections.emptyList(), Collections.emptyList()),
+                (t) -> new ItemNode(1, count, t, condition, Collections.emptyList(), Collections.emptyList())
         );
     }
 }
