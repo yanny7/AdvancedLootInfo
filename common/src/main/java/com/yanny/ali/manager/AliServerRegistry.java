@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.nodes.LootTableNode;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
@@ -564,11 +564,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers, LootTable lootTable) {
-        return new LootTableNode(modifiers, this, lootTable);
+        return NodeUtils.getLootTableNode(modifiers, this, lootTable, 1, Collections.emptyList(), Collections.emptyList());
     }
 
     public IDataNode parseTable(List<ILootModifier<?>> modifiers) {
-        return new LootTableNode(modifiers, this);
+        return NodeUtils.getLootTableNode(modifiers);
     }
 
     public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {

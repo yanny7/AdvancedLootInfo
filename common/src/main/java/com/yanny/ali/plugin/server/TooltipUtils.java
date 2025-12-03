@@ -37,32 +37,6 @@ import java.util.*;
 import java.util.function.Function;
 
 public class TooltipUtils {
-    @NotNull
-    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = new LinkedHashMap<>();
-
-        chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
-
-        for (LootItemCondition condition : conditions) {
-            utils.applyChanceModifier(utils, condition, chance);
-        }
-
-        return chance;
-    }
-
-    @NotNull
-    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getCount(IServerUtils utils, List<LootItemFunction> functions) {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
-
-        count.put(null, Map.of(0, new RangeValue()));
-
-        for (LootItemFunction function : functions) {
-            utils.applyCountModifier(utils, function, count);
-        }
-
-        return count;
-    }
-
     public static ItemStack getItemStack(IServerUtils utils, ItemStack itemStack, List<LootItemFunction> functions) {
         for (LootItemFunction function : functions) {
             itemStack = utils.applyItemStackModifier(utils, function, itemStack);
