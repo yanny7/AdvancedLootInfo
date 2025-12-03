@@ -10,7 +10,7 @@ import com.almostreliable.lootjs.loot.modifier.handler.ReplaceLootAction;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
 import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
@@ -58,9 +58,9 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), node.getFunctions().stream()).toList();
 
                         if (!conditions.isEmpty()) {
-                            nodes.add(new ModifiedNode(utils, c, new ItemNode(utils, entry.getVanillaEntry(), 1, 1, allFunctions, allConditions)));
+                            nodes.add(new ModifiedNode(utils, c, NodeUtils.getItemNode(utils, entry.getVanillaEntry(), 1, 1, allFunctions, allConditions)));
                         } else {
-                            nodes.add(new ItemNode(utils, entry.getVanillaEntry(), 1, 1, allFunctions, allConditions));
+                            nodes.add(NodeUtils.getItemNode(utils, entry.getVanillaEntry(), 1, 1, allFunctions, allConditions));
                         }
 
                         return nodes;
