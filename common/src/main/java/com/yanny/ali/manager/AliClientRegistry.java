@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final int PADDING = 2;
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
@@ -129,7 +128,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                 if (direction == WidgetDirection.HORIZONTAL) {
                     posX += bounds.getWidth();
                 } else {
-                    posY += bounds.getHeight() + PADDING;
+                    posY += bounds.getHeight() + IWidget.PADDING;
                 }
             } else {
                 if (lastDirection == WidgetDirection.HORIZONTAL && direction == WidgetDirection.HORIZONTAL) {
@@ -145,13 +144,18 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
                     if (direction != lastDirection) {
                         if (lastDirection == WidgetDirection.HORIZONTAL) {
-                            posY += widgets.get(widgets.size() - 1).getRect().getHeight() + PADDING;
+                            posY += widgets.get(widgets.size() - 1).getRect().getHeight() + IWidget.PADDING;
                         }
 
                         bounds.setOffset(posX, posY);
+                        widget.onResize(bounds, maxWidth);
                     }
 
-                    posY += bounds.getHeight() + PADDING;
+                    if (direction != WidgetDirection.HORIZONTAL) {
+                        posY += bounds.getHeight() + IWidget.PADDING;
+                    } else {
+                        posX += bounds.getWidth();
+                    }
                 }
             }
 

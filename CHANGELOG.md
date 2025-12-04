@@ -1,3 +1,7 @@
+# []
+
+- Fixed suboptimal layout in some cases
+
 # [1.6.0]
 
 - Added GLM support (Global Loot Modifiers)

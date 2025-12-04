@@ -137,4 +137,71 @@ public abstract class ListWidget implements IWidget {
 
         return clicked;
     }
+
+    @Override
+    public void onResize(RelativeRect parent, int maxWidth) {
+        int posX = 0, posY = 0;
+        WidgetDirection lastDirection = null;
+
+        for (IWidget widget : widgets) {
+            WidgetDirection direction = widget.getDirection();
+            RelativeRect bounds = widget.getRect();
+
+            if (bounds.getOffsetY() == 0) {
+                widget.onResize(bounds, maxWidth);
+                posX = bounds.getOffsetX() + bounds.getWidth();
+                continue;
+            }
+
+            bounds.setOffset(posX, posY);
+
+            if (lastDirection == null) {
+                if (direction == WidgetDirection.HORIZONTAL) {
+                    posX += bounds.getWidth();
+                } else {
+                    posY += bounds.getHeight() + PADDING;
+                }
+            } else {
+                if (lastDirection == WidgetDirection.HORIZONTAL && direction == WidgetDirection.HORIZONTAL) {
+                    if (bounds.getRight() <= maxWidth) {
+                        posX += bounds.getWidth();
+                    } else {
+                        posX = bounds.getWidth();
+                        posY += widgets.get(widgets.size() - 1).getRect().getHeight();
+                        bounds.setOffset(0, posY);
+                    }
+                } else {
+                    posX = 0;
+
+                    if (direction != lastDirection) {
+                        if (lastDirection == WidgetDirection.HORIZONTAL) {
+                            posY += widgets.get(widgets.size() - 1).getRect().getHeight() + IWidget.PADDING;
+                        }
+
+                        bounds.setOffset(posX, posY);
+                        widget.onResize(bounds, maxWidth);
+                    }
+
+                    if (direction != WidgetDirection.HORIZONTAL) {
+                        posY += bounds.getHeight() + IWidget.PADDING;
+                    } else {
+                        posX += bounds.getWidth();
+                    }
+                }
+            }
+
+            lastDirection = direction;
+        }
+
+        int w = 0, h = 0;
+
+        for (IWidget widget : widgets) {
+            RelativeRect rect = widget.getRect();
+
+            w = Math.max(w, rect.getOffsetX() + rect.getWidth());
+            h = Math.max(h, rect.getOffsetY() + rect.getHeight());
+        }
+
+        parent.setDimensions(w, h);
+    }
 }
