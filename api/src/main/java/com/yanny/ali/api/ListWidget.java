@@ -29,7 +29,7 @@ public abstract class ListWidget implements IWidget {
         boolean hasGroupWidget = groupWidget != null;
         List<IWidget> children = null;
 
-        groupWidgetWidth = hasGroupWidget ? groupWidget.getRect().width : 0;
+        groupWidgetWidth = hasGroupWidget ? groupWidget.getRect().getWidth() : 0;
         bounds = rect;
 
         if (hasGroupWidget) {
@@ -38,7 +38,7 @@ public abstract class ListWidget implements IWidget {
         }
 
         if (entry instanceof ListNode listNode) {
-            RelativeRect subRect = new RelativeRect(groupWidgetWidth, 0, rect.width - groupWidgetWidth, 0, rect);
+            RelativeRect subRect = new RelativeRect(groupWidgetWidth, 0, rect.getWidth() - groupWidgetWidth, 0, rect);
             List<IDataNode> nodes = listNode.nodes();
 
             if (!nodes.isEmpty()) {
@@ -50,9 +50,9 @@ public abstract class ListWidget implements IWidget {
                     children = new ArrayList<>(widgetList);
                 }
 
-                bounds.setDimensions(subRect.width + groupWidgetWidth, subRect.height);
+                bounds.setDimensions(subRect.getWidth() + groupWidgetWidth, subRect.getHeight());
             } else {
-                bounds.setDimensions(subRect.width + groupWidgetWidth, GROUP_WIDGET_HEIGHT);
+                bounds.setDimensions(subRect.getWidth() + groupWidgetWidth, GROUP_WIDGET_HEIGHT);
             }
         } else {
             bounds.setDimensions(GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
@@ -100,7 +100,7 @@ public abstract class ListWidget implements IWidget {
         for (IWidget widget : widgets) {
             WidgetDirection direction = widget.getDirection();
 
-            if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().offsetY > 0) {
+            if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().getOffsetY() > 0) {
                 guiGraphics.blitRepeating(TEXTURE_LOC, (int) (bounds.getX() + Math.floor((double) groupWidgetWidth / 2) + 1), widget.getRect().getY() + 8, (int) (Math.ceil((double) groupWidgetWidth / 2) - 1), 2, 2, 0, 18, 2);
             }
 

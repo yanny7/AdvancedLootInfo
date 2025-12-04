@@ -33,11 +33,11 @@ public class TextureWidget implements IWidget {
         this.regionHeight = regionHeight;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
-        rect.setDimensions(rect.width, rect.height);
+        rect.setDimensions(rect.getWidth(), rect.getHeight());
     }
 
     public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v) {
-        this(texture, rect, u, v, rect.width, rect.height, 256, 256);
+        this(texture, rect, u, v, rect.getWidth(), rect.getHeight(), 256, 256);
     }
 
     @Override
@@ -61,6 +61,6 @@ public class TextureWidget implements IWidget {
 
     @Override
     public void render(GuiGraphics draw, int mouseX, int mouseY) {
-        draw.blit(texture, rect.getX(), rect.getY(), rect.width, rect.height, u, v, regionWidth, regionHeight, textureWidth, textureHeight);
+        draw.blit(texture, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), u, v, regionWidth, regionHeight, textureWidth, textureHeight);
     }
 }
