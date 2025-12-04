@@ -52,10 +52,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     public synchronized void startLootData(int totalMessages) {
-        if (currentDataReceiver != null && !currentDataReceiver.getFuture().isDone()) {
-            LOGGER.warn("Tried to start data reception while another operation is in progress.");
-            return;
-        }
+        clearLootData();
 
         currentDataReceiver = new DataReceiver(totalMessages);
 
