@@ -6,9 +6,7 @@ import com.yanny.ali.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.GlobalLootModifierWidget;
-import com.yanny.ali.plugin.client.widget.SingletonWidget;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
-import com.yanny.ali.plugin.common.nodes.SingletonNode;
 import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifierManager;
@@ -30,10 +28,8 @@ public class ForgePlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerWidget(SingletonNode.ID, SingletonWidget::new);
         registry.registerWidget(GlobalLootModifierNode.ID, GlobalLootModifierWidget::new);
 
-        registry.registerDataNode(SingletonNode.ID, SingletonNode::new);
         registry.registerDataNode(GlobalLootModifierNode.ID, GlobalLootModifierNode::new);
     }
 
