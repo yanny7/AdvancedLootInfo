@@ -96,7 +96,10 @@ public class GlobalLootModifierUtils {
     }
 
     public static boolean entityPredicate(LootItemCondition c) {
-        if (c instanceof LootItemEntityPropertyCondition condition && condition.entityTarget == LootContext.EntityTarget.THIS) {
+        if (c instanceof LootItemEntityPropertyCondition condition
+                && condition.entityTarget == LootContext.EntityTarget.THIS
+                && condition.predicate != EntityPredicate.ANY
+                && condition.predicate.entityType != EntityTypePredicate.ANY) {
             return true;
         } else {
             return c instanceof AnyOfCondition condition && entityPredicate(Arrays.asList(condition.terms));
