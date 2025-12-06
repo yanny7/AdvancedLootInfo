@@ -36,6 +36,7 @@
             "com.yanny.ali.plugin.mods.farmers_delight.Plugin",
             "com.yanny.ali.plugin.mods.hybrid_aquatic.Plugin",
             "com.yanny.ali.plugin.mods.moonlight.Plugin",
+            "com.yanny.ali.plugin.mods.porting_lib.loot.Plugin",
             "com.yanny.ali.plugin.mods.porting_lib_tools.Plugin",
             "com.yanny.ali.plugin.mods.repurposed_structures.Plugin",
             "com.yanny.ali.plugin.mods.sawmill.Plugin",
