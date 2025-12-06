@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.farmers_delight;
+package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;

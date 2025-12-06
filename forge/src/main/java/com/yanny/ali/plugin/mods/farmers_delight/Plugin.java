@@ -5,6 +5,8 @@ import com.yanny.ali.api.IClientRegistry;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgePlugin;
+import com.yanny.ali.plugin.client.widget.ModifiedWidget;
+import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.mods.PluginUtils;
 
 @AliEntrypoint
