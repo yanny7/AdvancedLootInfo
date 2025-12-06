@@ -12,6 +12,7 @@ import com.yanny.ali.mixin.MixinCompositeLootAction;
 import com.yanny.ali.mixin.MixinModifyLootAction;
 import com.yanny.ali.mixin.MixinRemoveLootAction;
 import com.yanny.ali.mixin.MixinReplaceLootAction;
+import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.*;
