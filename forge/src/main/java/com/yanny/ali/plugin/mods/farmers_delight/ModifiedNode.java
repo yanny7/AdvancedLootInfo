@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.farmers_delight_glm;
+package com.yanny.ali.plugin.mods.farmers_delight;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
