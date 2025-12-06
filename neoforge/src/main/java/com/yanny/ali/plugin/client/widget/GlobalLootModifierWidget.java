@@ -16,7 +16,7 @@ public class GlobalLootModifierWidget implements IWidget {
     public GlobalLootModifierWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         bounds = rect;
         widget = getGlobalLootModifierWidget(bounds, entry);
-        bounds.setDimensions(widget.getRect().width, widget.getRect().height);
+        bounds.setDimensions(widget.getRect().getWidth(), widget.getRect().getHeight());
     }
 
     @Override

@@ -1,3 +1,8 @@
+# []
+
+- Fixed suboptimal layout in some cases
+- Fixed entity GLM condition list not complete
+
 # [1.6.0]
 
 - Added GLM support (Global Loot Modifiers)

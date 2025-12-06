@@ -41,9 +41,9 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, Res
         Component fullText = Component.literal(display.getId().toString());
         int textWidth = Minecraft.getInstance().font.width(lootName);
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), OFFSET);
-        int with = Mth.clamp(holder.bounds().width, textWidth, bounds.width);
+        int with = Mth.clamp(holder.bounds().getWidth(), textWidth, bounds.width);
         int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
-        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().height + OFFSET);
+        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().getHeight() + OFFSET);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
         Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());

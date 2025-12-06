@@ -7,9 +7,7 @@ import com.yanny.ali.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.mixin.MixinNeoForgeEventHandler;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.GlobalLootModifierWidget;
-import com.yanny.ali.plugin.client.widget.SingletonWidget;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
-import com.yanny.ali.plugin.common.nodes.SingletonNode;
 import net.neoforged.neoforge.common.loot.CanToolPerformAction;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifierManager;
@@ -32,10 +30,8 @@ public class NeoForgePlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerWidget(SingletonNode.ID, SingletonWidget::new);
         registry.registerWidget(GlobalLootModifierNode.ID, GlobalLootModifierWidget::new);
 
-        registry.registerDataNode(SingletonNode.ID, SingletonNode::new);
         registry.registerDataNode(GlobalLootModifierNode.ID, GlobalLootModifierNode::new);
     }
 
