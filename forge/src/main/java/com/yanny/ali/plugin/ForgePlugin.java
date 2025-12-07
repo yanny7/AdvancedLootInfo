@@ -50,6 +50,7 @@ public class ForgePlugin implements IPlugin {
         return utils.getValueTooltip(utils, cond.id()).build("ali.type.condition.loot_table_id");
     }
 
+    @NotNull
     private static List<ILootModifier<?>> registerLootModifiers(IServerUtils utils) {
         Map<Class<?>, BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>>> glmMap = new HashMap<>();
         Set<Class<?>> missingGLM = new HashSet<>();
