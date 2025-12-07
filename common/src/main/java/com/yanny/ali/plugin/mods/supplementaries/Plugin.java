@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.mods.supplementaries;
 
+import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.plugin.mods.PluginUtils;
@@ -7,7 +8,7 @@ import com.yanny.ali.plugin.mods.supplementaries.functions.CurseLootFunction;
 import com.yanny.ali.plugin.mods.supplementaries.functions.RandomArrowFunction;
 import com.yanny.ali.plugin.mods.supplementaries.trades.RandomAdventurerMapListing;
 
-//@AliEntrypoint
+@AliEntrypoint
 public class Plugin implements IPlugin {
     @Override
     public String getModId() {

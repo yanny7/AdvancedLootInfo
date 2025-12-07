@@ -5,10 +5,8 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.client.widget.GlobalLootModifierWidget;
-import com.yanny.ali.plugin.client.widget.SingletonWidget;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
-import com.yanny.ali.plugin.common.nodes.SingletonNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
@@ -32,10 +30,8 @@ public class NeoForgePlugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
-        registry.registerWidget(SingletonNode.ID, SingletonWidget::new);
         registry.registerWidget(GlobalLootModifierNode.ID, GlobalLootModifierWidget::new);
 
-        registry.registerDataNode(SingletonNode.ID, SingletonNode::new);
         registry.registerDataNode(GlobalLootModifierNode.ID, GlobalLootModifierNode::new);
     }
 

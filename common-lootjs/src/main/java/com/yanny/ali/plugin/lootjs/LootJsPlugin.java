@@ -68,14 +68,12 @@ public class LootJsPlugin implements IPlugin {
         registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
         registry.registerDataNode(ItemTagNode.ID, ItemTagNode::new);
         registry.registerDataNode(GroupLootNode.ID, GroupLootNode::new);
-        registry.registerDataNode(ModifiedNode.ID, ModifiedNode::new);
 
         registry.registerWidget(AddLootNode.ID, AddLootWidget::new);
         registry.registerWidget(WeightedAddLootNode.ID, WeightedAddLootWidget::new);
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);
         registry.registerWidget(GroupLootNode.ID, GroupedLootWidget::new);
-        registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
     }
 
     @Override

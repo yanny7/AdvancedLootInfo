@@ -6,17 +6,18 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class SingletonNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "singleton");
+public class ModifiedNode extends ListNode {
+    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "modified");
 
     private final ITooltipNode tooltip;
 
-    public SingletonNode(IServerUtils utils, IDataNode node) {
-        addChildren(node);
-        tooltip = EntryTooltipUtils.getGroupTooltip();
+    public ModifiedNode(IServerUtils utils, IDataNode original, IDataNode modified) {
+        tooltip = EntryTooltipUtils.getAlternativesTooltip();
+        addChildren(modified);
+        addChildren(original);
     }
 
-    public SingletonNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
+    public ModifiedNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = ITooltipNode.decodeNode(utils, buf);
     }

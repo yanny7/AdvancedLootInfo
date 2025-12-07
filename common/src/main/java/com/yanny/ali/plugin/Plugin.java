@@ -93,6 +93,7 @@ public class Plugin implements IPlugin {
         registry.registerWidget(AlternativesNode.ID, AlternativesWidget::new);
         registry.registerWidget(SequenceNode.ID, SequentialWidget::new);
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
+        registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
         registry.registerWidget(MissingNode.ID, MissingWidget::new);
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
@@ -109,6 +110,7 @@ public class Plugin implements IPlugin {
         registry.registerDataNode(EmptyNode.ID, EmptyNode::new);
         registry.registerDataNode(DynamicNode.ID, DynamicNode::new);
         registry.registerDataNode(ReferenceNode.ID, ReferenceNode::new);
+        registry.registerDataNode(ModifiedNode.ID, ModifiedNode::new);
         registry.registerDataNode(MissingNode.ID, MissingNode::new);
 
         registry.registerDataNode(TradeNode.ID, TradeNode::new);
