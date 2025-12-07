@@ -1,9 +1,15 @@
 package com.yanny.ali.plugin.mods;
 
+import com.google.common.collect.Lists;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class ReflectionUtils {
     public static <T extends BaseAccessor<?>> T copyClassData(Class<T> myClass, Object targetObject) {
@@ -22,19 +28,25 @@ public class ReflectionUtils {
 
                     if (fieldAnnotation != null) {
                         // Find the corresponding field in the inaccessible class
-                        Field targetField = targetClass.getDeclaredField(myField.getName());
+                        Optional<Field> optional = getFieldsUpTo(targetClass, Object.class).stream().filter((f) -> f.getName().equals(myField.getName())).findFirst();
 
-                        targetField.setAccessible(true);
-                        myField.setAccessible(true);
+                        if (optional.isPresent()) {
+                            Field targetField = optional.get();
 
-                        // Copy the value from the inaccessible field to your field
-                        Object value = targetField.get(targetObject);
+                            targetField.setAccessible(true);
+                            myField.setAccessible(true);
 
-                        if (fieldAnnotation.clazz() == Object.class) {
-                            myField.set(myObject, value);
+                            // Copy the value from the inaccessible field to your field
+                            Object value = targetField.get(targetObject);
+
+                            if (fieldAnnotation.clazz() == Object.class) {
+                                myField.set(myObject, value);
+                            } else {
+                                //noinspection unchecked
+                                myField.set(myObject, copyClassData((Class<T>) fieldAnnotation.clazz(), value));
+                            }
                         } else {
-                            //noinspection unchecked
-                            myField.set(myObject, copyClassData((Class<T>) fieldAnnotation.clazz(), value));
+                            throw new NoSuchFieldException(myField.getName());
                         }
                     }
                 }
@@ -79,5 +91,18 @@ public class ReflectionUtils {
                         throw new RuntimeException(e);
                     }
                 });
+    }
+
+    @NotNull
+    private static List<Field> getFieldsUpTo(Class<?> startClass, @Nullable Class<?> exclusiveParent) {
+        List<Field> currentClassFields = Lists.newArrayList(startClass.getDeclaredFields());
+        Class<?> parentClass = startClass.getSuperclass();
+
+        if (parentClass != null && !(parentClass.equals(exclusiveParent))) {
+            List<Field> parentClassFields = getFieldsUpTo(parentClass, exclusiveParent);
+            currentClassFields.addAll(parentClassFields);
+        }
+
+        return currentClassFields;
     }
 }
