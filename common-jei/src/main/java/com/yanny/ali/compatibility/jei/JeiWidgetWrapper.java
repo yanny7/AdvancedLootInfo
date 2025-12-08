@@ -44,6 +44,6 @@ public class JeiWidgetWrapper implements IRecipeWidget {
     }
 
     public Rect getRect() {
-        return new Rect(rect.getX(), rect.getY(), rect.width, rect.height);
+        return new Rect(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
     }
 }

@@ -17,7 +17,7 @@ public class EmiWidgetWrapper extends Widget {
         RelativeRect rect = widget.getRect();
 
         this.widget = widget;
-        bounds = new Bounds(rect.getX(), rect.getY(), rect.width, rect.height);
+        bounds = new Bounds(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override

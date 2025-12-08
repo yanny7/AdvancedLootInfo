@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.farmers_delight_glm;
+package com.yanny.ali.plugin.mods.farmers_delight;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
@@ -13,7 +13,7 @@ import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.neoforged.neoforge.common.loot.LootModifier;
+import net.minecraftforge.common.loot.LootModifier;
 
 import java.util.Arrays;
 import java.util.Collections;
