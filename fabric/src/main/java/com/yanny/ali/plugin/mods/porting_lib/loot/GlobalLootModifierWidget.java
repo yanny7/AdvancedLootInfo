@@ -1,6 +1,7 @@
-package com.yanny.ali.plugin.client.widget;
+package com.yanny.ali.plugin.mods.porting_lib.loot;
 
 import com.yanny.ali.api.*;
+import com.yanny.ali.plugin.client.widget.TextureWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
