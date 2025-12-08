@@ -18,7 +18,7 @@ public class NormalizeWidget implements IWidget {
 
         bounds = rect;
         bounds.setDimensions(18, 18);
-        widget = WidgetUtils.getUnknownWidget(rect, entry);
+        widget = WidgetUtils.getUnknownWidget(rect);
         tooltip = NodeUtils.toComponents(node.getTooltip(), 0, false);
     }
 
