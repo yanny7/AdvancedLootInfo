@@ -68,7 +68,7 @@ public class WidgetUtils {
     }
 
     @NotNull
-    public static IWidget getUnknownWidget(RelativeRect rect, IDataNode node) {
+    public static IWidget getUnknownWidget(RelativeRect rect) {
         return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 30, 0);
     }
 
@@ -117,8 +117,8 @@ public class WidgetUtils {
 
             @Override
             public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-                blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, r.getX(), r.getY(), r.width, r.height, 2, 2, 2, 2, 18, 18, 35, 18);
-                guiGraphics.drawString(Minecraft.getInstance().font, txt, r.getX() + (r.width - txtWidth) / 2, r.getY() + 9, 0, false);
+                blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, r.getX(), r.getY(), r.getWidth(), r.getHeight(), 2, 2, 2, 2, 18, 18, 35, 18);
+                guiGraphics.drawString(Minecraft.getInstance().font, txt, r.getX() + (r.getWidth() - txtWidth) / 2, r.getY() + 9, 0, false);
             }
         };
     }
