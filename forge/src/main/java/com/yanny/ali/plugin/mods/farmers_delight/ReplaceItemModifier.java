@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.farmers_delight_glm;
+package com.yanny.ali.plugin.mods.farmers_delight;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
@@ -6,6 +6,7 @@ import com.yanny.ali.plugin.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.IForgeLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.common.nodes.ModifiedNode;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.lootjs.widget;
+package com.yanny.ali.plugin.client.widget;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;

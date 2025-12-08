@@ -11,13 +11,11 @@ import com.yanny.ali.plugin.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
 import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
-import com.yanny.ali.plugin.lootjs.node.ModifiedNode;
 import com.yanny.ali.plugin.lootjs.server.LootJsConditionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.server.LootJsFunctionTooltipUtils;
 import com.yanny.ali.plugin.lootjs.server.LootJsGenericTooltipUtils;
 import com.yanny.ali.plugin.lootjs.widget.ItemStackWidget;
 import com.yanny.ali.plugin.lootjs.widget.ItemTagWidget;
-import com.yanny.ali.plugin.lootjs.widget.ModifiedWidget;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.common.ItemAbility;
 import org.jetbrains.annotations.NotNull;
@@ -72,11 +70,9 @@ public class LootJsPlugin implements IPlugin {
     public void registerClient(IClientRegistry registry) {
         registry.registerDataNode(ItemStackNode.ID, ItemStackNode::new);
         registry.registerDataNode(ItemTagNode.ID, ItemTagNode::new);
-        registry.registerDataNode(ModifiedNode.ID, ModifiedNode::new);
 
         registry.registerWidget(ItemStackNode.ID, ItemStackWidget::new);
         registry.registerWidget(ItemTagNode.ID, ItemTagWidget::new);
-        registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
     }
 
     @Override

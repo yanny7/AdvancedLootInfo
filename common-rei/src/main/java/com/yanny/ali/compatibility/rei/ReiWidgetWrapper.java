@@ -22,7 +22,7 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
         RelativeRect rect = widget.getRect();
 
         this.widget = widget;
-        this.bounds = new Rectangle(rect.getX(), 0, rect.width, rect.height);
+        this.bounds = new Rectangle(rect.getX(), 0, rect.getWidth(), rect.getHeight());
     }
 
     @Override

@@ -1,12 +1,10 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.mods.porting_lib.loot;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.mixin.MixinLootModifier;
-import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
@@ -21,10 +19,6 @@ import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.common.loot.LootTableIdCondition;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -34,6 +28,19 @@ import java.util.function.Function;
 
 public class GlobalLootModifierUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
+
+    private static Class<?> LOOT_MODIFIER_CLASS;
+    private static Class<?> LOOT_TABLE_ID_CONDITION_CLASS;
+
+    static {
+        try {
+            LOOT_MODIFIER_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootModifier");
+            LOOT_TABLE_ID_CONDITION_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            LOGGER.warn("Unable to obtain GLM classes: {}", e.getMessage());
+        }
+    }
 
     public static Optional<ILootModifier<?>> getLootModifier(List<LootItemCondition> conditions, Function<List<LootItemCondition>, List<IOperation>> operationSupplier) {
         if (GlobalLootModifierUtils.entityPredicate(conditions)) {
@@ -144,7 +151,7 @@ public class GlobalLootModifierUtils {
     }
 
     public static boolean tablePredicate(LootItemCondition c) {
-        if (c instanceof LootTableIdCondition) {
+        if (LOOT_TABLE_ID_CONDITION_CLASS.isAssignableFrom(c.getClass())) {
             return true;
         } else {
             return c instanceof AnyOfCondition condition && tablePredicate(condition.terms);
@@ -157,7 +164,7 @@ public class GlobalLootModifierUtils {
 
     public static boolean tablePredicate(List<LootItemCondition> conditions, ResourceLocation location) {
         return  conditions.stream().anyMatch((c) -> {
-            if (c instanceof LootTableIdCondition condition && condition.id().equals(location)) {
+            if (LOOT_TABLE_ID_CONDITION_CLASS.isAssignableFrom(c.getClass()) && ReflectionUtils.copyClassData(LootTableIdCondition.class, c).getTargetLootTableId().equals(location)) {
                 return true;
             } else {
                 return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, location);
@@ -165,13 +172,13 @@ public class GlobalLootModifierUtils {
         });
     }
 
-    public static <T extends BaseAccessor<?> & IForgeLootModifier> void registerGlobalLootModifier(IForgePlugin.IRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IGlobalLootModifier> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<T> clazz) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
             try {
                 //noinspection unchecked
-                Class<IGlobalLootModifier> functionClass = (Class<IGlobalLootModifier>) Class.forName(classAnnotation.value());
+                Class<Object> functionClass = (Class<Object>) Class.forName(classAnnotation.value());
                 registry.registerGlobalLootModifier(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getLootModifier(u));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register GLM for {} with error {}", classAnnotation.value(), e.getMessage());
@@ -182,13 +189,15 @@ public class GlobalLootModifierUtils {
         }
     }
 
-    public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifier modifier) {
-        if (modifier instanceof LootModifier lootModifier) {
-            return getLootModifier(Arrays.asList(((MixinLootModifier) lootModifier).getConditions()), (conditions) -> {
-                ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
-                IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, getName(modifier));
+    public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, Object modifier, ResourceLocation location) {
+        if (LOOT_MODIFIER_CLASS.isAssignableFrom(modifier.getClass())) {
+            LootModifier lootModifier = ReflectionUtils.copyClassData(LootModifier.class, modifier);
 
-                TooltipUtils.addObjectFields(utils, fieldsTooltip, lootModifier, LootModifier.class);
+            return getLootModifier(Arrays.asList(lootModifier.getConditions()), (conditions) -> {
+                ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
+                IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, location);
+
+                TooltipUtils.addObjectFields(utils, fieldsTooltip, lootModifier, LOOT_MODIFIER_CLASS);
                 tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
                 tooltip.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
                 return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(utils, tooltip.build())));
@@ -196,9 +205,5 @@ public class GlobalLootModifierUtils {
         }
 
         return Optional.empty();
-    }
-
-    public static ResourceLocation getName(IGlobalLootModifier modifier) {
-        return ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec());
     }
 }
