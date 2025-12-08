@@ -19,6 +19,7 @@ public class Plugin implements IPlugin {
 
         PluginUtils.registerConditionTooltip(registry, CanItemPerformAbilityCondition.class);
 
-        //TODO modifiers!
+        PluginUtils.registerItemListing(registry, FDItemListing.class);
+        PluginUtils.registerItemListingCollector(registry, FDItemListing.class);
     }
 }

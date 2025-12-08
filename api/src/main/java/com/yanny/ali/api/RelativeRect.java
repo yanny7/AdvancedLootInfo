@@ -13,11 +13,11 @@ public class RelativeRect {
         }
     };
 
-    public int offsetX;
-    public int offsetY;
-    public int width;
-    public int height;
-    public final RelativeRect parent;
+    private int offsetX;
+    private int offsetY;
+    private int width;
+    private int height;
+    private final RelativeRect parent;
 
     public RelativeRect(int offsetX, int offsetY) {
         this(offsetX, offsetY, 0, 0);
@@ -49,6 +49,22 @@ public class RelativeRect {
 
     public int getBottom() {
         return getY() + height;
+    }
+
+    public int getOffsetX() {
+        return offsetX;
+    }
+
+    public int getOffsetY() {
+        return offsetY;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public void setOffset(int offsetX, int offsetY) {
