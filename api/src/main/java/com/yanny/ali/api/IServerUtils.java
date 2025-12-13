@@ -50,7 +50,11 @@ public interface IServerUtils extends ICommonUtils {
     @Nullable
     ServerLevel getServerLevel();
 
+    @Nullable
     LootContext getLootContext();
+
+    @Nullable
+    ResourceLocation getCurrentLootTable();
 
     LootTable getLootTable(ResourceLocation location);
 

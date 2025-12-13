@@ -254,13 +254,21 @@ public class TooltipUtils {
     }
 
     public static void addObjectFields(IServerUtils utils, IKeyTooltipNode tooltip, Object object, Class<?> baseClass) {
+        if (object.getClass().isEnum()) {
+            return;
+        }
+
         List<Field> fields = TooltipUtils.getAllFields(object.getClass(), baseClass);
         List<Field> names = fields.stream().filter((f) -> !Modifier.isStatic(f.getModifiers())).toList();
 
         names.forEach((f) -> {
-            f.setAccessible(true);
+            if (f.isSynthetic()) {
+                return;
+            }
 
             try {
+                f.setAccessible(true);
+
                 Object obj = f.get(object);
                 IKeyTooltipNode t;
 
