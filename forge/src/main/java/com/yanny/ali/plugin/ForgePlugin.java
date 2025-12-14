@@ -3,6 +3,7 @@ package com.yanny.ali.plugin;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.mixin.MixinForgeInternalHandler;
+import com.yanny.ali.mixin.MixinLootModifier;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
@@ -107,7 +108,7 @@ public class ForgePlugin implements IPlugin {
 
             @Override
             public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
-                return ((MixinLootTableIdCondition) condition).getTargetLootTableId();
+                return ((LootTableIdCondition) condition).id();
             }
         };
     }
