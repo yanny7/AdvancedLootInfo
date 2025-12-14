@@ -4,11 +4,12 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IGlobalLootModifierAccessor;
+import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
-import com.yanny.ali.plugin.mods.porting_lib.loot.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.mods.porting_lib.loot.IGlobalLootModifier;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -20,7 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 @ClassAccessor("vectorwing.farmersdelight.common.loot.modifier.ReplaceItemModifier")
-public class ReplaceItemModifier extends BaseAccessor<Object> implements IGlobalLootModifier {
+public class ReplaceItemModifier extends BaseAccessor<Object> implements IGlobalLootModifierAccessor {
     @FieldAccessor
     private Item removedItem;
     @FieldAccessor
@@ -34,7 +35,7 @@ public class ReplaceItemModifier extends BaseAccessor<Object> implements IGlobal
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
@@ -55,6 +56,6 @@ public class ReplaceItemModifier extends BaseAccessor<Object> implements IGlobal
                 return nodes;
             };
             return Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> itemStack.getItem().equals(removedItem), factory));
-        });
+        }, predicate);
     }
 }

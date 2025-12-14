@@ -100,7 +100,7 @@ public class ForgePlugin implements IPlugin {
     }
 
     @NotNull
-    public static ILootTableIdConditionPredicate getLootTableIdConditionPredicate() {
+    private static ILootTableIdConditionPredicate getLootTableIdConditionPredicate() {
         return new ILootTableIdConditionPredicate() {
             @Override
             public boolean isLootTableIdCondition(LootItemCondition condition) {
