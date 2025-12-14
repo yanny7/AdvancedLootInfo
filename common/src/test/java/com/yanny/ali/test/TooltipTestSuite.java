@@ -192,14 +192,22 @@ public class TooltipTestSuite {
                 return PluginManager.SERVER_REGISTRY.convertNumber(utils, numberProvider);
             }
 
+            @Nullable
             @Override
-            public @Nullable ServerLevel getServerLevel() {
+            public ServerLevel getServerLevel() {
                 return PluginManager.SERVER_REGISTRY.getServerLevel();
             }
 
+            @Nullable
             @Override
             public LootContext getLootContext() {
                 return PluginManager.SERVER_REGISTRY.getLootContext();
+            }
+
+            @Nullable
+            @Override
+            public ResourceLocation getCurrentLootTable() {
+                return null;
             }
 
             @Override

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.porting_lib.loot;
+package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
