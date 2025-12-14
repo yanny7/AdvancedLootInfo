@@ -179,6 +179,8 @@ public abstract class AbstractServer {
                 ResourceLocation location = resourceKey.location();
                 LootTable lootTable = lootTables.remove(location);
 
+                serverRegistry.setCurrentLootTable(location);
+
                 if (config.blockCategories.stream().filter((f) -> f.validate(block)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                     List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
                     List<ILootModifier<?>> lootModifiers = Stream.concat(
@@ -198,9 +200,9 @@ public abstract class AbstractServer {
                         e.printStackTrace();
                         LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
                     }
-                } else {
-                    lootTables.remove(location);
                 }
+
+                serverRegistry.setCurrentLootTable(null);
             }
         }
 
@@ -230,6 +232,8 @@ public abstract class AbstractServer {
                         ResourceLocation location = resourceKey.location();
                         LootTable lootTable = lootTables.remove(location);
 
+                        serverRegistry.setCurrentLootTable(location);
+
                         if (config.entityCategories.stream().filter((f) -> f.validate(entityType)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                             List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
                             List<ILootModifier<?>> lootModifiers = Stream.concat(
@@ -250,6 +254,8 @@ public abstract class AbstractServer {
                                 LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
                             }
                         }
+
+                        serverRegistry.setCurrentLootTable(null);
                     }
                 }
             }
@@ -266,6 +272,8 @@ public abstract class AbstractServer {
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
             ResourceLocation location = entry.getKey();
 
+            serverRegistry.setCurrentLootTable(location);
+
             if (config.gameplayCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 LootTable lootTable = entry.getValue();
                 List<Item> items = lootTableItems.get(location);
@@ -278,6 +286,8 @@ public abstract class AbstractServer {
                     LOGGER.warn("Failed to parse loot table {} with error {}", location, e.getMessage());
                 }
             }
+
+            serverRegistry.setCurrentLootTable(null);
         }
 
         lootTables.clear();
@@ -291,6 +301,8 @@ public abstract class AbstractServer {
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             ResourceLocation location = entry.getKey().location();
 
+            serverRegistry.setCurrentLootTable(location);
+
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = VillagerTrades.TRADES.get(entry.getValue());
 
@@ -300,12 +312,14 @@ public abstract class AbstractServer {
                         tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
                     } catch (Throwable e) {
                         e.printStackTrace();
-                        LOGGER.warn("Failed to parse trade for villager {} with error {}", entry.getValue().name(), e.getMessage());
+                        LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage());
                     }
                 } else {
                     LOGGER.warn("No trades defined for {}", location);
                 }
             }
+
+            serverRegistry.setCurrentLootTable(null);
         }
 
         return nodes;
