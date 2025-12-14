@@ -2,10 +2,11 @@ package com.yanny.ali.plugin.mods.farmers_delight;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
-import com.yanny.ali.plugin.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.IForgeLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IGlobalLootModifierAccessor;
+import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -19,7 +20,7 @@ import net.neoforged.neoforge.common.loot.LootModifier;
 import java.util.*;
 
 @ClassAccessor("vectorwing.farmersdelight.common.loot.modifier.PastrySlicingModifier")
-public class PastrySlicingModifier extends GlobalLootModifier implements IForgeLootModifier {
+public class PastrySlicingModifier extends GlobalLootModifier implements IGlobalLootModifierAccessor {
     @FieldAccessor
     private Item pastrySlice;
 
@@ -27,7 +28,7 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IForgeL
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
@@ -40,6 +41,6 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IForgeL
             IDataNode node = new ItemNode(1, new RangeValue(1, 7), pastrySlice.getDefaultInstance(), tooltip, Collections.emptyList(), c);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
-        });
+        }, predicate);
     }
 }
