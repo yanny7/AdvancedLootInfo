@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.porting_lib.loot;
+package com.yanny.ali.plugin.glm;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
@@ -10,6 +10,7 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -29,20 +30,7 @@ import java.util.function.Function;
 public class GlobalLootModifierUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static Class<?> LOOT_MODIFIER_CLASS;
-    private static Class<?> LOOT_TABLE_ID_CONDITION_CLASS;
-
-    static {
-        try {
-            LOOT_MODIFIER_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootModifier");
-            LOOT_TABLE_ID_CONDITION_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            LOGGER.warn("Unable to obtain GLM classes: {}", e.getMessage());
-        }
-    }
-
-    public static Optional<ILootModifier<?>> getLootModifier(List<LootItemCondition> conditions, Function<List<LootItemCondition>, List<IOperation>> operationSupplier) {
+    public static Optional<ILootModifier<?>> getLootModifier(List<LootItemCondition> conditions, Function<List<LootItemCondition>, List<IOperation>> operationSupplier, ILootTableIdConditionPredicate predicate) {
         if (GlobalLootModifierUtils.entityPredicate(conditions)) {
             return Optional.of(new ILootModifier<Entity>() {
                 @Override
@@ -77,16 +65,16 @@ public class GlobalLootModifierUtils {
                     return IType.BLOCK;
                 }
             });
-        } else if (GlobalLootModifierUtils.tablePredicate(conditions)) {
+        } else if (GlobalLootModifierUtils.tablePredicate(conditions, predicate)) {
             return Optional.of(new ILootModifier<ResourceLocation>() {
                 @Override
                 public boolean predicate(ResourceLocation value) {
-                    return GlobalLootModifierUtils.tablePredicate(conditions, value);
+                    return GlobalLootModifierUtils.tablePredicate(conditions, value, predicate);
                 }
 
                 @Override
                 public List<IOperation> getOperations() {
-                    return operationSupplier.apply(conditions.stream().filter((c) -> !tablePredicate(c)).toList());
+                    return operationSupplier.apply(conditions.stream().filter((c) -> !tablePredicate(c, predicate)).toList());
                 }
 
                 @Override
@@ -150,36 +138,35 @@ public class GlobalLootModifierUtils {
         });
     }
 
-    public static boolean tablePredicate(LootItemCondition c) {
-        if (LOOT_TABLE_ID_CONDITION_CLASS.isAssignableFrom(c.getClass())) {
+    public static boolean tablePredicate(LootItemCondition c, ILootTableIdConditionPredicate predicate) {
+        if (predicate.isLootTableIdCondition(c)) {
             return true;
         } else {
-            return c instanceof AnyOfCondition condition && tablePredicate(condition.terms);
+            return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, predicate);
         }
     }
 
-    public static boolean tablePredicate(List<LootItemCondition> conditions) {
-        return conditions.stream().anyMatch(GlobalLootModifierUtils::tablePredicate);
+    public static boolean tablePredicate(List<LootItemCondition> conditions, ILootTableIdConditionPredicate predicate) {
+        return conditions.stream().anyMatch((c) -> tablePredicate(c, predicate));
     }
 
-    public static boolean tablePredicate(List<LootItemCondition> conditions, ResourceLocation location) {
+    public static boolean tablePredicate(List<LootItemCondition> conditions, ResourceLocation location, ILootTableIdConditionPredicate predicate) {
         return  conditions.stream().anyMatch((c) -> {
-            if (LOOT_TABLE_ID_CONDITION_CLASS.isAssignableFrom(c.getClass()) && ReflectionUtils.copyClassData(LootTableIdCondition.class, c).getTargetLootTableId().equals(location)) {
+            if (predicate.isLootTableIdCondition(c) && predicate.getTargetLootTableId(c).equals(location)) {
                 return true;
             } else {
-                return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, location);
+                return c instanceof AnyOfCondition condition && tablePredicate(condition.terms, location, predicate);
             }
         });
     }
 
-    public static <T extends BaseAccessor<?> & IGlobalLootModifier> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<T> clazz) {
+    public static <T extends BaseAccessor<?> & IGlobalLootModifierAccessor> void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, Class<T> clazz, ILootTableIdConditionPredicate predicate) {
         ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
 
         if (classAnnotation != null) {
             try {
-                //noinspection unchecked
-                Class<Object> functionClass = (Class<Object>) Class.forName(classAnnotation.value());
-                registry.registerGlobalLootModifier(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getLootModifier(u));
+                Class<?> functionClass = Class.forName(classAnnotation.value());
+                registry.registerGlobalLootModifier(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getLootModifier(u, predicate));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to register GLM for {} with error {}", classAnnotation.value(), e.getMessage());
                 e.printStackTrace();
@@ -189,19 +176,17 @@ public class GlobalLootModifierUtils {
         }
     }
 
-    public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, Object modifier, ResourceLocation location) {
-        if (LOOT_MODIFIER_CLASS.isAssignableFrom(modifier.getClass())) {
-            LootModifier lootModifier = ReflectionUtils.copyClassData(LootModifier.class, modifier);
-
-            return getLootModifier(Arrays.asList(lootModifier.getConditions()), (conditions) -> {
+    public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier, ILootTableIdConditionPredicate predicate) {
+        if (modifier.isLootModifier()) {
+            return getLootModifier(modifier.getConditions(), (conditions) -> {
                 ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
-                IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, location);
+                IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
 
-                TooltipUtils.addObjectFields(utils, fieldsTooltip, lootModifier, LOOT_MODIFIER_CLASS);
+                TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
                 tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
                 tooltip.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
                 return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(utils, tooltip.build())));
-            });
+            }, predicate);
         }
 
         return Optional.empty();

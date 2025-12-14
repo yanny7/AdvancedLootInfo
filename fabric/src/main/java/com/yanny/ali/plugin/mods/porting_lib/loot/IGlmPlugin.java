@@ -1,9 +1,9 @@
-package com.yanny.ali.plugin;
+package com.yanny.ali.plugin.mods.porting_lib.loot;
 
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 
-public interface IForgePlugin extends IPlugin {
+public interface IGlmPlugin extends IPlugin {
     void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate);
 }
