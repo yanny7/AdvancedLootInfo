@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.common.nodes;
+package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;

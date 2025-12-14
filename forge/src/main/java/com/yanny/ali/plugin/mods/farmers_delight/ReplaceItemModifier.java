@@ -2,11 +2,12 @@ package com.yanny.ali.plugin.mods.farmers_delight;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.GlobalLootModifier;
-import com.yanny.ali.plugin.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.IForgeLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IGlobalLootModifierAccessor;
+import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -21,7 +22,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 @ClassAccessor("vectorwing.farmersdelight.common.loot.modifier.ReplaceItemModifier")
-public class ReplaceItemModifier extends GlobalLootModifier implements IForgeLootModifier {
+public class ReplaceItemModifier extends GlobalLootModifier implements IGlobalLootModifierAccessor {
     @FieldAccessor
     private Item removedItem;
     @FieldAccessor
@@ -33,7 +34,7 @@ public class ReplaceItemModifier extends GlobalLootModifier implements IForgeLoo
         super(parent);
     }
 
-    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils) {
+    public Optional<ILootModifier<?>> getLootModifier(IServerUtils utils, ILootTableIdConditionPredicate predicate) {
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
@@ -54,6 +55,6 @@ public class ReplaceItemModifier extends GlobalLootModifier implements IForgeLoo
                 return nodes;
             };
             return Collections.singletonList(new IOperation.ReplaceOperation((itemStack) -> itemStack.getItem().equals(removedItem), factory));
-        });
+        }, predicate);
     }
 }
