@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.ali.plugin.client.widget;
+package com.yanny.ali.plugin.glm;
 
 import javax.annotation.ParametersAreNonnullByDefault;
