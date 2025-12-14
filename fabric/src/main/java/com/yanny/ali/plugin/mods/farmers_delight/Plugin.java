@@ -2,12 +2,14 @@ package com.yanny.ali.plugin.mods.farmers_delight;
 
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
+import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.mods.PluginUtils;
-import com.yanny.ali.plugin.mods.porting_lib.loot.GlobalLootModifierUtils;
-import com.yanny.ali.plugin.mods.porting_lib.loot.IGlobalLootModifierPlugin;
+import com.yanny.ali.plugin.mods.porting_lib.loot.IGlmPlugin;
 
 @AliEntrypoint
-public class Plugin implements IGlobalLootModifierPlugin {
+public class Plugin implements IGlmPlugin {
     @Override
     public String getModId() {
         return "farmersdelight";
@@ -20,10 +22,10 @@ public class Plugin implements IGlobalLootModifierPlugin {
     }
 
     @Override
-    public void registerGLM(IRegistry registry) {
-        GlobalLootModifierUtils.registerGlobalLootModifier(registry, AddItemModifier.class);
-        GlobalLootModifierUtils.registerGlobalLootModifier(registry, AddLootTableModifier.class);
-        GlobalLootModifierUtils.registerGlobalLootModifier(registry, PastrySlicingModifier.class);
-        GlobalLootModifierUtils.registerGlobalLootModifier(registry, ReplaceItemModifier.class);
+    public void registerGlobalLootModifier(IGlobalLootModifierPlugin.IRegistry registry, ILootTableIdConditionPredicate predicate) {
+        GlobalLootModifierUtils.registerGlobalLootModifier(registry, AddItemModifier.class, predicate);
+        GlobalLootModifierUtils.registerGlobalLootModifier(registry, AddLootTableModifier.class, predicate);
+        GlobalLootModifierUtils.registerGlobalLootModifier(registry, PastrySlicingModifier.class, predicate);
+        GlobalLootModifierUtils.registerGlobalLootModifier(registry, ReplaceItemModifier.class, predicate);
     }
 }
