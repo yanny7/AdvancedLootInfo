@@ -12,7 +12,7 @@ public class NeoForgeServerBusSubscriber {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
         PluginManager.registerServerEvent();
-        AliMod.INFO_PROPAGATOR.server().readLootTables(event.getServer().getLootData(), event.getServer().overworld());
+        AliMod.SERVER.readLootTables(event.getServer().getLootData(), event.getServer().overworld());
     }
 
     @SubscribeEvent
@@ -22,6 +22,6 @@ public class NeoForgeServerBusSubscriber {
 
     @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
-        AliMod.INFO_PROPAGATOR.server().syncLootTables(event.getEntity());
+        AliMod.SERVER.syncLootTables(event.getEntity());
     }
 }
