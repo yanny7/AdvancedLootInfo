@@ -8,18 +8,8 @@ import org.jetbrains.annotations.NotNull;
 public class NetworkUtils {
     private static int messageId = 0;
 
-    public static DistHolder<AbstractClient, AbstractServer> registerLootInfoPropagator(IPayloadRegistrar registrar) {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            return registerClientLootInfoPropagator(registrar);
-        } else {
-            return registerServerLootInfoPropagator(registrar);
-        }
-    }
-
-    @NotNull
-    private static DistHolder<AbstractClient, AbstractServer> registerClientLootInfoPropagator(IPayloadRegistrar registrar) {
+    public static void registerClient(IPayloadRegistrar registrar) {
         Client client = new Client();
-        Server server = new Server();
 
         registrar.play(
                 LootDataChunkMessage.ID,
@@ -39,29 +29,6 @@ public class NetworkUtils {
                 (handler) ->
                         handler.client(client::onDone).server((msg, ctx) -> {})
         );
-        return new DistHolder<>(client, server);
-    }
-
-    @NotNull
-    private static DistHolder<AbstractClient, AbstractServer> registerServerLootInfoPropagator(IPayloadRegistrar registrar) {
-        Server server = new Server();
-
-        registrar.play(
-                LootDataChunkMessage.ID,
-                LootDataChunkMessage::new,
-                (handler) -> {}
-        );
-        registrar.play(
-                ClearMessage.ID,
-                ClearMessage::new,
-                (handler) -> {}
-        );
-        registrar.play(
-                DoneMessage.ID,
-                DoneMessage::new,
-                (handler) -> {}
-        );
-        return new DistHolder<>(null, server);
     }
 
     private static int getMessageId() {
