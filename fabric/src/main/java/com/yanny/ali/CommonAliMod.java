@@ -1,17 +1,15 @@
 package com.yanny.ali;
 
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
-import com.yanny.ali.network.DistHolder;
-import com.yanny.ali.network.NetworkUtils;
+import com.yanny.ali.network.Server;
 import net.fabricmc.api.ModInitializer;
 
 public class CommonAliMod implements ModInitializer {
-    public static final DistHolder<AbstractClient, AbstractServer> INFO_PROPAGATOR;
+    public static final AbstractServer SERVER;
 
     static {
-        INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator();
+        SERVER = new Server();
     }
 
     @Override
