@@ -2,10 +2,9 @@ package com.yanny.ali;
 
 import com.yanny.ali.datagen.DataGeneration;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractClient;
 import com.yanny.ali.network.AbstractServer;
-import com.yanny.ali.network.DistHolder;
 import com.yanny.ali.network.NetworkUtils;
+import com.yanny.ali.network.Server;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -14,7 +13,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
 public class AliMod {
-    public static DistHolder<AbstractClient, AbstractServer> INFO_PROPAGATOR;
+    public static final AbstractServer SERVER = new Server();
     private static final String PROTOCOL_VERSION = "1";
 
     public AliMod(IEventBus modEventBus) {
@@ -33,6 +32,6 @@ public class AliMod {
     }
 
     public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
-        INFO_PROPAGATOR = NetworkUtils.registerLootInfoPropagator(event.registrar(Utils.MOD_ID).versioned(PROTOCOL_VERSION));
+        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).versioned(PROTOCOL_VERSION));
     }
 }

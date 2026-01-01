@@ -24,7 +24,7 @@ public class FabricBusSubscriber {
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
         if (!serverLoaded) { // to be safe, handle only once for world loading (should be called only once for overworld, but who knows?)
             PluginManager.registerServerEvent();
-            CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
+            CommonAliMod.SERVER.readLootTables(server.reloadableRegistries(), server.overworld());
             serverLoaded = true;
         }
     }
@@ -37,15 +37,15 @@ public class FabricBusSubscriber {
     private static void onReload(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         if (success) {
             PluginManager.reloadServer();
-            CommonAliMod.INFO_PROPAGATOR.server().readLootTables(server.reloadableRegistries(), server.overworld());
+            CommonAliMod.SERVER.readLootTables(server.reloadableRegistries(), server.overworld());
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                CommonAliMod.INFO_PROPAGATOR.server().syncLootTables(player);
+                CommonAliMod.SERVER.syncLootTables(player);
             }
         }
     }
 
     private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
-        CommonAliMod.INFO_PROPAGATOR.server().syncLootTables(event.player);
+        CommonAliMod.SERVER.syncLootTables(event.player);
     }
 }
