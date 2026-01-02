@@ -1,32 +1,59 @@
 plugins {
-    id 'java'
-    id 'idea'
-    id 'fabric-loom'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 base {
-    archivesName = "${mod_name}-fabric-${minecraft_version}"
+    archivesName = "${mod_name}-fabric"
 }
 
-fabricApi {
-    configureDataGeneration {
-        modId = "ali"
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    runs {
+        datagen {
+            inherit client
+            name "Fabric Data Generation"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${project(":fabric").file("src/main/generated")}"
+            vmArg "-Dfabric-api.datagen.modid=${mod_id}"
+
+            runDir "build/datagen"
+        }
     }
 }
 
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    implementation project(":api")
-    implementation project(":common")
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+
+    common(project(path: ":api", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common-rei", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":api", configuration: "transformProductionFabric")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+    shadowCommon(project(path: ":common-rei", configuration: "transformProductionFabric")) { transitive false }
+    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionFabric")) { transitive false }
+    runtimeOnly project(path: ":common", configuration: "namedElements")
 
     // EMI
     modCompileOnlyApi "dev.emi:emi-fabric:${emi_version}:api"
-    modCompileOnly "dev.emi:emi-fabric:${emi_version}"
+    modCompileOnlyApi "dev.emi:emi-fabric:${emi_version}"
     modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
 
     // JEI
@@ -84,84 +111,79 @@ dependencies {
     modCompileOnly "curse.maven:villagersplus-fabric-809542:4996993"
 }
 
-loom {
-    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
-    }
-
-    mixin {
-        defaultRefmapName.set("${mod_id}.refmap.json")
-    }
-
-    runs {
-        client {
-            client()
-            setConfigName("Fabric Client")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-
-        server {
-            server()
-            setConfigName("Fabric Server")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    def addedPackageInfos = [] as Set
-
-    def sourceProjects = [
-            project(":api"),
-            project(":common"),
-            project(":common-rei"),
-            project(":common-lootjs")
-    ]
-
-    sourceSets.main.allSource.each { sourceFile ->
-        if (sourceFile.name == 'package-info.java') {
-            def rootDir = sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
-            if (rootDir != null) {
-                def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
-                addedPackageInfos.add(relativePath)
-            }
-        }
-    }
-
-    sourceProjects.each { sourceProject ->
-        source(sourceProject.sourceSets.main.allSource.filter { sourceFile ->
-            if (sourceFile.name == 'package-info.java') {
-                def rootDir = sourceProject.sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
-                if (rootDir != null) {
-                    def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
-
-                    if (addedPackageInfos.contains(relativePath)) {
-                        return false
-                    } else {
-                        addedPackageInfos.add(relativePath)
-                        return true
-                    }
-                }
-            }
-
-            return true
-        })
-    }
-}
-
-tasks.named("sourcesJar", Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    from(project(":api").sourceSets.main.allSource)
-    from(project(":common").sourceSets.main.allSource)
-    from(project(":common-rei").sourceSets.main.allSource)
-    from(project(":common-lootjs").sourceSets.main.allSource)
-}
-
 processResources {
-    from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources
     from project(":common-lootjs").sourceSets.main.resources
+
+    inputs.property "version", project.version
+
+    def expandProps = [
+            "version": project.version,
+            "group": project.group, //Else we target the task's group.
+
+            "mod_name": mod_name,
+            "mod_author": mod_author,
+            "mod_id": mod_id,
+            "license": license,
+            "description": project.description,
+
+            "minecraft_version": minecraft_version,
+            "minecraft_version_range": minecraft_version_range,
+
+            "forge_version": forge_version,
+            "forge_loader_version_range": forge_loader_version_range,
+            "forge_version_range": forge_version_range,
+
+            "fabric_version": fabric_version,
+            "fabric_loader_version": fabric_loader_version,
+
+            "emi_version": emi_version,
+            "emi_version_range": emi_version_range,
+            "emi_version_range_fabric": emi_version_range_fabric,
+
+            "jei_version": jei_version,
+            "jei_version_range": jei_version_range,
+            "jei_version_range_fabric": jei_version_range_fabric,
+
+            "rei_version": rei_version,
+            "rei_version_range": rei_version_range,
+            "rei_version_range_fabric": rei_version_range_fabric,
+            "cloth_config_version": cloth_config_version,
+            "architectury_version": architectury_version
+    ]
+
+    filesMatching("fabric.mod.json") { expand expandProps }
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    injectAccessWidener = true
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main/generated"
+        }
+    }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
 }

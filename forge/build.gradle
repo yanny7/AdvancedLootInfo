@@ -1,217 +1,196 @@
 plugins {
-    id 'idea'
-    id 'net.minecraftforge.gradle'
-    id 'org.spongepowered.mixin'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 base {
-    archivesName = "${mod_name}-forge-${minecraft_version}"
+    archivesName = "${mod_name}-forge"
 }
 
-mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
-
-    config("${mod_id}.mixins.json")
-    config("${mod_id}.lootjs.mixins.json")
-    config("${mod_id}.forge.mixins.json")
+architectury {
+    platformSetupLoomIde()
+    forge()
 }
 
-minecraft {
-    mappings channel: 'official', version: minecraft_version
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
 
-    copyIdeResources = true //Calls processResources when in dev
+    forge {
+        convertAccessWideners = true
 
-    // Automatically enable forge AccessTransformers if the file exists
-    // This location is hardcoded in Forge and can not be changed.
-    // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+        mixinConfig "ali.mixins.json"
+        mixinConfig "ali.lootjs.mixins.json"
+        mixinConfig "ali.forge.mixins.json"
     }
 
     runs {
-        client {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                    source project(":api").sourceSets.main
-                    source project(":common").sourceSets.main
-                }
-            }
-        }
-
-        server {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                    source project(":api").sourceSets.main
-                    source project(":common").sourceSets.main
-                }
-            }
-        }
-
         data {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                    source project(":api").sourceSets.main
-                    source project(":common").sourceSets.main
-                }
-            }
+            data()
+            programArgs "--all", "--mod", "${mod_id}"
+            programArgs "--output", "${file('src/main/generated/')}"
+            programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
     }
 }
 
-sourceSets.main.resources.srcDir 'src/generated/resources'
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentForge.extendsFrom common
+}
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    modImplementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    compileOnly project(":api")
-    compileOnly project(":common")
-    compileOnly project(":common-rei")
-    compileOnly project(":common-lootjs")
+    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    common(project(path: ":api", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common-rei", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":api", configuration: "transformProductionForge")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
+    shadowCommon(project(path: ":common-rei", configuration: "transformProductionForge")) { transitive false }
+    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionForge")) { transitive false }
+    runtimeOnly project(path: ":common", configuration: "namedElements")
 
     // EMI
-    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}:api")
-    compileOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
-//    runtimeOnly fg.deobf("dev.emi:emi-forge:${emi_version}")
+    modCompileOnlyApi "dev.emi:emi-forge:${emi_version}:api"
+    modCompileOnlyApi "dev.emi:emi-forge:${emi_version}"
+//    runtimeOnly "dev.emi:emi-forge:${emi_version}"
 
     // JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-//    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
+//    runtimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
 
     // REI
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}")
-    compileOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}")
-    runtimeOnly fg.deobf("me.shedaniel:RoughlyEnoughItems-forge:${rei_version}")
-    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}")
-    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
+    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
+    modImplementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+    modImplementation "dev.architectury:architectury-forge:${architectury_version}"
 
     // LootJS
-    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
-    implementation fg.deobf("curse.maven:rhino-416294:6186971")
-    implementation fg.deobf("curse.maven:lootjs-570630:5404565")
+    modCompileOnly "curse.maven:kubejs-238086:5853326"
+    modCompileOnly "curse.maven:rhino-416294:6186971"
+    modCompileOnly "curse.maven:lootjs-570630:5404565"
 
     // Aether https://www.curseforge.com/minecraft/mc-mods/aether
-    compileOnly fg.deobf("curse.maven:aether-255308:6134920")
+    modCompileOnly "curse.maven:aether-255308:6134920"
 
     // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-    compileOnly fg.deobf("curse.maven:deeperdarker-659011:5906086")
+    modCompileOnly "curse.maven:deeperdarker-659011:5906086"
 
     // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
-    compileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
+    modCompileOnly "curse.maven:farmers-delight-398521:6917255"
 
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
-    compileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497304")
+    modCompileOnly "curse.maven:hybrid-aquatic-834427:6497304"
 
     // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
-    compileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+    modCompileOnly "curse.maven:immersive-engineering-231951:6206989"
 
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
-    compileOnly fg.deobf("curse.maven:selene-499980:6983934")
+    modCompileOnly "curse.maven:selene-499980:6983934"
 
     // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
-    compileOnly fg.deobf("curse.maven:repurposed-structures-368293:6797349")
+    modCompileOnly "curse.maven:repurposed-structures-368293:6797349"
 
     // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
-    compileOnly fg.deobf("curse.maven:sawmill-964817:6948522")
+    modCompileOnly "curse.maven:sawmill-964817:6948522"
 
     // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
-    compileOnly fg.deobf("curse.maven:snow-real-magic-308663:6888541")
+    modCompileOnly "curse.maven:snow-real-magic-308663:6888541"
 
     // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-    compileOnly fg.deobf("curse.maven:supplementaries-412082:6974860")
+    modCompileOnly "curse.maven:supplementaries-412082:6974860"
 
     // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
-    compileOnly fg.deobf("curse.maven:the-bumblezone-forge-362479:6960926")
+    modCompileOnly "curse.maven:the-bumblezone-forge-362479:6960926"
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
-    compileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
+    modCompileOnly "curse.maven:villagersplus-forge-817272:4996995"
 
     // Mantle https://www.curseforge.com/minecraft/mc-mods/mantle
-    compileOnly fg.deobf("curse.maven:mantle-74924:6819217")
-}
-
-tasks.withType(JavaCompile).configureEach {
-    def addedPackageInfos = [] as Set
-
-    def sourceProjects = [
-            project(":api"),
-            project(":common"),
-            project(":common-rei"),
-            project(":common-lootjs")
-    ]
-
-    sourceSets.main.allSource.each { sourceFile ->
-        if (sourceFile.name == 'package-info.java') {
-            def rootDir = sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
-            if (rootDir != null) {
-                def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
-                addedPackageInfos.add(relativePath)
-            }
-        }
-    }
-
-    sourceProjects.each { sourceProject ->
-        source(sourceProject.sourceSets.main.allSource.filter { sourceFile ->
-            if (sourceFile.name == 'package-info.java') {
-                def rootDir = sourceProject.sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
-                if (rootDir != null) {
-                    def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
-
-                    if (addedPackageInfos.contains(relativePath)) {
-                        return false
-                    } else {
-                        addedPackageInfos.add(relativePath)
-                        return true
-                    }
-                }
-            }
-
-            return true
-        })
-    }
-}
-
-tasks.named("sourcesJar", Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    from(project(":api").sourceSets.main.allSource)
-    from(project(":common").sourceSets.main.allSource)
-    from(project(":common-rei").sourceSets.main.allSource)
-    from(project(":common-lootjs").sourceSets.main.allSource)
-}
-
-tasks.named('compileTestJava') {
-    it.enabled = false
-}
-
-tasks.named('test') {
-    it.enabled = false
+    modCompileOnly "curse.maven:mantle-74924:6819217"
 }
 
 processResources {
-    from project(":api").sourceSets.main.resources
     from project(":common").sourceSets.main.resources
     from project(":common-lootjs").sourceSets.main.resources
+
+    inputs.property "version", project.version
+
+    def expandProps = [
+            "version": project.version,
+            "group": project.group, //Else we target the task's group.
+
+            "mod_name": mod_name,
+            "mod_author": mod_author,
+            "mod_id": mod_id,
+            "license": license,
+            "description": project.description,
+
+            "minecraft_version": minecraft_version,
+            "minecraft_version_range": minecraft_version_range,
+
+            "forge_version": forge_version,
+            "forge_loader_version_range": forge_loader_version_range,
+            "forge_version_range": forge_version_range,
+
+            "fabric_version": fabric_version,
+            "fabric_loader_version": fabric_loader_version,
+
+            "emi_version": emi_version,
+            "emi_version_range": emi_version_range,
+            "emi_version_range_fabric": emi_version_range_fabric,
+
+            "jei_version": jei_version,
+            "jei_version_range": jei_version_range,
+            "jei_version_range_fabric": jei_version_range_fabric,
+
+            "rei_version": rei_version,
+            "rei_version_range": rei_version_range,
+            "rei_version_range_fabric": rei_version_range_fabric,
+            "cloth_config_version": cloth_config_version,
+            "architectury_version": architectury_version
+    ]
+
+    filesMatching("META-INF/mods.toml") {expand expandProps}
+    filesMatching("pack.mcmeta") { expand expandProps }
 }
 
-jar.finalizedBy('reobfJar')
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main/generated"
+        }
+    }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}

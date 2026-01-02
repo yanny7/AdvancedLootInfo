@@ -13,6 +13,13 @@ license="${license}"
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/yanny7/advancedlootinfo/issues" #optional
 
+[[mixins]]
+config = "ali.mixins.json"
+[[mixins]]
+config = "ali.lootjs.mixins.json"
+[[mixins]]
+config = "ali.forge.mixins.json"
+
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod

@@ -1,6 +1,6 @@
 accessWidener v2 named
 
-accessible field net/minecraft/world/level/storage/loot/LootTable pools [Lnet/minecraft/world/level/storage/loot/LootPool;
+#accessible field net/minecraft/world/level/storage/loot/LootTable pools [Lnet/minecraft/world/level/storage/loot/LootPool;
 accessible field net/minecraft/world/level/storage/loot/LootTable functions [Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
 accessible field net/minecraft/world/level/storage/loot/LootPool bonusRolls Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/level/storage/loot/LootPool conditions [Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;
@@ -280,6 +280,8 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsT
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems maxUses I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems villagerXp I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems priceMultiplier F
+
+#accessible field net/minecraftforge/common/loot/CanToolPerformAction action Lnet/minecraftforge/common/ToolAction;
 
 #########
 # TESTS #

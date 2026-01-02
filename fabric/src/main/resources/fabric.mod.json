@@ -17,26 +17,26 @@
     "accessWidener": "ali.accesswidener",
     "entrypoints": {
         "main": [
-            "com.yanny.ali.CommonAliMod"
+          "com.yanny.ali.fabric.CommonAliMod"
         ],
         "client": [
-            "com.yanny.ali.ClientAliMod"
+          "com.yanny.ali.fabric.ClientAliMod"
         ],
         "fabric-datagen": [
-            "com.yanny.ali.datagen.DataGeneration"
+            "com.yanny.ali.fabric.datagen.DataGeneration"
         ],
         "ali": [
             "com.yanny.ali.plugin.Plugin",
-            "com.yanny.ali.plugin.lootjs.LootJsPlugin",
-            "com.yanny.ali.plugin.FabricLootJsPlugin",
+            "com.yanny.ali.lootjs.LootJsPlugin",
+            "com.yanny.ali.fabric.plugin.FabricLootJsPlugin",
             "com.yanny.ali.plugin.mods.aether.Plugin",
             "com.yanny.ali.plugin.mods.charm.Plugin",
             "com.yanny.ali.plugin.mods.cultural_delights.Plugin",
             "com.yanny.ali.plugin.mods.deeper_and_darker.Plugin",
-            "com.yanny.ali.plugin.mods.farmers_delight.Plugin",
+            "com.yanny.ali.fabric.plugin.mods.farmers_delight.Plugin",
             "com.yanny.ali.plugin.mods.hybrid_aquatic.Plugin",
             "com.yanny.ali.plugin.mods.moonlight.Plugin",
-            "com.yanny.ali.plugin.mods.porting_lib.loot.Plugin",
+            "com.yanny.ali.fabric.plugin.mods.porting_lib.loot.Plugin",
             "com.yanny.ali.plugin.mods.porting_lib_tools.Plugin",
             "com.yanny.ali.plugin.mods.repurposed_structures.Plugin",
             "com.yanny.ali.plugin.mods.sawmill.Plugin",
@@ -52,7 +52,7 @@
             "com.yanny.ali.compatibility.JeiCompatibility"
         ],
         "rei_client": [
-            "com.yanny.ali.compatibility.ReiCompatibility"
+          "com.yanny.ali.rei.ReiCompatibility"
         ]
     },
     "mixins": [
