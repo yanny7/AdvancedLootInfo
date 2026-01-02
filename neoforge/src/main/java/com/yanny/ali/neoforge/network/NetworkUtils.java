@@ -1,12 +1,9 @@
-package com.yanny.ali.forge.network;
+package com.yanny.ali.neoforge.network;
 
 import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.network.SimpleChannel;
-
-import java.util.function.BiConsumer;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 public class NetworkUtils {
     private static int messageId = 0;
@@ -17,17 +14,17 @@ public class NetworkUtils {
         channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
                 .encoder(LootDataChunkMessage::encode)
                 .decoder(LootDataChunkMessage::new)
-                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+                .consumerNetworkThread(client::onLootInfo)
                 .add();
         channel.messageBuilder(ClearMessage.class, getMessageId())
                 .encoder(ClearMessage::encode)
                 .decoder(ClearMessage::new)
-                .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
+                .consumerNetworkThread(client::onClear)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
                 .encoder(DoneMessage::encode)
                 .decoder(DoneMessage::new)
-                .consumerNetworkThread((BiConsumer<DoneMessage, CustomPayloadEvent.Context>) client::onDone)
+                .consumerNetworkThread(client::onDone)
                 .add();
     }
 

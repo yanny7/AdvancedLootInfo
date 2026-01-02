@@ -1,9 +1,11 @@
-package com.yanny.ali.forge.plugin;
+package com.yanny.ali.neoforge.plugin;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
-import com.yanny.ali.forge.mixin.MixinLootModifier;
+import com.yanny.ali.neoforge.mixin.MixinCanToolPerformAction;
+import com.yanny.ali.neoforge.mixin.MixinLootModifier;
+import com.yanny.ali.neoforge.mixin.MixinLootTableIdCondition;
+import com.yanny.ali.neoforge.mixin.MixinNeoForgeEventHandler;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
@@ -11,39 +13,44 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.*;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.loot.*;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.BiFunction;
 
 @AliEntrypoint
-public class ForgePlugin implements IPlugin {
+public class NeoForgePlugin implements IPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @Override
     public String getModId() {
-        return "forge";
+        return "neoforge";
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerConditionTooltip(CanToolPerformAction.class, ForgePlugin::getCanToolPerformActionTooltip);
-        registry.registerConditionTooltip(LootTableIdCondition.class, ForgePlugin::getLootTableIdTooltip);
+        registry.registerConditionTooltip(CanToolPerformAction.class, NeoForgePlugin::getCanToolPerformActionTooltip);
+        registry.registerConditionTooltip(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdTooltip);
 
-        registry.registerLootModifiers(ForgePlugin::registerLootModifiers);
+        registry.registerLootModifiers(NeoForgePlugin::registerLootModifiers);
     }
 
+    @Unmodifiable
     @NotNull
-    public static ITooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
-        return utils.getValueTooltip(utils, cond.action().name()).build("ali.type.condition.can_tool_perform_action");
+    public static ITooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction condition) {
+        MixinCanToolPerformAction cond = (MixinCanToolPerformAction) condition;
+        return utils.getValueTooltip(utils, cond.getAction().name()).build("ali.type.condition.can_tool_perform_action");
     }
 
+    @Unmodifiable
     @NotNull
-    public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
-        return utils.getValueTooltip(utils, cond.id()).build("ali.type.condition.loot_table_id");
+    public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition condition) {
+        MixinLootTableIdCondition cond = (MixinLootTableIdCondition) condition;
+        return utils.getValueTooltip(utils, cond.getTargetLootTableId()).build("ali.type.condition.loot_table_id");
     }
 
     @NotNull
@@ -60,7 +67,7 @@ public class ForgePlugin implements IPlugin {
             }
         }
 
-        LootModifierManager lootModifierManager = MixinForgeInternalHandler.getLootModifierManager();
+        LootModifierManager lootModifierManager = MixinNeoForgeEventHandler.getLootModifierManager();
 
         for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
             IGlobalLootModifierWrapper wrapper = wrap(globalLootModifier);
@@ -108,7 +115,7 @@ public class ForgePlugin implements IPlugin {
 
             @Override
             public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
-                return ((LootTableIdCondition) condition).id();
+                return ((MixinLootTableIdCondition) condition).getTargetLootTableId();
             }
         };
     }
@@ -118,7 +125,7 @@ public class ForgePlugin implements IPlugin {
         return new IGlobalLootModifierWrapper() {
             @Override
             public ResourceLocation getName() {
-                return ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec());
+                return NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.getKey(modifier.codec());
             }
 
             @Override

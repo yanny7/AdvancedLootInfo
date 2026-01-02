@@ -44,11 +44,11 @@ dependencies {
     common(project(path: ":api", configuration: "namedElements")) { transitive false }
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     common(project(path: ":common-rei", configuration: "namedElements")) { transitive false }
-    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
+//    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":api", configuration: "transformProductionFabric")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
     shadowCommon(project(path: ":common-rei", configuration: "transformProductionFabric")) { transitive false }
-    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionFabric")) { transitive false }
+//    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionFabric")) { transitive false }
     runtimeOnly project(path: ":common", configuration: "namedElements")
 
     // EMI
@@ -115,7 +115,7 @@ dependencies {
 
 processResources {
     from project(":common").sourceSets.main.resources
-    from project(":common-lootjs").sourceSets.main.resources
+//    from project(":common-lootjs").sourceSets.main.resources
 
     inputs.property "version", project.version
 

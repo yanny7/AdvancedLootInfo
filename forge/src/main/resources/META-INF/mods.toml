@@ -15,8 +15,8 @@ issueTrackerURL="https://github.com/yanny7/advancedlootinfo/issues" #optional
 
 [[mixins]]
 config = "ali.mixins.json"
-[[mixins]]
-config = "ali.lootjs.mixins.json"
+#[[mixins]]
+#config = "ali.lootjs.mixins.json"
 [[mixins]]
 config = "ali.forge.mixins.json"
 

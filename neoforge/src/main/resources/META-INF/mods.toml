@@ -15,10 +15,10 @@ authors = "${mod_author}" #optional
 description = '''${description}''' #mandatory (Supports multiline text)
 
 [[mixins]]
-config = "${mod_id}.mixins.json"
+config = "ali.mixins.json"
 
 [[mixins]]
-config = "${mod_id}.neoforge.mixins.json"
+config = "ali.neoforge.mixins.json"
 
 [[dependencies.ali]] #optional
 modId = "neoforge" #mandatory
