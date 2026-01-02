@@ -23,6 +23,9 @@ pluginManagement {
                 includeGroup "lol.bai.explosion"
             }
         }
+        maven {
+            url "https://maven.architectury.dev/"
+        }
     }
 }
 

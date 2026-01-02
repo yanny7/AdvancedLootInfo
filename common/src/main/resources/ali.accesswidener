@@ -155,6 +155,8 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsT
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems villagerXp I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems priceMultiplier F
 
+#accessible field net/minecraftforge/common/loot/CanToolPerformAction action Lnet/minecraftforge/common/ToolAction;
+
 #########
 # TESTS #
 #########
