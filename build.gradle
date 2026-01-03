@@ -24,7 +24,6 @@ subprojects {
     if (platforms.contains(project.name)) {
         processResources {
             from project(":common").sourceSets.main.resources
-            from project(":common-lootjs").sourceSets.main.resources
 
             inputs.property "version", project.version
 
@@ -72,6 +71,7 @@ subprojects {
             main {
                 resources {
                     srcDir "src/main/generated"
+                    exclude ".cache/**"
                 }
             }
         }
