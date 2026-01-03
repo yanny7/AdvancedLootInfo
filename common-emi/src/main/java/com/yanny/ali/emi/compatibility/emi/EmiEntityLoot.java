@@ -1,4 +1,4 @@
-package com.yanny.ali.compatibility.emi;
+package com.yanny.ali.emi.compatibility.emi;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.EntityStorage;

@@ -18,6 +18,7 @@ loom {
         convertAccessWideners = true
 
         mixinConfig "ali.mixins.json"
+//        mixinConfig "ali.emi.mixins.json"
 //        mixinConfig "ali.lootjs.mixins.json"
         mixinConfig "ali.forge.mixins.json"
     }
@@ -47,20 +48,20 @@ dependencies {
 
     common(project(path: ":api", configuration: "namedElements")) { transitive false }
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
+//    common(project(path: ":common-emi", configuration: "namedElements")) { transitive false }
     common(project(path: ":common-rei", configuration: "namedElements")) { transitive false }
 //    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":api", configuration: "transformProductionForge")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
+//    shadowCommon(project(path: ":common-emi", configuration: "transformProductionForge")) { transitive false }
     shadowCommon(project(path: ":common-rei", configuration: "transformProductionForge")) { transitive false }
 //    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionForge")) { transitive false }
     runtimeOnly project(path: ":common", configuration: "namedElements")
 
     // EMI
 //    modCompileOnlyApi "dev.emi:emi-forge:${emi_version}:api"
-//    modCompileOnlyApi "dev.emi:emi-forge:${emi_version}"
-    modRuntimeOnly("dev.emi:emi-forge:${emi_version}") {
-        transitive = false
-    }
+//    modCompileOnly "dev.emi:emi-forge:${emi_version}"
+//    modLocalRuntime "dev.emi:emi-forge:${emi_version}"
 
     // JEI
     modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
@@ -121,6 +122,7 @@ dependencies {
 
 processResources {
     from project(":common").sourceSets.main.resources
+//    from project(":common-emi").sourceSets.main.resources
 //    from project(":common-lootjs").sourceSets.main.resources
 
     inputs.property "version", project.version

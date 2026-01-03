@@ -2,8 +2,7 @@
   "required": true,
   "package": "com.yanny.ali.mixin",
   "mixins": [
-    "MixinBushBlock",
-    "MixinRecipeScreen"
+    "MixinBushBlock"
   ],
   "client": [
   ],

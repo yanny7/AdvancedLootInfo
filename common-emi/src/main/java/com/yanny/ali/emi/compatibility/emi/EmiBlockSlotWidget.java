@@ -1,4 +1,4 @@
-package com.yanny.ali.compatibility.emi;
+package com.yanny.ali.emi.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

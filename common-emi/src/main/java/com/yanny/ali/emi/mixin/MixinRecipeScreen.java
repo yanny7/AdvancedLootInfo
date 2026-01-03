@@ -1,4 +1,4 @@
-package com.yanny.ali.mixin;
+package com.yanny.ali.emi.mixin;
 
 import com.yanny.ali.compatibility.IMouseEvents;
 import dev.emi.emi.api.widget.Widget;

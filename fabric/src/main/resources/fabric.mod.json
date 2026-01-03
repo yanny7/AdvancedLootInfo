@@ -27,8 +27,6 @@
         ],
         "ali": [
             "com.yanny.ali.plugin.Plugin",
-            "com.yanny.ali.lootjs.LootJsPlugin",
-            "com.yanny.ali.fabric.plugin.FabricLootJsPlugin",
             "com.yanny.ali.plugin.mods.aether.Plugin",
             "com.yanny.ali.plugin.mods.charm.Plugin",
             "com.yanny.ali.plugin.mods.cultural_delights.Plugin",
@@ -46,10 +44,10 @@
             "com.yanny.ali.plugin.mods.villagers_plus.Plugin"
         ],
         "emi": [
-            "com.yanny.ali.compatibility.EmiCompatibility"
+            "com.yanny.ali.emi.compatibility.EmiCompatibility"
         ],
         "jei_mod_plugin": [
-            "com.yanny.ali.compatibility.JeiCompatibility"
+            "com.yanny.ali.jei.compatibility.JeiCompatibility"
         ],
         "rei_client": [
           "com.yanny.ali.rei.ReiCompatibility"
@@ -57,6 +55,7 @@
     },
     "mixins": [
         "ali.mixins.json",
+        "ali.emi.mixins.json",
         "ali.fabric.mixins.json"
     ],
     "depends": {

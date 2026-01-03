@@ -1,4 +1,4 @@
-package com.yanny.ali.compatibility.emi;
+package com.yanny.ali.emi.compatibility.emi;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.IDataNode;
@@ -9,7 +9,6 @@ import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 

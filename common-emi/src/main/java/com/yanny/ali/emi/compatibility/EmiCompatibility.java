@@ -1,13 +1,13 @@
-package com.yanny.ali.compatibility;
+package com.yanny.ali.emi.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.compatibility.common.GenericUtils;
-import com.yanny.ali.compatibility.emi.EmiBlockLoot;
-import com.yanny.ali.compatibility.emi.EmiEntityLoot;
-import com.yanny.ali.compatibility.emi.EmiGameplayLoot;
-import com.yanny.ali.compatibility.emi.EmiTradeLoot;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
+import com.yanny.ali.emi.compatibility.emi.EmiBlockLoot;
+import com.yanny.ali.emi.compatibility.emi.EmiEntityLoot;
+import com.yanny.ali.emi.compatibility.emi.EmiGameplayLoot;
+import com.yanny.ali.emi.compatibility.emi.EmiTradeLoot;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.AliCommonRegistry;
 import com.yanny.ali.manager.PluginManager;
