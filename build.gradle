@@ -24,43 +24,48 @@ subprojects {
     if (platforms.contains(project.name)) {
         processResources {
             from project(":common").sourceSets.main.resources
-            from project(":common-lootjs").sourceSets.main.resources
+            from project(":common-emi").sourceSets.main.resources
+//            from project(":common-lootjs").sourceSets.main.resources
 
             inputs.property "version", project.version
 
             def expandProps = [
-                    "version"                   : project.version,
-                    "group"                     : project.group,
+                    "version"                      : project.version,
+                    "group"                        : project.group,
 
-                    "mod_name"                  : mod_name,
-                    "mod_author"                : mod_author,
-                    "mod_id"                    : mod_id,
-                    "license"                   : license,
-                    "description"               : project.description,
+                    "mod_name"                     : mod_name,
+                    "mod_author"                   : mod_author,
+                    "mod_id"                       : mod_id,
+                    "license"                      : license,
+                    "description"                  : project.description,
 
-                    "minecraft_version"         : minecraft_version,
-                    "minecraft_version_range"   : minecraft_version_range,
+                    "minecraft_version"            : minecraft_version,
+                    "minecraft_version_range"      : minecraft_version_range,
 
-                    "forge_version"             : forge_version,
-                    "forge_loader_version_range": forge_loader_version_range,
-                    "forge_version_range"       : forge_version_range,
+                    "forge_version"                : forge_version,
+                    "forge_loader_version_range"   : forge_loader_version_range,
+                    "forge_version_range"          : forge_version_range,
 
-                    "fabric_version"            : fabric_version,
-                    "fabric_loader_version"     : fabric_loader_version,
+                    "neoforge_version"             : neoforge_version,
+                    "neoforge_loader_version_range": neoforge_loader_version_range,
+                    "neoforge_version_range"       : neoforge_version_range,
 
-                    "emi_version"               : emi_version,
-                    "emi_version_range"         : emi_version_range,
-                    "emi_version_range_fabric"  : emi_version_range_fabric,
+                    "fabric_version"               : fabric_version,
+                    "fabric_loader_version"        : fabric_loader_version,
 
-                    "jei_version"               : jei_version,
-                    "jei_version_range"         : jei_version_range,
-                    "jei_version_range_fabric"  : jei_version_range_fabric,
+                    "emi_version"                  : emi_version,
+                    "emi_version_range"            : emi_version_range,
+                    "emi_version_range_fabric"     : emi_version_range_fabric,
 
-                    "rei_version"               : rei_version,
-                    "rei_version_range"         : rei_version_range,
-                    "rei_version_range_fabric"  : rei_version_range_fabric,
-                    "cloth_config_version"      : cloth_config_version,
-                    "architectury_version"      : architectury_version
+                    "jei_version"                  : jei_version,
+                    "jei_version_range"            : jei_version_range,
+                    "jei_version_range_fabric"     : jei_version_range_fabric,
+
+                    "rei_version"                  : rei_version,
+                    "rei_version_range"            : rei_version_range,
+                    "rei_version_range_fabric"     : rei_version_range_fabric,
+                    "cloth_config_version"         : cloth_config_version,
+                    "architectury_version"         : architectury_version
             ]
 
             filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
@@ -91,6 +96,10 @@ allprojects {
     group = group
 
     repositories {
+        maven {
+            name = 'NeoForge'
+            url = 'https://maven.neoforged.net/releases/'
+        }
         maven { // EMI
             name = "EMI"
             url = "https://maven.terraformersmc.com/"

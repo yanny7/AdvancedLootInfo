@@ -1,6 +1,6 @@
 package com.yanny.ali.emi.mixin;
 
-import com.yanny.ali.compatibility.IMouseEvents;
+import com.yanny.ali.emi.compatibility.IMouseEvents;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.screen.RecipeScreen;
 import dev.emi.emi.screen.WidgetGroup;

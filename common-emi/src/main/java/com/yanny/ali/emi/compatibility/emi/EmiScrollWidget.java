@@ -3,7 +3,7 @@ package com.yanny.ali.emi.compatibility.emi;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.compatibility.IMouseEvents;
+import com.yanny.ali.emi.compatibility.IMouseEvents;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
