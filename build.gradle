@@ -18,6 +18,64 @@ subprojects {
         minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings loom.officialMojangMappings()
     }
+
+    def platforms = enabled_platforms.split(",")
+
+    if (platforms.contains(project.name)) {
+        processResources {
+            from project(":common").sourceSets.main.resources
+            from project(":common-lootjs").sourceSets.main.resources
+
+            inputs.property "version", project.version
+
+            def expandProps = [
+                    "version"                   : project.version,
+                    "group"                     : project.group,
+
+                    "mod_name"                  : mod_name,
+                    "mod_author"                : mod_author,
+                    "mod_id"                    : mod_id,
+                    "license"                   : license,
+                    "description"               : project.description,
+
+                    "minecraft_version"         : minecraft_version,
+                    "minecraft_version_range"   : minecraft_version_range,
+
+                    "forge_version"             : forge_version,
+                    "forge_loader_version_range": forge_loader_version_range,
+                    "forge_version_range"       : forge_version_range,
+
+                    "fabric_version"            : fabric_version,
+                    "fabric_loader_version"     : fabric_loader_version,
+
+                    "emi_version"               : emi_version,
+                    "emi_version_range"         : emi_version_range,
+                    "emi_version_range_fabric"  : emi_version_range_fabric,
+
+                    "jei_version"               : jei_version,
+                    "jei_version_range"         : jei_version_range,
+                    "jei_version_range_fabric"  : jei_version_range_fabric,
+
+                    "rei_version"               : rei_version,
+                    "rei_version_range"         : rei_version_range,
+                    "rei_version_range_fabric"  : rei_version_range_fabric,
+                    "cloth_config_version"      : cloth_config_version,
+                    "architectury_version"      : architectury_version
+            ]
+
+            filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
+                expand expandProps
+            }
+        }
+
+        sourceSets {
+            main {
+                resources {
+                    srcDir "src/main/generated"
+                }
+            }
+        }
+    }
 }
 
 allprojects {
@@ -33,11 +91,6 @@ allprojects {
     group = group
 
     repositories {
-        mavenCentral()
-        maven {
-            name = 'Sponge / Mixin'
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-        }
         maven { // EMI
             name = "EMI"
             url = "https://maven.terraformersmc.com/"

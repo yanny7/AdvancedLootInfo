@@ -46,10 +46,10 @@
             "com.yanny.ali.plugin.mods.villagers_plus.Plugin"
         ],
         "emi": [
-            "com.yanny.ali.compatibility.EmiCompatibility"
+            "com.yanny.ali.emi.compatibility.EmiCompatibility"
         ],
         "jei_mod_plugin": [
-            "com.yanny.ali.compatibility.JeiCompatibility"
+          "com.yanny.ali.jei.compatibility.JeiCompatibility"
         ],
         "rei_client": [
           "com.yanny.ali.rei.ReiCompatibility"
@@ -57,6 +57,7 @@
     },
     "mixins": [
         "ali.mixins.json",
+        "ali.emi.mixins.json",
         "ali.lootjs.mixins.json",
         "ali.fabric.mixins.json"
     ],
