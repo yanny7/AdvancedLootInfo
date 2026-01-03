@@ -46,23 +46,21 @@ dependencies {
 
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    common(project(path: ":api", configuration: "namedElements")) { transitive false }
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-//    common(project(path: ":common-emi", configuration: "namedElements")) { transitive false }
-    common(project(path: ":common-jei", configuration: "namedElements")) { transitive false }
-    common(project(path: ":common-rei", configuration: "namedElements")) { transitive false }
-//    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":api", configuration: "transformProductionForge")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
-//    shadowCommon(project(path: ":common-emi", configuration: "transformProductionForge")) { transitive false }
-    shadowCommon(project(path: ":common-jei", configuration: "transformProductionForge")) { transitive false }
-    shadowCommon(project(path: ":common-rei", configuration: "transformProductionForge")) { transitive false }
-//    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionForge")) { transitive false }
-    runtimeOnly project(path: ":common", configuration: "namedElements")
+    def commonProjects = [
+            ":api",
+            ":common",
+//            ":common-emi",
+            ":common-jei",
+            ":common-rei",
+//            ":common-lootjs"
+    ]
+
+    commonProjects.each { p ->
+        common(project(path: p, configuration: "namedElements")) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
+    }
 
     // EMI
-//    modCompileOnlyApi "dev.emi:emi-forge:${emi_version}:api"
-//    modCompileOnly "dev.emi:emi-forge:${emi_version}"
 //    modLocalRuntime "dev.emi:emi-forge:${emi_version}"
 
     // JEI
@@ -70,10 +68,9 @@ dependencies {
 
     // REI
     modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-default-plugin-forge:${rei_version}"
 //    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-//    modImplementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-//    modImplementation "dev.architectury:architectury-forge:${architectury_version}"
+//    modLocalRuntime "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+//    modLocalRuntime "dev.architectury:architectury-forge:${architectury_version}"
 
     // LootJS
 //    modCompileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
@@ -120,52 +117,6 @@ dependencies {
 //    modCompileOnly "curse.maven:mantle-74924:6819217"
 }
 
-processResources {
-    from project(":common").sourceSets.main.resources
-//    from project(":common-emi").sourceSets.main.resources
-//    from project(":common-lootjs").sourceSets.main.resources
-
-    inputs.property "version", project.version
-
-    def expandProps = [
-            "version": project.version,
-            "group": project.group, //Else we target the task's group.
-
-            "mod_name": mod_name,
-            "mod_author": mod_author,
-            "mod_id": mod_id,
-            "license": license,
-            "description": project.description,
-
-            "minecraft_version": minecraft_version,
-            "minecraft_version_range": minecraft_version_range,
-
-            "forge_version": forge_version,
-            "forge_loader_version_range": forge_loader_version_range,
-            "forge_version_range": forge_version_range,
-
-            "fabric_version": fabric_version,
-            "fabric_loader_version": fabric_loader_version,
-
-            "emi_version": emi_version,
-            "emi_version_range": emi_version_range,
-            "emi_version_range_fabric": emi_version_range_fabric,
-
-            "jei_version": jei_version,
-            "jei_version_range": jei_version_range,
-            "jei_version_range_fabric": jei_version_range_fabric,
-
-            "rei_version": rei_version,
-            "rei_version_range": rei_version_range,
-            "rei_version_range_fabric": rei_version_range_fabric,
-            "cloth_config_version": cloth_config_version,
-            "architectury_version": architectury_version
-    ]
-
-    filesMatching("META-INF/mods.toml") {expand expandProps}
-    filesMatching("pack.mcmeta") { expand expandProps }
-}
-
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
@@ -183,14 +134,6 @@ sourcesJar {
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDir "src/main/generated"
-        }
-    }
 }
 
 components.java {

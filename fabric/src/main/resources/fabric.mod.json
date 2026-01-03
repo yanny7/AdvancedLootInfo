@@ -47,7 +47,7 @@
             "com.yanny.ali.emi.compatibility.EmiCompatibility"
         ],
         "jei_mod_plugin": [
-            "com.yanny.ali.jei.compatibility.JeiCompatibility"
+          "com.yanny.ali.jei.compatibility.JeiCompatibility"
         ],
         "rei_client": [
           "com.yanny.ali.rei.ReiCompatibility"

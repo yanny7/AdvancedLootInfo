@@ -13,8 +13,6 @@ dependencies {
     implementation project(path: ":api", configuration: "namedElements")
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-
     testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
