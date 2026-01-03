@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@SuppressWarnings("UnusedMixin") // Not needed in common
 @Mixin(RecipeScreen.class)
 public class MixinRecipeScreen {
     @Shadow
