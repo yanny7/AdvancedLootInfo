@@ -1,11 +1,11 @@
-package com.yanny.ali.compatibility;
+package com.yanny.ali.jei.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.*;
-import com.yanny.ali.compatibility.jei.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
+import com.yanny.ali.jei.compatibility.jei.*;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import mezz.jei.api.IModPlugin;

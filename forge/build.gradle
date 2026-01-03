@@ -49,11 +49,13 @@ dependencies {
     common(project(path: ":api", configuration: "namedElements")) { transitive false }
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
 //    common(project(path: ":common-emi", configuration: "namedElements")) { transitive false }
+    common(project(path: ":common-jei", configuration: "namedElements")) { transitive false }
     common(project(path: ":common-rei", configuration: "namedElements")) { transitive false }
 //    common(project(path: ":common-lootjs", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":api", configuration: "transformProductionForge")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
 //    shadowCommon(project(path: ":common-emi", configuration: "transformProductionForge")) { transitive false }
+    shadowCommon(project(path: ":common-jei", configuration: "transformProductionForge")) { transitive false }
     shadowCommon(project(path: ":common-rei", configuration: "transformProductionForge")) { transitive false }
 //    shadowCommon(project(path: ":common-lootjs", configuration: "transformProductionForge")) { transitive false }
     runtimeOnly project(path: ":common", configuration: "namedElements")
@@ -64,9 +66,7 @@ dependencies {
 //    modLocalRuntime "dev.emi:emi-forge:${emi_version}"
 
     // JEI
-    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-    modCompileOnlyApi "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
-//    modLocalRuntime "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+    modLocalRuntime "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
 
     // REI
     modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"

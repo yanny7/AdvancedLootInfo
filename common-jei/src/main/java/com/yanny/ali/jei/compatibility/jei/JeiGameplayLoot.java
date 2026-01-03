@@ -1,4 +1,4 @@
-package com.yanny.ali.compatibility.jei;
+package com.yanny.ali.jei.compatibility.jei;
 
 import com.yanny.ali.api.*;
 import com.yanny.ali.compatibility.common.GameplayLootType;
