@@ -42,35 +42,12 @@ configurations {
 }
 
 dependencies {
-    modImplementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    def commonProjects = [
-            ":api",
-            ":common",
-            ":common-emi",
-            ":common-jei",
-            ":common-rei",
-            ":common-lootjs"
-    ]
-
-    commonProjects.each { p ->
+    project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
     }
-
-    // EMI
-//    modLocalRuntime "dev.emi:emi-forge:${emi_version}"
-
-    // JEI
-    modLocalRuntime "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
-
-    // REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
-//    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-//    modLocalRuntime "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-//    modLocalRuntime "dev.architectury:architectury-forge:${architectury_version}"
 
     // LootJS
     modCompileOnly "curse.maven:kubejs-238086:5853326"
@@ -115,11 +92,6 @@ dependencies {
 
     // Mantle https://www.curseforge.com/minecraft/mc-mods/mantle
     modCompileOnly "curse.maven:mantle-74924:6819217"
-}
-
-processResources {
-    from project(":common-emi").sourceSets.main.resources
-    from project(":common-lootjs").sourceSets.main.resources
 }
 
 shadowJar {

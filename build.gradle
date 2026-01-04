@@ -15,6 +15,7 @@ subprojects {
     }
 
     dependencies {
+        implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
         minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings loom.officialMojangMappings()
     }
@@ -22,8 +23,47 @@ subprojects {
     def platforms = enabled_platforms.split(",")
 
     if (platforms.contains(project.name)) {
+        def emi_available = emi_enabled == "true" && project.findProperty("${project.name}_emi_enabled") == "true"
+        def jei_available = jei_enabled == "true" && project.findProperty("${project.name}_jei_enabled") == "true"
+        def rei_available = rei_enabled == "true" && project.findProperty("${project.name}_rei_enabled") == "true"
+        def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
+
+        project.ext.emi_available = emi_available
+        project.ext.commonProjects = [":api", ":common"]
+
+        if (emi_available) project.ext.commonProjects << ":common-emi"
+        if (jei_available) project.ext.commonProjects << ":common-jei"
+        if (rei_available) project.ext.commonProjects << ":common-rei"
+        if (lootjs_available) project.ext.commonProjects << ":common-lootjs"
+
+        dependencies {
+            if (emi_available) {
+                modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+            }
+            if (jei_available) {
+                modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+            }
+            if (rei_available) {
+                modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
+                modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+
+                if (project.name == "forge") {
+                    modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+                    modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                }
+            }
+        }
+
         processResources {
             from project(":common").sourceSets.main.resources
+
+            if (emi_available) {
+                from project(":common-emi").sourceSets.main.resources
+            }
+
+            if (lootjs_available) {
+                from project(":common-lootjs").sourceSets.main.resources
+            }
 
             inputs.property "version", project.version
 
@@ -81,7 +121,6 @@ subprojects {
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
 
     base {
         archivesName = mod_name

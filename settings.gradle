@@ -31,11 +31,28 @@ plugins {
 
 // This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)
 rootProject.name = 'MultiLoader-AdvancedLootInfo'
+
 include("api")
 include("common")
-include("common-emi")
-include("common-jei")
-include("common-rei")
+
+if (settings.emi_enabled == "true") {
+    include("common-emi")
+}
+
+if (settings.jei_enabled == "true") {
+    include("common-jei")
+}
+
+if (settings.rei_enabled == "true") {
+    include("common-rei")
+}
+
 include("common-lootjs")
-include("fabric")
-include("forge")
+
+if (settings.fabric_enabled == "true") {
+    include("fabric")
+}
+
+if (settings.forge_enabled == "true") {
+    include("forge")
+}

@@ -17,7 +17,7 @@ loom {
     runs {
         datagen {
             inherit client
-            name "Fabric Data Generation"
+            name "Minecraft Data"
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.output-dir=${project(":fabric").file("src/main/generated")}"
             vmArg "-Dfabric-api.datagen.modid=${mod_id}"
@@ -36,34 +36,13 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    def commonProjects = [
-            ":api",
-            ":common",
-            ":common-emi",
-            ":common-jei",
-            ":common-rei",
-            ":common-lootjs"
-    ]
-
-    commonProjects.each { p ->
+    project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
     }
-
-    // EMI
-    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
-
-    // JEI
-//    modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
-
-    // REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
-//    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
 
     // LootJS
     modCompileOnly "curse.maven:kubejs-238086:5853321"
@@ -109,11 +88,6 @@ dependencies {
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-fabric
     modCompileOnly "curse.maven:villagersplus-fabric-809542:4996993"
-}
-
-processResources {
-    from project(":common-emi").sourceSets.main.resources
-    from project(":common-lootjs").sourceSets.main.resources
 }
 
 shadowJar {
