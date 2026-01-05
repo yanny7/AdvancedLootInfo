@@ -7,6 +7,9 @@ architectury {
     minecraft = minecraft_version
 }
 
+def platforms = enabled_platforms.split(",")
+def viewers = ["emi", "jei", "rei"]
+
 subprojects {
     apply plugin: "dev.architectury.loom"
 
@@ -19,8 +22,6 @@ subprojects {
         minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings loom.officialMojangMappings()
     }
-
-    def platforms = enabled_platforms.split(",")
 
     if (platforms.contains(project.name)) {
         def emi_available = emi_enabled == "true" && project.findProperty("${project.name}_emi_enabled") == "true"
@@ -36,20 +37,45 @@ subprojects {
         if (rei_available) project.ext.commonProjects << ":common-rei"
         if (lootjs_available) project.ext.commonProjects << ":common-lootjs"
 
-        dependencies {
-            if (emi_available) {
-                modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+        // register tasks that allow running specific combination of recipe viewer and launcher
+        viewers.each { viewer ->
+            if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
+                tasks.register("run${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
+                    group = "launchers"
+                    description = "Launch ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
+                    setTasks([":${project.name}:runClient".toString()])
+                    startParameter.projectProperties = ["recipe_viewer": viewer]
+                }
             }
-            if (jei_available) {
+        }
+
+        dependencies {
+            def recipe_viewer = project.findProperty("recipe_viewer")
+            if (!recipe_viewer) {
+                if (emi_available) recipe_viewer = "emi"
+                else if (jei_available) recipe_viewer = "jei"
+                else if (rei_available) recipe_viewer = "rei"
+            }
+
+            if (emi_available && recipe_viewer == "emi") {
+                modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+                println("Set to EMI")
+            }
+            if (jei_available && recipe_viewer == "jei") {
                 modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+                println("Set to JEI")
             }
             if (rei_available) {
                 modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
-                modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
 
-                if (project.name == "forge") {
-                    modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-                    modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                if (recipe_viewer == "rei") {
+                    println("Set to REI")
+                    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+
+                    if (project.name == "forge") {
+                        modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+                        modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                    }
                 }
             }
         }
@@ -60,7 +86,6 @@ subprojects {
             if (emi_available) {
                 from project(":common-emi").sourceSets.main.resources
             }
-
             if (lootjs_available) {
                 from project(":common-lootjs").sourceSets.main.resources
             }
