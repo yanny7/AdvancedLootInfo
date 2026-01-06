@@ -19,9 +19,15 @@ loom {
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfig "ali.mixins.json"
-//        mixinConfig "ali.emi.mixins.json"
-//        mixinConfig "ali.lootjs.mixins.json"
         mixinConfig "ali.forge.mixins.json"
+
+        if (emi_enabled == "true" && forge_emi_enabled == "true") {
+            mixinConfig "ali.emi.mixins.json"
+        }
+
+        if (lootjs_enabled == "true" && forge_lootjs_enabled == "true") {
+            mixinConfig "ali.lootjs.mixins.json"
+        }
     }
 
     mixin {
