@@ -123,6 +123,7 @@ subprojects {
         processResources {
             from(project(":common").sourceSets.main.resources.srcDirs) {
                 include "pack.mcmeta"
+                include "ali.accesswidener"
             }
 
             inputs.property "version", project.version
