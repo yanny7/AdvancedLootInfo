@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'com.gradleup.shadow'
 }
 
 base {
@@ -16,11 +16,16 @@ loom {
 
     forge {
         convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfig "ali.mixins.json"
         mixinConfig "ali.emi.mixins.json"
         mixinConfig "ali.lootjs.mixins.json"
         mixinConfig "ali.forge.mixins.json"
+    }
+
+    mixin {
+        defaultRefmapName = "ali.forge.refmap.json"
     }
 
     runs {
@@ -46,7 +51,7 @@ dependencies {
 
     project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
-        shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionForge")) { transitive false }
     }
 
     // LootJS
@@ -105,6 +110,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = null
 }
 
 sourcesJar {

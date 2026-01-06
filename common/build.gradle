@@ -4,6 +4,10 @@ architectury {
 
 loom {
     accessWidenerPath = file("src/main/resources/ali.accesswidener")
+
+    mixin {
+        defaultRefmapName = "ali.refmap.json"
+    }
 }
 
 dependencies {

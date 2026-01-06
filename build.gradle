@@ -1,6 +1,7 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.13-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.10-SNAPSHOT" apply false
+    id "com.gradleup.shadow" version "8.3.6" apply false
 }
 
 architectury {
@@ -59,17 +60,14 @@ subprojects {
 
             if (emi_available && recipe_viewer == "emi") {
                 modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
-                println("Set to EMI")
             }
             if (jei_available && recipe_viewer == "jei") {
                 modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
-                println("Set to JEI")
             }
             if (rei_available) {
                 modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
 
                 if (recipe_viewer == "rei") {
-                    println("Set to REI")
                     modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
 
                     if (project.name == "forge") {
@@ -205,4 +203,3 @@ allprojects {
         withSourcesJar()
     }
 }
-

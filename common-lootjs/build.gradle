@@ -4,6 +4,10 @@ architectury {
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    mixin {
+        defaultRefmapName = "ali.lootjs.refmap.json"
+    }
 }
 
 dependencies {
