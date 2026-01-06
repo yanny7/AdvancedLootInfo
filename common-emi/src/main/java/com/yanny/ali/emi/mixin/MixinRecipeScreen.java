@@ -35,7 +35,7 @@ public class MixinRecipeScreen {
     }
 
     @Inject(at = @At("HEAD"), method = "mouseDragged(DDIDD)Z", cancellable = true)
-    private void ali_onMouseScrolled(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> info) {
+    private void ali_onMouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> info) {
         for (WidgetGroup widgetGroup : currentPage) {
             double mx = mouseX - widgetGroup.x();
             double my = mouseY - widgetGroup.y();

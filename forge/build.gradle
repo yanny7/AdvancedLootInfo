@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'com.gradleup.shadow'
 }
 
 base {
@@ -16,11 +16,16 @@ loom {
 
     forge {
         convertAccessWideners = true
+        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
         mixinConfig "ali.mixins.json"
 //        mixinConfig "ali.emi.mixins.json"
 //        mixinConfig "ali.lootjs.mixins.json"
         mixinConfig "ali.forge.mixins.json"
+    }
+
+    mixin {
+        defaultRefmapName = "ali.forge.refmap.json"
     }
 
     runs {
@@ -42,35 +47,12 @@ configurations {
 }
 
 dependencies {
-    modImplementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-
     forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    def commonProjects = [
-            ":api",
-            ":common",
-//            ":common-emi",
-            ":common-jei",
-            ":common-rei",
-//            ":common-lootjs"
-    ]
-
-    commonProjects.each { p ->
+    project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
-        shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionForge")) { transitive false }
     }
-
-    // EMI
-//    modLocalRuntime "dev.emi:emi-forge:${emi_version}"
-
-    // JEI
-    modLocalRuntime "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
-
-    // REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-forge:${rei_version}"
-//    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-forge:${rei_version}"
-//    modLocalRuntime "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-//    modLocalRuntime "dev.architectury:architectury-forge:${architectury_version}"
 
     // LootJS
 //    modCompileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
@@ -128,6 +110,7 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = null
 }
 
 sourcesJar {

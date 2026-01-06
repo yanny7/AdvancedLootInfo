@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id 'com.gradleup.shadow'
 }
 
 base {
@@ -14,10 +14,14 @@ architectury {
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
+    mixin {
+        defaultRefmapName = "ali.fabric.refmap.json"
+    }
+
     runs {
         datagen {
             inherit client
-            name "Fabric Data Generation"
+            name "Minecraft Data"
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.output-dir=${project(":fabric").file("src/main/generated")}"
             vmArg "-Dfabric-api.datagen.modid=${mod_id}"
@@ -36,37 +40,13 @@ configurations {
 }
 
 dependencies {
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
-    def commonProjects = [
-            ":api",
-            ":common",
-            ":common-emi",
-            ":common-jei",
-            ":common-rei",
-//            ":common-lootjs"
-    ]
-
-    commonProjects.each { p ->
+    project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
     }
-
-    // EMI
-//    modLocalRuntime "dev.emi:emi-fabric:${emi_version}"
-
-    // JEI
-    modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
-//    modLocalRuntime("mezz.jei:jei-${minecraft_version}-fabric:${jei_version}")
-
-    // REI
-    modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
-//    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}"
-//    modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
-//    modRuntimeOnly "dev.architectury:architectury-fabric:${architectury_version}"
 
     // LootJS
 //    modCompileOnly "curse.maven:kubejs-238086:5853321"

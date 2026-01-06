@@ -1,11 +1,15 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.13-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.11-SNAPSHOT" apply false
+    id "com.gradleup.shadow" version "8.3.6" apply false
 }
 
 architectury {
     minecraft = minecraft_version
 }
+
+def platforms = enabled_platforms.split(",")
+def viewers = ["emi", "jei", "rei"]
 
 subprojects {
     apply plugin: "dev.architectury.loom"
@@ -15,61 +19,116 @@ subprojects {
     }
 
     dependencies {
+        implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
         minecraft "com.mojang:minecraft:${minecraft_version}"
         mappings loom.officialMojangMappings()
     }
 
-    def platforms = enabled_platforms.split(",")
+    ext {
+        expandProps = [
+                "version"                   : project.version,
+                "group"                     : project.group,
+
+                "mod_name"                  : mod_name,
+                "mod_author"                : mod_author,
+                "mod_id"                    : mod_id,
+                "license"                   : license,
+                "description"               : project.description,
+
+                "minecraft_version"         : minecraft_version,
+                "minecraft_version_range"   : minecraft_version_range,
+
+                "forge_version"             : forge_version,
+                "forge_loader_version_range": forge_loader_version_range,
+                "forge_version_range"       : forge_version_range,
+
+                "fabric_version"            : fabric_version,
+                "fabric_loader_version"     : fabric_loader_version,
+
+                "emi_version"               : emi_version,
+                "emi_version_range"         : emi_version_range,
+                "emi_version_range_fabric"  : emi_version_range_fabric,
+
+                "jei_version"               : jei_version,
+                "jei_version_range"         : jei_version_range,
+                "jei_version_range_fabric"  : jei_version_range_fabric,
+
+                "rei_version"               : rei_version,
+                "rei_version_range"         : rei_version_range,
+                "rei_version_range_fabric"  : rei_version_range_fabric,
+                "cloth_config_version"      : cloth_config_version,
+                "architectury_version"      : architectury_version
+        ]
+    }
 
     if (platforms.contains(project.name)) {
+        def emi_available = emi_enabled == "true" && project.findProperty("${project.name}_emi_enabled") == "true"
+        def jei_available = jei_enabled == "true" && project.findProperty("${project.name}_jei_enabled") == "true"
+        def rei_available = rei_enabled == "true" && project.findProperty("${project.name}_rei_enabled") == "true"
+        def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
+
+        ext {
+            commonProjects = [":api", ":common"]
+        }
+
+        if (emi_available) project.ext.commonProjects << ":common-emi"
+        if (jei_available) project.ext.commonProjects << ":common-jei"
+        if (rei_available) project.ext.commonProjects << ":common-rei"
+        if (lootjs_available) project.ext.commonProjects << ":common-lootjs"
+
+        // register tasks that allow running specific combination of recipe viewer and launcher
+        viewers.each { viewer ->
+            if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
+                tasks.register("run${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
+                    group = "launchers"
+                    description = "Launch ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
+                    setTasks([":${project.name}:runClient".toString()])
+                    startParameter.projectProperties = ["recipe_viewer": viewer]
+                }
+            }
+        }
+
+        dependencies {
+            def recipe_viewer = project.findProperty("recipe_viewer")
+            if (!recipe_viewer) {
+                if (emi_available) recipe_viewer = "emi"
+                else if (jei_available) recipe_viewer = "jei"
+                else if (rei_available) recipe_viewer = "rei"
+            }
+
+            if (emi_available) {
+                modCompileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
+
+                if (recipe_viewer == "emi") {
+                    modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+                }
+            }
+            if (jei_available && recipe_viewer == "jei") {
+                modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+            }
+            if (rei_available) {
+                modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
+
+                if (recipe_viewer == "rei") {
+                    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+
+                    if (project.name == "forge") {
+                        modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+                        modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                    }
+                }
+            }
+        }
+
         processResources {
-            from project(":common").sourceSets.main.resources
-            from project(":common-emi").sourceSets.main.resources
-//            from project(":common-lootjs").sourceSets.main.resources
+            from(project(":common").sourceSets.main.resources.srcDirs) {
+                include "pack.mcmeta"
+            }
 
             inputs.property "version", project.version
 
-            def expandProps = [
-                    "version"                      : project.version,
-                    "group"                        : project.group,
-
-                    "mod_name"                     : mod_name,
-                    "mod_author"                   : mod_author,
-                    "mod_id"                       : mod_id,
-                    "license"                      : license,
-                    "description"                  : project.description,
-
-                    "minecraft_version"            : minecraft_version,
-                    "minecraft_version_range"      : minecraft_version_range,
-
-                    "forge_version"                : forge_version,
-                    "forge_loader_version_range"   : forge_loader_version_range,
-                    "forge_version_range"          : forge_version_range,
-
-                    "neoforge_version"             : neoforge_version,
-                    "neoforge_loader_version_range": neoforge_loader_version_range,
-                    "neoforge_version_range"       : neoforge_version_range,
-
-                    "fabric_version"               : fabric_version,
-                    "fabric_loader_version"        : fabric_loader_version,
-
-                    "emi_version"                  : emi_version,
-                    "emi_version_range"            : emi_version_range,
-                    "emi_version_range_fabric"     : emi_version_range_fabric,
-
-                    "jei_version"                  : jei_version,
-                    "jei_version_range"            : jei_version_range,
-                    "jei_version_range_fabric"     : jei_version_range_fabric,
-
-                    "rei_version"                  : rei_version,
-                    "rei_version_range"            : rei_version_range,
-                    "rei_version_range_fabric"     : rei_version_range_fabric,
-                    "cloth_config_version"         : cloth_config_version,
-                    "architectury_version"         : architectury_version
-            ]
-
             filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
-                expand expandProps
+                expand project.ext.expandProps
             }
         }
 
@@ -77,6 +136,7 @@ subprojects {
             main {
                 resources {
                     srcDir "src/main/generated"
+                    exclude ".cache/**"
                 }
             }
         }
@@ -86,7 +146,6 @@ subprojects {
 allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
 
     base {
         archivesName = mod_name
@@ -157,4 +216,3 @@ allprojects {
         enabled = false
     }
 }
-
