@@ -17,6 +17,8 @@ description = '''${description}''' #mandatory (Supports multiline text)
 [[mixins]]
 config = "ali.mixins.json"
 [[mixins]]
+config = "ali.emi.mixins.json"
+[[mixins]]
 config = "ali.neoforge.mixins.json"
 
 [[dependencies.ali]] #optional
