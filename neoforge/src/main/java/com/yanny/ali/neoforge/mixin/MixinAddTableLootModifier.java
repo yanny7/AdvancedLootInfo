@@ -1,4 +1,4 @@
-package com.yanny.ali.mixin;
+package com.yanny.ali.neoforge.mixin;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.loot.AddTableLootModifier;
