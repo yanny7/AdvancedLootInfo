@@ -78,7 +78,7 @@ dependencies {
     modCompileOnly "curse.maven:snow-real-magic-308663:6783557"
 
     // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-    modCompileOnly "curse.maven:supplementaries-412082:7008519"
+//    modCompileOnly "curse.maven:supplementaries-412082:7008519"
 
     // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
     modCompileOnly "curse.maven:the-bumblezone-forge-362479:6960939"

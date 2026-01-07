@@ -10,20 +10,16 @@ loom {
     }
 }
 
-if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-    minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.neoforged:neoforge:${neoforge_version}"
 
     compileOnly project(path: ":common", configuration: "namedElements")
 
-    compileOnly "curse.maven:kubejs-238086:5810100"
-    compileOnly "curse.maven:rhino-416294:6184623"
-    compileOnly "curse.maven:lootjs-570630:6792267"
+    modCompileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
+
+    modCompileOnly "curse.maven:kubejs-238086:5810100"
+    modCompileOnly "curse.maven:rhino-416294:6184623"
+    modCompileOnly "curse.maven:lootjs-570630:6792267"
 }

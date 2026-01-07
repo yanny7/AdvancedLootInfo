@@ -1,4 +1,4 @@
-package com.yanny.ali.compatibility.jei;
+package com.yanny.ali.jei.compatibility.jei;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;

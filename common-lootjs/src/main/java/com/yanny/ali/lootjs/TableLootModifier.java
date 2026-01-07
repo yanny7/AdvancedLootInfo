@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.lootjs;
+package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootType;
 import com.almostreliable.lootjs.core.filters.IdFilter;

@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.mods.farmers_delight;
+package com.yanny.ali.fabric.plugin.mods.farmers_delight;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;

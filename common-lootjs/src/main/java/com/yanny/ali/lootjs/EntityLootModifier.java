@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.lootjs;
+package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.yanny.ali.api.IServerUtils;

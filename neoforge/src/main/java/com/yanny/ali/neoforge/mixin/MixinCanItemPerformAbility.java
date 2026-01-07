@@ -1,4 +1,4 @@
-package com.yanny.ali.mixin;
+package com.yanny.ali.neoforge.mixin;
 
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.loot.CanItemPerformAbility;

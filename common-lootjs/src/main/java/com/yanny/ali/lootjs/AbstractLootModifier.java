@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.lootjs;
+package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.entry.ItemLootEntry;
 import com.almostreliable.lootjs.loot.modifier.LootAction;
@@ -10,11 +10,11 @@ import com.almostreliable.lootjs.loot.modifier.handler.ReplaceLootAction;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
+import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
+import com.yanny.ali.lootjs.node.ItemStackNode;
+import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
-import com.yanny.ali.plugin.lootjs.modifier.ModifiedItemFunction;
-import com.yanny.ali.plugin.lootjs.node.ItemStackNode;
-import com.yanny.ali.plugin.lootjs.node.ItemTagNode;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
