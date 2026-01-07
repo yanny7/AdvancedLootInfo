@@ -1,63 +1,36 @@
-plugins {
-    id 'idea'
-    id 'java'
-    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
+architectury {
+    common(enabled_platforms.split(","))
 }
 
-base {
-    archivesName = "${mod_name}-common-${minecraft_version}"
-}
+loom {
+    accessWidenerPath = file("src/main/resources/ali.accesswidener")
 
-minecraft {
-    version(minecraft_version)
-
-    if(file("src/main/resources/${mod_id}.accesswidener").exists()){
-        accessWideners(file("src/main/resources/${mod_id}.accesswidener"))
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java']
-        }
-        resources {
-            srcDirs = ['src/main/resources']
-        }
-    }
-    test {
-        java {
-            srcDirs = ['src/test/java']
-        }
-        resources {
-            srcDirs = ['src/test/resources']
-        }
-    }
-}
-
-test {
-    useJUnitPlatform() // Enable JUnit 5 platform
-    testLogging {
-        events "passed", "skipped", "failed" // Show test results in console
+    mixin {
+        defaultRefmapName = "ali.refmap.json"
     }
 }
 
 dependencies {
-    compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    compileOnly project(":api")
-
-    compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}:api"
-    compileOnly "dev.emi:emi-xplat-mojmap:${emi_version}"
-
-    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-
-    testImplementation project(":api")
-    testImplementation project(":common")
+    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
+    // Do NOT use other classes from fabric loader
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
     testImplementation 'org.junit.platform:junit-platform-suite:1.12.0'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
     testImplementation 'org.mockito:mockito-core:5.11.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main/generated"
+            exclude ".cache/**"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
 }

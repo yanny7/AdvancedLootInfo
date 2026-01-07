@@ -1,179 +1,117 @@
 plugins {
-    id 'idea'
-    id 'net.neoforged.gradle.userdev' version '7.0.182'
-    id 'java-library'
+    id 'com.gradleup.shadow'
 }
 
 base {
-    archivesName = "${mod_name}-neoforge-${minecraft_version}"
+    archivesName = "${mod_name}-neoforge"
 }
 
-// Automatically enable neoforge AccessTransformers if the file exists
-// This location is hardcoded in FML and can not be changed.
-// https://github.com/neoforged/FancyModLoader/blob/a952595eaaddd571fbc53f43847680b00894e0c1/loader/src/main/java/net/neoforged/fml/loading/moddiscovery/ModFile.java#L118
-if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
-    minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
+architectury {
+    platformSetupLoomIde()
+    neoForge()
 }
 
-runs {
-    configureEach {
-        modSource project.sourceSets.main
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    mixin {
+        useLegacyMixinAp = true
+        defaultRefmapName = "ali.neoforge.refmap.json"
     }
 
-    client {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    server {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-
-    gameTestServer {
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-
-    data {
-        programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
-    compileOnly project(":api")
-    compileOnly project(":common")
-    compileOnly project(":common-rei")
-
-    // EMI
-    compileOnly "dev.emi:emi-neoforge:${emi_version}:api"
-    compileOnly "dev.emi:emi-neoforge:${emi_version}"
-//    runtimeOnly "dev.emi:emi-neoforge:${emi_version}"
-
-    // JEI
-    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
-    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-
-    // REI
-    compileOnly "me.shedaniel:RoughlyEnoughItems-api-neoforge:${rei_version}"
-    compileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-neoforge:${rei_version}"
-//    runtimeOnly "me.shedaniel:RoughlyEnoughItems-neoforge:${rei_version}"
-    implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-    implementation "dev.architectury:architectury-neoforge:${architectury_version}"
-
-    // LootJS
-    implementation "curse.maven:kubejs-238086:5810100"
-    implementation "curse.maven:rhino-416294:6184623"
-    implementation "curse.maven:lootjs-570630:6792267"
-
-    // Aether https://www.curseforge.com/minecraft/mc-mods/aether
-    compileOnly "curse.maven:aether-255308:6894706"
-
-    // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-    compileOnly "curse.maven:deeperdarker-659011:6463247"
-
-    // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
-    compileOnly "curse.maven:farmers-delight-398521:6917256"
-
-    // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
-//    compileOnly "curse.maven:hybrid-aquatic-834427:6497304"
-
-    // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
-    compileOnly "curse.maven:immersive-engineering-231951:6733669"
-
-    // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
-    compileOnly "curse.maven:selene-499980:7007381"
-
-    // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
-    compileOnly "curse.maven:repurposed-structures-368293:6797352"
-
-    // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
-    compileOnly "curse.maven:sawmill-964817:6979313"
-
-    // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
-    compileOnly "curse.maven:snow-real-magic-308663:6783557"
-
-    // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-    compileOnly "curse.maven:supplementaries-412082:7008519"
-
-    // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
-    compileOnly "curse.maven:the-bumblezone-forge-362479:6960939"
-
-    // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
-//    compileOnly "curse.maven:villagersplus-forge-817272:4996995"
-}
-
-// NeoGradle compiles the game, but we don't want to add our common code to the game's code
-Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
-
-tasks.named('compileTestJava') {
-    it.enabled = false
-}
-
-tasks.named('test') {
-    it.enabled = false
-}
-
-tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
-    def addedPackageInfos = [] as Set
-
-    def sourceProjects = [
-            project(":api"),
-            project(":common"),
-            project(":common-emi"),
-            project(":common-jei"),
-            project(":common-rei"),
-            project(":common-lootjs")
-    ]
-
-    sourceSets.main.allSource.each { sourceFile ->
-        if (sourceFile.name == 'package-info.java') {
-            def rootDir = sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
-            if (rootDir != null) {
-                def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
-                addedPackageInfos.add(relativePath)
-            }
+    runs {
+        data {
+            data()
+            programArgs "--all", "--mod", "${mod_id}"
+            programArgs "--output", "${file('src/main/generated/')}"
+            programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
     }
+}
 
-    sourceProjects.each { sourceProject ->
-        source(sourceProject.sourceSets.main.allSource.filter { sourceFile ->
-            if (sourceFile.name == 'package-info.java') {
-                def rootDir = sourceProject.sourceSets.main.allJava.srcDirs.find { sourceFile.absolutePath.startsWith(it.absolutePath) }
-                if (rootDir != null) {
-                    def relativePath = rootDir.toPath().relativize(sourceFile.toPath()).toString().replace('\\', '/')
+configurations {
+    common
+    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
 
-                    if (addedPackageInfos.contains(relativePath)) {
-                        return false
-                    } else {
-                        addedPackageInfos.add(relativePath)
-                        return true
-                    }
-                }
-            }
+dependencies {
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
 
-            return true
-        })
+    project.ext.commonProjects.each { p ->
+        common(project(path: p, configuration: "namedElements")) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionNeoForge")) { transitive false }
     }
+
+    // LootJS
+    modCompileOnly "curse.maven:kubejs-238086:5810100"
+    modCompileOnly "curse.maven:rhino-416294:6184623"
+    modCompileOnly "curse.maven:lootjs-570630:6792267"
+
+    // Aether https://www.curseforge.com/minecraft/mc-mods/aether
+    modCompileOnly "curse.maven:aether-255308:6894706"
+
+    // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
+    modCompileOnly "curse.maven:deeperdarker-659011:6463247"
+
+    // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
+    modCompileOnly "curse.maven:farmers-delight-398521:6917256"
+
+    // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
+//    modCompileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497306")
+
+    // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
+    modCompileOnly "curse.maven:immersive-engineering-231951:6733669"
+
+    // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
+    modCompileOnly "curse.maven:selene-499980:7007381"
+
+    // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
+    modCompileOnly "curse.maven:repurposed-structures-368293:6797352"
+
+    // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
+    modCompileOnly "curse.maven:sawmill-964817:6979313"
+
+    // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
+    modCompileOnly "curse.maven:snow-real-magic-308663:6783557"
+
+    // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
+    modCompileOnly "curse.maven:supplementaries-412082:7008519"
+
+    // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
+    modCompileOnly "curse.maven:the-bumblezone-forge-362479:6960939"
+
+    // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
+//    modCompileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
+
+    // Mantle https://www.curseforge.com/minecraft/mc-mods/mantle
+//    modCompileOnly "curse.maven:mantle-74924:6819217"
 }
 
-tasks.named("sourcesJar", Jar) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+shadowJar {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
 
-    from(project(":api").sourceSets.main.allSource)
-    from(project(":common").sourceSets.main.allSource)
-    from(project(":common-emi").sourceSets.main.allSource)
-    from(project(":common-jei").sourceSets.main.allSource)
-    from(project(":common-rei").sourceSets.main.allSource)
-    from(project(":common-lootjs").sourceSets.main.allSource)
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
 }
 
-tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
-    from project(":api").sourceSets.main.resources
-    from project(":common").sourceSets.main.resources
-    from project(":common-emi").sourceSets.main.resources
-    from project(":common-jei").sourceSets.main.resources
-    from project(":common-lootjs").sourceSets.main.resources
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+    archiveClassifier = null
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
 }

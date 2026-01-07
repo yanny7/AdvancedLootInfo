@@ -1,7 +1,13 @@
-plugins {
-    id 'java'
-    id 'idea'
-    id 'net.neoforged.gradle.userdev' version '7.0.182'
+architectury {
+    common(enabled_platforms.split(","))
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    mixin {
+        defaultRefmapName = "ali.lootjs.refmap.json"
+    }
 }
 
 if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
@@ -11,30 +17,13 @@ if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
-    compileOnly project(":api")
-    compileOnly project(":common")
+    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
+    // Do NOT use other classes from fabric loader
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+
+    compileOnly project(path: ":common", configuration: "namedElements")
 
     compileOnly "curse.maven:kubejs-238086:5810100"
     compileOnly "curse.maven:rhino-416294:6184623"
     compileOnly "curse.maven:lootjs-570630:6792267"
-}
-
-// NeoGradle compiles the game, but we don't want to add our common code to the game's code
-Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
-
-tasks.named('jar').configure {
-    enabled = false
-}
-
-tasks.named('assemble').configure {
-    enabled = false
-}
-
-tasks.named('build').configure {
-    enabled = false
-}
-
-tasks.named('compileJava').configure {
-    enabled = false
 }
