@@ -17,25 +17,25 @@
     "accessWidener": "ali.accesswidener",
     "entrypoints": {
         "main": [
-            "com.yanny.ali.CommonAliMod"
+          "com.yanny.ali.fabric.CommonAliMod"
         ],
         "client": [
-            "com.yanny.ali.ClientAliMod"
+          "com.yanny.ali.fabric.ClientAliMod"
         ],
         "fabric-datagen": [
-            "com.yanny.ali.datagen.DataGeneration"
+            "com.yanny.ali.fabric.datagen.DataGeneration"
         ],
         "ali": [
             "com.yanny.ali.plugin.Plugin"
         ],
         "emi": [
-            "com.yanny.ali.compatibility.EmiCompatibility"
+            "com.yanny.ali.emi.compatibility.EmiCompatibility"
         ],
         "jei_mod_plugin": [
-            "com.yanny.ali.compatibility.JeiCompatibility"
+          "com.yanny.ali.jei.compatibility.JeiCompatibility"
         ],
         "rei_client": [
-            "com.yanny.ali.compatibility.ReiCompatibility"
+          "com.yanny.ali.rei.ReiCompatibility"
         ]
     },
     "mixins": [
