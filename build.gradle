@@ -68,7 +68,7 @@ subprojects {
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
 
         ext {
-            commonProjects = [":api", ":common"]
+            commonProjects = [":common"]
         }
 
         if (emi_available) project.ext.commonProjects << ":common-emi"
