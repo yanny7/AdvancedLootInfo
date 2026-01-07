@@ -130,9 +130,11 @@ accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltip
 accessible method net/minecraft/world/item/enchantment/ItemEnchantments <init> (Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;Z)V
 accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStack;
 
+accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
+accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction$CopyOperation
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
@@ -211,6 +213,8 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsT
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems maxUses I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems villagerXp I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems priceMultiplier F
+
+#accessible field net/minecraftforge/common/loot/CanToolPerformAction action Lnet/minecraftforge/common/ToolAction;
 
 #########
 # TESTS #

@@ -11,7 +11,6 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IItemListing;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -47,10 +46,10 @@ public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemLi
                 Either.left(ItemStack.EMPTY), // Either.left(PotionUtils.setPotion(buy, Potions.WATER)),
                 new RangeValue(buy.getCount()),
                 EmptyTooltipNode.EMPTY,
-                Either.left(currency),
+                Either.left(currency.copy()),
                 new RangeValue(currency.getCount()),
                 EmptyTooltipNode.EMPTY,
-                Either.left(sell),
+                Either.left(sell.copy()),
                 new RangeValue(),
                 EmptyTooltipNode.EMPTY, // List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
                 maxUses,
