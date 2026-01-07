@@ -9,9 +9,6 @@
     "MixinMinecraftServer",
     "MixinNeoForgeEventHandler"
   ],
-  "client": [
-    "MixinRecipeScreen"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

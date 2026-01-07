@@ -206,11 +206,11 @@ allprojects {
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
-        options.release.set(21)
+        options.release.set(java_version as Integer)
     }
 
     java {
-        toolchain.languageVersion = JavaLanguageVersion.of(21)
+        toolchain.languageVersion = JavaLanguageVersion.of(java_version)
         withSourcesJar()
     }
 
