@@ -1,0 +1,37 @@
+package com.yanny.ali.forge.network;
+
+import com.yanny.ali.network.ClearMessage;
+import com.yanny.ali.network.DoneMessage;
+import com.yanny.ali.network.LootDataChunkMessage;
+import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.SimpleChannel;
+
+import java.util.function.BiConsumer;
+
+public class NetworkUtils {
+    private static int messageId = 0;
+
+    public static void registerClient(SimpleChannel channel) {
+        Client client = new Client();
+
+        channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
+                .encoder(LootDataChunkMessage::write)
+                .decoder(LootDataChunkMessage::new)
+                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+                .add();
+        channel.messageBuilder(ClearMessage.class, getMessageId())
+                .encoder(ClearMessage::write)
+                .decoder(ClearMessage::new)
+                .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
+                .add();
+        channel.messageBuilder(DoneMessage.class, getMessageId())
+                .encoder(DoneMessage::write)
+                .decoder(DoneMessage::new)
+                .consumerNetworkThread((BiConsumer<DoneMessage, CustomPayloadEvent.Context>) client::onDone)
+                .add();
+    }
+
+    private static int getMessageId() {
+        return ++messageId;
+    }
+}

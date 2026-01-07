@@ -1,12 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.yanny.ali.mixin",
-  "refmap": "ali.refmap.json",
-  "compatibilityLevel": "JAVA_17",
-  "plugin": "com.yanny.ali.mixin.ConfigPlugin",
+  "package": "com.yanny.ali.forge.mixin",
+  "plugin": "com.yanny.ali.forge.mixin.ConfigPlugin",
   "mixins": [
-    "MixinBushBlock",
     "MixinForgeInternalHandler",
     "MixinLootModifier",
     "MixinMinecraftServer"

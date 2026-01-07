@@ -77,9 +77,11 @@ accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
 
+accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$FormulaType
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops
+accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$CopyOperation
 accessible class net/minecraft/world/level/storage/loot/functions/CopyNbtFunction$Path
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
@@ -154,6 +156,8 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsT
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems maxUses I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems villagerXp I
 accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems priceMultiplier F
+
+#accessible field net/minecraftforge/common/loot/CanToolPerformAction action Lnet/minecraftforge/common/ToolAction;
 
 #########
 # TESTS #

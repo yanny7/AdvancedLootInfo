@@ -1,50 +1,24 @@
-plugins {
-    id 'java'
-    id 'idea'
-    id 'fabric-loom'
+architectury {
+    common(enabled_platforms.split(","))
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    mixin {
+        defaultRefmapName = "ali.lootjs.refmap.json"
+    }
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${minecraft_version}"
-    mappings loom.officialMojangMappings()
+    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
+    // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    implementation project(":api")
-    implementation project(":common")
+    compileOnly project(path: ":api", configuration: "namedElements")
+    compileOnly project(path: ":common", configuration: "namedElements")
 
     modCompileOnly "curse.maven:kubejs-238086:5853321"
     modCompileOnly "curse.maven:rhino-416294:6186969"
     modCompileOnly "curse.maven:lootjs-570630:6508898"
-}
-
-loom {
-    if (project(":common").file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(project(":common").file("src/main/resources/${mod_id}.accesswidener"))
-    }
-}
-
-tasks.named('jar').configure {
-    enabled = false
-}
-
-tasks.named('assemble').configure {
-    enabled = false
-}
-
-tasks.named('build').configure {
-    enabled = false
-}
-
-tasks.named('remapJar').configure {
-    enabled = false
-}
-
-tasks.named('remapSourcesJar').configure {
-    enabled = false
-}
-
-tasks.named('compileJava').configure {
-    enabled = false
 }
