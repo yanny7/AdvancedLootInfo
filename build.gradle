@@ -28,6 +28,7 @@ subprojects {
         expandProps = [
                 "version"                      : project.version,
                 "group"                        : project.group,
+                "java_version"                 : java_version,
 
                 "mod_name"                     : mod_name,
                 "mod_author"                   : mod_author,
@@ -132,7 +133,7 @@ subprojects {
 
             inputs.property "version", project.version
 
-            filesMatching(["fabric.mod.json", "META-INF/mods.toml", "pack.mcmeta"]) {
+            filesMatching(["fabric.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml", "pack.mcmeta"]) {
                 expand project.ext.expandProps
             }
         }

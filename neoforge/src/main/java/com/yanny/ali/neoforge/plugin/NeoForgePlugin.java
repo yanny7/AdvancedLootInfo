@@ -2,11 +2,7 @@ package com.yanny.ali.neoforge.plugin;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
-import com.yanny.ali.mixin.MixinAddTableLootModifier;
-import com.yanny.ali.neoforge.mixin.MixinCanToolPerformAction;
-import com.yanny.ali.neoforge.mixin.MixinLootModifier;
-import com.yanny.ali.neoforge.mixin.MixinLootTableIdCondition;
-import com.yanny.ali.neoforge.mixin.MixinNeoForgeEventHandler;
+import com.yanny.ali.neoforge.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;

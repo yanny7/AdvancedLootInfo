@@ -2,7 +2,6 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.yanny.ali.forge.mixin",
-  "plugin": "com.yanny.ali.forge.mixin.ConfigPlugin",
   "mixins": [
     "MixinForgeInternalHandler",
     "MixinLootModifier",

@@ -1,4 +1,4 @@
-package com.yanny.ali.mixin;
+package com.yanny.ali.fabric.mixin;
 
 import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;

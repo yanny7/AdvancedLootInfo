@@ -1,4 +1,4 @@
-package com.yanny.ali.mixin;
+package com.yanny.ali.neoforge.mixin;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
