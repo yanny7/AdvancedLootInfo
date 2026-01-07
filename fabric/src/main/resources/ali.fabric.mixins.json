@@ -1,17 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.yanny.ali.mixin",
-  "refmap": "ali.refmap.json",
-  "compatibilityLevel": "JAVA_17",
-  "plugin": "com.yanny.ali.mixin.ConfigPlugin",
-  "mixins": [
-    "MixinBushBlock"
-  ],
+  "package": "com.yanny.ali.fabric.mixin",
+  "plugin": "com.yanny.ali.fabric.mixin.ConfigPlugin",
   "client": [
     "MixinClientPlayNetworkAddon",
-    "MixinMinecraft",
-    "MixinRecipeScreen"
+    "MixinMinecraft"
   ],
   "injectors": {
     "defaultRequire": 1
