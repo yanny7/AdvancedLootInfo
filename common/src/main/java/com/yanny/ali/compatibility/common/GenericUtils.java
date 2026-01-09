@@ -3,6 +3,7 @@ package com.yanny.ali.compatibility.common;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.Rect;
@@ -35,16 +36,22 @@ import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
+import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
@@ -259,6 +266,50 @@ public class GenericUtils {
         }
 
         tradeData.clear();
+    }
+    private static CompletableFuture<byte[]> lastProcessedFuture = null;
+
+    public static <T> void register(T emiRegistry, BiConsumer<T, byte[]> registerData) {
+        LOGGER.info("Starting data registration...");
+
+        while (true) {
+            CompletableFuture<byte[]> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
+
+            if (futureData == lastProcessedFuture && futureData.isDone()) {
+                LOGGER.info("Data checks out: Already registered this version. Skipping.");
+                return;
+            }
+
+            if (futureData.isDone()) {
+                LOGGER.info("Data already received, processing instantly.");
+            } else {
+                LOGGER.info("Blocking this thread until all data are received!");
+            }
+
+            try {
+                byte[] fullCompressedData = futureData.get();
+
+                registerData.accept(emiRegistry, fullCompressedData);
+                lastProcessedFuture = futureData;
+                LOGGER.info("Data registration finished successfully.");
+                break;
+
+            } catch (CancellationException e) {
+                LOGGER.warn("Data reception was cancelled. Retrying with new data stream...");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                LOGGER.error("Registration thread interrupted!");
+                break;
+            } catch (ExecutionException e) {
+                LOGGER.error("Failed to finish registering data with error {}", e.getCause().getMessage());
+                e.printStackTrace();
+                break;
+            } catch (Throwable e) {
+                e.printStackTrace();
+                LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage());
+                break;
+            }
+        }
     }
 
     // split table path and make uppercased text
