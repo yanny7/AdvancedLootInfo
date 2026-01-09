@@ -7,6 +7,7 @@ import net.fabricmc.api.ClientModInitializer;
 public class ClientAliMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        FabricClientBusSubscriber.registerEvents();
         NetworkUtils.registerClient();
         PluginManager.registerClientEvent();
     }
