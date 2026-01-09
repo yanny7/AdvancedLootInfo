@@ -11,14 +11,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 
-public class FabricBusSubscriber {
+public class FabricCommonBusSubscriber {
     private static boolean serverLoaded = false;
 
     public static void registerEvents() {
-        ServerWorldEvents.LOAD.register(FabricBusSubscriber::onServerStarting);
-        ServerLifecycleEvents.SERVER_STOPPING.register(FabricBusSubscriber::onServerStopping);
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricBusSubscriber::onReload);
-        ServerPlayConnectionEvents.JOIN.register(FabricBusSubscriber::onPlayerLogIn);
+        ServerWorldEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
+        ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
+        ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
     }
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
