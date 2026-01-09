@@ -26,10 +26,6 @@ import org.slf4j.Logger;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -39,35 +35,7 @@ public class EmiCompatibility implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry emiRegistry) {
-        CompletableFuture<byte[]> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
-
-        if (futureData.isDone()) {
-            LOGGER.info("Data already received, processing instantly.");
-        } else {
-            LOGGER.info("Blocking this thread until all data are received!");
-        }
-
-        try {
-            byte[] fullCompressedData = futureData.get();
-
-            registerData(emiRegistry, fullCompressedData);
-            LOGGER.info("Data registration finished successfully.");
-        } catch (ExecutionException e) {
-            Throwable cause = e.getCause() != null ? e.getCause() : e;
-
-            if (cause instanceof TimeoutException || cause instanceof CancellationException) {
-                LOGGER.error("Failed to receive data: Operation aborted or timed out. Registration aborted!");
-            } else {
-                LOGGER.error("Failed to finish registering data with error {}", cause.getMessage());
-                cause.printStackTrace();
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            LOGGER.error("Registration thread interrupted!");
-        } catch (Throwable e) {
-            e.printStackTrace();
-            LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage());
-        }
+        GenericUtils.register(emiRegistry, this::registerData);
     }
 
     private void registerData(EmiRegistry registry, byte[] fullCompressedData) {
