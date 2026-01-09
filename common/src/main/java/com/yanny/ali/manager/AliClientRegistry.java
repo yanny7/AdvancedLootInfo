@@ -73,7 +73,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
-            stopLogging();
+            stopLogging(true);
         }
 
         CompletableFuture<byte[]> oldPromise = activeDataPromise.getAndSet(new CompletableFuture<>());
@@ -85,6 +85,16 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Cleared Loot data");
     }
 
+    public synchronized void reloadLootData() {
+        LOGGER.info("Expecting reload loot data");
+        clearLootData();
+    }
+
+    public synchronized void logOut() {
+        LOGGER.info("Player log out received");
+        clearLootData();
+    }
+
     public synchronized void doneLootData() {
         DataReceiver receiver = currentDataReceiver;
 
@@ -93,7 +103,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         }
 
         receiver.forceDone();
-        stopLogging();
+        stopLogging(false);
         LOGGER.info("Finished receiving loot data");
     }
 
@@ -220,11 +230,14 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         loggerScheduler.scheduleAtFixedRate(logTask, 1, 1, TimeUnit.SECONDS);
     }
 
-    private void stopLogging() {
+    private void stopLogging(boolean forcedStop) {
         if (loggerScheduler != null) {
             long count = receivedChunksPerSecond.getAndSet(0);
 
-            LOGGER.info("Received last {} chunk(s). Done receiving data.", count);
+            if (!forcedStop) {
+                LOGGER.info("Received last {} chunk(s). Done receiving data.", count);
+            }
+
             loggerScheduler.shutdownNow();
 
             try {
@@ -238,19 +251,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     private static class DataReceiver {
-        private static final long INACTIVITY_TIMEOUT_SECONDS = 30;
-
         private final CompletableFuture<byte[]> dataFuture = new CompletableFuture<>();
-        private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        private final AtomicReference<ScheduledFuture<?>> timeoutHandleRef = new AtomicReference<>();
         private final Map<Integer, byte[]> chunkMap = new HashMap<>();
-
         private final CountDownLatch completionLatch;
 
         public DataReceiver(int expectedMessageCount) {
             this.completionLatch = new CountDownLatch(expectedMessageCount);
-
-            resetInactivityTimeout();
 
             CompletableFuture.runAsync(() -> {
                 try {
@@ -262,7 +268,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     dataFuture.completeExceptionally(e);
-                    shutdownScheduler();
                 }
             });
         }
@@ -273,7 +278,6 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             }
 
             chunkMap.put(index, data);
-            resetInactivityTimeout();
             completionLatch.countDown();
         }
 
@@ -298,45 +302,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             }
 
             dataFuture.complete(fullCompressedData);
-            shutdownScheduler();
-        }
-
-        private void resetInactivityTimeout() {
-            Runnable timeoutTask = () -> {
-                if (!dataFuture.isDone()) {
-                    String msg = String.format("Data reception failed due to inactivity timeout (%ds).", INACTIVITY_TIMEOUT_SECONDS);
-
-                    dataFuture.completeExceptionally(new TimeoutException(msg));
-                    shutdownScheduler();
-                }
-            };
-
-            ScheduledFuture<?> previousHandle = timeoutHandleRef.getAndSet(null);
-
-            if (previousHandle != null) {
-                previousHandle.cancel(false);
-            }
-
-            ScheduledFuture<?> newHandle = scheduler.schedule(timeoutTask, INACTIVITY_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-            timeoutHandleRef.set(newHandle);
         }
 
         public void cancelOperation() {
             if (!dataFuture.isDone()) {
                 dataFuture.cancel(true);
             }
-
-            shutdownScheduler();
-        }
-
-        private void shutdownScheduler() {
-            ScheduledFuture<?> currentHandle = timeoutHandleRef.getAndSet(null);
-
-            if (currentHandle != null) {
-                currentHandle.cancel(false);
-            }
-
-            scheduler.shutdownNow();
         }
 
         public CompletableFuture<byte[]> getFuture() {
