@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +26,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
     private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
     private ScheduledExecutorService loggerScheduler;
+    private final AtomicInteger syncedTagCount = new AtomicInteger(0);
+    private final AtomicBoolean loggedIn = new AtomicBoolean(false);
 
     private volatile DataReceiver currentDataReceiver = null;
 
@@ -86,13 +89,23 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     public synchronized void reloadLootData() {
-        LOGGER.info("Expecting reload loot data");
-        clearLootData();
+        // reload is called on login, causing clearing already received data
+        if (loggedIn.get() && syncedTagCount.getAndIncrement() > 0) {
+            LOGGER.info("Reloading loot data");
+            clearLootData();
+        }
     }
 
-    public synchronized void logOut() {
-        LOGGER.info("Player log out received");
+    public synchronized void loggingIn() {
+        LOGGER.info("Player login received");
+        loggedIn.set(true);
+    }
+
+    public synchronized void loggingOut() {
+        LOGGER.info("Player logout received");
         clearLootData();
+        loggedIn.set(false);
+        syncedTagCount.set(0);
     }
 
     public synchronized void doneLootData() {
