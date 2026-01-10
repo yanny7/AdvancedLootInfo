@@ -1,4 +1,4 @@
-# []
+# [1.6.1]
 
 - Fixed suboptimal layout in some cases
 - Fixed entity GLM condition list not complete
