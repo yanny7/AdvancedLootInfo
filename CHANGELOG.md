@@ -1,10 +1,11 @@
-# []
+# [1.6.1]
 
 - Fixed suboptimal layout in some cases
 - Fixed entity GLM condition list not complete
 - Added support for GLM on Fabric implemented by PortingLib Loot library
 - Resolved a client freeze when connecting to a LAN world
 - Fixed reload not updating loot data
+- Removed empty branches in loot table
 - Fixed crash on second world login
 
 # [1.6.0]
