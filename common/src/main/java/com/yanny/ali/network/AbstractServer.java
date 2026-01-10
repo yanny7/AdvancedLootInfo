@@ -140,9 +140,15 @@ public abstract class AbstractServer {
         int injectedLootTables = 0;
 
         for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
+            IDataNode node = entry.getValue();
+
+            if (node instanceof ListNode listNode) {
+                listNode.optimizeList();
+            }
+
             if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
                 if (!serverRegistry.isSubTable(entry.getKey())) {
-                    result.put(entry.getKey(), entry.getValue());
+                    result.put(entry.getKey(), node);
                 } else {
                     injectedLootTables++;
                 }

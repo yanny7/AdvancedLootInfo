@@ -46,6 +46,30 @@ public abstract class ListNode implements IDataNode {
         nodes.add(node);
     }
 
+    public void optimizeList() {
+        if (nodes == null || nodes.isEmpty()) {
+            return;
+        }
+
+        for (IDataNode node : nodes) {
+            if (node instanceof ListNode listNode) {
+                listNode.optimizeList();
+            }
+        }
+
+        nodes.removeIf(node -> {
+            if (node instanceof ListNode listNode) {
+                return listNode.nodes().isEmpty();
+            }
+
+            return false;
+        });
+
+        if (nodes.isEmpty()) {
+            nodes = null;
+        }
+    }
+
     public abstract void encodeNode(IServerUtils utils, FriendlyByteBuf buf);
 
     @Override
