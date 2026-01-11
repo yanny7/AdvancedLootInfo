@@ -314,6 +314,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                 offset += chunk.length;
             }
 
+            chunkMap.clear();
             dataFuture.complete(fullCompressedData);
         }
 

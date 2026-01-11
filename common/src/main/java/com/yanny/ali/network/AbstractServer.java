@@ -1,16 +1,21 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -371,33 +376,94 @@ public abstract class AbstractServer {
     }
 
     private void writeLootData(RegistryFriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        IServerUtils utils = PluginManager.SERVER_REGISTRY;
+        AliServerRegistry utils = PluginManager.SERVER_REGISTRY;
+        int countIndex = buf.writerIndex();
+        int successfulNodes = 0;
 
-        buf.writeCollection(lootNodes.entrySet(), (f, e) -> {
-            f.writeResourceLocation(e.getKey());
-            e.getValue().encode(utils, (RegistryFriendlyByteBuf) f);
-            ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode((RegistryFriendlyByteBuf) f, lootTableItemStacks.getOrDefault(e.getKey(), Collections.emptyList()));
-        });
+        buf.writeInt(lootNodes.size());
+
+        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : lootNodes.entrySet()) {
+            int startOfNode = buf.writerIndex();
+
+            try {
+                utils.setCurrentLootTable(nodeEntry.getKey());
+                buf.writeResourceLocation(nodeEntry.getKey());
+                nodeEntry.getValue().encode(utils, buf);
+                ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode(buf, lootTableItemStacks.getOrDefault(nodeEntry.getKey(), Collections.emptyList()));
+                successfulNodes++;
+            } catch (Throwable e) {
+                buf.writerIndex(startOfNode);
+                LOGGER.warn("Failed to write loot data in {}", nodeEntry.getKey(), e);
+            } finally {
+                utils.setCurrentLootTable(null);
+            }
+        }
+
+        if (successfulNodes != lootNodes.size()) {
+            int endIndex = buf.writerIndex();
+
+            buf.writerIndex(countIndex);
+            buf.writeInt(successfulNodes);
+            buf.writerIndex(endIndex);
+        }
 
         lootNodes.clear();
         lootTableItemStacks.clear();
     }
 
     private void writeTradeData(RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
-        IServerUtils utils = PluginManager.SERVER_REGISTRY;
+        AliServerRegistry utils = PluginManager.SERVER_REGISTRY;
+        int countIndex = buf.writerIndex();
+        int successfulNodes = 0;
 
-        buf.writeCollection(trades.entrySet(), (f, e) -> {
-            Pair<List<Item>, List<Item>> pair = items.getOrDefault(e.getKey(), new Pair<>(Collections.emptyList(), Collections.emptyList()));
+        buf.writeInt(trades.size());
 
-            f.writeResourceLocation(e.getKey());
-            e.getValue().encode(utils, (RegistryFriendlyByteBuf) f);
-            f.writeCollection(pair.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-            f.writeCollection(pair.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-        });
+        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : trades.entrySet()) {
+            int startOfNode = buf.writerIndex();
 
-        wanderingTraderNode.encode(utils, buf);
-        buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-        buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+            try {
+                Pair<List<Item>, List<Item>> pair = items.getOrDefault(nodeEntry.getKey(), new Pair<>(Collections.emptyList(), Collections.emptyList()));
+
+                utils.setCurrentLootTable(nodeEntry.getKey());
+                buf.writeResourceLocation(nodeEntry.getKey());
+                nodeEntry.getValue().encode(utils, buf);
+                buf.writeCollection(pair.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+                buf.writeCollection(pair.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+                successfulNodes++;
+            } catch (Throwable e) {
+                buf.writerIndex(startOfNode);
+                LOGGER.warn("Failed to write trade data in {}", nodeEntry.getKey(), e);
+            } finally {
+                utils.setCurrentLootTable(null);
+            }
+        }
+
+        if (successfulNodes != trades.size()) {
+            int endIndex = buf.writerIndex();
+
+            buf.writerIndex(countIndex);
+            buf.writeInt(successfulNodes);
+            buf.writerIndex(endIndex);
+        }
+
+        int wtStart = buf.writerIndex();
+
+        try {
+            utils.setCurrentLootTable(new ResourceLocation("wandering_trader"));
+            wanderingTraderNode.encode(utils, buf);
+            buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+            buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to encode Wandering Trader", e);
+
+            // write dummy data
+            buf.writerIndex(wtStart);
+            new TradeNode(utils, new Int2ObjectOpenHashMap<>()).encode(utils, buf);
+            buf.writeCollection(List.of(), (b, i) -> {});
+            buf.writeCollection(List.of(), (b, i) -> {});
+        } finally {
+            utils.setCurrentLootTable(null);
+        }
 
         trades.clear();
         items.clear();
