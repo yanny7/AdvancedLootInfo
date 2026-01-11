@@ -135,6 +135,7 @@ public class GenericUtils {
         return Component.literal(text);
     }
 
+    @NotNull
     public static Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> decompressLootData(byte[] fullCompressedData, RegistryAccess registryAccess) {
         Map<ResourceLocation, LootData> lootData = new HashMap<>();
         Map<ResourceLocation, TradeData> tradeData = new HashMap<>();
@@ -143,7 +144,6 @@ public class GenericUtils {
 
         try (GZIPInputStream gzip = new GZIPInputStream(bis)) {
             decompressedBuf.writeBytes(gzip.readAllBytes());
-//            decompressedBuf.writeBytes(gzip, gzip.available());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -152,21 +152,25 @@ public class GenericUtils {
 
         try {
             IClientUtils utils = PluginManager.CLIENT_REGISTRY;
+            int lootDataCount = readerBuf.readInt();
 
-            lootData.putAll(readerBuf.readCollection(ArrayList::new, (b) -> {
-                ResourceLocation location = b.readResourceLocation();
-                IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).create(utils, (RegistryFriendlyByteBuf) b);
-                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) b);
-                return new AbstractMap.SimpleEntry<>(location, new LootData(dataNode, items));
-            }).stream().collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+            for (int i = 0; i < lootDataCount; i++) {
+                ResourceLocation location = readerBuf.readResourceLocation();
+                IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).create(utils, readerBuf);
+                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) readerBuf);
 
-            tradeData.putAll(readerBuf.readCollection(ArrayList::new, (b) -> {
-                ResourceLocation location = b.readResourceLocation();
-                IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, (RegistryFriendlyByteBuf) b);
-                List<Item> inputs = b.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-                List<Item> outputs = b.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-                return new AbstractMap.SimpleEntry<>(location, new TradeData(dataNode, inputs, outputs));
-            }).stream().collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue)));
+                lootData.put(location, new LootData(dataNode, items));
+            }
+
+            int tradeDataCount = readerBuf.readInt();
+
+            for (int i = 0; i < tradeDataCount; i++) {
+                ResourceLocation location = readerBuf.readResourceLocation();
+                IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
+                List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+                List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+                tradeData.put(location, new TradeData(dataNode, inputs, outputs));
+            }
 
             // wandering trader
             IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
@@ -280,8 +284,7 @@ public class GenericUtils {
             CompletableFuture<byte[]> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
 
             if (futureData == lastProcessedFuture && futureData.isDone()) {
-                LOGGER.info("Data checks out: Already registered this version. Skipping.");
-                return;
+                LOGGER.info("Data checks out: Already received. Reusing cached data for registration.");
             }
 
             if (futureData.isDone()) {
