@@ -2,6 +2,7 @@
 
 - Fixed freeze with JEI on world rejoin
 - Improved error handling and recovery for data processing and synchronization
+- Fixed chance value when used multiple probabilities in LootJS
 
 # [1.6.1]
 
