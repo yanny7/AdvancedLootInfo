@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -25,6 +26,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
     private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
     private ScheduledExecutorService loggerScheduler;
+    private final AtomicInteger syncedTagCount = new AtomicInteger(0);
+    private final AtomicBoolean loggedIn = new AtomicBoolean(false);
 
     private volatile DataReceiver currentDataReceiver = null;
 
@@ -86,13 +89,23 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     public synchronized void reloadLootData() {
-        LOGGER.info("Expecting reload loot data");
-        clearLootData();
+        // reload is called on login, causing clearing already received data
+        if (loggedIn.get() && syncedTagCount.getAndIncrement() > 0) {
+            LOGGER.info("Reloading loot data");
+            clearLootData();
+        }
     }
 
-    public synchronized void logOut() {
-        LOGGER.info("Player log out received");
+    public synchronized void loggingIn() {
+        LOGGER.info("Player login received");
+        loggedIn.set(true);
+    }
+
+    public synchronized void loggingOut() {
+        LOGGER.info("Player logout received");
         clearLootData();
+        loggedIn.set(false);
+        syncedTagCount.set(0);
     }
 
     public synchronized void doneLootData() {
@@ -252,24 +265,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private static class DataReceiver {
         private final CompletableFuture<byte[]> dataFuture = new CompletableFuture<>();
-        private final Map<Integer, byte[]> chunkMap = new HashMap<>();
-        private final CountDownLatch completionLatch;
+        private final Map<Integer, byte[]> chunkMap = new ConcurrentHashMap<>();
+        private final int totalChunks;
+        private final AtomicInteger receivedChunksCount = new AtomicInteger(0);
 
         public DataReceiver(int expectedMessageCount) {
-            this.completionLatch = new CountDownLatch(expectedMessageCount);
-
-            CompletableFuture.runAsync(() -> {
-                try {
-                    completionLatch.await();
-
-                    if (!dataFuture.isDone()) {
-                        completeFuture();
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    dataFuture.completeExceptionally(e);
-                }
-            });
+            totalChunks = expectedMessageCount;
         }
 
         public void messageReceived(int index, byte[] data) {
@@ -278,29 +279,38 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             }
 
             chunkMap.put(index, data);
-            completionLatch.countDown();
-        }
 
-        public void forceDone() {
-            while (completionLatch.getCount() > 0) {
-                completionLatch.countDown();
-            }
-
-            if (!dataFuture.isDone()) {
+            if (receivedChunksCount.incrementAndGet() == totalChunks) {
                 completeFuture();
             }
         }
 
+        public void forceDone() {
+            if (!dataFuture.isDone()) {
+                String errorMsg = String.format("Incomplete loot data! Expected %d chunks, but received only %d. Data is unusable.", totalChunks, receivedChunksCount.get());
+
+                LOGGER.error(errorMsg);
+                dataFuture.completeExceptionally(new IllegalStateException(errorMsg));
+            }
+        }
+
         private void completeFuture() {
+            if (dataFuture.isDone()) {
+                return;
+            }
+
             int totalCompressedSize = chunkMap.values().stream().mapToInt(a -> a.length).sum();
             byte[] fullCompressedData = new byte[totalCompressedSize];
             int offset = 0;
 
-            for (byte[] chunk : chunkMap.values()) {
+            for (int i = 0; i < totalChunks; i++) {
+                byte[] chunk = chunkMap.get(i);
+
                 System.arraycopy(chunk, 0, fullCompressedData, offset, chunk.length);
                 offset += chunk.length;
             }
 
+            chunkMap.clear();
             dataFuture.complete(fullCompressedData);
         }
 
@@ -308,6 +318,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             if (!dataFuture.isDone()) {
                 dataFuture.cancel(true);
             }
+
+            chunkMap.clear();
         }
 
         public CompletableFuture<byte[]> getFuture() {

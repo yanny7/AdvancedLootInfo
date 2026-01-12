@@ -1,8 +1,10 @@
 package com.yanny.ali.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -11,17 +13,20 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item");
+    private static final Logger LOGGER = LogUtils.getLogger();
     private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Item>> ITEM_TAG_STREAM_CODEC =
             ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.ITEM));
     private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Block>> BLOCK_TAG_STREAM_CODEC =
@@ -119,7 +124,16 @@ public class ItemNode implements IDataNode, IItemNode {
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        EITHER_CODEC.encode(buf, item);
+        int index = buf.writerIndex();
+
+        try {
+            EITHER_CODEC.encode(buf, item);
+        } catch (Throwable e) {
+            buf.writerIndex(index);
+            EITHER_CODEC.encode(buf, Either.left(ItemStack.EMPTY));
+            LOGGER.warn("Failed to encode {}/{}", BuiltInRegistries.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
+        }
+
         ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeFloat(chance);
