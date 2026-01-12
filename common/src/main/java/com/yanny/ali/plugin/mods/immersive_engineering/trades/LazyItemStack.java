@@ -31,7 +31,7 @@ public class LazyItemStack extends BaseAccessor<Function<Level, ItemStack>> {
         List<ItemStack> itemStacks = PluginUtils.getCapturedInstances(function, ItemStack.class);
 
         if (itemStacks.size() == 1) {
-            return Either.left(itemStacks.get(0).copy());
+            return Either.left(itemStacks.get(0));
         }
 
         //noinspection unchecked
