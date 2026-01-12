@@ -265,24 +265,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     private static class DataReceiver {
         private final CompletableFuture<byte[]> dataFuture = new CompletableFuture<>();
-        private final Map<Integer, byte[]> chunkMap = new HashMap<>();
-        private final CountDownLatch completionLatch;
+        private final Map<Integer, byte[]> chunkMap = new ConcurrentHashMap<>();
+        private final int totalChunks;
+        private final AtomicInteger receivedChunksCount = new AtomicInteger(0);
 
         public DataReceiver(int expectedMessageCount) {
-            this.completionLatch = new CountDownLatch(expectedMessageCount);
-
-            CompletableFuture.runAsync(() -> {
-                try {
-                    completionLatch.await();
-
-                    if (!dataFuture.isDone()) {
-                        completeFuture();
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    dataFuture.completeExceptionally(e);
-                }
-            });
+            totalChunks = expectedMessageCount;
         }
 
         public void messageReceived(int index, byte[] data) {
@@ -291,25 +279,33 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             }
 
             chunkMap.put(index, data);
-            completionLatch.countDown();
-        }
 
-        public void forceDone() {
-            while (completionLatch.getCount() > 0) {
-                completionLatch.countDown();
-            }
-
-            if (!dataFuture.isDone()) {
+            if (receivedChunksCount.incrementAndGet() == totalChunks) {
                 completeFuture();
             }
         }
 
+        public void forceDone() {
+            if (!dataFuture.isDone()) {
+                String errorMsg = String.format("Incomplete loot data! Expected %d chunks, but received only %d. Data is unusable.", totalChunks, receivedChunksCount.get());
+
+                LOGGER.error(errorMsg);
+                dataFuture.completeExceptionally(new IllegalStateException(errorMsg));
+            }
+        }
+
         private void completeFuture() {
+            if (dataFuture.isDone()) {
+                return;
+            }
+
             int totalCompressedSize = chunkMap.values().stream().mapToInt(a -> a.length).sum();
             byte[] fullCompressedData = new byte[totalCompressedSize];
             int offset = 0;
 
-            for (byte[] chunk : chunkMap.values()) {
+            for (int i = 0; i < totalChunks; i++) {
+                byte[] chunk = chunkMap.get(i);
+
                 System.arraycopy(chunk, 0, fullCompressedData, offset, chunk.length);
                 offset += chunk.length;
             }
@@ -322,6 +318,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
             if (!dataFuture.isDone()) {
                 dataFuture.cancel(true);
             }
+
+            chunkMap.clear();
         }
 
         public CompletableFuture<byte[]> getFuture() {
