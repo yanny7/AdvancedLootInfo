@@ -1,4 +1,4 @@
-# []
+# [1.6.2]
 
 - Fixed freeze with JEI on world rejoin
 - Improved error handling and recovery for data processing and synchronization
