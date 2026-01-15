@@ -120,6 +120,11 @@
       "type": "boolean",
       "description": "If true, logs more detailed statistics.",
       "default": false
+    },
+    "showInGameNames": {
+      "type": "boolean",
+      "description": "If true, displays names instead of ResourceLocation",
+      "default": true
     }
   },
   "required": [],
