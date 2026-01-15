@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.client;
 
 import com.yanny.ali.api.*;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -28,5 +29,10 @@ public abstract class ClientUtils implements IWidgetUtils {
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return PluginManager.CLIENT_REGISTRY.createEntities(type, level);
+    }
+
+    @Override
+    public AliConfig getConfiguration() {
+        return PluginManager.CLIENT_REGISTRY.getConfiguration();
     }
 }
