@@ -21,6 +21,7 @@ public class AliConfig {
     public List<ResourceLocation> disabledEntities;
 
     public boolean logMoreStatistics = false;
+    public boolean showInGameNames = true;
 
     public AliConfig() {
         blockCategories = new ArrayList<>();
