@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
@@ -299,7 +300,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             entryTracker.incrementCallCount(type.getClass());
             return entryFactory;
         } else {
-            if (PluginManager.COMMON_REGISTRY.getConfiguration().logMoreStatistics) {
+            if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.info("Missing entry factory for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(type.getType()), utils.getCurrentLootTable());
             }
 
@@ -316,7 +317,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             functionTracker.incrementCallCount(function.getClass());
             return entryTooltipGetter.apply(utils, function);
         } else {
-            if (PluginManager.COMMON_REGISTRY.getConfiguration().logMoreStatistics) {
+            if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.info("Missing function tooltip for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), utils.getCurrentLootTable());
             }
 
@@ -333,7 +334,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             conditionTracker.incrementCallCount(condition.getClass());
             return entryTooltipGetter.apply(utils, condition);
         } else {
-            if (PluginManager.COMMON_REGISTRY.getConfiguration().logMoreStatistics) {
+            if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.info("Missing condition tooltip for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), utils.getCurrentLootTable());
             }
 
@@ -350,7 +351,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             ingredientTracker.incrementCallCount(ingredient.getClass());
             return ingredientTooltipGetter.apply(utils, ingredient);
         } else {
-            if (PluginManager.COMMON_REGISTRY.getConfiguration().logMoreStatistics) {
+            if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.info("Missing ingredient tooltip for {} in {}", ingredient.getClass(), utils.getCurrentLootTable());
             }
 
@@ -375,7 +376,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             if (valueTooltipGetter != null) {
                 return valueTooltipGetter.apply(utils, value);
             } else {
-                if (PluginManager.COMMON_REGISTRY.getConfiguration().logMoreStatistics) {
+                if (utils.getConfiguration().logMoreStatistics) {
                     LOGGER.info("Missing value tooltip for {} in {}", value.getClass(), utils.getCurrentLootTable());
                 }
 
@@ -468,7 +469,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
                 }
             } catch (Throwable ignored) {}
 
-            if (PluginManager.COMMON_REGISTRY.getConfiguration().logMoreStatistics) {
+            if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.info("Missing item listing for {} in {}", entry.getClass(), utils.getCurrentLootTable());
             }
 
@@ -580,6 +581,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return utils.createEntities(type, level);
+    }
+
+    @Override
+    public AliConfig getConfiguration() {
+        return utils.getConfiguration();
     }
 
     public void printRegistrationInfo() {

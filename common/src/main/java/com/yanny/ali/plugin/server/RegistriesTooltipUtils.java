@@ -2,10 +2,12 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -53,17 +55,29 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getBlockTooltip(IServerUtils utils, Block block) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK, block);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(block.getName());
+        } else {
+            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK, block);
+        }
     }
 
     @NotNull
     public static IKeyTooltipNode getItemTooltip(IServerUtils utils, Item item) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ITEM, item);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(item.getName(item.getDefaultInstance()));
+        } else {
+            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ITEM, item);
+        }
     }
 
     @NotNull
     public static IKeyTooltipNode getEntityTypeTooltip(IServerUtils utils, EntityType<?> entityType) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_TYPE, entityType);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(entityType.getDescription());
+        } else {
+            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_TYPE, entityType);
+        }
     }
 
     @NotNull
@@ -83,7 +97,11 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getMobEffectTooltip(IServerUtils utils, MobEffect mobEffect) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.MOB_EFFECT, mobEffect);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(mobEffect.getDisplayName());
+        } else {
+            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.MOB_EFFECT, mobEffect);
+        }
     }
 
     @NotNull
@@ -98,12 +116,20 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getEnchantmentTooltip(IServerUtils utils, Enchantment enchantment) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENCHANTMENT, enchantment);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(enchantment.getFullname(1));
+        } else {
+            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENCHANTMENT, enchantment);
+        }
     }
 
     @NotNull
     public static IKeyTooltipNode getAttributeTooltip(IServerUtils utils, Attribute attribute) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ATTRIBUTE, attribute);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(Component.translatable(attribute.getDescriptionId()));
+        } else {
+            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ATTRIBUTE, attribute);
+        }
     }
 
     @NotNull
@@ -158,11 +184,19 @@ public class RegistriesTooltipUtils {
 
     @NotNull
     public static IKeyTooltipNode getTrimMaterialTooltip(IServerUtils utils, TrimMaterial material) {
-        return getRegistryTooltip(utils, Registries.TRIM_MATERIAL, material);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(material.description());
+        } else {
+            return getRegistryTooltip(utils, Registries.TRIM_MATERIAL, material);
+        }
     }
 
     @NotNull
     public static IKeyTooltipNode getTrimPatternTooltip(IServerUtils utils, TrimPattern pattern) {
-        return getRegistryTooltip(utils, Registries.TRIM_PATTERN, pattern);
+        if (utils.getConfiguration().showInGameNames) {
+            return ComponentTooltipNode.values(pattern.description());
+        } else {
+            return getRegistryTooltip(utils, Registries.TRIM_PATTERN, pattern);
+        }
     }
 }

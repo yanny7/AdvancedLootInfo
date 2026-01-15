@@ -1,3 +1,7 @@
+# []
+
+- Added a config option to switch between localized names and ResourceLocations for Items/Blocks/Effects...
+
 # [1.6.2]
 
 - Fixed freeze with JEI on world rejoin
