@@ -2,6 +2,7 @@ package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
+import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -222,6 +223,11 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return utils.createEntities(type, level);
+    }
+
+    @Override
+    public AliConfig getConfiguration() {
+        return utils.getConfiguration();
     }
 
     public void printRegistrationInfo() {
