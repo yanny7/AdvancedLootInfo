@@ -52,12 +52,13 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
         return entities;
     }
 
-    public void loadConfiguration() {
-        configuration = ConfigUtils.readConfiguration();
-    }
-
+    @Override
     public AliConfig getConfiguration() {
         return configuration;
+    }
+
+    public void loadConfiguration() {
+        configuration = ConfigUtils.readConfiguration();
     }
 
     public void printRegistrationInfo() {
