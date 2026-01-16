@@ -1,3 +1,7 @@
+# [1.6.4]
+
+- Fixed rare crash in some modpacks when obtaining localized registry name
+
 # [1.6.3]
 
 - Used localized names for Items/Blocks/Effects..., added config option to display them as ResourceLocations 
