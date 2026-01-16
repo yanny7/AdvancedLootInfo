@@ -1,6 +1,6 @@
-# []
+# [1.6.3]
 
-- Added a config option to switch between localized names and ResourceLocations for Items/Blocks/Effects...
+- Used localized names for Items/Blocks/Effects..., added config option to display them as ResourceLocations 
 
 # [1.6.2]
 
