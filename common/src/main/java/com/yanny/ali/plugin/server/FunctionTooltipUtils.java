@@ -22,7 +22,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getCopyNameTooltip(IServerUtils utils, CopyNameFunction fun) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.source.param().name()).build("ali.property.value.source"))
+                .add(utils.getValueTooltip(utils, fun.source.contextParam().name()).build("ali.property.value.source"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.copy_name");
     }
@@ -282,10 +282,13 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static ITooltipNode getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
-        return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.filter).build("ali.property.branch.filter"))
-                .add(BranchTooltipNode.branch().add(utils.getFunctionTooltip(utils, fun.modifier)).build("ali.property.branch.modifier"))
-                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, fun.filter).build("ali.property.branch.filter"));
+
+        fun.onPass.ifPresent(f -> tooltip.add(BranchTooltipNode.branch().add(utils.getFunctionTooltip(utils, f)).build("ali.property.branch.on_pass")));
+        fun.onFail.ifPresent(f -> tooltip.add(BranchTooltipNode.branch().add(utils.getFunctionTooltip(utils, f)).build("ali.property.branch.on_fail")));
+
+        return tooltip.add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.filtered");
     }
 
@@ -373,5 +376,12 @@ public class FunctionTooltipUtils {
                 .add(utils.getValueTooltip(utils, fun.strings).build("ali.property.branch.strings"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_custom_model_data");
+    }
+
+    @NotNull
+    public static ITooltipNode getDiscardItemTooltip(IServerUtils utils, DiscardItem fun) {
+        return BranchTooltipNode.branch()
+                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.discard_item");
     }
 }

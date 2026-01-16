@@ -6,10 +6,10 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class EmptyNode implements IDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "empty");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "empty");
 
     private final ITooltipNode tooltip;
     private final float chance;
@@ -36,7 +36,7 @@ public class EmptyNode implements IDataNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

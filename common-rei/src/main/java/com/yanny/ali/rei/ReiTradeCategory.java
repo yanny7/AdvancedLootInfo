@@ -11,21 +11,21 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, ResourceLocation> {
+public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, Identifier> {
     private static final int OFFSET = 10;
 
     private final CategoryIdentifier<ReiTradeDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
 
-    public ReiTradeCategory(CategoryIdentifier<ReiTradeDisplay> identifier, Component title, LootCategory<ResourceLocation> lootCategory) {
+    public ReiTradeCategory(CategoryIdentifier<ReiTradeDisplay> identifier, Component title, LootCategory<Identifier> lootCategory) {
         super(lootCategory);
         this.identifier = identifier;
         this.title = title;

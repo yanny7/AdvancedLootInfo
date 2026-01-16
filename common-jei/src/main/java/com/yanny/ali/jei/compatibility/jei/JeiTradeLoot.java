@@ -14,14 +14,14 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
 
-public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, ResourceLocation> {
-    public JeiTradeLoot(IGuiHelper guiHelper, IRecipeType<RecipeHolder<TradeLootType>> recipeType, LootCategory<ResourceLocation> lootCategory, Component title, IDrawable icon) {
+public class JeiTradeLoot extends JeiBaseLoot<TradeLootType, Identifier> {
+    public JeiTradeLoot(IGuiHelper guiHelper, IRecipeType<RecipeHolder<TradeLootType>> recipeType, LootCategory<Identifier> lootCategory, Component title, IDrawable icon) {
         super(guiHelper, recipeType, lootCategory, title, icon);
     }
 

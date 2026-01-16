@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.mods.PluginUtils;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -59,8 +59,8 @@ public class Plugin implements IPlugin {
             }
         }
 
-        for (Map.Entry<ResourceLocation, Object> entry : LootModifierManager.getAllLootMods().entrySet()) {
-            ResourceLocation location = entry.getKey();
+        for (Map.Entry<Identifier, Object> entry : LootModifierManager.getAllLootMods().entrySet()) {
+            Identifier location = entry.getKey();
             Object globalLootModifier = entry.getValue();
             IGlobalLootModifierWrapper wrapper = wrap(globalLootModifier, location);
 
@@ -106,17 +106,17 @@ public class Plugin implements IPlugin {
             }
 
             @Override
-            public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
+            public Identifier getTargetLootTableId(LootItemCondition condition) {
                 return ReflectionUtils.copyClassData(LootTableIdCondition.class, condition).getTargetLootTableId();
             }
         };
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(Object modifier, ResourceLocation location) {
+    private static IGlobalLootModifierWrapper wrap(Object modifier, Identifier location) {
         return new IGlobalLootModifierWrapper() {
             @Override
-            public ResourceLocation getName() {
+            public Identifier getName() {
                 return location;
             }
 

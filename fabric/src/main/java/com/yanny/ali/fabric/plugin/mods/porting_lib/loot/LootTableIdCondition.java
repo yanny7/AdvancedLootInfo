@@ -6,18 +6,18 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IConditionTooltip;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @ClassAccessor("io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition")
 public class LootTableIdCondition extends BaseAccessor<Object> implements IConditionTooltip {
     @FieldAccessor
-    private ResourceLocation targetLootTableId;
+    private Identifier targetLootTableId;
 
     public LootTableIdCondition(Object parent) {
         super(parent);
     }
 
-    public ResourceLocation getTargetLootTableId() {
+    public Identifier getTargetLootTableId() {
         return targetLootTableId;
     }
 

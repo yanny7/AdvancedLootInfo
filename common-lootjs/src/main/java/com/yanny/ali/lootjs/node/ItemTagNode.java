@@ -8,7 +8,7 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemTagNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "item_tag");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(LootJsPlugin.ID, "item_tag");
 
     private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
@@ -55,7 +55,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     public ItemTagNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
+        tag = TagKey.create(Registries.ITEM, buf.readIdentifier());
         tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
@@ -96,7 +96,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        buf.writeResourceLocation(tag.location());
+        buf.writeIdentifier(tag.location());
         ITooltipNode.encodeNode(utils, tooltip, buf);
         count.encode(buf);
         buf.writeBoolean(modified);
@@ -109,7 +109,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

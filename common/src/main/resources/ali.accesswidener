@@ -42,7 +42,7 @@ accessible field net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantedCountIncreaseFunction enchantment Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantedCountIncreaseFunction limit I
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantedCountIncreaseFunction value Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
-accessible field net/minecraft/world/level/storage/loot/functions/CopyNameFunction source Lnet/minecraft/world/level/storage/loot/functions/CopyNameFunction$Source;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyNameFunction source Lnet/minecraft/world/level/storage/loot/LootContextArg;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyBlockState block Lnet/minecraft/core/Holder;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyBlockState properties Ljava/util/Set;
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction onlyCompatible Z
@@ -84,9 +84,10 @@ accessible field net/minecraft/world/level/storage/loot/functions/SetItemFunctio
 accessible field net/minecraft/world/level/storage/loot/functions/SetComponentsFunction components Lnet/minecraft/core/component/DataComponentPatch;
 accessible field net/minecraft/world/level/storage/loot/functions/ModifyContainerContents component Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;
 accessible field net/minecraft/world/level/storage/loot/functions/ModifyContainerContents modifier Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
-accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction filter Lnet/minecraft/advancements/critereon/ItemPredicate;
-accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction modifier Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
-accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction source Lnet/minecraft/world/level/storage/loot/functions/CopyComponentsFunction$Source;
+accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction filter Lnet/minecraft/advancements/criterion/ItemPredicate;
+accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction onPass Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction onFail Ljava/util/Optional;
+accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction source Lnet/minecraft/world/level/storage/loot/LootContextArg;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction include Ljava/util/Optional;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction exclude Ljava/util/Optional;
 accessible field net/minecraft/world/level/storage/loot/functions/SetFireworksFunction explosions Ljava/util/Optional;
@@ -115,7 +116,7 @@ accessible field net/minecraft/world/item/crafting/Ingredient values Lnet/minecr
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/HolderGetter$Provider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetItemFunction <init> (Ljava/util/List;Lnet/minecraft/core/Holder;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ModifyContainerContents <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
-accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/critereon/ItemPredicate;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
+accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/criterion/ItemPredicate;Ljava/util/Optional;Ljava/util/Optional;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetFireworksFunction <init> (Ljava/util/List;Ljava/util/Optional;Ljava/util/Optional;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetWrittenBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetWritableBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
@@ -132,78 +133,78 @@ accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible class net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction$CopyOperation
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
-accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher
-accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher
-accessible class net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher
-accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementPredicate
-accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate
-accessible class net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate
-accessible class net/minecraft/advancements/critereon/PlayerPredicate$StatMatcher
-accessible class net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate
+accessible class net/minecraft/advancements/criterion/StatePropertiesPredicate$PropertyMatcher
+accessible class net/minecraft/advancements/criterion/StatePropertiesPredicate$ExactMatcher
+accessible class net/minecraft/advancements/criterion/StatePropertiesPredicate$RangedMatcher
+accessible class net/minecraft/advancements/criterion/PlayerPredicate$AdvancementPredicate
+accessible class net/minecraft/advancements/criterion/PlayerPredicate$AdvancementCriterionsPredicate
+accessible class net/minecraft/advancements/criterion/PlayerPredicate$AdvancementDonePredicate
+accessible class net/minecraft/advancements/criterion/PlayerPredicate$StatMatcher
+accessible class net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate
 
 
-accessible class net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems
-accessible class net/minecraft/world/entity/npc/VillagerTrades$EmeraldsForVillagerTypeItem
-accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds
-accessible class net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald
-accessible class net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds
-accessible class net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds
-accessible class net/minecraft/world/entity/npc/VillagerTrades$DyedArmorForEmeralds
-accessible class net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds
-accessible class net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds
-accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems
-accessible class net/minecraft/world/entity/npc/VillagerTrades$TypeSpecificTrade
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldsForVillagerTypeItem
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsForEmeralds
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$SuspiciousStewForEmerald
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantedItemForEmeralds
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$DyedArmorForEmeralds
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantBookForEmeralds
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems
+accessible class net/minecraft/world/entity/npc/villager/VillagerTrades$TypeSpecificTrade
 
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems itemStack Lnet/minecraft/world/item/trading/ItemCost;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems emeraldAmount I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems priceMultiplier F
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldsForVillagerTypeItem trades Ljava/util/Map;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldsForVillagerTypeItem cost I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldsForVillagerTypeItem maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldsForVillagerTypeItem villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds itemStack Lnet/minecraft/world/item/ItemStack;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds emeraldCost I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsForEmeralds priceMultiplier F
-accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald effects Lnet/minecraft/world/item/component/SuspiciousStewEffects;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald xp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$SuspiciousStewForEmerald priceMultiplier F
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds itemStack Lnet/minecraft/world/item/ItemStack;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds baseEmeraldCost I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantedItemForEmeralds priceMultiplier F
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds toItem Lnet/minecraft/world/item/ItemStack;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds toCount I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds emeraldCost I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds fromItem Lnet/minecraft/world/item/Item;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds fromCount I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TippedArrowForItemsAndEmeralds priceMultiplier F
-accessible field net/minecraft/world/entity/npc/VillagerTrades$DyedArmorForEmeralds item Lnet/minecraft/world/item/Item;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$DyedArmorForEmeralds value I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$DyedArmorForEmeralds maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$DyedArmorForEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds tradeableEnchantments Lnet/minecraft/tags/TagKey;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds minLevel I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds maxLevel I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds emeraldCost I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds destination Lnet/minecraft/tags/TagKey;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds displayName Ljava/lang/String;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds destinationType Lnet/minecraft/core/Holder;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems fromItem Lnet/minecraft/world/item/trading/ItemCost;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems emeraldCost I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems toItem Lnet/minecraft/world/item/ItemStack;
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems maxUses I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems villagerXp I
-accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems priceMultiplier F
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems itemStack Lnet/minecraft/world/item/trading/ItemCost;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems emeraldAmount I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldForItems priceMultiplier F
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldsForVillagerTypeItem trades Ljava/util/Map;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldsForVillagerTypeItem cost I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldsForVillagerTypeItem maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EmeraldsForVillagerTypeItem villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsForEmeralds itemStack Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsForEmeralds emeraldCost I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsForEmeralds maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsForEmeralds villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsForEmeralds priceMultiplier F
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$SuspiciousStewForEmerald effects Lnet/minecraft/world/item/component/SuspiciousStewEffects;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$SuspiciousStewForEmerald xp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$SuspiciousStewForEmerald priceMultiplier F
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantedItemForEmeralds itemStack Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantedItemForEmeralds baseEmeraldCost I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantedItemForEmeralds maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantedItemForEmeralds villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantedItemForEmeralds priceMultiplier F
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds toItem Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds toCount I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds emeraldCost I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds fromItem Lnet/minecraft/world/item/Item;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds fromCount I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TippedArrowForItemsAndEmeralds priceMultiplier F
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$DyedArmorForEmeralds item Lnet/minecraft/world/item/Item;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$DyedArmorForEmeralds value I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$DyedArmorForEmeralds maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$DyedArmorForEmeralds villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantBookForEmeralds villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantBookForEmeralds tradeableEnchantments Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantBookForEmeralds minLevel I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$EnchantBookForEmeralds maxLevel I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds emeraldCost I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds destination Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds displayName Ljava/lang/String;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds destinationType Lnet/minecraft/core/Holder;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$TreasureMapForEmeralds villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems fromItem Lnet/minecraft/world/item/trading/ItemCost;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems emeraldCost I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems toItem Lnet/minecraft/world/item/ItemStack;
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems maxUses I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems villagerXp I
+accessible field net/minecraft/world/entity/npc/villager/VillagerTrades$ItemsAndEmeraldsToItems priceMultiplier F
 
 #accessible field net/minecraftforge/common/loot/CanToolPerformAction action Lnet/minecraftforge/common/ToolAction;
 
@@ -214,8 +215,8 @@ accessible field net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsT
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount <init> (I)V
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount <init> (IF)V
-accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate <init> (Ljava/util/List;)V
-accessible method net/minecraft/advancements/critereon/PlayerPredicate$AdvancementDonePredicate <init> (Z)V
-accessible method net/minecraft/advancements/critereon/PlayerPredicate$AdvancementCriterionsPredicate <init> (Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;)V
-accessible method net/minecraft/advancements/critereon/LocationPredicate$PositionPredicate <init> (Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;Lnet/minecraft/advancements/critereon/MinMaxBounds$Doubles;)V
+accessible method net/minecraft/advancements/criterion/StatePropertiesPredicate <init> (Ljava/util/List;)V
+accessible method net/minecraft/advancements/criterion/PlayerPredicate$AdvancementDonePredicate <init> (Z)V
+accessible method net/minecraft/advancements/criterion/PlayerPredicate$AdvancementCriterionsPredicate <init> (Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;)V
+accessible method net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate <init> (Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V

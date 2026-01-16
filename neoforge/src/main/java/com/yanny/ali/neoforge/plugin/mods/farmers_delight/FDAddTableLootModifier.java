@@ -38,7 +38,7 @@ public class FDAddTableLootModifier extends GlobalLootModifier implements IGloba
                     .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                     .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
                     .build();
-            IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.location(), c, tooltip);
+            IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.identifier(), c, tooltip);
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
         }, predicate);
     }

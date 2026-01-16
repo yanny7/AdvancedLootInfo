@@ -5,7 +5,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.tooltip.*;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -13,12 +13,12 @@ import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
@@ -174,9 +174,9 @@ public class GenericTooltipUtils {
             tooltip = utils.getValueTooltip(utils, entityType)
                     .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("ali.property.value.null"))
                     .build("ali.property.value.entity_type");
-        } else if (value.value() instanceof ResourceLocation resourceLocation) {
-            tooltip = utils.getValueTooltip(utils, resourceLocation)
-                    .add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(resourceLocation)), toString(stat.range())).build("ali.property.value.null"))
+        } else if (value.value() instanceof Identifier Identifier) {
+            tooltip = utils.getValueTooltip(utils, Identifier)
+                    .add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(Identifier)), toString(stat.range())).build("ali.property.value.null"))
                     .build("ali.property.value.id");
         } else {
             tooltip = EmptyTooltipNode.EMPTY;
@@ -261,7 +261,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceKey<Recipe<?>>, Boolean> entry) {
-        return ValueTooltipNode.keyValue(entry.getKey().location(), entry.getValue()).build("ali.property.value.null");
+        return ValueTooltipNode.keyValue(entry.getKey().identifier(), entry.getValue()).build("ali.property.value.null");
     }
 
     @NotNull
@@ -306,7 +306,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getAdvancementEntryTooltip(IServerUtils utils, Map.Entry<ResourceLocation, PlayerPredicate.AdvancementPredicate> entry) {
+    public static ITooltipNode getAdvancementEntryTooltip(IServerUtils utils, Map.Entry<Identifier, PlayerPredicate.AdvancementPredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
                 .add(getAdvancementPredicateTooltip(utils, entry.getValue()))
                 .build("ali.property.value.null");
@@ -467,7 +467,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    private static String getTranslationKey(ResourceLocation location) {
+    private static String getTranslationKey(Identifier location) {
         return "stat." + location.toString().replace(':', '.');
     }
 }

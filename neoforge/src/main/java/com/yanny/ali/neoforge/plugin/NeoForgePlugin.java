@@ -12,7 +12,7 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.*;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -78,7 +78,7 @@ public class NeoForgePlugin implements IPlugin {
                         .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
                         .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
                         .build();
-                IDataNode node = NodeUtils.getReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable().location(), c, tooltip);
+                IDataNode node = NodeUtils.getReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable().identifier(), c, tooltip);
                 return List.of(new IOperation.AddOperation((i) -> true, node));
             }, tablePredicate);
         });
@@ -128,7 +128,7 @@ public class NeoForgePlugin implements IPlugin {
             }
 
             @Override
-            public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
+            public Identifier getTargetLootTableId(LootItemCondition condition) {
                 return ((MixinLootTableIdCondition) condition).getTargetLootTableId();
             }
         };
@@ -138,7 +138,7 @@ public class NeoForgePlugin implements IPlugin {
     private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier) {
         return new IGlobalLootModifierWrapper() {
             @Override
-            public ResourceLocation getName() {
+            public Identifier getName() {
                 return NeoForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.getKey(modifier.codec());
             }
 

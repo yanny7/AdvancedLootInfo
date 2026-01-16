@@ -1,14 +1,14 @@
 package com.yanny.ali.api;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface IClientRegistry {
-    void registerWidget(ResourceLocation id, IWidgetFactory factory);
+    void registerWidget(Identifier id, IWidgetFactory factory);
 
-    <T extends IDataNode> void registerDataNode(ResourceLocation id, DataFactory<T> dataFactory);
+    <T extends IDataNode> void registerDataNode(Identifier id, DataFactory<T> dataFactory);
 
-    <T extends ITooltipNode> void registerTooltipNode(ResourceLocation id, TooltipFactory<T> tooltipFactory);
+    <T extends ITooltipNode> void registerTooltipNode(Identifier id, TooltipFactory<T> tooltipFactory);
 
     @FunctionalInterface
     interface IWidgetFactory {

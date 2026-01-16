@@ -1,12 +1,12 @@
 package com.yanny.ali.api;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public interface IDataNode extends Comparable<IDataNode> {
     ITooltipNode getTooltip();
 
-    ResourceLocation getId();
+    Identifier getId();
 
     void encode(IServerUtils utils, RegistryFriendlyByteBuf buf);
 

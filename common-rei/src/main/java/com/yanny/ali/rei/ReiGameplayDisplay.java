@@ -2,12 +2,12 @@ package com.yanny.ali.rei;
 
 import com.yanny.ali.compatibility.common.GameplayLootType;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
 public class ReiGameplayDisplay extends ReiBaseDisplay {
-    private final ResourceLocation id;
+    private final Identifier id;
     private final CategoryIdentifier<ReiGameplayDisplay> identifier;
 
     public ReiGameplayDisplay(GameplayLootType entry, CategoryIdentifier<ReiGameplayDisplay> identifier) {
@@ -21,7 +21,7 @@ public class ReiGameplayDisplay extends ReiBaseDisplay {
         return identifier;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 }

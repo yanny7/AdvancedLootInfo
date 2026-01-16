@@ -1,7 +1,7 @@
 package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -35,7 +35,7 @@ public class Utils {
     }
 
     @NotNull
-    public static Predicate<ResourceLocation> typePredicate(LootType type) {
+    public static Predicate<Identifier> typePredicate(LootType type) {
         return switch (type) {
             case UNKNOWN, VAULT, ADVANCEMENT_REWARD, ADVANCEMENT_ENTITY, ADVANCEMENT_LOCATION,
                  COMMAND, SELECTOR -> (r) -> false;

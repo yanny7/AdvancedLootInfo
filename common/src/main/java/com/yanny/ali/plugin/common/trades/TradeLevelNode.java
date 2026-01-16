@@ -8,11 +8,11 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 
 public class TradeLevelNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "trade_level");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "trade_level");
 
     public final int level;
 
@@ -42,7 +42,7 @@ public class TradeLevelNode extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

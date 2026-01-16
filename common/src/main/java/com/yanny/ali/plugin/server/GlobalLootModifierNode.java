@@ -6,10 +6,10 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class GlobalLootModifierNode implements IDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "glm");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "glm");
 
     private final ITooltipNode tooltip;
 
@@ -27,7 +27,7 @@ public class GlobalLootModifierNode implements IDataNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

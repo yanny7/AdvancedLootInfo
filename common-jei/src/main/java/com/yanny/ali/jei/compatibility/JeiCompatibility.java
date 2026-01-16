@@ -13,13 +13,12 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.types.IRecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -35,8 +34,8 @@ public class JeiCompatibility implements IModPlugin {
 
     private final Map<LootCategory<Block>, JeiBlockLoot> blockCategories = new LinkedHashMap<>();
     private final Map<LootCategory<EntityType<?>>, JeiEntityLoot> entityCategories = new LinkedHashMap<>();
-    private final Map<LootCategory<ResourceLocation>, JeiGameplayLoot> gameplayCategories = new LinkedHashMap<>();
-    private final Map<LootCategory<ResourceLocation>, JeiTradeLoot> tradeCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<Identifier>, JeiGameplayLoot> gameplayCategories = new LinkedHashMap<>();
+    private final Map<LootCategory<Identifier>, JeiTradeLoot> tradeCategories = new LinkedHashMap<>();
 
     @Override
     public void onRuntimeUnavailable() {
@@ -204,7 +203,7 @@ public class JeiCompatibility implements IModPlugin {
 
     @NotNull
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return Utils.modLoc("jei_plugin");
     }
 

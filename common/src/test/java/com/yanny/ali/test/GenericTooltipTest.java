@@ -7,7 +7,7 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
 import net.minecraft.core.component.*;
@@ -16,7 +16,7 @@ import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
@@ -31,7 +31,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.CatVariants;
+import net.minecraft.world.entity.animal.feline.CatVariants;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -161,7 +161,7 @@ public class GenericTooltipTest {
     @Test
     public void testModifierTooltip() {
         assertTooltip(ValueTooltipUtils.getModifierTooltip(UTILS, new SetAttributesFunction.ModifierBuilder(
-                ResourceLocation.withDefaultNamespace("armor"),
+                Identifier.withDefaultNamespace("armor"),
                 Attributes.ARMOR,
                 AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL,
                 UniformGenerator.between(1, 5))
@@ -712,7 +712,7 @@ public class GenericTooltipTest {
     public void testEntryPredicateTooltip() {
         assertTooltip(ValueTooltipUtils.getEntryPredicateTooltip(UTILS, new AttributeModifiersPredicate.EntryPredicate(
                 Optional.of(HolderSet.direct(Attributes.ARMOR, Attributes.GRAVITY)),
-                Optional.of(ResourceLocation.withDefaultNamespace("test")),
+                Optional.of(Identifier.withDefaultNamespace("test")),
                 MinMaxBounds.Doubles.between(1.5, 3.14),
                 Optional.of(AttributeModifier.Operation.ADD_VALUE),
                 Optional.of(EquipmentSlotGroup.ARMOR)
@@ -787,7 +787,7 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getItemAttributeModifiersEntryTooltip(UTILS, new ItemAttributeModifiers.Entry(
                 Attributes.BLOCK_BREAK_SPEED,
                 new AttributeModifier(
-                        ResourceLocation.withDefaultNamespace("test"),
+                        Identifier.withDefaultNamespace("test"),
                         1.25,
                         AttributeModifier.Operation.ADD_VALUE
                 ),
@@ -806,7 +806,7 @@ public class GenericTooltipTest {
     @Test
     public void testAttributeModifierTooltip() {
         assertTooltip(ValueTooltipUtils.getAttributeModifierTooltip(UTILS, new AttributeModifier(
-                ResourceLocation.withDefaultNamespace("test"),
+                Identifier.withDefaultNamespace("test"),
                 1.25,
                 AttributeModifier.Operation.ADD_VALUE
         )).build("ali.property.branch.attribute_modifier"), List.of(
@@ -901,7 +901,11 @@ public class GenericTooltipTest {
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false",
                         "    -> minecraft:break_sound",
-                        "      -> Sound: minecraft:entity.item.break"
+                        "      -> Sound: minecraft:entity.item.break",
+                        "    -> minecraft:use_effects",
+                        "      -> Not implemented: SimpleType",
+                        "      -> Not implemented: SimpleType",
+                        "    -> minecraft:swing_animation"
                 )
         ));
     }

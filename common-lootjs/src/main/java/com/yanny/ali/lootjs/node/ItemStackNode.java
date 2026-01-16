@@ -8,7 +8,7 @@ import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemStackNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(LootJsPlugin.ID, "item_stack");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(LootJsPlugin.ID, "item_stack");
 
     private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
@@ -109,7 +109,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

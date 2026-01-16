@@ -1,7 +1,7 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.DataComponentPredicateTooltipUtils;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.predicates.*;
@@ -9,7 +9,7 @@ import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -212,7 +212,7 @@ public class DataComponentPredicateTooltipTest {
         assertTooltip(DataComponentPredicateTooltipUtils.getAttributeModifiersPredicateTooltip(UTILS, new AttributeModifiersPredicate(Optional.of(new CollectionPredicate<>(
                 Optional.of(CollectionContentsPredicate.of(new AttributeModifiersPredicate.EntryPredicate(
                         Optional.of(HolderSet.direct(Attributes.ARMOR)),
-                        Optional.of(ResourceLocation.withDefaultNamespace("help")),
+                        Optional.of(Identifier.withDefaultNamespace("help")),
                         MinMaxBounds.Doubles.between(1, 4),
                         Optional.of(AttributeModifier.Operation.ADD_VALUE),
                         Optional.of(EquipmentSlotGroup.ARMOR)

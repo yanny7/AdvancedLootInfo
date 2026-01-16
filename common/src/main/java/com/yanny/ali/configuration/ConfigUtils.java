@@ -4,7 +4,7 @@ import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.platform.Services;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -91,16 +91,16 @@ public class ConfigUtils {
         }
     }
 
-    private static class ResourceLocationAdapter implements JsonSerializer<ResourceLocation>, JsonDeserializer<ResourceLocation> {
+    private static class IdentifierAdapter implements JsonSerializer<Identifier>, JsonDeserializer<Identifier> {
         @NotNull
         @Override
-        public ResourceLocation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return ResourceLocation.parse(json.getAsString());
+        public Identifier deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return Identifier.parse(json.getAsString());
         }
 
         @NotNull
         @Override
-        public JsonElement serialize(ResourceLocation location, Type typeOfT, JsonSerializationContext context) {
+        public JsonElement serialize(Identifier location, Type typeOfT, JsonSerializationContext context) {
             return new JsonPrimitive(location.toString());
         }
     }
@@ -109,7 +109,7 @@ public class ConfigUtils {
     private static Gson createGson() {
         return new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(ResourceLocation.class, new ResourceLocationAdapter())
+                .registerTypeAdapter(Identifier.class, new IdentifierAdapter())
                 .registerTypeAdapter(LootCategory.class, new LootCategoryAdapter())
                 .registerTypeAdapter(BlockLootCategory.class, new LootCategoryAdapter())
                 .registerTypeAdapter(EntityLootCategory.class, new LootCategoryAdapter())

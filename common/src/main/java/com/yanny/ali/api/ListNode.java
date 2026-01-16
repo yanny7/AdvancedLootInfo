@@ -26,12 +26,12 @@ public abstract class ListNode implements IDataNode {
         if (count == 0) {
             nodes = Collections.emptyList();
         } else if (count == 1) {
-            nodes = Collections.singletonList(utils.getDataNodeFactory(buf.readResourceLocation()).create(utils, buf));
+            nodes = Collections.singletonList(utils.getDataNodeFactory(buf.readIdentifier()).create(utils, buf));
         } else {
             nodes = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {
-                nodes.add(utils.getDataNodeFactory(buf.readResourceLocation()).create(utils, buf));
+                nodes.add(utils.getDataNodeFactory(buf.readIdentifier()).create(utils, buf));
             }
 
             Collections.sort(nodes);
@@ -89,7 +89,7 @@ public abstract class ListNode implements IDataNode {
             int startOfNode = buf.writerIndex();
 
             try {
-                buf.writeResourceLocation(node.getId());
+                buf.writeIdentifier(node.getId());
                 node.encode(utils, buf);
                 successfulNodes++;
             } catch (Throwable e) {

@@ -3,12 +3,12 @@ package com.yanny.ali.plugin.common.nodes;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
 public class LootTableNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "loot_table");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "loot_table");
 
     private final ITooltipNode tooltip;
 
@@ -33,7 +33,7 @@ public class LootTableNode extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

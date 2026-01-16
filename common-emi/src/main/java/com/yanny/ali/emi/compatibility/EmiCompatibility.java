@@ -18,7 +18,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -49,8 +49,8 @@ public class EmiCompatibility implements EmiPlugin {
         if (level != null) {
             Map<LootCategory<Block>, EmiRecipeCategory> blockCategories = config.blockCategories.stream().collect(getCollector());
             Map<LootCategory<EntityType<?>>, EmiRecipeCategory> entityCategories = config.entityCategories.stream().collect(getCollector());
-            Map<LootCategory<ResourceLocation>, EmiRecipeCategory> gameplayCategories = config.gameplayCategories.stream().collect(getCollector());
-            Map<LootCategory<ResourceLocation>, EmiRecipeCategory> tradeCategories = config.tradeCategories.stream().collect(getCollector());
+            Map<LootCategory<Identifier>, EmiRecipeCategory> gameplayCategories = config.gameplayCategories.stream().collect(getCollector());
+            Map<LootCategory<Identifier>, EmiRecipeCategory> tradeCategories = config.tradeCategories.stream().collect(getCollector());
 
             blockCategories.values().forEach(registry::addCategory);
             entityCategories.values().forEach(registry::addCategory);
@@ -101,7 +101,7 @@ public class EmiCompatibility implements EmiPlugin {
                     (node, location, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : gameplayCategories.entrySet()) {
+                        for (Map.Entry<LootCategory<Identifier>, EmiRecipeCategory> entry : gameplayCategories.entrySet()) {
                             if (entry.getKey().validate(location)) {
                                 if (entry.getKey().isHidden()) {
                                     return;
@@ -119,7 +119,7 @@ public class EmiCompatibility implements EmiPlugin {
                     (tradeEntry, location, inputs, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
+                        for (Map.Entry<LootCategory<Identifier>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
                             if (entry.getKey().validate(location)) {
                                 if (entry.getKey().isHidden()) {
                                     return;
@@ -137,7 +137,7 @@ public class EmiCompatibility implements EmiPlugin {
                     (tradeEntry, location, inputs, outputs) -> {
                         EmiRecipeCategory category = null;
 
-                        for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
+                        for (Map.Entry<LootCategory<Identifier>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
                             if (entry.getKey().validate(location)) {
                                 if (entry.getKey().isHidden()) {
                                     return;

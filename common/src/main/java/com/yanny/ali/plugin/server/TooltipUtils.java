@@ -6,14 +6,14 @@ import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
-import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -425,7 +425,7 @@ public class TooltipUtils {
 
     private static ItemAttributeModifiers updateModifiers(List<SetAttributesFunction.Modifier> modifiers, ItemAttributeModifiers itemAttributeModifiers) {
         for (SetAttributesFunction.Modifier modifier : modifiers) {
-            ResourceLocation id = modifier.id();
+            Identifier id = modifier.id();
 
             if (modifier.slots().size() == 1 && modifier.amount().getType() == NumberProviders.CONSTANT) {
                 EquipmentSlotGroup equipmentSlot = Util.getRandom(modifier.slots(), RandomSource.create());

@@ -10,8 +10,7 @@ import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
-import net.minecraft.Util;
-import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.Holder;
@@ -24,8 +23,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackResources;
@@ -35,9 +34,10 @@ import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
@@ -214,12 +214,12 @@ public class TooltipTestSuite {
 
             @Nullable
             @Override
-            public ResourceLocation getCurrentLootTable() {
+            public Identifier getCurrentLootTable() {
                 return null;
             }
 
             @Override
-            public LootTable getLootTable(Either<ResourceLocation, LootTable> location) {
+            public LootTable getLootTable(Either<Identifier, LootTable> location) {
                 return PluginManager.SERVER_REGISTRY.getLootTable(location);
             }
 
@@ -280,7 +280,7 @@ public class TooltipTestSuite {
             Field frozenField = MappedRegistry.class.getDeclaredField("frozen");
             frozenField.setAccessible(true);
             frozenField.set(BuiltInRegistries.LOOT_FUNCTION_TYPE, false);
-            Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, ResourceKey.create(Registries.LOOT_FUNCTION_TYPE, ResourceLocation.withDefaultNamespace("unknown")), LootFunctionTypes.UNUSED);
+            Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, ResourceKey.create(Registries.LOOT_FUNCTION_TYPE, Identifier.withDefaultNamespace("unknown")), LootFunctionTypes.UNUSED);
             frozenField.set(BuiltInRegistries.LOOT_FUNCTION_TYPE, true);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -292,7 +292,7 @@ public class TooltipTestSuite {
             Field frozenField = MappedRegistry.class.getDeclaredField("frozen");
             frozenField.setAccessible(true);
             frozenField.set(BuiltInRegistries.LOOT_CONDITION_TYPE, false);
-            Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, ResourceKey.create(Registries.LOOT_CONDITION_TYPE, ResourceLocation.withDefaultNamespace("unknown")), LootConditionTypes.UNUSED);
+            Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, ResourceKey.create(Registries.LOOT_CONDITION_TYPE, Identifier.withDefaultNamespace("unknown")), LootConditionTypes.UNUSED);
             frozenField.set(BuiltInRegistries.LOOT_CONDITION_TYPE, true);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException(e);

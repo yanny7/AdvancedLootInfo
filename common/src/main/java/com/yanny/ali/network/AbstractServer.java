@@ -21,8 +21,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.ReloadableServerRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,8 +30,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -64,18 +64,18 @@ public abstract class AbstractServer {
         AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
 
         AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
-        Map<ResourceLocation, LootTable> lootTables = collectLootTables(manager);
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
-        Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
-        Map<ResourceLocation, List<Item>> lootTableItems;
-        Map<ResourceLocation, List<ItemStack>> lootTableItemStacks;
+        Map<Identifier, LootTable> lootTables = collectLootTables(manager);
+        Map<Identifier, IDataNode> lootNodes = new HashMap<>();
+        Map<Identifier, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
+        Map<Identifier, List<Item>> lootTableItems;
+        Map<Identifier, List<ItemStack>> lootTableItemStacks;
         List<ILootModifier<?>> lootModifiers = serverRegistry.getLootModifiers();
         Map<ILootModifier.IType<?>, List<ILootModifier<?>>> groupedTypes = lootModifiers.stream().collect(Collectors.groupingBy(ILootModifier::getType));
         List<ILootModifier<?>> blockLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.BLOCK, Collections.emptyList());
         List<ILootModifier<?>> entityLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.ENTITY, Collections.emptyList());
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.LOOT_TABLE, Collections.emptyList());
-        Map<ResourceLocation, IDataNode> tradeNodes;
-        Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
+        Map<Identifier, IDataNode> tradeNodes;
+        Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
         Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
         IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
 
@@ -134,17 +134,17 @@ public abstract class AbstractServer {
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
     @NotNull
-    private static List<Item> getItems(Map.Entry<ResourceLocation, LootTable> lootTableMap) {
+    private static List<Item> getItems(Map.Entry<Identifier, LootTable> lootTableMap) {
         return ItemCollectorUtils.collectLootTable(PluginManager.SERVER_REGISTRY, lootTableMap.getValue());
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<ResourceLocation, IDataNode> lootNodes, Map<ResourceLocation, List<ItemStack>> items) {
-        Map<ResourceLocation, IDataNode> result = new HashMap<>();
+    private static Map<Identifier, IDataNode> removeEmptyLootTable(AliServerRegistry serverRegistry, Map<Identifier, IDataNode> lootNodes, Map<Identifier, List<ItemStack>> items) {
+        Map<Identifier, IDataNode> result = new HashMap<>();
         int emptyLootTables = 0;
         int injectedLootTables = 0;
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : lootNodes.entrySet()) {
+        for (Map.Entry<Identifier, IDataNode> entry : lootNodes.entrySet()) {
             IDataNode node = entry.getValue();
 
             if (node instanceof ListNode listNode) {
@@ -167,24 +167,24 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, LootTable> collectLootTables(ReloadableServerRegistries.Holder manager) {
-        Map<ResourceLocation, LootTable> lootTables = new HashMap<>();
+    private static Map<Identifier, LootTable> collectLootTables(ReloadableServerRegistries.Holder manager) {
+        Map<Identifier, LootTable> lootTables = new HashMap<>();
         Registry<LootTable> registry = (Registry<LootTable>)manager.lookup().lookup(Registries.LOOT_TABLE).orElseThrow();
 
-        registry.entrySet().forEach((e) -> lootTables.put(e.getKey().location(), e.getValue()));
+        registry.entrySet().forEach((e) -> lootTables.put(e.getKey().identifier(), e.getValue()));
 
         return lootTables;
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processBlocks(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<Identifier, IDataNode> processBlocks(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, LootTable> lootTables,
                                                                   List<ILootModifier<?>> blockLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                  Map<ResourceLocation, List<Item>> lootTableItems) {
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+                                                                  Map<Identifier, List<Item>> lootTableItems) {
+        Map<Identifier, IDataNode> lootNodes = new HashMap<>();
 
         for (Block block : BuiltInRegistries.BLOCK) {
             block.getLootTable().ifPresent((resourceKey) -> {
-                ResourceLocation location = resourceKey.location();
+                Identifier location = resourceKey.identifier();
                 LootTable lootTable = lootTables.remove(location);
 
                 serverRegistry.setCurrentLootTable(location);
@@ -218,15 +218,15 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<ResourceLocation, LootTable> lootTables,
+    private static Map<Identifier, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,
                                                                     List<ILootModifier<?>> entityLootModifiers, List<ILootModifier<?>> lootTableLootModifiers,
-                                                                    Map<ResourceLocation, List<Item>> lootTableItems) {
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+                                                                    Map<Identifier, List<Item>> lootTableItems) {
+        Map<Identifier, IDataNode> lootNodes = new HashMap<>();
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
                 // at least remove entity default loot table, otherwise it will end up in gameplay category
-                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootTables.remove(lootTableResourceKey.location()));
+                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootTables.remove(lootTableResourceKey.identifier()));
                 continue;
             }
 
@@ -235,7 +235,7 @@ public abstract class AbstractServer {
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
                     mob.getLootTable().ifPresent((resourceKey) -> {
-                        ResourceLocation location = resourceKey.location();
+                        Identifier location = resourceKey.identifier();
                         LootTable lootTable = lootTables.remove(location);
 
                         serverRegistry.setCurrentLootTable(location);
@@ -271,12 +271,12 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processLootTables(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, LootTable> lootTables,
-                                                                      List<ILootModifier<?>> lootTableLootModifiers, Map<ResourceLocation, List<Item>> lootTableItems) {
-        Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
+    private static Map<Identifier, IDataNode> processLootTables(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, LootTable> lootTables,
+                                                                      List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
+        Map<Identifier, IDataNode> lootNodes = new HashMap<>();
 
-        for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
-            ResourceLocation location = entry.getKey();
+        for (Map.Entry<Identifier, LootTable> entry : lootTables.entrySet()) {
+            Identifier location = entry.getKey();
 
             serverRegistry.setCurrentLootTable(location);
 
@@ -301,11 +301,11 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
-        Map<ResourceLocation, IDataNode> nodes = new HashMap<>();
+    private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems) {
+        Map<Identifier, IDataNode> nodes = new HashMap<>();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
-            ResourceLocation location = entry.getKey().location();
+            Identifier location = entry.getKey().identifier();
 
             serverRegistry.setCurrentLootTable(location);
 
@@ -370,19 +370,19 @@ public abstract class AbstractServer {
         return itemStacks;
     }
 
-    private void writeLootData(RegistryFriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
+    private void writeLootData(RegistryFriendlyByteBuf buf, Map<Identifier, List<ItemStack>> lootTableItemStacks, Map<Identifier, IDataNode> lootNodes) {
         AliServerRegistry utils = PluginManager.SERVER_REGISTRY;
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
         buf.writeInt(lootNodes.size());
 
-        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : lootNodes.entrySet()) {
+        for (Map.Entry<Identifier, IDataNode> nodeEntry : lootNodes.entrySet()) {
             int startOfNode = buf.writerIndex();
 
             try {
                 utils.setCurrentLootTable(nodeEntry.getKey());
-                buf.writeResourceLocation(nodeEntry.getKey());
+                buf.writeIdentifier(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
                 ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode(buf, lootTableItemStacks.getOrDefault(nodeEntry.getKey(), Collections.emptyList()));
                 successfulNodes++;
@@ -406,24 +406,24 @@ public abstract class AbstractServer {
         lootTableItemStacks.clear();
     }
 
-    private void writeTradeData(RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
+    private void writeTradeData(RegistryFriendlyByteBuf buf, Map<Identifier, IDataNode> trades, Map<Identifier, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
         AliServerRegistry utils = PluginManager.SERVER_REGISTRY;
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
         buf.writeInt(trades.size());
 
-        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : trades.entrySet()) {
+        for (Map.Entry<Identifier, IDataNode> nodeEntry : trades.entrySet()) {
             int startOfNode = buf.writerIndex();
 
             try {
                 Pair<List<Item>, List<Item>> pair = items.getOrDefault(nodeEntry.getKey(), new Pair<>(Collections.emptyList(), Collections.emptyList()));
 
                 utils.setCurrentLootTable(nodeEntry.getKey());
-                buf.writeResourceLocation(nodeEntry.getKey());
+                buf.writeIdentifier(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
-                buf.writeCollection(pair.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-                buf.writeCollection(pair.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+                buf.writeCollection(pair.getA(), (b, i) -> b.writeIdentifier(BuiltInRegistries.ITEM.getKey(i)));
+                buf.writeCollection(pair.getB(), (b, i) -> b.writeIdentifier(BuiltInRegistries.ITEM.getKey(i)));
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
@@ -444,10 +444,10 @@ public abstract class AbstractServer {
         int wtStart = buf.writerIndex();
 
         try {
-            utils.setCurrentLootTable(ResourceLocation.withDefaultNamespace("wandering_trader"));
+            utils.setCurrentLootTable(Identifier.withDefaultNamespace("wandering_trader"));
             wanderingTraderNode.encode(utils, buf);
-            buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
-            buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
+            buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeIdentifier(BuiltInRegistries.ITEM.getKey(i)));
+            buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeIdentifier(BuiltInRegistries.ITEM.getKey(i)));
         } catch (Throwable e) {
             LOGGER.warn("Failed to encode Wandering Trader", e);
 
@@ -496,7 +496,7 @@ public abstract class AbstractServer {
     }
 
     private static <T extends ItemLike> List<ItemStack> toItemStacks(TagKey<T> tag) {
-        Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tag.registry().location());
+        Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tag.registry().identifier());
 
         if (registry.isPresent()) {
             //noinspection unchecked

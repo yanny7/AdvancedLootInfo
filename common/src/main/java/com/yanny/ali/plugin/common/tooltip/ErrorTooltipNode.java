@@ -8,7 +8,7 @@ import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ErrorTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "error");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "error");
 
     private final String value;
 
@@ -35,7 +35,7 @@ public class ErrorTooltipNode implements ITooltipNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

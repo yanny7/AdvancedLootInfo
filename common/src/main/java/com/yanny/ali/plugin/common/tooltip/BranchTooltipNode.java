@@ -10,7 +10,7 @@ import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "branch");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "branch");
     private static final LoadingCache<CacheKey, BranchTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new BranchTooltipNode(data) : null));
 
@@ -57,7 +57,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

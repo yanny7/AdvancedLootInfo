@@ -21,7 +21,7 @@ loom {
 
     runs {
         data {
-            data()
+            clientData()
             programArgs "--all", "--mod", "${mod_id}"
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"

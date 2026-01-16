@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -107,7 +107,7 @@ public class ForgePlugin implements IPlugin {
             }
 
             @Override
-            public ResourceLocation getTargetLootTableId(LootItemCondition condition) {
+            public Identifier getTargetLootTableId(LootItemCondition condition) {
                 return ((LootTableIdCondition) condition).id();
             }
         };
@@ -117,7 +117,7 @@ public class ForgePlugin implements IPlugin {
     private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier) {
         return new IGlobalLootModifierWrapper() {
             @Override
-            public ResourceLocation getName() {
+            public Identifier getName() {
                 return ForgeRegistries.GLOBAL_LOOT_MODIFIER_SERIALIZERS.get().getKey(modifier.codec());
             }
 

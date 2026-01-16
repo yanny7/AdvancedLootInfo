@@ -3,12 +3,12 @@ package com.yanny.ali.plugin.common.nodes;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
 public class ReferenceNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "reference");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "reference");
 
     private final ITooltipNode tooltip;
     private final float chance;
@@ -37,7 +37,7 @@ public class ReferenceNode extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

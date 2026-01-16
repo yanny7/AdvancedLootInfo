@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.client;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -17,12 +17,12 @@ public abstract class ClientUtils implements IWidgetUtils {
     }
 
     @Override
-    public <T extends IDataNode> IClientRegistry.DataFactory<T> getDataNodeFactory(ResourceLocation id) {
+    public <T extends IDataNode> IClientRegistry.DataFactory<T> getDataNodeFactory(Identifier id) {
         return PluginManager.CLIENT_REGISTRY.getDataNodeFactory(id);
     }
 
     @Override
-    public <T extends ITooltipNode> IClientRegistry.TooltipFactory<T> getTooltipNodeFactory(ResourceLocation id) {
+    public <T extends ITooltipNode> IClientRegistry.TooltipFactory<T> getTooltipNodeFactory(Identifier id) {
         return PluginManager.CLIENT_REGISTRY.getTooltipNodeFactory(id);
     }
 

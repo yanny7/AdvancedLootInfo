@@ -2,7 +2,7 @@ package com.yanny.ali.plugin.mods.sawmill;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;

@@ -2,7 +2,7 @@ package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
 
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
@@ -35,10 +35,10 @@ public class LootModifierManager {
         REGISTERED_GLM = internalField;
     }
 
-    public static Map<ResourceLocation, Object> getAllLootMods() {
+    public static Map<Identifier, Object> getAllLootMods() {
         try {
             //noinspection unchecked
-            return (Map<ResourceLocation, Object>) REGISTERED_GLM.get(INSTANCE);
+            return (Map<Identifier, Object>) REGISTERED_GLM.get(INSTANCE);
         } catch (IllegalAccessException e) {
             LOGGER.warn("Unable to obtain global loot modifiers: {}", e.getMessage());
             return Collections.emptyMap();

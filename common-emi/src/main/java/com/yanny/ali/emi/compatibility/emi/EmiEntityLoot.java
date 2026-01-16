@@ -12,7 +12,7 @@ import dev.emi.emi.api.widget.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -25,9 +25,9 @@ import java.util.List;
 
 public class EmiEntityLoot extends EmiBaseLoot {
     private final EntityType<?> entityType;
-    private final ResourceLocation variant;
+    private final Identifier variant;
 
-    public EmiEntityLoot(EmiRecipeCategory category, ResourceLocation id, EntityType<?> entityType, IDataNode lootTable, List<ItemStack> outputs) {
+    public EmiEntityLoot(EmiRecipeCategory category, Identifier id, EntityType<?> entityType, IDataNode lootTable, List<ItemStack> outputs) {
         super(category, id, lootTable, 0, 48, Collections.emptyList(), outputs);
         this.entityType = entityType;
         this.variant = id;

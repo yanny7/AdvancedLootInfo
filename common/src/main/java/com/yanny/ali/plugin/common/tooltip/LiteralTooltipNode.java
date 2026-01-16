@@ -9,7 +9,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class LiteralTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "literal");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "literal");
     private static final LoadingCache<String, LiteralTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new LiteralTooltipNode(data) : null));
 
@@ -34,7 +34,7 @@ public class LiteralTooltipNode implements ITooltipNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

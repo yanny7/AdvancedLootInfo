@@ -10,7 +10,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.*;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ import java.util.function.BiFunction;
 public class EmiTradeLoot extends EmiBaseLoot {
     private final String path;
 
-    public EmiTradeLoot(EmiRecipeCategory category, ResourceLocation id,  IDataNode trade, List<ItemStack> inputs, List<ItemStack> outputs) {
+    public EmiTradeLoot(EmiRecipeCategory category, Identifier id,  IDataNode trade, List<ItemStack> inputs, List<ItemStack> outputs) {
         super(category, id, trade, 0, 10, inputs, outputs);
         this.path = id.getPath();
     }

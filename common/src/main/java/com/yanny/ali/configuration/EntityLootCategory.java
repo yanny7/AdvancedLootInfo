@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -14,7 +14,7 @@ import java.util.List;
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private final List<Class<?>> classes;
 
-    public EntityLootCategory(ResourceLocation key, Item icon, boolean hide, List<Class<?>> classes) {
+    public EntityLootCategory(Identifier key, Item icon, boolean hide, List<Class<?>> classes) {
         super(key, icon, Type.ENTITY, hide);
         this.classes = classes;
     }

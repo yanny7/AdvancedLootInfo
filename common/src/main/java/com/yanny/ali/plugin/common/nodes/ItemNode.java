@@ -9,7 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "item");
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Item>> ITEM_TAG_STREAM_CODEC =
             ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.ITEM));
@@ -145,7 +145,7 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

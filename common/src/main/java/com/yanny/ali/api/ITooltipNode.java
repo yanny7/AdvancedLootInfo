@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,12 +15,12 @@ public interface ITooltipNode {
     ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 
     static void encodeNode(IServerUtils utils, ITooltipNode node, RegistryFriendlyByteBuf buf) {
-        buf.writeResourceLocation(node.getId());
+        buf.writeIdentifier(node.getId());
         node.encode(utils, buf);
     }
 
     static ITooltipNode decodeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        ResourceLocation name = buf.readResourceLocation();
+        Identifier name = buf.readIdentifier();
         IClientRegistry.TooltipFactory<?> factory = utils.getTooltipNodeFactory(name);
 
         if (factory != null) {
@@ -59,5 +59,5 @@ public interface ITooltipNode {
 
     void encode(IServerUtils utils, RegistryFriendlyByteBuf buf);
 
-    ResourceLocation getId();
+    Identifier getId();
 }

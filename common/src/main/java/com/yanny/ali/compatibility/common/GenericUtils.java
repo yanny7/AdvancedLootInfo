@@ -23,16 +23,15 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
@@ -49,7 +48,7 @@ import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
+    private static final Identifier TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
 
@@ -71,6 +70,8 @@ public class GenericUtils {
                     256
             );
 
+            float screenMouseX = (float) (Minecraft.getInstance().mouseHandler.xpos() / Minecraft.getInstance().getWindow().getGuiScale());
+            float screenMouseY = (float) (Minecraft.getInstance().mouseHandler.ypos() / Minecraft.getInstance().getWindow().getGuiScale());
             EntityDimensions dimensions = entity.getType().getDimensions();
             renderEntityInInventoryFollowsMouse(
                     guiGraphics,
@@ -80,8 +81,8 @@ public class GenericUtils {
                     bounds.bottom() - 1,
                     (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
                     0.0625F,
-                    mouseX,
-                    mouseY,
+                    mouseX + screenMouseX - bounds.x(),
+                    mouseY+ screenMouseY,
                     livingEntity
             );
 
@@ -109,9 +110,9 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> decompressLootData(byte[] fullCompressedData, RegistryAccess registryAccess) {
-        Map<ResourceLocation, LootData> lootData = new HashMap<>();
-        Map<ResourceLocation, TradeData> tradeData = new HashMap<>();
+    public static Pair<Map<Identifier, LootData>, Map<Identifier, TradeData>> decompressLootData(byte[] fullCompressedData, RegistryAccess registryAccess) {
+        Map<Identifier, LootData> lootData = new HashMap<>();
+        Map<Identifier, TradeData> tradeData = new HashMap<>();
         ByteArrayInputStream bis = new ByteArrayInputStream(fullCompressedData);
         ByteBuf decompressedBuf = Unpooled.buffer();
 
@@ -128,9 +129,9 @@ public class GenericUtils {
             int lootDataCount = readerBuf.readInt();
 
             for (int i = 0; i < lootDataCount; i++) {
-                ResourceLocation location = readerBuf.readResourceLocation();
+                Identifier location = readerBuf.readIdentifier();
                 IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).create(utils, readerBuf);
-                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) readerBuf);
+                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(readerBuf);
 
                 lootData.put(location, new LootData(dataNode, items));
             }
@@ -138,19 +139,19 @@ public class GenericUtils {
             int tradeDataCount = readerBuf.readInt();
 
             for (int i = 0; i < tradeDataCount; i++) {
-                ResourceLocation location = readerBuf.readResourceLocation();
+                Identifier location = readerBuf.readIdentifier();
                 IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
-                List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::getValue).toList();
-                List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::getValue).toList();
+                List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readIdentifier).stream().map(BuiltInRegistries.ITEM::getValue).toList();
+                List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readIdentifier).stream().map(BuiltInRegistries.ITEM::getValue).toList();
                 tradeData.put(location, new TradeData(dataNode, inputs, outputs));
             }
 
             // wandering trader
             IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
-            List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::getValue).toList();
-            List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::getValue).toList();
+            List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readIdentifier).stream().map(BuiltInRegistries.ITEM::getValue).toList();
+            List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readIdentifier).stream().map(BuiltInRegistries.ITEM::getValue).toList();
 
-            tradeData.put(ResourceLocation.withDefaultNamespace("empty"), new TradeData(dataNode, inputs, outputs));
+            tradeData.put(Identifier.withDefaultNamespace("empty"), new TradeData(dataNode, inputs, outputs));
         } finally {
             readerBuf.release();
         }
@@ -181,11 +182,11 @@ public class GenericUtils {
         entity.yHeadRotO = entity.getYRot();
 
         float entityScale = entity.getScale();
-        Vector3f $$22 = new Vector3f(0.0F, entity.getBbHeight() / 2.0F + scale * entityScale, 0.0F);
-        float $$23 = (float)size / entityScale;
+        float $$22 = scale * entityScale;
+        int $$23 = Math.round(size / entityScale);
         int x = (int) guiGraphics.pose().m20();
         int y = (int) guiGraphics.pose().m21();
-        InventoryScreen.renderEntityInInventory(guiGraphics, left + x, top + y, right + x, bottom + y, $$23, $$22, rotateZ, rotateX, entity);
+        InventoryScreen.renderEntityInInventoryFollowsMouse(guiGraphics, left + x, top + y, right + x, bottom + y, $$23, $$22, mouseX, mouseY, entity);
 
         entity.yBodyRot = yBodyRot;
         entity.setYRot(entityYRot);
@@ -196,18 +197,18 @@ public class GenericUtils {
     }
 
     public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config, byte[] fullCompressedData,
-                                   QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
-                                   QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
-                                   TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
-                                   QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
-                                   QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
-        Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(fullCompressedData, level.registryAccess());
-        Map<ResourceLocation, LootData> lootData = pair.getA();
-        Map<ResourceLocation, TradeData> tradeData = pair.getB();
+                                   QuadConsumer<IDataNode, Identifier, Block, List<ItemStack>> blockConsumer,
+                                   QuadConsumer<IDataNode, Identifier, EntityType<?>, List<ItemStack>> entityConsumer,
+                                   TriConsumer<IDataNode, Identifier, List<ItemStack>> gameplayConsumer,
+                                   QuadConsumer<IDataNode, Identifier, List<ItemStack>, List<ItemStack>> traderConsumer,
+                                   QuadConsumer<IDataNode, Identifier, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
+        Pair<Map<Identifier, LootData>, Map<Identifier, TradeData>> pair = GenericUtils.decompressLootData(fullCompressedData, level.registryAccess());
+        Map<Identifier, LootData> lootData = pair.getA();
+        Map<Identifier, TradeData> tradeData = pair.getB();
 
         for (Block block : BuiltInRegistries.BLOCK) {
             block.getLootTable().ifPresent((resourceKey -> {
-                ResourceLocation location = resourceKey.location();
+                Identifier location = resourceKey.identifier();
                 LootData data = lootData.get(location);
 
                 if (data != null) {
@@ -220,7 +221,7 @@ public class GenericUtils {
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
                 // at least remove entity default loot table
-                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootData.remove(lootTableResourceKey.location()));
+                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootData.remove(lootTableResourceKey.identifier()));
                 continue;
             }
 
@@ -229,7 +230,7 @@ public class GenericUtils {
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
                     mob.getLootTable().ifPresent((resourceKey) -> {
-                        ResourceLocation location = resourceKey.location();
+                        Identifier location = resourceKey.identifier();
                         LootData data = lootData.get(location);
 
                         if (data != null) {
@@ -242,7 +243,7 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<ResourceLocation, LootData> entry : lootData.entrySet()) {
+        for (Map.Entry<Identifier, LootData> entry : lootData.entrySet()) {
             gameplayConsumer.accept(entry.getValue().node, entry.getKey(), entry.getValue().items());
         }
 
@@ -250,11 +251,11 @@ public class GenericUtils {
 
         List<Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession>> entries = BuiltInRegistries.VILLAGER_PROFESSION.entrySet()
                 .stream()
-                .sorted(Comparator.comparing(a -> a.getKey().location().getPath()))
+                .sorted(Comparator.comparing(a -> a.getKey().identifier().getPath()))
                 .toList();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : entries) {
-            ResourceLocation location = entry.getKey().location();
+            Identifier location = entry.getKey().identifier();
             TradeData tradeEntry = tradeData.get(location);
 
             if (tradeEntry != null) {
@@ -266,8 +267,8 @@ public class GenericUtils {
             }
         }
 
-        for (Map.Entry<ResourceLocation, TradeData> entry : tradeData.entrySet()) {
-            ResourceLocation location = entry.getKey();
+        for (Map.Entry<Identifier, TradeData> entry : tradeData.entrySet()) {
+            Identifier location = entry.getKey();
             TradeData tradeEntry = tradeData.get(location);
 
             if (tradeEntry != null) {

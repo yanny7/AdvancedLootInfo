@@ -1,10 +1,10 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.EntitySubPredicateTooltipUtils;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
@@ -51,9 +51,9 @@ public class EntitySubPredicateTooltipTest {
     @Test
     public void testPlayerPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getPlayerPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
-                .checkAdvancementDone(ResourceLocation.withDefaultNamespace("test"), true)
-                .addRecipe(ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("test")), false)
-                .checkAdvancementCriterions(ResourceLocation.withDefaultNamespace("criterion"), Map.of("test", true, "test2", false))
+                .checkAdvancementDone(Identifier.withDefaultNamespace("test"), true)
+                .addRecipe(ResourceKey.create(Registries.RECIPE, Identifier.withDefaultNamespace("test")), false)
+                .checkAdvancementCriterions(Identifier.withDefaultNamespace("criterion"), Map.of("test", true, "test2", false))
                 .addStat(Stats.BLOCK_MINED, Blocks.COBBLESTONE.builtInRegistryHolder(), MinMaxBounds.Ints.atLeast(100))
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))

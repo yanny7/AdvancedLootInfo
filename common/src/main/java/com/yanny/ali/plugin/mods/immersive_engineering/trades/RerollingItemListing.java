@@ -15,8 +15,8 @@ import com.yanny.ali.plugin.mods.IItemListing;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -135,6 +135,6 @@ public class RerollingItemListing extends BaseAccessor<VillagerTrades.ItemListin
 
     @NotNull
     private static Item getItem(String name) {
-        return BuiltInRegistries.ITEM.getValue(ResourceLocation.fromNamespaceAndPath("immersiveengineering", name));
+        return BuiltInRegistries.ITEM.getValue(Identifier.fromNamespaceAndPath("immersiveengineering", name));
     }
 }

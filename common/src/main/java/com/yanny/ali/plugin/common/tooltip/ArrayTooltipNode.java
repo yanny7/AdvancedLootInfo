@@ -8,7 +8,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class ArrayTooltipNode extends ListTooltipNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "array");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "array");
     private static final LoadingCache<CacheKey, ArrayTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new ArrayTooltipNode(data) : null));
 
@@ -35,7 +35,7 @@ public class ArrayTooltipNode extends ListTooltipNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

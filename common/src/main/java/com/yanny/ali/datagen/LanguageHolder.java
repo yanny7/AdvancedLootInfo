@@ -99,6 +99,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.copy_custom_data", "Copy Custom Data:");
         TRANSLATION_MAP.put("ali.type.function.copy_name", "Copy Name:");
         TRANSLATION_MAP.put("ali.type.function.copy_state", "Copy State:");
+        TRANSLATION_MAP.put("ali.type.function.discard_item", "Discard Item:");
         TRANSLATION_MAP.put("ali.type.function.enchant_randomly", "Enchant Randomly:");
         TRANSLATION_MAP.put("ali.type.function.enchant_with_levels", "Enchant With Levels:");
         TRANSLATION_MAP.put("ali.type.function.enchanted_count_increase", "Enchanted Count Increase:");
@@ -286,6 +287,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.numerator", "Numerator:");
         TRANSLATION_MAP.put("ali.property.branch.occupant", "Occupant:");
         TRANSLATION_MAP.put("ali.property.branch.offhand", "Offhand:");
+        TRANSLATION_MAP.put("ali.property.branch.on_fail", "On Fail:");
+        TRANSLATION_MAP.put("ali.property.branch.on_pass", "On Pass:");
         TRANSLATION_MAP.put("ali.property.branch.on_consume_effects", "On Consume Effects:");
         TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
         TRANSLATION_MAP.put("ali.property.branch.options", "Options:");

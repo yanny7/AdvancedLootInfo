@@ -5,7 +5,7 @@ import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -15,8 +15,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BannerPatternTags;
@@ -31,12 +31,16 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.entity.animal.chicken.ChickenVariants;
+import net.minecraft.world.entity.animal.cow.CowVariants;
+import net.minecraft.world.entity.animal.feline.CatVariants;
 import net.minecraft.world.entity.animal.frog.FrogVariants;
+import net.minecraft.world.entity.animal.pig.PigVariants;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariants;
 import net.minecraft.world.entity.animal.wolf.WolfVariants;
-import net.minecraft.world.entity.decoration.PaintingVariants;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.decoration.painting.PaintingVariants;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -167,7 +171,7 @@ public class DataComponentTooltipTest {
                         new ItemAttributeModifiers.Entry(
                                 Attributes.ARMOR,
                                 new AttributeModifier(
-                                        ResourceLocation.withDefaultNamespace("hello"),
+                                        Identifier.withDefaultNamespace("hello"),
                                         0.5,
                                         AttributeModifier.Operation.ADD_VALUE
                                 ),
@@ -176,7 +180,7 @@ public class DataComponentTooltipTest {
                         new ItemAttributeModifiers.Entry(
                                 Attributes.ARMOR_TOUGHNESS,
                                 new AttributeModifier(
-                                        ResourceLocation.withDefaultNamespace("world"),
+                                        Identifier.withDefaultNamespace("world"),
                                         1.25,
                                         AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
                                 ),
@@ -305,7 +309,11 @@ public class DataComponentTooltipTest {
                         "    -> minecraft:break_sound",
                         "      -> Sound: minecraft:entity.item.break",
                         "    -> minecraft:tooltip_display",
-                        "      -> Hide Tooltip: false"
+                        "      -> Hide Tooltip: false",
+                        "    -> minecraft:use_effects",
+                        "      -> Not implemented: SimpleType",
+                        "      -> Not implemented: SimpleType",
+                        "    -> minecraft:swing_animation"
                 )
         ));
     }
@@ -314,7 +322,7 @@ public class DataComponentTooltipTest {
     public void testUseCooldownTooltip() {
         assertTooltip(DataComponentTooltipUtils.getUseCooldownTooltip(UTILS, new UseCooldown(
                 3.5f,
-                Optional.of(ResourceLocation.withDefaultNamespace("test"))
+                Optional.of(Identifier.withDefaultNamespace("test"))
         )), List.of(
                 "Seconds: 3.5",
                 "Cooldown Group: minecraft:test"
@@ -383,8 +391,8 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getEquipableTooltip(UTILS, new Equippable(
                 EquipmentSlot.LEGS,
                 Holder.direct(SoundEvents.ANVIL_FALL),
-                Optional.of(ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.withDefaultNamespace("anvil"))),
-                Optional.of(ResourceLocation.withDefaultNamespace("camera")),
+                Optional.of(ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.withDefaultNamespace("anvil"))),
+                Optional.of(Identifier.withDefaultNamespace("camera")),
                 Optional.of(HolderSet.direct(Holder.direct(EntityType.ALLAY), Holder.direct(EntityType.ARMADILLO))),
                 true,
                 true,
@@ -536,7 +544,11 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:break_sound",
                         "        -> Sound: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
+                        "        -> Hide Tooltip: false",
+                        "      -> minecraft:use_effects",
+                        "        -> Not implemented: SimpleType",
+                        "        -> Not implemented: SimpleType",
+                        "      -> minecraft:swing_animation"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:snowball",
@@ -559,7 +571,11 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:break_sound",
                         "        -> Sound: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
+                        "        -> Hide Tooltip: false",
+                        "      -> minecraft:use_effects",
+                        "        -> Not implemented: SimpleType",
+                        "        -> Not implemented: SimpleType",
+                        "      -> minecraft:swing_animation"
                 )
         ));
     }
@@ -592,7 +608,11 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:break_sound",
                         "        -> Sound: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
+                        "        -> Hide Tooltip: false",
+                        "      -> minecraft:use_effects",
+                        "        -> Not implemented: SimpleType",
+                        "        -> Not implemented: SimpleType",
+                        "      -> minecraft:swing_animation"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -615,7 +635,11 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:break_sound",
                         "        -> Sound: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
+                        "        -> Hide Tooltip: false",
+                        "      -> minecraft:use_effects",
+                        "        -> Not implemented: SimpleType",
+                        "        -> Not implemented: SimpleType",
+                        "      -> minecraft:swing_animation"
                 ),
                 "Fraction: 1/32"
         ));
@@ -777,8 +801,8 @@ public class DataComponentTooltipTest {
     @Test
     public void testRecipesTooltip() {
         assertTooltip(DataComponentTooltipUtils.getRecipesTooltip(UTILS, List.of(
-                ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("recipe1")),
-                ResourceKey.create(Registries.RECIPE, ResourceLocation.withDefaultNamespace("recipe2"))
+                ResourceKey.create(Registries.RECIPE, Identifier.withDefaultNamespace("recipe1")),
+                ResourceKey.create(Registries.RECIPE, Identifier.withDefaultNamespace("recipe2"))
         )), List.of(
                 "Recipes:",
                 "  -> minecraft:recipe1",
@@ -843,8 +867,8 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testResourceLocationTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getResourceLocationTooltip(UTILS, ResourceLocation.withDefaultNamespace("test")), List.of("Value: minecraft:test"));
+    public void testIdentifierTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getIdentifierTooltip(UTILS, Identifier.withDefaultNamespace("test")), List.of("Value: minecraft:test"));
     }
 
     @Test
@@ -909,7 +933,11 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:break_sound",
                         "        -> Sound: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
+                        "        -> Hide Tooltip: false",
+                        "      -> minecraft:use_effects",
+                        "        -> Not implemented: SimpleType",
+                        "        -> Not implemented: SimpleType",
+                        "      -> minecraft:swing_animation"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -932,7 +960,11 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:break_sound",
                         "        -> Sound: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
+                        "        -> Hide Tooltip: false",
+                        "      -> minecraft:use_effects",
+                        "        -> Not implemented: SimpleType",
+                        "        -> Not implemented: SimpleType",
+                        "      -> minecraft:swing_animation"
                 )
         ));
     }
@@ -993,7 +1025,7 @@ public class DataComponentTooltipTest {
     @Test
     public void testContainerLootTooltip() {
         assertTooltip(DataComponentTooltipUtils.getContainerLootTooltip(UTILS, new SeededContainerLoot(
-                ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.withDefaultNamespace("loot")),
+                ResourceKey.create(Registries.LOOT_TABLE, Identifier.withDefaultNamespace("loot")),
                 12345L
         )), List.of(
                 "Loot Table: minecraft:loot",

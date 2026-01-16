@@ -12,7 +12,7 @@ import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -66,9 +66,9 @@ public class GlobalLootModifierUtils {
                 }
             });
         } else if (GlobalLootModifierUtils.tablePredicate(conditions, predicate)) {
-            return Optional.of(new ILootModifier<ResourceLocation>() {
+            return Optional.of(new ILootModifier<Identifier>() {
                 @Override
-                public boolean predicate(ResourceLocation value) {
+                public boolean predicate(Identifier value) {
                     return GlobalLootModifierUtils.tablePredicate(conditions, value, predicate);
                 }
 
@@ -78,7 +78,7 @@ public class GlobalLootModifierUtils {
                 }
 
                 @Override
-                public IType<ResourceLocation> getType() {
+                public IType<Identifier> getType() {
                     return IType.LOOT_TABLE;
                 }
             });
@@ -150,7 +150,7 @@ public class GlobalLootModifierUtils {
         return conditions.stream().anyMatch((c) -> tablePredicate(c, predicate));
     }
 
-    public static boolean tablePredicate(List<LootItemCondition> conditions, ResourceLocation location, ILootTableIdConditionPredicate predicate) {
+    public static boolean tablePredicate(List<LootItemCondition> conditions, Identifier location, ILootTableIdConditionPredicate predicate) {
         return  conditions.stream().anyMatch((c) -> {
             if (predicate.isLootTableIdCondition(c) && predicate.getTargetLootTableId(c).equals(location)) {
                 return true;

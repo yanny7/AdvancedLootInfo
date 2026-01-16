@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -19,9 +19,9 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
-    private final Map<ResourceLocation, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
-    private final Map<ResourceLocation, TooltipFactory<?>> tooltipNodeFactoryMap = new HashMap<>();
+    private final Map<Identifier, IWidgetFactory> widgetMap = new HashMap<>();
+    private final Map<Identifier, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
+    private final Map<Identifier, TooltipFactory<?>> tooltipNodeFactoryMap = new HashMap<>();
     private final ICommonUtils utils;
 
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
@@ -122,17 +122,17 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public void registerWidget(ResourceLocation id, IWidgetFactory factory) {
+    public void registerWidget(Identifier id, IWidgetFactory factory) {
         widgetMap.put(id, factory);
     }
 
     @Override
-    public <T extends IDataNode> void registerDataNode(ResourceLocation id, DataFactory<T> dataFactory) {
+    public <T extends IDataNode> void registerDataNode(Identifier id, DataFactory<T> dataFactory) {
         dataNodeFactoryMap.put(id, dataFactory);
     }
 
     @Override
-    public <T extends ITooltipNode> void registerTooltipNode(ResourceLocation id, TooltipFactory<T> tooltipFactory) {
+    public <T extends ITooltipNode> void registerTooltipNode(Identifier id, TooltipFactory<T> tooltipFactory) {
         tooltipNodeFactoryMap.put(id, tooltipFactory);
     }
 
@@ -201,7 +201,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends IDataNode> DataFactory<T> getDataNodeFactory(ResourceLocation id) {
+    public <T extends IDataNode> DataFactory<T> getDataNodeFactory(Identifier id) {
         //noinspection unchecked
         DataFactory<T> dataFactory = (DataFactory<T>) dataNodeFactoryMap.get(id);
 
@@ -211,7 +211,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends ITooltipNode> TooltipFactory<T> getTooltipNodeFactory(ResourceLocation id) {
+    public <T extends ITooltipNode> TooltipFactory<T> getTooltipNodeFactory(Identifier id) {
         //noinspection unchecked
         TooltipFactory<T> tooltipFactory = (TooltipFactory<T>) tooltipNodeFactoryMap.get(id);
 

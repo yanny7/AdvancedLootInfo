@@ -8,9 +8,9 @@ import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.mods.*;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @ClassAccessor("svenhjol.charm.feature.beekeepers.common.Trades$EmeraldsForFlowers")
 public class EmeraldsForFlowers extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
-    private static final TagKey<Item> BEEKEEPER_SELLS_FLOWERS = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("charm", "beekeeper_sells_flowers"));
+    private static final TagKey<Item> BEEKEEPER_SELLS_FLOWERS = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("charm", "beekeeper_sells_flowers"));
 
     @FieldAccessor
     private int villagerXp;

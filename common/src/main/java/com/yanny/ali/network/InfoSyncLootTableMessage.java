@@ -44,8 +44,8 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
                     }),
             (l) -> l.lootTable,
             StreamCodec.of(
-                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i))),
-                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.getValue(a.readResourceLocation()))
+                    (b, l) -> b.writeCollection(l, (a, i) -> a.writeIdentifier(BuiltInRegistries.ITEM.getKey(i))),
+                    (b) -> b.readList((a) -> BuiltInRegistries.ITEM.getValue(a.readIdentifier()))
             ), (l) -> l.items,
             InfoSyncLootTableMessage::new
     );

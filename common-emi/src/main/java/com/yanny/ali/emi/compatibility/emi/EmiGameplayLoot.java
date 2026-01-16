@@ -10,7 +10,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.widget.*;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class EmiGameplayLoot extends EmiBaseLoot {
-    private final ResourceLocation location;
+    private final Identifier location;
 
-    public EmiGameplayLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, List<ItemStack> outputs) {
+    public EmiGameplayLoot(EmiRecipeCategory category, Identifier id, IDataNode lootTable, List<ItemStack> outputs) {
         super(category, id, lootTable, 0, 10, Collections.emptyList(), outputs);
         location = id;
     }

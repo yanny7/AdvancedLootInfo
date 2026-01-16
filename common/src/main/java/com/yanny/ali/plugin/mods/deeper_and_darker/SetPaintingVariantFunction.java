@@ -9,7 +9,7 @@ import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.decoration.PaintingVariant;
+import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
 import java.util.Optional;

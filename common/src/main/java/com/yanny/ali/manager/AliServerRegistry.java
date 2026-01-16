@@ -13,18 +13,18 @@ import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.*;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
@@ -70,8 +70,8 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
     private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
 
-    private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
-    private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
+    private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
+    private final Map<Identifier, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
@@ -99,7 +99,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     private ServerLevel serverLevel;
     private LootContext lootContext;
-    private ResourceLocation currentLootTable;
+    private Identifier currentLootTable;
 
     public AliServerRegistry(ICommonUtils utils) {
         this.utils = utils;
@@ -147,11 +147,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         ingredientTracker.clearStats();
     }
 
-    public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
-        lootTableMap.put(resourceLocation, lootTable);
+    public void addLootTable(Identifier Identifier, LootTable lootTable) {
+        lootTableMap.put(Identifier, lootTable);
     }
 
-    public void setCurrentLootTable(@Nullable ResourceLocation location) {
+    public void setCurrentLootTable(@Nullable Identifier location) {
         currentLootTable = location;
     }
 
@@ -485,7 +485,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             try {
                 // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
                 //noinspection DataFlowIssue
-                MerchantOffer offer = entry.getOffer(null, null);
+                MerchantOffer offer = entry.getOffer(null, null, null);
 
                 if (offer != null) {
                     return TradeUtils.getNode(utils, offer, condition);
@@ -517,7 +517,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             try {
                 // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
                 //noinspection DataFlowIssue
-                MerchantOffer offer = entry.getOffer(null, null);
+                MerchantOffer offer = entry.getOffer(null, null, null);
 
                 if (offer != null) {
                     return TradeUtils.collectItems(utils, offer);
@@ -561,16 +561,16 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Nullable
     @Override
-    public ResourceLocation getCurrentLootTable() {
+    public Identifier getCurrentLootTable() {
         return currentLootTable;
     }
 
     @Nullable
     @Override
-    public LootTable getLootTable(Either<ResourceLocation, LootTable> either) {
-        either.ifLeft((resourceLocation) -> hitMap.compute(resourceLocation, (k, v) -> v == null ? 1 : v + 1));
+    public LootTable getLootTable(Either<Identifier, LootTable> either) {
+        either.ifLeft((Identifier) -> hitMap.compute(Identifier, (k, v) -> v == null ? 1 : v + 1));
         either.ifRight((lootTable) -> {
-            Optional<Map.Entry<ResourceLocation, LootTable>> entry = lootTableMap.entrySet().stream().filter((l) -> l.getValue().equals(lootTable)).findFirst();
+            Optional<Map.Entry<Identifier, LootTable>> entry = lootTableMap.entrySet().stream().filter((l) -> l.getValue().equals(lootTable)).findFirst();
 
             entry.ifPresent(e -> hitMap.compute(e.getKey(), (k, v) -> v == null ? 1 : v + 1));
         });
@@ -599,10 +599,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return new TradeNode(this, itemListing);
     }
 
-    public boolean isSubTable(ResourceLocation resourceLocation) {
-        Integer hitCount = hitMap.get(resourceLocation);
+    public boolean isSubTable(Identifier Identifier) {
+        Integer hitCount = hitMap.get(Identifier);
 
-        return hitCount != null && lootTableMap.getOrDefault(resourceLocation, LootTable.EMPTY).getParamSet() == LootTable.DEFAULT_PARAM_SET;
+        return hitCount != null && lootTableMap.getOrDefault(Identifier, LootTable.EMPTY).getParamSet() == LootTable.DEFAULT_PARAM_SET;
     }
 
     @Override

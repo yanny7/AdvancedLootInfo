@@ -8,7 +8,7 @@ import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class NormalizeNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("snowrealmagic", "item_stack");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath("snowrealmagic", "item_stack");
 
     private final ITooltipNode tooltip;
     private final float chance;
@@ -51,7 +51,7 @@ public class NormalizeNode implements IDataNode, IItemNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

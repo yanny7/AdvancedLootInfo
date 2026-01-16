@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -89,7 +89,7 @@ public class ItemCollectorUtils {
     @NotNull
     public static List<Item> collectReference(IServerUtils utils, NestedLootTable entry) {
         List<Item> result = new LinkedList<>();
-        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::location));
+        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::identifier));
 
         if (lootTable != null) {
             result.addAll(collectLootTable(utils, lootTable));

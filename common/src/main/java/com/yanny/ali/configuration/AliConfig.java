@@ -1,7 +1,7 @@
 package com.yanny.ali.configuration;
 
 import com.yanny.ali.Utils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -18,7 +18,7 @@ public class AliConfig {
     public List<GameplayLootCategory> gameplayCategories;
     public List<TradeLootCategory> tradeCategories;
 
-    public List<ResourceLocation> disabledEntities;
+    public List<Identifier> disabledEntities;
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;

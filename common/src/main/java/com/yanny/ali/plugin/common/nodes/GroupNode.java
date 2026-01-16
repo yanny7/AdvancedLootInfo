@@ -6,12 +6,12 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
 public class GroupNode extends CompositeNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "group");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "group");
 
     private final ITooltipNode tooltip;
 
@@ -36,7 +36,7 @@ public class GroupNode extends CompositeNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

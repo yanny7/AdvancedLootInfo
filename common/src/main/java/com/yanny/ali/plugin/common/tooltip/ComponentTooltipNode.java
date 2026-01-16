@@ -12,7 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 import static com.yanny.ali.api.ITooltipNode.pad;
 
 public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "component");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "component");
     private static final LoadingCache<CacheKey, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new ComponentTooltipNode(data) : null));
 
@@ -61,7 +61,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

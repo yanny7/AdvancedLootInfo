@@ -7,7 +7,7 @@ import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.ItemLike;
 import java.util.Collections;
 
 public class ItemsToItemsNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "items_to_items");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "items_to_items");
 
     private final ITooltipNode tooltip;
 
@@ -81,7 +81,7 @@ public class ItemsToItemsNode extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

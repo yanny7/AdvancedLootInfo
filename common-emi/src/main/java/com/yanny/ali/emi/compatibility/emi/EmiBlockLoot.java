@@ -10,7 +10,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -23,7 +23,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
     private final Block block;
     private final boolean isSpecial;
 
-    public EmiBlockLoot(EmiRecipeCategory category, ResourceLocation id, Block block, IDataNode lootTable, List<ItemStack> outputs) {
+    public EmiBlockLoot(EmiRecipeCategory category, Identifier id, Block block, IDataNode lootTable, List<ItemStack> outputs) {
         super(category, id, lootTable, 0, (block instanceof VegetationBlock || block.asItem() == Items.AIR) ? 30 : 22, Collections.emptyList(), outputs);
         this.block = block;
         isSpecial = block instanceof VegetationBlock || block.asItem() == Items.AIR;

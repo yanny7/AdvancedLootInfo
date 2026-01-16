@@ -9,7 +9,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.FormattedCharSequence;
@@ -166,7 +166,7 @@ public class TestUtils {
 
         for(String namespace : resourceManager.getNamespaces()) {
             try {
-                ResourceLocation langLocation = ResourceLocation.fromNamespaceAndPath(namespace, lang);
+                Identifier langLocation = Identifier.fromNamespaceAndPath(namespace, lang);
 
                 for(Resource resource : resourceManager.getResourceStack(langLocation)) {
                     try (InputStream inputStream = resource.open()) {

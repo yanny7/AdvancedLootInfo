@@ -6,7 +6,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EmptyTooltipNode implements ITooltipNode {
     public static final EmptyTooltipNode EMPTY = new EmptyTooltipNode();
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "empty");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "empty");
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
@@ -22,7 +22,7 @@ public class EmptyTooltipNode implements ITooltipNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

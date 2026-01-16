@@ -5,7 +5,7 @@ import com.yanny.ali.platform.Services;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ReiEntityDisplay extends ReiBaseDisplay {
     private final EntityType<?> entityType;
-    private final ResourceLocation variant;
+    private final Identifier variant;
     private final CategoryIdentifier<ReiEntityDisplay> identifier;
 
     public ReiEntityDisplay(EntityLootType entry, CategoryIdentifier<ReiEntityDisplay> identifier) {
@@ -34,7 +34,7 @@ public class ReiEntityDisplay extends ReiBaseDisplay {
         return entityType;
     }
 
-    public ResourceLocation getVariant() {
+    public Identifier getVariant() {
         return variant;
     }
 

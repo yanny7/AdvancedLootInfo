@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class ListWidget implements IWidget {
-    public static final ResourceLocation TEXTURE_LOC = ResourceLocation.fromNamespaceAndPath("ali", "textures/gui/gui.png");
+    public static final Identifier TEXTURE_LOC = Identifier.fromNamespaceAndPath("ali", "textures/gui/gui.png");
 
     public static final int GROUP_WIDGET_WIDTH = 7;
     public static final int GROUP_WIDGET_HEIGHT = 18;
@@ -210,15 +210,15 @@ public abstract class ListWidget implements IWidget {
         parent.setDimensions(w, h);
     }
 
-    public static void blit(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
+    public static void blit(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 255, 255 );
     }
 
-    public static void blit(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {
+    public static void blit(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {
         blit(guiGraphics, pAtlasLocation, pX, pY, pWidth, pHeight, pUOffset, pVOffset, pWidth, pHeight);
     }
 
-    public static void blitRepeating(GuiGraphics guiGraphics, ResourceLocation pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
+    public static void blitRepeating(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
         int i = pTargetX;
         int j;
 

@@ -3,12 +3,12 @@ package com.yanny.ali.plugin.common.trades;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
 public class SubTradesNode<T> extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "sub_trades");
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "sub_trades");
 
     private final ITooltipNode tooltip;
 
@@ -40,7 +40,7 @@ public class SubTradesNode<T> extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

@@ -1,12 +1,12 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.ConditionTooltipUtils;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
@@ -210,7 +210,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, Identifier.withDefaultNamespace("test"))).build()), List.of("Reference: minecraft:test"));
     }
 
     @Test

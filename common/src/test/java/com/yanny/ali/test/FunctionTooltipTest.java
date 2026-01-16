@@ -2,7 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
@@ -10,8 +10,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.InstrumentTags;
 import net.minecraft.tags.ItemTags;
@@ -34,10 +34,12 @@ import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -62,7 +64,14 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyNameTooltip() {
-        assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, (CopyNameFunction) CopyNameFunction.copyName(new CopyNameFunction.Source(new ContextKey<>(ResourceLocation.withDefaultNamespace("this")))).build()), List.of(
+        CopyNameFunction copyNameFunction = (CopyNameFunction) CopyNameFunction.copyName(new LootContextArg.SimpleGetter<>() {
+            @NotNull
+            @Override
+            public ContextKey<?> contextParam() {
+                return new ContextKey<>(Identifier.withDefaultNamespace("this"));
+            }
+        }).build();
+        assertTooltip(FunctionTooltipUtils.getCopyNameTooltip(UTILS, copyNameFunction), List.of(
                 "Copy Name:",
                 "  -> Source: minecraft:this"
         ));
@@ -203,7 +212,7 @@ public class FunctionTooltipTest {
     public void testReferenceTooltip() {
         assertTooltip(FunctionTooltipUtils.getReferenceTooltip(UTILS, (FunctionReference) FunctionReference.functionReference(ResourceKey.create(
                 Registries.ITEM_MODIFIER,
-                ResourceLocation.withDefaultNamespace("gameplay/fishing"))
+                Identifier.withDefaultNamespace("gameplay/fishing"))
         ).build()), List.of(
                 "Reference:",
                 "  -> Name: minecraft:gameplay/fishing"
@@ -229,12 +238,12 @@ public class FunctionTooltipTest {
                 "  -> Replace: false"
         ));
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
-                .withModifier(new SetAttributesFunction.ModifierBuilder(ResourceLocation.withDefaultNamespace("armor"), Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))
+                .withModifier(new SetAttributesFunction.ModifierBuilder(Identifier.withDefaultNamespace("armor"), Attributes.ARMOR, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, UniformGenerator.between(1, 5))
                         .forSlot(EquipmentSlotGroup.HEAD)
                         .forSlot(EquipmentSlotGroup.CHEST)
                         .forSlot(EquipmentSlotGroup.LEGS)
                         .forSlot(EquipmentSlotGroup.FEET))
-                .withModifier(new SetAttributesFunction.ModifierBuilder(ResourceLocation.withDefaultNamespace("chest"), Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, ConstantValue.exactly(3))
+                .withModifier(new SetAttributesFunction.ModifierBuilder(Identifier.withDefaultNamespace("chest"), Attributes.ARMOR_TOUGHNESS, AttributeModifier.Operation.ADD_MULTIPLIED_BASE, ConstantValue.exactly(3))
                         .forSlot(EquipmentSlotGroup.MAINHAND))
                 .build()), List.of(
                 "Set Attributes:",
@@ -339,7 +348,7 @@ public class FunctionTooltipTest {
     public void testSetLootTableTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(UTILS, (SetContainerLootTable) SetContainerLootTable.withLootTable(
                 BlockEntityType.BELL,
-                ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.withDefaultNamespace("gameplay/mesh")),
+                ResourceKey.create(Registries.LOOT_TABLE, Identifier.withDefaultNamespace("gameplay/mesh")),
                 42L
         ).build()), List.of(
                 "Set Loot Table:",
@@ -477,13 +486,16 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getFilteredTooltip(UTILS, new FilteredFunction(
                 List.of(),
                 ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.COALS).build(),
-                ApplyExplosionDecay.explosionDecay().build()
+                Optional.of(ApplyExplosionDecay.explosionDecay().build()),
+                Optional.of(ApplyExplosionDecay.explosionDecay().build())
         )), List.of(
                 "Filtered:",
                 "  -> Filter:",
                 "    -> Items:",
                 "      -> Tag: minecraft:coals",
-                "  -> Modifier:",
+                "  -> On Pass:",
+                "    -> Explosion Decay",
+                "  -> On Fail:",
                 "    -> Explosion Decay"
         ));
     }
@@ -491,7 +503,7 @@ public class FunctionTooltipTest {
     @Test
     public void testCopyComponentsTooltip() {
         assertTooltip(FunctionTooltipUtils.getCopyComponentsTooltip(UTILS, (CopyComponentsFunction) CopyComponentsFunction
-                .copyComponentsFromBlockEntity(new ContextKey<>(ResourceLocation.withDefaultNamespace("block_entity")))
+                .copyComponentsFromBlockEntity(new ContextKey<>(Identifier.withDefaultNamespace("block_entity")))
                 .include(DataComponents.DAMAGE)
                 .include(DataComponents.FOOD)
                 .exclude(DataComponents.BEES)
@@ -684,5 +696,10 @@ public class FunctionTooltipTest {
                 "      -> test",
                 "    -> List Operation: REPLACE_ALL"
         ));
+    }
+
+    @Test
+    public void testDiscardItemTooltip() {
+        assertTooltip(FunctionTooltipUtils.getDiscardItemTooltip(UTILS, (DiscardItem) DiscardItem.discardItem().build()), List.of("Discard Item:"));
     }
 }

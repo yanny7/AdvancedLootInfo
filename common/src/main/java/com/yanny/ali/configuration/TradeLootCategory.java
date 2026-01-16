@@ -3,17 +3,17 @@ package com.yanny.ali.configuration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class TradeLootCategory extends LootCategory<ResourceLocation> {
+public class TradeLootCategory extends LootCategory<Identifier> {
     private final List<Pattern> patterns;
 
-    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, List<Pattern> patterns) {
+    public TradeLootCategory(Identifier key, Item icon, boolean hide, List<Pattern> patterns) {
         super(key, icon, Type.TRADE, hide);
         this.patterns = patterns;
     }
@@ -32,7 +32,7 @@ public class TradeLootCategory extends LootCategory<ResourceLocation> {
     }
 
     @Override
-    public boolean validate(ResourceLocation path) {
+    public boolean validate(Identifier path) {
         return patterns.stream().anyMatch((p) -> p.matcher(path.toString()).find());
     }
 }

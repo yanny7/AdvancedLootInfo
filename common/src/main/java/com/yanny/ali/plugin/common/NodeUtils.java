@@ -9,8 +9,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -105,7 +105,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::location));
+        LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::identifier));
         ITooltipNode tooltip = EntryTooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight);
         List<IDataNode> children;
 
@@ -119,7 +119,7 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static ReferenceNode getReferenceNode(IServerUtils utils, ResourceLocation table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
+    public static ReferenceNode getReferenceNode(IServerUtils utils, Identifier table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
         LootTable lootTable = utils.getLootTable(Either.left(table));
         List<IDataNode> children;
 
@@ -323,7 +323,7 @@ public class NodeUtils {
         return itemNode.getModifiedItem().map(
                 predicate::test,
                 (tagKey) -> {
-                    Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tagKey.registry().location());
+                    Optional<? extends Holder.Reference<? extends Registry<?>>> registry = BuiltInRegistries.REGISTRY.get(tagKey.registry().identifier());
 
                     if (registry.isPresent()) {
                         //noinspection unchecked

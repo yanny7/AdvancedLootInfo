@@ -79,7 +79,11 @@ public class ServerUtilsTest {
                         "    -> minecraft:break_sound",
                         "      -> Sound: minecraft:entity.item.break",
                         "    -> minecraft:tooltip_display",
-                        "      -> Hide Tooltip: false"
+                        "      -> Hide Tooltip: false",
+                        "    -> minecraft:use_effects",
+                        "      -> Not implemented: SimpleType",
+                        "      -> Not implemented: SimpleType",
+                        "    -> minecraft:swing_animation"
                 )
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("ali.property.value.value"), List.of(

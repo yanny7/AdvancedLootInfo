@@ -11,7 +11,7 @@ import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
@@ -23,8 +23,8 @@ import net.minecraft.core.component.predicates.WritableBookPredicate;
 import net.minecraft.core.component.predicates.WrittenBookPredicate;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -330,7 +330,7 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getResourceLocationTooltip(IServerUtils ignoredUtils, ResourceLocation value) {
+    public static IKeyTooltipNode getIdentifierTooltip(IServerUtils ignoredUtils, Identifier value) {
         return ValueTooltipNode.value(value);
     }
 
@@ -341,7 +341,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static <T> IKeyTooltipNode getResourceKeyTooltip(IServerUtils utils, ResourceKey<T> value) {
-        return utils.getValueTooltip(utils, value.location());
+        return utils.getValueTooltip(utils, value.identifier());
     }
 
     @NotNull
