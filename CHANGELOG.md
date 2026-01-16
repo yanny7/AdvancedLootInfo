@@ -1,6 +1,7 @@
 # []
 
 - Added a config option to switch between localized names and ResourceLocations for Items/Blocks/Effects...
+- Fixed unable to connect to Fabric server
 
 # [1.6.2]
 
