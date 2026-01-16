@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.server;
 
+import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
@@ -36,11 +37,14 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getRegistryTooltip;
 import static com.yanny.ali.plugin.server.ValueTooltipUtils.getBuiltInRegistryTooltip;
 
 public class RegistriesTooltipUtils {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     @NotNull
     public static IKeyTooltipNode getEntryTypeTooltip(IServerUtils utils, LootPoolEntryType type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type);
@@ -59,28 +63,40 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getBlockTooltip(IServerUtils utils, Block block) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(block.getName());
-        } else {
-            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK, block);
+            try {
+                return ComponentTooltipNode.values(block.getName());
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized Block name: {}", BuiltInRegistries.BLOCK.getKey(block));
+            }
         }
+
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK, block);
     }
 
     @NotNull
     public static IKeyTooltipNode getItemTooltip(IServerUtils utils, Item item) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(item.getName(item.getDefaultInstance()));
-        } else {
-            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ITEM, item);
+            try {
+                return ComponentTooltipNode.values(item.getName(item.getDefaultInstance()));
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized Item name: {}", BuiltInRegistries.ITEM.getKey(item));
+            }
         }
+
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ITEM, item);
     }
 
     @NotNull
     public static IKeyTooltipNode getEntityTypeTooltip(IServerUtils utils, EntityType<?> entityType) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(entityType.getDescription());
-        } else {
-            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_TYPE, entityType);
+            try {
+                return ComponentTooltipNode.values(entityType.getDescription());
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized EntityType name: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
+            }
         }
+
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_TYPE, entityType);
     }
 
     @NotNull
@@ -101,10 +117,14 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getMobEffectTooltip(IServerUtils utils, MobEffect mobEffect) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(mobEffect.getDisplayName());
-        } else {
-            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.MOB_EFFECT, mobEffect);
+            try {
+                return ComponentTooltipNode.values(mobEffect.getDisplayName());
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized MobEffect name: {}", BuiltInRegistries.MOB_EFFECT.getKey(mobEffect));
+            }
         }
+
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.MOB_EFFECT, mobEffect);
     }
 
     @NotNull
@@ -120,19 +140,27 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getEnchantmentTooltip(IServerUtils utils, Enchantment enchantment) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(Enchantment.getFullname(Holder.direct(enchantment), 1));
-        } else {
-            return getRegistryTooltip(utils, Registries.ENCHANTMENT, enchantment);
+            try {
+                return ComponentTooltipNode.values(Enchantment.getFullname(Holder.direct(enchantment), 1));
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized Enchantment name");
+            }
         }
+
+        return getRegistryTooltip(utils, Registries.ENCHANTMENT, enchantment);
     }
 
     @NotNull
     public static IKeyTooltipNode getAttributeTooltip(IServerUtils utils, Attribute attribute) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(Component.translatable(attribute.getDescriptionId()));
-        } else {
-            return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ATTRIBUTE, attribute);
+            try {
+                return ComponentTooltipNode.values(Component.translatable(attribute.getDescriptionId()));
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized Attribute name: {}", BuiltInRegistries.ATTRIBUTE.getKey(attribute));
+            }
         }
+
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ATTRIBUTE, attribute);
     }
 
     @NotNull
@@ -188,28 +216,40 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getTrimMaterialTooltip(IServerUtils utils, TrimMaterial material) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(material.description());
-        } else {
-            return getRegistryTooltip(utils, Registries.TRIM_MATERIAL, material);
+            try {
+                return ComponentTooltipNode.values(material.description());
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized TrimMaterial name");
+            }
         }
+
+        return getRegistryTooltip(utils, Registries.TRIM_MATERIAL, material);
     }
 
     @NotNull
     public static IKeyTooltipNode getTrimPatternTooltip(IServerUtils utils, TrimPattern pattern) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(pattern.description());
-        } else {
-            return getRegistryTooltip(utils, Registries.TRIM_PATTERN, pattern);
+            try {
+                return ComponentTooltipNode.values(pattern.description());
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized TrimPattern name");
+            }
         }
+
+        return getRegistryTooltip(utils, Registries.TRIM_PATTERN, pattern);
     }
 
     @NotNull
     public static IKeyTooltipNode getJukeboxSongTooltip(IServerUtils utils, JukeboxSong song) {
         if (utils.getConfiguration().showInGameNames) {
-            return ComponentTooltipNode.values(song.description());
-        } else {
-            return getRegistryTooltip(utils, Registries.JUKEBOX_SONG, song);
+            try {
+                return ComponentTooltipNode.values(song.description());
+            } catch (Throwable ignored) {
+                LOGGER.warn("Failed to get localized JukeboxSong name");
+            }
         }
+
+        return getRegistryTooltip(utils, Registries.JUKEBOX_SONG, song);
     }
 
     @NotNull
