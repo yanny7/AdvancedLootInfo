@@ -1,3 +1,7 @@
+# []
+
+- Displayed overflowed loot info in REI using scrollbar
+
 # [1.6.4]
 
 - Fixed rare crash in some modpacks when obtaining localized registry name
