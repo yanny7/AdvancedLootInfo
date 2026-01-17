@@ -1,10 +1,7 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility.rei;
 
-import com.yanny.ali.api.Rect;
-import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
-import com.yanny.ali.manager.PluginManager;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -14,26 +11,21 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.Level;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityType<?>> {
-    private static final int WIDGET_SIZE = 36;
-    private static final int TEXT_OFFSET = 10;
-    private static final int OFFSET = TEXT_OFFSET + WIDGET_SIZE + PADDING;
+public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay, ResourceLocation> {
+    private static final int OFFSET = 10;
 
-    private final CategoryIdentifier<ReiEntityDisplay> identifier;
+    private final CategoryIdentifier<ReiGameplayDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
 
-    public ReiEntityCategory(CategoryIdentifier<ReiEntityDisplay> identifier, Component title, LootCategory<EntityType<?>> lootCategory) {
+    public ReiGameplayCategory(CategoryIdentifier<ReiGameplayDisplay> identifier, Component title, LootCategory<ResourceLocation> lootCategory) {
         super(lootCategory);
         this.identifier = identifier;
         this.title = title;
@@ -42,39 +34,22 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
 
     @SuppressWarnings("UnstableApiUsage")
     @Override
-    public List<Widget> setupDisplay(ReiEntityDisplay display, Rectangle bounds) {
+    public List<Widget> setupDisplay(ReiGameplayDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
-        Rect rect = new Rect(0, 0, WIDGET_SIZE, WIDGET_SIZE);
-        Component entityLabel = display.getEntityType().getDescription();
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntityType());
-        int textWidth = Minecraft.getInstance().font.width(entityLabel);
+        String key = "ali/loot_table/" + display.getId().getPath();
+        Component lootName = GenericUtils.ellipsis( key, display.getId().getPath(), bounds.width);
+        Component fullText = Component.literal(display.getId().toString());
+        int textWidth = Minecraft.getInstance().font.width(lootName);
         WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), OFFSET);
-        int with = Mth.clamp(Math.max(holder.bounds().getWidth(), textWidth), WIDGET_SIZE + (SLOT_SIZE + PADDING) * 2, bounds.width);
+        int with = Mth.clamp(holder.bounds().getWidth(), textWidth, bounds.width);
         int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
         Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().getHeight() + OFFSET);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
         Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 2 * PADDING, height);
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
-
-        if (spawnEgg != null) {
-            innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getX() + 1, innerBounds.getY() + TEXT_OFFSET + 1)).entry(EntryStacks.of(spawnEgg)).markInput());
-        }
-
-        innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
-            Level level = Minecraft.getInstance().level;
-
-            if (level != null) {
-                Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, display.getEntityType(), level, display.getVariant());
-
-                graphics.pose().pushPose();
-                graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
-                GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, graphics, mouseX + innerBounds.width / 2, mouseY);
-                graphics.pose().popPose();
-            }
-        }));
-        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), display.getEntityType().getDescription()));
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
+        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName).noShadow().color(0).tooltip(fullText));
         widgets.add(Widgets.createCategoryBase(fullBounds));
 
         if (bounds.height >= innerBounds.height + 8) {
@@ -89,7 +64,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
     }
 
     @Override
-    public CategoryIdentifier<ReiEntityDisplay> getCategoryIdentifier() {
+    public CategoryIdentifier<ReiGameplayDisplay> getCategoryIdentifier() {
         return identifier;
     }
 
