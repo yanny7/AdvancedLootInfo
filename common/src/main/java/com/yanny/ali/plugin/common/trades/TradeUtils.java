@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
@@ -11,6 +12,7 @@ import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,7 +22,9 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class TradeUtils {
     @NotNull
@@ -223,6 +227,25 @@ public class TradeUtils {
     }
 
     @NotNull
+    public static SubTradesNode<VillagerTrades.TypeSpecificTrade> getNode(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing, ITooltipNode condition) {
+        return new SubTradesNode<>(utils, listing, condition) {
+            @Override
+            public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing) {
+                List<IDataNode> nodes = new ArrayList<>();
+
+                for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
+                    VillagerType type = entry.getKey();
+                    ITooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
+
+                    nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
+                }
+
+                return nodes;
+            }
+        };
+    }
+
+    @NotNull
     public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, MerchantOffer offer) {
         return new Pair<>(
                 List.of(offer.getBaseCostA().getItem(), offer.getCostB().getItem()),
@@ -300,5 +323,19 @@ public class TradeUtils {
                 List.of(Items.EMERALD, Items.COMPASS),
                 List.of(Items.MAP)
         );
+    }
+
+    @NotNull
+    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing) {
+        Pair<List<Item>, List<Item>> result = new Pair<>(new ArrayList<>(), new ArrayList<>());
+
+        for (VillagerTrades.ItemListing itemListing : listing.trades().values()) {
+            Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
+
+            result.getA().addAll(pair.getA());
+            result.getB().addAll(pair.getB());
+        }
+
+        return result;
     }
 }

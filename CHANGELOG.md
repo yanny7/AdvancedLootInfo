@@ -1,3 +1,7 @@
+# []
+
+- Supported displaying trades for Villager Trade Rebalance
+
 # [1.6.4]
 
 - Fixed rare crash in some modpacks when obtaining localized registry name

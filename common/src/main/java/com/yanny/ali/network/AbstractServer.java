@@ -31,6 +31,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -77,7 +78,7 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> tradeNodes;
         Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
         Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
-        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
+        IDataNode wanderingTraderNode = processWanderingTrader(level, serverRegistry);
 
         serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
@@ -92,7 +93,7 @@ public abstract class AbstractServer {
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, lootTableItemStacks);
-        tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
+        tradeNodes = new HashMap<>(processTrades(level, serverRegistry, config, tradeItems));
 
         LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootNodes.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
 
@@ -301,8 +302,10 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
+    private static Map<ResourceLocation, IDataNode> processTrades(ServerLevel level, AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
         Map<ResourceLocation, IDataNode> nodes = new HashMap<>();
+        Map<VillagerProfession, Int2ObjectMap<VillagerTrades.ItemListing[]>> trades = VillagerTrades.TRADES;
+        Map<VillagerProfession, Int2ObjectMap<VillagerTrades.ItemListing[]>> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES;
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             ResourceLocation location = entry.getKey().location();
@@ -310,7 +313,15 @@ public abstract class AbstractServer {
             serverRegistry.setCurrentLootTable(location);
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = VillagerTrades.TRADES.get(entry.getValue());
+                Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = null;
+
+                if (level.enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
+                    itemListingMap = experimentalTrades.get(entry.getValue());
+                }
+
+                if (itemListingMap == null) {
+                    itemListingMap = trades.get(entry.getValue());
+                }
 
                 if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
                     try {
@@ -332,9 +343,16 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry) {
+    private static IDataNode processWanderingTrader(ServerLevel level, AliServerRegistry serverRegistry) {
         try {
-            return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+            if (level.enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
+                Int2ObjectMap<VillagerTrades.ItemListing[]> trades = new Int2ObjectOpenHashMap<>();
+
+                VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES.forEach((pair) -> trades.put((int) pair.getValue(), pair.getKey()));
+                return serverRegistry.parseTrade(trades);
+            } else {
+                return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+            }
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage());
