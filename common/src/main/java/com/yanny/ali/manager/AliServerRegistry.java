@@ -30,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -65,6 +66,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Map<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltipMap = new HashMap<>();
     private final Map<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltipMap = new HashMap<>();
     private final Map<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltipMap = new HashMap<>();
+    private final Map<Class<?>, BiFunction<IServerUtils, SlotSource, ITooltipNode>> slotSourceTooltipMap = new HashMap<>();
 
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
     private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
@@ -87,6 +89,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final Set<Class<?>> missingEntitySubPredicateTooltips = new HashSet<>();
     private final Set<Class<?>> missingDataComponentTypeTooltips = new HashSet<>();
     private final Set<Class<?>> missingConsumeEffectTooltips = new HashSet<>();
+    private final Set<Class<?>> missingSlotSourceTooltips = new HashSet<>();
     private final Set<Class<?>> missingItemListingFactories = new HashSet<>();
     private final Set<Class<?>> missingNumberConverters = new HashSet<>();
 
@@ -237,6 +240,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
         consumeEffectTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+    }
+
+    @Override
+    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+        //noinspection unchecked
+        slotSourceTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
@@ -446,6 +455,18 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
+    public <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+        BiFunction<IServerUtils, SlotSource, ITooltipNode> slotSourceTooltipGetter = slotSourceTooltipMap.get(slotSource.getClass());
+
+        if (slotSourceTooltipGetter != null) {
+            return slotSourceTooltipGetter.apply(utils, slotSource);
+        } else {
+            missingSlotSourceTooltips.add(slotSource.getClass());
+            return utils.getValueTooltip(utils, slotSource.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
+        }
+    }
+
+    @Override
     public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
         TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getClass());
 
@@ -643,6 +664,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         missingEntitySubPredicateTooltips.forEach((t) -> LOGGER.warn("Missing entity sub predicate tooltip for {}", t.getName()));
         missingDataComponentTypeTooltips.forEach((t) -> LOGGER.warn("Missing data component type tooltip for {}", t.getName()));
         missingConsumeEffectTooltips.forEach((t) -> LOGGER.warn("Missing consume effect tooltip for {}", t.getName()));
+        missingSlotSourceTooltips.forEach((t) -> LOGGER.warn("Missing slot source tooltip for {}", t.getName()));
         missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
         missingNumberConverters.forEach((t) -> LOGGER.warn("Missing number converters for {}", t.getName()));
 

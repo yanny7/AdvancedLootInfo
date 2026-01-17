@@ -18,6 +18,7 @@ accessible field net/minecraft/world/level/storage/loot/entries/LootPoolSingleto
 accessible field net/minecraft/world/level/storage/loot/entries/NestedLootTable contents Lcom/mojang/datafixers/util/Either;
 accessible field net/minecraft/world/level/storage/loot/entries/TagEntry expand Z
 accessible field net/minecraft/world/level/storage/loot/entries/TagEntry tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/level/storage/loot/entries/SlotLoot slotSource Lnet/minecraft/world/item/slot/SlotSource;
 
 accessible field net/minecraft/core/component/predicates/EnchantmentsPredicate enchantments Ljava/util/List;
 accessible field net/minecraft/world/item/AdventureModePredicate predicates Ljava/util/List;
@@ -26,6 +27,13 @@ accessible field net/minecraft/world/item/component/BundleContents items Ljava/u
 accessible field net/minecraft/world/item/component/ItemContainerContents items Lnet/minecraft/core/NonNullList;
 accessible field net/minecraft/core/component/DataComponentExactPredicate expectedComponents Ljava/util/List;
 accessible field net/minecraft/world/item/enchantment/ItemEnchantments enchantments Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;
+accessible field net/minecraft/world/item/slot/ContentsSlotSource component Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;
+accessible field net/minecraft/world/item/slot/RangeSlotSource source Lnet/minecraft/world/level/storage/loot/LootContextArg;
+accessible field net/minecraft/world/item/slot/RangeSlotSource slotRange Lnet/minecraft/world/inventory/SlotRange;
+accessible field net/minecraft/world/item/slot/LimitSlotSource limit I
+accessible field net/minecraft/world/item/slot/FilteredSlotSource filter Lnet/minecraft/advancements/criterion/ItemPredicate;
+accessible field net/minecraft/world/item/slot/CompositeSlotSource terms Ljava/util/List;
+accessible field net/minecraft/world/item/slot/TransformedSlotSource slotSource Lnet/minecraft/world/item/slot/SlotSource;
 
 accessible field net/minecraft/world/level/storage/loot/predicates/CompositeLootItemCondition terms Ljava/util/List;
 
@@ -124,6 +132,11 @@ accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltip
 accessible method net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 accessible method net/minecraft/world/item/enchantment/ItemEnchantments <init> (Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;)V
 accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStack;
+accessible method net/minecraft/world/item/slot/ContentsSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;)V
+accessible method net/minecraft/world/item/slot/RangeSlotSource <init> (Lnet/minecraft/world/level/storage/loot/LootContextArg;Lnet/minecraft/world/inventory/SlotRange;)V
+accessible method net/minecraft/world/item/slot/LimitSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;I)V
+accessible method net/minecraft/world/item/slot/FilteredSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;Lnet/minecraft/advancements/criterion/ItemPredicate;)V
+accessible method net/minecraft/world/item/slot/GroupSlotSource <init> (Ljava/util/List;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

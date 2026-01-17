@@ -194,12 +194,20 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.consume_effect.remove_effects", "Remove Effects:");
         TRANSLATION_MAP.put("ali.type.consume_effect.teleport_randomly", "Teleport Randomly:");
 
+        TRANSLATION_MAP.put("ali.type.slot_source.empty", "Empty Slot");
+        TRANSLATION_MAP.put("ali.type.slot_source.contents", "Contents:");
+        TRANSLATION_MAP.put("ali.type.slot_source.slot_range", "Slot Range:");
+        TRANSLATION_MAP.put("ali.type.slot_source.limit_slots", "Limit Slots:");
+        TRANSLATION_MAP.put("ali.type.slot_source.filtered", "Filtered:");
+        TRANSLATION_MAP.put("ali.type.slot_source.group", "Group:");
+
         TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
         TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");
         TRANSLATION_MAP.put("ali.enum.group_type.alternatives", "Selects only first successful entry");
         TRANSLATION_MAP.put("ali.enum.group_type.sequence", "Selects entries sequentially until first failed");
         TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
         TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
+        TRANSLATION_MAP.put("ali.enum.group_type.slot", "Slot source");
         TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
 
         // Snow Real Magic
@@ -307,6 +315,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.branch.rule", "Rule:");
         TRANSLATION_MAP.put("ali.property.branch.rules", "Rules:");
         TRANSLATION_MAP.put("ali.property.branch.scores", "Scores:");
+        TRANSLATION_MAP.put("ali.property.branch.slot_source", "Slot Source:");
         TRANSLATION_MAP.put("ali.property.branch.slots", "Slots:");
         TRANSLATION_MAP.put("ali.property.branch.songs", "Songs:");
         TRANSLATION_MAP.put("ali.property.branch.source_entity", "Source Entity:");
@@ -494,6 +503,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.skip_known_structures", "Skip Known Structures: %s");
         TRANSLATION_MAP.put("ali.property.value.slot", "Slot: %s");
         TRANSLATION_MAP.put("ali.property.value.slot_group", "Slot Group: %s");
+        TRANSLATION_MAP.put("ali.property.value.slot_range", "Slot Range: %s");
         TRANSLATION_MAP.put("ali.property.value.smokey", "Smokey: %s");
         TRANSLATION_MAP.put("ali.property.value.sneak", "Sneak: %s");
         TRANSLATION_MAP.put("ali.property.value.song", "Song: %s");

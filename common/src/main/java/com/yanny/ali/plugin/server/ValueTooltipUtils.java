@@ -27,8 +27,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
@@ -38,6 +40,7 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
@@ -756,5 +759,20 @@ public class ValueTooltipUtils {
         }
 
         return EmptyTooltipNode.empty();
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getLootContextArgTooltip(IServerUtils utils, LootContextArg<?> lootContextArg) {
+        return utils.getValueTooltip(utils, lootContextArg.contextParam());
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getContextKeyTooltip(IServerUtils utils, ContextKey<?> contextKey) {
+        return utils.getValueTooltip(utils, contextKey.name());
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getSlotRangeTooltip(IServerUtils utils, SlotRange slotRange) {
+        return utils.getValueTooltip(utils, slotRange.toString());
     }
 }

@@ -43,6 +43,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -82,7 +83,8 @@ import java.util.concurrent.ExecutionException;
         ConsumeEffectTooltipTest.class,
         IngredientTooltipTest.class,
         TooltipTest.class,
-        ServerUtilsTest.class
+        ServerUtilsTest.class,
+        SlotSourceTooltipTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -168,6 +170,11 @@ public class TooltipTestSuite {
             @Override
             public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
                 return PluginManager.SERVER_REGISTRY.getConsumeEffectTooltip(utils, effect);
+            }
+
+            @Override
+            public <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+                return PluginManager.SERVER_REGISTRY.getSlotSourceTooltip(utils, slotSource);
             }
 
             @Override

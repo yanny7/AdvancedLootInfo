@@ -22,7 +22,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getCopyNameTooltip(IServerUtils utils, CopyNameFunction fun) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.source.contextParam().name()).build("ali.property.value.source"))
+                .add(utils.getValueTooltip(utils, fun.source).build("ali.property.value.source"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.copy_name");
     }
@@ -295,7 +295,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getCopyComponentsTooltip(IServerUtils utils, CopyComponentsFunction fun) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.source.contextParam().name()).build("ali.property.value.source"))
+                .add(utils.getValueTooltip(utils, fun.source).build("ali.property.value.source"))
                 .add(utils.getValueTooltip(utils, fun.include).build("ali.property.branch.include"))
                 .add(utils.getValueTooltip(utils, fun.exclude).build("ali.property.branch.exclude"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))

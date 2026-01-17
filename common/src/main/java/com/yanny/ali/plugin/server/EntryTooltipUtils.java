@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -75,6 +76,18 @@ public class EntryTooltipUtils {
     public static ITooltipNode getEmptyTooltip(IServerUtils utils, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return ArrayTooltipNode.array()
                 .add(LiteralTooltipNode.translatable("ali.enum.group_type.empty"))
+                .add(getQualityTooltip(quality))
+                .add(getChanceTooltip(chance))
+                .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
+                .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
+                .build();
+    }
+
+    @NotNull
+    public static ITooltipNode getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return ArrayTooltipNode.array()
+                .add(LiteralTooltipNode.translatable("ali.enum.group_type.slot"))
+                .add(utils.getSlotSourceTooltip(utils, slotSource))
                 .add(getQualityTooltip(quality))
                 .add(getChanceTooltip(chance))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))

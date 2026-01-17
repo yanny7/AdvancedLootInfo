@@ -30,6 +30,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -46,6 +47,7 @@ import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.npc.villager.VillagerType;
+import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.*;
@@ -55,6 +57,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
+import net.minecraft.world.item.slot.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -67,6 +70,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
@@ -103,6 +107,7 @@ public class Plugin implements IPlugin {
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
         registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
         registry.registerWidget(GlobalLootModifierNode.ID, GlobalLootModifierWidget::new);
+        registry.registerWidget(SlotNode.ID, SlotWidget::new);
         registry.registerWidget(MissingNode.ID, MissingWidget::new);
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
@@ -121,6 +126,7 @@ public class Plugin implements IPlugin {
         registry.registerDataNode(ReferenceNode.ID, ReferenceNode::new);
         registry.registerDataNode(ModifiedNode.ID, ModifiedNode::new);
         registry.registerDataNode(GlobalLootModifierNode.ID, GlobalLootModifierNode::new);
+        registry.registerDataNode(SlotNode.ID, SlotNode::new);
         registry.registerDataNode(MissingNode.ID, MissingNode::new);
 
         registry.registerDataNode(TradeNode.ID, TradeNode::new);
@@ -147,6 +153,7 @@ public class Plugin implements IPlugin {
         registry.registerItemCollector(EmptyLootItem.class, ItemCollectorUtils::collectSingleton);
         registry.registerItemCollector(DynamicLoot.class, ItemCollectorUtils::collectSingleton);
         registry.registerItemCollector(NestedLootTable.class, ItemCollectorUtils::collectReference);
+        registry.registerItemCollector(SlotLoot.class, ItemCollectorUtils::collectSingleton);
 
         registry.registerItemCollector(SmeltItemFunction.class, ItemCollectorUtils::collectFurnaceSmelt);
         registry.registerItemCollector(SetItemFunction.class, ItemCollectorUtils::collectSetItem);
@@ -166,6 +173,7 @@ public class Plugin implements IPlugin {
         registry.registerEntry(EmptyLootItem.class, NodeUtils::getEmptyNode);
         registry.registerEntry(DynamicLoot.class, NodeUtils::getDynamicNode);
         registry.registerEntry(NestedLootTable.class, NodeUtils::getReferenceNode);
+        registry.registerEntry(SlotLoot.class, NodeUtils::getSlotNode);
 
         registry.registerConditionTooltip(AllOfCondition.class, ConditionTooltipUtils::getAllOfTooltip);
         registry.registerConditionTooltip(AnyOfCondition.class, ConditionTooltipUtils::getAnyOfTooltip);
@@ -476,6 +484,16 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlocksAttacks.DamageReduction.class, ValueTooltipUtils::getDamageReductionTooltip);
         registry.registerValueTooltip(BlocksAttacks.ItemDamageFunction.class, ValueTooltipUtils::getItemDamageTooltip);
         registry.registerValueTooltip(DataComponentMatchers.class, ValueTooltipUtils::getDataComponentMatchersTooltip);
+        registry.registerValueTooltip(LootContextArg.class, ValueTooltipUtils::getLootContextArgTooltip);
+        registry.registerValueTooltip(ContextKey.class, ValueTooltipUtils::getContextKeyTooltip);
+        registry.registerValueTooltip(SlotRange.class, ValueTooltipUtils::getSlotRangeTooltip);
+
+        registry.registerSlotSourceTooltip(EmptySlotSource.class, SlotSourceTooltipUtils::getEmptyTooltip);
+        registry.registerSlotSourceTooltip(ContentsSlotSource.class, SlotSourceTooltipUtils::getContentsTooltip);
+        registry.registerSlotSourceTooltip(RangeSlotSource.class, SlotSourceTooltipUtils::getSlotRangeTooltip);
+        registry.registerSlotSourceTooltip(LimitSlotSource.class, SlotSourceTooltipUtils::getLimitSlotsTooltip);
+        registry.registerSlotSourceTooltip(FilteredSlotSource.class, SlotSourceTooltipUtils::getFilteredTooltip);
+        registry.registerSlotSourceTooltip(GroupSlotSource.class, SlotSourceTooltipUtils::getGroupTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithEnchantedBonusCondition.class, TooltipUtils::applyRandomChanceWithLooting);

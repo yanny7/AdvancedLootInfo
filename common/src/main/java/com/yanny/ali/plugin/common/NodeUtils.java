@@ -133,6 +133,17 @@ public class NodeUtils {
     }
 
     @NotNull
+    public static SlotNode getSlotNode(IServerUtils utils, SlotLoot entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
+        List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
+        float chance = getChance(entry, rawChance, sumWeight);
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
+        ITooltipNode tooltip = EntryTooltipUtils.getSlotTooltip(utils, entry.slotSource, entry.quality, enchantedChance, allFunctions, allConditions);
+
+        return new SlotNode(chance, tooltip);
+    }
+
+    @NotNull
     public static LootPoolNode getLootPoolNode(IServerUtils utils, LootPool entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();

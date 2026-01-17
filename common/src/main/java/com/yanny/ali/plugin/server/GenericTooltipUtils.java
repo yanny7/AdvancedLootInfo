@@ -24,6 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -128,6 +129,17 @@ public class GenericTooltipUtils {
         }
 
         return EmptyTooltipNode.EMPTY;
+    }
+
+    @NotNull
+    public static ITooltipNode getSlotListTooltip(IServerUtils utils, List<SlotSource> slots) {
+        ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
+
+        for (SlotSource slot : slots) {
+            array.add(utils.getSlotSourceTooltip(utils, slot));
+        }
+
+        return array.build();
     }
 
     @NotNull

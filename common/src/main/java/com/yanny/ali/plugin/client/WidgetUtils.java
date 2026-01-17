@@ -86,6 +86,14 @@ public class WidgetUtils {
     }
 
     @NotNull
+    public static IWidget getSlotWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 102, 0);
+
+        widget.tooltipText(node.getTooltip());
+        return widget;
+    }
+
+    @NotNull
     public static IWidget getArrowWidget(RelativeRect rect, IDataNode node) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 24, 18, rect), 53, 18);
 
