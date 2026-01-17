@@ -3,6 +3,7 @@ package com.yanny.ali.rei.compatibility.rei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.mixin.MixinBushBlock;
 import me.shedaniel.math.Point;
@@ -50,7 +51,7 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
         int width = holder.bounds().getWidth() % 2 == 0 ? holder.bounds().getWidth() : holder.bounds().getWidth() + 1;
         Rectangle innerBounds = new Rectangle(0, 0, width, holder.bounds().getHeight() + offset);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
-        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + ReiScrollWidget.getScrollBoxScrollbarExtraWidth(), height);
+        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollBoxScrollbarExtraWidth(), height);
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
         if (isSpecial) {

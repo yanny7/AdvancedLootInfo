@@ -1,6 +1,7 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.api.Rect;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
@@ -52,7 +53,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
         int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
         Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().getHeight() + OFFSET);
         int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
-        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + ReiScrollWidget.getScrollBoxScrollbarExtraWidth(), height);
+        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollBoxScrollbarExtraWidth(), height);
         List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
 
         if (spawnEgg != null) {
