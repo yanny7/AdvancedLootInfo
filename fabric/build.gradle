@@ -14,10 +14,6 @@ architectury {
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 
-    mixin {
-        defaultRefmapName = "ali.fabric.refmap.json"
-    }
-
     runs {
         datagen {
             inherit client
