@@ -1,5 +1,6 @@
 # []
 
+- Displayed overflowed loot info in REI using scrollbar
 - Supported displaying trades for Villager Trade Rebalance
 
 # [1.6.4]

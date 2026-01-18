@@ -1,4 +1,4 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.compatibility.common.*;
@@ -6,6 +6,7 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.rei.compatibility.rei.*;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;

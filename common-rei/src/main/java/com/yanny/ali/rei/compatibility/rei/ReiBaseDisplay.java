@@ -1,4 +1,4 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.compatibility.common.IType;
