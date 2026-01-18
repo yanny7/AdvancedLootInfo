@@ -8,8 +8,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 public abstract class AbstractScrollWidget {
     protected static final int SCROLLBAR_PADDING = 2;
@@ -143,9 +141,7 @@ public abstract class AbstractScrollWidget {
 
     private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY, float scrollOffsetY) {
         PoseStack poseStack = guiGraphics.pose();
-        PoseStack.Pose last = poseStack.last();
-        Matrix4f pose = last.pose();
-        ScreenRectangle scissorArea = transform(rect, pose);
+        ScreenRectangle scissorArea = new ScreenRectangle(rect.x(), rect.y(), rect.width(), rect.height());
         float scrollAmount = getHiddenAmount() * scrollOffsetY;
 
         guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
@@ -162,19 +158,6 @@ public abstract class AbstractScrollWidget {
 
     public static int getScrollBoxScrollbarExtraWidth() {
         return SCROLLBAR_WIDTH + SCROLLBAR_PADDING;
-    }
-
-    @NotNull
-    private static ScreenRectangle transform(Rect rect, Matrix4f pose) {
-        Vector3f topLeft = new Vector3f(rect.x(), rect.y(), 1.0f);
-        Vector3f bottomRight = new Vector3f(rect.x() + rect.width(), rect.y() + rect.height(), 1.0f);
-
-        topLeft = pose.transformPosition(topLeft);
-        bottomRight = pose.transformPosition(bottomRight);
-
-        int x = Math.round(topLeft.x);
-        int y = Math.round(topLeft.y);
-        return new ScreenRectangle(x, y, Math.round(bottomRight.x) - x, Math.round(bottomRight.y) - y);
     }
 
     @NotNull

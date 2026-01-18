@@ -30,6 +30,11 @@ public class ReiScrollWidget extends Widget {
         scrollWidget.render(guiGraphics, mouseX, mouseY);
     }
 
+    @Override
+    public boolean containsMouse(double mouseX, double mouseY) {
+        return scrollWidget.getRect().contains((int) mouseX, (int) mouseY);
+    }
+
     @NotNull
     @Override
     public List<? extends GuiEventListener> children() {
