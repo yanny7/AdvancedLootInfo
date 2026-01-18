@@ -35,9 +35,4 @@ public class DynamicWidget implements IWidget {
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);
     }
-
-    @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return widget.mouseClicked(mouseX, mouseY, button);
-    }
 }
