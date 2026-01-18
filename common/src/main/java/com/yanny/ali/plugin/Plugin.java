@@ -480,6 +480,7 @@ public class Plugin implements IPlugin {
         registry.registerItemListing(VillagerTrades.SuspiciousStewForEmerald.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TradeUtils::getNode);
         registry.registerItemListing(VillagerTrades.TreasureMapForEmeralds.class, TradeUtils::getNode);
+        registry.registerItemListing(VillagerTrades.TypeSpecificTrade.class, TradeUtils::getNode);
 
         registry.registerItemListingCollector(VillagerTrades.DyedArmorForEmeralds.class, TradeUtils::collectItems);
         registry.registerItemListingCollector(VillagerTrades.EmeraldForItems.class, TradeUtils::collectItems);
@@ -491,6 +492,7 @@ public class Plugin implements IPlugin {
         registry.registerItemListingCollector(VillagerTrades.SuspiciousStewForEmerald.class, TradeUtils::collectItems);
         registry.registerItemListingCollector(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TradeUtils::collectItems);
         registry.registerItemListingCollector(VillagerTrades.TreasureMapForEmeralds.class, TradeUtils::collectItems);
+        registry.registerItemListingCollector(VillagerTrades.TypeSpecificTrade.class, TradeUtils::collectItems);
     }
 
     @NotNull
