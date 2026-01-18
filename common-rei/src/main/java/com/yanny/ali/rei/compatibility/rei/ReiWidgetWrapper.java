@@ -1,4 +1,4 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.RelativeRect;

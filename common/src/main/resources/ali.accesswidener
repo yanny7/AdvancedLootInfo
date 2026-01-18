@@ -105,6 +105,7 @@ accessible class net/minecraft/world/entity/npc/VillagerTrades$DyedArmorForEmera
 accessible class net/minecraft/world/entity/npc/VillagerTrades$EnchantBookForEmeralds
 accessible class net/minecraft/world/entity/npc/VillagerTrades$TreasureMapForEmeralds
 accessible class net/minecraft/world/entity/npc/VillagerTrades$ItemsAndEmeraldsToItems
+accessible class net/minecraft/world/entity/npc/VillagerTrades$TypeSpecificTrade
 
 accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems itemStack Lnet/minecraft/world/item/ItemStack;
 accessible field net/minecraft/world/entity/npc/VillagerTrades$EmeraldForItems emeraldAmount I
