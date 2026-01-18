@@ -50,7 +50,7 @@
           "com.yanny.ali.jei.compatibility.JeiCompatibility"
         ],
         "rei_client": [
-          "com.yanny.ali.rei.ReiCompatibility"
+          "com.yanny.ali.rei.compatibility.ReiCompatibility"
         ]
     },
     "mixins": [
