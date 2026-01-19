@@ -12,7 +12,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.SimpleChannel;
 
 @Mod(Utils.MOD_ID)
@@ -25,8 +24,7 @@ public class AliMod {
     static {
         CHANNEL = ChannelBuilder.named(Utils.modLoc("network"))
                 .networkProtocolVersion(PROTOCOL_VERSION)
-                .clientAcceptedVersions(NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION))
-                .serverAcceptedVersions(NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION))
+                .optional()
                 .simpleChannel();
 
         NetworkUtils.registerClient(CHANNEL);

@@ -1,8 +1,8 @@
 package com.yanny.ali.neoforge.network;
 
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 public class NetworkUtils {
@@ -14,12 +14,12 @@ public class NetworkUtils {
         channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
                 .encoder(LootDataChunkMessage::encode)
                 .decoder(LootDataChunkMessage::new)
-                .consumerNetworkThread(client::onLootInfo)
+                .consumerNetworkThread(client::onLootDataChunk)
                 .add();
-        channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::encode)
-                .decoder(ClearMessage::new)
-                .consumerNetworkThread(client::onClear)
+        channel.messageBuilder(StartMessage.class, getMessageId())
+                .encoder(StartMessage::encode)
+                .decoder(StartMessage::new)
+                .consumerNetworkThread(client::onStart)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
                 .encoder(DoneMessage::encode)

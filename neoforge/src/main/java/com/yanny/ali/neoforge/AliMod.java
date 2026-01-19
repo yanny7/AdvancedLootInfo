@@ -17,18 +17,18 @@ import net.neoforged.neoforge.network.simple.SimpleChannel;
 @Mod(Utils.MOD_ID)
 public class AliMod {
     public static final AbstractServer SERVER;
-    private static final String PROTOCOL_VERSION = "1";
+    public static final SimpleChannel CHANNEL;
+    private static final String PROTOCOL_VERSION = "2";
 
     static {
-        SimpleChannel channel = NetworkRegistry.newSimpleChannel(
-                Utils.modLoc("network"),
-                () -> PROTOCOL_VERSION,
-                PROTOCOL_VERSION::equals,
-                PROTOCOL_VERSION::equals
-        );
+        CHANNEL = NetworkRegistry.ChannelBuilder.named(Utils.modLoc("network"))
+                .networkProtocolVersion(() -> PROTOCOL_VERSION)
+                .clientAcceptedVersions(NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION))
+                .serverAcceptedVersions(NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION))
+                .simpleChannel();
 
-        NetworkUtils.registerClient(channel);
-        SERVER = new Server(channel);
+        NetworkUtils.registerClient(CHANNEL);
+        SERVER = new Server(CHANNEL);
     }
 
     public AliMod() {
