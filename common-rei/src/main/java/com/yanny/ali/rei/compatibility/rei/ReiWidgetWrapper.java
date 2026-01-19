@@ -46,6 +46,11 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
         return false;
     }
 
+    @Override
+    public boolean containsMouse(double mouseX, double mouseY) {
+        return false;
+    }
+
     @NotNull
     @Override
     public List<? extends GuiEventListener> children() {

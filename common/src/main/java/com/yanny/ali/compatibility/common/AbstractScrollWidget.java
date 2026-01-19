@@ -37,7 +37,7 @@ public abstract class AbstractScrollWidget {
         Rect markerArea = calculateScrollbarMarkerArea();
         guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
 
-        drawContents(guiGraphics, mouseX, mouseY, scrollOffsetY);
+        drawContents(guiGraphics, mouseX, mouseY);
     }
 
     public boolean onMouseScrolled(double mouseX, double mouseY, double scrollDeltaY) {
@@ -98,14 +98,6 @@ public abstract class AbstractScrollWidget {
         return getHiddenAmount() * scrollOffsetY;
     }
 
-    public Rect getContentRect() {
-        return contentRect;
-    }
-
-    public Rect getRect() {
-        return rect;
-    }
-
     protected Rect calculateScrollbarMarkerArea() {
         int totalSpace = scrollRect.height() - 2;
         int scrollMarkerWidth = scrollRect.width() - 2;
@@ -141,12 +133,12 @@ public abstract class AbstractScrollWidget {
         return (float) (scrollAmount / (double) totalHeight);
     }
 
-    private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY, float scrollOffsetY) {
+    private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         PoseStack poseStack = guiGraphics.pose();
         PoseStack.Pose last = poseStack.last();
         Matrix4f pose = last.pose();
         ScreenRectangle scissorArea = transform(rect, pose);
-        float scrollAmount = getHiddenAmount() * scrollOffsetY;
+        float scrollAmount = getScrollAmount();
 
         guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
         poseStack.pushPose();
