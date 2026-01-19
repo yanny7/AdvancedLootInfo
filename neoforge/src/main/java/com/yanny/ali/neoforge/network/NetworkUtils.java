@@ -1,8 +1,8 @@
 package com.yanny.ali.neoforge.network;
 
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
 
 public class NetworkUtils {
@@ -15,13 +15,13 @@ public class NetworkUtils {
                 LootDataChunkMessage.ID,
                 LootDataChunkMessage::new,
                 (handler) ->
-                        handler.client(client::onLootInfo).server((msg, ctx) -> {})
+                        handler.client(client::onLootDataChunk).server((msg, ctx) -> {})
         );
         registrar.play(
-                ClearMessage.ID,
-                ClearMessage::new,
+                StartMessage.ID,
+                StartMessage::new,
                 (handler) ->
-                        handler.client(client::onClear).server((msg, ctx) -> {})
+                        handler.client(client::onStart).server((msg, ctx) -> {})
         );
         registrar.play(
                 DoneMessage.ID,

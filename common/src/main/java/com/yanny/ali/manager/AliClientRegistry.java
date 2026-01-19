@@ -97,9 +97,24 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         }
     }
 
-    public synchronized void loggingIn() {
+    public synchronized void loggingIn(boolean modAvailableOnServer) {
         LOGGER.info("Player login received");
         loggedIn.set(true);
+
+        if (!modAvailableOnServer) {
+            LOGGER.info("ALI is not present on the server. Completing sync with empty data.");
+            CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
+
+            if (!currentPromise.isDone()) {
+                currentPromise.complete(new byte[0]);
+            }
+
+            if (currentDataReceiver != null) {
+                currentDataReceiver.cancelOperation();
+                currentDataReceiver = null;
+                stopLogging(true);
+            }
+        }
     }
 
     public synchronized void loggingOut() {
