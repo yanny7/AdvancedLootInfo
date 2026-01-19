@@ -2,14 +2,14 @@ package com.yanny.ali.network;
 
 import net.minecraft.network.FriendlyByteBuf;
 
-public class ClearMessage {
+public class StartMessage {
     public final int totalMessages;
 
-    public ClearMessage(int totalMessages) {
+    public StartMessage(int totalMessages) {
         this.totalMessages = totalMessages;
     }
 
-    public ClearMessage(FriendlyByteBuf buf) {
+    public StartMessage(FriendlyByteBuf buf) {
         totalMessages = buf.readInt();
     }
 

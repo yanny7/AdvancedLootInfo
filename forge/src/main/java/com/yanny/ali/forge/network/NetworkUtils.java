@@ -1,6 +1,5 @@
 package com.yanny.ali.forge.network;
 
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
 import net.minecraftforge.event.network.CustomPayloadEvent;
@@ -17,12 +16,12 @@ public class NetworkUtils {
         channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
                 .encoder(LootDataChunkMessage::encode)
                 .decoder(LootDataChunkMessage::new)
-                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootDataChunk)
                 .add();
-        channel.messageBuilder(ClearMessage.class, getMessageId())
-                .encoder(ClearMessage::encode)
-                .decoder(ClearMessage::new)
-                .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
+        channel.messageBuilder(StartMessage.class, getMessageId())
+                .encoder(StartMessage::encode)
+                .decoder(StartMessage::new)
+                .consumerNetworkThread((BiConsumer<StartMessage, CustomPayloadEvent.Context>) client::onStart)
                 .add();
         channel.messageBuilder(DoneMessage.class, getMessageId())
                 .encoder(DoneMessage::encode)
