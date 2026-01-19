@@ -1,8 +1,8 @@
 package com.yanny.ali.lootjs.widget;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.lootjs.node.ItemTagNode;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class ItemTagWidget implements IWidget {

@@ -45,7 +45,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
             return true;
         }
 
-        if (scrollWidget.getContentRect().contains(mouseX, mouseY)) {
+        if (bounds.contains(mouseX, mouseY)) {
             float scrollAmount = scrollWidget.getScrollAmount();
 
             for (Widget widget : widgets) {

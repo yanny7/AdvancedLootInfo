@@ -37,12 +37,27 @@ public class ReiScrollWidget extends Widget {
     }
 
     @Override
+    public boolean mouseReleased(double d, double e, int i) {
+        return super.mouseReleased(d, e + scrollWidget.getScrollAmount(), i);
+    }
+
+    @Override
+    public void mouseMoved(double d, double e) {
+        super.mouseMoved(d, e + scrollWidget.getScrollAmount());
+    }
+
+    @Override
+    public boolean containsMouse(double mouseX, double mouseY) {
+        return super.containsMouse(mouseX, mouseY + scrollWidget.getScrollAmount());
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (scrollWidget.onScrollbarClicked(mouseX, mouseY, button)) {
             return true;
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY + scrollWidget.getScrollAmount(), button);
     }
 
     @Override
@@ -51,7 +66,7 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY, scrollDeltaY, scrollDeltaX);
+        return super.mouseScrolled(mouseX, mouseY + scrollWidget.getScrollAmount(), scrollDeltaX, scrollDeltaY);
     }
 
     @Override
@@ -60,6 +75,6 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(mouseX, mouseY + scrollWidget.getScrollAmount(), button, dragX, dragY);
     }
 }
