@@ -10,22 +10,16 @@ import net.neoforged.neoforge.network.PacketDistributor;
 public class Server extends AbstractServer {
     @Override
     protected void sendStartMessage(ServerPlayer serverPlayer, StartMessage message) {
-        if (channel.isRemotePresent(serverPlayer.connection.connection)) {
-            PacketDistributor.PLAYER.with(serverPlayer).send(message);
-        }
+        PacketDistributor.PLAYER.with(serverPlayer).send(message);
     }
 
     @Override
     protected void sendLootDataChunkMessage(ServerPlayer serverPlayer, LootDataChunkMessage message) {
-        if (channel.isRemotePresent(serverPlayer.connection.connection)) {
-            PacketDistributor.PLAYER.with(serverPlayer).send(message);
-        }
+        PacketDistributor.PLAYER.with(serverPlayer).send(message);
     }
 
     @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
-        if (channel.isRemotePresent(serverPlayer.connection.connection)) {
-            PacketDistributor.PLAYER.with(serverPlayer).send(message);
-        }
+        PacketDistributor.PLAYER.with(serverPlayer).send(message);
     }
 }

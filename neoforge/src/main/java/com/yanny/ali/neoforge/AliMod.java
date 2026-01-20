@@ -33,6 +33,6 @@ public class AliMod {
     }
 
     public static void registerPayloadHandler(final RegisterPayloadHandlerEvent event) {
-        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).versioned(PROTOCOL_VERSION));
+        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION));
     }
 }

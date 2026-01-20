@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public record LootDataChunkMessage(int index, byte[] data) implements CustomPacketPayload {
-    public static final ResourceLocation ID = Utils.modLoc("loot_table_sync");
+    public static final ResourceLocation ID = Utils.modLoc("loot_data_chunk");
 
     public LootDataChunkMessage(FriendlyByteBuf buf) {
         this(buf.readInt(), buf.readByteArray());

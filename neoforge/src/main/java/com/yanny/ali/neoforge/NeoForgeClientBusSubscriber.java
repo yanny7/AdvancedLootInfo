@@ -3,11 +3,14 @@ package com.yanny.ali.neoforge;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.network.StartMessage;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.neoforge.network.connection.ConnectionPhase;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
 
 @Mod.EventBusSubscriber(modid = Utils.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class NeoForgeClientBusSubscriber {
@@ -22,7 +25,8 @@ public class NeoForgeClientBusSubscriber {
 
     @SubscribeEvent
     public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
-        PluginManager.CLIENT_REGISTRY.loggingIn(AliMod.CHANNEL.isRemotePresent(event.getConnection()));
+        boolean connected = NetworkRegistry.getInstance().isConnected(event.getConnection(), ConnectionPhase.ANY, StartMessage.ID);
+        PluginManager.CLIENT_REGISTRY.loggingIn(connected);
     }
 
     @SubscribeEvent
