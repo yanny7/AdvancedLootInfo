@@ -1,25 +1,31 @@
 package com.yanny.ali.fabric.network;
 
 import com.yanny.ali.network.AbstractServer;
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 
 public class Server extends AbstractServer {
     @Override
-    protected void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message) {
-        ServerPlayNetworking.send(serverPlayer, message);
+    protected void sendStartMessage(ServerPlayer serverPlayer, StartMessage message) {
+        if (ServerPlayNetworking.canSend(serverPlayer, StartMessage.TYPE)) {
+            ServerPlayNetworking.send(serverPlayer, message);
+        }
     }
 
     @Override
-    protected void sendSyncLootTableMessage(ServerPlayer serverPlayer, LootDataChunkMessage message) {
-        ServerPlayNetworking.send(serverPlayer, message);
+    protected void sendLootDataChunkMessage(ServerPlayer serverPlayer, LootDataChunkMessage message) {
+        if (ServerPlayNetworking.canSend(serverPlayer, LootDataChunkMessage.TYPE)) {
+            ServerPlayNetworking.send(serverPlayer, message);
+        }
     }
 
     @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
-        ServerPlayNetworking.send(serverPlayer, message);
+        if (ServerPlayNetworking.canSend(serverPlayer, DoneMessage.TYPE)) {
+            ServerPlayNetworking.send(serverPlayer, message);
+        }
     }
 }

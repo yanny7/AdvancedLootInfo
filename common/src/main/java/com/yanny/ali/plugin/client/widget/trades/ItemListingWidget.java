@@ -54,21 +54,6 @@ public class ItemListingWidget implements IWidget {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        boolean clicked = false;
-
-        for (IWidget widget : widgets) {
-            RelativeRect b = widget.getRect();
-
-            if (b.contains(mouseX, mouseY)) {
-                clicked |= widget.mouseClicked(mouseX, mouseY, button);
-            }
-        }
-
-        return clicked;
-    }
-
-    @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         for (IWidget widget : widgets) {
             widget.render(guiGraphics, mouseX, mouseY);

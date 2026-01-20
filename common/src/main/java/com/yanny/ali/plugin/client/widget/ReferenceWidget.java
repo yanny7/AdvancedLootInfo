@@ -37,11 +37,6 @@ public class ReferenceWidget implements IWidget {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return widget.mouseClicked(mouseX, mouseY, button);
-    }
-
-    @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);
     }

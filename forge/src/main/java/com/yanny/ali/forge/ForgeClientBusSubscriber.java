@@ -23,7 +23,7 @@ public class ForgeClientBusSubscriber {
 
     @SubscribeEvent
     public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
-        PluginManager.CLIENT_REGISTRY.loggingIn();
+        PluginManager.CLIENT_REGISTRY.loggingIn(AliMod.CHANNEL.isRemotePresent(event.getConnection()));
     }
 
     @SubscribeEvent
