@@ -15,7 +15,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 @Mod(Utils.MOD_ID)
 public class AliMod {
     public static final AbstractServer SERVER = new Server();
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
 
     public AliMod(IEventBus modEventBus) {
         modEventBus.addListener(DataGeneration::generate);
@@ -33,6 +33,6 @@ public class AliMod {
     }
 
     public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
-        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).versioned(PROTOCOL_VERSION));
+        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION));
     }
 }

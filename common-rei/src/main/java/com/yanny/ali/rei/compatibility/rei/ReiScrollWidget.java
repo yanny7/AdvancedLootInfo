@@ -11,9 +11,11 @@ import java.util.List;
 
 public class ReiScrollWidget extends Widget {
     private final AbstractScrollWidget scrollWidget;
+    private final Rect rect;
     private final List<Widget> widgets;
 
     public ReiScrollWidget(Rect rect, int contentHeight, List<Widget> widgets) {
+        this.rect = rect;
         this.widgets = widgets;
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
             @Override
@@ -30,15 +32,25 @@ public class ReiScrollWidget extends Widget {
         scrollWidget.render(guiGraphics, mouseX, mouseY);
     }
 
-    @Override
-    public boolean containsMouse(double mouseX, double mouseY) {
-        return scrollWidget.getRect().contains((int) mouseX, (int) mouseY);
-    }
-
     @NotNull
     @Override
     public List<? extends GuiEventListener> children() {
         return widgets;
+    }
+
+    @Override
+    public boolean mouseReleased(double d, double e, int i) {
+        return super.mouseReleased(d, e + scrollWidget.getScrollAmount(), i);
+    }
+
+    @Override
+    public void mouseMoved(double d, double e) {
+        super.mouseMoved(d, e + scrollWidget.getScrollAmount());
+    }
+
+    @Override
+    public boolean containsMouse(double mouseX, double mouseY) {
+        return rect.contains((int) mouseX, (int) mouseY);
     }
 
     @Override
@@ -47,7 +59,7 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY + scrollWidget.getScrollAmount(), button);
     }
 
     @Override
@@ -56,7 +68,7 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY, scrollDeltaY, scrollDeltaX);
+        return super.mouseScrolled(mouseX, mouseY + scrollWidget.getScrollAmount(), scrollDeltaX, scrollDeltaY);
     }
 
     @Override
@@ -65,6 +77,6 @@ public class ReiScrollWidget extends Widget {
             return true;
         }
 
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(mouseX, mouseY + scrollWidget.getScrollAmount(), button, dragX, dragY);
     }
 }
