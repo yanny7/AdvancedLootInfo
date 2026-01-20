@@ -112,11 +112,11 @@ public abstract class AbstractServer {
     public final void syncLootTables(Player player) {
         if (player instanceof ServerPlayer serverPlayer) {
             LOGGER.info("Started syncing loot info to {}", player.getScoreboardName());
-            sendClearMessage(serverPlayer, new ClearMessage(chunks.size()));
+            sendStartMessage(serverPlayer, new StartMessage(chunks.size()));
 
             for (LootDataChunkMessage message : chunks) {
                 try {
-                    sendSyncLootTableMessage(serverPlayer, message);
+                    sendLootDataChunkMessage(serverPlayer, message);
                 } catch (Throwable e) {
                     e.printStackTrace();
                     LOGGER.warn("Failed to send message with error: {}", e.getMessage());
@@ -128,9 +128,9 @@ public abstract class AbstractServer {
         }
     }
 
-    protected abstract void sendClearMessage(ServerPlayer serverPlayer, ClearMessage message);
+    protected abstract void sendStartMessage(ServerPlayer serverPlayer, StartMessage message);
 
-    protected abstract void sendSyncLootTableMessage(ServerPlayer serverPlayer, LootDataChunkMessage message);
+    protected abstract void sendLootDataChunkMessage(ServerPlayer serverPlayer, LootDataChunkMessage message);
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
