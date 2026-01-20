@@ -2,18 +2,18 @@ package com.yanny.ali.neoforge.network;
 
 
 import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class Client extends AbstractClient {
-    public void onLootInfo(LootDataChunkMessage msg, IPayloadContext contextSupplier) {
-        super.onLootInfo(msg);
+    public void onLootDataChunk(LootDataChunkMessage msg, IPayloadContext contextSupplier) {
+        super.onLootDataChunk(msg);
     }
 
-    public void onClear(ClearMessage msg, IPayloadContext contextSupplier) {
-        super.onClear(msg);
+    public void onStart(StartMessage msg, IPayloadContext contextSupplier) {
+        super.onStart(msg);
     }
 
     public void onDone(DoneMessage msg, IPayloadContext contextSupplier) {
