@@ -647,6 +647,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         LOGGER.info("Registered {} data component predicate tooltips", dataComponentPredicateTooltipMap.size());
         LOGGER.info("Registered {} entity sub predicate tooltips", entitySubPredicateTooltipMap.size());
         LOGGER.info("Registered {} data component type tooltips", dataComponentTypeTooltipMap.size());
+        LOGGER.info("Registered {} consume effect tooltips", consumeEffectTooltipMap.size());
         LOGGER.info("Registered {} chance modifiers", chanceModifierMap.size());
         LOGGER.info("Registered {} count modifiers", countModifierMap.size());
         LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());

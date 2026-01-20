@@ -1,8 +1,8 @@
 package com.yanny.ali.forge.network;
 
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraftforge.event.network.CustomPayloadEvent;
@@ -19,12 +19,12 @@ public class NetworkUtils {
         //noinspection unchecked
         channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
                 .codec((StreamCodec<FriendlyByteBuf, LootDataChunkMessage>)(Object) LootDataChunkMessage.CODEC)
-                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootInfo)
+                .consumerNetworkThread((BiConsumer<LootDataChunkMessage, CustomPayloadEvent.Context>) client::onLootDataChunk)
                 .add();
         //noinspection unchecked
-        channel.messageBuilder(ClearMessage.class, getMessageId())
-                .codec((StreamCodec<FriendlyByteBuf, ClearMessage>)(Object) ClearMessage.CODEC)
-                .consumerNetworkThread((BiConsumer<ClearMessage, CustomPayloadEvent.Context>) client::onClear)
+        channel.messageBuilder(StartMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, StartMessage>)(Object) StartMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<StartMessage, CustomPayloadEvent.Context>) client::onStart)
                 .add();
         //noinspection unchecked
         channel.messageBuilder(DoneMessage.class, getMessageId())

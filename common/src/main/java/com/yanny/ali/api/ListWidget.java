@@ -129,21 +129,6 @@ public abstract class ListWidget implements IWidget {
     }
 
     @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        boolean clicked = false;
-
-        for (IWidget widget : widgets) {
-            RelativeRect b = widget.getRect();
-
-            if (b.contains(mouseX, mouseY)) {
-                clicked |= widget.mouseClicked(mouseX, mouseY, button);
-            }
-        }
-
-        return clicked;
-    }
-
-    @Override
     public void onResize(RelativeRect parent, int maxWidth) {
         int posX = 0, posY = 0;
         WidgetDirection lastDirection = null;

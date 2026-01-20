@@ -113,6 +113,11 @@ public class GenericUtils {
     public static Pair<Map<Identifier, LootData>, Map<Identifier, TradeData>> decompressLootData(byte[] fullCompressedData, RegistryAccess registryAccess) {
         Map<Identifier, LootData> lootData = new HashMap<>();
         Map<Identifier, TradeData> tradeData = new HashMap<>();
+
+        if (fullCompressedData.length == 0) {
+            return new Pair<>(lootData, tradeData);
+        }
+
         ByteArrayInputStream bis = new ByteArrayInputStream(fullCompressedData);
         ByteBuf decompressedBuf = Unpooled.buffer();
 

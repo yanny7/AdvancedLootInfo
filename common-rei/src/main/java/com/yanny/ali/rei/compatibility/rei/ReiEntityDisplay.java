@@ -1,4 +1,4 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.compatibility.common.EntityLootType;
 import com.yanny.ali.platform.Services;

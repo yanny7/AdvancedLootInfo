@@ -2,6 +2,7 @@ package com.yanny.ali.emi.compatibility.emi;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.plugin.client.ClientUtils;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -22,12 +23,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public abstract class EmiBaseLoot extends BasicEmiRecipe {
-    static final int CATEGORY_WIDTH = 9 * 18 - EmiScrollWidget.getScrollBoxScrollbarExtraWidth();
+    static final int CATEGORY_WIDTH = 9 * 18 - AbstractScrollWidget.getScrollBoxScrollbarExtraWidth();
     private final Widget widget;
     private final List<Holder> slotWidgets = new LinkedList<>();
 
     public EmiBaseLoot(EmiRecipeCategory category, Identifier id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<ItemStack> outputs) {
-        super(category, Identifier.fromNamespaceAndPath(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
+        super(category, Identifier.fromNamespaceAndPath(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollBoxScrollbarExtraWidth(), 1024);
         RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
         widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
         this.inputs.addAll(inputs.stream().map(EmiStack::of).toList());
@@ -36,7 +37,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgetHolder) {
-        Rect rect = new Rect(0, 0, CATEGORY_WIDTH + EmiScrollWidget.getScrollBoxScrollbarExtraWidth(), Math.min(getDisplayHeight(), widgetHolder.getHeight()));
+        Rect rect = new Rect(0, 0, CATEGORY_WIDTH + AbstractScrollWidget.getScrollBoxScrollbarExtraWidth(), Math.min(getDisplayHeight(), widgetHolder.getHeight()));
         List<Widget> widgets = new ArrayList<>();
 
         widgets.addAll(slotWidgets.stream().map((h) -> {

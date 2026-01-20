@@ -12,15 +12,10 @@ public interface IWidget {
 
     WidgetDirection getDirection();
 
-    default void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-    }
+    default void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
 
     default List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return List.of();
-    }
-
-    default boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return false;
     }
 
     default void onResize(RelativeRect parent, int maxWidth) {}
