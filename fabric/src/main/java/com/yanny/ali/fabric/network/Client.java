@@ -12,7 +12,7 @@ public class Client extends AbstractClient {
     }
 
     public void onStart(StartMessage message, ClientPlayNetworking.Context context) {
-        super.onClear(message);
+        super.onStart(message);
     }
 
     public void onDone(DoneMessage message, ClientPlayNetworking.Context context) {

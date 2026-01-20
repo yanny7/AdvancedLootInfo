@@ -1,8 +1,8 @@
 package com.yanny.ali.fabric.network;
 
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 
