@@ -40,7 +40,13 @@ public class ReiScrollWidget extends Widget {
 
     @Override
     public boolean mouseReleased(double d, double e, int i) {
-        return super.mouseReleased(d, e + scrollWidget.getScrollAmount(), i);
+        double f = e + scrollWidget.getScrollAmount();
+
+        if (!super.mouseReleased(d, f, i)) {
+            return this.getChildAt(d, f).filter((guiEventListener) -> guiEventListener.mouseReleased(d, f, i)).isPresent();
+        }
+
+        return false;
     }
 
     @Override

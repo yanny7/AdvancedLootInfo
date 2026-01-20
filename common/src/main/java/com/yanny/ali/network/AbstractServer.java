@@ -304,8 +304,8 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<ResourceLocation, IDataNode> processTrades(ServerLevel level, AliServerRegistry serverRegistry, AliConfig config, Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems) {
         Map<ResourceLocation, IDataNode> nodes = new HashMap<>();
-        Map<VillagerProfession, Int2ObjectMap<VillagerTrades.ItemListing[]>> trades = VillagerTrades.TRADES;
-        Map<VillagerProfession, Int2ObjectMap<VillagerTrades.ItemListing[]>> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES;
+        Map<ResourceKey<VillagerProfession>, Int2ObjectMap<VillagerTrades.ItemListing[]>> trades = VillagerTrades.TRADES;
+        Map<ResourceKey<VillagerProfession>, Int2ObjectMap<VillagerTrades.ItemListing[]>> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES;
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             ResourceLocation location = entry.getKey().location();
@@ -345,14 +345,7 @@ public abstract class AbstractServer {
     @NotNull
     private static IDataNode processWanderingTrader(ServerLevel level, AliServerRegistry serverRegistry) {
         try {
-            if (level.enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
-                Int2ObjectMap<VillagerTrades.ItemListing[]> trades = new Int2ObjectOpenHashMap<>();
-
-                VillagerTrades.EXPERIMENTAL_WANDERING_TRADER_TRADES.forEach((pair) -> trades.put((int) pair.getValue(), pair.getKey()));
-                return serverRegistry.parseTrade(trades);
-            } else {
-                return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
-            }
+            return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
         } catch (Throwable e) {
             e.printStackTrace();
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage());

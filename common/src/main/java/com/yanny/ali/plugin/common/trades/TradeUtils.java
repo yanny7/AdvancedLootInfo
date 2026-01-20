@@ -12,6 +12,7 @@ import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
@@ -231,9 +232,9 @@ public class TradeUtils {
             public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing) {
                 List<IDataNode> nodes = new ArrayList<>();
 
-                for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
-                    VillagerType type = entry.getKey();
-                    ITooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
+                for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
+                    ResourceKey<VillagerType> type = entry.getKey();
+                    ITooltipNode cond = utils.getValueTooltip(utils, type).build("ali.property.value.villager_type");
 
                     nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
                 }
