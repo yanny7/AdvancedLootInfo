@@ -1,4 +1,4 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.RelativeRect;
@@ -43,7 +43,12 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return widget.mouseClicked((int) mouseX, (int) mouseY, button);
+        return false;
+    }
+
+    @Override
+    public boolean containsMouse(double mouseX, double mouseY) {
+        return false;
     }
 
     @NotNull

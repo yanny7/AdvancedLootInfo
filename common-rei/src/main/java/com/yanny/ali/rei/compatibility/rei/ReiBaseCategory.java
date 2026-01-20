@@ -1,4 +1,4 @@
-package com.yanny.ali.rei;
+package com.yanny.ali.rei.compatibility.rei;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;

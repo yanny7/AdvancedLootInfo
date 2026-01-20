@@ -12,12 +12,12 @@ public class DoneMessage implements CustomPacketPayload {
     public static final StreamCodec<RegistryFriendlyByteBuf, DoneMessage> CODEC = new StreamCodec<>() {
         @NotNull
         @Override
-        public DoneMessage decode(@NotNull RegistryFriendlyByteBuf buf) {
+        public DoneMessage decode(RegistryFriendlyByteBuf buf) {
             return new DoneMessage(buf);
         }
 
         @Override
-        public void encode(@NotNull RegistryFriendlyByteBuf buf, @NotNull DoneMessage message) {
+        public void encode(RegistryFriendlyByteBuf buf, DoneMessage message) {
             message.write(buf);
         }
     };
