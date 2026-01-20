@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import org.jetbrains.annotations.NotNull;
 
 public record LootDataChunkMessage(int index, byte[] data) implements CustomPacketPayload {
-    public static final Type<LootDataChunkMessage> TYPE = new Type<>(Utils.modLoc("loot_chunk_sync"));
+    public static final Type<LootDataChunkMessage> TYPE = new Type<>(Utils.modLoc("loot_data_chunk"));
     public static final StreamCodec<RegistryFriendlyByteBuf, LootDataChunkMessage> CODEC = StreamCodec.composite(
             ByteBufCodecs.INT,
             LootDataChunkMessage::index,

@@ -34,9 +34,4 @@ public class EmiWidgetWrapper extends Widget {
     public List<ClientTooltipComponent> getTooltip(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY).stream().map((t) -> ClientTooltipComponent.create(t.getVisualOrderText())).toList();
     }
-
-    @Override
-    public boolean mouseClicked(int mouseX, int mouseY, int button) {
-        return widget.mouseClicked(mouseX, mouseY, button);
-    }
 }

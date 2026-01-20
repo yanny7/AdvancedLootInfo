@@ -1,3 +1,9 @@
+# []
+
+- Displayed overflowed loot info in REI using scrollbar
+- The mod is now optional for connecting, but requires both client and server for loot table synchronization
+- Supported displaying trades for Villager Trade Rebalance
+
 # [1.6.4]
 
 - Fixed rare crash in some modpacks when obtaining localized registry name
