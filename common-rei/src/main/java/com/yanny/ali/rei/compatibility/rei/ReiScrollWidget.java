@@ -5,6 +5,7 @@ import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -39,11 +40,12 @@ public class ReiScrollWidget extends Widget {
     }
 
     @Override
-    public boolean mouseReleased(double d, double e, int i) {
-        double f = e + scrollWidget.getScrollAmount();
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double f = event.y() + scrollWidget.getScrollAmount();
+        MouseButtonEvent newEvent = new MouseButtonEvent(event.x(), event.y() + scrollWidget.getScrollAmount(), event.buttonInfo());
 
-        if (!super.mouseReleased(d, f, i)) {
-            return this.getChildAt(d, f).filter((guiEventListener) -> guiEventListener.mouseReleased(d, f, i)).isPresent();
+        if (!super.mouseReleased(newEvent)) {
+            return this.getChildAt(event.x(), f).filter((guiEventListener) -> guiEventListener.mouseReleased(newEvent)).isPresent();
         }
 
         return false;
@@ -60,12 +62,12 @@ public class ReiScrollWidget extends Widget {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (scrollWidget.onScrollbarClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean bl) {
+        if (scrollWidget.onScrollbarClicked(event.x(), event.y(), event.button())) {
             return true;
         }
 
-        return super.mouseClicked(mouseX, mouseY + scrollWidget.getScrollAmount(), button);
+        return super.mouseClicked(new MouseButtonEvent(event.x(), event.y() + scrollWidget.getScrollAmount(), event.buttonInfo()), bl);
     }
 
     @Override
@@ -78,11 +80,10 @@ public class ReiScrollWidget extends Widget {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        if (scrollWidget.onMouseDragged(mouseX, mouseY, button)) {
+    public boolean mouseDragged(MouseButtonEvent event, double d, double e) {
+        if (scrollWidget.onMouseDragged(event.x(), event.y(), event.button())) {
             return true;
         }
-
-        return super.mouseDragged(mouseX, mouseY + scrollWidget.getScrollAmount(), button, dragX, dragY);
+        return super.mouseDragged(new MouseButtonEvent(event.x(), event.y() + scrollWidget.getScrollAmount(), event.buttonInfo()), d, e);
     }
 }

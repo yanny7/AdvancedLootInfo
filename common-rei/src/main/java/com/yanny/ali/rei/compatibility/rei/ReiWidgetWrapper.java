@@ -43,7 +43,7 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent mouseButtonEvent, boolean bl) {
         return false;
     }
 
