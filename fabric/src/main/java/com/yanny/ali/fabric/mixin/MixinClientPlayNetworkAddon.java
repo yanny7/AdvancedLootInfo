@@ -1,8 +1,8 @@
 package com.yanny.ali.fabric.mixin;
 
-import com.yanny.ali.network.ClearMessage;
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.StartMessage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.impl.networking.client.ClientPlayNetworkAddon;
@@ -24,7 +24,7 @@ public class MixinClientPlayNetworkAddon {
     private void ali$reload(ClientPlayNetworking.PlayPayloadHandler<?> handler, CustomPacketPayload payload, CallbackInfo ci) {
         PacketSender packetSender = (PacketSender) this;
 
-        if (payload instanceof ClearMessage || payload instanceof LootDataChunkMessage || payload instanceof DoneMessage) {
+        if (payload instanceof StartMessage || payload instanceof LootDataChunkMessage || payload instanceof DoneMessage) {
             // execute on networking thread to avoid deadlock
             ((ClientPlayNetworking.PlayPayloadHandler) handler).receive(payload, new ClientPlayNetworking.Context() {
                 @Override
