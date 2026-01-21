@@ -15,7 +15,7 @@ public class FabricClientBusSubscriber {
     }
 
     private static void onConnect(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
-        PluginManager.CLIENT_REGISTRY.loggingIn(ClientPlayNetworking.canSend(NetworkUtils.START_LOOT_INFO_ID));
+        PluginManager.CLIENT_REGISTRY.loggingIn(ClientPlayNetworking.getReceived().contains(NetworkUtils.START_LOOT_INFO_ID));
     }
 
     private static void onDisconnect(ClientPacketListener clientPacketListener, Minecraft minecraft) {
