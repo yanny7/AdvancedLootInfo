@@ -109,8 +109,7 @@ public class NeoForgePlugin implements IPlugin {
                     }
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.warn("Failed to add GLM with error {}", e.getMessage());
+                LOGGER.warn("Failed to add GLM with error {}", e.getMessage(), e);
             }
         }
 
