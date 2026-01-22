@@ -29,8 +29,8 @@ public class PluginManager {
         for (IPlugin plugin : PLUGINS) {
             try {
                 plugin.registerCommon(COMMON_REGISTRY);
-            } catch (Throwable throwable) {
-                LOGGER.error("Failed to register {} common part with error: {}", plugin.getModId(), throwable.getMessage());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to register {} common part with error: {}", plugin.getModId(), e.getMessage(), e);
             }
         }
 
@@ -49,8 +49,8 @@ public class PluginManager {
         for (IPlugin plugin : PLUGINS) {
             try {
                 plugin.registerServer(SERVER_REGISTRY);
-            } catch (Throwable throwable) {
-                LOGGER.error("Failed to reload {} server part with error: {}", plugin.getModId(), throwable.getMessage());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to reload {} server part with error: {}", plugin.getModId(), e.getMessage(), e);
             }
         }
 
@@ -73,8 +73,8 @@ public class PluginManager {
         for (IPlugin plugin : PLUGINS) {
             try {
                 plugin.registerClient(CLIENT_REGISTRY);
-            } catch (Throwable throwable) {
-                LOGGER.error("Failed to register {} client part with error: {}", plugin.getModId(), throwable.getMessage());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to register {} client part with error: {}", plugin.getModId(), e.getMessage(), e);
             }
         }
 
@@ -89,8 +89,8 @@ public class PluginManager {
         for (IPlugin plugin : PLUGINS) {
             try {
                 plugin.registerServer(SERVER_REGISTRY);
-            } catch (Throwable throwable) {
-                LOGGER.error("Failed to register {} server part with error: {}", plugin.getModId(), throwable.getMessage());
+            } catch (Throwable e) {
+                LOGGER.error("Failed to register {} server part with error: {}", plugin.getModId(), e.getMessage(), e);
             }
         }
 
