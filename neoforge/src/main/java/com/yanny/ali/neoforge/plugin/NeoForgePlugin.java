@@ -14,6 +14,7 @@ import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.loot.*;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,8 @@ public class NeoForgePlugin implements IPlugin {
         registry.registerConditionTooltip(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdTooltip);
 
         registry.registerLootModifiers(NeoForgePlugin::registerLootModifiers);
+
+        registry.registerValueTooltip(ItemAbility.class, NeoForgePlugin::getItemAbilityTooltip);
     }
 
     @Unmodifiable
@@ -52,6 +55,10 @@ public class NeoForgePlugin implements IPlugin {
     public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition condition) {
         MixinLootTableIdCondition cond = (MixinLootTableIdCondition) condition;
         return utils.getValueTooltip(utils, cond.getTargetLootTableId()).build("ali.type.condition.loot_table_id");
+    }
+
+    private static IKeyTooltipNode getItemAbilityTooltip(IServerUtils utils, ItemAbility ability) {
+        return utils.getValueTooltip(utils, ability.name());
     }
 
     @NotNull
