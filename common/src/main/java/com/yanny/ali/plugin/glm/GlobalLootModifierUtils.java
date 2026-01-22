@@ -170,8 +170,7 @@ public class GlobalLootModifierUtils {
                 Class<?> functionClass = Class.forName(classAnnotation.value());
                 registry.registerGlobalLootModifier(functionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).getLootModifier(u, predicate));
             } catch (Throwable e) {
-                LOGGER.warn("Failed to register GLM for {} with error {}", classAnnotation.value(), e.getMessage());
-                e.printStackTrace();
+                LOGGER.warn("Failed to register GLM for {} with error {}", classAnnotation.value(), e.getMessage(), e);
             }
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for GLM " + clazz.getName());

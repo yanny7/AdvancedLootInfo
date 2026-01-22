@@ -117,8 +117,7 @@ public abstract class AbstractServer {
                 try {
                     sendLootDataChunkMessage(serverPlayer, message);
                 } catch (Throwable e) {
-                    e.printStackTrace();
-                    LOGGER.warn("Failed to send message with error: {}", e.getMessage());
+                    LOGGER.warn("Failed to send message with error: {}", e.getMessage(), e);
                 }
             }
 
@@ -204,8 +203,7 @@ public abstract class AbstractServer {
                             LOGGER.debug("Missing block loot table for {}", block);
                         }
                     } catch (Throwable e) {
-                        e.printStackTrace();
-                        LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage());
+                        LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage(), e);
                     }
                 }
 
@@ -256,8 +254,7 @@ public abstract class AbstractServer {
                                     LOGGER.debug("Missing entity loot table for {}", entity);
                                 }
                             } catch (Throwable e) {
-                                e.printStackTrace();
-                                LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage());
+                                LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage(), e);
                             }
                         }
 
@@ -288,8 +285,7 @@ public abstract class AbstractServer {
                 try {
                     lootNodes.put(location, serverRegistry.parseTable(lootModifiers, lootTable));
                 } catch (Throwable e) {
-                    e.printStackTrace();
-                    LOGGER.warn("Failed to parse loot table {} with error {}", location, e.getMessage());
+                    LOGGER.warn("Failed to parse loot table {} with error {}", location, e.getMessage(), e);
                 }
             }
 
@@ -317,8 +313,7 @@ public abstract class AbstractServer {
                         nodes.put(location, serverRegistry.parseTrade(itemListingMap));
                         tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
                     } catch (Throwable e) {
-                        e.printStackTrace();
-                        LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage());
+                        LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
                     }
                 } else {
                     LOGGER.warn("No trades defined for {}", location);
@@ -336,8 +331,7 @@ public abstract class AbstractServer {
         try {
             return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
         } catch (Throwable e) {
-            e.printStackTrace();
-            LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage());
+            LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
             return new MissingNode(EmptyTooltipNode.EMPTY);
         }
     }
@@ -471,7 +465,6 @@ public abstract class AbstractServer {
         try (GZIPOutputStream gzip = new GZIPOutputStream(bos)) {
             rawBuf.readBytes(gzip, rawBuf.readableBytes());
         } catch (IOException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
 
