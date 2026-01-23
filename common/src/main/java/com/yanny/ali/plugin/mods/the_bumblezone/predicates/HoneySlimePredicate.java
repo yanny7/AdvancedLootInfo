@@ -34,7 +34,7 @@ public class HoneySlimePredicate extends BaseAccessor<EntitySubPredicate> implem
             //noinspection unchecked
             codec = (MapCodec<HoneySlimePredicate>) typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain MapCodec: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain MapCodec: {}", e.getMessage(), e);
         }
 
         CODEC = codec;
