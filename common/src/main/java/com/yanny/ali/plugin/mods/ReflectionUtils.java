@@ -56,8 +56,7 @@ public class ReflectionUtils {
 
             throw new IllegalStateException("Class is not annotated with @ClassAccessor");
         } catch (Throwable e) {
-            e.printStackTrace();
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException(e);
         }
     }
 
