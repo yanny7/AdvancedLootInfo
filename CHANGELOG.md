@@ -1,3 +1,7 @@
+# []
+
+- Fixed detection of server side client from client side
+
 # [1.7.0]
 
 - Displayed overflowed loot info in REI using scrollbar
