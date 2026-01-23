@@ -45,7 +45,7 @@ public class TradeListing extends BaseAccessor<VillagerTrades.ItemListing> imple
             typeMapField.setAccessible(true);
             sellForOneEmerald = typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain trade outline SELL_FOR_ONE_EMERALD: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain trade outline SELL_FOR_ONE_EMERALD: {}", e.getMessage(), e);
         }
 
         try {

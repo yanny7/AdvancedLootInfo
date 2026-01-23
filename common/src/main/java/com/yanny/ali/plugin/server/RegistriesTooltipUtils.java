@@ -243,8 +243,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(song.description());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized JukeboxSong name");
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized JukeboxSong name", e);
             }
         }
 

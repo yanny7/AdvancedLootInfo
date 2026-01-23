@@ -1,6 +1,7 @@
 package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootType;
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
