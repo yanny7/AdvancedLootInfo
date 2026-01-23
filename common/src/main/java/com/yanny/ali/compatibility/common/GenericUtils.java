@@ -313,12 +313,10 @@ public class GenericUtils {
                 LOGGER.error("Registration thread interrupted!");
                 break;
             } catch (ExecutionException e) {
-                LOGGER.error("Failed to finish registering data with error {}", e.getCause().getMessage());
-                e.printStackTrace();
+                LOGGER.error("Failed to finish registering data with error {}", e.getCause().getMessage(), e);
                 break;
             } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage());
+                LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage(), e);
                 break;
             }
         }
