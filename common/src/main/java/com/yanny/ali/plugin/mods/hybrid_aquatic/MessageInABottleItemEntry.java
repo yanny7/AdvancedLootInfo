@@ -37,8 +37,7 @@ public class MessageInABottleItemEntry extends SingletonContainer implements IEn
             typeMapField.setAccessible(true);
             item = (Item) typeMapField.get(null);
         } catch (Throwable e) {
-            e.printStackTrace();
-            LOGGER.warn("Unable to obtain item MESSAGE_IN_A_BOTTLE: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain item MESSAGE_IN_A_BOTTLE: {}", e.getMessage(), e);
         }
 
         MSG_IN_BOTTLE = item;
