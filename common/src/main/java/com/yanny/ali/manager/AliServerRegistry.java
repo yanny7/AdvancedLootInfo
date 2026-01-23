@@ -557,8 +557,8 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
             if (function != null) {
                 try {
                     return function.apply(utils, numberProvider);
-                } catch (Throwable throwable) {
-                    LOGGER.warn("Failed to convert number with error {}", throwable.getMessage());
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to convert number with error {}", e.getMessage(), e);
                 }
             } else {
                 missingNumberConverters.add(numberProvider.getClass());

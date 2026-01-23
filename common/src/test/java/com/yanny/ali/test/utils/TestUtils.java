@@ -171,12 +171,12 @@ public class TestUtils {
                 for(Resource resource : resourceManager.getResourceStack(langLocation)) {
                     try (InputStream inputStream = resource.open()) {
                         Language.loadFromJson(inputStream, stringBuilder::put);
-                    } catch (IOException $$5) {
-                        LOGGER.warn("Failed to load translations for {} from pack {}", "en_us", resource.sourcePackId(), $$5);
+                    } catch (IOException e) {
+                        LOGGER.warn("Failed to load translations for {} from pack {}", "en_us", resource.sourcePackId(), e);
                     }
                 }
-            } catch (Exception $$8) {
-                LOGGER.warn("Skipped language file: {}:{} ({})", namespace, lang, $$8.toString());
+            } catch (Exception e) {
+                LOGGER.warn("Skipped language file: {}:{} ({})", namespace, lang, e);
             }
         }
 

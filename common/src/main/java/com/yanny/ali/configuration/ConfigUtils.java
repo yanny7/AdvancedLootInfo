@@ -54,7 +54,7 @@ public class ConfigUtils {
             LOGGER.info("Loading configuration file {}", configFilePath);
             return gson.fromJson(reader, AliConfig.class);
         } catch (Exception e) {
-            LOGGER.warn("Error while reading configuration file: {}", e.getMessage());
+            LOGGER.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return new AliConfig();
         }
     }
@@ -64,8 +64,7 @@ public class ConfigUtils {
             gson.toJson(new AliConfig(), writer);
             LOGGER.info("Created new configuration file {}", configFilePath);
         } catch (IOException e) {
-            LOGGER.warn("Error while writing configuration file: {}", e.getMessage());
-            e.printStackTrace();
+            LOGGER.warn("Error while writing configuration file: {}", e.getMessage(), e);
         }
     }
 

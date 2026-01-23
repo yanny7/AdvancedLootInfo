@@ -37,8 +37,7 @@ public class AncientToolItemListing extends BaseAccessor<VillagerTrades.ItemList
             //noinspection unchecked
             tagKey = (TagKey<Item>) typeMapField.get(null);
         } catch (Throwable e) {
-            e.printStackTrace();
-            LOGGER.warn("Unable to obtain item TRADER_TOOLS: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain item TRADER_TOOLS: {}", e.getMessage(), e);
         }
 
         TRADER_TOOLS = tagKey;

@@ -30,9 +30,8 @@ public class FabricPlatformHelper implements IPlatformHelper {
                     plugins.add(plugin);
                     LOGGER.info("Registered ALI plugin [{}] {}", plugin.getModId(), plugin.getClass().getCanonicalName());
                 }
-            } catch (Throwable t) {
-                LOGGER.warn("Failed to load plugin with error: {}", t.getMessage());
-                t.printStackTrace();
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to load plugin with error: {}", e.getMessage(), e);
             }
         }
 

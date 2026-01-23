@@ -29,7 +29,7 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
                         try {
                             ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, l);
                         } catch (Throwable e) {
-                            LOGGER.error("Failed to encode loot table with error: {}", e.getMessage());
+                            LOGGER.error("Failed to encode loot table with error: {}", e.getMessage(), e);
                             b.writerIndex(fallbackIndex);
                             ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).encode(b, LootTable.EMPTY);
                         }
@@ -38,7 +38,7 @@ public record InfoSyncLootTableMessage(ResourceKey<LootTable> location, LootTabl
                         try {
                             return ByteBufCodecs.fromCodecWithRegistries(LootDataType.TABLE.codec()).decode(b);
                         } catch (Throwable e) {
-                            LOGGER.error("Failed to decode loot table with error: {}", e.getMessage());
+                            LOGGER.error("Failed to decode loot table with error: {}", e.getMessage(), e);
                             return LootTable.EMPTY;
                         }
                     }),

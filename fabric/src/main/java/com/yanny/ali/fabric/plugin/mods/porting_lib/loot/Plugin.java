@@ -28,8 +28,7 @@ public class Plugin implements IPlugin {
             LOOT_MODIFIER_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootModifier");
             LOOT_TABLE_ID_CONDITION_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            LOGGER.warn("Unable to obtain GLM classes: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain GLM classes: {}", e.getMessage(), e);
         }
     }
 
@@ -87,8 +86,7 @@ public class Plugin implements IPlugin {
                     }
                 }
             } catch (Throwable e) {
-                e.printStackTrace();
-                LOGGER.warn("Failed to add GLM with error {}", e.getMessage());
+                LOGGER.warn("Failed to add GLM with error {}", e.getMessage(), e);
             }
         }
 

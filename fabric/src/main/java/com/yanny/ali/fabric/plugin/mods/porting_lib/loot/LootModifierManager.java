@@ -27,8 +27,7 @@ public class LootModifierManager {
             internalField = managerClass.getDeclaredField("registeredLootModifiers");
             internalField.setAccessible(true);
         } catch (Throwable e) {
-            e.printStackTrace();
-            LOGGER.warn("Unable to obtain LootModifierManager: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain LootModifierManager: {}", e.getMessage(), e);
         }
 
         INSTANCE = internalInstance;
@@ -40,7 +39,7 @@ public class LootModifierManager {
             //noinspection unchecked
             return (Map<Identifier, Object>) REGISTERED_GLM.get(INSTANCE);
         } catch (IllegalAccessException e) {
-            LOGGER.warn("Unable to obtain global loot modifiers: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain global loot modifiers: {}", e.getMessage(), e);
             return Collections.emptyMap();
         }
     }

@@ -72,8 +72,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(block.getName());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized Block name: {}", BuiltInRegistries.BLOCK.getKey(block));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized Block name: {}", BuiltInRegistries.BLOCK.getKey(block), e);
             }
         }
 
@@ -85,8 +85,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(item.getName(item.getDefaultInstance()));
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized Item name: {}", BuiltInRegistries.ITEM.getKey(item));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized Item name: {}", BuiltInRegistries.ITEM.getKey(item), e);
             }
         }
 
@@ -98,8 +98,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(entityType.getDescription());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized EntityType name: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized EntityType name: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e);
             }
         }
 
@@ -126,8 +126,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(mobEffect.getDisplayName());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized MobEffect name: {}", BuiltInRegistries.MOB_EFFECT.getKey(mobEffect));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized MobEffect name: {}", BuiltInRegistries.MOB_EFFECT.getKey(mobEffect), e);
             }
         }
 
@@ -149,8 +149,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(Enchantment.getFullname(Holder.direct(enchantment), 1));
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized Enchantment name");
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized Enchantment name", e);
             }
         }
 
@@ -162,8 +162,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(Component.translatable(attribute.getDescriptionId()));
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized Attribute name: {}", BuiltInRegistries.ATTRIBUTE.getKey(attribute));
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized Attribute name: {}", BuiltInRegistries.ATTRIBUTE.getKey(attribute), e);
             }
         }
 
@@ -225,8 +225,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(material.description());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized TrimMaterial name");
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized TrimMaterial name", e);
             }
         }
 
@@ -238,8 +238,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(pattern.description());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized TrimPattern name");
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized TrimPattern name", e);
             }
         }
 
@@ -251,8 +251,8 @@ public class RegistriesTooltipUtils {
         if (utils.getConfiguration().showInGameNames) {
             try {
                 return ComponentTooltipNode.values(song.description());
-            } catch (Throwable ignored) {
-                LOGGER.warn("Failed to get localized JukeboxSong name");
+            } catch (Throwable e) {
+                LOGGER.warn("Failed to get localized JukeboxSong name", e);
             }
         }
 

@@ -26,7 +26,7 @@ public class EntityUtils {
             try {
                 sheep = EntityType.SHEEP.create(level, EntitySpawnReason.LOAD);
             } catch (Throwable e) {
-                LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage());
+                LOGGER.warn("Failed to create colored sheep with color {}: {}", color.getSerializedName(), e.getMessage(), e);
                 continue;
             }
 
@@ -41,7 +41,7 @@ public class EntityUtils {
         try {
             sheep = EntityType.SHEEP.create(level, EntitySpawnReason.LOAD);
         } catch (Throwable e) {
-            LOGGER.warn("Failed to create sheep: {}", e.getMessage());
+            LOGGER.warn("Failed to create sheep: {}", e.getMessage(), e);
             return entities;
         }
 
