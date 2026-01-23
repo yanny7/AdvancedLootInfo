@@ -59,9 +59,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
                         } else {
                             LOGGER.warn("{} doesn't implement {}", annotationData.memberName(), IPlugin.class.getName());
                         }
-                    } catch (Throwable t) {
-                        LOGGER.warn("Failed to load plugin with error: {}", t.getMessage());
-                        t.printStackTrace();
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to load plugin with error: {}", e.getMessage(), e);
                     }
                 }
             }

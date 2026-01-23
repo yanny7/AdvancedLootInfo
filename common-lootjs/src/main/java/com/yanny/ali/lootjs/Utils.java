@@ -1,8 +1,10 @@
 package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootType;
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Utils {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     @NotNull
     public static <T> List<T> getCapturedInstances(Predicate<?> predicate, Class<T> requiredType) {
         List<T> instances = new ArrayList<>();
@@ -26,9 +30,9 @@ public class Utils {
                 }
             }
         } catch (IllegalAccessException e) {
-            System.err.println("Error while accessing field: " + e.getMessage());
+            LOGGER.warn("Error while accessing field: {}", e.getMessage(), e);
         } catch (SecurityException e) {
-            System.err.println("Security error while accessing field: " + e.getMessage());
+            LOGGER.warn("Security error while accessing field: {}", e.getMessage(), e);
         }
 
         return instances;

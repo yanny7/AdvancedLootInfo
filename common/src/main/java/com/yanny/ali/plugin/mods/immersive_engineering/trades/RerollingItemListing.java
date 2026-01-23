@@ -46,7 +46,7 @@ public class RerollingItemListing extends BaseAccessor<VillagerTrades.ItemListin
             typeMapField.setAccessible(true);
             mapInstance = typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain map instance: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain map instance: {}", e.getMessage(), e);
         }
 
         try {
@@ -56,7 +56,7 @@ public class RerollingItemListing extends BaseAccessor<VillagerTrades.ItemListin
             typeMapField.setAccessible(true);
             revolverInstance = typeMapField.get(null);
         } catch (Throwable e) {
-            LOGGER.warn("Unable to obtain revolver instance: {}", e.getMessage());
+            LOGGER.warn("Unable to obtain revolver instance: {}", e.getMessage(), e);
         }
 
         MAP_INSTANCE = mapInstance;
