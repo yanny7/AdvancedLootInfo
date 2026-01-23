@@ -2,6 +2,7 @@ package com.yanny.ali.fabric.network;
 
 import com.yanny.ali.Utils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 
 public class NetworkUtils {
@@ -15,5 +16,9 @@ public class NetworkUtils {
         ClientPlayNetworking.registerGlobalReceiver(LOOT_DATA_CHUNK_ID, client::onLootDataChunk);
         ClientPlayNetworking.registerGlobalReceiver(START_LOOT_INFO_ID, client::onStart);
         ClientPlayNetworking.registerGlobalReceiver(DONE_LOOT_INFO_ID, client::onDone);
+    }
+
+    public static void registerCommon() {
+        ServerPlayNetworking.registerGlobalReceiver(START_LOOT_INFO_ID, ((s, p, h, b, r) -> {}));
     }
 }
