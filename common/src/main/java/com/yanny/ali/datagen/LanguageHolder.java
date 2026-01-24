@@ -348,6 +348,7 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.any", "ANY");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.auto_detected", "Auto-detected: %s");
+        TRANSLATION_MAP.put("ali.util.advanced_loot_info.accepts", "Accepts:");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
         TRANSLATION_MAP.put("ali/loot_table/chests/ancient_city", "Ancient City Chest");

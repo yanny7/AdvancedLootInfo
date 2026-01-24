@@ -12,6 +12,7 @@ import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.mods.PluginUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
@@ -26,15 +27,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
+import oshi.util.tuples.Triplet;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -188,7 +193,7 @@ public class GenericUtils {
                                    QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
                                    TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
-                                   QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> traderConsumer,
+                                   QuintConsumer<IDataNode, ResourceLocation, VillagerProfession, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
         Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(fullCompressedData);
         Map<ResourceLocation, LootData> lootData = pair.getA();
@@ -253,7 +258,7 @@ public class GenericUtils {
                 List<ItemStack> inputs = tradeEntry.inputs.stream().map(Item::getDefaultInstance).toList();
                 List<ItemStack> outputs = tradeEntry.outputs.stream().map(Item::getDefaultInstance).toList();
 
-                traderConsumer.accept(tradeEntry.node, location, inputs, outputs);
+                traderConsumer.accept(tradeEntry.node, location, entry.getValue(), inputs, outputs);
                 tradeData.remove(location);
             }
         }
@@ -272,6 +277,7 @@ public class GenericUtils {
 
         tradeData.clear();
     }
+
     private static CompletableFuture<byte[]> lastProcessedFuture = null;
 
     public static <T> void register(T emiRegistry, BiConsumer<T, byte[]> registerData) {
@@ -312,6 +318,49 @@ public class GenericUtils {
                 break;
             }
         }
+    }
+
+    public static Set<Block> getJobSites(@Nullable VillagerProfession profession) {
+        if (profession != null) {
+            //noinspection unchecked
+            List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) PluginUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
+            PoiType poiType;
+
+            if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.get(0))) != null) {
+                return poiType.matchingStates().stream().map(BlockBehaviour.BlockStateBase::getBlock).collect(Collectors.toSet());
+            }
+        }
+
+        return Set.of();
+    }
+
+    public static Set<Item> getRequestedItems(@Nullable VillagerProfession profession) {
+        if (profession != null) {
+            return profession.requestedItems();
+        }
+
+        return Set.of();
+    }
+
+    @NotNull
+    public static Triplet<Component, Component, Rect> prepareGameplayTitle(ResourceLocation location, int maxWidth) {
+        String key = "ali/loot_table/" + location.getPath();
+        Component text = GenericUtils.ellipsis(key, location.getPath(), maxWidth);
+        Component fullText = Component.literal(location.toString());
+        Rect rect = new Rect(0, 0, Minecraft.getInstance().font.width(text), 8);
+
+        return new Triplet<>(text, fullText, rect);
+    }
+
+    @NotNull
+    public static Triplet<Component, Component, Rect> prepareTraderTitle(String path, int maxWidth) {
+        String key = path.equals("empty") ? "entity.minecraft.wandering_trader" : "entity.minecraft.villager." + path;
+        String id = path.equals("empty") ? "wandering_trader" : path;
+        Component text = GenericUtils.ellipsis(key, id, maxWidth);
+        Component fullText = Component.translatableWithFallback(key, id);
+        Rect rect = new Rect(0, 0, Minecraft.getInstance().font.width(text), 8);
+
+        return new Triplet<>(text, fullText, rect);
     }
 
     // split table path and make uppercased text

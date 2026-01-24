@@ -1,6 +1,7 @@
 # []
 
-- Fixed detection of server side client from client side
+- Fixed detection of server mod presence from client on Fabric
+- Added traders POI blocks
 
 # [1.7.0]
 
