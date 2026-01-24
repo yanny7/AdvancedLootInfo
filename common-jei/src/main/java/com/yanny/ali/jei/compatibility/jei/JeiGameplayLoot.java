@@ -14,6 +14,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Triplet;
 
 public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, ResourceLocation> {
     public JeiGameplayLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder<GameplayLootType>> recipeType, LootCategory<ResourceLocation> lootCategory, Component title, IDrawable icon) {
@@ -29,15 +30,12 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, ResourceLocat
     @Override
     public void draw(RecipeHolder<GameplayLootType> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
-        String key = "ali/loot_table/" + recipe.type().id().getPath();
-        Component text = GenericUtils.ellipsis(key, recipe.type().id().getPath(), CATEGORY_WIDTH);
-        Component fullText = Component.literal(recipe.type().id().toString());
-        Rect rect = new Rect(0, 0, 9 * 18, 8);
+        Triplet<Component, Component, Rect> title = GenericUtils.prepareGameplayTitle(recipe.type().id(), CATEGORY_WIDTH);
 
-        guiGraphics.drawString(Minecraft.getInstance().font, text, 0, 0, 0, false);
+        guiGraphics.drawString(Minecraft.getInstance().font, title.getA(), 0, 0, 0, false);
 
-        if (rect.contains((int) mouseX, (int) mouseY)) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, fullText, (int) mouseX, (int) mouseY);
+        if (title.getC().contains((int) mouseX, (int) mouseY)) {
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, title.getB(), (int) mouseX, (int) mouseY);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.yanny.ali.lootjs;
 
 import com.almostreliable.lootjs.core.LootEntry;
-import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootEntry;
@@ -11,42 +10,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class Utils {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
-    @NotNull
-    public static <T> List<T> getCapturedInstances(Predicate<?> predicate, Class<T> requiredType) {
-        List<T> instances = new ArrayList<>();
-
-        try {
-            Field[] fields = predicate.getClass().getDeclaredFields();
-
-            for (Field field : fields) {
-                field.setAccessible(true);
-                Object entry = field.get(predicate);
-
-                if (requiredType.isInstance(entry)) {
-                    instances.add(requiredType.cast(entry));
-                }
-            }
-        } catch (IllegalAccessException e) {
-            LOGGER.warn("Error while accessing field: {}", e.getMessage(), e);
-        } catch (SecurityException e) {
-            LOGGER.warn("Security error while accessing field: {}", e.getMessage(), e);
-        }
-
-        return instances;
-    }
-
     public static IDataNode getEntry(IServerUtils utils, LootEntry entry, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
         MixinLootEntry mixinLootEntry = (MixinLootEntry) entry;
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), mixinLootEntry.getPostModifications().stream()).toList();
