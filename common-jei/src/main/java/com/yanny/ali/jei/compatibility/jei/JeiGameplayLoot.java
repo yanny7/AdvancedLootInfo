@@ -1,6 +1,7 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.yanny.ali.api.*;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
@@ -17,6 +18,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
+import oshi.util.tuples.Triplet;
 
 import java.util.List;
 
@@ -27,14 +29,8 @@ public class JeiGameplayLoot extends JeiBaseLoot<GameplayLootType, ResourceLocat
 
     @Override
     Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, GameplayLootType recipe) {
-        String key = "ali/loot_table/" + recipe.id().getPath();
-        Component text = GenericUtils.ellipsis(key, recipe.id().getPath(), CATEGORY_WIDTH);
-        Component fullText = Component.literal(recipe.id().toString());
-        Rect rect = new Rect(0, 0, CATEGORY_WIDTH, 8);
-        return new Pair<>(List.of(
-                createTextWidget(text, 0, false),
-                new TooltipWidget(fullText, rect)
-        ), List.of());
+        Triplet<Component, Component, Rect> title = GenericUtils.prepareGameplayTitle(recipe.id(), CATEGORY_WIDTH - AbstractScrollWidget.getScrollbarExtraWidth());
+        return new Pair<>(List.of(createTextWidget(title.getA(), 0, 0, false), new TooltipWidget(title.getB(), title.getC())), List.of());
     }
 
     @Override
