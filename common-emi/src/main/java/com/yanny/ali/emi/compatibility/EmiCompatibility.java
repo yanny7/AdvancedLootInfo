@@ -20,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -116,7 +117,7 @@ public class EmiCompatibility implements EmiPlugin {
                             registry.addRecipe(new EmiGameplayLoot(category, location, node, outputs));
                         }
                     },
-                    (tradeEntry, location, inputs, outputs) -> {
+                    (tradeEntry, location, profession, inputs, outputs) -> {
                         EmiRecipeCategory category = null;
 
                         for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
@@ -131,7 +132,7 @@ public class EmiCompatibility implements EmiPlugin {
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiTradeLoot(category, location, tradeEntry, inputs, outputs));
+                            registry.addRecipe(new EmiTradeLoot(category, location, profession, tradeEntry, inputs, outputs));
                         }
                     },
                     (tradeEntry, location, inputs, outputs) -> {
@@ -149,7 +150,7 @@ public class EmiCompatibility implements EmiPlugin {
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiTradeLoot(category, location, tradeEntry, inputs, outputs));
+                            registry.addRecipe(new EmiTradeLoot(category, location, (VillagerProfession) null, tradeEntry, inputs, outputs));
                         }
                     }
             );
