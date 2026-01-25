@@ -3,7 +3,6 @@ package com.yanny.ali.rei.compatibility.rei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.mixin.MixinBushBlock;
 import me.shedaniel.math.Point;
@@ -26,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,14 +45,11 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
     @Override
     public List<Widget> setupDisplay(ReiBlockDisplay display, Rectangle bounds) {
         boolean isSpecial = display.getBlock() instanceof BushBlock || display.getBlock().asItem() == Items.AIR;
-        int offset = isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING;
         List<Widget> widgets = new LinkedList<>();
-        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), offset);
-        int width = holder.bounds().getWidth() % 2 == 0 ? holder.bounds().getWidth() : holder.bounds().getWidth() + 1;
-        Rectangle innerBounds = new Rectangle(0, 0, width, holder.bounds().getHeight() + offset);
-        int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
-        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollBoxScrollbarExtraWidth(), height);
-        List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
+        Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, isSpecial ? OUT_SLOT_SIZE + PADDING : SLOT_SIZE + PADDING);
+        Rectangle innerBounds = prepared.getA();
+        Rectangle fullBounds = prepared.getB();
+        List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
 
         if (isSpecial) {
             innerWidgets.add(Widgets.createResultSlotBackground(new Point(innerBounds.getCenterX() - ITEM_SIZE / 2, innerBounds.getY() + OUT_SLOT_OFFSET)));

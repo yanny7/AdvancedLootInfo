@@ -25,7 +25,7 @@ public abstract class AbstractScrollWidget {
 
     public AbstractScrollWidget(Rect rect, int contentHeight) {
         this.rect = rect;
-        this.contentRect = new Rect(0, 0, rect.width() - getScrollBoxScrollbarExtraWidth(), contentHeight);
+        this.contentRect = new Rect(0, 0, rect.width() - getScrollbarExtraWidth(), contentHeight);
         this.scrollRect = calculateScrollArea(rect.width(), rect.height());
     }
 
@@ -152,7 +152,7 @@ public abstract class AbstractScrollWidget {
         }
     }
 
-    public static int getScrollBoxScrollbarExtraWidth() {
+    public static int getScrollbarExtraWidth() {
         return SCROLLBAR_WIDTH + SCROLLBAR_PADDING;
     }
 

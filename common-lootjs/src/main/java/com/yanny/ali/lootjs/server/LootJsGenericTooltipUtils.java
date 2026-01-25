@@ -7,7 +7,7 @@ import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
-import com.yanny.ali.lootjs.Utils;
+import com.yanny.ali.plugin.mods.PluginUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -68,10 +68,10 @@ public class LootJsGenericTooltipUtils {
                 return ValueTooltipNode.value("BLOCK");
             }
 
-            List<ResourceLocationFilter.ByLocation> byLocation = Utils.getCapturedInstances(predicate, ResourceLocationFilter.ByLocation.class);
+            List<ResourceLocationFilter.ByLocation> byLocation = PluginUtils.getCapturedInstances(predicate, ResourceLocationFilter.ByLocation.class);
 
             if (byLocation.size() == 1) {
-                List<Integer> minMax = Utils.getCapturedInstances(predicate, Integer.class);
+                List<Integer> minMax = PluginUtils.getCapturedInstances(predicate, Integer.class);
 
                 if (minMax.size() == 2) {
                     IKeyTooltipNode tooltip = ValueTooltipNode.value("HAS_ENCHANTMENT");
@@ -88,10 +88,10 @@ public class LootJsGenericTooltipUtils {
                 }
             }
 
-            List<ResourceLocationFilter.ByPattern> byPattern = Utils.getCapturedInstances(predicate, ResourceLocationFilter.ByPattern.class);
+            List<ResourceLocationFilter.ByPattern> byPattern = PluginUtils.getCapturedInstances(predicate, ResourceLocationFilter.ByPattern.class);
 
             if (byPattern.size() == 1) {
-                List<Integer> minMax = Utils.getCapturedInstances(predicate, Integer.class);
+                List<Integer> minMax = PluginUtils.getCapturedInstances(predicate, Integer.class);
 
                 if (minMax.size() == 2) {
                     IKeyTooltipNode tooltip = ValueTooltipNode.value("HAS_ENCHANTMENT");
@@ -108,7 +108,7 @@ public class LootJsGenericTooltipUtils {
                 }
             }
 
-            List<Ingredient> ingredient = Utils.getCapturedInstances(predicate, Ingredient.class);
+            List<Ingredient> ingredient = PluginUtils.getCapturedInstances(predicate, Ingredient.class);
 
             if (ingredient.size() == 1) {
                 Ingredient i = ingredient.get(0);

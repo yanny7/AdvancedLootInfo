@@ -3,6 +3,7 @@ package com.yanny.ali.lootjs;
 import com.almostreliable.lootjs.core.LootModificationByBlock;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationByBlock;
+import com.yanny.ali.plugin.mods.PluginUtils;
 import dev.latvian.mods.kubejs.block.state.BlockStatePredicate;
 import net.minecraft.world.level.block.Block;
 
@@ -19,7 +20,7 @@ public class BlockLootModifier extends LootModifier<Block> {
         if (statePredicate == null) {
             predicate = BlockStatePredicate.Simple.ALL;
         } else {
-            List<BlockStatePredicate> instance = Utils.getCapturedInstances(statePredicate, BlockStatePredicate.class);
+            List<BlockStatePredicate> instance = PluginUtils.getCapturedInstances(statePredicate, BlockStatePredicate.class);
 
             if (instance.size() == 1) {
                 predicate = instance.get(0);

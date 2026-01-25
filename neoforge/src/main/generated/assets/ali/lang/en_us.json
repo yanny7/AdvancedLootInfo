@@ -257,6 +257,7 @@
   "ali.type.function.uniquify_if_has_items": "Uniquify If Has Items",
   "ali.type.function.whirlwind_spawn_entity": "Whirlwind Spawn Entity",
   "ali.type.function.windmill": "Set Windmill Sails",
+  "ali.util.advanced_loot_info.accepts": "Accepts:",
   "ali.util.advanced_loot_info.any": "ANY",
   "ali.util.advanced_loot_info.auto_detected": "Auto-detected: %s",
   "ali.util.advanced_loot_info.delimiter.conditions": "----- Predicates -----",
