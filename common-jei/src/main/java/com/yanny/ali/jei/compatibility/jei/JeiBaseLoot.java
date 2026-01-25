@@ -125,7 +125,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             });
         }
 
-        Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollBoxScrollbarExtraWidth(), CATEGORY_HEIGHT);
+        Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollbarExtraWidth(), CATEGORY_HEIGHT);
         JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().height() + getYOffset(recipe.type()), scrollWidgets);
 
         builder.addSlottedWidget(scrollWidget, slotDrawables);
@@ -134,7 +134,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public int getWidth() {
-        return CATEGORY_WIDTH + JeiScrollWidget.getScrollBoxScrollbarExtraWidth();
+        return CATEGORY_WIDTH + JeiScrollWidget.getScrollbarExtraWidth();
     }
 
     @Override
@@ -163,9 +163,9 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
                 if (centered) {
                     int width = Minecraft.getInstance().font.width(component);
-                    guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, 0, 0, false);
+                    guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, y, 0, false);
                 } else {
-                    guiGraphics.drawString(Minecraft.getInstance().font, component, x, 0, 0, false);
+                    guiGraphics.drawString(Minecraft.getInstance().font, component, x, y, 0, false);
                 }
             }
         };

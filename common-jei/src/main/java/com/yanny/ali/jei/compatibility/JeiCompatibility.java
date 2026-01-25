@@ -21,6 +21,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -144,7 +145,7 @@ public class JeiCompatibility implements IModPlugin {
                             gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(node, location, Collections.emptyList(), outputs));
                         }
                     },
-                    (node, location, inputs, outputs) -> {
+                    (node, location, profession, inputs, outputs) -> {
                         IRecipeType<RecipeHolder<TradeLootType>> recipeType = null;
 
                         for (JeiTradeLoot recipeCategory : tradeCategories.values()) {
@@ -159,7 +160,10 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                            tradeRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new TradeLootType(node, location.getPath(), inputs, outputs));
+                            Set<Block> pois = GenericUtils.getJobSites(profession);
+                            Set<Item> accepts = GenericUtils.getRequestedItems(profession);
+
+                            tradeRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new TradeLootType(pois, accepts, node, location.getPath(), inputs, outputs));
                         }
                     },
                     (node, location, inputs, outputs) -> {
@@ -177,7 +181,7 @@ public class JeiCompatibility implements IModPlugin {
                         }
 
                         if (recipeType != null) {
-                            tradeRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new TradeLootType(node, location.getPath(), inputs, outputs));
+                            tradeRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new TradeLootType(Set.of(), Set.of(), node, location.getPath(), inputs, outputs));
                         }
                     }
             );
