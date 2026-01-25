@@ -1,7 +1,6 @@
 package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.ali.api.Rect;
-import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
 import me.shedaniel.math.Point;
@@ -14,15 +13,15 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, ResourceLocation> {
-    private static final int OFFSET = 10;
-
     private final CategoryIdentifier<ReiTradeDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
@@ -36,22 +35,38 @@ public class ReiTradeCategory extends ReiBaseCategory<ReiTradeDisplay, ResourceL
 
     @Override
     public List<Widget> setupDisplay(ReiTradeDisplay display, Rectangle bounds) {
+        Triplet<Component, Component, Rect> traderTitle = GenericUtils.prepareTraderTitle(display.getId(), bounds.width);
         List<Widget> widgets = new LinkedList<>();
-        String key = display.getId().equals("empty") ? "entity.minecraft.wandering_trader" : "entity.minecraft.villager." + display.getId();
-        String id = display.getId().equals("empty") ? "wandering_trader" : display.getId();
-        Component lootName = GenericUtils.ellipsis( key, id, bounds.width);
-        Component fullText = Component.translatableWithFallback(key, id);
-        int textWidth = Minecraft.getInstance().font.width(lootName);
-        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), OFFSET);
-        int with = Mth.clamp(holder.bounds().getWidth(), textWidth, bounds.width);
-        int innerWidth = with % 2 == 0 ? with : with + 1; // made width even
-        Rectangle innerBounds = new Rectangle(0, 0, innerWidth, holder.bounds().getHeight() + OFFSET);
-        int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
-        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollBoxScrollbarExtraWidth(), height);
-        List<Widget> innerWidgets = new LinkedList<>(holder.widgets());
+        Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, (display.getPois().isEmpty() ? 10 : 20) + (display.getAccepts().isEmpty() ? 0 : 20));
+        Rectangle innerBounds = prepared.getA();
+        Rectangle fullBounds = prepared.getB();
+        List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
+
+        if (!display.getPois().isEmpty()) {
+            int i = 1;
+
+            for (Block block : display.getPois()) {
+                innerWidgets.add(Widgets.createSlot(new Point(CATEGORY_WIDTH - i * 18, 1)).entry(EntryStacks.of(block)).markInput());
+                i++;
+            }
+        }
+
+        if (!display.getAccepts().isEmpty()) {
+            int i = 0;
+            int yOffset = (display.getPois().isEmpty() ? 10 : 20) + 1;
+            Component t = Component.translatable("ali.util.advanced_loot_info.accepts");
+            int width = Minecraft.getInstance().font.width(t);
+
+            innerWidgets.add(Widgets.createLabel(new Point(0, yOffset + 5), t).leftAligned().noShadow().color(0xFF000000));
+
+            for (Item item : display.getAccepts()) {
+                innerWidgets.add(Widgets.createSlot(new Point(width + 2 + i * 18, yOffset)).entry(EntryStacks.of(item)).markInput());
+                i++;
+            }
+        }
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
-        innerWidgets.add(Widgets.createLabel(new Point(innerBounds.getCenterX(), 0), lootName).noShadow().color(0xFF000000).tooltip(fullText));
+        innerWidgets.add(Widgets.createLabel(new Point(0, 0), traderTitle.getA()).leftAligned().noShadow().color(0xFF000000).tooltip(traderTitle.getB()));
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
                 new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),
