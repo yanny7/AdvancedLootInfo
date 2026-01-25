@@ -1,9 +1,7 @@
 package com.yanny.ali.emi.compatibility.emi;
 
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.RelativeRect;
+import com.yanny.ali.api.*;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -13,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import oshi.util.tuples.Triplet;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,14 +32,12 @@ public class EmiGameplayLoot extends EmiBaseLoot {
 
     @Override
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
+        Triplet<Component, Component, Rect> title = GenericUtils.prepareGameplayTitle(location, widgetHolder.getWidth() - AbstractScrollWidget.getScrollbarExtraWidth());
+        Rect rect = title.getC();
 
-        String key = "ali/loot_table/" + location.getPath();
-        Component text = GenericUtils.ellipsis(key, location.getPath(), widgetHolder.getWidth() - 10);
-        Component fullText = Component.literal(location.toString());
-        Bounds bounds = new Bounds(0, 0, widgetHolder.getWidth() - 10, 8);
         return List.of(
-                new TextWidget(text.getVisualOrderText(), 0, 0, 0, false),
-                new TitleWidget(bounds, fullText)
+                new TextWidget(title.getA().getVisualOrderText(), 0, 0, 0, false),
+                new TitleWidget(new Bounds(rect.x(), rect.y(), rect.width(), rect.height()), title.getB())
         );
     }
 
