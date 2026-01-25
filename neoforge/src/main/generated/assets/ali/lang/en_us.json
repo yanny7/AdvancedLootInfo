@@ -471,6 +471,7 @@
   "ali.type.slot_source.group": "Group:",
   "ali.type.slot_source.limit_slots": "Limit Slots:",
   "ali.type.slot_source.slot_range": "Slot Range:",
+  "ali.util.advanced_loot_info.accepts": "Accepts:",
   "ali.util.advanced_loot_info.any": "ANY",
   "ali.util.advanced_loot_info.auto_detected": "Auto-detected: %s",
   "ali.util.advanced_loot_info.delimiter.conditions": "----- Predicates -----",

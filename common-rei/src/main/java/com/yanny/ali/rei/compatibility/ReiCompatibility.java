@@ -17,6 +17,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
@@ -144,7 +145,7 @@ public class ReiCompatibility implements REIClientPlugin {
                             gameplayRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new GameplayLootType(node, location, Collections.emptyList(), outputs));
                         }
                     },
-                    (tradeEntry, location, inputs, outputs) -> {
+                    (tradeEntry, location, profession, inputs, outputs) -> {
                         Holder<ReiTradeDisplay, TradeLootType, Identifier> recipeHolder = null;
 
                         for (Holder<ReiTradeDisplay, TradeLootType, Identifier> holder : tradeCategories.values()) {
@@ -159,7 +160,10 @@ public class ReiCompatibility implements REIClientPlugin {
                         }
 
                         if (recipeHolder != null) {
-                            tradeRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new TradeLootType(tradeEntry, location.getPath(), inputs, outputs));
+                            Set<Block> pois = GenericUtils.getJobSites(profession);
+                            Set<Item> accepts = GenericUtils.getRequestedItems(profession);
+
+                            tradeRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new TradeLootType(pois, accepts, tradeEntry, location.getPath(), inputs, outputs));
                         }
                     },
                     (tradeEntry, location, inputs, outputs) -> {
@@ -177,7 +181,7 @@ public class ReiCompatibility implements REIClientPlugin {
                         }
 
                         if (recipeHolder != null) {
-                            tradeRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new TradeLootType(tradeEntry, location.getPath(), inputs, outputs));
+                            tradeRecipeTypes.computeIfAbsent(recipeHolder, (b) -> new LinkedList<>()).add(new TradeLootType(Set.of(), Set.of(), tradeEntry, location.getPath(), inputs, outputs));
                         }
                     }
             );
