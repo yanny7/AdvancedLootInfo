@@ -3,6 +3,7 @@ package com.yanny.ali.rei.compatibility.rei;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
+import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -63,6 +65,15 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
 
     public LootCategory<U> getLootCategory() {
         return lootCategory;
+    }
+
+    protected Triplet<Rectangle, Rectangle, List<Widget>> prepareWidgets(T display, Rectangle bounds, int offset) {
+        WidgetHolder holder = getBaseWidget(display, new Rectangle(0, 0, bounds.width, bounds.height), offset);
+        Rectangle innerBounds = new Rectangle(0, 0, bounds.width, holder.bounds().getHeight() + offset);
+        int height = Math.min(innerBounds.height + 2 * PADDING, bounds.height - 2 * PADDING);
+        Rectangle fullBounds = new Rectangle(0, 0, innerBounds.width + 3 * PADDING + AbstractScrollWidget.getScrollbarExtraWidth(), height);
+
+        return new Triplet<>(innerBounds, fullBounds, holder.widgets);
     }
 
     protected WidgetHolder getBaseWidget(T display, Rectangle bounds, int y) {
