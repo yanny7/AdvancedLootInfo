@@ -1,4 +1,4 @@
-# []
+# [1.7.1]
 
 - Fixed detection of server mod presence from client on Fabric
 - Added traders POI blocks
