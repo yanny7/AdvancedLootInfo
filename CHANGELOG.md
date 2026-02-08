@@ -1,6 +1,7 @@
 # []
 
 - Fixed missing loot information on Forge
+- Fixed rendering blocks on REI and EMI
 
 # [1.7.1]
 
