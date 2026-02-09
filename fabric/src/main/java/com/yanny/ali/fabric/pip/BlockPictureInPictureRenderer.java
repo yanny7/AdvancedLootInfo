@@ -1,4 +1,4 @@
-package com.yanny.ali.neoforge.pip;
+package com.yanny.ali.fabric.pip;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -9,8 +9,6 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionfc;
@@ -31,7 +29,6 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     protected void renderToTexture(BlockRenderState renderState, PoseStack poseStack) {
         float scale = renderState.scale();
         BlockState state = renderState.state();
-        Level fakeLevel = renderState.level();
 
         poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, -RENDER_SIZE * scale);
         DEFAULT_TRANSFORM.apply(false, poseStack.last());
@@ -39,14 +36,14 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
         poseStack.last().normal().rotate(LIGHT_FIX_ROT);
         poseStack.translate(-.5, -.5, -.5);
 
+        System.out.println(state.getBlock().asItem().getName().toString());
+
         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(
                 state,
                 poseStack,
                 bufferSource,
                 LightTexture.FULL_BRIGHT,
-                OverlayTexture.NO_OVERLAY,
-                fakeLevel,
-                BlockPos.ZERO
+                OverlayTexture.NO_OVERLAY
         );
     }
 

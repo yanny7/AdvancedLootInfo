@@ -15,7 +15,6 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -98,17 +97,16 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
 
         @Override
         public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
             Matrix3x2fStack poseStack = guiGraphics.pose();
 
             poseStack.pushMatrix();
             poseStack.translate(bounds.getX(), bounds.getY());
 
             if (isPlant) {
-                int x = (int) guiGraphics.pose().m20() - 7;
-                int y = (int) guiGraphics.pose().m21() - 8;
+                int x = (int) guiGraphics.pose().m20() - 6;
+                int y = (int) guiGraphics.pose().m21() - 4;
 
-                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 0.75f, null);
+                BlockRenderState renderState = BlockRenderState.of(blockState, level, x + 3, y, bounds.width + x, bounds.height + y, 0.8f, null);
 
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
@@ -119,15 +117,15 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                     base = Blocks.GRASS_BLOCK.defaultBlockState();
                 }
 
-                BlockRenderState farmlandState = BlockRenderState.of(base, level, x + 3, y + 7, bounds.width + x + 3, bounds.height + y + 7, 0.75f, null);
+                BlockRenderState farmlandState = BlockRenderState.of(base, level, x, y + 8, bounds.width + x + 3, bounds.height + y + 7, 0.8f, null);
 
                 Services.getPlatform().renderBlockInGui(guiGraphics, farmlandState);
                 Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
             } else {
-                int x = (int) guiGraphics.pose().m20() - 4;
-                int y = (int) guiGraphics.pose().m21() - 4;
+                int x = (int) guiGraphics.pose().m20() - 5;
+                int y = (int) guiGraphics.pose().m21();
 
-                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1, null);
+                BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1.1F, null);
                 Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
             }
 
