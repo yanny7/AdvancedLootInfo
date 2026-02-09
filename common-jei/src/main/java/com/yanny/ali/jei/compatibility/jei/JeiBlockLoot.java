@@ -21,6 +21,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -79,7 +80,7 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 poseStack.scale(9, -9, 9);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
 
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
@@ -91,13 +92,13 @@ public class JeiBlockLoot extends JeiBaseLoot<BlockLootType, Block> {
                 }
 
                 poseStack.translate(0, -1, 0);
-                blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+                blockRenderer.renderSingleBlock(base, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
             } else {
                 poseStack.translate(21, 16.5, 100);
                 poseStack.scale(18, -18, 18);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY);
+                blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
                 poseStack.translate(0, -1, 0);
             }
 
