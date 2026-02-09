@@ -1,3 +1,9 @@
+# [1.7.2]
+
+- Fixed missing loot information on Forge
+- Fixed rendering blocks on REI and EMI
+- Fixed missing loot info from Aquaculture 2 (and other mods that used reflection for injecting loot)
+
 # [1.7.1]
 
 - Fixed detection of server mod presence from client on Fabric
