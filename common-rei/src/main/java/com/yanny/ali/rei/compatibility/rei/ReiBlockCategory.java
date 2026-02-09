@@ -1,5 +1,7 @@
 package com.yanny.ali.rei.compatibility.rei;
 
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.yanny.ali.api.Rect;
@@ -15,6 +17,7 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -25,6 +28,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.joml.Vector3f;
 import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
@@ -102,16 +106,20 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
             BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
             PoseStack poseStack = guiGraphics.pose();
 
+            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
+            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
+            RenderSystem.setShaderLights(light0, light1);
+
             poseStack.pushPose();
             poseStack.translate(bounds.getX(), bounds.getY(), 100);
 
             if (isPlant) {
-                poseStack.translate(18, 14, 100);
+                poseStack.translate(14, 12, 100);
                 poseStack.scale(9, -9, 9);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));
 
-                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
+                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
 
                 BlockState base;
                 BlockState farmland = Blocks.FARMLAND.defaultBlockState();
@@ -123,17 +131,18 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
                 }
 
                 poseStack.translate(0, -1, 0);
-                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(base, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
+                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(base, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
             } else {
-                poseStack.translate(25.5, 21, 100);
+                poseStack.translate(21, 21, 100);
                 poseStack.scale(18, -18, 18);
                 poseStack.mulPose(Axis.XP.rotationDegrees(30f));
                 poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, 15728880, OverlayTexture.NO_OVERLAY));
+                guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
                 poseStack.translate(0, -1, 0);
             }
 
             poseStack.popPose();
+            Lighting.setupForFlatItems();
         }
     }
 }
