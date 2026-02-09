@@ -5,7 +5,6 @@
   "plugin": "com.yanny.ali.forge.mixin.ConfigPlugin",
   "mixins": [
     "MixinCanToolPerformAction",
-    "MixinForgeHooks",
     "MixinForgeInternalHandler",
     "MixinLootModifier",
     "MixinLootTableForge",
