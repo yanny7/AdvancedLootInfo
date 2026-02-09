@@ -51,6 +51,6 @@ public class FabricPlatformHelper implements IPlatformHelper {
 
     @Override
     public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
-//        guiGraphics.submitPictureInPictureRenderState(renderState); FIXME how?
+        guiGraphics.guiRenderState.submitPicturesInPictureState(renderState);
     }
 }
