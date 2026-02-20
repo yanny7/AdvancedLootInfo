@@ -2,11 +2,9 @@ package com.yanny.ali.fabric.platform;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IPlugin;
-import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import org.slf4j.Logger;
@@ -47,10 +45,5 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
-    }
-
-    @Override
-    public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
-        guiGraphics.guiRenderState.submitPicturesInPictureState(renderState);
     }
 }

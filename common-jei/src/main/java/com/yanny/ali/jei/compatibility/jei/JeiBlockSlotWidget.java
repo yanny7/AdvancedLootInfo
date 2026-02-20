@@ -81,14 +81,14 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
 
                 BlockRenderState farmlandState = BlockRenderState.of(base, level, x + 3, y + 7, rect.width() + x + 3, rect.height() + y + 7, 0.75f, null);
 
-                Services.getPlatform().renderBlockInGui(guiGraphics, farmlandState);
-                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
+                Services.getClientPlatform().renderBlockInGui(guiGraphics, farmlandState);
+                Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
             } else {
                 int x = (int) guiGraphics.pose().m20() - 4;
                 int y = (int) guiGraphics.pose().m21() - 4;
 
                 BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, rect.width() + x, rect.height() + y, 1, null);
-                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
+                Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
             }
         }
 
