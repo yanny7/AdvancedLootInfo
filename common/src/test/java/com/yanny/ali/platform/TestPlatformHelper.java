@@ -1,10 +1,8 @@
 package com.yanny.ali.platform;
 
 import com.yanny.ali.api.IPlugin;
-import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import com.yanny.ali.plugin.Plugin;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 
@@ -25,10 +23,5 @@ public class TestPlatformHelper implements IPlatformHelper {
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return null;
-    }
-
-    @Override
-    public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
-
     }
 }
