@@ -1,3 +1,7 @@
+## []
+
+- Fixed loot tree rendering in edge cases
+
 ## [1.7.2]
 
 - Fixed missing loot information on Forge
