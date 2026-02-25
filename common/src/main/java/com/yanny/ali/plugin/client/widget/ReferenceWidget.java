@@ -40,9 +40,4 @@ public class ReferenceWidget implements IWidget {
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);
     }
-
-    @Override
-    public void onResize(RelativeRect parent, int maxWidth) {
-        widget.onResize(bounds, maxWidth);
-    }
 }
