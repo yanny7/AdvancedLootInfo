@@ -1,6 +1,7 @@
 ## []
 
 - Fixed loot tree rendering in edge cases
+- Fixed crash on older version of Forge or NeoForge
 
 ## [1.7.2]
 
