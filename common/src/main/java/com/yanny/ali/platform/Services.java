@@ -5,7 +5,7 @@ import com.yanny.ali.platform.services.IPlatformHelper;
 import java.util.ServiceLoader;
 
 public class Services {
-    private static volatile IPlatformHelper INSTANCE = load(IPlatformHelper.class);
+    private static volatile IPlatformHelper INSTANCE;
 
     public static IPlatformHelper getPlatform() {
         if (INSTANCE == null) {
