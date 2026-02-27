@@ -119,14 +119,14 @@ public class ReiBlockCategory extends ReiBaseCategory<ReiBlockDisplay, Block> {
 
                 BlockRenderState farmlandState = BlockRenderState.of(base, level, x, y + 8, bounds.width + x + 3, bounds.height + y + 7, 0.8f, null);
 
-                Services.getPlatform().renderBlockInGui(guiGraphics, farmlandState);
-                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
+                Services.getClientPlatform().renderBlockInGui(guiGraphics, farmlandState);
+                Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
             } else {
                 int x = (int) guiGraphics.pose().m20() - 5;
                 int y = (int) guiGraphics.pose().m21();
 
                 BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1.1F, null);
-                Services.getPlatform().renderBlockInGui(guiGraphics, renderState);
+                Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
             }
 
             poseStack.popMatrix();

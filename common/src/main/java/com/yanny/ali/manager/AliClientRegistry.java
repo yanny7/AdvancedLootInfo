@@ -159,23 +159,27 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
         for (IDataNode entry : entries) {
             IWidgetFactory widgetFactory = widgetMap.getOrDefault(entry.getId(), widgetMap.get(MissingNode.ID));
-            IWidget widget = widgetFactory.create(utils, entry, new RelativeRect(posX, posY, parent.getWidth() - posX, 0, parent), maxWidth);
-            RelativeRect bounds = widget.getRect();
-            WidgetDirection direction = widget.getDirection();
+            IWidget widget = widgetFactory.create(utils, entry, new RelativeRect(0, 0, maxWidth, 0, parent), maxWidth);
 
-            if (lastDirection == null) {
-                if (direction == WidgetDirection.HORIZONTAL) {
-                    posX += bounds.getWidth();
-                } else {
-                    posY += bounds.getHeight() + IWidget.PADDING;
-                }
-            } else {
+            widgets.add(widget);
+        }
+
+        int w = 0;
+        int h = 0;
+
+        for (int i = 0; i < widgets.size(); i++) {
+            IWidget widget = widgets.get(i);
+            WidgetDirection direction = widget.getDirection();
+            RelativeRect bounds = widget.getRect();
+
+            if (lastDirection != null) {
                 if (lastDirection == WidgetDirection.HORIZONTAL && direction == WidgetDirection.HORIZONTAL) {
-                    if (bounds.getRight() <= maxWidth) {
+                    if (parent.getX() + posX + bounds.getWidth() <= maxWidth) {
+                        bounds.setOffset(posX, posY);
                         posX += bounds.getWidth();
                     } else {
                         posX = bounds.getWidth();
-                        posY += widgets.get(widgets.size() - 1).getRect().getHeight();
+                        posY += widgets.get(i - 1).getRect().getHeight();
                         bounds.setOffset(0, posY);
                     }
                 } else {
@@ -183,11 +187,12 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
                     if (direction != lastDirection) {
                         if (lastDirection == WidgetDirection.HORIZONTAL) {
-                            posY += widgets.get(widgets.size() - 1).getRect().getHeight() + IWidget.PADDING;
+                            posY += widgets.get(i - 1).getRect().getHeight() + IWidget.PADDING;
                         }
 
                         bounds.setOffset(posX, posY);
-                        widget.onResize(bounds, maxWidth);
+                    } else {
+                        bounds.setOffset(posX, posY);
                     }
 
                     if (direction != WidgetDirection.HORIZONTAL) {
@@ -196,19 +201,19 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
                         posX += bounds.getWidth();
                     }
                 }
+            } else {
+                bounds.setOffset(posX, posY);
+
+                if (direction == WidgetDirection.HORIZONTAL) {
+                    posX += bounds.getWidth();
+                } else {
+                    posY += bounds.getHeight() + IWidget.PADDING;
+                }
             }
 
-            widgets.add(widget);
+            w = Math.max(w, bounds.getOffsetX() + bounds.getWidth());
+            h = Math.max(h, bounds.getOffsetY() + bounds.getHeight());
             lastDirection = direction;
-        }
-
-        int w = 0, h = 0;
-
-        for (IWidget widget : widgets) {
-            RelativeRect rect = widget.getRect();
-
-            w = Math.max(w, rect.getOffsetX() + rect.getWidth());
-            h = Math.max(h, rect.getOffsetY() + rect.getHeight());
         }
 
         parent.setDimensions(w, h);
