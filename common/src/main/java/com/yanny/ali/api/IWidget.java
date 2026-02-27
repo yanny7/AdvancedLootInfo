@@ -17,6 +17,4 @@ public interface IWidget {
     default List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return List.of();
     }
-
-    default void onResize(RelativeRect parent, int maxWidth) {}
 }
