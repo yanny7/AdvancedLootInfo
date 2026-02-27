@@ -1,37 +1,43 @@
-# [1.7.2]
+## [1.7.3]
+
+- Fixed loot tree rendering in edge cases
+- Fixed crash on older version of Forge or NeoForge
+- Fixed server crash on startup
+
+## [1.7.2]
 
 - Fixed missing loot information on Forge
 - Fixed rendering blocks on REI and EMI
 - Fixed missing loot info from Aquaculture 2 (and other mods that used reflection for injecting loot)
 
-# [1.7.1]
+## [1.7.1]
 
 - Fixed detection of server mod presence from client on Fabric
 - Added traders POI blocks
 
-# [1.7.0]
+## [1.7.0]
 
 - Displayed overflowed loot info in REI using scrollbar
 - The mod is now optional for connecting, but requires both client and server for loot table synchronization
 - Supported displaying trades for Villager Trade Rebalance
 - Added missing NeoForge ItemAbility value tooltip
 
-# [1.6.4]
+## [1.6.4]
 
 - Fixed rare crash in some modpacks when obtaining localized registry name
 
-# [1.6.3]
+## [1.6.3]
 
 - Used localized names for Items/Blocks/Effects..., added config option to display them as ResourceLocations 
 - Fixed unable to connect to Fabric server
 
-# [1.6.2]
+## [1.6.2]
 
 - Fixed freeze with JEI on world rejoin
 - Improved error handling and recovery for data processing and synchronization
 - Fixed chance value when used multiple probabilities in LootJS
 
-# [1.6.1]
+## [1.6.1]
 
 - Fixed suboptimal layout in some cases
 - Fixed entity GLM condition list not complete
@@ -41,7 +47,7 @@
 - Removed empty branches in loot table
 - Fixed crash on second world login
 
-# [1.6.0]
+## [1.6.0]
 
 - Added GLM support (Global Loot Modifiers)
 - Fixed missing spawn eggs for modded mobs on (Neo)Forge
