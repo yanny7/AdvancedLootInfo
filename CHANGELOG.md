@@ -1,3 +1,7 @@
+## []
+
+- Fixed server crash on startup
+
 # [1.7.2]
 
 - Fixed missing loot information on Forge

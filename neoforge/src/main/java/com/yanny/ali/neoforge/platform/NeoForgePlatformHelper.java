@@ -4,9 +4,7 @@ import com.google.common.base.Suppliers;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
-import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.services.IPlatformHelper;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.fml.ModList;
@@ -38,11 +36,6 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
-    }
-
-    @Override
-    public void renderBlockInGui(GuiGraphics guiGraphics, BlockRenderState renderState) {
-        guiGraphics.submitPictureInPictureRenderState(renderState);
     }
 
     private List<IPlugin> loadPlugins() {
