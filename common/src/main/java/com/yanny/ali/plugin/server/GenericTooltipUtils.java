@@ -1,5 +1,7 @@
 package com.yanny.ali.plugin.server;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -16,6 +18,7 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.Deserializers;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -46,7 +49,15 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingFunctionTooltip(IServerUtils utils, LootItemFunction function) {
         IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
+        try {
+            Gson lootGson = Deserializers.createFunctionSerializer().create();
+            JsonElement jsonElement = lootGson.toJsonTree(function);
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable ignored) {
+            TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
+        }
+
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -54,7 +65,15 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingConditionTooltip(IServerUtils utils, LootItemCondition condition) {
         IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
+        try {
+            Gson lootGson = Deserializers.createConditionSerializer().create();
+            JsonElement jsonElement = lootGson.toJsonTree(condition);
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable ignored) {
+            TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
+        }
+
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 

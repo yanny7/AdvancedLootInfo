@@ -1,3 +1,7 @@
+## []
+
+- Using serialized JSON data for displaying auto-detected modifiers/predicates
+
 ## [1.7.3]
 
 - Fixed loot tree rendering in edge cases

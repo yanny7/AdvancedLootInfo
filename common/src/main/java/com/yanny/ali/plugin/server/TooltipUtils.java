@@ -1,11 +1,14 @@
 package com.yanny.ali.plugin.server;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.*;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
@@ -333,6 +336,65 @@ public class TooltipUtils {
         }
 
         return tooltip;
+    }
+
+    public static ITooltipNode getJsonTooltip(IServerUtils utils, JsonElement element) {
+        if (element.isJsonObject()) {
+            ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
+            JsonObject object = element.getAsJsonObject();
+
+            object.asMap().forEach((key, e) -> {
+                IKeyTooltipNode t = getElementTooltip(utils, e);
+
+                if (t instanceof ValueTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(key, false));
+                } else if (t instanceof BranchTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(key + ":", false));
+                }
+            });
+
+            return tooltip.build();
+        }
+
+        return EmptyTooltipNode.EMPTY;
+    }
+
+    private static IKeyTooltipNode getElementTooltip(IServerUtils utils, JsonElement element) {
+        if (element.isJsonObject()) {
+            JsonObject jsonObject = element.getAsJsonObject();
+            BranchTooltipNode.Builder tooltip = BranchTooltipNode.branch();
+
+            jsonObject.asMap().forEach((key, e) -> {
+                IKeyTooltipNode t = getElementTooltip(utils, e);
+
+                if (t instanceof ValueTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(key, false));
+                } else if (t instanceof BranchTooltipNode.Builder builder) {
+                    tooltip.add(builder.build(key + ":", false));
+                }
+            });
+
+            return tooltip;
+        } else if (element.isJsonArray()) {
+            JsonArray jsonArray = element.getAsJsonArray();
+            ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
+
+            jsonArray.forEach((e) -> array.add(getElementTooltip(utils, e).build(":")));
+
+            return BranchTooltipNode.branch().add(array.build());
+        } else if (element.isJsonPrimitive()) {
+            JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
+
+            if (jsonPrimitive.isBoolean()) {
+                return utils.getValueTooltip(utils, jsonPrimitive.getAsBoolean());
+            } else if (jsonPrimitive.isString()) {
+                return utils.getValueTooltip(utils, jsonPrimitive.getAsString());
+            } else if (jsonPrimitive.isNumber()) {
+                return utils.getValueTooltip(utils, jsonPrimitive.getAsNumber());
+            }
+        }
+
+        return EmptyTooltipNode.empty();
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {
