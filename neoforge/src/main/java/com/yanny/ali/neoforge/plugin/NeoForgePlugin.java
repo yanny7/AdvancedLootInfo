@@ -1,6 +1,9 @@
 package com.yanny.ali.neoforge.plugin;
 
+import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.*;
 import com.yanny.ali.neoforge.mixin.MixinCanToolPerformAction;
 import com.yanny.ali.neoforge.mixin.MixinLootModifier;
@@ -140,6 +143,13 @@ public class NeoForgePlugin implements IPlugin {
             @Override
             public List<LootItemCondition> getConditions() {
                 return Arrays.asList(((MixinLootModifier) modifier).getConditions());
+            }
+
+            @Override
+            public JsonElement serialize() {
+                //noinspection unchecked
+                Codec<IGlobalLootModifier> codec = ((Codec<IGlobalLootModifier>) modifier.codec());
+                return codec.encodeStart(JsonOps.INSTANCE, modifier).getOrThrow(false, (s) -> {});
             }
         };
     }
