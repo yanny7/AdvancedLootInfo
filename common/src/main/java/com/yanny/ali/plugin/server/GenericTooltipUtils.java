@@ -1,8 +1,8 @@
 package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonElement;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -57,8 +57,8 @@ public class GenericTooltipUtils {
 
         try {
             //noinspection unchecked
-            Codec<LootItemFunction> codec = ((Codec<LootItemFunction>) function.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(JsonOps.INSTANCE, function).getOrThrow();
+            MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, function).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable ignored) {
@@ -74,8 +74,8 @@ public class GenericTooltipUtils {
 
         try {
             //noinspection unchecked
-            Codec<LootItemCondition> codec = ((Codec<LootItemCondition>) condition.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(JsonOps.INSTANCE, condition).getOrThrow();
+            MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, condition).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable ignored) {
