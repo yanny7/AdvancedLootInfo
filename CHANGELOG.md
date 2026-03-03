@@ -1,6 +1,7 @@
 ## []
 
 - Using serialized JSON data for displaying auto-detected modifiers/predicates
+- Fixed missing loot info for LootJS pools
 
 ## [1.7.3]
 
