@@ -1,6 +1,9 @@
 package com.yanny.ali.forge.plugin;
 
+import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
@@ -133,6 +136,13 @@ public class ForgePlugin implements IPlugin {
             @Override
             public List<LootItemCondition> getConditions() {
                 return Arrays.asList(((MixinLootModifier) modifier).getConditions());
+            }
+
+            @Override
+            public JsonElement serialize() {
+                //noinspection unchecked
+                MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());
+                return codec.codec().encodeStart(JsonOps.INSTANCE, modifier).getOrThrow();
             }
         };
     }
