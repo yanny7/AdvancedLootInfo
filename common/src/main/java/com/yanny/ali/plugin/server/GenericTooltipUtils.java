@@ -1,5 +1,8 @@
 package com.yanny.ali.plugin.server;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -52,7 +55,16 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingFunctionTooltip(IServerUtils utils, LootItemFunction function) {
         IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
+        try {
+            //noinspection unchecked
+            Codec<LootItemFunction> codec = ((Codec<LootItemFunction>) function.getType().codec());
+            JsonElement jsonElement = codec.encodeStart(JsonOps.INSTANCE, function).getOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable ignored) {
+            TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
+        }
+
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -60,7 +72,16 @@ public class GenericTooltipUtils {
     public static ITooltipNode getMissingConditionTooltip(IServerUtils utils, LootItemCondition condition) {
         IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
+        try {
+            //noinspection unchecked
+            Codec<LootItemCondition> codec = ((Codec<LootItemCondition>) condition.getType().codec());
+            JsonElement jsonElement = codec.encodeStart(JsonOps.INSTANCE, condition).getOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable ignored) {
+            TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
+        }
+
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
