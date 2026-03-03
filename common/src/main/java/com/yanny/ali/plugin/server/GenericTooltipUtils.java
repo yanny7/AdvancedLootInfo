@@ -1,8 +1,9 @@
 package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonElement;
-import com.mojang.serialization.Codec;
+import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
@@ -13,6 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -36,6 +38,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -44,11 +47,26 @@ import java.util.function.Predicate;
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
 public class GenericTooltipUtils {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     @NotNull
     public static ITooltipNode getMissingEntryTooltip(IServerUtils utils, LootPoolEntryContainer entry) {
         IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry.getType());
 
-        TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
+        try {
+            //noinspection unchecked
+            MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, entry).getOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType()), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
+        }
+
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -58,11 +76,15 @@ public class GenericTooltipUtils {
 
         try {
             //noinspection unchecked
-            Codec<LootItemFunction> codec = ((Codec<LootItemFunction>) function.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(JsonOps.INSTANCE, function).getOrThrow();
+            MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, function).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable ignored) {
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get function info from serialized data for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), utils.getCurrentLootTable(), e);
+            }
+
             TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
         }
 
@@ -75,11 +97,15 @@ public class GenericTooltipUtils {
 
         try {
             //noinspection unchecked
-            Codec<LootItemCondition> codec = ((Codec<LootItemCondition>) condition.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(JsonOps.INSTANCE, condition).getOrThrow();
+            MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, condition).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable ignored) {
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), utils.getCurrentLootTable(), e);
+            }
+
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
         }
 
