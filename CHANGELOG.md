@@ -1,6 +1,6 @@
 ## []
 
-- Using serialized JSON data for displaying auto-detected modifiers/predicates
+- Using serialized JSON data for displaying auto-detected modifiers/predicates/entries/GLM
 
 ## [1.7.3]
 

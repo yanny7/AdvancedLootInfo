@@ -1,5 +1,6 @@
 package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
 
+import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.platform.Services;
@@ -131,6 +132,11 @@ public class Plugin implements IPlugin {
             @Override
             public List<LootItemCondition> getConditions() {
                 return Arrays.asList(((LootModifier) modifier).getConditions());
+            }
+
+            @Override
+            public JsonElement serialize() {
+                throw new IllegalStateException("Not implemented");
             }
         };
     }
