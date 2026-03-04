@@ -401,7 +401,15 @@ public class TooltipUtils {
             JsonArray jsonArray = element.getAsJsonArray();
             ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
 
-            jsonArray.forEach((e) -> array.add(getElementTooltip(utils, e).build(":")));
+            jsonArray.forEach((e) -> {
+                IKeyTooltipNode t = getElementTooltip(utils, e);
+
+                if (t instanceof ValueTooltipNode.Builder builder) {
+                    array.add(builder.build("", false));
+                } else if (t instanceof BranchTooltipNode.Builder builder) {
+                    array.add(builder.build(":", false));
+                }
+            });
 
             return BranchTooltipNode.branch().add(array.build());
         } else if (element.isJsonPrimitive()) {

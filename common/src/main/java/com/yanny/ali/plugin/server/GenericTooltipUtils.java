@@ -17,6 +17,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
@@ -53,9 +54,10 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry.getType());
 
         try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
             //noinspection unchecked
             MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, entry).getOrThrow();
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, entry).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -74,9 +76,10 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
         try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
             //noinspection unchecked
             MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, function).getOrThrow();
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, function).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -95,9 +98,10 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
         try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
             //noinspection unchecked
             MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
-            JsonElement jsonElement = codec.codec().encodeStart(JsonOps.INSTANCE, condition).getOrThrow();
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, condition).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
