@@ -12,6 +12,7 @@ import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.*;
@@ -66,7 +67,7 @@ public class ForgePlugin implements IPlugin {
         LootModifierManager lootModifierManager = MixinForgeInternalHandler.getLootModifierManager();
 
         for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
-            IGlobalLootModifierWrapper wrapper = wrap(globalLootModifier);
+            IGlobalLootModifierWrapper wrapper = wrap(utils, globalLootModifier);
 
             try {
                 BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>> getter = glmMap.get(globalLootModifier.getClass());
@@ -116,7 +117,7 @@ public class ForgePlugin implements IPlugin {
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier) {
+    private static IGlobalLootModifierWrapper wrap(IServerUtils utils, IGlobalLootModifier modifier) {
         return new IGlobalLootModifierWrapper() {
             @Override
             public ResourceLocation getName() {
@@ -140,9 +141,10 @@ public class ForgePlugin implements IPlugin {
 
             @Override
             public JsonElement serialize() {
+                RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
                 //noinspection unchecked
                 Codec<IGlobalLootModifier> codec = ((Codec<IGlobalLootModifier>) modifier.codec());
-                return codec.encodeStart(JsonOps.INSTANCE, modifier).getOrThrow(false, (s) -> {});
+                return codec.encodeStart(registryOps, modifier).getOrThrow(false, (s) -> {});
             }
         };
     }
