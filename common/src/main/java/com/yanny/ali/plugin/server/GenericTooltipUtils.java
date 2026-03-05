@@ -49,7 +49,7 @@ public class GenericTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
             //noinspection unchecked
             Codec<LootPoolEntryContainer> codec = ((Codec<LootPoolEntryContainer>) entry.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, entry).getOrThrow(false, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, entry).getOrThrow(true, (s) -> {});
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -71,7 +71,7 @@ public class GenericTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
             //noinspection unchecked
             Codec<LootItemFunction> codec = ((Codec<LootItemFunction>) function.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, function).getOrThrow(false, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, function).getOrThrow(true, (s) -> {});
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -93,7 +93,7 @@ public class GenericTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
             //noinspection unchecked
             Codec<LootItemCondition> codec = ((Codec<LootItemCondition>) condition.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, condition).getOrThrow(false, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, condition).getOrThrow(true, (s) -> {});
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {

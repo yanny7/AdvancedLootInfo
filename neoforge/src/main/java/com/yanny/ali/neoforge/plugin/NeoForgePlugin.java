@@ -165,7 +165,7 @@ public class NeoForgePlugin implements IPlugin {
                 RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
                 //noinspection unchecked
                 Codec<IGlobalLootModifier> codec = ((Codec<IGlobalLootModifier>) modifier.codec());
-                return codec.encodeStart(registryOps, modifier).getOrThrow(false, (s) -> {});
+                return codec.encodeStart(registryOps, modifier).getOrThrow(true, (s) -> {});
             }
         };
     }
