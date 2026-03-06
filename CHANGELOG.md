@@ -1,3 +1,8 @@
+## []
+
+- Using serialized JSON data for displaying auto-detected modifiers/predicates/entries/GLM
+- Fixed missing loot info for LootJS pools
+
 ## [1.7.3]
 
 - Fixed loot tree rendering in edge cases
