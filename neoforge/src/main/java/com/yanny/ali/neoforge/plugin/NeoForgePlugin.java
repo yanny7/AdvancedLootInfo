@@ -1,6 +1,9 @@
 package com.yanny.ali.neoforge.plugin;
 
+import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import com.yanny.ali.neoforge.mixin.*;
 import com.yanny.ali.platform.Services;
@@ -12,6 +15,7 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.ItemAbility;
@@ -91,7 +95,7 @@ public class NeoForgePlugin implements IPlugin {
         });
 
         for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
-            IGlobalLootModifierWrapper wrapper = wrap(globalLootModifier);
+            IGlobalLootModifierWrapper wrapper = wrap(utils, globalLootModifier);
 
             try {
                 BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>> getter = glmMap.get(globalLootModifier.getClass());
@@ -141,7 +145,7 @@ public class NeoForgePlugin implements IPlugin {
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier) {
+    private static IGlobalLootModifierWrapper wrap(IServerUtils utils, IGlobalLootModifier modifier) {
         return new IGlobalLootModifierWrapper() {
             @Override
             public ResourceLocation getName() {
@@ -161,6 +165,14 @@ public class NeoForgePlugin implements IPlugin {
             @Override
             public List<LootItemCondition> getConditions() {
                 return Arrays.asList(((MixinLootModifier) modifier).getConditions());
+            }
+
+            @Override
+            public JsonElement serialize() {
+                RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+                //noinspection unchecked
+                MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());
+                return codec.codec().encodeStart(registryOps, modifier).getPartialOrThrow();
             }
         };
     }
