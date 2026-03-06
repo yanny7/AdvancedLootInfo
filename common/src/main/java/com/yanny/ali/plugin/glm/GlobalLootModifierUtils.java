@@ -5,12 +5,13 @@ import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
-import com.yanny.ali.plugin.server.GlobalLootModifierNode;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -179,12 +180,23 @@ public class GlobalLootModifierUtils {
         if (modifier.isLootModifier()) {
             return getLootModifier(modifier.getConditions(), (conditions) -> {
                 ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
-                IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
 
-                TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
-                tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
+                try {
+                    tooltip.add(BranchTooltipNode.branch().add(TooltipUtils.getJsonTooltip(utils, modifier.serialize())).build("ali.util.advanced_loot_info.auto_detected"));
+                    tooltip.add(TooltipUtils.getJsonTooltip(utils, modifier.serialize()));
+                } catch (Throwable e) {
+                    if (utils.getConfiguration().logMoreStatistics) {
+                        LOGGER.warn("Failed to get GLM info from serialized data for {}", modifier.getName(), e);
+                    }
+
+                    IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
+
+                    TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
+                    tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
+                }
+
                 tooltip.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
-                return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(utils, tooltip.build())));
+                return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build())));
             }, predicate);
         }
 

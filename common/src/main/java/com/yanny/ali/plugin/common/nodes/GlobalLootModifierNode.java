@@ -1,4 +1,4 @@
-package com.yanny.ali.plugin.server;
+package com.yanny.ali.plugin.common.nodes;
 
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
@@ -13,7 +13,7 @@ public class GlobalLootModifierNode implements IDataNode {
 
     private final ITooltipNode tooltip;
 
-    public GlobalLootModifierNode(IServerUtils utils, ITooltipNode tooltip) {
+    public GlobalLootModifierNode(ITooltipNode tooltip) {
         this.tooltip = tooltip;
     }
 

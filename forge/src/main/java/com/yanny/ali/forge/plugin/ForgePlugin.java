@@ -1,6 +1,9 @@
 package com.yanny.ali.forge.plugin;
 
+import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
@@ -10,6 +13,7 @@ import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -63,7 +67,7 @@ public class ForgePlugin implements IPlugin {
         LootModifierManager lootModifierManager = MixinForgeInternalHandler.getLootModifierManager();
 
         for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
-            IGlobalLootModifierWrapper wrapper = wrap(globalLootModifier);
+            IGlobalLootModifierWrapper wrapper = wrap(utils, globalLootModifier);
 
             try {
                 BiFunction<IServerUtils, IGlobalLootModifier, Optional<ILootModifier<?>>> getter = glmMap.get(globalLootModifier.getClass());
@@ -113,7 +117,7 @@ public class ForgePlugin implements IPlugin {
     }
 
     @NotNull
-    private static IGlobalLootModifierWrapper wrap(IGlobalLootModifier modifier) {
+    private static IGlobalLootModifierWrapper wrap(IServerUtils utils, IGlobalLootModifier modifier) {
         return new IGlobalLootModifierWrapper() {
             @Override
             public Identifier getName() {
@@ -133,6 +137,14 @@ public class ForgePlugin implements IPlugin {
             @Override
             public List<LootItemCondition> getConditions() {
                 return Arrays.asList(((MixinLootModifier) modifier).getConditions());
+            }
+
+            @Override
+            public JsonElement serialize() {
+                RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+                //noinspection unchecked
+                MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());
+                return codec.codec().encodeStart(registryOps, modifier).getPartialOrThrow();
             }
         };
     }
