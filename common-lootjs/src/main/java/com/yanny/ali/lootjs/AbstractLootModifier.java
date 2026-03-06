@@ -3,10 +3,7 @@ package com.yanny.ali.lootjs;
 import com.almostreliable.lootjs.core.entry.ItemLootEntry;
 import com.almostreliable.lootjs.loot.modifier.LootAction;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
-import com.almostreliable.lootjs.loot.modifier.handler.AddLootAction;
-import com.almostreliable.lootjs.loot.modifier.handler.ModifyLootAction;
-import com.almostreliable.lootjs.loot.modifier.handler.RemoveLootAction;
-import com.almostreliable.lootjs.loot.modifier.handler.ReplaceLootAction;
+import com.almostreliable.lootjs.loot.modifier.handler.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.*;
@@ -45,6 +42,8 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         operations.add(new IOperation.AddOperation((s) -> true, utils.getEntryFactory(utils, entry).create(utils, entry, 1, 1, functions, conditions)));
                     }
                 }
+                case LootPoolAction lootPoolAction ->
+                        operations.add(new IOperation.AddOperation((s) -> true, NodeUtils.getLootPoolNode(utils, lootPoolAction.pool(), 1, functions, conditions)));
                 case RemoveLootAction removeLootAction ->
                         operations.add(new IOperation.RemoveOperation(removeLootAction.filter()::test));
                 case ReplaceLootAction replaceLootAction -> {
