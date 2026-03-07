@@ -339,9 +339,9 @@ public class GenericUtils {
         if (profession != null) {
             //noinspection unchecked
             List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) PluginUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
-            Optional<Holder.Reference<PoiType>> poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.getFirst());
+            Optional<Holder.Reference<PoiType>> poiType;
 
-            if (poi.size() == 1 && poiType.isPresent()) {
+            if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.getFirst())).isPresent()) {
                 return poiType.get().value().matchingStates().stream().map(BlockBehaviour.BlockStateBase::getBlock).collect(Collectors.toSet());
             }
         }
