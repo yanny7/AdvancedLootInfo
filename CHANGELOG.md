@@ -1,4 +1,4 @@
-## []
+## [1.8.0]
 
 - Using serialized JSON data for displaying auto-detected modifiers/predicates/entries/GLM
 - Fixed missing loot info for LootJS pools
