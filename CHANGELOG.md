@@ -2,6 +2,7 @@
 
 - Using serialized JSON data for displaying auto-detected modifiers/predicates/entries/GLM
 - Fixed missing loot info for LootJS pools
+- Fixed mod stopped working when added villager profession
 
 ## [1.7.3]
 
