@@ -30,17 +30,17 @@ import java.util.stream.Stream;
 
 public class NodeUtils {
     @NotNull
-    public static ItemNode getItemNode(IServerUtils utils, LootItem entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static IDataNode getItemNode(IServerUtils utils, LootItem entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return getItemNode(utils, entry, (f) -> Either.left(TooltipUtils.getItemStack(utils, entry.item.value().getDefaultInstance(), f)), rawChance, sumWeight, functions, conditions);
     }
 
     @NotNull
-    public static ItemNode getTagNode(IServerUtils utils, TagEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static IDataNode getTagNode(IServerUtils utils, TagEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return getItemNode(utils, entry, (f) -> Either.right(entry.tag), rawChance, sumWeight, functions, conditions);
     }
 
     @NotNull
-    public static ItemNode getItemNode(IServerUtils utils, LootPoolSingletonContainer entry, Function<List<LootItemFunction>, Either<ItemStack, TagKey<? extends ItemLike>>> itemGetter, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static IDataNode getItemNode(IServerUtils utils, LootPoolSingletonContainer entry, Function<List<LootItemFunction>, Either<ItemStack, TagKey<? extends ItemLike>>> itemGetter, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         float chance = getChance(entry, rawChance, sumWeight);
@@ -48,8 +48,13 @@ public class NodeUtils {
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedCount = getEnchantedCount(utils, allFunctions);
         ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions);
+        Either<ItemStack, TagKey<? extends ItemLike>> either = itemGetter.apply(allFunctions);
 
-        return new ItemNode(chance, count, itemGetter.apply(allFunctions), tooltip, allFunctions, allConditions);
+        if (either.left().isPresent() && either.left().get().isEmpty()) {
+            return new EmptyNode(chance, tooltip);
+        } else {
+            return new ItemNode(chance, count, either, tooltip, allFunctions, allConditions);
+        }
     }
 
     @NotNull
