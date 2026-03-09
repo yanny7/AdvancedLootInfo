@@ -1,3 +1,8 @@
+## [1.8.1]
+
+- Fixed auto-detected GLM tooltip
+- Display item entry as empty entry if item is empty (air)
+
 ## [1.8.0]
 
 - Using serialized JSON data for displaying auto-detected modifiers/predicates/entries/GLM
