@@ -1,4 +1,4 @@
-## []
+## [1.8.1]
 
 - Fixed auto-detected GLM tooltip
 - Display item entry as empty entry if item is empty (air)
