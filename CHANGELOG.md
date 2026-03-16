@@ -1,4 +1,4 @@
-## []
+## [1.8.2]
 
 - Fixed sporadic game freeze on world start
 
