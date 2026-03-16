@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final long RELOAD_COOLDOWN_MS = 2000L;
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
     private final Map<ResourceLocation, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
@@ -29,6 +30,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private ScheduledExecutorService loggerScheduler;
     private final AtomicInteger syncedTagCount = new AtomicInteger(0);
     private final AtomicBoolean loggedIn = new AtomicBoolean(false);
+    private long lastSyncStartTime = 0;
 
     private volatile DataReceiver currentDataReceiver = null;
 
@@ -55,8 +57,9 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     public synchronized void startLootData(int totalMessages) {
-        clearLootData();
+        clearLootData(true);
 
+        lastSyncStartTime = System.currentTimeMillis();
         currentDataReceiver = new DataReceiver(totalMessages);
 
         CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
@@ -73,7 +76,14 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Started receiving loot data");
     }
 
-    public synchronized void clearLootData() {
+    public synchronized void clearLootData(boolean force) {
+        long timeSinceStart = System.currentTimeMillis() - lastSyncStartTime;
+
+        if (timeSinceStart < RELOAD_COOLDOWN_MS && !force) {
+            LOGGER.info("Ignoring redundant reload request (triggered only {}ms after sync start)", timeSinceStart);
+            return;
+        }
+
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
@@ -93,7 +103,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         // reload is called on login, causing clearing already received data
         if (loggedIn.get() && syncedTagCount.getAndIncrement() > 0) {
             LOGGER.info("Reloading loot data");
-            clearLootData();
+            clearLootData(false);
         }
     }
 
@@ -119,9 +129,10 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
 
     public synchronized void loggingOut() {
         LOGGER.info("Player logout received");
-        clearLootData();
+        clearLootData(true);
         loggedIn.set(false);
         syncedTagCount.set(0);
+        lastSyncStartTime = 0;
     }
 
     public synchronized void doneLootData() {
