@@ -1,3 +1,7 @@
+## [1.8.2]
+
+- Fixed sporadic game freeze on world start
+
 ## [1.8.1]
 
 - Fixed auto-detected GLM tooltip
