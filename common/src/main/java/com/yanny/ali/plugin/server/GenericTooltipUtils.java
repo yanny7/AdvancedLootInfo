@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.server;
 
 import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.yanny.ali.api.IKeyTooltipNode;
@@ -28,6 +29,8 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -57,7 +60,7 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
             MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, entry).getPartialOrThrow();
@@ -79,7 +82,7 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
             MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, function).getPartialOrThrow();
@@ -101,7 +104,7 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
             MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, condition).getPartialOrThrow();
@@ -113,6 +116,95 @@ public class GenericTooltipUtils {
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    @NotNull
+    public static ITooltipNode getMissingIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
+        IKeyTooltipNode tooltip = ValueTooltipNode.value(ingredient.getClass().getName());
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            JsonElement jsonElement = Ingredient.CODEC.encodeStart(registryOps, ingredient).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, ingredient, Ingredient.class);
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    public static ITooltipNode getMissingDataComponentPredicateTooltip(IServerUtils utils, DataComponentPredicate predicate) {
+        IKeyTooltipNode tooltip = ValueTooltipNode.value(predicate.getClass().getName());
+
+        TooltipUtils.addObjectFields(utils, tooltip, predicate, DataComponentPredicate.class);
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    public static ITooltipNode getMissingEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
+        IKeyTooltipNode tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<EntitySubPredicate> codec = ((MapCodec<EntitySubPredicate>) predicate.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, predicate).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get entity sub predicate info from serialized data for {} in {}", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, predicate, EntitySubPredicate.class);
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    public static ITooltipNode getMissingDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+        IKeyTooltipNode tooltip = RegistriesTooltipUtils.getDataComponentTypeTooltip(utils, type);
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            Codec<Object> codec = ((Codec<Object>) type.codec());
+            JsonElement jsonElement = Objects.requireNonNull(codec).encodeStart(registryOps, value).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get data component type info from serialized data for {} in {}", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type), utils.getCurrentLootTable(), e);
+            }
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    @NotNull
+    public static ITooltipNode getMissingConsumableEffectTooltip(IServerUtils utils, ConsumeEffect effect) {
+        IKeyTooltipNode tooltip = getConsumeEffectTypeTooltip(utils, effect.getType());
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<ConsumeEffect> codec = ((MapCodec<ConsumeEffect>) effect.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, effect).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get consume effect info from serialized data for {} in {}", BuiltInRegistries.CONSUME_EFFECT_TYPE.getKey(effect.getType()), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, effect, ConsumeEffect.class);
         }
 
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
@@ -413,7 +505,6 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getSlotRangePredicateEntryTooltip(IServerUtils utils, Map.Entry<SlotRange, ItemPredicate> entry) {
-//        return utils.getValueTooltip(utils, entry.getKey().slots())
         return ValueTooltipNode.keyValue(entry.getKey().toString(), entry.getKey().slots().toString())
                 .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.branch.predicate"))
                 .build("ali.property.value.null");
