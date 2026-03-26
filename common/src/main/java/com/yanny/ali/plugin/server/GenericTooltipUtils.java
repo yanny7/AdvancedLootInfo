@@ -27,6 +27,7 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -181,6 +182,28 @@ public class GenericTooltipUtils {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get data component type info from serialized data for {} in {}", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type), utils.getCurrentLootTable(), e);
             }
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    @NotNull
+    public static ITooltipNode getMissingConsumableEffectTooltip(IServerUtils utils, ConsumeEffect effect) {
+        IKeyTooltipNode tooltip = getConsumeEffectTypeTooltip(utils, effect.getType());
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<ConsumeEffect> codec = ((MapCodec<ConsumeEffect>) effect.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, effect).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get consume effect info from serialized data for {} in {}", BuiltInRegistries.CONSUME_EFFECT_TYPE.getKey(effect.getType()), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, effect, ConsumeEffect.class);
         }
 
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");

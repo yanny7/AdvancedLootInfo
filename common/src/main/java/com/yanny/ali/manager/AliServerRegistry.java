@@ -184,8 +184,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
-        //noinspection unchecked
-        consumeEffectTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        consumeEffectTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
     @Override
@@ -305,14 +304,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
-        BiFunction<IServerUtils, ConsumeEffect, ITooltipNode> consumeEffectTooltipGetter = consumeEffectTooltipMap.get(effect.getClass());
-
-        if (consumeEffectTooltipGetter != null) {
-            return consumeEffectTooltipGetter.apply(utils, effect);
-        } else {
-            missingConsumeEffectTooltips.add(effect.getClass());
-            return utils.getValueTooltip(utils, effect.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
-        }
+        return consumeEffectTooltips.get(effect.getClass())
+                .map((i) -> i.apply(utils, effect))
+                .orElseGet(() -> GenericTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));
     }
 
     @Override
