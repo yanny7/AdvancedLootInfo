@@ -346,15 +346,7 @@ public class TooltipUtils {
                     } else if (element instanceof LootItemFunction function) {
                         tooltip.add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
                     } else {
-                        IKeyTooltipNode t = utils.getValueTooltip(utils, element);
-
-                        if (t instanceof ValueTooltipNode.Builder builder) {
-                            tooltip.add(builder.build("ali.property.value.null"));
-                        } else if (t instanceof BranchTooltipNode.Builder builder) {
-                            tooltip.add(builder.build("ali.property.branch.values"));
-                        } else if (t instanceof ErrorTooltipNode.Builder) {
-                            tooltip.add(utils.getValueTooltip(utils, element).build("ali.property.value.null"));
-                        }
+                        tooltip.add(buildTooltip(utils.getValueTooltip(utils, element)));
                     }
                 }
             } else {
@@ -383,7 +375,17 @@ public class TooltipUtils {
             return tooltip.build();
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return buildTooltip(getElementTooltip(utils, element));
+    }
+
+    public static ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
+        return switch (keyTooltipNode) {
+            case BranchTooltipNode.Builder builder -> builder.build("ali.property.branch.values");
+            case ErrorTooltipNode.Builder builder -> builder.build();
+            case ArrayTooltipNode.Builder builder -> builder.build();
+            case EmptyTooltipNode.Builder builder -> builder.build();
+            default -> keyTooltipNode.build("ali.property.value.null");
+        };
     }
 
     private static IKeyTooltipNode getElementTooltip(IServerUtils utils, JsonElement element) {
