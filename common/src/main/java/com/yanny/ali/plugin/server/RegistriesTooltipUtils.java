@@ -29,6 +29,7 @@ import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
@@ -65,6 +66,11 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getConditionTypeTooltip(IServerUtils utils, LootItemConditionType type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_CONDITION_TYPE, type);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getConsumeEffectTypeTooltip(IServerUtils utils, ConsumeEffect.Type<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.CONSUME_EFFECT_TYPE, type);
     }
 
     @NotNull
