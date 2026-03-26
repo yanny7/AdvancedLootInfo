@@ -417,7 +417,7 @@ public class ValueTooltipUtils {
         IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
         for (Object o : collection) {
-            tooltip.add(utils.getValueTooltip(utils, o).build("ali.property.value.null"));
+            tooltip.add(TooltipUtils.buildTooltip(utils.getValueTooltip(utils, o)));
         }
 
         return tooltip;
