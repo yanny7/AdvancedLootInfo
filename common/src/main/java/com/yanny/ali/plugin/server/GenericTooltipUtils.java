@@ -179,7 +179,7 @@ public class GenericTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get entity sub predicate info from serialized data for {} in {}", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get data component type info from serialized data for {} in {}", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type), utils.getCurrentLootTable(), e);
             }
         }
 
