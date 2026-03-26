@@ -56,7 +56,7 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
             MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, entry).getPartialOrThrow();
@@ -78,7 +78,7 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
             MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, function).getPartialOrThrow();
@@ -100,7 +100,7 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.getServerLevel()).registryAccess());
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
             MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, condition).getPartialOrThrow();
@@ -122,7 +122,10 @@ public class GenericTooltipUtils {
         IKeyTooltipNode tooltip = ValueTooltipNode.value(ingredient.getClass().getName());
 
         try {
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, ingredient.toJson()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            JsonElement jsonElement = Ingredient.CODEC.encodeStart(registryOps, ingredient).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), utils.getCurrentLootTable(), e);
