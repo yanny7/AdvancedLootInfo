@@ -381,7 +381,7 @@ public class TooltipUtils {
             return tooltip.build();
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return buildTooltip(getElementTooltip(utils, element));
     }
 
     public static ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
