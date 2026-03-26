@@ -119,7 +119,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getMissingIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
+        IKeyTooltipNode tooltip = ValueTooltipNode.value(ingredient.getClass().getName());
 
         try {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, ingredient.toJson()));
