@@ -278,21 +278,21 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     public <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
         return itemSubPredicateTooltips.get(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> utils.getValueTooltip(utils, predicate.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing"));
+                .orElseGet(() -> GenericTooltipUtils.getMissingItemSubPredicateTooltip(utils, predicate));
     }
 
     @Override
     public <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
         return entitySubPredicateTooltips.get(predicate.codec())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> utils.getValueTooltip(utils, predicate.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing"));
+                .orElseGet(() -> GenericTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
     }
 
     @Override
     public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
         return dataComponentTypeTooltips.get(type)
                 .map((i) -> i.apply(utils, value))
-                .orElseGet(() -> utils.getValueTooltip(utils, type.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing"));
+                .orElseGet(() -> GenericTooltipUtils.getMissingDataComponentTypeTooltip(utils, type, value));
     }
 
     @Override

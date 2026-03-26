@@ -385,17 +385,13 @@ public class TooltipUtils {
     }
 
     public static ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
-        if (keyTooltipNode instanceof BranchTooltipNode.Builder builder) {
-            return builder.build("ali.property.branch.values");
-        } else if (keyTooltipNode instanceof ErrorTooltipNode.Builder builder) {
-            return builder.build();
-        } else if (keyTooltipNode instanceof ArrayTooltipNode.Builder builder) {
-            return builder.build();
-        } else if (keyTooltipNode instanceof EmptyTooltipNode.Builder builder) {
-            return builder.build();
-        } else {
-            return keyTooltipNode.build("ali.property.value.null");
-        }
+        return switch (keyTooltipNode) {
+            case BranchTooltipNode.Builder builder -> builder.build("ali.property.branch.values");
+            case ErrorTooltipNode.Builder builder -> builder.build();
+            case ArrayTooltipNode.Builder builder -> builder.build();
+            case EmptyTooltipNode.Builder builder -> builder.build();
+            default -> keyTooltipNode.build("ali.property.value.null");
+        };
     }
 
     private static IKeyTooltipNode getElementTooltip(IServerUtils utils, JsonElement element) {
