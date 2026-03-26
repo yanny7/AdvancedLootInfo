@@ -11,7 +11,8 @@ import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
-import com.yanny.ali.plugin.server.*;
+import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.Holder;
@@ -41,6 +42,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
@@ -48,52 +50,40 @@ import oshi.util.tuples.Pair;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectorMap = new HashMap<>();
-    private final Map<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectorMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverterMap = new HashMap<>();
-    private final Map<Class<?>, EntryFactory<?>> entryFactoryMap = new HashMap<>();
-
-    private final Map<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltipMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltipMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltipMap = new HashMap<>();
-    private final ClassKeyedMap<BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltipMap = new ClassKeyedMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicateTooltipMap = new HashMap<>();
-    private final Map<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltipMap = new HashMap<>();
-    private final Map<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltipMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltipMap = new HashMap<>();
-
-    private final Map<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifierMap = new HashMap<>();
-    private final Map<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifierMap = new HashMap<>();
-    private final Map<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifierMap = new HashMap<>();
+    private final List<ManagedRegistry<?, ?>> allRegistries = new ArrayList<>();
+    // factories
+    private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new);
+    // converters
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new);
+    // listings
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, ITooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new);
+    // collectors
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectors = registerClassKeyed("trade item collectors", false, HashMap::new);
+    // tooltips
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new);;
+    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter);
+    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltips = registerClassKeyed("consume effect tooltips", true, HashMap::new);
+    // modifiers
+    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new);
+    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new);
 
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
-
-    private final Map<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, ITooltipNode, IDataNode>> itemListingFactoryMap = new HashMap<>();
-    private final Map<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectorMap = new HashMap<>();
-
-    private final Set<Class<?>> missingEntryFactories = new HashSet<>();
-    private final Set<Class<?>> missingFunctionTooltips = new HashSet<>();
-    private final Set<Class<?>> missingConditionTooltips = new HashSet<>();
-    private final Set<Class<?>> missingIngredientTooltips = new HashSet<>();
-    private final Set<Class<?>> missingValueTooltips = new HashSet<>();
-    private final Set<Class<?>> missingDataComponentPredicateTooltips = new HashSet<>();
-    private final Set<Class<?>> missingEntitySubPredicateTooltips = new HashSet<>();
-    private final Set<Class<?>> missingDataComponentTypeTooltips = new HashSet<>();
-    private final Set<Class<?>> missingConsumeEffectTooltips = new HashSet<>();
-    private final Set<Class<?>> missingItemListingFactories = new HashSet<>();
-    private final Set<Class<?>> missingNumberConverters = new HashSet<>();
-
-    private final FunctionStatsTracker entryTracker = new FunctionStatsTracker(EntryFactory.class);
-    private final FunctionStatsTracker functionTracker = new FunctionStatsTracker(FunctionTooltipUtils.class);
-    private final FunctionStatsTracker conditionTracker = new FunctionStatsTracker(ConditionTooltipUtils.class);
-    private final FunctionStatsTracker ingredientTracker = new FunctionStatsTracker(IngredientTooltipUtils.class);
 
     private final ICommonUtils utils;
 
@@ -106,45 +96,11 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     public void clearData() {
-        entryItemCollectorMap.clear();
-        functionItemCollectorMap.clear();
-        numberConverterMap.clear();
-        entryFactoryMap.clear();
-
-        functionTooltipMap.clear();
-        conditionTooltipMap.clear();
-        ingredientTooltipMap.clear();
-        dataComponentPredicateTooltipMap.clear();
-        entitySubPredicateTooltipMap.clear();
-        dataComponentTypeTooltipMap.clear();
-        consumeEffectTooltipMap.clear();
-
-        chanceModifierMap.clear();
-        countModifierMap.clear();
-        itemStackModifierMap.clear();
-
         lootTableMap.clear();
         lootModifierGetters.clear();
         lootModifierMap.clear();
 
-        itemListingFactoryMap.clear();
-        tradeItemCollectorMap.clear();
-
-        missingEntryFactories.clear();
-        missingFunctionTooltips.clear();
-        missingConditionTooltips.clear();
-        missingIngredientTooltips.clear();
-        missingDataComponentPredicateTooltips.clear();
-        missingEntitySubPredicateTooltips.clear();
-        missingDataComponentTypeTooltips.clear();
-        missingConsumeEffectTooltips.clear();
-        missingItemListingFactories.clear();
-        missingNumberConverters.clear();
-
-        entryTracker.clearStats();
-        functionTracker.clearStats();
-        conditionTracker.clearStats();
-        ingredientTracker.clearStats();
+        allRegistries.forEach(ManagedRegistry::clear);
     }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
@@ -176,91 +132,79 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier) {
-        //noinspection unchecked
-        entryItemCollectorMap.put(type, (u, e) -> itemSupplier.apply(u, (T) e));
+        entryItemCollectors.put(type, (u, e) -> itemSupplier.apply(u, type.cast(e)));
     }
 
     @Override
     public <T extends LootItemFunction> void registerItemCollector(Class<T> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier) {
-        //noinspection unchecked
-        functionItemCollectorMap.put(type, (u, l, f) -> itemSupplier.apply(u, l, (T) f));
+        functionItemCollectors.put(type, (u, l, f) -> itemSupplier.apply(u, l, type.cast(f)));
     }
 
     @Override
-    public <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entryFactory) {
-        entryFactoryMap.put(type, entryFactory);
+    public <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entry) {
+        entryFactories.put(type, entry);
     }
 
     @Override
     public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
-        //noinspection unchecked
-        functionTooltipMap.put(type, (u, f) -> getter.apply(u, (T) f));
+        functionTooltips.put(type, (u, f) -> getter.apply(u, type.cast(f)));
     }
 
     @Override
     public <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
-        //noinspection unchecked
-        conditionTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        conditionTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
     @Override
     public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
-        //noinspection unchecked
-        ingredientTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        ingredientTooltips.put(type, (u, i) -> getter.apply(u, type.cast(i)));
     }
 
     @Override
     public <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, IKeyTooltipNode> getter) {
-        //noinspection unchecked
-        valueTooltipMap.put(type, (u, v) -> getter.apply(u, (T) v));
+        valueTooltips.put(type, (u, v) -> getter.apply(u, type.cast(v)));
     }
 
     @Override
     public <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
-        //noinspection unchecked
-        dataComponentPredicateTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        dataComponentPredicateTooltips.put(type, (u, i) -> getter.apply(u, type.cast(i)));
     }
 
     @Override
     public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
-        entitySubPredicateTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        entitySubPredicateTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
     public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
         //noinspection unchecked
-        dataComponentTypeTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        dataComponentTypeTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
     public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
-        //noinspection unchecked
-        consumeEffectTooltipMap.put(type, (u, c) -> getter.apply(u, (T) c));
+        consumeEffectTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
     @Override
     public <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter) {
-        //noinspection unchecked
-        numberConverterMap.put(type, (u, t) -> converter.apply(u, (T) t));
+        numberConverters.put(type, (u, n) -> converter.apply(u, type.cast(n)));
     }
 
     @Override
     public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
-        //noinspection unchecked
-        countModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+        countModifiers.put(type, (u, f, v) -> consumer.accept(u, type.cast(f), v));
     }
 
     @Override
     public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> consumer) {
-        //noinspection unchecked
-        chanceModifierMap.put(type, (u, f, v) -> consumer.accept(u, (T) f, v));
+        chanceModifiers.put(type, (u, c, v) -> consumer.accept(u, type.cast(c), v));
     }
 
     @Override
     public <T extends LootItemFunction> void registerItemStackModifier(Class<T> type, TriFunction<IServerUtils, T, ItemStack, ItemStack> consumer) {
-        //noinspection unchecked
-        itemStackModifierMap.put(type, (u, f, i) -> consumer.apply(u, (T) f, i));
+        itemStackModifiers.put(type, (u, f, i) -> consumer.apply(u, type.cast(f), i));
     }
 
     @Override
@@ -270,105 +214,54 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, ITooltipNode, IDataNode> tradeFactory) {
-        //noinspection unchecked
-        itemListingFactoryMap.put(type, (u, i, c) -> tradeFactory.apply(u, (T) i, c));
+        tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
     }
 
     @Override
     public <T extends VillagerTrades.ItemListing> void registerItemListingCollector(Class<T> type, BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemSupplier) {
-        //noinspection unchecked
-        tradeItemCollectorMap.put(type, (u, i) -> itemSupplier.apply(u, (T) i));
+        tradeItemCollectors.put(type, (u, i) -> itemSupplier.apply(u, (type.cast(i))));
     }
 
     @Override
     public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-        BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>> itemSupplier = entryItemCollectorMap.get(entry.getClass());
-
-        if (itemSupplier != null) {
-            return itemSupplier.apply(utils, entry);
-        } else {
-            return List.of();
-        }
+        return entryItemCollectors.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(List::of);
     }
 
     @Override
     public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-        TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>> itemSupplier = functionItemCollectorMap.get(function.getClass());
-
-        if (itemSupplier != null) {
-            return itemSupplier.apply(utils, items, function);
-        } else {
-            return List.of();
-        }
+        return functionItemCollectors.get(function.getClass())
+                .map((e) -> e.apply(utils, items, function))
+                .orElseGet(List::of);
     }
 
     @Override
     public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
         //noinspection unchecked
-        EntryFactory<T> entryFactory = (EntryFactory<T>) entryFactoryMap.get(type.getClass());
-
-        if (entryFactory != null) {
-            entryTracker.incrementCallCount(type.getClass());
-            return entryFactory;
-        } else {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.info("Missing entry factory for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(type.getType()), utils.getCurrentLootTable());
-            }
-
-            missingEntryFactories.add(type.getClass());
-            return (u, e, c, s, f, o) -> new MissingNode(GenericTooltipUtils.getMissingEntryTooltip(u, e));
-        }
+        return (EntryFactory<T>) entryFactories.get(type.getClass())
+                .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(GenericTooltipUtils.getMissingEntryTooltip(u, e)));
     }
 
     @Override
     public <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function) {
-        BiFunction<IServerUtils, LootItemFunction, ITooltipNode> entryTooltipGetter = functionTooltipMap.get(function.getClass());
-
-        if (entryTooltipGetter != null) {
-            functionTracker.incrementCallCount(function.getClass());
-            return entryTooltipGetter.apply(utils, function);
-        } else {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.info("Missing function tooltip for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), utils.getCurrentLootTable());
-            }
-
-            missingFunctionTooltips.add(function.getClass());
-            return GenericTooltipUtils.getMissingFunctionTooltip(utils, function);
-        }
+        return functionTooltips.get(function.getClass())
+                .map((f) -> f.apply(utils, function))
+                .orElseGet(() -> GenericTooltipUtils.getMissingFunctionTooltip(utils, function));
     }
 
     @Override
     public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
-        BiFunction<IServerUtils, LootItemCondition, ITooltipNode> entryTooltipGetter = conditionTooltipMap.get(condition.getClass());
-
-        if (entryTooltipGetter != null) {
-            conditionTracker.incrementCallCount(condition.getClass());
-            return entryTooltipGetter.apply(utils, condition);
-        } else {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.info("Missing condition tooltip for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), utils.getCurrentLootTable());
-            }
-
-            missingConditionTooltips.add(condition.getClass());
-            return GenericTooltipUtils.getMissingConditionTooltip(utils, condition);
-        }
+        return conditionTooltips.get(condition.getClass())
+                .map((c) -> c.apply(utils, condition))
+                .orElseGet(() -> GenericTooltipUtils.getMissingConditionTooltip(utils, condition));
     }
 
     @Override
     public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
-        BiFunction<IServerUtils, Ingredient, ITooltipNode> ingredientTooltipGetter = ingredientTooltipMap.get(ingredient.getClass());
-
-        if (ingredientTooltipGetter != null) {
-            ingredientTracker.incrementCallCount(ingredient.getClass());
-            return ingredientTooltipGetter.apply(utils, ingredient);
-        } else {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.info("Missing ingredient tooltip for {} in {}", ingredient.getClass(), utils.getCurrentLootTable());
-            }
-
-            missingIngredientTooltips.add(ingredient.getClass());
-            return ErrorTooltipNode.error("[" + ingredient.getClass().getName() + "]").build();
-        }
+        return ingredientTooltips.get(ingredient.getClass())
+                .map((i) -> i.apply(utils, ingredient))
+                .orElseGet(() -> GenericTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
     }
 
     @Override
@@ -382,166 +275,105 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         if (valueClass.isArray()) {
             return TooltipUtils.getArrayTooltip(utils, value);
         } else {
-            BiFunction<IServerUtils, Object, IKeyTooltipNode> valueTooltipGetter = valueTooltipMap.get(valueClass);
-
-            if (valueTooltipGetter != null) {
-                return valueTooltipGetter.apply(utils, value);
-            } else {
-                if (utils.getConfiguration().logMoreStatistics) {
-                    LOGGER.info("Missing value tooltip for {} in {}", value.getClass(), utils.getCurrentLootTable());
-                }
-
-                missingValueTooltips.add(valueClass);
-                return ErrorTooltipNode.error("[" + valueClass.getName() + "]");
-            }
+            return valueTooltips.get(valueClass)
+                    .map((v) -> v.apply(utils, value))
+                    .orElseGet(() -> ErrorTooltipNode.error("[" + valueClass.getName() + "]"));
         }
     }
 
     @Override
     public <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
-        BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode> dataComponentPredicateTooltipGetter = dataComponentPredicateTooltipMap.get(predicate.getClass());
-
-        if (dataComponentPredicateTooltipGetter != null) {
-            return dataComponentPredicateTooltipGetter.apply(utils, predicate);
-        } else {
-            missingDataComponentPredicateTooltips.add(predicate.getClass());
-            return utils.getValueTooltip(utils, predicate.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
-        }
+        return dataComponentPredicateTooltips.get(predicate.getClass())
+                .map((i) -> i.apply(utils, predicate))
+                .orElseGet(() -> GenericTooltipUtils.getMissingDataComponentPredicateTooltip(utils, predicate));
     }
 
     @Override
     public <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
-        BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode> entitySubPredicateTooltipGetter = entitySubPredicateTooltipMap.get(predicate.codec());
-
-        if (entitySubPredicateTooltipGetter != null) {
-            return entitySubPredicateTooltipGetter.apply(utils, predicate);
-        } else {
-            missingEntitySubPredicateTooltips.add(predicate.getClass());
-            return utils.getValueTooltip(utils, predicate.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
-        }
+        return entitySubPredicateTooltips.get(predicate.codec())
+                .map((i) -> i.apply(utils, predicate))
+                .orElseGet(() -> GenericTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
     }
 
     @Override
     public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
-        BiFunction<IServerUtils, Object, ITooltipNode> dataComponentTypeTooltipGetter = dataComponentTypeTooltipMap.get(type);
-
-        if (dataComponentTypeTooltipGetter != null) {
-            return dataComponentTypeTooltipGetter.apply(utils, value);
-        } else {
-            missingDataComponentTypeTooltips.add(type.getClass());
-            return utils.getValueTooltip(utils, type.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
-        }
+        return dataComponentTypeTooltips.get(type)
+                .map((i) -> i.apply(utils, value))
+                .orElseGet(() -> GenericTooltipUtils.getMissingDataComponentTypeTooltip(utils, type, value));
     }
 
     @Override
     public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
-        BiFunction<IServerUtils, ConsumeEffect, ITooltipNode> consumeEffectTooltipGetter = consumeEffectTooltipMap.get(effect.getClass());
-
-        if (consumeEffectTooltipGetter != null) {
-            return consumeEffectTooltipGetter.apply(utils, effect);
-        } else {
-            missingConsumeEffectTooltips.add(effect.getClass());
-            return utils.getValueTooltip(utils, effect.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
-        }
+        return consumeEffectTooltips.get(effect.getClass())
+                .map((i) -> i.apply(utils, effect))
+                .orElseGet(() -> GenericTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));
     }
 
     @Override
     public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusCountConsumer = countModifierMap.get(function.getClass());
-
-        if (bonusCountConsumer != null) {
-            bonusCountConsumer.accept(utils, function, count);
-        }
+        countModifiers.get(function.getClass()).ifPresent((m) -> m.accept(utils, function, count));
     }
 
     @Override
     public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
-        TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>> bonusChanceConsumer = chanceModifierMap.get(condition.getClass());
-
-        if (bonusChanceConsumer != null) {
-            bonusChanceConsumer.accept(utils, condition, chance);
-        }
+        chanceModifiers.get(condition.getClass()).ifPresent((m) -> m.accept(utils, condition, chance));
     }
 
     @Override
-    public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack) {
-        TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack> bonusChanceConsumer = itemStackModifierMap.get(function.getClass());
-
-        if (bonusChanceConsumer != null) {
-            itemStack = bonusChanceConsumer.apply(utils, function, itemStack);
-        }
-
-        return itemStack;
+    public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, final ItemStack itemStack) {
+        return itemStackModifiers.get(function.getClass())
+                .map((m) -> m.apply(utils, function, itemStack))
+                .orElse(itemStack);
     }
 
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
-        //noinspection unchecked
-        TriFunction<IServerUtils, T, ITooltipNode, IDataNode> itemListingFactory = (TriFunction<IServerUtils, T, ITooltipNode, IDataNode>) itemListingFactoryMap.get(entry.getClass());
+        return tradeItemListings.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry, condition))
+                .orElseGet(() -> {
+                    try {
+                        // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
+                        //noinspection DataFlowIssue
+                        MerchantOffer offer = entry.getOffer(null, null);
 
-        if (itemListingFactory != null) {
-            return itemListingFactory.apply(utils, entry, condition);
-        } else {
-            try {
-                // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
-                //noinspection DataFlowIssue
-                MerchantOffer offer = entry.getOffer(null, null);
+                        if (offer != null) {
+                            return TradeUtils.getNode(utils, offer, condition);
+                        }
+                    } catch (Throwable ignored) {}
 
-                if (offer != null) {
-                    return TradeUtils.getNode(utils, offer, condition);
-                }
-            } catch (Throwable ignored) {}
-
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.info("Missing item listing for {} in {}", entry.getClass(), utils.getCurrentLootTable());
-            }
-
-            missingItemListingFactories.add(entry.getClass());
-
-            try {
-                return new MissingNode(GenericTooltipUtils.getMissingItemListingTooltip(utils, entry));
-            } catch (Throwable e) {
-                return new MissingNode(EmptyTooltipNode.EMPTY);
-            }
-        }
+                    try {
+                        return new MissingNode(GenericTooltipUtils.getMissingItemListingTooltip(utils, entry));
+                    } catch (Throwable e) {
+                        return new MissingNode(EmptyTooltipNode.EMPTY);
+                    }
+                });
     }
 
     @Override
     public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
-        //noinspection unchecked
-        BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemCollector = (BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>>) tradeItemCollectorMap.get(entry.getClass());
+        return tradeItemCollectors.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> {
+                    try {
+                        // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
+                        //noinspection DataFlowIssue
+                        MerchantOffer offer = entry.getOffer(null, null);
 
-        if (itemCollector != null) {
-            return itemCollector.apply(utils, entry);
-        } else {
-            try {
-                // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
-                //noinspection DataFlowIssue
-                MerchantOffer offer = entry.getOffer(null, null);
+                        if (offer != null) {
+                            return TradeUtils.collectItems(utils, offer);
+                        }
+                    } catch (Throwable ignored) {}
 
-                if (offer != null) {
-                    return TradeUtils.collectItems(utils, offer);
-                }
-            } catch (Throwable ignored) {}
-        }
-
-        return new Pair<>(Collections.emptyList(), Collections.emptyList());
+                    return new Pair<>(Collections.emptyList(), Collections.emptyList());
+                });
     }
 
     @Override
     public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
         if (numberProvider != null) {
-            BiFunction<IServerUtils, NumberProvider, RangeValue> function = numberConverterMap.get(numberProvider.getClass());
-
-            if (function != null) {
-                try {
-                    return function.apply(utils, numberProvider);
-                } catch (Throwable e) {
-                    LOGGER.warn("Failed to convert number with error {}", e.getMessage(), e);
-                }
-            } else {
-                missingNumberConverters.add(numberProvider.getClass());
-            }
+            return numberConverters.get(numberProvider.getClass())
+                    .map((c) -> c.apply(utils, numberProvider))
+                    .orElseGet(() -> new RangeValue(false, true));
         }
 
         return new RangeValue(false, true);
@@ -616,40 +448,45 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     public void printRegistrationInfo() {
-        LOGGER.info("Registered {} entry item collectors", entryItemCollectorMap.size());
-        LOGGER.info("Registered {} function item collectors", functionItemCollectorMap.size());
-        LOGGER.info("Registered {} number converters", numberConverterMap.size());
-        LOGGER.info("Registered {} entry factories", entryFactoryMap.size());
-        LOGGER.info("Registered {} function tooltips", functionTooltipMap.size());
-        LOGGER.info("Registered {} condition tooltips", conditionTooltipMap.size());
-        LOGGER.info("Registered {} ingredient tooltips", ingredientTooltipMap.size());
-        LOGGER.info("Registered {} data component predicate tooltips", dataComponentPredicateTooltipMap.size());
-        LOGGER.info("Registered {} entity sub predicate tooltips", entitySubPredicateTooltipMap.size());
-        LOGGER.info("Registered {} data component type tooltips", dataComponentTypeTooltipMap.size());
-        LOGGER.info("Registered {} consume effect tooltips", consumeEffectTooltipMap.size());
-        LOGGER.info("Registered {} chance modifiers", chanceModifierMap.size());
-        LOGGER.info("Registered {} count modifiers", countModifierMap.size());
-        LOGGER.info("Registered {} item stack modifiers", itemStackModifierMap.size());
+        allRegistries.forEach(ManagedRegistry::logStatistics);
+
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
-        LOGGER.info("Registered {} item listing factories", itemListingFactoryMap.size());
     }
 
     public void printRuntimeInfo() {
-        missingEntryFactories.forEach((t) -> LOGGER.warn("Missing entry factory for {}", t.getName()));
-        missingFunctionTooltips.forEach((t) -> LOGGER.warn("Missing function tooltip for {}", t.getName()));
-        missingConditionTooltips.forEach((t) -> LOGGER.warn("Missing condition tooltip for {}", t.getName()));
-        missingIngredientTooltips.forEach((t) -> LOGGER.warn("Missing ingredient tooltip for {}", t.getName()));
-        missingValueTooltips.forEach((t) -> LOGGER.warn("Missing value tooltip for {}", t.getName()));
-        missingDataComponentPredicateTooltips.forEach((t) -> LOGGER.warn("Missing data component predicate tooltip for {}", t.getName()));
-        missingEntitySubPredicateTooltips.forEach((t) -> LOGGER.warn("Missing entity sub predicate tooltip for {}", t.getName()));
-        missingDataComponentTypeTooltips.forEach((t) -> LOGGER.warn("Missing data component type tooltip for {}", t.getName()));
-        missingConsumeEffectTooltips.forEach((t) -> LOGGER.warn("Missing consume effect tooltip for {}", t.getName()));
-        missingItemListingFactories.forEach((t) -> LOGGER.warn("Missing trade item listing for {}", t.getName()));
-        missingNumberConverters.forEach((t) -> LOGGER.warn("Missing number converters for {}", t.getName()));
+        allRegistries.forEach(ManagedRegistry::logMissing);
+    }
 
-        entryTracker.logStats();
-        functionTracker.logStats();
-        conditionTracker.logStats();
-        ingredientTracker.logStats();
+    @NotNull
+    private <V> ManagedRegistry<Class<?>, V> registerClassKeyed(String label, boolean reportMissing, Supplier<Map<Class<?>, V>> mapSupplier) {
+        return register(label, reportMissing, mapSupplier, Class::getTypeName);
+    }
+
+    @NotNull
+    private <K, V> ManagedRegistry<K, V> register(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter) {
+        ManagedRegistry<K, V> reg = new ManagedRegistry<>(label, reportMissing, mapSupplier, keyNameGetter);
+        allRegistries.add(reg);
+        return reg;
+    }
+
+    private static String mapCodecNameGetter(MapCodec<?> codec) {
+        //noinspection unchecked
+        ResourceLocation key = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey((MapCodec<? extends EntitySubPredicate>) codec);
+
+        if (key != null) {
+            return key.toString();
+        } else {
+            return codec.getClass().getTypeName();
+        }
+    }
+
+    private static String dataComponentTypeNameGetter(DataComponentType<?> dataComponentType) {
+        ResourceLocation key = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(dataComponentType);
+
+        if (key != null) {
+            return key.toString();
+        } else {
+            return dataComponentType.getClass().getTypeName();
+        }
     }
 }
