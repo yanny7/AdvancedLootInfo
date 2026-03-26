@@ -26,6 +26,7 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -111,6 +112,23 @@ public class GenericTooltipUtils {
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    @NotNull
+    public static ITooltipNode getMissingIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
+        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
+
+        try {
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, ingredient.toJson()));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, ingredient, Ingredient.class);
         }
 
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");

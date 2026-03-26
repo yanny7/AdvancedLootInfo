@@ -254,7 +254,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
         return ingredientTooltips.get(ingredient.getClass())
                 .map((i) -> i.apply(utils, ingredient))
-                .orElseGet(() -> ErrorTooltipNode.error("[" + ingredient.getClass().getName() + "]").build());
+                .orElseGet(() -> GenericTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
     }
 
     @Override
