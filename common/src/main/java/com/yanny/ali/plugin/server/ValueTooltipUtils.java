@@ -410,7 +410,13 @@ public class ValueTooltipUtils {
         IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
         for (Object o : collection) {
-            tooltip.add(utils.getValueTooltip(utils, o).build("ali.property.value.null"));
+            IKeyTooltipNode t = utils.getValueTooltip(utils, o);
+
+            if (t instanceof BranchTooltipNode.Builder builder) {
+                tooltip.add(builder.build("ali.property.branch.values"));
+            } else {
+                tooltip.add(t.build("ali.property.value.null"));
+            }
         }
 
         return tooltip;

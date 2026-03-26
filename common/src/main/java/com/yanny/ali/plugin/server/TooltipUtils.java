@@ -354,12 +354,10 @@ public class TooltipUtils {
                     } else {
                         IKeyTooltipNode t = utils.getValueTooltip(utils, element);
 
-                        if (t instanceof ValueTooltipNode.Builder builder) {
-                            tooltip.add(builder.build("ali.property.value.null"));
-                        } else if (t instanceof BranchTooltipNode.Builder builder) {
+                        if (t instanceof BranchTooltipNode.Builder builder) {
                             tooltip.add(builder.build("ali.property.branch.values"));
-                        } else if (t instanceof ErrorTooltipNode.Builder) {
-                            tooltip.add(utils.getValueTooltip(utils, element).build("ali.property.value.null"));
+                        } else {
+                            tooltip.add(t.build("ali.property.value.null"));
                         }
                     }
                 }
