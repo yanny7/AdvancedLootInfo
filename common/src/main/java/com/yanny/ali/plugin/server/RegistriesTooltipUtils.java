@@ -20,6 +20,7 @@ import net.minecraft.world.entity.animal.chicken.ChickenVariant;
 import net.minecraft.world.entity.animal.cow.CowVariant;
 import net.minecraft.world.entity.animal.feline.CatVariant;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariant;
 import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
@@ -33,6 +34,7 @@ import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -192,6 +194,11 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
+    public static IKeyTooltipNode getSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.SLOT_SOURCE_TYPE, slotSource.codec());
+    }
+
+    @NotNull
     public static IKeyTooltipNode getCatVariantTooltip(IServerUtils utils, CatVariant catVariant) {
         return getRegistryTooltip(utils, Registries.CAT_VARIANT, catVariant);
     }
@@ -303,5 +310,10 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getDataComponentPredicateTypeTooltip(IServerUtils utils, DataComponentPredicate.Type<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, type);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, ZombieNautilusVariant zombieNautilusVariant) {
+        return getRegistryTooltip(utils, Registries.ZOMBIE_NAUTILUS_VARIANT, zombieNautilusVariant);
     }
 }

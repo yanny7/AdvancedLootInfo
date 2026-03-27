@@ -81,9 +81,12 @@ public class ServerUtilsTest {
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false",
                         "    -> minecraft:use_effects",
-                        "      -> Not implemented: SimpleType",
-                        "      -> Not implemented: SimpleType",
-                        "    -> minecraft:swing_animation"
+                        "      -> Can Sprint: false",
+                        "      -> Interact Vibrations: true",
+                        "      -> Speed Multiplier: 0.2",
+                        "    -> minecraft:swing_animation",
+                        "      -> Type: WHACK",
+                        "      -> Duration: 6"
                 )
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("ali.property.value.value"), List.of(

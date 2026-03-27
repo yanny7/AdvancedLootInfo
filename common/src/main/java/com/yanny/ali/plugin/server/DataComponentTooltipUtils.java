@@ -12,10 +12,12 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.animal.chicken.ChickenVariant;
 import net.minecraft.world.entity.animal.cow.CowVariant;
 import net.minecraft.world.entity.animal.feline.CatVariant;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariant;
 import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
@@ -513,5 +515,71 @@ public class DataComponentTooltipUtils {
     @NotNull
     public static ITooltipNode getTypedEntityDataTooltip(IServerUtils utils, TypedEntityData<?> value) {
         return utils.getValueTooltip(utils, value.copyTagWithoutId().toString()).build("ali.property.value.tag");
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getSwingAnimationTooltip(IServerUtils utils, SwingAnimation value) {
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.type()).build("ali.property.value.type"))
+                .add(utils.getValueTooltip(utils, value.duration()).build("ali.property.value.duration"))
+                .build();
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static ITooltipNode getUseEffectsTooltip(IServerUtils utils, UseEffects value) {
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.canSprint()).build("ali.property.value.can_sprint"))
+                .add(utils.getValueTooltip(utils, value.interactVibrations()).build("ali.property.value.interact_vibrations"))
+                .add(utils.getValueTooltip(utils, value.speedMultiplier()).build("ali.property.value.speed_multiplier"))
+                .build();
+    }
+
+    @NotNull
+    public static ITooltipNode getDamageTypeTooltip(IServerUtils utils, EitherHolder<DamageType> holder) {
+        return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
+    }
+
+    @NotNull
+    public static ITooltipNode getAttackRangeTooltip(IServerUtils utils, AttackRange value) {
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.minRange()).build("ali.property.value.min_range"))
+                .add(utils.getValueTooltip(utils, value.maxRange()).build("ali.property.value.max_range"))
+                .add(utils.getValueTooltip(utils, value.minCreativeRange()).build("ali.property.value.min_creative_range"))
+                .add(utils.getValueTooltip(utils, value.maxCreativeRange()).build("ali.property.value.max_creative_range"))
+                .add(utils.getValueTooltip(utils, value.hitboxMargin()).build("ali.property.value.hitbox_margin"))
+                .add(utils.getValueTooltip(utils, value.mobFactor()).build("ali.property.value.mob_factor"))
+                .build();
+    }
+
+    @NotNull
+    public static ITooltipNode getPiercingWeaponTooltip(IServerUtils utils, PiercingWeapon value) {
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.dealsKnockback()).build("ali.property.value.deals_knockback"))
+                .add(utils.getValueTooltip(utils, value.dismounts()).build("ali.property.value.dismounts"))
+                .add(utils.getValueTooltip(utils, value.sound()).build("ali.property.value.sound"))
+                .add(utils.getValueTooltip(utils, value.hitSound()).build("ali.property.value.hit_sound"))
+                .build();
+    }
+
+    @NotNull
+    public static ITooltipNode getKineticWeaponTooltip(IServerUtils utils, KineticWeapon value) {
+        return ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, value.contactCooldownTicks()).build("ali.property.value.contact_cooldown_ticks"))
+                .add(utils.getValueTooltip(utils, value.delayTicks()).build("ali.property.value.delay_ticks"))
+                .add(utils.getValueTooltip(utils, value.dismountConditions()).build("ali.property.branch.dismount_condition"))
+                .add(utils.getValueTooltip(utils, value.knockbackConditions()).build("ali.property.branch.knockback_condition"))
+                .add(utils.getValueTooltip(utils, value.damageConditions()).build("ali.property.branch.damage_condition"))
+                .add(utils.getValueTooltip(utils, value.forwardMovement()).build("ali.property.value.forward_movement"))
+                .add(utils.getValueTooltip(utils, value.damageMultiplier()).build("ali.property.value.damage_multiplier"))
+                .add(utils.getValueTooltip(utils, value.sound()).build("ali.property.value.sound"))
+                .add(utils.getValueTooltip(utils, value.hitSound()).build("ali.property.value.hit_sound"))
+                .build();
+    }
+
+    @NotNull
+    public static ITooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, EitherHolder<ZombieNautilusVariant> holder) {
+        return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
     }
 }

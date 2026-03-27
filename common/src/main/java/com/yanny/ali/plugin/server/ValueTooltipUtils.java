@@ -775,4 +775,12 @@ public class ValueTooltipUtils {
     public static IKeyTooltipNode getSlotRangeTooltip(IServerUtils utils, SlotRange slotRange) {
         return utils.getValueTooltip(utils, slotRange.toString());
     }
+
+    @NotNull
+    public static IKeyTooltipNode getKineticWeaponConditionTooltip(IServerUtils utils, KineticWeapon.Condition condition) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, condition.maxDurationTicks()).build("ali.property.value.max_duration_ticks"))
+                .add(utils.getValueTooltip(utils, condition.minSpeed()).build("ali.property.value.min_speed"))
+                .add(utils.getValueTooltip(utils, condition.minRelativeSpeed()).build("ali.property.value.min_relative_speed"));
+    }
 }

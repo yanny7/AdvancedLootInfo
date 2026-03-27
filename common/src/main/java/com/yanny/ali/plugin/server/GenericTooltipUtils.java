@@ -150,7 +150,7 @@ public class GenericTooltipUtils {
     }
 
     public static ITooltipNode getMissingEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
-        IKeyTooltipNode tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
+        IKeyTooltipNode tooltip = getEntitySubPredicateTooltip(utils, predicate);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
@@ -171,7 +171,7 @@ public class GenericTooltipUtils {
     }
 
     public static ITooltipNode getMissingDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
-        IKeyTooltipNode tooltip = RegistriesTooltipUtils.getDataComponentTypeTooltip(utils, type);
+        IKeyTooltipNode tooltip = getDataComponentTypeTooltip(utils, type);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
@@ -206,6 +206,28 @@ public class GenericTooltipUtils {
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, effect, ConsumeEffect.class);
+        }
+
+        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
+    }
+
+    @NotNull
+    public static ITooltipNode getMissingSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
+        IKeyTooltipNode tooltip = getSlotSourceTooltip(utils, slotSource);
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<SlotSource> codec = ((MapCodec<SlotSource>) slotSource.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, slotSource).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get consume effect info from serialized data for {} in {}", BuiltInRegistries.SLOT_SOURCE_TYPE.getKey(slotSource.codec()), utils.getCurrentLootTable(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, slotSource, SlotSource.class);
         }
 
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");

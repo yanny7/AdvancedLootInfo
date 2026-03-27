@@ -24,6 +24,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -35,6 +36,7 @@ import net.minecraft.world.entity.animal.chicken.ChickenVariants;
 import net.minecraft.world.entity.animal.cow.CowVariants;
 import net.minecraft.world.entity.animal.feline.CatVariants;
 import net.minecraft.world.entity.animal.frog.FrogVariants;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariants;
 import net.minecraft.world.entity.animal.pig.PigVariants;
 import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariants;
@@ -311,9 +313,12 @@ public class DataComponentTooltipTest {
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false",
                         "    -> minecraft:use_effects",
-                        "      -> Not implemented: SimpleType",
-                        "      -> Not implemented: SimpleType",
-                        "    -> minecraft:swing_animation"
+                        "      -> Can Sprint: false",
+                        "      -> Interact Vibrations: true",
+                        "      -> Speed Multiplier: 0.2",
+                        "    -> minecraft:swing_animation",
+                        "      -> Type: WHACK",
+                        "      -> Duration: 6"
                 )
         ));
     }
@@ -546,9 +551,12 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false",
                         "      -> minecraft:use_effects",
-                        "        -> Not implemented: SimpleType",
-                        "        -> Not implemented: SimpleType",
-                        "      -> minecraft:swing_animation"
+                        "        -> Can Sprint: false",
+                        "        -> Interact Vibrations: true",
+                        "        -> Speed Multiplier: 0.2",
+                        "      -> minecraft:swing_animation",
+                        "        -> Type: WHACK",
+                        "        -> Duration: 6"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:snowball",
@@ -573,9 +581,12 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false",
                         "      -> minecraft:use_effects",
-                        "        -> Not implemented: SimpleType",
-                        "        -> Not implemented: SimpleType",
-                        "      -> minecraft:swing_animation"
+                        "        -> Can Sprint: false",
+                        "        -> Interact Vibrations: true",
+                        "        -> Speed Multiplier: 0.2",
+                        "      -> minecraft:swing_animation",
+                        "        -> Type: WHACK",
+                        "        -> Duration: 6"
                 )
         ));
     }
@@ -610,9 +621,12 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false",
                         "      -> minecraft:use_effects",
-                        "        -> Not implemented: SimpleType",
-                        "        -> Not implemented: SimpleType",
-                        "      -> minecraft:swing_animation"
+                        "        -> Can Sprint: false",
+                        "        -> Interact Vibrations: true",
+                        "        -> Speed Multiplier: 0.2",
+                        "      -> minecraft:swing_animation",
+                        "        -> Type: WHACK",
+                        "        -> Duration: 6"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -637,9 +651,12 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false",
                         "      -> minecraft:use_effects",
-                        "        -> Not implemented: SimpleType",
-                        "        -> Not implemented: SimpleType",
-                        "      -> minecraft:swing_animation"
+                        "        -> Can Sprint: false",
+                        "        -> Interact Vibrations: true",
+                        "        -> Speed Multiplier: 0.2",
+                        "      -> minecraft:swing_animation",
+                        "        -> Type: WHACK",
+                        "        -> Duration: 6"
                 ),
                 "Fraction: 1/32"
         ));
@@ -935,9 +952,12 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false",
                         "      -> minecraft:use_effects",
-                        "        -> Not implemented: SimpleType",
-                        "        -> Not implemented: SimpleType",
-                        "      -> minecraft:swing_animation"
+                        "        -> Can Sprint: false",
+                        "        -> Interact Vibrations: true",
+                        "        -> Speed Multiplier: 0.2",
+                        "      -> minecraft:swing_animation",
+                        "        -> Type: WHACK",
+                        "        -> Duration: 6"
                 ),
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
@@ -962,9 +982,12 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false",
                         "      -> minecraft:use_effects",
-                        "        -> Not implemented: SimpleType",
-                        "        -> Not implemented: SimpleType",
-                        "      -> minecraft:swing_animation"
+                        "        -> Can Sprint: false",
+                        "        -> Interact Vibrations: true",
+                        "        -> Speed Multiplier: 0.2",
+                        "      -> minecraft:swing_animation",
+                        "        -> Type: WHACK",
+                        "        -> Duration: 6"
                 )
         ));
     }
@@ -1102,5 +1125,98 @@ public class DataComponentTooltipTest {
     public void testTypedEntityDataTooltip() {
         assertTooltip(DataComponentTooltipUtils.getTypedEntityDataTooltip(UTILS, TypedEntityData.of(2, new CompoundTag())),
                 List.of("Tag: {}"));
+    }
+
+    @Test
+    public void testSwingAnimationTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getSwingAnimationTooltip(UTILS, SwingAnimation.DEFAULT),
+                List.of(
+                        "Type: WHACK",
+                        "Duration: 6"
+                ));
+    }
+
+    @Test
+    public void testUseEffectsTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getUseEffectsTooltip(UTILS, UseEffects.DEFAULT),
+                List.of(
+                        "Can Sprint: false",
+                        "Interact Vibrations: true",
+                        "Speed Multiplier: 0.2"
+                ));
+    }
+
+    @Test
+    public void testDamageTypeTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getDamageTypeTooltip(UTILS, new EitherHolder<>(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CACTUS))),
+                List.of("Type: minecraft:cactus"));
+    }
+
+    @Test
+    public void testAttackRangeTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getAttackRangeTooltip(UTILS, new AttackRange(0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F)),
+                List.of(
+                        "Min Range: 0.1",
+                        "Max Range: 0.2",
+                        "Min Creative Range: 0.3",
+                        "Max Creative Range: 0.4",
+                        "Hitbox Margin: 0.5",
+                        "Mob Factor: 0.6"
+                ));
+    }
+
+    @Test
+    public void testPiercingWeaponTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getPiercingWeaponTooltip(UTILS, new PiercingWeapon(
+                true,
+                false,
+                Optional.of(SoundEvents.AMBIENT_CAVE),
+                Optional.of(Holder.direct(SoundEvents.ALLAY_HURT)))
+        ), List.of(
+                "Deals Knockback: true",
+                "Dismounts: false",
+                "Sound: minecraft:ambient.cave",
+                "Hit Sound: minecraft:entity.allay.hurt"
+        ));
+    }
+
+    @Test
+    public void testKineticWeaponTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getKineticWeaponTooltip(UTILS, new KineticWeapon(
+                1,
+                2,
+                KineticWeapon.Condition.ofAttackerSpeed(1, 0.5F),
+                KineticWeapon.Condition.ofRelativeSpeed(2, 1.5F),
+                KineticWeapon.Condition.ofAttackerSpeed(3, 4),
+                0.3F,
+                0.5F,
+                Optional.of(SoundEvents.AMBIENT_CAVE),
+                Optional.of(Holder.direct(SoundEvents.ALLAY_HURT)))
+        ), List.of(
+                "Contact Cooldown Ticks: 1",
+                "Delay Ticks: 2",
+                "Dismount Condition:",
+                "  -> Max Duration Ticks: 1",
+                "  -> Min Speed: 0.5",
+                "  -> Min Relative Speed: 0.0",
+                "Knockback Condition:",
+                "  -> Max Duration Ticks: 2",
+                "  -> Min Speed: 0.0",
+                "  -> Min Relative Speed: 1.5",
+                "Damage Condition:",
+                "  -> Max Duration Ticks: 3",
+                "  -> Min Speed: 4.0",
+                "  -> Min Relative Speed: 0.0",
+                "Forward Movement: 0.3",
+                "Damage Multiplier: 0.5",
+                "Sound: minecraft:ambient.cave",
+                "Hit Sound: minecraft:entity.allay.hurt"
+        ));
+    }
+
+    @Test
+    public void testZombieNautilusVariantTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getZombieNautilusVariantTooltip(UTILS, new EitherHolder<>(LOOKUP.lookupOrThrow(Registries.ZOMBIE_NAUTILUS_VARIANT).getOrThrow(ZombieNautilusVariants.WARM))),
+                List.of("Type: minecraft:warm"));
     }
 }

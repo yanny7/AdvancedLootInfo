@@ -318,14 +318,9 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Override
     public <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
-        BiFunction<IServerUtils, SlotSource, ITooltipNode> slotSourceTooltipGetter = slotSourceTooltipMap.get(slotSource.getClass());
-
-        if (slotSourceTooltipGetter != null) {
-            return slotSourceTooltipGetter.apply(utils, slotSource);
-        } else {
-            missingSlotSourceTooltips.add(slotSource.getClass());
-            return utils.getValueTooltip(utils, slotSource.getClass().getSimpleName()).build("ali.util.advanced_loot_info.missing");
-        }
+        return slotSourceTooltips.get(slotSource.getClass())
+                .map((i) -> i.apply(utils, slotSource))
+                .orElseGet(() -> GenericTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource));
     }
 
     @Override
@@ -490,7 +485,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     private static String mapCodecNameGetter(MapCodec<?> codec) {
         //noinspection unchecked
-        ResourceLocation key = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey((MapCodec<? extends EntitySubPredicate>) codec);
+        Identifier key = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey((MapCodec<? extends EntitySubPredicate>) codec);
 
         if (key != null) {
             return key.toString();
@@ -500,7 +495,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     private static String dataComponentTypeNameGetter(DataComponentType<?> dataComponentType) {
-        ResourceLocation key = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(dataComponentType);
+        Identifier key = BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(dataComponentType);
 
         if (key != null) {
             return key.toString();

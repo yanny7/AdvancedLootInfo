@@ -41,6 +41,7 @@ import net.minecraft.world.entity.animal.chicken.ChickenVariant;
 import net.minecraft.world.entity.animal.cow.CowVariant;
 import net.minecraft.world.entity.animal.feline.CatVariant;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariant;
 import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
@@ -264,7 +265,10 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.MAX_DAMAGE, DataComponentTooltipUtils::getIntTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DAMAGE, DataComponentTooltipUtils::getIntTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.UNBREAKABLE, DataComponentTooltipUtils::getEmptyTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.USE_EFFECTS, DataComponentTooltipUtils::getUseEffectsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.CUSTOM_NAME, DataComponentTooltipUtils::getCustomNameTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.MINIMUM_ATTACK_CHARGE, DataComponentTooltipUtils::getFloatValueTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.DAMAGE_TYPE, DataComponentTooltipUtils::getDamageTypeTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.ITEM_NAME, DataComponentTooltipUtils::getItemNameTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.ITEM_MODEL, DataComponentTooltipUtils::getIdentifierTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.LORE, DataComponentTooltipUtils::getItemLoreTooltip);
@@ -286,6 +290,7 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.DAMAGE_RESISTANT, DataComponentTooltipUtils::getDamageResistantTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.TOOL, DataComponentTooltipUtils::getToolTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.WEAPON, DataComponentTooltipUtils::getWeaponTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.ATTACK_RANGE, DataComponentTooltipUtils::getAttackRangeTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.ENCHANTABLE, DataComponentTooltipUtils::getEnchantableTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.EQUIPPABLE, DataComponentTooltipUtils::getEquipableTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.REPAIRABLE, DataComponentTooltipUtils::getRepairableTooltip);
@@ -293,6 +298,9 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.TOOLTIP_STYLE, DataComponentTooltipUtils::getIdentifierTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DEATH_PROTECTION, DataComponentTooltipUtils::getDeathProtectionTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.BLOCKS_ATTACKS, DataComponentTooltipUtils::getBlockAttacksTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.PIERCING_WEAPON, DataComponentTooltipUtils::getPiercingWeaponTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.KINETIC_WEAPON, DataComponentTooltipUtils::getKineticWeaponTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.SWING_ANIMATION, DataComponentTooltipUtils::getSwingAnimationTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.STORED_ENCHANTMENTS, DataComponentTooltipUtils::getItemEnchantmentsTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DYED_COLOR, DataComponentTooltipUtils::getDyedColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_COLOR, DataComponentTooltipUtils::getMapColorTooltip);
@@ -346,6 +354,7 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.PIG_VARIANT, DataComponentTooltipUtils::getPigVariantTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.COW_VARIANT, DataComponentTooltipUtils::getCowVariantTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.CHICKEN_VARIANT, DataComponentTooltipUtils::getChickenVariantTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.ZOMBIE_NAUTILUS_VARIANT, DataComponentTooltipUtils::getZombieNautilusVariantTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.FROG_VARIANT, DataComponentTooltipUtils::getFrogVariantTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.HORSE_VARIANT, DataComponentTooltipUtils::getEnumTypeTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.PAINTING_VARIANT, DataComponentTooltipUtils::getPaintingVariantTooltip);
@@ -399,6 +408,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(CowVariant.class, RegistriesTooltipUtils::getCowVariantTooltip);
         registry.registerValueTooltip(ChickenVariant.class, RegistriesTooltipUtils::getChickenVariantTooltip);
         registry.registerValueTooltip(DataComponentPredicate.Type.class, RegistriesTooltipUtils::getDataComponentPredicateTypeTooltip);
+        registry.registerValueTooltip(ZombieNautilusVariant.class, RegistriesTooltipUtils::getZombieNautilusVariantTooltip);
 
         registry.registerValueTooltip(Identifier.class, ValueTooltipUtils::getIdentifierTooltip);
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
@@ -487,6 +497,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(LootContextArg.class, ValueTooltipUtils::getLootContextArgTooltip);
         registry.registerValueTooltip(ContextKey.class, ValueTooltipUtils::getContextKeyTooltip);
         registry.registerValueTooltip(SlotRange.class, ValueTooltipUtils::getSlotRangeTooltip);
+        registry.registerValueTooltip(KineticWeapon.Condition.class, ValueTooltipUtils::getKineticWeaponConditionTooltip);
 
         registry.registerSlotSourceTooltip(EmptySlotSource.class, SlotSourceTooltipUtils::getEmptyTooltip);
         registry.registerSlotSourceTooltip(ContentsSlotSource.class, SlotSourceTooltipUtils::getContentsTooltip);

@@ -903,9 +903,12 @@ public class GenericTooltipTest {
                         "    -> minecraft:break_sound",
                         "      -> Sound: minecraft:entity.item.break",
                         "    -> minecraft:use_effects",
-                        "      -> Not implemented: SimpleType",
-                        "      -> Not implemented: SimpleType",
-                        "    -> minecraft:swing_animation"
+                        "      -> Can Sprint: false",
+                        "      -> Interact Vibrations: true",
+                        "      -> Speed Multiplier: 0.2",
+                        "    -> minecraft:swing_animation",
+                        "      -> Type: WHACK",
+                        "      -> Duration: 6"
                 )
         ));
     }
