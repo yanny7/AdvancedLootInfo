@@ -1065,4 +1065,10 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getCatVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.JELLIE)),
                 List.of("Type: minecraft:jellie"));
     }
+
+    @Test
+    public void testTypedEntityDataTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getTypedEntityDataTooltip(UTILS, TypedEntityData.of(2, new CompoundTag())),
+                List.of("Tag: {}"));
+    }
 }
