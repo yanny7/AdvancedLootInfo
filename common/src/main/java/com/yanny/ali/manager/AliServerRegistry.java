@@ -10,10 +10,8 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
-import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -25,14 +23,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.slot.SlotSource;
-import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
@@ -46,7 +45,6 @@ import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -61,18 +59,15 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new);
     // converters
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new);
-    // listings
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, ITooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new);
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectors = registerClassKeyed("trade item collectors", false, HashMap::new);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new);;
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new);
     private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter);
     private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltips = registerClassKeyed("consume effect tooltips", true, HashMap::new);
@@ -83,6 +78,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new);
 
     private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
+    private final Map<Identifier, VillagerTrade> villagerTradeMap = new HashMap<>();
     private final Map<Identifier, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
@@ -99,22 +95,28 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     public void clearData() {
         lootTableMap.clear();
+        villagerTradeMap.clear();
         lootModifierGetters.clear();
         lootModifierMap.clear();
 
         allRegistries.forEach(ManagedRegistry::clear);
     }
 
-    public void addLootTable(Identifier Identifier, LootTable lootTable) {
-        lootTableMap.put(Identifier, lootTable);
+    public void addLootTable(Identifier identifier, LootTable lootTable) {
+        lootTableMap.put(identifier, lootTable);
+    }
+
+    public void addVillagerTrade(Identifier identifier, VillagerTrade villagerTrade) {
+        villagerTradeMap.put(identifier, villagerTrade);
     }
 
     public void setCurrentLootTable(@Nullable Identifier location) {
         currentLootTable = location;
     }
 
-    public void clearLootTables() {
+    public void clearTemporaryMaps() {
         lootTableMap.clear();
+        villagerTradeMap.clear();
     }
 
     public void prepareLootModifiers() {
@@ -217,16 +219,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     @Override
     public void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter) {
         lootModifierGetters.add(getter);
-    }
-
-    @Override
-    public <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, ITooltipNode, IDataNode> tradeFactory) {
-        tradeItemListings.put(type, (u, i, c) -> tradeFactory.apply(u, type.cast(i), c));
-    }
-
-    @Override
-    public <T extends VillagerTrades.ItemListing> void registerItemListingCollector(Class<T> type, BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemSupplier) {
-        tradeItemCollectors.put(type, (u, i) -> itemSupplier.apply(u, (type.cast(i))));
     }
 
     @Override
@@ -341,48 +333,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @Override
-    public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
-        return tradeItemListings.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry, condition))
-                .orElseGet(() -> {
-                    try {
-                        // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
-                        //noinspection DataFlowIssue
-                        MerchantOffer offer = entry.getOffer(null, null, null);
-
-                        if (offer != null) {
-                            return TradeUtils.getNode(utils, offer, condition);
-                        }
-                    } catch (Throwable ignored) {}
-
-                    try {
-                        return new MissingNode(GenericTooltipUtils.getMissingItemListingTooltip(utils, entry));
-                    } catch (Throwable e) {
-                        return new MissingNode(EmptyTooltipNode.EMPTY);
-                    }
-                });
-    }
-
-    @Override
-    public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
-        return tradeItemCollectors.get(entry.getClass())
-                .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> {
-                    try {
-                        // try to get result from MerchantOffer. only if params aren't used (otherwise values can be dynamic)
-                        //noinspection DataFlowIssue
-                        MerchantOffer offer = entry.getOffer(null, null, null);
-
-                        if (offer != null) {
-                            return TradeUtils.collectItems(utils, offer);
-                        }
-                    } catch (Throwable ignored) {}
-
-                    return new Pair<>(Collections.emptyList(), Collections.emptyList());
-                });
-    }
-
-    @Override
     public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
         if (numberProvider != null) {
             return numberConverters.get(numberProvider.getClass())
@@ -425,6 +375,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Nullable
     @Override
+    public VillagerTrade getVillagerTrade(Identifier identifier) {
+        return villagerTradeMap.get(identifier);
+    }
+
+    @Nullable
+    @Override
     public HolderLookup.Provider lookupProvider() {
         return serverLevel != null ? serverLevel.registryAccess() : null;
     }
@@ -437,12 +393,12 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
         return NodeUtils.getLootTableNode(modifiers);
     }
 
-    public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
-        return new TradeNode(this, itemListingMap);
+    public IDataNode parseTrade(VillagerProfession profession) {
+        return new TradeNode(this, profession);
     }
 
-    public IDataNode parseTrade(List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> itemListing) {
-        return new TradeNode(this, itemListing);
+    public IDataNode parseTrade(List<TradeSet> trades) {
+        return new TradeNode(this, trades);
     }
 
     public boolean isSubTable(Identifier Identifier) {

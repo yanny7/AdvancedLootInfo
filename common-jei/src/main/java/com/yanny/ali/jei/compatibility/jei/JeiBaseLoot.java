@@ -18,7 +18,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -160,12 +160,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             }
 
             @Override
-            public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+            public void drawWidget(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 if (centered) {
                     int width = Minecraft.getInstance().font.width(component);
-                    guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, y, 0xFF000000, false);
+                    guiGraphics.text(Minecraft.getInstance().font, component, x - width / 2, y, 0xFF000000, false);
                 } else {
-                    guiGraphics.drawString(Minecraft.getInstance().font, component, x, y, 0xFF000000, false);
+                    guiGraphics.text(Minecraft.getInstance().font, component, x, y, 0xFF000000, false);
                 }
             }
         };

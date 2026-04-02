@@ -133,7 +133,8 @@ public class GenericTooltipTest {
                 "Explosion Decay",
                 "  -> Predicates:",
                 "    -> Survives Explosion",
-                "Furnace Smelt"
+                "Furnace Smelt",
+                "  -> Use Input Count: true"
         ));
     }
 

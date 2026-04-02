@@ -19,7 +19,7 @@ import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -132,7 +132,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         }
 
         @Override
-        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(GuiGraphicsExtractor guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
             if (count != null) {
                 Font font = Minecraft.getInstance().font;
                 Matrix3x2fStack stack = guiGraphics.pose();

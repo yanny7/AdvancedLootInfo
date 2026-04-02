@@ -12,7 +12,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
@@ -252,38 +251,6 @@ public class PluginUtils {
             }
         } else {
             throw new IllegalStateException("Missing ClassAccessor annotation for item stack modifier " + clazz.getName());
-        }
-    }
-
-    public static <T extends BaseAccessor<?> & IItemListing> void registerItemListing(IServerRegistry registry, Class<T> clazz) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                //noinspection unchecked
-                Class<VillagerTrades.ItemListing> conditionClass = (Class<VillagerTrades.ItemListing>) Class.forName(classAnnotation.value());
-                registry.registerItemListing(conditionClass, (u, c, t) -> ReflectionUtils.copyClassData(clazz, c).getNode(u, t));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register item listing for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            throw new IllegalStateException("Missing ClassAccessor annotation for item listing {}" + clazz.getName());
-        }
-    }
-
-    public static <T extends BaseAccessor<?> & IItemListing> void registerItemListingCollector(IServerRegistry registry, Class<T> clazz) {
-        ClassAccessor classAnnotation = clazz.getAnnotation(ClassAccessor.class);
-
-        if (classAnnotation != null) {
-            try {
-                //noinspection unchecked
-                Class<VillagerTrades.ItemListing> conditionClass = (Class<VillagerTrades.ItemListing>) Class.forName(classAnnotation.value());
-                registry.registerItemListingCollector(conditionClass, (u, c) -> ReflectionUtils.copyClassData(clazz, c).collectItems(u));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to register item listing collector for {} with error {}", classAnnotation.value(), e.getMessage(), e);
-            }
-        } else {
-            LOGGER.warn("Missing ClassAccessor annotation for item listing collector {}", clazz.getName());
         }
     }
 

@@ -3,7 +3,7 @@ package com.yanny.ali.rei.compatibility.rei;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ public class ReiScrollWidget extends Widget {
         this.widgets = widgets;
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
             @Override
-            public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+            public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {
                     widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
@@ -29,7 +29,7 @@ public class ReiScrollWidget extends Widget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
         scrollWidget.render(guiGraphics, mouseX, mouseY);
     }
 

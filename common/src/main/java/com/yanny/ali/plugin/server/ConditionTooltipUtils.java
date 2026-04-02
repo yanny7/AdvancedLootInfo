@@ -133,6 +133,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static ITooltipNode getTimeCheckTooltip(IServerUtils utils, TimeCheck cond) {
         return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.clock()).build("ali.property.value.clock"))
                 .add(utils.getValueTooltip(utils, cond.period()).build("ali.property.value.period"))
                 .add(utils.getValueTooltip(utils, cond.value()).build("ali.property.value.value"))
                 .build("ali.type.condition.time_check");
@@ -141,7 +142,7 @@ public class ConditionTooltipUtils {
     @NotNull
     public static ITooltipNode getValueCheckTooltip(IServerUtils utils, ValueCheckCondition cond) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, cond.provider()).build("ali.property.value.provider"))
+                .add(utils.getValueTooltip(utils, cond.value()).build("ali.property.value.value"))
                 .add(utils.getValueTooltip(utils, cond.range()).build("ali.property.value.range"))
                 .build("ali.type.condition.value_check");
     }
@@ -152,5 +153,13 @@ public class ConditionTooltipUtils {
                 .add(utils.getValueTooltip(utils, cond.isRaining()).build("ali.property.value.is_raining"))
                 .add(utils.getValueTooltip(utils, cond.isThundering()).build("ali.property.value.is_thundering"))
                 .build("ali.type.condition.weather_check");
+    }
+
+    @NotNull
+    public static ITooltipNode getEnvironmentAttributeCheckTooltip(IServerUtils utils, EnvironmentAttributeCheck<?> cond) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, cond.attribute()).build("ali.property.value.attribute"))
+                .add(utils.getValueTooltip(utils, cond.value()).build("ali.property.value.value"))
+                .build("ali.type.condition.environment_attribute_check");
     }
 }

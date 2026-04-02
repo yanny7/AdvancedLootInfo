@@ -7,7 +7,7 @@ import com.yanny.ali.mixin.MixinVegetationBlock;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LightTexture;
@@ -40,7 +40,7 @@ public class EmiBlockSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
         drawBackground(guiGraphics, mouseX, mouseY, delta);
         drawOverlay(guiGraphics, mouseX, mouseY, delta);
         BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();

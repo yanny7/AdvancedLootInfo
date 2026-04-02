@@ -3,7 +3,7 @@ package com.yanny.ali.compatibility.common;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.yanny.ali.api.Rect;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
@@ -27,9 +27,9 @@ public abstract class AbstractScrollWidget {
         this.scrollRect = calculateScrollArea(rect.width(), rect.height());
     }
 
-    public abstract void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY);
+    public abstract void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY);
 
-    public void render(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void render(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
 
         Rect markerArea = calculateScrollbarMarkerArea();
@@ -131,7 +131,7 @@ public abstract class AbstractScrollWidget {
         return (float) (scrollAmount / (double) totalHeight);
     }
 
-    private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    private void drawContents(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         Matrix3x2fStack poseStack = guiGraphics.pose();
         ScreenRectangle scissorArea = new ScreenRectangle(rect.x(), rect.y(), rect.width(), rect.height());
         float scrollAmount = getScrollAmount();

@@ -1,15 +1,16 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.ali.api.IServerUtils;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.*;
@@ -106,7 +107,7 @@ public class ItemCollectorUtils {
         if (level != null) {
             return items.stream().map((i) -> level.recipeAccess()
                     .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.value().result().getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
+                    .map((l) -> List.of(l.value().result().item().value())).orElse(List.of())).flatMap(Collection::stream).toList();
         }
 
         return List.of();
@@ -118,35 +119,18 @@ public class ItemCollectorUtils {
         return List.of(function.item.value());
     }
 
+
+
     @NotNull
-    public static Pair<List<Item>, List<Item>> collectTradeItems(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemLists) {
+    public static Pair<List<Item>, List<Item>> collectTradeSetItems(IServerUtils utils, TradeSet tradeSet) {
         List<Item> inputs = new ArrayList<>();
         List<Item> outputs = new ArrayList<>();
 
-        for (VillagerTrades.ItemListing[] itemListings : itemLists.values()) {
-            for (VillagerTrades.ItemListing itemListing : itemListings) {
-                Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
+        for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
+            Pair<List<Item>, List<Item>> pair = TradeUtils.collectItems(utils, trade.value());
 
-                inputs.addAll(pair.getA());
-                outputs.addAll(pair.getB());
-            }
-        }
-
-        return new Pair<>(inputs, outputs);
-    }
-
-    @NotNull
-    public static Pair<List<Item>, List<Item>> collectTradeItems(IServerUtils utils, List<org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer>> itemLists) {
-        List<Item> inputs = new ArrayList<>();
-        List<Item> outputs = new ArrayList<>();
-
-        for (org.apache.commons.lang3.tuple.Pair<VillagerTrades.ItemListing[], Integer> p : itemLists) {
-            for (VillagerTrades.ItemListing itemListing : p.getLeft()) {
-                Pair<List<Item>, List<Item>> pair = utils.collectItems(utils, itemListing);
-
-                inputs.addAll(pair.getA());
-                outputs.addAll(pair.getB());
-            }
+            inputs.addAll(pair.getA());
+            outputs.addAll(pair.getB());
         }
 
         return new Pair<>(inputs, outputs);

@@ -4,14 +4,15 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
-import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.tooltip.*;
-import com.yanny.ali.plugin.common.trades.*;
+import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeLevelNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.*;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.criterion.*;
@@ -31,6 +32,8 @@ import net.minecraft.server.network.Filterable;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.attribute.EnvironmentAttribute;
+import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -46,7 +49,6 @@ import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.*;
@@ -75,7 +77,7 @@ import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.entries.*;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
+import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -113,7 +115,6 @@ public class Plugin implements IPlugin {
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
         registry.registerWidget(TradeLevelNode.ID, TradeLevelWidget::new);
-        registry.registerWidget(SubTradesNode.ID, SubTradesWidget::new);
         registry.registerWidget(ItemsToItemsNode.ID, ItemListingWidget::new);
 
         registry.registerDataNode(LootTableNode.ID, LootTableNode::new);
@@ -132,7 +133,6 @@ public class Plugin implements IPlugin {
 
         registry.registerDataNode(TradeNode.ID, TradeNode::new);
         registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
-        registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
         registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
 
         registry.registerTooltipNode(ArrayTooltipNode.ID, ArrayTooltipNode::decode);
@@ -165,6 +165,8 @@ public class Plugin implements IPlugin {
         registry.registerNumberProvider(ScoreboardValue.class, Plugin::convertScore);
         registry.registerNumberProvider(StorageValue.class, Plugin::convertStorage);
         registry.registerNumberProvider(EnchantmentLevelProvider.class, Plugin::convertEnchantmentLevel);
+        registry.registerNumberProvider(EnvironmentAttributeValue.class, Plugin::convertEnvironmentAttribute);
+        registry.registerNumberProvider(Sum.class, Plugin::convertSum);
 
         registry.registerEntry(LootItem.class, NodeUtils::getItemNode);
         registry.registerEntry(TagEntry.class, NodeUtils::getTagNode);
@@ -195,6 +197,7 @@ public class Plugin implements IPlugin {
         registry.registerConditionTooltip(TimeCheck.class, ConditionTooltipUtils::getTimeCheckTooltip);
         registry.registerConditionTooltip(ValueCheckCondition.class, ConditionTooltipUtils::getValueCheckTooltip);
         registry.registerConditionTooltip(WeatherCheck.class, ConditionTooltipUtils::getWeatherCheckTooltip);
+        registry.registerConditionTooltip(EnvironmentAttributeCheck.class, ConditionTooltipUtils::getEnvironmentAttributeCheckTooltip);
 
         registry.registerFunctionTooltip(ApplyBonusCount.class, FunctionTooltipUtils::getApplyBonusTooltip);
         registry.registerFunctionTooltip(CopyNameFunction.class, FunctionTooltipUtils::getCopyNameTooltip);
@@ -237,6 +240,8 @@ public class Plugin implements IPlugin {
         registry.registerFunctionTooltip(SetOminousBottleAmplifierFunction.class, FunctionTooltipUtils::getSetOminousBottleAmplifierTooltip);
         registry.registerFunctionTooltip(SetCustomModelDataFunction.class, FunctionTooltipUtils::getSetCustomModelDataTooltip);
         registry.registerFunctionTooltip(DiscardItem.class, FunctionTooltipUtils::getDiscardItemTooltip);
+        registry.registerFunctionTooltip(SetRandomDyesFunction.class, FunctionTooltipUtils::getSetRandomDyesTooltip);
+        registry.registerFunctionTooltip(SetRandomPotionFunction.class, FunctionTooltipUtils::getSetRandomPotionsTooltip);
 
         registry.registerDataComponentPredicateTooltip(DamagePredicate.class, DataComponentPredicateTooltipUtils::getDamagePredicateTooltip);
         registry.registerDataComponentPredicateTooltip(EnchantmentsPredicate.Enchantments.class, DataComponentPredicateTooltipUtils::getEnchantmentsPredicateTooltip);
@@ -301,7 +306,9 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentTypeTooltip(DataComponents.PIERCING_WEAPON, DataComponentTooltipUtils::getPiercingWeaponTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.KINETIC_WEAPON, DataComponentTooltipUtils::getKineticWeaponTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.SWING_ANIMATION, DataComponentTooltipUtils::getSwingAnimationTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.ADDITIONAL_TRADE_COST, DataComponentTooltipUtils::getIntTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.STORED_ENCHANTMENTS, DataComponentTooltipUtils::getItemEnchantmentsTooltip);
+        registry.registerDataComponentTypeTooltip(DataComponents.DYE, DataComponentTooltipUtils::getEnumTypeTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.DYED_COLOR, DataComponentTooltipUtils::getDyedColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_COLOR, DataComponentTooltipUtils::getMapColorTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAP_ID, DataComponentTooltipUtils::getMapIdTooltip);
@@ -373,9 +380,9 @@ public class Plugin implements IPlugin {
 
         registry.registerIngredientTooltip(Ingredient.class, IngredientTooltipUtils::getIngredientTooltip);
 
-        registry.registerValueTooltip(LootPoolEntryType.class, RegistriesTooltipUtils::getEntryTypeTooltip);
-        registry.registerValueTooltip(LootItemFunctionType.class, RegistriesTooltipUtils::getFunctionTypeTooltip);
-        registry.registerValueTooltip(LootItemConditionType.class, RegistriesTooltipUtils::getConditionTypeTooltip);
+        registry.registerValueTooltip(LootPoolEntryContainer.class, RegistriesTooltipUtils::getEntryTypeTooltip);
+        registry.registerValueTooltip(LootItemFunction.class, RegistriesTooltipUtils::getFunctionTypeTooltip);
+        registry.registerValueTooltip(LootItemCondition.class, RegistriesTooltipUtils::getConditionTypeTooltip);
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Item.class, RegistriesTooltipUtils::getItemTooltip);
         registry.registerValueTooltip(EntityType.class, RegistriesTooltipUtils::getEntityTypeTooltip);
@@ -383,7 +390,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlockEntityType.class, RegistriesTooltipUtils::getBlockEntityTypeTooltip);
         registry.registerValueTooltip(Potion.class, RegistriesTooltipUtils::getPotionTooltip);
         registry.registerValueTooltip(MobEffect.class, RegistriesTooltipUtils::getMobEffectTooltip);
-        registry.registerValueTooltip(LootNbtProviderType.class, RegistriesTooltipUtils::getLootNbtProviderTypeTooltip);
+        registry.registerValueTooltip(NbtProvider.class, RegistriesTooltipUtils::getNbtProviderTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
         registry.registerValueTooltip(Enchantment.class, RegistriesTooltipUtils::getEnchantmentTooltip);
         registry.registerValueTooltip(Attribute.class, RegistriesTooltipUtils::getAttributeTooltip);
@@ -409,6 +416,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ChickenVariant.class, RegistriesTooltipUtils::getChickenVariantTooltip);
         registry.registerValueTooltip(DataComponentPredicate.Type.class, RegistriesTooltipUtils::getDataComponentPredicateTypeTooltip);
         registry.registerValueTooltip(ZombieNautilusVariant.class, RegistriesTooltipUtils::getZombieNautilusVariantTooltip);
+        registry.registerValueTooltip(EnvironmentAttribute.class, RegistriesTooltipUtils::getEnvironmentAttributeTooltip);
+        registry.registerValueTooltip(WorldClock.class, RegistriesTooltipUtils::getWorldClockTooltip);
 
         registry.registerValueTooltip(Identifier.class, ValueTooltipUtils::getIdentifierTooltip);
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
@@ -488,7 +497,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntityPredicate.LocationWrapper.class, ValueTooltipUtils::getLocationWrapperTooltip);
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
-        registry.registerValueTooltip(EitherHolder.class, ValueTooltipUtils::getEitherHolderTooltip);
         registry.registerValueTooltip(InputPredicate.class, ValueTooltipUtils::getInputPredicateTooltip);
         registry.registerValueTooltip(ListOperation.StandAlone.class, ValueTooltipUtils::getStandaloneTooltip);
         registry.registerValueTooltip(BlocksAttacks.DamageReduction.class, ValueTooltipUtils::getDamageReductionTooltip);
@@ -498,6 +506,9 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ContextKey.class, ValueTooltipUtils::getContextKeyTooltip);
         registry.registerValueTooltip(SlotRange.class, ValueTooltipUtils::getSlotRangeTooltip);
         registry.registerValueTooltip(KineticWeapon.Condition.class, ValueTooltipUtils::getKineticWeaponConditionTooltip);
+        registry.registerValueTooltip(ItemStackTemplate.class, ValueTooltipUtils::getItemStackTemplateTooltip);
+        registry.registerValueTooltip(DataComponentExactPredicate.class, ValueTooltipUtils::getDataComponentExactPredicateTooltip);
+        registry.registerValueTooltip(FoodPredicate.class, ValueTooltipUtils::getFoodPredicateTooltip);
 
         registry.registerSlotSourceTooltip(EmptySlotSource.class, SlotSourceTooltipUtils::getEmptyTooltip);
         registry.registerSlotSourceTooltip(ContentsSlotSource.class, SlotSourceTooltipUtils::getContentsTooltip);
@@ -530,30 +541,6 @@ public class Plugin implements IPlugin {
         registry.registerItemStackModifier(SetWrittenBookPagesFunction.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(ToggleTooltips.class, TooltipUtils::applyItemStackModifier);
         registry.registerItemStackModifier(SetEnchantmentsFunction.class, TooltipUtils::applySetEnchantmentsItemStackModifier);
-
-        registry.registerItemListing(VillagerTrades.DyedArmorForEmeralds.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.EmeraldForItems.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.EmeraldsForVillagerTypeItem.class, EmeraldsForVillagerTypeItemNode::new);
-        registry.registerItemListing(VillagerTrades.EnchantBookForEmeralds.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.EnchantedItemForEmeralds.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.ItemsAndEmeraldsToItems.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.ItemsForEmeralds.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.SuspiciousStewForEmerald.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.TreasureMapForEmeralds.class, TradeUtils::getNode);
-        registry.registerItemListing(VillagerTrades.TypeSpecificTrade.class, TradeUtils::getNode);
-
-        registry.registerItemListingCollector(VillagerTrades.DyedArmorForEmeralds.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.EmeraldForItems.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.EmeraldsForVillagerTypeItem.class, EmeraldsForVillagerTypeItemNode::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.EnchantBookForEmeralds.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.EnchantedItemForEmeralds.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.ItemsAndEmeraldsToItems.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.ItemsForEmeralds.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.SuspiciousStewForEmerald.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.TippedArrowForItemsAndEmeralds.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.TreasureMapForEmeralds.class, TradeUtils::collectItems);
-        registry.registerItemListingCollector(VillagerTrades.TypeSpecificTrade.class, TradeUtils::collectItems);
     }
 
     @NotNull
@@ -586,5 +573,22 @@ public class Plugin implements IPlugin {
     private static RangeValue convertEnchantmentLevel(IServerUtils utils, EnchantmentLevelProvider numberProvider) {
         //TODO
         return new RangeValue(false, true);
+    }
+
+    @NotNull
+    private static RangeValue convertEnvironmentAttribute(IServerUtils utils, EnvironmentAttributeValue numberProvider) {
+        //TODO
+        return new RangeValue(false, true);
+    }
+
+    @NotNull
+    private static RangeValue convertSum(IServerUtils utils, Sum numberProvider) {
+        RangeValue value = new RangeValue(0);
+
+        for (NumberProvider summand : numberProvider.summands()) {
+            value.add(utils.convertNumber(utils, summand));
+        }
+
+        return value;
     }
 }

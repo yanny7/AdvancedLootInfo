@@ -11,17 +11,18 @@ public class NetworkUtils {
     public static void registerClient() {
         Client client = new Client();
 
+        PayloadTypeRegistry.clientboundPlay().register(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(StartMessage.TYPE, StartMessage.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(DoneMessage.TYPE, DoneMessage.CODEC);
+
         ClientPlayNetworking.registerGlobalReceiver(LootDataChunkMessage.TYPE, client::onLootDataChunk);
         ClientPlayNetworking.registerGlobalReceiver(StartMessage.TYPE, client::onStart);
         ClientPlayNetworking.registerGlobalReceiver(DoneMessage.TYPE, client::onDone);
     }
 
     public static void registerCommon() {
-        PayloadTypeRegistry.playC2S().register(StartMessage.TYPE, StartMessage.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(StartMessage.TYPE, (s, c) -> {});
+        PayloadTypeRegistry.serverboundPlay().register(StartMessage.TYPE, StartMessage.CODEC);
 
-        PayloadTypeRegistry.playS2C().register(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(StartMessage.TYPE, StartMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(StartMessage.TYPE, (s, c) -> {});
     }
 }

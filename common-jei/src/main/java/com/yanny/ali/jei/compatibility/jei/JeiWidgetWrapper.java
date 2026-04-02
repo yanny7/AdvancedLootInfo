@@ -5,7 +5,7 @@ import com.yanny.ali.api.Rect;
 import com.yanny.ali.api.RelativeRect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class JeiWidgetWrapper implements IRecipeWidget {
     }
 
     @Override
-    public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void drawWidget(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         widget.render(guiGraphics, (int) mouseX, (int) mouseY);
     }
 

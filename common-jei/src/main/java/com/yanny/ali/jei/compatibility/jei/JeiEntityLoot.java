@@ -18,18 +18,19 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import oshi.util.tuples.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
     public JeiEntityLoot(IGuiHelper guiHelper, IRecipeType<RecipeHolder<EntityLootType>> recipeType, LootCategory<EntityType<?>> lootCategory, Component title, IDrawable icon) {
@@ -40,11 +41,9 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<EntityLootType> recipe, IFocusGroup iFocusGroup) {
         super.setRecipe(builder, recipe, iFocusGroup);
 
-        SpawnEggItem spawnEgg = Services.getPlatform().getSpawnEggItem(recipe.type().entityType());
+        Optional<net.minecraft.core.Holder<Item>> spawnEgg = Services.getPlatform().getSpawnEggItem(recipe.type().entityType());
 
-        if (spawnEgg != null) {
-            builder.addSlot(RecipeIngredientRole.CRAFTING_STATION).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").add(spawnEgg);
-        }
+        spawnEgg.ifPresent(itemHolder -> builder.addSlot(RecipeIngredientRole.CRAFTING_STATION).setPosition(1, 1).setStandardSlotBackground().setSlotName("spawn_egg").add(itemHolder.value()));
     }
 
     @Override
@@ -63,7 +62,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
             final ScreenPosition position = new ScreenPosition(0, 0);
 
             @Override
-            public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+            public void drawWidget(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 Level level = Minecraft.getInstance().level;
 
                 if (level != null) {

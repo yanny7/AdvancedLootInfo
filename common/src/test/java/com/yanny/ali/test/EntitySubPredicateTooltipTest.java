@@ -58,9 +58,13 @@ public class EntitySubPredicateTooltipTest {
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
                 .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
+                .setFood(FoodPredicate.Builder.food().withLevel(MinMaxBounds.Ints.atLeast(3)).withSaturation(MinMaxBounds.Doubles.atLeast(2)).build())
                 .hasInput(new InputPredicate(Optional.of(true), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()))
                 .build()), List.of(
                 "Player:",
+                "  -> Food:",
+                "    -> Level: ≥3",
+                "    -> Saturation: ≥2.0",
                 "  -> Game Types:",
                 "    -> SURVIVAL",
                 "  -> Stats:",

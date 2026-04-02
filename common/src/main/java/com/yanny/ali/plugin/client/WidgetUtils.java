@@ -11,7 +11,7 @@ import com.yanny.ali.plugin.client.widget.TextureWidget;
 import com.yanny.ali.plugin.common.NodeUtils;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -124,22 +124,22 @@ public class WidgetUtils {
             }
 
             @Override
-            public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+            public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
                 blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, r.getX(), r.getY(), r.getWidth(), r.getHeight(), 2, 2, 2, 2, 18, 18, 35, 18);
-                guiGraphics.drawString(Minecraft.getInstance().font, txt, r.getX() + (r.getWidth() - txtWidth) / 2, r.getY() + 9, 0xFF000000, false);
+                guiGraphics.text(Minecraft.getInstance().font, txt, r.getX() + (r.getWidth() - txtWidth) / 2, r.getY() + 9, 0xFF000000, false);
             }
         };
     }
 
-    public static void blit(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
+    public static void blit(GuiGraphicsExtractor guiGraphics, Identifier pAtlasLocation, int pX, int pY, int pWidth, int pHeight, float pUOffset, float pVOffset, int pUWidth, int pVHeight) {
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, pAtlasLocation, pX, pY, pUOffset, pVOffset, pWidth, pHeight, pUWidth, pVHeight, 255, 255 );
     }
 
-    public static void blit(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {
+    public static void blit(GuiGraphicsExtractor guiGraphics, Identifier pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight) {
         blit(guiGraphics, pAtlasLocation, pX, pY, pWidth, pHeight, pUOffset, pVOffset, pWidth, pHeight);
     }
 
-    public static void blitRepeating(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
+    public static void blitRepeating(GuiGraphicsExtractor guiGraphics, Identifier pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
         int i = pTargetX;
         int j;
 
@@ -157,7 +157,7 @@ public class WidgetUtils {
         }
     }
 
-    public static void blitNineSliced(GuiGraphics guiGraphics, Identifier pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pCornerWidth, int pCornerHeight, int pEdgeWidth, int pEdgeHeight, int pSourceWidth, int pSourceHeight, int pSourceX, int pSourceY) {
+    public static void blitNineSliced(GuiGraphicsExtractor guiGraphics, Identifier pAtlasLocation, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pCornerWidth, int pCornerHeight, int pEdgeWidth, int pEdgeHeight, int pSourceWidth, int pSourceHeight, int pSourceX, int pSourceY) {
         pCornerWidth = Math.min(pCornerWidth, pTargetWidth / 2);
         pEdgeWidth = Math.min(pEdgeWidth, pTargetWidth / 2);
         pCornerHeight = Math.min(pCornerHeight, pTargetHeight / 2);

@@ -4,7 +4,7 @@ import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.RelativeRect;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class EmiWidgetWrapper extends Widget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float v) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float v) {
         widget.render(guiGraphics, mouseX, mouseY);
     }
 

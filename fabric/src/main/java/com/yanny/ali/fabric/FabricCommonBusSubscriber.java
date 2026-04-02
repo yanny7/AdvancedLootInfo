@@ -1,8 +1,8 @@
 package com.yanny.ali.fabric;
 
 import com.yanny.ali.manager.PluginManager;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
@@ -15,7 +15,7 @@ public class FabricCommonBusSubscriber {
     private static boolean serverLoaded = false;
 
     public static void registerEvents() {
-        ServerWorldEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
+        ServerLevelEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);

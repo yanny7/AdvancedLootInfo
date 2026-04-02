@@ -12,6 +12,7 @@ import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -108,7 +108,7 @@ public class GlobalLootModifierUtils {
                     && condition.entityTarget() == LootContext.EntityTarget.THIS
                     && condition.predicate().isPresent()
                     && condition.predicate().get().entityType().isPresent()
-                    && condition.predicate().get().entityType().get().matches(entity.getType())) {
+                    && condition.predicate().get().entityType().get().matches(Holder.direct(entity.getType()))) {
                 return true;
             } else {
                 return c instanceof AnyOfCondition condition && entityPredicate(condition.terms, entity);

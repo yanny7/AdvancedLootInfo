@@ -8,7 +8,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class EmiLootSlotWidget extends SlotWidget {
     }
 
     @Override
-    public void drawOverlay(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+    public void drawOverlay(GuiGraphicsExtractor draw, int mouseX, int mouseY, float delta) {
         if (count != null) {
             Font font = Minecraft.getInstance().font;
             PoseStack stack = draw.pose();

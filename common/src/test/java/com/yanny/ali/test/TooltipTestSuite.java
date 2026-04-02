@@ -37,13 +37,13 @@ import net.minecraft.util.Unit;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.slot.SlotSource;
+import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -193,16 +193,6 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
-                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, condition);
-            }
-
-            @Override
-            public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.SERVER_REGISTRY.collectItems(utils, entry);
-            }
-
-            @Override
             public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
                 return PluginManager.SERVER_REGISTRY.convertNumber(utils, numberProvider);
             }
@@ -228,6 +218,11 @@ public class TooltipTestSuite {
             @Override
             public LootTable getLootTable(Either<Identifier, LootTable> location) {
                 return PluginManager.SERVER_REGISTRY.getLootTable(location);
+            }
+
+            @Override
+            public VillagerTrade getVillagerTrade(Identifier identifier) {
+                return PluginManager.SERVER_REGISTRY.getVillagerTrade(identifier);
             }
 
             @Override

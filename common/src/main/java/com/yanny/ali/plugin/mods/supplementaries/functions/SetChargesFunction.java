@@ -25,7 +25,7 @@ public class SetChargesFunction extends ConditionalFunction implements IFunction
     @Override
     public ITooltipNode getTooltip(IServerUtils utils) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, RangeValue.rangeToString(new RangeValue(amount.getMinValue()), new RangeValue(amount.getMaxValue()))).build("ali.property.value.amount"))
+                .add(utils.getValueTooltip(utils, RangeValue.rangeToString(new RangeValue(amount.minInclusive()), new RangeValue(amount.maxInclusive()))).build("ali.property.value.amount"))
                 .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.curse_loot");
     }

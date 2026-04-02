@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.client.widget.trades;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.client.widget.ItemWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class ItemListingWidget implements IWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         for (IWidget widget : widgets) {
             widget.render(guiGraphics, mouseX, mouseY);
         }

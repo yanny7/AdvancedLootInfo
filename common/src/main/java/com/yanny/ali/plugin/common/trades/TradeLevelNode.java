@@ -5,24 +5,23 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
+import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.VillagerTrade;
 
 public class TradeLevelNode extends ListNode {
     public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "trade_level");
 
     public final int level;
 
-    public TradeLevelNode(IServerUtils utils, int level, VillagerTrades.ItemListing[] itemListings) {
+    public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
         this.level = level;
 
-        for (VillagerTrades.ItemListing itemListing : itemListings) {
-            if (itemListing != null) {
-                addChildren(utils.getItemListing(utils, itemListing, EmptyTooltipNode.EMPTY));
-            }
+        for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
+            addChildren(TradeUtils.getNode(utils, trade.value()));
         }
     }
 

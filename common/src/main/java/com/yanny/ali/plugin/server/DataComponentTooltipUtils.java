@@ -5,11 +5,11 @@ import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.damagesource.DamageType;
@@ -24,7 +24,10 @@ import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.decoration.painting.PaintingVariant;
 import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.AdventureModePredicate;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.JukeboxPlayable;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.crafting.Recipe;
@@ -33,6 +36,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.enchantment.Repairable;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.PotDecorations;
@@ -170,7 +174,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static ITooltipNode getDamageResistantTooltip(IServerUtils utils, DamageResistant resistant) {
-        return utils.getValueTooltip(utils, resistant.types()).build("ali.property.value.type");
+        return utils.getValueTooltip(utils, resistant.types()).build("ali.property.branch.types");
     }
 
     @NotNull
@@ -233,7 +237,7 @@ public class DataComponentTooltipUtils {
                 .add(utils.getValueTooltip(utils, value.disableCooldownScale()).build("ali.property.value.disable_cooldown_scale"))
                 .add(getCollectionTooltip(utils, "ali.property.branch.damage_reduction", value.damageReductions()).build("ali.property.branch.damage_reductions"))
                 .add(utils.getValueTooltip(utils, value.itemDamage()).build("ali.property.branch.item_damage"))
-                .add(utils.getValueTooltip(utils, value.bypassedBy()).build("ali.property.value.bypassed_by"))
+                .add(utils.getValueTooltip(utils, value.bypassedBy()).build("ali.property.branch.bypassed_by"))
                 .add(utils.getValueTooltip(utils, value.blockSound()).build("ali.property.value.block_sound"))
                 .add(utils.getValueTooltip(utils, value.disableSound()).build("ali.property.value.disable_sound"))
                 .build();
@@ -269,7 +273,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static ITooltipNode getChargedProjectilesTooltip(IServerUtils utils, ChargedProjectiles value) {
-        return getCollectionTooltip(utils, "ali.property.branch.item", value.getItems()).build("ali.property.branch.items");
+        return getCollectionTooltip(utils, "ali.property.branch.item", value.items()).build("ali.property.branch.items");
     }
 
     @NotNull
@@ -338,8 +342,8 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getProvidesTrimMaterialTooltip(IServerUtils utils, ProvidesTrimMaterial value) {
-        return utils.getValueTooltip(utils, value.material()).build("ali.property.value.material");
+    public static ITooltipNode getProvidesTrimMaterialTooltip(IServerUtils utils, Holder<TrimMaterial> value) {
+        return utils.getValueTooltip(utils, value).build("ali.property.value.material");
     }
 
     @Unmodifiable
@@ -355,8 +359,8 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getProvidesBannerPatternsTooltip(IServerUtils utils, TagKey<BannerPattern> value) {
-        return utils.getValueTooltip(utils, value).build("ali.property.value.banner_pattern");
+    public static ITooltipNode getProvidesBannerPatternsTooltip(IServerUtils utils, HolderSet<BannerPattern> value) {
+        return utils.getValueTooltip(utils, value).build("ali.property.branch.banner_patterns");
     }
 
     @Unmodifiable
@@ -492,7 +496,7 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getChickenVariantTooltip(IServerUtils utils, EitherHolder<ChickenVariant> holder) {
+    public static ITooltipNode getChickenVariantTooltip(IServerUtils utils, Holder<ChickenVariant> holder) {
         return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
     }
 
@@ -537,17 +541,17 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getDamageTypeTooltip(IServerUtils utils, EitherHolder<DamageType> holder) {
+    public static ITooltipNode getDamageTypeTooltip(IServerUtils utils, Holder<DamageType> holder) {
         return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
     }
 
     @NotNull
     public static ITooltipNode getAttackRangeTooltip(IServerUtils utils, AttackRange value) {
         return ArrayTooltipNode.array()
-                .add(utils.getValueTooltip(utils, value.minRange()).build("ali.property.value.min_range"))
-                .add(utils.getValueTooltip(utils, value.maxRange()).build("ali.property.value.max_range"))
-                .add(utils.getValueTooltip(utils, value.minCreativeRange()).build("ali.property.value.min_creative_range"))
-                .add(utils.getValueTooltip(utils, value.maxCreativeRange()).build("ali.property.value.max_creative_range"))
+                .add(utils.getValueTooltip(utils, value.minReach()).build("ali.property.value.min_reach"))
+                .add(utils.getValueTooltip(utils, value.maxReach()).build("ali.property.value.max_reach"))
+                .add(utils.getValueTooltip(utils, value.minCreativeReach()).build("ali.property.value.min_creative_reach"))
+                .add(utils.getValueTooltip(utils, value.maxCreativeReach()).build("ali.property.value.max_creative_reach"))
                 .add(utils.getValueTooltip(utils, value.hitboxMargin()).build("ali.property.value.hitbox_margin"))
                 .add(utils.getValueTooltip(utils, value.mobFactor()).build("ali.property.value.mob_factor"))
                 .build();
@@ -579,7 +583,7 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, EitherHolder<ZombieNautilusVariant> holder) {
+    public static ITooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, Holder<ZombieNautilusVariant> holder) {
         return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
     }
 }

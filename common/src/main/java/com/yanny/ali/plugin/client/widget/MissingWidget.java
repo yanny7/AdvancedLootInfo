@@ -3,7 +3,7 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class MissingWidget implements IWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         widget.render(guiGraphics, mouseX, mouseY);
     }
 }

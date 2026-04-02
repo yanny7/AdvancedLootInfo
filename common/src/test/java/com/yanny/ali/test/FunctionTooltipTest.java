@@ -125,7 +125,8 @@ public class FunctionTooltipTest {
                 "Enchant Randomly:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:on_random_loot",
-                "  -> Only Compatible: true"
+                "  -> Only Compatible: true",
+                "  -> Include Additional Cost Component: false"
         ));
         assertTooltip(FunctionTooltipUtils.getEnchantRandomlyTooltip(UTILS, (EnchantRandomlyFunction) EnchantRandomlyFunction.randomEnchantment()
                 .withEnchantment(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.CHANNELING).orElseThrow())
@@ -134,19 +135,21 @@ public class FunctionTooltipTest {
                 "Enchant Randomly:",
                 "  -> Enchantments:",
                 "    -> minecraft:channeling",
-                "  -> Only Compatible: true"
+                "  -> Only Compatible: true",
+                "  -> Include Additional Cost Component: false"
         ));
     }
 
     @Test
     public void testEnchantWithLevelsTooltip() {
         assertTooltip(FunctionTooltipUtils.getEnchantWithLevelsTooltip(UTILS, (EnchantWithLevelsFunction) EnchantWithLevelsFunction.enchantWithLevels(LOOKUP, UniformGenerator.between(1, 3))
-                .fromOptions(HolderSet.direct(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow())).build()
+                .withOptions(HolderSet.direct(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow())).build()
         ), List.of(
                 "Enchant With Levels:",
                 "  -> Levels: 1-3",
                 "  -> Options:",
-                "    -> minecraft:looting"
+                "    -> minecraft:looting",
+                "  -> Include Additional Cost Component: false"
         ));
     }
 
@@ -184,7 +187,10 @@ public class FunctionTooltipTest {
 
     @Test
     public void testFurnaceSmeltTooltip() {
-        assertTooltip(FunctionTooltipUtils.getFurnaceSmeltTooltip(UTILS, (SmeltItemFunction) SmeltItemFunction.smelted().build()), List.of("Furnace Smelt"));
+        assertTooltip(FunctionTooltipUtils.getFurnaceSmeltTooltip(UTILS, (SmeltItemFunction) SmeltItemFunction.smelted().build()), List.of(
+                "Furnace Smelt",
+                "  -> Use Input Count: true"
+        ));
     }
 
     @Test
@@ -203,7 +209,7 @@ public class FunctionTooltipTest {
         ), List.of(
                 "Enchanted Count Increase:",
                 "  -> Enchantment: minecraft:looting",
-                "  -> Value: 0-4",
+                "  -> Count: 0-4",
                 "  -> Limit: 3"
         ));
     }
@@ -227,7 +233,8 @@ public class FunctionTooltipTest {
         ))), List.of(
                 "Sequence:",
                 "  -> Explosion Decay",
-                "  -> Furnace Smelt"
+                "  -> Furnace Smelt",
+                "    -> Use Input Count: true"
         ));
     }
 
@@ -338,9 +345,11 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetInstrumentsTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(UTILS, (SetInstrumentFunction) SetInstrumentFunction.setInstrumentOptions(InstrumentTags.SCREAMING_GOAT_HORNS).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetInstrumentTooltip(UTILS, (SetInstrumentFunction) SetInstrumentFunction.setInstrumentOptions(
+                LOOKUP.lookupOrThrow(Registries.INSTRUMENT).getOrThrow(InstrumentTags.SCREAMING_GOAT_HORNS)).build()), List.of(
                 "Set Instrument:",
-                "  -> Options: minecraft:screaming_goat_horns"
+                "  -> Options:",
+                "    -> Tag: minecraft:screaming_goat_horns"
         ));
     }
 
@@ -701,5 +710,28 @@ public class FunctionTooltipTest {
     @Test
     public void testDiscardItemTooltip() {
         assertTooltip(FunctionTooltipUtils.getDiscardItemTooltip(UTILS, (DiscardItem) DiscardItem.discardItem().build()), List.of("Discard Item:"));
+    }
+
+    @Test
+    public void testSetRandomDyesTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetRandomDyesTooltip(UTILS, (SetRandomDyesFunction) SetRandomDyesFunction.withCount(ConstantValue.exactly(5)).build()), List.of(
+                "Set Random Dyes:",
+                "  -> Number Of Dyes: 5"
+        ));
+    }
+
+    @Test
+    public void testSetRandomPotionsTooltip() {
+        assertTooltip(FunctionTooltipUtils.getSetRandomPotionsTooltip(UTILS, (SetRandomPotionFunction) SetRandomPotionFunction.fromTagKey(
+                Optional.of(HolderSet.direct(
+                        Potions.TURTLE_MASTER,
+                        Potions.HARMING
+                ))
+        ).build()), List.of(
+                "Set Random Potions:",
+                "  -> Options:",
+                "    -> minecraft:turtle_master",
+                "    -> minecraft:harming"
+        ));
     }
 }

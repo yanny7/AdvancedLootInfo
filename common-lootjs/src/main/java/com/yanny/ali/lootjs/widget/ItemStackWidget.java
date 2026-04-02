@@ -3,7 +3,7 @@ package com.yanny.ali.lootjs.widget;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public class ItemStackWidget implements IWidget {
     private final RelativeRect bounds;
@@ -31,7 +31,7 @@ public class ItemStackWidget implements IWidget {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         if (modified) {
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0, 0, 200);

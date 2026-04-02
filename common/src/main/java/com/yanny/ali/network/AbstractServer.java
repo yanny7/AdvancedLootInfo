@@ -11,12 +11,13 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
+import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -31,11 +32,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.item.trading.TradeSets;
+import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -47,6 +49,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
@@ -77,8 +80,8 @@ public abstract class AbstractServer {
         List<ILootModifier<?>> lootTableLootModifiers = groupedTypes.getOrDefault(ILootModifier.IType.LOOT_TABLE, Collections.emptyList());
         Map<Identifier, IDataNode> tradeNodes;
         Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
-        Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
-        IDataNode wanderingTraderNode = processWanderingTrader(level, serverRegistry);
+        Pair<List<Item>, List<Item>> wanderingTraderItems = collectWanderingTraderItems(serverRegistry, manager);
+        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry, manager);
 
         serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
@@ -93,7 +96,7 @@ public abstract class AbstractServer {
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, lootTableItemStacks);
-        tradeNodes = new HashMap<>(processTrades(level, serverRegistry, config, tradeItems));
+        tradeNodes = new HashMap<>(processTrades(serverRegistry, config, tradeItems));
 
         LOGGER.info("Processing {} loot tables and {} trades took {}ms", lootNodes.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
 
@@ -105,7 +108,7 @@ public abstract class AbstractServer {
         writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
         compressAndStoreData(rawBuf);
 
-        serverRegistry.clearLootTables(); // not needed anymore
+        serverRegistry.clearTemporaryMaps(); // not needed anymore
         serverRegistry.printRuntimeInfo();
     }
 
@@ -298,36 +301,44 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<Identifier, IDataNode> processTrades(ServerLevel level, AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems) {
+    private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
-        Map<ResourceKey<VillagerProfession>, Int2ObjectMap<VillagerTrades.ItemListing[]>> trades = VillagerTrades.TRADES;
-        Map<ResourceKey<VillagerProfession>, Int2ObjectMap<VillagerTrades.ItemListing[]>> experimentalTrades = VillagerTrades.EXPERIMENTAL_TRADES;
+        HolderLookup.RegistryLookup<TradeSet> lookup = Objects.requireNonNull(serverRegistry.lookupProvider()).lookup(Registries.TRADE_SET).orElseThrow();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             Identifier location = entry.getKey().identifier();
+            VillagerProfession profession = entry.getValue();
+            List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = profession.tradeSetsByLevel().int2ObjectEntrySet()
+                    .stream()
+                    .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
+                    .toList();
+            Pair<List<Item>, List<Item>> items = new Pair<>(new ArrayList<>(), new ArrayList<>());
 
+            for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entryTrades : entries) {
+                Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entryTrades.getValue());
+
+                tradeSetReference.ifPresent((tradeSet) -> {
+                    for (Holder<VillagerTrade> trade : tradeSet.value().getTrades()) {
+                        Pair<List<Item>, List<Item>> pair = TradeUtils.collectItems(serverRegistry, trade.value());
+                        items.getA().addAll(pair.getA());
+                        items.getB().addAll(pair.getB());
+                    }
+                });
+            }
+
+            if (items.getA().isEmpty() && items.getB().isEmpty()) {
+                LOGGER.warn("No trades defined for profession {}", location);
+                continue;
+            }
+
+            tradeItems.put(location, items);
             serverRegistry.setCurrentLootTable(location);
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = null;
-
-                if (level.enabledFeatures().contains(FeatureFlags.TRADE_REBALANCE)) {
-                    itemListingMap = experimentalTrades.get(entry.getKey());
-                }
-
-                if (itemListingMap == null) {
-                    itemListingMap = trades.get(entry.getKey());
-                }
-
-                if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
-                    try {
-                        nodes.put(location, serverRegistry.parseTrade(itemListingMap));
-                        tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
-                    }
-                } else {
-                    LOGGER.warn("No trades defined for {}", location);
+                try {
+                    nodes.put(location, serverRegistry.parseTrade(profession));
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
                 }
             }
 
@@ -338,13 +349,44 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode processWanderingTrader(ServerLevel level, AliServerRegistry serverRegistry) {
+    private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry, ReloadableServerRegistries.Holder manager) {
         try {
-            return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+            List<TradeSet> trades = new ArrayList<>();
+            Registry<TradeSet> registry = (Registry<TradeSet>)manager.lookup().lookup(Registries.TRADE_SET).orElseThrow();
+
+            registry.get(TradeSets.WANDERING_TRADER_BUYING).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
+            registry.get(TradeSets.WANDERING_TRADER_COMMON).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
+            registry.get(TradeSets.WANDERING_TRADER_UNCOMMON).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
+
+            return serverRegistry.parseTrade(trades);
         } catch (Throwable e) {
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
             return new MissingNode(EmptyTooltipNode.EMPTY);
         }
+    }
+
+    @NotNull
+    private static Pair<List<Item>, List<Item>> collectWanderingTraderItems(AliServerRegistry serverRegistry, ReloadableServerRegistries.Holder manager) {
+        List<Item> inputs = new ArrayList<>();
+        List<Item> outputs = new ArrayList<>();
+        Consumer<Holder.Reference<TradeSet>> collectConsumer = (set) -> {
+            Pair<List<Item>, List<Item>> pair = ItemCollectorUtils.collectTradeSetItems(serverRegistry, set.value());
+
+            inputs.addAll(pair.getA());
+            outputs.addAll(pair.getB());
+        };
+
+        try {
+            Registry<TradeSet> registry = (Registry<TradeSet>)manager.lookup().lookup(Registries.TRADE_SET).orElseThrow();
+
+            registry.get(TradeSets.WANDERING_TRADER_BUYING).ifPresent(collectConsumer);
+            registry.get(TradeSets.WANDERING_TRADER_COMMON).ifPresent(collectConsumer);
+            registry.get(TradeSets.WANDERING_TRADER_UNCOMMON).ifPresent(collectConsumer);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to parse wandering trader items with error {}", e.getMessage(), e);
+        }
+
+        return new Pair<>(inputs, outputs);
     }
 
     private static <T> boolean predicateModifier(ILootModifier<?> modifier, T value, List<Item> items) {
@@ -458,7 +500,7 @@ public abstract class AbstractServer {
 
             // write dummy data
             buf.writerIndex(wtStart);
-            new TradeNode(utils, new Int2ObjectOpenHashMap<>()).encode(utils, buf);
+            new TradeNode(utils, Collections.emptyList()).encode(utils, buf);
             buf.writeCollection(List.of(), (b, i) -> {});
             buf.writeCollection(List.of(), (b, i) -> {});
         } finally {

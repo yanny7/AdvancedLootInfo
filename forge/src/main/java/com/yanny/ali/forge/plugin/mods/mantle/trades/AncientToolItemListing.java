@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 @ClassAccessor("slimeknights.tconstruct.world.logic.AncientToolItemListing")
-public class AncientToolItemListing extends BaseAccessor<VillagerTrades.ItemListing> implements IItemListing {
+public class AncientToolItemListing extends BaseAccessor<VillagerTrade> implements IItemListing {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final TagKey<Item> TRADER_TOOLS;
 
@@ -43,7 +43,7 @@ public class AncientToolItemListing extends BaseAccessor<VillagerTrades.ItemList
         TRADER_TOOLS = tagKey;
     }
 
-    public AncientToolItemListing(VillagerTrades.ItemListing parent) {
+    public AncientToolItemListing(VillagerTrade parent) {
         super(parent);
     }
 

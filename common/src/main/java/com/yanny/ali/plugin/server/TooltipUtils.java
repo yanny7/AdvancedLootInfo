@@ -30,7 +30,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
@@ -119,9 +118,9 @@ public class TooltipUtils {
             for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap : count.entrySet()) {
                 for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
                     if (function.add) {
-                        levelEntry.getValue().add(utils.convertNumber(utils, function.value));
+                        levelEntry.getValue().add(utils.convertNumber(utils, function.count));
                     } else {
-                        levelEntry.getValue().set(utils.convertNumber(utils, function.value));
+                        levelEntry.getValue().set(utils.convertNumber(utils, function.count));
                     }
                 }
             }
@@ -160,7 +159,7 @@ public class TooltipUtils {
             for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> entry : bonusCount.entrySet()) {
                 for (Map.Entry<Integer, RangeValue> mapEntry : entry.getValue().entrySet()) {
                     RangeValue value = mapEntry.getValue();
-                    value.clamp(utils.convertNumber(utils, function.limiter.min), utils.convertNumber(utils, function.limiter.max));
+                    value.clamp(utils.convertNumber(utils, function.limit.min), utils.convertNumber(utils, function.limit.max));
                 }
             }
         }
@@ -174,7 +173,7 @@ public class TooltipUtils {
                 for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
                     RangeValue value = entry.getValue();
 
-                    value.add(utils.convertNumber(utils, function.value).multiply(entry.getKey()));
+                    value.add(utils.convertNumber(utils, function.count).multiply(entry.getKey()));
 
                     if (function.limit > 0) {
                         value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
@@ -187,7 +186,7 @@ public class TooltipUtils {
                 count.put(enchantment, levelMap);
 
                 for (int level = 1; level <= enchantment.value().getMaxLevel(); level++) {
-                    RangeValue value = new RangeValue(baseCount).add(utils.convertNumber(utils, function.value).multiply(level));
+                    RangeValue value = new RangeValue(baseCount).add(utils.convertNumber(utils, function.count).multiply(level));
 
                     if (function.limit > 0) {
                         value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
@@ -499,7 +498,7 @@ public class TooltipUtils {
         for (SetAttributesFunction.Modifier modifier : modifiers) {
             Identifier id = modifier.id();
 
-            if (modifier.slots().size() == 1 && modifier.amount().getType() == NumberProviders.CONSTANT) {
+            if (modifier.slots().size() == 1 && modifier.amount().codec() == ConstantValue.MAP_CODEC) {
                 EquipmentSlotGroup equipmentSlot = Util.getRandom(modifier.slots(), RandomSource.create());
                 ConstantValue value = (ConstantValue) modifier.amount();
 

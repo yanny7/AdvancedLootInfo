@@ -12,6 +12,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.attribute.EnvironmentAttribute;
+import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -42,10 +44,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -56,18 +58,18 @@ public class RegistriesTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static IKeyTooltipNode getEntryTypeTooltip(IServerUtils utils, LootPoolEntryType type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type);
+    public static IKeyTooltipNode getEntryTypeTooltip(IServerUtils utils, LootPoolEntryContainer type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type.codec());
     }
 
     @NotNull
-    public static IKeyTooltipNode getFunctionTypeTooltip(IServerUtils utils, LootItemFunctionType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_FUNCTION_TYPE, type);
+    public static IKeyTooltipNode getFunctionTypeTooltip(IServerUtils utils, LootItemFunction type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_FUNCTION_TYPE, type.codec());
     }
 
     @NotNull
-    public static IKeyTooltipNode getConditionTypeTooltip(IServerUtils utils, LootItemConditionType type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_CONDITION_TYPE, type);
+    public static IKeyTooltipNode getConditionTypeTooltip(IServerUtils utils, LootItemCondition type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_CONDITION_TYPE, type.codec());
     }
 
     @NotNull
@@ -143,8 +145,8 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getLootNbtProviderTypeTooltip(IServerUtils utils, LootNbtProviderType providerType) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, providerType);
+    public static IKeyTooltipNode getNbtProviderTooltip(IServerUtils utils, NbtProvider provider) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, provider.codec());
     }
 
     @NotNull
@@ -315,5 +317,15 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, ZombieNautilusVariant zombieNautilusVariant) {
         return getRegistryTooltip(utils, Registries.ZOMBIE_NAUTILUS_VARIANT, zombieNautilusVariant);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getEnvironmentAttributeTooltip(IServerUtils utils, EnvironmentAttribute<?> attribute) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENVIRONMENT_ATTRIBUTE, attribute);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getWorldClockTooltip(IServerUtils utils, WorldClock clock) {
+        return getRegistryTooltip(utils, Registries.WORLD_CLOCK, clock);
     }
 }

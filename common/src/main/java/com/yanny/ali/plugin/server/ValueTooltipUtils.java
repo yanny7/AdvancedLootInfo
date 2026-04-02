@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.TypedDataComponent;
@@ -31,8 +32,8 @@ import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.inventory.SlotRange;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
@@ -52,7 +53,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getDataComponentExactPredicateTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 
 public class ValueTooltipUtils {
@@ -710,11 +710,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static <T> IKeyTooltipNode getEitherHolderTooltip(IServerUtils utils, EitherHolder<T> holder) {
-        return holder.contents().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
-    }
-
-    @NotNull
     public static IKeyTooltipNode getInputPredicateTooltip(IServerUtils utils, InputPredicate predicate) {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, predicate.forward()).build("ali.property.value.forward"))
@@ -754,7 +749,7 @@ public class ValueTooltipUtils {
     public static IKeyTooltipNode getDataComponentMatchersTooltip(IServerUtils utils, DataComponentMatchers dataComponentMatchers) {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
             return BranchTooltipNode.branch()
-                    .add(getDataComponentExactPredicateTooltip(utils, dataComponentMatchers.exact()))
+                    .add(utils.getValueTooltip(utils, dataComponentMatchers.exact()).build("ali.property.branch.expected_components"))
                     .add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build("ali.property.branch.partial_matchers"));
         }
 
@@ -782,5 +777,29 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, condition.maxDurationTicks()).build("ali.property.value.max_duration_ticks"))
                 .add(utils.getValueTooltip(utils, condition.minSpeed()).build("ali.property.value.min_speed"))
                 .add(utils.getValueTooltip(utils, condition.minRelativeSpeed()).build("ali.property.value.min_relative_speed"));
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getItemStackTemplateTooltip(IServerUtils utils, ItemStackTemplate itemStackTemplate) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, itemStackTemplate.item()).build("ali.property.value.item"))
+                .add(utils.getValueTooltip(utils, itemStackTemplate.count()).build("ali.property.value.count"))
+                .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build("ali.property.branch.components"));
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate predicate) {
+        return utils.getValueTooltip(utils, predicate.expectedComponents);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getFoodPredicateTooltip(IServerUtils utils, FoodPredicate predicate) {
+        if (predicate != FoodPredicate.ANY) {
+            return BranchTooltipNode.branch()
+                    .add(utils.getValueTooltip(utils, predicate.level()).build("ali.property.value.level"))
+                    .add(utils.getValueTooltip(utils, predicate.saturation()).build("ali.property.value.saturation"));
+        }
+
+        return EmptyTooltipNode.empty();
     }
 }

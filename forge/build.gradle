@@ -61,48 +61,48 @@ dependencies {
     }
 
     // LootJS
-//    modCompileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
-//    modCompileOnly fg.deobf("curse.maven:rhino-416294:6186971")
-//    modCompileOnly fg.deobf("curse.maven:lootjs-570630:5404565")
+//    compileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
+//    compileOnly fg.deobf("curse.maven:rhino-416294:6186971")
+//    compileOnly fg.deobf("curse.maven:lootjs-570630:5404565")
 
     // Aether https://www.curseforge.com/minecraft/mc-mods/aether
-//    modCompileOnly fg.deobf("curse.maven:aether-255308:6134920")
+//    compileOnly fg.deobf("curse.maven:aether-255308:6134920")
 
     // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-//    modCompileOnly fg.deobf("curse.maven:deeperdarker-659011:5906086")
+//    compileOnly fg.deobf("curse.maven:deeperdarker-659011:5906086")
 
     // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
-//    modCompileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
+//    compileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
 
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
-//    modCompileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497306")
+//    compileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497306")
 
     // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
-//    modCompileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+//    compileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
 
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
-//    modCompileOnly fg.deobf("curse.maven:selene-499980:6983934")
+//    compileOnly fg.deobf("curse.maven:selene-499980:6983934")
 
     // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
-//    modCompileOnly fg.deobf("curse.maven:repurposed-structures-368293:6797349")
+//    compileOnly fg.deobf("curse.maven:repurposed-structures-368293:6797349")
 
     // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
-//    modCompileOnly fg.deobf("curse.maven:sawmill-964817:6948522")
+//    compileOnly fg.deobf("curse.maven:sawmill-964817:6948522")
 
     // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
-//    modCompileOnly fg.deobf("curse.maven:snow-real-magic-308663:6888541")
+//    compileOnly fg.deobf("curse.maven:snow-real-magic-308663:6888541")
 
     // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-//    modCompileOnly fg.deobf("curse.maven:supplementaries-412082:6974860")
+//    compileOnly fg.deobf("curse.maven:supplementaries-412082:6974860")
 
     // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
-//    modCompileOnly fg.deobf("curse.maven:the-bumblezone-forge-362479:6960926")
+//    compileOnly fg.deobf("curse.maven:the-bumblezone-forge-362479:6960926")
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
-//    modCompileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
+//    compileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
 
     // Mantle https://www.curseforge.com/minecraft/mc-mods/mantle
-//    modCompileOnly "curse.maven:mantle-74924:6819217"
+//    compileOnly "curse.maven:mantle-74924:6819217"
 }
 
 shadowJar {

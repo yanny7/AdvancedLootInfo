@@ -1,7 +1,7 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.13-SNAPSHOT" apply false
-    id "com.gradleup.shadow" version "8.3.6" apply false
+    id "architectury-plugin" version "3.5-SNAPSHOT"
+    id "dev.architectury.loom-no-remap" version "1.14-SNAPSHOT" apply false
+    id "com.gradleup.shadow" version "9.4.1" apply false
 }
 
 architectury {
@@ -12,16 +12,11 @@ def platforms = enabled_platforms.split(",")
 def viewers = ["emi", "jei", "rei"]
 
 subprojects {
-    apply plugin: "dev.architectury.loom"
-
-    loom {
-        silentMojangMappingsLicense()
-    }
+    apply plugin: "dev.architectury.loom-no-remap"
 
     dependencies {
         implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
         minecraft "com.mojang:minecraft:${minecraft_version}"
-        mappings loom.officialMojangMappings()
     }
 
     ext {
@@ -102,24 +97,24 @@ subprojects {
             }
 
             if (emi_available) {
-                modCompileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
+                compileOnlyApi "dev.emi:emi-${project.name}:${emi_version}"
 
                 if (recipe_viewer == "emi") {
-                    modRuntimeOnly "dev.emi:emi-${project.name}:${emi_version}"
+                    runtimeOnly "dev.emi:emi-${project.name}:${emi_version}"
                 }
             }
             if (jei_available && recipe_viewer == "jei") {
-                modRuntimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
+                runtimeOnly "mezz.jei:jei-${minecraft_version}-${project.name}:${jei_version}"
             }
             if (rei_available) {
-                modCompileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
+                compileOnlyApi "me.shedaniel:RoughlyEnoughItems-api-${project.name}:${rei_version}"
 
                 if (recipe_viewer == "rei") {
-                    modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
+                    runtimeOnly "me.shedaniel:RoughlyEnoughItems-${project.name}:${rei_version}"
 
                     if (project.name == "forge") {
-                        modRuntimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-                        modRuntimeOnly "dev.architectury:architectury-forge:${architectury_version}"
+                        runtimeOnly "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+                        runtimeOnly "dev.architectury:architectury-forge:${architectury_version}"
                     }
                 }
             }

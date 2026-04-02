@@ -5,13 +5,16 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -43,7 +46,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     }
 
     @Override
-    public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
+    public Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
     }
 }

@@ -5,7 +5,6 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -22,51 +21,23 @@ public class ItemsToItemsNode extends ListNode {
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
                             RangeValue input1Count,
-                            Either<ItemStack, TagKey<? extends ItemLike>> output,
-                            RangeValue outputCount,
-                            int maxUses,
-                            int xp,
-                            float priceMultiplier,
-                            ITooltipNode condition) {
-        this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), new RangeValue(), output, outputCount, maxUses, xp, priceMultiplier, condition);
-    }
-
-    public ItemsToItemsNode(IServerUtils utils,
-                            Either<ItemStack, TagKey<? extends ItemLike>> input1,
-                            RangeValue input1Count,
-                            Either<ItemStack, TagKey<? extends ItemLike>> input2,
-                            RangeValue input2Count,
-                            Either<ItemStack, TagKey<? extends ItemLike>> output,
-                            RangeValue outputCount,
-                            int maxUses,
-                            int xp,
-                            float priceMultiplier,
-                            ITooltipNode condition) {
-        this(utils, input1, input1Count, EmptyTooltipNode.EMPTY, input2, input2Count, EmptyTooltipNode.EMPTY, output, outputCount, EmptyTooltipNode.EMPTY, maxUses, xp, priceMultiplier, condition);
-    }
-
-    public ItemsToItemsNode(IServerUtils utils,
-                            Either<ItemStack, TagKey<? extends ItemLike>> input1,
-                            RangeValue input1Count,
                             ITooltipNode input1Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> input2,
                             RangeValue input2Count,
                             ITooltipNode input2Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
                             RangeValue outputCount,
-                            ITooltipNode outputCondition,
-                            int maxUses,
-                            int xp,
-                            float priceMultiplier,
-                            ITooltipNode condition) {
+                            ITooltipNode outputModifier,
+                            RangeValue maxUses,
+                            RangeValue xp,
+                            ITooltipNode tooltip) {
         addChildren(getChildren(input1, input1Count, input1Condition));
         addChildren(getChildren(input2, input2Count, input2Condition));
-        addChildren(getChildren(output, outputCount, outputCondition));
-        tooltip = ArrayTooltipNode.array()
-                .add(condition)
-                .add(utils.getValueTooltip(utils, maxUses).build("ali.property.value.uses"))
-                .add(utils.getValueTooltip(utils, xp).build("ali.property.value.villager_xp"))
-                .add(utils.getValueTooltip(utils, priceMultiplier).build("ali.property.value.price_multiplier"))
+        addChildren(getChildren(output, outputCount, outputModifier));
+        this.tooltip = ArrayTooltipNode.array()
+                .add(utils.getValueTooltip(utils, maxUses.toString()).build("ali.property.value.uses"))
+                .add(utils.getValueTooltip(utils, xp.toString()).build("ali.property.value.villager_xp"))
+                .add(tooltip)
                 .build();
     }
 

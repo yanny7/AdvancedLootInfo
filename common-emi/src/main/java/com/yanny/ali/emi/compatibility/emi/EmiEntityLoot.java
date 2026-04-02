@@ -10,7 +10,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -63,7 +63,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
                 }
 
                 @Override
-                public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+                public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
                     Level level = Minecraft.getInstance().level;
 
                     if (level != null) {

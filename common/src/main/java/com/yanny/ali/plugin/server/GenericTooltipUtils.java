@@ -14,7 +14,6 @@ import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,7 +24,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
@@ -34,6 +32,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.slot.SlotSource;
+import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -58,18 +57,18 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getMissingEntryTooltip(IServerUtils utils, LootPoolEntryContainer entry) {
-        IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry.getType());
+        IKeyTooltipNode tooltip = getEntryTypeTooltip(utils, entry);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
-            MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
+            MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, entry).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType()), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.codec()), utils.getCurrentLootTable(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
@@ -80,18 +79,18 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getMissingFunctionTooltip(IServerUtils utils, LootItemFunction function) {
-        IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function.getType());
+        IKeyTooltipNode tooltip = getFunctionTypeTooltip(utils, function);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
-            MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
+            MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, function).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get function info from serialized data for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get function info from serialized data for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.codec()), utils.getCurrentLootTable(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
@@ -102,18 +101,18 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static ITooltipNode getMissingConditionTooltip(IServerUtils utils, LootItemCondition condition) {
-        IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition.getType());
+        IKeyTooltipNode tooltip = getConditionTypeTooltip(utils, condition);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
             //noinspection unchecked
-            MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
+            MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, condition).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.codec()), utils.getCurrentLootTable(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
@@ -234,10 +233,10 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {
-        IKeyTooltipNode tooltip = ValueTooltipNode.value(itemListing.getClass().getName());
+    public static ITooltipNode getMissingVillagerTradeTooltip(IServerUtils utils, VillagerTrade villagerTrade) {
+        IKeyTooltipNode tooltip = ValueTooltipNode.value(villagerTrade.getClass().getName());
 
-        TooltipUtils.addObjectFields(utils, tooltip, itemListing, VillagerTrades.ItemListing.class);
+        TooltipUtils.addObjectFields(utils, tooltip, villagerTrade, VillagerTrade.class);
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
@@ -374,11 +373,6 @@ public class GenericTooltipUtils {
         }
 
         return EmptyTooltipNode.empty();
-    }
-
-    @NotNull
-    public static ITooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
-        return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents).build("ali.property.branch.expected_components");
     }
 
     @NotNull

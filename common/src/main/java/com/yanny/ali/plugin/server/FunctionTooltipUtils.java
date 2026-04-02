@@ -30,7 +30,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getCopyCustomDataTooltip(IServerUtils utils, CopyCustomDataFunction fun) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.source.getType()).build("ali.property.value.source"))
+                .add(utils.getValueTooltip(utils, fun.source).build("ali.property.value.source"))
                 .add(getCollectionTooltip(utils, "ali.property.branch.operation", fun.operations).build("ali.property.branch.copy_operations"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.copy_custom_data");
@@ -50,6 +50,7 @@ public class FunctionTooltipUtils {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, fun.options).build("ali.property.branch.enchantments"))
                 .add(utils.getValueTooltip(utils, fun.onlyCompatible).build("ali.property.value.only_compatible"))
+                .add(utils.getValueTooltip(utils, fun.includeAdditionalCostComponent).build("ali.property.value.include_additional_cost_component"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.enchant_randomly");
     }
@@ -59,6 +60,7 @@ public class FunctionTooltipUtils {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, fun.levels).build("ali.property.value.levels"))
                 .add(utils.getValueTooltip(utils, fun.options).build("ali.property.branch.options"))
+                .add(utils.getValueTooltip(utils, fun.includeAdditionalCostComponent).build("ali.property.value.include_additional_cost_component"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.enchant_with_levels");
     }
@@ -93,6 +95,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getFurnaceSmeltTooltip(IServerUtils utils, SmeltItemFunction fun) {
         return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, fun.useInputCount).build("ali.property.value.use_input_count"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.furnace_smelt");
     }
@@ -100,7 +103,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getLimitCountTooltip(IServerUtils utils, LimitCount fun) {
         return BranchTooltipNode.branch(true)
-                .add(utils.getValueTooltip(utils, fun.limiter).build("ali.property.value.limit"))
+                .add(utils.getValueTooltip(utils, fun.limit).build("ali.property.value.limit"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.limit_count");
     }
@@ -109,7 +112,7 @@ public class FunctionTooltipUtils {
     public static ITooltipNode getEnchantedCountIncreaseTooltip(IServerUtils utils, EnchantedCountIncreaseFunction fun) {
         IKeyTooltipNode tooltip = BranchTooltipNode.branch(true)
                 .add(utils.getValueTooltip(utils, fun.enchantment).build("ali.property.value.enchantment"))
-                .add(utils.getValueTooltip(utils, fun.value).build("ali.property.value.value"));
+                .add(utils.getValueTooltip(utils, fun.count).build("ali.property.value.count"));
 
         if (fun.limit > 0) {
             tooltip.add(utils.getValueTooltip(utils, fun.limit).build("ali.property.value.limit"));
@@ -164,7 +167,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getSetCountTooltip(IServerUtils utils, SetItemCountFunction fun) {
         return BranchTooltipNode.branch(true)
-                .add(utils.getValueTooltip(utils, fun.value).build("ali.property.value.count"))
+                .add(utils.getValueTooltip(utils, fun.count).build("ali.property.value.count"))
                 .add(utils.getValueTooltip(utils, fun.add).build("ali.property.value.add"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_count");
@@ -191,7 +194,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getSetInstrumentTooltip(IServerUtils utils, SetInstrumentFunction fun) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.options).build("ali.property.value.options"))
+                .add(utils.getValueTooltip(utils, fun.options).build("ali.property.branch.options"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_instrument");
     }
@@ -362,7 +365,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static ITooltipNode getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
         return BranchTooltipNode.branch()
-                .add(utils.getValueTooltip(utils, fun.amplifierGenerator).build("ali.property.value.amplifier"))
+                .add(utils.getValueTooltip(utils, fun.amplifier).build("ali.property.value.amplifier"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_ominous_bottle_amplifier");
     }
@@ -383,5 +386,21 @@ public class FunctionTooltipUtils {
         return BranchTooltipNode.branch()
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.discard_item");
+    }
+
+    @NotNull
+    public static ITooltipNode getSetRandomDyesTooltip(IServerUtils utils, SetRandomDyesFunction fun) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, fun.numberOfDyes).build("ali.property.value.number_of_dyes"))
+                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.set_random_dyes");
+    }
+
+    @NotNull
+    public static ITooltipNode getSetRandomPotionsTooltip(IServerUtils utils, SetRandomPotionFunction fun) {
+        return BranchTooltipNode.branch()
+                .add(utils.getValueTooltip(utils, fun.options).build("ali.property.branch.options"))
+                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                .build("ali.type.function.set_random_potions");
     }
 }

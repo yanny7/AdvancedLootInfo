@@ -1,13 +1,14 @@
 package com.yanny.ali.plugin.server;
 
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.jetbrains.annotations.NotNull;
 
 public class LootFunctionTypes {
-    public static final LootItemFunctionType<?> UNUSED = create();
+    public static final MapCodec<? extends LootItemFunction> UNUSED = create();
 
     @NotNull
-    private static LootItemFunctionType<?> create() {
-        return new LootItemFunctionType<>(null);
+    private static MapCodec<? extends LootItemFunction> create() {
+        return MapCodec.unit((LootItemFunction)null);
     }
 }

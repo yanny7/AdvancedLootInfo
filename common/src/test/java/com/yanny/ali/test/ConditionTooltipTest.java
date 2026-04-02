@@ -8,6 +8,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.attribute.EnvironmentAttributes;
+import net.minecraft.world.clock.WorldClocks;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -29,11 +31,12 @@ public class ConditionTooltipTest {
     @Test
     public void testAllOfTooltip() {
         assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
-                TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
+                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()), List.of(
                 "All Of:",
                 "  -> Time Check:",
+                "    -> Clock: minecraft:overworld",
                 "    -> Period: 10",
                 "    -> Value: 1 - 8",
                 "  -> Weather Check:",
@@ -44,11 +47,12 @@ public class ConditionTooltipTest {
     @Test
     public void testAnyOfTooltip() {
         assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, (AnyOfCondition) AnyOfCondition.anyOf(
-                TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
+                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()), List.of(
                 "Any of:",
                 "  -> Time Check:",
+                "    -> Clock: minecraft:overworld",
                 "    -> Period: 10",
                 "    -> Value: 1 - 8",
                 "  -> Weather Check:",
@@ -143,10 +147,11 @@ public class ConditionTooltipTest {
     @Test
     public void testInvertedTooltip() {
         assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
-                TimeCheck.time(IntRange.range(1, 8)).setPeriod(10)
+                TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(1, 8)).setPeriod(10)
         ).build()), List.of(
                 "Inverted:",
                 "  -> Time Check:",
+                "    -> Clock: minecraft:overworld",
                 "    -> Period: 10",
                 "    -> Value: 1 - 8"
         ));
@@ -229,8 +234,9 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTimeCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(IntRange.range(5, 10)).setPeriod(24000).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(LOOKUP.lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD), IntRange.range(5, 10)).setPeriod(24000).build()), List.of(
                 "Time Check:",
+                "  -> Clock: minecraft:overworld",
                 "  -> Period: 24000",
                 "  -> Value: 5 - 10"
         ));
@@ -240,7 +246,7 @@ public class ConditionTooltipTest {
     public void testValueCheckTooltip() {
         assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()), List.of(
                 "Value Check:",
-                "  -> Provider: 1-20",
+                "  -> Value: 1-20",
                 "  -> Range: 1 - 10"
         ));
     }
@@ -261,5 +267,14 @@ public class ConditionTooltipTest {
                 "  -> Is Thundering: false"
         ));
         assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().build()), List.of("Weather Check:"));
+    }
+
+    @Test
+    public void testEnvironmentAttributeCheckTooltip() {
+        assertTooltip(ConditionTooltipUtils.getEnvironmentAttributeCheckTooltip(UTILS, (EnvironmentAttributeCheck<?>) EnvironmentAttributeCheck.environmentAttribute(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, 5).build()), List.of(
+                "Environment Attribute Check:",
+                "  -> Attribute: minecraft:visual/ambient_light_color",
+                "  -> Value: 5"
+        ));
     }
 }

@@ -6,36 +6,42 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.item.trading.TradeSet;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class TradeNode extends ListNode {
     public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "trade");
 
-    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
-        List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()
+    public TradeNode(IServerUtils utils, VillagerProfession profession) {
+        List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = profession.tradeSetsByLevel().int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
                 .toList();
+        HolderLookup.RegistryLookup<TradeSet> lookup = Objects.requireNonNull(utils.lookupProvider()).lookup(Registries.TRADE_SET).orElseThrow();
 
-        for (Int2ObjectMap.Entry<VillagerTrades.ItemListing[]> entry : entries) {
-            if (entry.getValue().length > 0) {
-                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue()));
-            }
+        for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entry : entries) {
+            Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entry.getValue());
+
+            tradeSetReference.ifPresent((tradeSet) -> addChildren(new TradeLevelNode(utils, entry.getIntKey(), tradeSet.value())));
         }
     }
 
-    public TradeNode(IServerUtils utils, List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList) {
-        this(utils, convert(itemListingList));
+    public TradeNode(IServerUtils utils, List<TradeSet> trades) {
+        for (int i = 0; i < trades.size(); i++) {
+            addChildren(new TradeLevelNode(utils, i, trades.get(i)));
+        }
     }
 
     public TradeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
@@ -55,23 +61,5 @@ public class TradeNode extends ListNode {
     @Override
     public Identifier getId() {
         return ID;
-    }
-
-    @NotNull
-    private static Int2ObjectMap<VillagerTrades.ItemListing[]> convert(List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList) {
-        List<Pair<VillagerTrades.ItemListing[], Integer>> list = itemListingList.stream().sorted(Comparator.comparing(Pair::getRight)).toList();
-        Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = new Int2ObjectArrayMap<>();
-
-        for (Pair<VillagerTrades.ItemListing[], Integer> pair : list) {
-            itemListingMap.compute(pair.getRight(), (i, listing) -> {
-                if (listing == null) {
-                    return pair.getLeft();
-                } else {
-                    return ArrayUtils.addAll(listing, pair.getLeft());
-                }
-            });
-        }
-
-        return itemListingMap;
     }
 }

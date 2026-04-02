@@ -14,7 +14,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -58,7 +58,7 @@ public class GenericUtils {
     private static final int WIDGET_SIZE = 36;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
 
-    public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
+    public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
         if (entity instanceof LivingEntity livingEntity) {
             guiGraphics.pose().pushMatrix();
             guiGraphics.blit(
@@ -170,7 +170,7 @@ public class GenericUtils {
         return new Pair<>(lootData, tradeData);
     }
 
-    public static void renderEntityInInventoryFollowsMouse(GuiGraphics guiGraphics, int left, int top, int right, int bottom,
+    public static void renderEntityInInventoryFollowsMouse(GuiGraphicsExtractor guiGraphics, int left, int top, int right, int bottom,
                                                            int size, float scale, float mouseX, float mouseY, LivingEntity entity) {
         float hCenter = (float)(left + right) / 2.0F;
         float vCenter = (float)(top + bottom) / 2.0F;
@@ -197,7 +197,7 @@ public class GenericUtils {
         int $$23 = Math.round(size / entityScale);
         int x = (int) guiGraphics.pose().m20();
         int y = (int) guiGraphics.pose().m21();
-        InventoryScreen.renderEntityInInventoryFollowsMouse(guiGraphics, left + x, top + y, right + x, bottom + y, $$23, $$22, mouseX, mouseY, entity);
+        InventoryScreen.extractEntityInInventoryFollowsMouse(guiGraphics, left + x, top + y, right + x, bottom + y, $$23, $$22, mouseX, mouseY, entity);
 
         entity.yBodyRot = yBodyRot;
         entity.setYRot(entityYRot);
