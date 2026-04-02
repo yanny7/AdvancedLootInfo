@@ -94,4 +94,9 @@ public class DataComponentPredicateTooltipUtils {
     public static ITooltipNode getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayablePredicate predicate) {
         return utils.getValueTooltip(utils, predicate.song()).build("ali.property.branch.songs");
     }
+
+    @NotNull
+    public static ITooltipNode getAnyValueTooltip(IServerUtils utils, AnyValue predicate) {
+        return utils.getValueTooltip(utils, predicate.type()).build("ali.property.value.type");
+    }
 }

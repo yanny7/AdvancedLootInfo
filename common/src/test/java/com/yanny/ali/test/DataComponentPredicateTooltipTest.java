@@ -4,6 +4,8 @@ import com.yanny.ali.plugin.server.DataComponentPredicateTooltipUtils;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
 import net.minecraft.core.registries.Registries;
@@ -258,12 +260,21 @@ public class DataComponentPredicateTooltipTest {
     }
 
     @Test
-    public void testJukebox() {
+    public void testJukeboxTooltip() {
         assertTooltip(DataComponentPredicateTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayablePredicate(
                 Optional.of(HolderSet.direct(LOOKUP.lookup(Registries.JUKEBOX_SONG).orElseThrow().get(JukeboxSongs.PIGSTEP).orElseThrow()))
         )), List.of(
                 "Songs:",
                 "  -> minecraft:pigstep"
+        ));
+    }
+
+    @Test
+    public void testAnyValueTooltip() {
+        assertTooltip(DataComponentPredicateTooltipUtils.getAnyValueTooltip(UTILS, new AnyValue(
+                DataComponents.DAMAGE_TYPE
+        )), List.of(
+                "Type: minecraft:damage_type"
         ));
     }
 }
