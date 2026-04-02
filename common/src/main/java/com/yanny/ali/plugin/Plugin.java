@@ -252,6 +252,7 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentPredicateTooltip(AttributeModifiersPredicate.class, DataComponentPredicateTooltipUtils::getAttributeModifiersPredicateTooltip);
         registry.registerDataComponentPredicateTooltip(TrimPredicate.class, DataComponentPredicateTooltipUtils::getTrimPredicateTooltip);
         registry.registerDataComponentPredicateTooltip(JukeboxPlayablePredicate.class, DataComponentPredicateTooltipUtils::getJukeboxPlayableTooltip);
+        registry.registerDataComponentPredicateTooltip(AnyValue.class, DataComponentPredicateTooltipUtils::getAnyValueTooltip);
 
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.LIGHTNING, EntitySubPredicateTooltipUtils::getLightningBoltPredicateTooltip);
         registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FISHING_HOOK, EntitySubPredicateTooltipUtils::getFishingHookPredicateTooltip);
