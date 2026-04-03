@@ -1,8 +1,7 @@
-package com.yanny.ali.fabric.pip;
+package com.yanny.ali.pip;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yanny.ali.pip.BlockRenderState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -35,8 +34,6 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
         poseStack.translate(.5, .5, .5);
         poseStack.last().normal().rotate(LIGHT_FIX_ROT);
         poseStack.translate(-.5, -.5, -.5);
-
-        System.out.println(state.getBlock().asItem().getName().toString());
 
         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(
                 state,

@@ -1,8 +1,8 @@
 package com.yanny.ali.fabric;
 
-import com.yanny.ali.fabric.pip.BlockPictureInPictureRenderer;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.StartMessage;
+import com.yanny.ali.pip.BlockPictureInPictureRenderer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.SpecialGuiElementRegistry;
