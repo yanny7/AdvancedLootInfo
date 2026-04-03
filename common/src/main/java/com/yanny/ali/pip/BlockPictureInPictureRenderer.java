@@ -2,10 +2,16 @@ package com.yanny.ali.pip;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yanny.ali.pip.BlockRenderState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
+import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.cuboid.ItemTransform;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionfc;
@@ -18,12 +24,20 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     );
     private static final Quaternionfc LIGHT_FIX_ROT = Axis.YP.rotationDegrees(285);
 
+    private FeatureRenderDispatcher featureRenderDispatcher = null;
+    private SubmitNodeCollector collector = null;
+
     public BlockPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource) {
         super(bufferSource);
     }
 
     @Override
     protected void renderToTexture(BlockRenderState renderState, PoseStack poseStack) {
+        if (featureRenderDispatcher == null) {
+            featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
+            collector = featureRenderDispatcher.getSubmitNodeStorage();
+        }
+
         float scale = renderState.scale();
         BlockState state = renderState.state();
 
@@ -33,13 +47,11 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
         poseStack.last().normal().rotate(LIGHT_FIX_ROT);
         poseStack.translate(-.5, -.5, -.5);
 
-//        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(
-//                state,
-//                poseStack,
-//                bufferSource,
-//                LightTexture.FULL_BRIGHT,
-//                OverlayTexture.NO_OVERLAY
-//        );
+        BlockDisplayContext context = BlockDisplayContext.create();
+        BlockModelRenderState s = new BlockModelRenderState();
+        Minecraft.getInstance().blockModelResolver.update(s, state, context);
+        s.submit(poseStack, collector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+        featureRenderDispatcher.renderAllFeatures();
     }
 
     @Override

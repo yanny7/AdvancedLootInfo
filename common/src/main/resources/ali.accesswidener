@@ -170,6 +170,8 @@ accessible field net/minecraft/world/item/trading/VillagerTrade reputationDiscou
 accessible field net/minecraft/world/item/trading/VillagerTrade xp Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/item/trading/VillagerTrade doubleTradePriceEnchantments Ljava/util/Optional;
 
+accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;
+
 #########
 # TESTS #
 #########
