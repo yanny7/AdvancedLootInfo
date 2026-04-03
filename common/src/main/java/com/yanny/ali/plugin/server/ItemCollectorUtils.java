@@ -119,8 +119,6 @@ public class ItemCollectorUtils {
         return List.of(function.item.value());
     }
 
-
-
     @NotNull
     public static Pair<List<Item>, List<Item>> collectTradeSetItems(IServerUtils utils, TradeSet tradeSet) {
         List<Item> inputs = new ArrayList<>();
