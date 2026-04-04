@@ -5,6 +5,7 @@ import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.ICommonUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.ConfigUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -46,7 +47,7 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
         try {
             entities.addAll(factory.apply(level));
         } catch (Throwable e) {
-            LOGGER.warn("Failed to create entity: {}", e.getMessage());
+            LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e.getMessage());
         }
 
         return entities;
