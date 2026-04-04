@@ -226,6 +226,10 @@ public abstract class AbstractServer {
                 continue;
             }
 
+            if (entityType == EntityType.PLAYER) {
+                continue;
+            }
+
             List<Entity> entityList = serverRegistry.createEntities(entityType, level);
 
             for (Entity entity : entityList) {

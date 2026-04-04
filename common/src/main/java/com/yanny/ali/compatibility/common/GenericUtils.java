@@ -219,6 +219,10 @@ public class GenericUtils {
                 continue;
             }
 
+            if (entityType == EntityType.PLAYER) {
+                continue;
+            }
+
             List<Entity> entityList = clientRegistry.createEntities(entityType, level);
 
             for (Entity entity : entityList) {
