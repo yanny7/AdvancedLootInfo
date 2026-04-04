@@ -18,6 +18,7 @@ import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -56,27 +57,27 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     private final List<ManagedRegistry<?, ?>> allRegistries = new ArrayList<>();
     // factories
-    private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new);
+    private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, NumberProvider, RangeValue>> numberConverters = registerClassKeyed("number converters", true, HashMap::new, BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE);
     // listings
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, ITooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, VillagerTrades.ItemListing, ITooltipNode, IDataNode>> tradeItemListings = registerClassKeyed("trade item listings", true, HashMap::new, null);
     // collectors
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new);
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectors = registerClassKeyed("trade item collectors", false, HashMap::new);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectors = registerClassKeyed("trade item collectors", false, HashMap::new, null);
     // tooltips
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode>> itemSubPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new);;
-    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter);
-    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, ITooltipNode>> itemSubPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new, BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE);;
+    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
+    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter, BuiltInRegistries.DATA_COMPONENT_TYPE);
     // modifiers
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new);
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new);
-    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new);
+    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
 
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
     private final Map<ResourceLocation, Integer> hitMap = new HashMap<>();
@@ -440,13 +441,13 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     @NotNull
-    private <V> ManagedRegistry<Class<?>, V> registerClassKeyed(String label, boolean reportMissing, Supplier<Map<Class<?>, V>> mapSupplier) {
-        return register(label, reportMissing, mapSupplier, Class::getTypeName);
+    private <V> ManagedRegistry<Class<?>, V> registerClassKeyed(String label, boolean reportMissing, Supplier<Map<Class<?>, V>> mapSupplier, @Nullable Registry<?> registry) {
+        return register(label, reportMissing, mapSupplier, Class::getTypeName, registry);
     }
 
     @NotNull
-    private <K, V> ManagedRegistry<K, V> register(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter) {
-        ManagedRegistry<K, V> reg = new ManagedRegistry<>(label, reportMissing, mapSupplier, keyNameGetter);
+    private <K, V> ManagedRegistry<K, V> register(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
+        ManagedRegistry<K, V> reg = new ManagedRegistry<>(label, reportMissing, mapSupplier, keyNameGetter, registry);
         allRegistries.add(reg);
         return reg;
     }
