@@ -32,12 +32,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.*;
-import net.minecraft.world.entity.animal.frog.FrogVariants;
-import net.minecraft.world.entity.animal.wolf.WolfSoundVariants;
-import net.minecraft.world.entity.animal.wolf.WolfVariants;
-import net.minecraft.world.entity.decoration.PaintingVariants;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.animal.ChickenVariants;
+import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -301,7 +297,7 @@ public class DataComponentTooltipTest {
                         "    -> minecraft:item_model",
                         "      -> Value: minecraft:andesite",
                         "    -> minecraft:break_sound",
-                        "      -> Sound: minecraft:entity.item.break",
+                        "      -> Value: minecraft:entity.item.break",
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false"
                 )
@@ -532,7 +528,7 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:item_model",
                         "        -> Value: minecraft:arrow",
                         "      -> minecraft:break_sound",
-                        "        -> Sound: minecraft:entity.item.break",
+                        "        -> Value: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false"
                 ),
@@ -555,7 +551,7 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:item_model",
                         "        -> Value: minecraft:snowball",
                         "      -> minecraft:break_sound",
-                        "        -> Sound: minecraft:entity.item.break",
+                        "        -> Value: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false"
                 )
@@ -588,7 +584,7 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:item_model",
                         "        -> Value: minecraft:coal_block",
                         "      -> minecraft:break_sound",
-                        "        -> Sound: minecraft:entity.item.break",
+                        "        -> Value: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false"
                 ),
@@ -611,7 +607,7 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:item_model",
                         "        -> Value: minecraft:diorite",
                         "      -> minecraft:break_sound",
-                        "        -> Sound: minecraft:entity.item.break",
+                        "        -> Value: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false"
                 ),
@@ -935,7 +931,7 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:item_model",
                         "        -> Value: minecraft:andesite",
                         "      -> minecraft:break_sound",
-                        "        -> Sound: minecraft:entity.item.break",
+                        "        -> Value: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false"
                 ),
@@ -958,7 +954,7 @@ public class DataComponentTooltipTest {
                         "      -> minecraft:item_model",
                         "        -> Value: minecraft:diorite",
                         "      -> minecraft:break_sound",
-                        "        -> Sound: minecraft:entity.item.break",
+                        "        -> Value: minecraft:entity.item.break",
                         "      -> minecraft:tooltip_display",
                         "        -> Hide Tooltip: false"
                 )
@@ -1030,26 +1026,8 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testBreakSoundTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBreakSoundTooltip(UTILS, Holder.direct(SoundEvents.BASALT_BREAK)), List.of("Sound: minecraft:block.basalt.break"));
-    }
-
-    @Test
-    public void testVillagerVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getVillagerVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.VILLAGER_TYPE).getOrThrow(VillagerType.JUNGLE)),
-                List.of("Type: minecraft:jungle"));
-    }
-
-    @Test
-    public void testWolfVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getWolfVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).getOrThrow(WolfVariants.PALE)),
-                List.of("Type: minecraft:pale"));
-    }
-
-    @Test
-    public void testWolfSoundVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getWolfSoundVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.WOLF_SOUND_VARIANT).getOrThrow(WolfSoundVariants.CUTE)),
-                List.of("Type: minecraft:cute"));
+    public void testHolderTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getHolderTooltip(UTILS, Holder.direct(SoundEvents.BASALT_BREAK)), List.of("Value: minecraft:block.basalt.break"));
     }
 
     @Test
@@ -1059,38 +1037,8 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testPigVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getPigVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.PIG_VARIANT).getOrThrow(PigVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testCowVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCowVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.COW_VARIANT).getOrThrow(CowVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
     public void testChickenVariantTooltip() {
         assertTooltip(DataComponentTooltipUtils.getChickenVariantTooltip(UTILS, new EitherHolder<>(ChickenVariants.COLD)),
                 List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testFrogVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getFrogVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testPaintingVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getPaintingVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.PAINTING_VARIANT).getOrThrow(PaintingVariants.BUST)),
-                List.of("Type: minecraft:bust"));
-    }
-
-    @Test
-    public void testCatVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCatVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.JELLIE)),
-                List.of("Type: minecraft:jellie"));
     }
 }
