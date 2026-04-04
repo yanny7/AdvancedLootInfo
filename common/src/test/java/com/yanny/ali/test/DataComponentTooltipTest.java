@@ -544,7 +544,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testInstrumentTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getInstrumentTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.INSTRUMENT)
+        assertTooltip(DataComponentTooltipUtils.getHolderTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.INSTRUMENT)
                 .getOrThrow(Instruments.SING_GOAT_HORN)), List.of("Value: minecraft:sing_goat_horn"));
     }
 

@@ -10,7 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.AdventureModePredicate;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.JukeboxPlayable;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.*;
@@ -222,8 +225,8 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getInstrumentTooltip(IServerUtils utils, Holder<Instrument> value) {
-        return utils.getValueTooltip(utils, value.value()).build("ali.property.value.value");
+    public static ITooltipNode getHolderTooltip(IServerUtils utils, Holder<?> value) {
+        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
     @NotNull
