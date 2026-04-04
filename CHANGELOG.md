@@ -1,6 +1,7 @@
 ## []
 
 - Improved auto-detected tooltip
+- Fixed error when connecting to server
 
 ## [1.8.2]
 
