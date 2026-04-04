@@ -901,7 +901,7 @@ public class GenericTooltipTest {
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false",
                         "    -> minecraft:break_sound",
-                        "      -> Sound: minecraft:entity.item.break"
+                        "      -> Value: minecraft:entity.item.break"
                 )
         ));
     }
