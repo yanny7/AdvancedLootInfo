@@ -1,6 +1,7 @@
 package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.core.Registry;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -15,14 +16,17 @@ public class ManagedRegistry<K, V> {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final Map<K, V> storage;
+    @Nullable
+    private final Registry<?> registry;
     private final Function<K, String> keyNameGetter;
     private final String label;
     @Nullable
     private final Set<K> missing;
 
-    public ManagedRegistry(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter) {
+    public ManagedRegistry(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
         this.label = label;
         this.keyNameGetter = keyNameGetter;
+        this.registry = registry;
         storage = mapSupplier.get();
 
         if (reportMissing) {
@@ -65,6 +69,10 @@ public class ManagedRegistry<K, V> {
     }
 
     public void logStatistics() {
-        LOGGER.info("Registered {} {}", storage.size(), label);
+        if (registry != null) {
+            LOGGER.info("Registered {}/{} {}", storage.size(), registry.size(), label);
+        } else {
+            LOGGER.info("Registered {} {}", storage.size(), label);
+        }
     }
 }
