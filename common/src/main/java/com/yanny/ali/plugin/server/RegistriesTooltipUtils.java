@@ -18,11 +18,15 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.animal.chicken.ChickenSoundVariant;
 import net.minecraft.world.entity.animal.chicken.ChickenVariant;
+import net.minecraft.world.entity.animal.cow.CowSoundVariant;
 import net.minecraft.world.entity.animal.cow.CowVariant;
+import net.minecraft.world.entity.animal.feline.CatSoundVariant;
 import net.minecraft.world.entity.animal.feline.CatVariant;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
 import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariant;
+import net.minecraft.world.entity.animal.pig.PigSoundVariant;
 import net.minecraft.world.entity.animal.pig.PigVariant;
 import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
@@ -327,5 +331,25 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getWorldClockTooltip(IServerUtils utils, WorldClock clock) {
         return getRegistryTooltip(utils, Registries.WORLD_CLOCK, clock);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getPigSoundVariantTooltip(IServerUtils utils, PigSoundVariant variant) {
+        return getRegistryTooltip(utils, Registries.PIG_SOUND_VARIANT, variant);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getCowSoundVariantTooltip(IServerUtils utils, CowSoundVariant variant) {
+        return getRegistryTooltip(utils, Registries.COW_SOUND_VARIANT, variant);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getChickenSoundVariantTooltip(IServerUtils utils, ChickenSoundVariant variant) {
+        return getRegistryTooltip(utils, Registries.CHICKEN_SOUND_VARIANT, variant);
+    }
+
+    @NotNull
+    public static IKeyTooltipNode getCatSoundVariantTooltip(IServerUtils utils, CatSoundVariant variant) {
+        return getRegistryTooltip(utils, Registries.CAT_SOUND_VARIANT, variant);
     }
 }

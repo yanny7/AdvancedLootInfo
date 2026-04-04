@@ -23,7 +23,6 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -31,17 +30,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.chicken.ChickenVariants;
-import net.minecraft.world.entity.animal.cow.CowVariants;
-import net.minecraft.world.entity.animal.feline.CatVariants;
-import net.minecraft.world.entity.animal.frog.FrogVariants;
-import net.minecraft.world.entity.animal.nautilus.ZombieNautilusVariants;
-import net.minecraft.world.entity.animal.pig.PigVariants;
 import net.minecraft.world.entity.animal.rabbit.Rabbit;
-import net.minecraft.world.entity.animal.wolf.WolfSoundVariants;
-import net.minecraft.world.entity.animal.wolf.WolfVariants;
-import net.minecraft.world.entity.decoration.painting.PaintingVariants;
-import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -309,7 +298,7 @@ public class DataComponentTooltipTest {
                         "    -> minecraft:item_model",
                         "      -> Value: minecraft:andesite",
                         "    -> minecraft:break_sound",
-                        "      -> Sound: minecraft:entity.item.break",
+                        "      -> Value: minecraft:entity.item.break",
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false",
                         "    -> minecraft:use_effects",
@@ -687,12 +676,6 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testProvidesTrimMaterialTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getProvidesTrimMaterialTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.TRIM_MATERIAL)
-                .getOrThrow(TrimMaterials.GOLD)), List.of("Material: minecraft:gold"));
-    }
-
-    @Test
     public void testOminousBottleAmplifierTooltip() {
         assertTooltip(DataComponentTooltipUtils.getOminousBottleAmplifierTooltip(UTILS, new OminousBottleAmplifier(5)), List.of("Value: 5"));
     }
@@ -903,68 +886,14 @@ public class DataComponentTooltipTest {
     }
 
     @Test
-    public void testBreakSoundTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBreakSoundTooltip(UTILS, Holder.direct(SoundEvents.BASALT_BREAK)), List.of("Sound: minecraft:block.basalt.break"));
-    }
-
-    @Test
-    public void testVillagerVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getVillagerVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.VILLAGER_TYPE).getOrThrow(VillagerType.JUNGLE)),
-                List.of("Type: minecraft:jungle"));
-    }
-
-    @Test
-    public void testWolfVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getWolfVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).getOrThrow(WolfVariants.PALE)),
-                List.of("Type: minecraft:pale"));
-    }
-
-    @Test
-    public void testWolfSoundVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getWolfSoundVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.WOLF_SOUND_VARIANT).getOrThrow(WolfSoundVariants.CUTE)),
-                List.of("Type: minecraft:cute"));
+    public void testHolderTooltip() {
+        assertTooltip(DataComponentTooltipUtils.getHolderTooltip(UTILS, Holder.direct(SoundEvents.BASALT_BREAK)), List.of("Value: minecraft:block.basalt.break"));
     }
 
     @Test
     public void testEnumTypeTooltip() {
         assertTooltip(DataComponentTooltipUtils.getEnumTypeTooltip(UTILS, Rabbit.Variant.EVIL),
                 List.of("Type: EVIL"));
-    }
-
-    @Test
-    public void testPigVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getPigVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.PIG_VARIANT).getOrThrow(PigVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testCowVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCowVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.COW_VARIANT).getOrThrow(CowVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testChickenVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getChickenVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.CHICKEN_VARIANT).getOrThrow(ChickenVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testFrogVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getFrogVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariants.COLD)),
-                List.of("Type: minecraft:cold"));
-    }
-
-    @Test
-    public void testPaintingVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getPaintingVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.PAINTING_VARIANT).getOrThrow(PaintingVariants.BUST)),
-                List.of("Type: minecraft:bust"));
-    }
-
-    @Test
-    public void testCatVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCatVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.JELLIE)),
-                List.of("Type: minecraft:jellie"));
     }
 
     @Test
@@ -990,12 +919,6 @@ public class DataComponentTooltipTest {
                         "Interact Vibrations: true",
                         "Speed Multiplier: 0.2"
                 ));
-    }
-
-    @Test
-    public void testDamageTypeTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getDamageTypeTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CACTUS)),
-                List.of("Type: minecraft:cactus"));
     }
 
     @Test
@@ -1058,11 +981,5 @@ public class DataComponentTooltipTest {
                 "Sound: minecraft:ambient.cave",
                 "Hit Sound: minecraft:entity.allay.hurt"
         ));
-    }
-
-    @Test
-    public void testZombieNautilusVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getZombieNautilusVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.ZOMBIE_NAUTILUS_VARIANT).getOrThrow(ZombieNautilusVariants.WARM)),
-                List.of("Type: minecraft:warm"));
     }
 }

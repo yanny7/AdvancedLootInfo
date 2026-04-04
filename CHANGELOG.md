@@ -1,4 +1,4 @@
-## []
+## [1.8.3]
 
 - Improved auto-detected tooltip
 - Fixed error when connecting to server
