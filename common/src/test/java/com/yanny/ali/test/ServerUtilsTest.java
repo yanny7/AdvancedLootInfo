@@ -77,7 +77,7 @@ public class ServerUtilsTest {
                         "    -> minecraft:provides_trim_material",
                         "      -> Material: minecraft:emerald",
                         "    -> minecraft:break_sound",
-                        "      -> Sound: minecraft:entity.item.break",
+                        "      -> Value: minecraft:entity.item.break",
                         "    -> minecraft:tooltip_display",
                         "      -> Hide Tooltip: false",
                         "    -> minecraft:use_effects",
