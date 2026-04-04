@@ -8,19 +8,10 @@ import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
-import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.ChickenVariant;
-import net.minecraft.world.entity.animal.CowVariant;
-import net.minecraft.world.entity.animal.PigVariant;
-import net.minecraft.world.entity.animal.frog.FrogVariant;
-import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
-import net.minecraft.world.entity.animal.wolf.WolfVariant;
-import net.minecraft.world.entity.decoration.PaintingVariant;
-import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -455,24 +446,10 @@ public class DataComponentTooltipUtils {
                 .build();
     }
 
+    @Unmodifiable
     @NotNull
-    public static ITooltipNode getBreakSoundTooltip(IServerUtils utils, Holder<SoundEvent> soundEvent) {
-        return utils.getValueTooltip(utils, soundEvent).build("ali.property.value.sound");
-    }
-
-    @NotNull
-    public static ITooltipNode getVillagerVariantTooltip(IServerUtils utils, Holder<VillagerType> villager) {
-        return utils.getValueTooltip(utils, villager).build("ali.property.value.type");
-    }
-
-    @NotNull
-    public static ITooltipNode getWolfVariantTooltip(IServerUtils utils, Holder<WolfVariant> wolf) {
-        return utils.getValueTooltip(utils, wolf).build("ali.property.value.type");
-    }
-
-    @NotNull
-    public static ITooltipNode getWolfSoundVariantTooltip(IServerUtils utils, Holder<WolfSoundVariant> wolfSound) {
-        return utils.getValueTooltip(utils, wolfSound).build("ali.property.value.type");
+    public static ITooltipNode getHolderTooltip(IServerUtils utils, Holder<?> value) {
+        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
     @Unmodifiable
@@ -482,32 +459,7 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getPigVariantTooltip(IServerUtils utils, Holder<PigVariant> pigVariant) {
-        return utils.getValueTooltip(utils, pigVariant).build("ali.property.value.type");
-    }
-
-    @NotNull
-    public static ITooltipNode getCowVariantTooltip(IServerUtils utils, Holder<CowVariant> cowVariant) {
-        return utils.getValueTooltip(utils, cowVariant).build("ali.property.value.type");
-    }
-
-    @NotNull
     public static ITooltipNode getChickenVariantTooltip(IServerUtils utils, EitherHolder<ChickenVariant> holder) {
         return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
-    }
-
-    @NotNull
-    public static ITooltipNode getFrogVariantTooltip(IServerUtils utils, Holder<FrogVariant> frogVariant) {
-        return utils.getValueTooltip(utils, frogVariant).build("ali.property.value.type");
-    }
-
-    @NotNull
-    public static ITooltipNode getPaintingVariantTooltip(IServerUtils utils, Holder<PaintingVariant> paintingVariant) {
-        return utils.getValueTooltip(utils, paintingVariant).build("ali.property.value.type");
-    }
-
-    @NotNull
-    public static ITooltipNode getCatVariantTooltip(IServerUtils utils, Holder<CatVariant> catVariant) {
-        return utils.getValueTooltip(utils, catVariant).build("ali.property.value.type");
     }
 }
