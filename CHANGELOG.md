@@ -1,4 +1,4 @@
-## []
+## [1.8.4]
 
 - Fixed crash when used with Polymer mod
 
