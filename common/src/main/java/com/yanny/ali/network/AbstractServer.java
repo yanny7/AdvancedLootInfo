@@ -35,6 +35,7 @@ import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.item.trading.TradeSets;
 import net.minecraft.world.item.trading.VillagerTrade;
@@ -42,6 +43,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
@@ -406,6 +408,7 @@ public abstract class AbstractServer {
         }
     }
 
+    @Unmodifiable
     @NotNull
     private static List<ItemStack> collectItems(IDataNode node) {
         List<ItemStack> itemStacks = new ArrayList<>();
@@ -418,7 +421,7 @@ public abstract class AbstractServer {
             itemStacks.addAll(itemNode.getModifiedItem().map(List::of, AbstractServer::toItemStacks));
         }
 
-        return itemStacks;
+        return itemStacks.stream().filter((f) -> !f.isEmpty()).toList();
     }
 
     private void writeLootData(RegistryFriendlyByteBuf buf, Map<Identifier, List<ItemStack>> lootTableItemStacks, Map<Identifier, IDataNode> lootNodes) {
@@ -430,12 +433,18 @@ public abstract class AbstractServer {
 
         for (Map.Entry<Identifier, IDataNode> nodeEntry : lootNodes.entrySet()) {
             int startOfNode = buf.writerIndex();
+            List<ItemStack> itemStacks = lootTableItemStacks.getOrDefault(nodeEntry.getKey(), Collections.emptyList());
 
             try {
                 utils.setCurrentLootTable(nodeEntry.getKey());
                 buf.writeIdentifier(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
-                ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode(buf, lootTableItemStacks.getOrDefault(nodeEntry.getKey(), Collections.emptyList()));
+                buf.writeInt(itemStacks.size());
+
+                for (ItemStack itemStack : itemStacks) {
+                    ItemStackTemplate.STREAM_CODEC.encode(buf, ItemStackTemplate.fromNonEmptyStack(itemStack));
+                }
+
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);

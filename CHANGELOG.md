@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash when used with Polymer mod
+
 ## [1.8.3]
 
 - Improved auto-detected tooltip

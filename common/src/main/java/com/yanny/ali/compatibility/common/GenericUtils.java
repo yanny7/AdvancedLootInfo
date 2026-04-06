@@ -32,6 +32,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
@@ -142,7 +143,12 @@ public class GenericUtils {
             for (int i = 0; i < lootDataCount; i++) {
                 Identifier location = readerBuf.readIdentifier();
                 IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).create(utils, readerBuf);
-                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(readerBuf);
+                int itemStackSize = readerBuf.readInt();
+                List<ItemStack> items = new ArrayList<>(itemStackSize);
+
+                for (int i1 = 0; i1 < itemStackSize; i1++) {
+                    items.add(ItemStackTemplate.STREAM_CODEC.decode(readerBuf).create());
+                }
 
                 lootData.put(location, new LootData(dataNode, items));
             }

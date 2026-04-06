@@ -13,6 +13,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ItemNode implements IDataNode, IItemNode {
     public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "item");
@@ -60,8 +62,8 @@ public class ItemNode implements IDataNode, IItemNode {
                     }
                 }
             };
-    private static final StreamCodec<RegistryFriendlyByteBuf, Either<ItemStack, TagKey<? extends ItemLike>>> EITHER_CODEC =
-            ByteBufCodecs.either(ItemStack.OPTIONAL_STREAM_CODEC, ITEM_LIKE_TAG_CODEC);
+    private static final StreamCodec<RegistryFriendlyByteBuf, Either<Optional<ItemStackTemplate>, TagKey<? extends ItemLike>>> EITHER_CODEC =
+            ByteBufCodecs.either(ByteBufCodecs.optional(ItemStackTemplate.STREAM_CODEC), ITEM_LIKE_TAG_CODEC);
 
     private final ITooltipNode tooltip;
     private final List<LootItemCondition> conditions;
@@ -88,7 +90,7 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        item = EITHER_CODEC.decode(buf);
+        item = EITHER_CODEC.decode(buf).mapLeft((o) -> o.map(ItemStackTemplate::create).orElse(ItemStack.EMPTY));
         tooltip = ITooltipNode.decodeNode(utils, buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
@@ -127,10 +129,10 @@ public class ItemNode implements IDataNode, IItemNode {
         int index = buf.writerIndex();
 
         try {
-            EITHER_CODEC.encode(buf, item);
+            EITHER_CODEC.encode(buf, item.mapLeft((i) -> i.isEmpty() ? Optional.empty() : Optional.of(ItemStackTemplate.fromNonEmptyStack(i))));
         } catch (Throwable e) {
             buf.writerIndex(index);
-            EITHER_CODEC.encode(buf, Either.left(ItemStack.EMPTY));
+            EITHER_CODEC.encode(buf, Either.left(Optional.empty()));
             LOGGER.warn("Failed to encode {}/{}", BuiltInRegistries.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
         }
 
