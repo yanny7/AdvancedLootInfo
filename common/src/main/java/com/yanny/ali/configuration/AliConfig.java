@@ -78,6 +78,8 @@ public class AliConfig {
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("sniffer_digging"), Items.SNIFFER_EGG, false, Ingredient.of(Items.SNIFFER_SPAWN_EGG), List.of(Pattern.compile("^.*:gameplay/sniffer_digging.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("panda_sneeze"), Items.BAMBOO, false, Ingredient.of(Items.PANDA_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/panda_sneeze.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("shearing"), Items.SHEARS, false, Ingredient.of(Items.SHEARS), Collections.singletonList(Pattern.compile("^.*:shearing/.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("armadillo_shed"), Items.ARMADILLO_SCUTE, false, Ingredient.of(Items.ARMADILLO_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/armadillo_shed.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("chicken_lay"), Items.EGG, false, Ingredient.of(Items.CHICKEN_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/chicken_lay.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, false, null, Collections.singletonList(Pattern.compile(".*"))));
 
         tradeCategories = new ArrayList<>();

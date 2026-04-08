@@ -188,7 +188,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
             registry.add(category);
 
-            if (!catalyst.isEmpty()) {
+            if (catalyst != null) {
                 registry.addWorkstations(category.getCategoryIdentifier(), EntryIngredients.ofIngredient(catalyst));
             }
         }
