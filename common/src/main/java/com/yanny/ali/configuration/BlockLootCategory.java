@@ -7,6 +7,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.List;
 public class BlockLootCategory extends LootCategory<Block> {
     private final List<Class<?>> classes;
 
-    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, List<Class<?>> classes) {
-        super(key, icon, Type.BLOCK, hide);
+    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Class<?>> classes) {
+        super(key, icon, Type.BLOCK, hide, catalyst);
         this.classes = classes;
     }
 
