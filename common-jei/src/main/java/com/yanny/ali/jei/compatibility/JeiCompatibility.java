@@ -23,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -72,10 +73,10 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        blockCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
-        entityCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
-        gameplayCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
-        tradeCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
+        blockCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), getCatalyst(category)));
+        entityCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), getCatalyst(category)));
+        gameplayCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), getCatalyst(category)));
+        tradeCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), getCatalyst(category)));
     }
 
     @Override
@@ -168,6 +169,17 @@ public class JeiCompatibility implements IModPlugin {
         if (recipeType != null) {
             types.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(supplier.get());
         }
+    }
+
+    private static <T> Item[] getCatalyst(LootCategory<T> category) {
+        Ingredient catalyst = category.getCatalyst();
+
+        if (catalyst != null) {
+            //noinspection deprecation
+            return catalyst.items().map(Holder::value).toArray(Item[]::new);
+        }
+
+        return new Item[0];
     }
 
     @FunctionalInterface
