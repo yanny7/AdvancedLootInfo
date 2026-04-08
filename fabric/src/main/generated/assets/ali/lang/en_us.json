@@ -448,6 +448,7 @@
   "ali.util.advanced_loot_info.pad.7": "              ->",
   "ali.util.advanced_loot_info.pad.8": "                ->",
   "ali.util.advanced_loot_info.pad.9": "                  ->",
+  "ali.util.advanced_loot_info.removed": "REMOVED",
   "ali.util.advanced_loot_info.two_values": "%s%s",
   "ali.util.advanced_loot_info.two_values_with_space": "%s %s",
   "ali/loot_table/archaeology/desert_pyramid": "Desert Pyramid",
@@ -554,8 +555,10 @@
   "emi.category.ali.fishing_loot": "Fishing Loot",
   "emi.category.ali.gameplay_loot": "Gameplay Loot",
   "emi.category.ali.hero_loot": "Hero of the Village Loot",
+  "emi.category.ali.panda_sneeze": "Panda Sneeze",
   "emi.category.ali.piglin_bartering": "Piglin Bartering",
   "emi.category.ali.plant_loot": "Plant Drops",
+  "emi.category.ali.shearing": "Shearing",
   "emi.category.ali.sniffer_digging": "Sniffer Digging",
   "emi.category.ali.trade_loot": "Trading Loot",
   "emi.category.ali.trial_chambers": "Trial Chambers"

@@ -421,6 +421,7 @@
   "ali.type.item_sub_predicate.item_trim": "Trim:",
   "ali.type.item_sub_predicate.item_writable_book": "Writable Book:",
   "ali.type.item_sub_predicate.item_written_book": "Written Book:",
+  "ali.util.advanced_loot_info.accepts": "Accepts:",
   "ali.util.advanced_loot_info.any": "ANY",
   "ali.util.advanced_loot_info.auto_detected": "Auto-detected: %s",
   "ali.util.advanced_loot_info.delimiter.conditions": "----- Predicates -----",
@@ -554,8 +555,10 @@
   "emi.category.ali.fishing_loot": "Fishing Loot",
   "emi.category.ali.gameplay_loot": "Gameplay Loot",
   "emi.category.ali.hero_loot": "Hero of the Village Loot",
+  "emi.category.ali.panda_sneeze": "Panda Sneeze",
   "emi.category.ali.piglin_bartering": "Piglin Bartering",
   "emi.category.ali.plant_loot": "Plant Drops",
+  "emi.category.ali.shearing": "Shearing",
   "emi.category.ali.sniffer_digging": "Sniffer Digging",
   "emi.category.ali.trade_loot": "Trading Loot",
   "emi.category.ali.trial_chambers": "Trial Chambers"

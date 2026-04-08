@@ -20,6 +20,8 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.piglin_bartering", "Piglin Bartering");
         TRANSLATION_MAP.put("emi.category.ali.sniffer_digging", "Sniffer Digging");
         TRANSLATION_MAP.put("emi.category.ali.trial_chambers", "Trial Chambers");
+        TRANSLATION_MAP.put("emi.category.ali.panda_sneeze", "Panda Sneeze");
+        TRANSLATION_MAP.put("emi.category.ali.shearing", "Shearing");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");

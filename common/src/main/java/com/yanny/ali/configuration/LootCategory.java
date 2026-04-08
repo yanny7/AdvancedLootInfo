@@ -2,6 +2,7 @@ package com.yanny.ali.configuration;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -33,7 +34,7 @@ public abstract class LootCategory<T> {
         hide = GsonHelper.getAsBoolean(jsonObject, "hide");
 
         if (jsonObject.has("catalyst")) {
-            catalyst = Ingredient.fromJson(jsonObject.get("catalyst"));
+            catalyst = Ingredient.CODEC_NONEMPTY.decode(JsonOps.INSTANCE, jsonObject.get("catalyst")).getOrThrow().getFirst();
         } else {
             catalyst = Ingredient.EMPTY;
         }
@@ -88,7 +89,7 @@ public abstract class LootCategory<T> {
         object.addProperty("hide", hide);
 
         if (!catalyst.isEmpty()) {
-            object.add("catalyst", catalyst.toJson());
+            object.add("catalyst", Ingredient.CODEC_NONEMPTY.encodeStart(JsonOps.INSTANCE, catalyst).getOrThrow());
         }
 
         toJson(object);
