@@ -8,14 +8,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
 
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private final List<Class<?>> classes;
 
-    public EntityLootCategory(ResourceLocation key, Item icon, boolean hide, List<Class<?>> classes) {
-        super(key, icon, Type.ENTITY, hide);
+    public EntityLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Class<?>> classes) {
+        super(key, icon, Type.ENTITY, hide, catalyst);
         this.classes = classes;
     }
 

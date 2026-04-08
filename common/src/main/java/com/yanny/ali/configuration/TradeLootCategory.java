@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,8 +14,8 @@ import java.util.regex.Pattern;
 public class TradeLootCategory extends LootCategory<ResourceLocation> {
     private final List<Pattern> patterns;
 
-    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, List<Pattern> patterns) {
-        super(key, icon, Type.TRADE, hide);
+    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Pattern> patterns) {
+        super(key, icon, Type.TRADE, hide, catalyst);
         this.patterns = patterns;
     }
 

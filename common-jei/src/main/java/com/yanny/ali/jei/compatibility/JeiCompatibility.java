@@ -13,6 +13,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
@@ -20,12 +21,12 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,14 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        blockCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        entityCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        gameplayCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        tradeCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+    }
+
+    @Override
     public void registerRecipes(IRecipeRegistration registration) {
         GenericUtils.register(registration, this::registerData);
     }
@@ -90,116 +99,22 @@ public class JeiCompatibility implements IModPlugin {
                     clientRegistry,
                     config,
                     fullCompressedData,
-                    (node, location, block, outputs) -> {
-                        RecipeType<RecipeHolder<BlockLootType>> recipeType = null;
-
-                        for (JeiBlockLoot recipeCategory : blockCategories.values()) {
-                            if (recipeCategory.getLootCategory().validate(block)) {
-                                if (recipeCategory.getLootCategory().isHidden()) {
-                                    return;
-                                }
-
-                                recipeType = recipeCategory.getRecipeType();
-                                break;
-                            }
-                        }
-
-                        if (recipeType != null) {
-                            blockRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new BlockLootType(block, node, Collections.emptyList(), outputs));
-                        }
-                    },
-                    (node, location, entity, outputs) -> {
-                        RecipeType<RecipeHolder<EntityLootType>> recipeType = null;
-
-                        for (JeiEntityLoot recipeCategory : entityCategories.values()) {
-                            if (recipeCategory.getLootCategory().validate(entity)) {
-                                if (recipeCategory.getLootCategory().isHidden()) {
-                                    return;
-                                }
-
-                                recipeType = recipeCategory.getRecipeType();
-                                break;
-                            }
-                        }
-
-                        if (recipeType != null) {
-                            entityRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new EntityLootType(entity, location, node, Collections.emptyList(), outputs));
-                        }
-                    },
-                    (node, location, outputs) -> {
-                        RecipeType<RecipeHolder<GameplayLootType>> recipeType = null;
-
-                        for (JeiGameplayLoot recipeCategory : gameplayCategories.values()) {
-                            if (recipeCategory.getLootCategory().validate(location)) {
-                                if (recipeCategory.getLootCategory().isHidden()) {
-                                    return;
-                                }
-
-                                recipeType = recipeCategory.getRecipeType();
-                                break;
-                            }
-                        }
-
-                        if (recipeType != null) {
-                            gameplayRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new GameplayLootType(node, location, Collections.emptyList(), outputs));
-                        }
-                    },
-                    (node, location, profession, inputs, outputs) -> {
-                        RecipeType<RecipeHolder<TradeLootType>> recipeType = null;
-
-                        for (JeiTradeLoot recipeCategory : tradeCategories.values()) {
-                            if (recipeCategory.getLootCategory().validate(location)) {
-                                if (recipeCategory.getLootCategory().isHidden()) {
-                                    return;
-                                }
-
-                                recipeType = recipeCategory.getRecipeType();
-                                break;
-                            }
-                        }
-
-                        if (recipeType != null) {
-                            Set<Block> pois = GenericUtils.getJobSites(profession);
-                            Set<Item> accepts = GenericUtils.getRequestedItems(profession);
-
-                            tradeRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new TradeLootType(pois, accepts, node, location.getPath(), inputs, outputs));
-                        }
-                    },
-                    (node, location, inputs, outputs) -> {
-                        RecipeType<RecipeHolder<TradeLootType>> recipeType = null;
-
-                        for (JeiTradeLoot recipeCategory : tradeCategories.values()) {
-                            if (recipeCategory.getLootCategory().validate(location)) {
-                                if (recipeCategory.getLootCategory().isHidden()) {
-                                    return;
-                                }
-
-                                recipeType = recipeCategory.getRecipeType();
-                                break;
-                            }
-                        }
-
-                        if (recipeType != null) {
-                            tradeRecipeTypes.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(new TradeLootType(Set.of(), Set.of(), node, location.getPath(), inputs, outputs));
-                        }
-                    }
+                    (node, location, block, outputs) ->
+                            addRecipeType(blockCategories, blockRecipeTypes, block, () -> new BlockLootType(block, node, outputs)),
+                    (node, location, entity, outputs) ->
+                            addRecipeType(entityCategories, entityRecipeTypes, entity, () -> new EntityLootType(entity, location, node, outputs)),
+                    (node, location, outputs) ->
+                            addRecipeType(gameplayCategories, gameplayRecipeTypes, location, () -> new GameplayLootType(node, location, outputs)),
+                    (node, location, profession, inputs, outputs) ->
+                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(profession, node, location.getPath(), inputs, outputs)),
+                    (node, location, inputs, outputs) ->
+                            addRecipeType(tradeCategories, tradeRecipeTypes, location, () -> new TradeLootType(Set.of(), Set.of(), node, location.getPath(), inputs, outputs))
             );
 
-            for (Map.Entry<RecipeType<RecipeHolder<BlockLootType>>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
-
-            for (Map.Entry<RecipeType<RecipeHolder<EntityLootType>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
-
-            for (Map.Entry<RecipeType<RecipeHolder<GameplayLootType>>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
-
-            for (Map.Entry<RecipeType<RecipeHolder<TradeLootType>>, List<TradeLootType>> entry : tradeRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
+            registerRecipes(registration, blockRecipeTypes);
+            registerRecipes(registration, entityRecipeTypes);
+            registerRecipes(registration, gameplayRecipeTypes);
+            registerRecipes(registration, tradeRecipeTypes);
         } else {
             LOGGER.warn("JEI integration was not loaded! Level is null!");
         }
@@ -219,13 +134,38 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     @NotNull
-    private static  <T, U, V extends IType> Collector<LootCategory<U>, ?, Map<LootCategory<U>, T>> getCollector(IGuiHelper guiHelper, LootConstructor<T, U, V> supplier) {
+    private static <T, U, V extends IType> Collector<LootCategory<U>, ?, Map<LootCategory<U>, T>> getCollector(IGuiHelper guiHelper, LootConstructor<T, U, V> supplier) {
         return Collectors.toMap(
                 (e) -> e,
                 (e) -> createCategory(guiHelper, e, supplier),
                 (a, b) -> a,
                 LinkedHashMap::new
         );
+    }
+
+    private static <T extends IType> void registerRecipes(IRecipeRegistration registration, Map<RecipeType<RecipeHolder<T>>, List<T>> configuration) {
+        for (Map.Entry<RecipeType<RecipeHolder<T>>, List<T>> entry : configuration.entrySet()) {
+            registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
+        }
+    }
+
+    private static <T, U, V extends IType> void addRecipeType(Map<LootCategory<U>, ? extends JeiBaseLoot<V, T>> categories, Map<RecipeType<RecipeHolder<V>>, List<V>> types, T object, Supplier<V> supplier) {
+        RecipeType<RecipeHolder<V>> recipeType = null;
+
+        for (JeiBaseLoot<V, T> recipeCategory : categories.values()) {
+            if (recipeCategory.getLootCategory().validate(object)) {
+                if (recipeCategory.getLootCategory().isHidden()) {
+                    return;
+                }
+
+                recipeType = recipeCategory.getRecipeType();
+                break;
+            }
+        }
+
+        if (recipeType != null) {
+            types.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(supplier.get());
+        }
     }
 
     @FunctionalInterface
