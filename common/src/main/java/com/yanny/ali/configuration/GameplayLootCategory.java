@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,8 +14,8 @@ import java.util.regex.Pattern;
 public class GameplayLootCategory extends LootCategory<ResourceLocation> {
     private final List<Pattern> patterns;
 
-    public GameplayLootCategory(ResourceLocation key, Item icon, boolean hide, List<Pattern> patterns) {
-        super(key, icon, Type.GAMEPLAY, hide);
+    public GameplayLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Pattern> patterns) {
+        super(key, icon, Type.GAMEPLAY, hide, catalyst);
         this.patterns = patterns;
     }
 

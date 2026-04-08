@@ -16,6 +16,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
         TRANSLATION_MAP.put("emi.category.ali.trade_loot", "Trading Loot");
+        TRANSLATION_MAP.put("emi.category.ali.cat_morning_gift", "Cat Morning Gift");
+        TRANSLATION_MAP.put("emi.category.ali.piglin_bartering", "Piglin Bartering");
+        TRANSLATION_MAP.put("emi.category.ali.sniffer_digging", "Sniffer Digging");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");

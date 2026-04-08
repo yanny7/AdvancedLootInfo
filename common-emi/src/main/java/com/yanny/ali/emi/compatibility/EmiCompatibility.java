@@ -15,12 +15,12 @@ import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public class EmiCompatibility implements EmiPlugin {
                     config,
                     fullCompressedData,
                     (node, location, block, outputs) -> {
-                        EmiRecipeCategory category = null;
+                        Map.Entry<LootCategory<Block>, EmiRecipeCategory> category = null;
 
                         for (Map.Entry<LootCategory<Block>, EmiRecipeCategory> entry : blockCategories.entrySet()) {
                             if (entry.getKey().validate(block)) {
@@ -72,17 +72,21 @@ public class EmiCompatibility implements EmiPlugin {
                                     return;
                                 }
 
-                                category = entry.getValue();
+                                category = entry;
                                 break;
                             }
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiBlockLoot(category, location, block, node, outputs));
+                            registry.addRecipe(new EmiBlockLoot(category.getValue(), location, block, node, outputs));
+
+                            if (!category.getKey().getCatalyst().isEmpty()) {
+                                registry.addWorkstation(category.getValue(), EmiIngredient.of(category.getKey().getCatalyst()));
+                            }
                         }
                     },
                     (node, location, entity, outputs) -> {
-                        EmiRecipeCategory category = null;
+                        Map.Entry<LootCategory<EntityType<?>>, EmiRecipeCategory> category = null;
 
                         for (Map.Entry<LootCategory<EntityType<?>>, EmiRecipeCategory> entry : entityCategories.entrySet()) {
                             if (entry.getKey().validate(entity)) {
@@ -90,17 +94,21 @@ public class EmiCompatibility implements EmiPlugin {
                                     return;
                                 }
 
-                                category = entry.getValue();
+                                category = entry;
                                 break;
                             }
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiEntityLoot(category, location, entity, node, outputs));
+                            registry.addRecipe(new EmiEntityLoot(category.getValue(), location, entity, node, outputs));
+
+                            if (!category.getKey().getCatalyst().isEmpty()) {
+                                registry.addWorkstation(category.getValue(), EmiIngredient.of(category.getKey().getCatalyst()));
+                            }
                         }
                     },
                     (node, location, outputs) -> {
-                        EmiRecipeCategory category = null;
+                        Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> category = null;
 
                         for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : gameplayCategories.entrySet()) {
                             if (entry.getKey().validate(location)) {
@@ -108,17 +116,21 @@ public class EmiCompatibility implements EmiPlugin {
                                     return;
                                 }
 
-                                category = entry.getValue();
+                                category = entry;
                                 break;
                             }
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiGameplayLoot(category, location, node, outputs));
+                            registry.addRecipe(new EmiGameplayLoot(category.getValue(), location, node, outputs));
+
+                            if (!category.getKey().getCatalyst().isEmpty()) {
+                                registry.addWorkstation(category.getValue(), EmiIngredient.of(category.getKey().getCatalyst()));
+                            }
                         }
                     },
                     (tradeEntry, location, profession, inputs, outputs) -> {
-                        EmiRecipeCategory category = null;
+                        Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> category = null;
 
                         for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
                             if (entry.getKey().validate(location)) {
@@ -126,17 +138,21 @@ public class EmiCompatibility implements EmiPlugin {
                                     return;
                                 }
 
-                                category = entry.getValue();
+                                category = entry;
                                 break;
                             }
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiTradeLoot(category, location, profession, tradeEntry, inputs, outputs));
+                            registry.addRecipe(new EmiTradeLoot(category.getValue(), location, profession, tradeEntry, inputs, outputs));
+
+                            if (!category.getKey().getCatalyst().isEmpty()) {
+                                registry.addWorkstation(category.getValue(), EmiIngredient.of(category.getKey().getCatalyst()));
+                            }
                         }
                     },
                     (tradeEntry, location, inputs, outputs) -> {
-                        EmiRecipeCategory category = null;
+                        Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> category = null;
 
                         for (Map.Entry<LootCategory<ResourceLocation>, EmiRecipeCategory> entry : tradeCategories.entrySet()) {
                             if (entry.getKey().validate(location)) {
@@ -144,13 +160,17 @@ public class EmiCompatibility implements EmiPlugin {
                                     return;
                                 }
 
-                                category = entry.getValue();
+                                category = entry;
                                 break;
                             }
                         }
 
                         if (category != null) {
-                            registry.addRecipe(new EmiTradeLoot(category, location, (VillagerProfession) null, tradeEntry, inputs, outputs));
+                            registry.addRecipe(new EmiTradeLoot(category.getValue(), location, null, tradeEntry, inputs, outputs));
+
+                            if (!category.getKey().getCatalyst().isEmpty()) {
+                                registry.addWorkstation(category.getValue(), EmiIngredient.of(category.getKey().getCatalyst()));
+                            }
                         }
                     }
             );

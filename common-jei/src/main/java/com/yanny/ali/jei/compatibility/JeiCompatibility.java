@@ -13,6 +13,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
@@ -65,6 +66,14 @@ public class JeiCompatibility implements IModPlugin {
         entityCategories.values().forEach(registration::addRecipeCategories);
         gameplayCategories.values().forEach(registration::addRecipeCategories);
         tradeCategories.values().forEach(registration::addRecipeCategories);
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        blockCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        entityCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        gameplayCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        tradeCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
     }
 
     @Override
@@ -185,21 +194,10 @@ public class JeiCompatibility implements IModPlugin {
                     }
             );
 
-            for (Map.Entry<RecipeType<RecipeHolder<BlockLootType>>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
-
-            for (Map.Entry<RecipeType<RecipeHolder<EntityLootType>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
-
-            for (Map.Entry<RecipeType<RecipeHolder<GameplayLootType>>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
-
-            for (Map.Entry<RecipeType<RecipeHolder<TradeLootType>>, List<TradeLootType>> entry : tradeRecipeTypes.entrySet()) {
-                registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
-            }
+            registerRecipes(registration, blockRecipeTypes);
+            registerRecipes(registration, entityRecipeTypes);
+            registerRecipes(registration, gameplayRecipeTypes);
+            registerRecipes(registration, tradeRecipeTypes);
         } else {
             LOGGER.warn("JEI integration was not loaded! Level is null!");
         }
@@ -219,13 +217,19 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     @NotNull
-    private static  <T, U, V extends IType> Collector<LootCategory<U>, ?, Map<LootCategory<U>, T>> getCollector(IGuiHelper guiHelper, LootConstructor<T, U, V> supplier) {
+    private static <T, U, V extends IType> Collector<LootCategory<U>, ?, Map<LootCategory<U>, T>> getCollector(IGuiHelper guiHelper, LootConstructor<T, U, V> supplier) {
         return Collectors.toMap(
                 (e) -> e,
                 (e) -> createCategory(guiHelper, e, supplier),
                 (a, b) -> a,
                 LinkedHashMap::new
         );
+    }
+
+    private static <T extends IType> void registerRecipes(IRecipeRegistration registration, Map<RecipeType<RecipeHolder<T>>, List<T>> configuration) {
+        for (Map.Entry<RecipeType<RecipeHolder<T>>, List<T>> entry : configuration.entrySet()) {
+            registration.addRecipes(entry.getKey(), entry.getValue().stream().map(RecipeHolder::new).toList());
+        }
     }
 
     @FunctionalInterface

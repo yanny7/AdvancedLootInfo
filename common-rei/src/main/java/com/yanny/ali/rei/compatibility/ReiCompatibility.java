@@ -11,12 +11,14 @@ import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.NotNull;
@@ -51,21 +53,10 @@ public class ReiCompatibility implements REIClientPlugin {
         gameplayCategories.putAll(config.gameplayCategories.stream().collect(getCollector(ReiGameplayDisplay::new, ReiGameplayCategory::new)));
         tradeCategories.putAll(config.tradeCategories.stream().collect(getCollector(ReiTradeDisplay::new, ReiTradeCategory::new)));
 
-        for (Holder<ReiBlockDisplay, BlockLootType, Block> holder : blockCategories.values()) {
-            registry.add(holder.category);
-        }
-
-        for (Holder<ReiEntityDisplay, EntityLootType, EntityType<?>> holder : entityCategories.values()) {
-            registry.add(holder.category);
-        }
-
-        for (Holder<ReiGameplayDisplay, GameplayLootType, ResourceLocation> holder : gameplayCategories.values()) {
-            registry.add(holder.category);
-        }
-
-        for (Holder<ReiTradeDisplay, TradeLootType, ResourceLocation> holder : tradeCategories.values()) {
-            registry.add(holder.category);
-        }
+        registerCategory(registry, blockCategories);
+        registerCategory(registry, entityCategories);
+        registerCategory(registry, gameplayCategories);
+        registerCategory(registry, tradeCategories);
     }
 
     @Override
@@ -186,25 +177,10 @@ public class ReiCompatibility implements REIClientPlugin {
                     }
             );
 
-            for (Map.Entry<Holder<ReiBlockDisplay, BlockLootType, Block>, List<BlockLootType>> entry : blockRecipeTypes.entrySet()) {
-                registry.registerFiller(blockPredicate(entry.getValue()), entry.getKey().filler());
-                entry.getValue().forEach(registry::add);
-            }
-
-            for (Map.Entry<Holder<ReiEntityDisplay, EntityLootType, EntityType<?>>, List<EntityLootType>> entry : entityRecipeTypes.entrySet()) {
-                registry.registerFiller(entityPredicate(entry.getValue()), entry.getKey().filler());
-                entry.getValue().forEach(registry::add);
-            }
-
-            for (Map.Entry<Holder<ReiGameplayDisplay, GameplayLootType, ResourceLocation>, List<GameplayLootType>> entry : gameplayRecipeTypes.entrySet()) {
-                registry.registerFiller(gameplayPredicate(entry.getValue()), entry.getKey().filler());
-                entry.getValue().forEach(registry::add);
-            }
-
-            for (Map.Entry<Holder<ReiTradeDisplay, TradeLootType, ResourceLocation>, List<TradeLootType>> entry : tradeRecipeTypes.entrySet()) {
-                registry.registerFiller(tradePredicate(entry.getValue()), entry.getKey().filler());
-                entry.getValue().forEach(registry::add);
-            }
+            registerFiller(registry, blockRecipeTypes, ReiCompatibility::blockPredicate);
+            registerFiller(registry, entityRecipeTypes, ReiCompatibility::entityPredicate);
+            registerFiller(registry, gameplayRecipeTypes, ReiCompatibility::gameplayPredicate);
+            registerFiller(registry, tradeRecipeTypes, ReiCompatibility::tradePredicate);
         } else {
             LOGGER.warn("REI integration was not loaded! Level is null!");
         }
@@ -233,7 +209,7 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> blockPredicate(List<BlockLootType> lootTypes) {
+    private static Predicate<Object> blockPredicate(List<BlockLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof BlockLootType type) {
@@ -246,7 +222,7 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> entityPredicate(List<EntityLootType> lootTypes) {
+    private static Predicate<Object> entityPredicate(List<EntityLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof EntityLootType type) {
@@ -259,7 +235,7 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> gameplayPredicate(List<GameplayLootType> lootTypes) {
+    private static Predicate<Object> gameplayPredicate(List<GameplayLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof GameplayLootType type) {
@@ -272,7 +248,7 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private Predicate<Object> tradePredicate(List<TradeLootType> lootTypes) {
+    private static Predicate<Object> tradePredicate(List<TradeLootType> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof TradeLootType type) {
@@ -282,6 +258,26 @@ public class ReiCompatibility implements REIClientPlugin {
 
             return false;
         };
+    }
+
+    private static <D extends ReiBaseDisplay, T, U> void registerCategory(CategoryRegistry registry, Map<LootCategory<U>, Holder<D, T, U>> categories) {
+        for (Map.Entry<LootCategory<U>, Holder<D, T, U>> entry : categories.entrySet()) {
+            ReiBaseCategory<D, U> category = entry.getValue().category;
+            Ingredient catalyst = entry.getKey().getCatalyst();
+
+            registry.add(category);
+
+            if (!catalyst.isEmpty()) {
+                registry.addWorkstations(category.getCategoryIdentifier(), EntryIngredients.ofIngredient(catalyst));
+            }
+        }
+    }
+
+    private static <D extends ReiBaseDisplay, T, U> void registerFiller(DisplayRegistry registry, Map<Holder<D, T, U>, List<T>> categories, Function<List<T>, Predicate<Object>> predicate) {
+        for (Map.Entry<Holder<D, T, U>, List<T>> entry : categories.entrySet()) {
+            registry.registerFiller(predicate.apply(entry.getValue()), entry.getKey().filler());
+            entry.getValue().forEach(registry::add);
+        }
     }
 
     private record Holder<D extends ReiBaseDisplay, T, U>(CategoryIdentifier<D> identifier, ReiBaseCategory<D, U> category, Function<T, D> filler) {}
