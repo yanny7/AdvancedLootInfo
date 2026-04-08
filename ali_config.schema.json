@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/aliconfig.schema.json",
+  "$id": "https://github.com/yanny7/AdvancedLootInfo/blob/master/alic_config.schema.json",
   "title": "Advanced Loot Info Configuration Schema",
   "description": "Main configuration file for the AdvancedLootInfo mod.",
   "type": "object",
@@ -9,6 +9,38 @@
       "type": "string",
       "description": "A Minecraft Resource Location string, typically formatted as 'namespace:path'.",
       "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
+    },
+    "Ingredient": {
+      "description": "An ingredient. Can be a single item, a tag, or a list of either.",
+      "oneOf": [
+        { "$ref": "#/definitions/IngredientValue" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/IngredientValue" },
+          "description": "A list of valid ingredient options."
+        }
+      ]
+    },
+    "IngredientValue": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": ["item"],
+          "properties": {
+            "item": { "$ref": "#/definitions/ResourceLocation" }
+          },
+          "additionalProperties": false,
+          "description": "A specific item ID."
+        },
+        {
+          "required": ["tag"],
+          "properties": {
+            "tag": { "$ref": "#/definitions/ResourceLocation" }
+          },
+          "additionalProperties": false,
+          "description": "A reference to an item tag (e.g., 'minecraft:logs')."
+        }
+      ]
     },
     "LootCategoryType": {
       "type": "string",
@@ -40,6 +72,10 @@
           "type": "boolean",
           "description": "If true, this category will be hidden from the UI. When set on server, no loot data are sent to client.",
           "default": false
+        },
+        "catalyst": {
+          "description": "Catalyst item for category",
+          "$ref": "#/definitions/Ingredient"
         }
       },
       "required": ["key", "type", "icon", "hide"],
