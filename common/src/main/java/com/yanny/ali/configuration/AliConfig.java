@@ -18,13 +18,13 @@ import java.util.regex.Pattern;
 public class AliConfig {
     public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(
-                BlockLootCategory.CODEC.codec().listOf().fieldOf("blockCategories").forGetter(c -> c.blockCategories),
-                EntityLootCategory.CODEC.codec().listOf().fieldOf("entityCategories").forGetter(c -> c.entityCategories),
-                GameplayLootCategory.CODEC.codec().listOf().fieldOf("gameplayCategories").forGetter(c -> c.gameplayCategories),
-                TradeLootCategory.CODEC.codec().listOf().fieldOf("tradeCategories").forGetter(c -> c.tradeCategories),
+                BlockLootCategory.CODEC.codec().listOf().optionalFieldOf("blockCategories", Collections.emptyList()).forGetter(c -> c.blockCategories),
+                EntityLootCategory.CODEC.codec().listOf().optionalFieldOf("entityCategories", Collections.emptyList()).forGetter(c -> c.entityCategories),
+                GameplayLootCategory.CODEC.codec().listOf().optionalFieldOf("gameplayCategories", Collections.emptyList()).forGetter(c -> c.gameplayCategories),
+                TradeLootCategory.CODEC.codec().listOf().optionalFieldOf("tradeCategories", Collections.emptyList()).forGetter(c -> c.tradeCategories),
                 ResourceLocation.CODEC.listOf().optionalFieldOf("disabledEntities", Collections.emptyList()).forGetter((c) -> c.disabledEntities),
-                Codec.BOOL.fieldOf("logMoreStatistics").forGetter((c) -> c.logMoreStatistics),
-                Codec.BOOL.fieldOf("showInGameNames").forGetter((c) -> c.showInGameNames)
+                Codec.BOOL.optionalFieldOf("logMoreStatistics", false).forGetter((c) -> c.logMoreStatistics),
+                Codec.BOOL.optionalFieldOf("showInGameNames", true).forGetter((c) -> c.showInGameNames)
         ).apply(instance, (blocks, entities, gameplay, trades, disabled, log, show) -> {
             AliConfig config = new AliConfig();
 
