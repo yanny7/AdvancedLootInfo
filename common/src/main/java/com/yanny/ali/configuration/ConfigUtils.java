@@ -1,11 +1,17 @@
 package com.yanny.ali.configuration;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import com.yanny.ali.Utils;
 import com.yanny.ali.platform.Services;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -13,12 +19,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class ConfigUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @NotNull
     public static AliConfig readConfiguration() {
@@ -40,66 +46,40 @@ public class ConfigUtils {
         }
 
         File config = configFile.toFile();
-        Gson gson = createGson();
 
         if (!config.exists()) {
-            saveConfig(configFile, gson);
+            saveConfig(configFile);
         }
 
-        return load(configFile, gson);
+        return load(configFile);
     }
 
-    private static AliConfig load(Path configFilePath, Gson gson) {
+    private static AliConfig load(Path configFilePath) {
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
             LOGGER.info("Loading configuration file {}", configFilePath);
-            return gson.fromJson(reader, AliConfig.class);
+
+            JsonElement json = JsonParser.parseReader(reader);
+            HolderLookup.Provider lookup = HolderLookup.Provider.create(BuiltInRegistries.REGISTRY.stream().map(Registry::asLookup));
+            DynamicOps<JsonElement> ops = lookup.createSerializationContext(JsonOps.INSTANCE);
+
+            return AliConfig.CODEC.parse(ops, json).getOrThrow((s) -> new RuntimeException("Config error: " + s));
         } catch (Exception e) {
             LOGGER.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return new AliConfig();
         }
     }
 
-    private static void saveConfig(Path configFilePath, Gson gson) {
+    private static void saveConfig(Path configFilePath) {
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
-            gson.toJson(new AliConfig(), writer);
-            LOGGER.info("Created new configuration file {}", configFilePath);
+            LOGGER.info("Creating new configuration file {}", configFilePath);
+
+            HolderLookup.Provider lookup = HolderLookup.Provider.create(BuiltInRegistries.REGISTRY.stream().map(Registry::asLookup));
+            DynamicOps<JsonElement> ops = lookup.createSerializationContext(JsonOps.INSTANCE);
+            JsonElement json = AliConfig.CODEC.encodeStart(ops, new AliConfig()).getOrThrow((s) -> new RuntimeException("Config save error: " + s));
+
+            GSON.toJson(json, writer);
         } catch (IOException e) {
             LOGGER.warn("Error while writing configuration file: {}", e.getMessage(), e);
         }
-    }
-
-    private static class LootCategoryAdapter implements JsonSerializer<LootCategory<?>>, JsonDeserializer<LootCategory<?>> {
-        @NotNull
-        @Override
-        public LootCategory<?> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            JsonObject jsonObject = json.getAsJsonObject();
-            LootCategory.Type type = LootCategory.Type.valueOf(GsonHelper.getAsString(jsonObject, "type"));
-
-            return switch (type) {
-                case BLOCK -> new BlockLootCategory(jsonObject);
-                case ENTITY -> new EntityLootCategory(jsonObject);
-                case TRADE -> new TradeLootCategory(jsonObject);
-                case GAMEPLAY -> new GameplayLootCategory(jsonObject);
-            };
-        }
-
-        @NotNull
-        @Override
-        public JsonElement serialize(LootCategory<?> lootCategory, Type typeOfT, JsonSerializationContext context) {
-            return lootCategory.toJson();
-        }
-    }
-
-    @NotNull
-    private static Gson createGson() {
-        return new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-                .registerTypeAdapter(LootCategory.class, new LootCategoryAdapter())
-                .registerTypeAdapter(BlockLootCategory.class, new LootCategoryAdapter())
-                .registerTypeAdapter(EntityLootCategory.class, new LootCategoryAdapter())
-                .registerTypeAdapter(GameplayLootCategory.class, new LootCategoryAdapter())
-                .registerTypeAdapter(TradeLootCategory.class, new LootCategoryAdapter())
-                .create();
     }
 }
