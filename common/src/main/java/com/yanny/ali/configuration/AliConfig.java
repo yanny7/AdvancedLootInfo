@@ -1,5 +1,7 @@
 package com.yanny.ali.configuration;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +16,29 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class AliConfig {
+    public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
+        instance.group(
+                BlockLootCategory.CODEC.codec().listOf().fieldOf("blockCategories").forGetter(c -> c.blockCategories),
+                EntityLootCategory.CODEC.codec().listOf().fieldOf("entityCategories").forGetter(c -> c.entityCategories),
+                GameplayLootCategory.CODEC.codec().listOf().fieldOf("gameplayCategories").forGetter(c -> c.gameplayCategories),
+                TradeLootCategory.CODEC.codec().listOf().fieldOf("tradeCategories").forGetter(c -> c.tradeCategories),
+                ResourceLocation.CODEC.listOf().optionalFieldOf("disabledEntities", Collections.emptyList()).forGetter((c) -> c.disabledEntities),
+                Codec.BOOL.fieldOf("logMoreStatistics").forGetter((c) -> c.logMoreStatistics),
+                Codec.BOOL.fieldOf("showInGameNames").forGetter((c) -> c.showInGameNames)
+        ).apply(instance, (blocks, entities, gameplay, trades, disabled, log, show) -> {
+            AliConfig config = new AliConfig();
+
+            config.disabledEntities = new ArrayList<>(disabled);
+            config.logMoreStatistics = log;
+            config.showInGameNames = show;
+            config.blockCategories = blocks;
+            config.entityCategories = entities;
+            config.gameplayCategories = gameplay;
+            config.tradeCategories = trades;
+            return config;
+        })
+    );
+
     public List<BlockLootCategory> blockCategories;
     public List<EntityLootCategory> entityCategories;
     public List<GameplayLootCategory> gameplayCategories;
