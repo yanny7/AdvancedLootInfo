@@ -7,8 +7,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class TradeLootCategory extends LootCategory<ResourceLocation> {
@@ -21,14 +23,16 @@ public class TradeLootCategory extends LootCategory<ResourceLocation> {
                     ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                     BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                     Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                    Ingredient.CODEC.optionalFieldOf("catalyst", Ingredient.EMPTY).forGetter(LootCategory::getCatalyst),
+                    Ingredient.CODEC.optionalFieldOf("catalyst").forGetter((src) -> Optional.ofNullable(src.getCatalyst())),
                     PATTERN_CODEC.listOf().fieldOf("pattern").forGetter(src -> src.patterns)
-            ).apply(instance, TradeLootCategory::new)
+            ).apply(instance, (key, icon, hide, catalyst, patterns) ->
+                    new TradeLootCategory(key, icon, hide, catalyst.orElse(null), patterns)
+            )
     );
 
     private final List<Pattern> patterns;
 
-    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Pattern> patterns) {
+    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, @Nullable Ingredient catalyst, List<Pattern> patterns) {
         super(key, icon, Type.TRADE, hide, catalyst);
         this.patterns = patterns;
     }

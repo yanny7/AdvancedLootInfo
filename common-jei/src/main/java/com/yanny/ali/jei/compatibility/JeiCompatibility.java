@@ -13,15 +13,16 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.types.IRecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -71,10 +72,10 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        blockCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
-        entityCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
-        gameplayCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
-        tradeCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        blockCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
+        entityCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
+        gameplayCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
+        tradeCategories.forEach((category, loot) -> registration.addCraftingStation(loot.getRecipeType(), category.getCatalyst().items().map(Holder::value).toArray(Item[]::new)));
     }
 
     @Override

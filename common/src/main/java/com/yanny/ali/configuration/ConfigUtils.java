@@ -10,7 +10,6 @@ import com.mojang.serialization.JsonOps;
 import com.yanny.ali.Utils;
 import com.yanny.ali.platform.Services;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class ConfigUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -59,7 +59,7 @@ public class ConfigUtils {
             LOGGER.info("Loading configuration file {}", configFilePath);
 
             JsonElement json = JsonParser.parseReader(reader);
-            HolderLookup.Provider lookup = HolderLookup.Provider.create(BuiltInRegistries.REGISTRY.stream().map(Registry::asLookup));
+            HolderLookup.Provider lookup = HolderLookup.Provider.create((Stream<HolderLookup.RegistryLookup<?>>)(Object) BuiltInRegistries.REGISTRY.stream());
             DynamicOps<JsonElement> ops = lookup.createSerializationContext(JsonOps.INSTANCE);
 
             return AliConfig.CODEC.parse(ops, json).getOrThrow((s) -> new RuntimeException("Config error: " + s));
@@ -73,7 +73,7 @@ public class ConfigUtils {
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
             LOGGER.info("Creating new configuration file {}", configFilePath);
 
-            HolderLookup.Provider lookup = HolderLookup.Provider.create(BuiltInRegistries.REGISTRY.stream().map(Registry::asLookup));
+            HolderLookup.Provider lookup = HolderLookup.Provider.create((Stream<HolderLookup.RegistryLookup<?>>)(Object) BuiltInRegistries.REGISTRY.stream());
             DynamicOps<JsonElement> ops = lookup.createSerializationContext(JsonOps.INSTANCE);
             JsonElement json = AliConfig.CODEC.encodeStart(ops, new AliConfig()).getOrThrow((s) -> new RuntimeException("Config save error: " + s));
 

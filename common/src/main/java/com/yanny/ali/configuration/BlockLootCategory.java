@@ -8,8 +8,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BlockLootCategory extends LootCategory<Block> {
     public static final MapCodec<BlockLootCategory> CODEC = RecordCodecBuilder.mapCodec((instance) ->
@@ -17,7 +19,7 @@ public class BlockLootCategory extends LootCategory<Block> {
                 ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                 BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                 Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                Ingredient.CODEC.optionalFieldOf("catalyst", Ingredient.EMPTY).forGetter(LootCategory::getCatalyst),
+                Ingredient.CODEC.optionalFieldOf("catalyst").forGetter((src) -> Optional.ofNullable(src.getCatalyst())),
                 Codec.STRING.listOf().fieldOf("classes").forGetter(src -> src.classes.stream().map(Class::getName).toList())
         ).apply(instance, (key, icon, hide, catalyst, classNames) -> {
             //noinspection unchecked
@@ -28,13 +30,13 @@ public class BlockLootCategory extends LootCategory<Block> {
                     throw new RuntimeException(e);
                 }
             }).toList();
-            return new BlockLootCategory(key, icon, hide, catalyst, classList);
+            return new BlockLootCategory(key, icon, hide, catalyst.orElse(null), classList);
         })
     );
 
     private final List<Class<?>> classes;
 
-    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Class<?>> classes) {
+    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, @Nullable Ingredient catalyst, List<Class<?>> classes) {
         super(key, icon, Type.BLOCK, hide, catalyst);
         this.classes = classes;
     }

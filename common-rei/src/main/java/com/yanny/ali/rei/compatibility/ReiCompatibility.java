@@ -25,10 +25,14 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ReiCompatibility implements REIClientPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -190,7 +194,7 @@ public class ReiCompatibility implements REIClientPlugin {
         }
     }
 
-    private static <D extends ReiBaseDisplay, T, U> void registerFiller(DisplayRegistry registry, Map<Holder<D, T, U>, List<T>> categories, Function<List<T>, Predicate<Object>> predicate) {
+    private static <D extends ReiBaseDisplay, T, U> void registerFiller(DisplayRegistry registry, Map<Holder<D, T, U>, List<T>> categories, Function<List<T>, BiPredicate<Object, DisplayAdditionReasons>> predicate) {
         for (Map.Entry<Holder<D, T, U>, List<T>> entry : categories.entrySet()) {
             registry.registerFillerWithReason(predicate.apply(entry.getValue()), entry.getKey().filler());
             entry.getValue().forEach(registry::add);
