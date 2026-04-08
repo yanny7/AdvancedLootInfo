@@ -49,7 +49,7 @@ public class AliConfig {
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("archaeology_loot"), Items.DECORATED_POT, false, Ingredient.of(Items.BRUSH, Items.SUSPICIOUS_SAND, Items.SUSPICIOUS_GRAVEL), List.of(Pattern.compile("^.*:archaeology/.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("hero_loot"), Items.EMERALD, false, List.of(Pattern.compile("^.*:gameplay/hero_of_the_village/.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("cat_morning_gift"), Items.PHANTOM_MEMBRANE, false, Ingredient.of(Items.CAT_SPAWN_EGG), List.of(Pattern.compile("^.*:gameplay/cat_morning_gift.*$"))));
-        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("piglin_bartering"), Items.GOLD_INGOT, false, Ingredient.of(Items.PIG_SPAWN_EGG, Items.GOLD_INGOT), List.of(Pattern.compile("^.*:gameplay/piglin_bartering.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("piglin_bartering"), Items.GOLD_INGOT, false, Ingredient.of(Items.PIGLIN_SPAWN_EGG, Items.GOLD_INGOT), List.of(Pattern.compile("^.*:gameplay/piglin_bartering.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("sniffer_digging"), Items.SNIFFER_EGG, false, Ingredient.of(Items.SNIFFER_SPAWN_EGG), List.of(Pattern.compile("^.*:gameplay/sniffer_digging.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, false, Collections.singletonList(Pattern.compile(".*"))));
 
