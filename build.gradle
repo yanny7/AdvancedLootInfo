@@ -68,13 +68,13 @@ subprojects {
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
 
         ext {
-            commonProjects = [":common"]
+            commonProjects = [":ali:common"]
         }
 
-        if (emi_available) project.ext.commonProjects << ":common-emi"
-        if (jei_available) project.ext.commonProjects << ":common-jei"
-        if (rei_available) project.ext.commonProjects << ":common-rei"
-        if (lootjs_available) project.ext.commonProjects << ":common-lootjs"
+        if (emi_available) project.ext.commonProjects << ":ali:common-emi"
+        if (jei_available) project.ext.commonProjects << ":ali:common-jei"
+        if (rei_available) project.ext.commonProjects << ":ali:common-rei"
+        if (lootjs_available) project.ext.commonProjects << ":ali:common-lootjs"
 
         // register tasks that allow running specific combination of recipe viewer and launcher
         viewers.each { viewer ->
@@ -82,7 +82,7 @@ subprojects {
                 tasks.register("run${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
                     group = "launchers"
                     description = "Launch ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
-                    setTasks([":${project.name}:runClient".toString()])
+                    setTasks([":ali:${project.name}:runClient".toString()])
                     startParameter.projectProperties = ["recipe_viewer": viewer]
                 }
             }
@@ -121,7 +121,7 @@ subprojects {
         }
 
         processResources {
-            from(project(":common").sourceSets.main.resources.srcDirs) {
+            from(project(":ali:common").sourceSets.main.resources.srcDirs) {
                 include "pack.mcmeta"
                 include "ali.accesswidener"
             }

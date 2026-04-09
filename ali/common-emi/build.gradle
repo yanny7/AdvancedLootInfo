@@ -14,7 +14,7 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 
-    compileOnly project(path: ":common")
+    compileOnly project(path: ":ali:common")
 
     compileOnlyApi "dev.emi:emi-xplat-intermediary:${emi_version}:api"
     compileOnlyApi "dev.emi:emi-xplat-intermediary:${emi_version}"
