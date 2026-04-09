@@ -1,12 +1,9 @@
 package com.yanny.ali.configuration;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -15,22 +12,16 @@ public abstract class LootCategory<T> {
     private final Item icon;
     private final Type type;
     private final boolean hide;
+    @Nullable
+    private final Ingredient catalyst;
 
-    public LootCategory(Identifier key, Item icon, Type type, boolean hide) {
+    public LootCategory(Identifier key, Item icon, Type type, boolean hide, @Nullable Ingredient catalyst) {
         this.key = key;
         this.icon = icon;
         this.type = type;
         this.hide = hide;
+        this.catalyst = catalyst;
     }
-
-    public LootCategory(LootCategory.Type type, JsonObject jsonObject) {
-        this.type = type;
-        key = Identifier.tryParse(GsonHelper.getAsString(jsonObject, "key"));
-        icon = BuiltInRegistries.ITEM.getValue(Identifier.parse(GsonHelper.getAsString(jsonObject, "icon")));
-        hide = GsonHelper.getAsBoolean(jsonObject, "hide");
-    }
-
-    protected abstract void toJson(JsonObject object);
 
     public abstract boolean validate(T t);
 
@@ -65,17 +56,9 @@ public abstract class LootCategory<T> {
         return hide;
     }
 
-    @NotNull
-    public final JsonElement toJson() {
-        JsonObject object = new JsonObject();
-
-        object.addProperty("key", key.toString());
-        object.addProperty("type", type.name());
-        object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon).toString());
-        object.addProperty("hide", hide);
-
-        toJson(object);
-        return object;
+    @Nullable
+    public Ingredient getCatalyst() {
+        return catalyst;
     }
 
     public enum Type {

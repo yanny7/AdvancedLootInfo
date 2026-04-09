@@ -16,8 +16,18 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.hero_loot", "Hero of the Village Loot");
         TRANSLATION_MAP.put("emi.category.ali.gameplay_loot", "Gameplay Loot");
         TRANSLATION_MAP.put("emi.category.ali.trade_loot", "Trading Loot");
+        TRANSLATION_MAP.put("emi.category.ali.cat_morning_gift", "Cat Morning Gift");
+        TRANSLATION_MAP.put("emi.category.ali.piglin_bartering", "Piglin Bartering");
+        TRANSLATION_MAP.put("emi.category.ali.sniffer_digging", "Sniffer Digging");
         TRANSLATION_MAP.put("emi.category.ali.trial_chambers", "Trial Chambers");
-        TRANSLATION_MAP.put("emi.category.ali.shearing_loot", "Shearing Loot");
+        TRANSLATION_MAP.put("emi.category.ali.panda_sneeze", "Panda Sneeze");
+        TRANSLATION_MAP.put("emi.category.ali.shearing", "Shearing");
+        TRANSLATION_MAP.put("emi.category.ali.armadillo_shed", "Armadillo Shed");
+        TRANSLATION_MAP.put("emi.category.ali.chicken_lay", "Chicken Lay");
+        TRANSLATION_MAP.put("emi.category.ali.carving", "Carving");
+        TRANSLATION_MAP.put("emi.category.ali.harvesting", "Harvesting");
+        TRANSLATION_MAP.put("emi.category.ali.turtle_grow", "Turtle Grow");
+        TRANSLATION_MAP.put("emi.category.ali.charged_creeper", "Charged Creeper");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");
