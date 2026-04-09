@@ -88,7 +88,7 @@ public class AliConfig {
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("harvesting"), Items.FLOWER_POT, false, null, Collections.singletonList(Pattern.compile("^.*:harvest/.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("turtle_grow"), Items.TURTLE_SCUTE, false, Ingredient.of(Items.TURTLE_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/turtle_grow.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, false, null, Collections.singletonList(Pattern.compile(".*"))));
-//todo
+
         tradeCategories = new ArrayList<>();
         tradeCategories.add(new TradeLootCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, false, null, Collections.singletonList(Pattern.compile(".*"))));
 
