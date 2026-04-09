@@ -3,35 +3,20 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_name}-forge"
+    archivesName = "${mod_name}-neoforge"
 }
 
 architectury {
     platformSetupLoomIde()
-    forge()
+    neoForge()
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-
-        mixinConfig "ali.mixins.json"
-        mixinConfig "ali.forge.mixins.json"
-
-        if (emi_enabled == "true" && forge_emi_enabled == "true") {
-            mixinConfig "ali.emi.mixins.json"
-        }
-
-        if (lootjs_enabled == "true" && forge_lootjs_enabled == "true") {
-            mixinConfig "ali.lootjs.mixins.json"
-        }
-    }
+    accessWidenerPath = project(":ali:common").loom.accessWidenerPath
 
     mixin {
-        defaultRefmapName = "ali.forge.refmap.json"
+        useLegacyMixinAp = true
+        defaultRefmapName = "ali.neoforge.refmap.json"
     }
 
     runs {
@@ -49,54 +34,54 @@ configurations {
     shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentNeoForge.extendsFrom common
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
 
     project.ext.commonProjects.each { p ->
         common(project(path: p, configuration: "namedElements")) { transitive false }
-        shadowCommon(project(path: p, configuration: "transformProductionForge")) { transitive false }
+        shadowCommon(project(path: p, configuration: "transformProductionNeoForge")) { transitive false }
     }
 
     // LootJS
-//    modCompileOnly fg.deobf("curse.maven:kubejs-238086:5853326")
-//    modCompileOnly fg.deobf("curse.maven:rhino-416294:6186971")
-//    modCompileOnly fg.deobf("curse.maven:lootjs-570630:5404565")
+    modCompileOnly "curse.maven:kubejs-238086:5810100"
+    modCompileOnly "curse.maven:rhino-416294:6184623"
+    modCompileOnly "curse.maven:lootjs-570630:6792267"
 
     // Aether https://www.curseforge.com/minecraft/mc-mods/aether
-//    modCompileOnly fg.deobf("curse.maven:aether-255308:6134920")
+    modCompileOnly "curse.maven:aether-255308:6894706"
 
     // Deeper and Darker https://www.curseforge.com/minecraft/mc-mods/deeperdarker
-//    modCompileOnly fg.deobf("curse.maven:deeperdarker-659011:5906086")
+    modCompileOnly "curse.maven:deeperdarker-659011:6463247"
 
     // Farmer's Delight https://www.curseforge.com/minecraft/mc-mods/farmers-delight
-//    modCompileOnly fg.deobf("curse.maven:farmers-delight-398521:6917255")
+    modCompileOnly "curse.maven:farmers-delight-398521:6917256"
 
     // Hybrid Aquatic https://www.curseforge.com/minecraft/mc-mods/hybrid-aquatic
 //    modCompileOnly fg.deobf("curse.maven:hybrid-aquatic-834427:6497306")
 
     // Immersive Engineering https://www.curseforge.com/minecraft/mc-mods/immersive-engineering
-//    modCompileOnly fg.deobf("curse.maven:immersive-engineering-231951:6206989")
+    modCompileOnly "curse.maven:immersive-engineering-231951:6733669"
 
     // Moonlight https://www.curseforge.com/minecraft/mc-mods/selene
-//    modCompileOnly fg.deobf("curse.maven:selene-499980:6983934")
+    modCompileOnly "curse.maven:selene-499980:7007381"
 
     // Repurposed Structures https://www.curseforge.com/minecraft/mc-mods/repurposed-structures
-//    modCompileOnly fg.deobf("curse.maven:repurposed-structures-368293:6797349")
+    modCompileOnly "curse.maven:repurposed-structures-368293:6797352"
 
     // Sawmill https://www.curseforge.com/minecraft/mc-mods/sawmill
-//    modCompileOnly fg.deobf("curse.maven:sawmill-964817:6948522")
+    modCompileOnly "curse.maven:sawmill-964817:6979313"
 
     // Snow! Real Magic! https://www.curseforge.com/minecraft/mc-mods/snow-real-magic
-//    modCompileOnly fg.deobf("curse.maven:snow-real-magic-308663:6888541")
+    modCompileOnly "curse.maven:snow-real-magic-308663:6783557"
 
     // Supplementaries https://www.curseforge.com/minecraft/mc-mods/supplementaries
-//    modCompileOnly fg.deobf("curse.maven:supplementaries-412082:6974860")
+//    modCompileOnly "curse.maven:supplementaries-412082:7008519"
 
     // The Bumblezone https://www.curseforge.com/minecraft/mc-mods/the-bumblezone-forge
-//    modCompileOnly fg.deobf("curse.maven:the-bumblezone-forge-362479:6960926")
+    modCompileOnly "curse.maven:the-bumblezone-forge-362479:6960939"
 
     // Villagers plus https://www.curseforge.com/minecraft/mc-mods/villagersplus-forge
 //    modCompileOnly fg.deobf("curse.maven:villagersplus-forge-817272:4996995")
@@ -120,7 +105,7 @@ remapJar {
 }
 
 sourcesJar {
-    def commonSources = project(":common").sourcesJar
+    def commonSources = project(":ali:common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }
