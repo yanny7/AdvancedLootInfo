@@ -30,16 +30,12 @@ import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
 
 public class DataComponentTooltipUtils {
-    private static final Logger log = LoggerFactory.getLogger(DataComponentTooltipUtils.class);
-
     @Unmodifiable
     @NotNull
     public static ITooltipNode getCustomDataTooltip(IServerUtils utils, CustomData value) {

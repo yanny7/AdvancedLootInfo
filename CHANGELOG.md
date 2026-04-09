@@ -1,3 +1,7 @@
+## []
+
+- Added catalyst ingredient to loot categories (e.g. Fishing Rod → Fishing Loot Category)
+
 ## [1.8.4]
 
 - Fixed crash when used with Polymer mod
