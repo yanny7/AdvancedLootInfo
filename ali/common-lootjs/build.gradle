@@ -3,7 +3,7 @@ architectury {
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+    accessWidenerPath = project(":ali:common").loom.accessWidenerPath
 
     mixin {
         defaultRefmapName = "ali.lootjs.refmap.json"
@@ -15,7 +15,7 @@ dependencies {
     // Do NOT use other classes from fabric loader
     modImplementation "net.neoforged:neoforge:${neoforge_version}"
 
-    compileOnly project(path: ":common", configuration: "namedElements")
+    compileOnly project(path: ":ali:common", configuration: "namedElements")
 
     modCompileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
 
