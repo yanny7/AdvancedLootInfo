@@ -71,7 +71,10 @@ public class AliConfig {
                 Pattern.compile("^.*:equipment/.*$")
         )));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("fishing_loot"), Items.FISHING_ROD, false, Ingredient.of(Items.FISHING_ROD), List.of(Pattern.compile("^.*:gameplay/fishing.*$"))));
-        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("archaeology_loot"), Items.DECORATED_POT, false, Ingredient.of(Items.BRUSH, Items.SUSPICIOUS_SAND, Items.SUSPICIOUS_GRAVEL), List.of(Pattern.compile("^.*:archaeology/.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("archaeology_loot"), Items.DECORATED_POT, false, Ingredient.of(Items.BRUSH, Items.SUSPICIOUS_SAND, Items.SUSPICIOUS_GRAVEL), List.of(
+                Pattern.compile("^.*:archaeology/.*$"),
+                Pattern.compile("^.*:brush/.*$")
+        )));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("hero_loot"), Items.EMERALD, false, null, List.of(Pattern.compile("^.*:gameplay/hero_of_the_village/.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("cat_morning_gift"), Items.PHANTOM_MEMBRANE, false, Ingredient.of(Items.CAT_SPAWN_EGG), List.of(Pattern.compile("^.*:gameplay/cat_morning_gift.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("piglin_bartering"), Items.GOLD_INGOT, false, Ingredient.of(Items.PIGLIN_SPAWN_EGG, Items.GOLD_INGOT), List.of(Pattern.compile("^.*:gameplay/piglin_bartering.*$"))));
@@ -80,8 +83,12 @@ public class AliConfig {
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("shearing"), Items.SHEARS, false, Ingredient.of(Items.SHEARS), Collections.singletonList(Pattern.compile("^.*:shearing/.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("armadillo_shed"), Items.ARMADILLO_SCUTE, false, Ingredient.of(Items.ARMADILLO_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/armadillo_shed.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("chicken_lay"), Items.EGG, false, Ingredient.of(Items.CHICKEN_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/chicken_lay.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("carving"), Items.CARVED_PUMPKIN, false, Ingredient.of(Items.SHEARS), Collections.singletonList(Pattern.compile("^.*:carve/.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("charged_creeper"), Items.CREEPER_HEAD, false, Ingredient.of(Items.CREEPER_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:charged_creeper/.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("harvesting"), Items.FLOWER_POT, false, null, Collections.singletonList(Pattern.compile("^.*:harvest/.*$"))));
+        gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("turtle_grow"), Items.TURTLE_SCUTE, false, Ingredient.of(Items.TURTLE_SPAWN_EGG), Collections.singletonList(Pattern.compile("^.*:gameplay/turtle_grow.*$"))));
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("gameplay_loot"), Items.COMPASS, false, null, Collections.singletonList(Pattern.compile(".*"))));
-
+//todo
         tradeCategories = new ArrayList<>();
         tradeCategories.add(new TradeLootCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, false, null, Collections.singletonList(Pattern.compile(".*"))));
 

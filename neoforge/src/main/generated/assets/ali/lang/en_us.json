@@ -630,12 +630,15 @@
   "emi.category.ali.archaeology_loot": "Archaeology Loot",
   "emi.category.ali.armadillo_shed": "Armadillo Shed",
   "emi.category.ali.block_loot": "Block Drops",
+  "emi.category.ali.carving": "Carving",
   "emi.category.ali.cat_morning_gift": "Cat Morning Gift",
+  "emi.category.ali.charged_creeper": "Charged Creeper",
   "emi.category.ali.chest_loot": "Chest Loot",
   "emi.category.ali.chicken_lay": "Chicken Lay",
   "emi.category.ali.entity_loot": "Entity Drops",
   "emi.category.ali.fishing_loot": "Fishing Loot",
   "emi.category.ali.gameplay_loot": "Gameplay Loot",
+  "emi.category.ali.harvesting": "Harvesting",
   "emi.category.ali.hero_loot": "Hero of the Village Loot",
   "emi.category.ali.panda_sneeze": "Panda Sneeze",
   "emi.category.ali.piglin_bartering": "Piglin Bartering",
@@ -643,5 +646,6 @@
   "emi.category.ali.shearing": "Shearing",
   "emi.category.ali.sniffer_digging": "Sniffer Digging",
   "emi.category.ali.trade_loot": "Trading Loot",
-  "emi.category.ali.trial_chambers": "Trial Chambers"
+  "emi.category.ali.trial_chambers": "Trial Chambers",
+  "emi.category.ali.turtle_grow": "Turtle Grow"
 }

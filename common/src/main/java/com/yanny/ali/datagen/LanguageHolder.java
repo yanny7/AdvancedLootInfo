@@ -24,6 +24,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.shearing", "Shearing");
         TRANSLATION_MAP.put("emi.category.ali.armadillo_shed", "Armadillo Shed");
         TRANSLATION_MAP.put("emi.category.ali.chicken_lay", "Chicken Lay");
+        TRANSLATION_MAP.put("emi.category.ali.carving", "Carving");
+        TRANSLATION_MAP.put("emi.category.ali.harvesting", "Harvesting");
+        TRANSLATION_MAP.put("emi.category.ali.turtle_grow", "Turtle Grow");
+        TRANSLATION_MAP.put("emi.category.ali.charged_creeper", "Charged Creeper");
 
         TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
         TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");
