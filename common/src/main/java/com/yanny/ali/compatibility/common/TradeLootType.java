@@ -1,7 +1,7 @@
 package com.yanny.ali.compatibility.common;
 
 import com.yanny.ali.api.IDataNode;
-import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
