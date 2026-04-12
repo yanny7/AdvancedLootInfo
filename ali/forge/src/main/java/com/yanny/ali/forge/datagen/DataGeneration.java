@@ -1,5 +1,6 @@
 package com.yanny.ali.forge.datagen;
 
+import com.yanny.ali.datagen.FakeLootProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -10,5 +11,6 @@ public class DataGeneration {
         PackOutput packOutput = generator.getPackOutput();
 
         generator.addProvider(event.includeClient(), new LanguageProvider(packOutput, "en_us"));
+        generator.addProvider(event.includeServer(), new FakeLootProvider(packOutput));
     }
 }

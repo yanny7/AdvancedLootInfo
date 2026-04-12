@@ -15,7 +15,7 @@ public class CommonAliMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        FabricCommonBusSubscriber.registerEvents();
+        FabricCommonBusSubscriber.registerEvents(SERVER);
         NetworkUtils.registerCommon();
         PluginManager.registerCommonEvent();
     }
