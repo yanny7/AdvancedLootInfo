@@ -1,10 +1,14 @@
 package com.yanny.ali.datagen;
 
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -23,7 +27,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetPotionFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,24 +40,29 @@ import java.util.concurrent.CompletableFuture;
 
 public class FakeLootProvider implements DataProvider {
     private final PackOutput.PathProvider pathProvider;
+    private final CompletableFuture<HolderLookup.Provider> registryLookup;
 
-    public FakeLootProvider(PackOutput output) {
+    public FakeLootProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
         pathProvider = output.createPathProvider(PackOutput.Target.DATA_PACK, "fake_loot");
+        this.registryLookup = registryLookup;
     }
 
     @NotNull
     @Override
     public CompletableFuture<?> run(CachedOutput cachedOutput) {
-        Map<ResourceLocation, LootTable.Builder> tables = collectLootTables();
-        List<CompletableFuture<?>> futures = new ArrayList<>();
+        return registryLookup.thenCompose((provider) -> {
+            Map<ResourceLocation, LootTable.Builder> tables = collectLootTables(provider);
+            List<CompletableFuture<?>> futures = new ArrayList<>();
+            RegistryOps<JsonElement> registryOps = provider.createSerializationContext(JsonOps.INSTANCE);
 
-        tables.forEach((location, builder) -> {
-            Path path = pathProvider.json(location);
+            tables.forEach((location, builder) -> {
+                Path path = pathProvider.json(location);
 
-            futures.add(DataProvider.saveStable(cachedOutput, LootDataType.TABLE.parser().toJsonTree(builder.build()), path));
+                futures.add(DataProvider.saveStable(cachedOutput, LootDataType.TABLE.codec().encodeStart(registryOps, builder.build()).getOrThrow(), path));
+            });
+
+            return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
         });
-
-        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
 
     @NotNull
@@ -63,7 +72,7 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private Map<ResourceLocation, LootTable.Builder> collectLootTables() {
+    private Map<ResourceLocation, LootTable.Builder> collectLootTables(HolderLookup.Provider provider) {
         Map<ResourceLocation, LootTable.Builder> map = new HashMap<>();
 
         registerLoot(map, "entities/fox",
@@ -82,8 +91,8 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/wandering_trader",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedItem(Items.MILK_BUCKET, EquipmentSlot.MAINHAND),
-                                addEquippedItem(Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.INVISIBILITY)))
+                                addEquippedItem(provider, Items.MILK_BUCKET, EquipmentSlot.MAINHAND),
+                                addEquippedItem(provider, Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.INVISIBILITY)))
                         )
                 )
         );
@@ -105,34 +114,34 @@ public class FakeLootProvider implements DataProvider {
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
                                 addChargedCreeperDropItem(Items.PIGLIN_HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_SWORD, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.CROSSBOW, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_SWORD, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CROSSBOW, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
         registerLoot(map, "entities/zombified_piglin",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_SWORD, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_AXE, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.CROSSBOW, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.WARPED_FUNGUS_ON_A_STICK, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_SWORD, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_AXE, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CROSSBOW, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.WARPED_FUNGUS_ON_A_STICK, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
         registerLoot(map, "entities/drowned",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedEnchantedAndDamagedItem(Items.TRIDENT, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.FISHING_ROD, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.TRIDENT, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.FISHING_ROD, EquipmentSlot.MAINHAND),
                                 addEquippedAlwaysDropItem(Items.NAUTILUS_SHELL)
                         ))
                 )
@@ -140,7 +149,7 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/pillager",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(
-                                addEquippedEnchantedAndDamagedItem(Items.CROSSBOW, EquipmentSlot.MAINHAND)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CROSSBOW, EquipmentSlot.MAINHAND)
                         )
                 )
         );
@@ -148,71 +157,98 @@ public class FakeLootProvider implements DataProvider {
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
                                 addChargedCreeperDropItem(Items.SKELETON_SKULL),
-                                addEquippedEnchantedAndDamagedItem(Items.BOW, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.BOW, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
+                        ))
+                )
+        );
+        registerLoot(map, "entities/bogged",
+                LootTable.lootTable().withPool(
+                        LootPool.lootPool().add(AlternativesEntry.alternatives(
+                                addEquippedEnchantedAndDamagedItem(provider, Items.BOW, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
         registerLoot(map, "entities/stray",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedEnchantedAndDamagedItem(Items.BOW, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.BOW, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
         registerLoot(map, "entities/vindicator",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_AXE, EquipmentSlot.MAINHAND)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_AXE, EquipmentSlot.MAINHAND)
                         )
                 )
         );
         registerLoot(map, "entities/witch",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedItem(Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.HEALING)),
-                                addEquippedItem(Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.FIRE_RESISTANCE)),
-                                addEquippedItem(Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.SWIFTNESS)),
-                                addEquippedItem(Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.WATER_BREATHING))
+                                addEquippedItem(provider, Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.HEALING)),
+                                addEquippedItem(provider, Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.FIRE_RESISTANCE)),
+                                addEquippedItem(provider, Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.SWIFTNESS)),
+                                addEquippedItem(provider, Items.POTION, EquipmentSlot.MAINHAND).apply(SetPotionFunction.setPotion(Potions.WATER_BREATHING))
                         ))
                 )
         );
@@ -226,7 +262,7 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/wither_skeleton",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(
-                                addEquippedEnchantedAndDamagedItem(Items.STONE_SWORD, EquipmentSlot.MAINHAND)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.STONE_SWORD, EquipmentSlot.MAINHAND)
                         )
                 )
         );
@@ -234,84 +270,84 @@ public class FakeLootProvider implements DataProvider {
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
                                 addChargedCreeperDropItem(Items.ZOMBIE_HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_SWORD, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SWORD, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
         registerLoot(map, "entities/zombie_villager",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_SWORD, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SWORD, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
         registerLoot(map, "entities/husk",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_SWORD, EquipmentSlot.MAINHAND),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.LEATHER_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.IRON_BOOTS, EquipmentSlot.FEET),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
-                                addEquippedEnchantedAndDamagedItem(Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SWORD, EquipmentSlot.MAINHAND),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.CHAINMAIL_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.IRON_BOOTS, EquipmentSlot.FEET),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_HELMET, EquipmentSlot.HEAD),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_CHESTPLATE, EquipmentSlot.CHEST),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_LEGGINGS, EquipmentSlot.LEGS),
+                                addEquippedEnchantedAndDamagedItem(provider, Items.DIAMOND_BOOTS, EquipmentSlot.FEET)
                         ))
                 )
         );
@@ -320,12 +356,12 @@ public class FakeLootProvider implements DataProvider {
     }
 
     private static void registerLoot(Map<ResourceLocation, LootTable.Builder> map, String name, LootTable.Builder builder) {
-        map.put(new ResourceLocation(name), builder);
+        map.put(ResourceLocation.withDefaultNamespace(name), builder);
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addItem(ItemLike item) {
-        return LootItem.lootTableItem(item).when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(0.085F, 0.01F));
+    private static LootPoolSingletonContainer.Builder<?> addItem(HolderLookup.Provider provider, ItemLike item) {
+        return LootItem.lootTableItem(item).when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(provider, 0.085F, 0.01F));
     }
 
     @NotNull
@@ -334,7 +370,7 @@ public class FakeLootProvider implements DataProvider {
                 LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().equipment(
                                 EntityEquipmentPredicate.Builder.equipment().mainhand(
-                                        ItemPredicate.Builder.item().of(item).build()
+                                        ItemPredicate.Builder.item().of(item)
                                 ).build()
                         )
                 )
@@ -342,10 +378,10 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addEquippedItem(ItemLike item, EquipmentSlot slot) {
-        ItemPredicate predicate = ItemPredicate.Builder.item().of(item).build();
+    private static LootPoolSingletonContainer.Builder<?> addEquippedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
+        ItemPredicate.Builder predicate = ItemPredicate.Builder.item().of(item);
 
-        return addItem(item).when(
+        return addItem(provider, item).when(
                 LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().equipment(
                                 switch (slot) {
@@ -355,6 +391,7 @@ public class FakeLootProvider implements DataProvider {
                                     case LEGS -> EntityEquipmentPredicate.Builder.equipment().legs(predicate).build();
                                     case CHEST -> EntityEquipmentPredicate.Builder.equipment().chest(predicate).build();
                                     case HEAD -> EntityEquipmentPredicate.Builder.equipment().head(predicate).build();
+                                    case BODY ->  EntityEquipmentPredicate.Builder.equipment().body(predicate).build();
                                 }
                         )
                 )
@@ -362,10 +399,10 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addEquippedEnchantedAndDamagedItem(ItemLike item, EquipmentSlot slot) {
+    private static LootPoolSingletonContainer.Builder<?> addEquippedEnchantedAndDamagedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
         float enchantChance = slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND ? 0.25F : 0.5F;
 
-        return addEquippedItem(item, slot)
+        return addEquippedItem(provider, item, slot)
                 .apply(EnchantRandomlyFunction.randomEnchantment().when(LootItemRandomChanceCondition.randomChance(enchantChance)))
                 .apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.0F, 1.0F)));
     }
@@ -377,7 +414,7 @@ public class FakeLootProvider implements DataProvider {
         powered.putBoolean("powered", true);
         return LootItem.lootTableItem(item).when(
                 LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.KILLER,
+                        LootContext.EntityTarget.ATTACKER,
                         EntityPredicate.Builder.entity()
                                 .entityType(EntityTypePredicate.of(EntityType.CREEPER))
                                 .nbt(new NbtPredicate(powered))

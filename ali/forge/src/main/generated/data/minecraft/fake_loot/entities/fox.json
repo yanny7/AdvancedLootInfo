@@ -15,9 +15,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:emerald"
-                        ]
+                        "items": "minecraft:emerald"
                       }
                     }
                   }
@@ -34,9 +32,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:rabbit_foot"
-                        ]
+                        "items": "minecraft:rabbit_foot"
                       }
                     }
                   }
@@ -53,9 +49,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:rabbit_hide"
-                        ]
+                        "items": "minecraft:rabbit_hide"
                       }
                     }
                   }
@@ -72,9 +66,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:egg"
-                        ]
+                        "items": "minecraft:egg"
                       }
                     }
                   }
@@ -91,9 +83,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:wheat"
-                        ]
+                        "items": "minecraft:wheat"
                       }
                     }
                   }
@@ -110,9 +100,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:leather"
-                        ]
+                        "items": "minecraft:leather"
                       }
                     }
                   }
@@ -129,9 +117,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:feather"
-                        ]
+                        "items": "minecraft:feather"
                       }
                     }
                   }

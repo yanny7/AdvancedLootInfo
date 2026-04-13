@@ -34,7 +34,7 @@ public class FabricCommonBusSubscriber {
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(Utils.MOD_ID, "fake_loot_loader");
+                return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
             }
 
             @NotNull

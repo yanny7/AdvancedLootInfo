@@ -11,7 +11,7 @@
               "conditions": [
                 {
                   "condition": "minecraft:entity_properties",
-                  "entity": "killer",
+                  "entity": "attacker",
                   "predicate": {
                     "type": "minecraft:creeper",
                     "nbt": "{powered:1b}"
@@ -24,9 +24,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -34,9 +39,7 @@
                   "predicate": {
                     "equipment": {
                       "mainhand": {
-                        "items": [
-                          "minecraft:bow"
-                        ]
+                        "items": "minecraft:bow"
                       }
                     }
                   }
@@ -68,9 +71,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -78,9 +86,7 @@
                   "predicate": {
                     "equipment": {
                       "head": {
-                        "items": [
-                          "minecraft:leather_helmet"
-                        ]
+                        "items": "minecraft:leather_helmet"
                       }
                     }
                   }
@@ -112,9 +118,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -122,9 +133,7 @@
                   "predicate": {
                     "equipment": {
                       "chest": {
-                        "items": [
-                          "minecraft:leather_chestplate"
-                        ]
+                        "items": "minecraft:leather_chestplate"
                       }
                     }
                   }
@@ -156,9 +165,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -166,9 +180,7 @@
                   "predicate": {
                     "equipment": {
                       "legs": {
-                        "items": [
-                          "minecraft:leather_leggings"
-                        ]
+                        "items": "minecraft:leather_leggings"
                       }
                     }
                   }
@@ -200,9 +212,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -210,9 +227,7 @@
                   "predicate": {
                     "equipment": {
                       "feet": {
-                        "items": [
-                          "minecraft:leather_boots"
-                        ]
+                        "items": "minecraft:leather_boots"
                       }
                     }
                   }
@@ -244,9 +259,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -254,9 +274,7 @@
                   "predicate": {
                     "equipment": {
                       "head": {
-                        "items": [
-                          "minecraft:golden_helmet"
-                        ]
+                        "items": "minecraft:golden_helmet"
                       }
                     }
                   }
@@ -288,9 +306,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -298,9 +321,7 @@
                   "predicate": {
                     "equipment": {
                       "chest": {
-                        "items": [
-                          "minecraft:golden_chestplate"
-                        ]
+                        "items": "minecraft:golden_chestplate"
                       }
                     }
                   }
@@ -332,9 +353,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -342,9 +368,7 @@
                   "predicate": {
                     "equipment": {
                       "legs": {
-                        "items": [
-                          "minecraft:golden_leggings"
-                        ]
+                        "items": "minecraft:golden_leggings"
                       }
                     }
                   }
@@ -376,9 +400,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -386,9 +415,7 @@
                   "predicate": {
                     "equipment": {
                       "feet": {
-                        "items": [
-                          "minecraft:golden_boots"
-                        ]
+                        "items": "minecraft:golden_boots"
                       }
                     }
                   }
@@ -420,9 +447,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -430,9 +462,7 @@
                   "predicate": {
                     "equipment": {
                       "head": {
-                        "items": [
-                          "minecraft:chainmail_helmet"
-                        ]
+                        "items": "minecraft:chainmail_helmet"
                       }
                     }
                   }
@@ -464,9 +494,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -474,9 +509,7 @@
                   "predicate": {
                     "equipment": {
                       "chest": {
-                        "items": [
-                          "minecraft:chainmail_chestplate"
-                        ]
+                        "items": "minecraft:chainmail_chestplate"
                       }
                     }
                   }
@@ -508,9 +541,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -518,9 +556,7 @@
                   "predicate": {
                     "equipment": {
                       "legs": {
-                        "items": [
-                          "minecraft:chainmail_leggings"
-                        ]
+                        "items": "minecraft:chainmail_leggings"
                       }
                     }
                   }
@@ -552,9 +588,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -562,9 +603,7 @@
                   "predicate": {
                     "equipment": {
                       "feet": {
-                        "items": [
-                          "minecraft:chainmail_boots"
-                        ]
+                        "items": "minecraft:chainmail_boots"
                       }
                     }
                   }
@@ -596,9 +635,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -606,9 +650,7 @@
                   "predicate": {
                     "equipment": {
                       "head": {
-                        "items": [
-                          "minecraft:iron_helmet"
-                        ]
+                        "items": "minecraft:iron_helmet"
                       }
                     }
                   }
@@ -640,9 +682,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -650,9 +697,7 @@
                   "predicate": {
                     "equipment": {
                       "chest": {
-                        "items": [
-                          "minecraft:iron_chestplate"
-                        ]
+                        "items": "minecraft:iron_chestplate"
                       }
                     }
                   }
@@ -684,9 +729,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -694,9 +744,7 @@
                   "predicate": {
                     "equipment": {
                       "legs": {
-                        "items": [
-                          "minecraft:iron_leggings"
-                        ]
+                        "items": "minecraft:iron_leggings"
                       }
                     }
                   }
@@ -728,9 +776,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -738,9 +791,7 @@
                   "predicate": {
                     "equipment": {
                       "feet": {
-                        "items": [
-                          "minecraft:iron_boots"
-                        ]
+                        "items": "minecraft:iron_boots"
                       }
                     }
                   }
@@ -772,9 +823,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -782,9 +838,7 @@
                   "predicate": {
                     "equipment": {
                       "head": {
-                        "items": [
-                          "minecraft:diamond_helmet"
-                        ]
+                        "items": "minecraft:diamond_helmet"
                       }
                     }
                   }
@@ -816,9 +870,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -826,9 +885,7 @@
                   "predicate": {
                     "equipment": {
                       "chest": {
-                        "items": [
-                          "minecraft:diamond_chestplate"
-                        ]
+                        "items": "minecraft:diamond_chestplate"
                       }
                     }
                   }
@@ -860,9 +917,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -870,9 +932,7 @@
                   "predicate": {
                     "equipment": {
                       "legs": {
-                        "items": [
-                          "minecraft:diamond_leggings"
-                        ]
+                        "items": "minecraft:diamond_leggings"
                       }
                     }
                   }
@@ -904,9 +964,14 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "chance": 0.085,
-                  "condition": "minecraft:random_chance_with_looting",
-                  "looting_multiplier": 0.01
+                  "condition": "minecraft:random_chance_with_enchanted_bonus",
+                  "enchanted_chance": {
+                    "type": "minecraft:linear",
+                    "base": 0.095,
+                    "per_level_above_first": 0.01
+                  },
+                  "enchantment": "minecraft:looting",
+                  "unenchanted_chance": 0.085
                 },
                 {
                   "condition": "minecraft:entity_properties",
@@ -914,9 +979,7 @@
                   "predicate": {
                     "equipment": {
                       "feet": {
-                        "items": [
-                          "minecraft:diamond_boots"
-                        ]
+                        "items": "minecraft:diamond_boots"
                       }
                     }
                   }

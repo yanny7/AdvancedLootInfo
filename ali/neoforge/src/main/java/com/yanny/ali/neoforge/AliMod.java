@@ -7,9 +7,12 @@ import com.yanny.ali.neoforge.network.NetworkUtils;
 import com.yanny.ali.neoforge.network.Server;
 import com.yanny.ali.network.AbstractServer;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
@@ -22,6 +25,8 @@ public class AliMod {
         modEventBus.addListener(AliMod::registerCommonEvent);
         modEventBus.addListener(AliMod::registerClientEvent);
         modEventBus.addListener(AliMod::registerPayloadHandler);
+
+        NeoForge.EVENT_BUS.register(this);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
@@ -34,5 +39,10 @@ public class AliMod {
 
     public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
         NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION));
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListener(AddReloadListenerEvent event) {
+        event.addListener(SERVER.getFakeLootDataManager());
     }
 }

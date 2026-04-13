@@ -8,7 +8,7 @@
           "conditions": [
             {
               "condition": "minecraft:entity_properties",
-              "entity": "killer",
+              "entity": "attacker",
               "predicate": {
                 "type": "minecraft:creeper",
                 "nbt": "{powered:1b}"
