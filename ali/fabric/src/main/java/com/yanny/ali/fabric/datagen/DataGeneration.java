@@ -1,5 +1,6 @@
 package com.yanny.ali.fabric.datagen;
 
+import com.yanny.ali.datagen.FakeLootProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -9,5 +10,6 @@ public class DataGeneration implements DataGeneratorEntrypoint {
         FabricDataGenerator.Pack pack = generator.createPack();
 
         pack.addProvider((p, l) -> new LanguageProvider(p, l, "en_us"));
+        pack.addProvider((p, l) -> new FakeLootProvider(p, l));
     }
 }
