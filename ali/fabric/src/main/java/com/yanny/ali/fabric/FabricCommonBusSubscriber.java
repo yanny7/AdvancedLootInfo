@@ -17,7 +17,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -31,7 +30,7 @@ public class FabricCommonBusSubscriber {
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader"), (provider) -> new IdentifiableResourceReloadListener() {
             @Override
             public ResourceLocation getFabricId() {
                 return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
@@ -39,8 +38,8 @@ public class FabricCommonBusSubscriber {
 
             @NotNull
             @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
-                return server.getFakeLootDataManager().reload(preparationBarrier,  resourceManager, profilerFiller, profilerFiller2, executor, executor2);
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, Executor executor, Executor executor2) {
+                return server.getFakeLootDataManager(provider).reload(preparationBarrier,  resourceManager, executor, executor2);
             }
         });
     }

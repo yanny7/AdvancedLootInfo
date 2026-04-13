@@ -1,51 +1,39 @@
 package com.yanny.ali.manager;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
-import com.mojang.serialization.JsonOps;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.storage.loot.LootDataType;
 import net.minecraft.world.level.storage.loot.LootTable;
-import org.slf4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FakeLootDataManager extends SimpleJsonResourceReloadListener {
-    private static final Logger LOGGER = LogUtils.getLogger();
+public class FakeLootDataManager extends SimpleJsonResourceReloadListener<LootTable> {
     private static final String FOLDER = "fake_loot";
-    private static final Gson GSON = new Gson();
 
     private final Map<ResourceLocation, LootTable> fakeTables = new HashMap<>();
 
-    public FakeLootDataManager() {
-        super(GSON, FOLDER);
+    public FakeLootDataManager(HolderLookup.Provider provider) {
+        super(provider, LootDataType.TABLE.codec(), ResourceKey.createRegistryKey(ResourceLocation.withDefaultNamespace(FOLDER)));
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        Map<ResourceLocation, LootTable> map = new HashMap<>();
-
-        this.fakeTables.clear();
-
-        object.forEach((location, json) -> {
-            try {
-                LootDataType.TABLE.codec().parse(JsonOps.INSTANCE, json)
-                        .resultOrPartial((e) -> LOGGER.warn("Failed to parse fake loot table {}: {}", location, e))
-                        .ifPresent((lootTable) -> map.put(location, lootTable));
-            } catch (Throwable e) {
-                LOGGER.warn("Failed to parse fake loot table {}", location, e);
-            }
-        });
-
-        this.fakeTables.putAll(map);
+    protected void apply(Map<ResourceLocation, LootTable> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+        this.fakeTables.putAll(object);
     }
 
     public Map<ResourceLocation, LootTable> getLootTables() {
         return fakeTables;
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return "fake_loot_manager";
     }
 }

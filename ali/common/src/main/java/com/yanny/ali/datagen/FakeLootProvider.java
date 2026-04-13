@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
@@ -78,13 +79,13 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/fox",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addEquippedAlwaysDropItem(Items.EMERALD),
-                                addEquippedAlwaysDropItem(Items.RABBIT_FOOT),
-                                addEquippedAlwaysDropItem(Items.RABBIT_HIDE),
-                                addEquippedAlwaysDropItem(Items.EGG),
-                                addEquippedAlwaysDropItem(Items.WHEAT),
-                                addEquippedAlwaysDropItem(Items.LEATHER),
-                                addEquippedAlwaysDropItem(Items.FEATHER)
+                                addEquippedAlwaysDropItem(provider, Items.EMERALD),
+                                addEquippedAlwaysDropItem(provider, Items.RABBIT_FOOT),
+                                addEquippedAlwaysDropItem(provider, Items.RABBIT_HIDE),
+                                addEquippedAlwaysDropItem(provider, Items.EGG),
+                                addEquippedAlwaysDropItem(provider, Items.WHEAT),
+                                addEquippedAlwaysDropItem(provider, Items.LEATHER),
+                                addEquippedAlwaysDropItem(provider, Items.FEATHER)
                         ))
                 )
         );
@@ -99,7 +100,7 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/creeper",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(
-                                addChargedCreeperDropItem(Items.CREEPER_HEAD)
+                                addChargedCreeperDropItem(provider, Items.CREEPER_HEAD)
                         )
                 )
         );
@@ -113,7 +114,7 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/piglin",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addChargedCreeperDropItem(Items.PIGLIN_HEAD),
+                                addChargedCreeperDropItem(provider, Items.PIGLIN_HEAD),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_SWORD, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.CROSSBOW, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.GOLDEN_HELMET, EquipmentSlot.HEAD),
@@ -142,7 +143,7 @@ public class FakeLootProvider implements DataProvider {
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
                                 addEquippedEnchantedAndDamagedItem(provider, Items.TRIDENT, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.FISHING_ROD, EquipmentSlot.MAINHAND),
-                                addEquippedAlwaysDropItem(Items.NAUTILUS_SHELL)
+                                addEquippedAlwaysDropItem(provider, Items.NAUTILUS_SHELL)
                         ))
                 )
         );
@@ -156,7 +157,7 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/skeleton",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addChargedCreeperDropItem(Items.SKELETON_SKULL),
+                                addChargedCreeperDropItem(provider, Items.SKELETON_SKULL),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.BOW, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_CHESTPLATE, EquipmentSlot.CHEST),
@@ -269,7 +270,7 @@ public class FakeLootProvider implements DataProvider {
         registerLoot(map, "entities/zombie",
                 LootTable.lootTable().withPool(
                         LootPool.lootPool().add(AlternativesEntry.alternatives(
-                                addChargedCreeperDropItem(Items.ZOMBIE_HEAD),
+                                addChargedCreeperDropItem(provider, Items.ZOMBIE_HEAD),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SHOVEL, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.IRON_SWORD, EquipmentSlot.MAINHAND),
                                 addEquippedEnchantedAndDamagedItem(provider, Items.LEATHER_HELMET, EquipmentSlot.HEAD),
@@ -365,12 +366,12 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addEquippedAlwaysDropItem(ItemLike item) {
+    private static LootPoolSingletonContainer.Builder<?> addEquippedAlwaysDropItem(HolderLookup.Provider provider, ItemLike item) {
         return LootItem.lootTableItem(item).when(
                 LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().equipment(
                                 EntityEquipmentPredicate.Builder.equipment().mainhand(
-                                        ItemPredicate.Builder.item().of(item)
+                                        ItemPredicate.Builder.item().of(provider.lookupOrThrow(Registries.ITEM), item)
                                 ).build()
                         )
                 )
@@ -379,7 +380,7 @@ public class FakeLootProvider implements DataProvider {
 
     @NotNull
     private static LootPoolSingletonContainer.Builder<?> addEquippedItem(HolderLookup.Provider provider, ItemLike item, EquipmentSlot slot) {
-        ItemPredicate.Builder predicate = ItemPredicate.Builder.item().of(item);
+        ItemPredicate.Builder predicate = ItemPredicate.Builder.item().of(provider.lookupOrThrow(Registries.ITEM), item);
 
         return addItem(provider, item).when(
                 LootItemEntityPropertyCondition.hasProperties(
@@ -392,6 +393,7 @@ public class FakeLootProvider implements DataProvider {
                                     case CHEST -> EntityEquipmentPredicate.Builder.equipment().chest(predicate).build();
                                     case HEAD -> EntityEquipmentPredicate.Builder.equipment().head(predicate).build();
                                     case BODY ->  EntityEquipmentPredicate.Builder.equipment().body(predicate).build();
+                                    case SADDLE -> throw new IllegalStateException();
                                 }
                         )
                 )
@@ -408,7 +410,7 @@ public class FakeLootProvider implements DataProvider {
     }
 
     @NotNull
-    private static LootPoolSingletonContainer.Builder<?> addChargedCreeperDropItem(ItemLike item) {
+    private static LootPoolSingletonContainer.Builder<?> addChargedCreeperDropItem(HolderLookup.Provider provider, ItemLike item) {
         CompoundTag powered = new CompoundTag();
 
         powered.putBoolean("powered", true);
@@ -416,7 +418,7 @@ public class FakeLootProvider implements DataProvider {
                 LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.ATTACKER,
                         EntityPredicate.Builder.entity()
-                                .entityType(EntityTypePredicate.of(EntityType.CREEPER))
+                                .entityType(EntityTypePredicate.of(provider.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))
                                 .nbt(new NbtPredicate(powered))
                 )
         );

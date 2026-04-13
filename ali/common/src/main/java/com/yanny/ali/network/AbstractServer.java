@@ -19,6 +19,7 @@ import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -59,9 +60,13 @@ public abstract class AbstractServer {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final List<LootDataChunkMessage> chunks = new ArrayList<>();
-    private final FakeLootDataManager fakeLootDataManager = new FakeLootDataManager();
+    private FakeLootDataManager fakeLootDataManager;
 
-    public FakeLootDataManager getFakeLootDataManager() {
+    public FakeLootDataManager getFakeLootDataManager(HolderLookup.Provider provider) {
+        if (fakeLootDataManager == null) {
+            fakeLootDataManager = new FakeLootDataManager(provider);
+        }
+
         return fakeLootDataManager;
     }
 
