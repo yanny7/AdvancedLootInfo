@@ -31,6 +31,10 @@ public class FakeLootDataManager extends SimpleJsonResourceReloadListener<LootTa
         return fakeTables;
     }
 
+    public void clearLootTables() {
+        fakeTables.clear();
+    }
+
     @NotNull
     @Override
     public String getName() {
