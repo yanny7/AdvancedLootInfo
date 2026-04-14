@@ -31,18 +31,7 @@ public class FabricCommonBusSubscriber {
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public ResourceLocation getFabricId() {
-                return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
-            }
-
-            @NotNull
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
-                return server.getFakeLootDataManager().reload(preparationBarrier,  resourceManager, profilerFiller, profilerFiller2, executor, executor2);
-            }
-        });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(getReloadListener(server));
     }
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
@@ -71,5 +60,21 @@ public class FabricCommonBusSubscriber {
 
     private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
         CommonAliMod.SERVER.syncLootTables(event.player);
+    }
+
+    @NotNull
+    private static IdentifiableResourceReloadListener getReloadListener(AbstractServer server) {
+        return new IdentifiableResourceReloadListener() {
+            @Override
+            public ResourceLocation getFabricId() {
+                return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
+            }
+
+            @NotNull
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller profilerFiller, ProfilerFiller profilerFiller2, Executor executor, Executor executor2) {
+                return server.getFakeLootDataManager().reload(preparationBarrier,  resourceManager, profilerFiller, profilerFiller2, executor, executor2);
+            }
+        };
     }
 }
