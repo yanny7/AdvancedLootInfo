@@ -28,13 +28,7 @@ public class FabricCommonBusSubscriber {
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
-        ResourceLoader.get(PackType.SERVER_DATA).registerReloader(Utils.modLoc("fake_loot_loader"), new PreparableReloadListener() {
-            @NotNull
-            @Override
-            public CompletableFuture<Void> reload(SharedState sharedState, Executor executor, PreparationBarrier preparationBarrier, Executor executor2) {
-                return server.getFakeLootDataManager(sharedState.get(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY)).reload(sharedState, executor, preparationBarrier, executor2);
-            }
-        });
+        ResourceLoader.get(PackType.SERVER_DATA).registerReloader(Utils.modLoc("fake_loot_loader"), getReloadListener(server));
     }
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
@@ -63,5 +57,16 @@ public class FabricCommonBusSubscriber {
 
     private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
         CommonAliMod.SERVER.syncLootTables(event.player);
+    }
+
+    @NotNull
+    private static PreparableReloadListener getReloadListener(AbstractServer server) {
+        return new PreparableReloadListener() {
+            @NotNull
+            @Override
+            public CompletableFuture<Void> reload(PreparableReloadListener.SharedState sharedState, Executor executor, PreparableReloadListener.PreparationBarrier preparationBarrier, Executor executor2) {
+                return server.getFakeLootDataManager(sharedState.get(ResourceLoader.RELOADER_REGISTRY_LOOKUP_KEY)).reload(sharedState, executor, preparationBarrier, executor2);
+            }
+        };
     }
 }
