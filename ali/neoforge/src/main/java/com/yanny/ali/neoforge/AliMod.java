@@ -8,11 +8,15 @@ import com.yanny.ali.neoforge.network.Server;
 import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.pip.BlockPictureInPictureRenderer;
 import com.yanny.ali.pip.BlockRenderState;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
@@ -26,6 +30,8 @@ public class AliMod {
         modEventBus.addListener(AliMod::registerClientEvent);
         modEventBus.addListener(AliMod::registerPayloadHandler);
         modEventBus.addListener(AliMod::registerPipRenderer);
+
+        NeoForge.EVENT_BUS.register(this);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
@@ -42,5 +48,10 @@ public class AliMod {
 
     public static void registerPipRenderer(final RegisterPictureInPictureRenderersEvent event) {
         event.register(BlockRenderState.class, BlockPictureInPictureRenderer::new);
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListener(AddServerReloadListenersEvent event) {
+        event.addListener(Identifier.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_manager"), SERVER.getFakeLootDataManager(event.getRegistryAccess()));
     }
 }
