@@ -305,7 +305,7 @@ if __name__ == "__main__":
 
     for mod_loader in mod_loaders:
         print (f"processing {mod_loader} launcher")
-        path = f"./{mod_loader[0]}/build/libs"
+        path = f"./ali/{mod_loader[0]}/build/libs"
         version = f"{props['minecraft_version']}-{props['version']}"
         file_name = f"{props['mod_name']}-{mod_loader[0]}-{version}.jar"
         file_path = f"{path}/{file_name}"

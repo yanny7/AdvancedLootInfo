@@ -1,4 +1,4 @@
-## []
+## [1.9.0]
 
 - Added catalyst ingredient to loot categories (e.g. Fishing Rod → Fishing Loot Category)
 - Added hardcoded vanilla loot extendable as datapack (see Wiki info)
