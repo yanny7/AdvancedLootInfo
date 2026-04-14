@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -30,18 +31,7 @@ public class FabricCommonBusSubscriber {
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
         ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader"), (provider) -> new IdentifiableResourceReloadListener() {
-            @Override
-            public ResourceLocation getFabricId() {
-                return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
-            }
-
-            @NotNull
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, Executor executor, Executor executor2) {
-                return server.getFakeLootDataManager(provider).reload(preparationBarrier,  resourceManager, executor, executor2);
-            }
-        });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(Utils.modLoc("fake_loot_loader"), (provider) -> getReloadListener(provider, server));
     }
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
@@ -70,5 +60,21 @@ public class FabricCommonBusSubscriber {
 
     private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
         CommonAliMod.SERVER.syncLootTables(event.player);
+    }
+
+    @NotNull
+    private static IdentifiableResourceReloadListener getReloadListener(HolderLookup.Provider provider, AbstractServer server) {
+        return new IdentifiableResourceReloadListener() {
+            @Override
+            public ResourceLocation getFabricId() {
+                return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
+            }
+
+            @NotNull
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, Executor executor, Executor executor2) {
+                return server.getFakeLootDataManager(provider).reload(preparationBarrier,  resourceManager, executor, executor2);
+            }
+        };
     }
 }
