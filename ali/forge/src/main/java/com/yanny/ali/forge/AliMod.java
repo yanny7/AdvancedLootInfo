@@ -6,7 +6,10 @@ import com.yanny.ali.forge.network.NetworkUtils;
 import com.yanny.ali.forge.network.Server;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -38,6 +41,8 @@ public class AliMod {
         modEventBus.addListener(DataGeneration::generate);
         modEventBus.addListener(AliMod::registerCommonEvent);
         modEventBus.addListener(AliMod::registerClientEvent);
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
@@ -46,5 +51,10 @@ public class AliMod {
 
     public static void registerClientEvent(@SuppressWarnings("unused") FMLClientSetupEvent event) {
         PluginManager.registerClientEvent();
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListener(AddReloadListenerEvent event) {
+        event.addListener(SERVER.getFakeLootDataManager());
     }
 }
