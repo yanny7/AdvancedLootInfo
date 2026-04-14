@@ -45,4 +45,8 @@ public class FakeLootDataManager extends SimpleJsonResourceReloadListener {
     public Map<ResourceLocation, LootTable> getLootTables() {
         return fakeTables;
     }
+
+    public void clearLootTables() {
+        fakeTables.clear();
+    }
 }
