@@ -16,8 +16,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class AliConfig {
+    public static final int CURRENT_VERSION = 1;
+
     public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(
+                Codec.INT.optionalFieldOf("configVersion", 0).forGetter((c) -> c.configVersion),
                 BlockLootCategory.CODEC.codec().listOf().optionalFieldOf("blockCategories", Collections.emptyList()).forGetter(c -> c.blockCategories),
                 EntityLootCategory.CODEC.codec().listOf().optionalFieldOf("entityCategories", Collections.emptyList()).forGetter(c -> c.entityCategories),
                 GameplayLootCategory.CODEC.codec().listOf().optionalFieldOf("gameplayCategories", Collections.emptyList()).forGetter(c -> c.gameplayCategories),
@@ -25,9 +28,10 @@ public class AliConfig {
                 ResourceLocation.CODEC.listOf().optionalFieldOf("disabledEntities", Collections.emptyList()).forGetter((c) -> c.disabledEntities),
                 Codec.BOOL.optionalFieldOf("logMoreStatistics", false).forGetter((c) -> c.logMoreStatistics),
                 Codec.BOOL.optionalFieldOf("showInGameNames", true).forGetter((c) -> c.showInGameNames)
-        ).apply(instance, (blocks, entities, gameplay, trades, disabled, log, show) -> {
+        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show) -> {
             AliConfig config = new AliConfig();
 
+            config.configVersion = version;
             config.disabledEntities = new ArrayList<>(disabled);
             config.logMoreStatistics = log;
             config.showInGameNames = show;
@@ -38,6 +42,8 @@ public class AliConfig {
             return config;
         })
     );
+
+    public int configVersion = 0;
 
     public List<BlockLootCategory> blockCategories;
     public List<EntityLootCategory> entityCategories;
