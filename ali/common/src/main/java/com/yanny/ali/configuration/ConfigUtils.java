@@ -32,8 +32,10 @@ public class ConfigUtils {
         Path modConfigDir = configDir.resolve(Utils.MOD_ID);
         Path configFile = modConfigDir.resolve(Utils.COMMON_CONFIG_NAME);
 
-        if (!modConfigDir.toFile().exists()) {
-            if (!modConfigDir.toFile().mkdirs()) {
+        if (!Files.exists(modConfigDir)) {
+            try {
+                Files.createDirectories(modConfigDir);
+            } catch (IOException e) {
                 LOGGER.warn("Failed to create path {} for configuration", modConfigDir);
                 return new AliConfig();
             }
@@ -46,7 +48,32 @@ public class ConfigUtils {
             saveConfig(configFile, gson);
         }
 
-        return load(configFile, gson);
+        AliConfig loadedConfig = load(configFile, gson);
+
+        if (loadedConfig.configVersion < AliConfig.CURRENT_VERSION) {
+            LOGGER.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.configVersion, AliConfig.CURRENT_VERSION);
+
+            try {
+                File backupFile = new File(config.getAbsolutePath() + ".bak");
+
+                if (backupFile.exists()) {
+                    if (!backupFile.delete()) {
+                        LOGGER.warn("Failed to delete backup file {}", backupFile);
+                    }
+                }
+
+                if (!config.renameTo(backupFile)) {
+                    LOGGER.warn("Failed to rename config file {} to {}", config, backupFile);
+                }
+
+                saveConfig(configFile, gson);
+                return load(configFile, gson);
+            } catch (Exception e) {
+                LOGGER.warn("Failed to rotate outdated config file!", e);
+            }
+        }
+
+        return loadedConfig;
     }
 
     private static AliConfig load(Path configFilePath, Gson gson) {
@@ -61,7 +88,10 @@ public class ConfigUtils {
 
     private static void saveConfig(Path configFilePath, Gson gson) {
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
-            gson.toJson(new AliConfig(), writer);
+            AliConfig config = new AliConfig();
+
+            config.configVersion = AliConfig.CURRENT_VERSION;
+            gson.toJson(config, writer);
             LOGGER.info("Created new configuration file {}", configFilePath);
         } catch (IOException e) {
             LOGGER.warn("Error while writing configuration file: {}", e.getMessage(), e);

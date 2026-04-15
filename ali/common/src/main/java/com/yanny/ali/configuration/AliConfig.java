@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class AliConfig {
+    public static final int CURRENT_VERSION = 1;
+
+    public int configVersion = 0;
+
     public List<BlockLootCategory> blockCategories;
     public List<EntityLootCategory> entityCategories;
     public List<GameplayLootCategory> gameplayCategories;
