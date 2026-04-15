@@ -1,3 +1,7 @@
+## []
+
+- Fixed latest feature not displayed due to old configuration file
+
 ## [1.9.0]
 
 - Added catalyst ingredient to loot categories (e.g. Fishing Rod → Fishing Loot Category)

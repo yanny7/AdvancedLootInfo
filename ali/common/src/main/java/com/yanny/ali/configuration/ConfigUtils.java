@@ -38,8 +38,10 @@ public class ConfigUtils {
         Path modConfigDir = configDir.resolve(Utils.MOD_ID);
         Path configFile = modConfigDir.resolve(Utils.COMMON_CONFIG_NAME);
 
-        if (!modConfigDir.toFile().exists()) {
-            if (!modConfigDir.toFile().mkdirs()) {
+        if (!Files.exists(modConfigDir)) {
+            try {
+                Files.createDirectories(modConfigDir);
+            } catch (IOException e) {
                 LOGGER.warn("Failed to create path {} for configuration", modConfigDir);
                 return new AliConfig();
             }
@@ -51,7 +53,32 @@ public class ConfigUtils {
             saveConfig(configFile);
         }
 
-        return load(configFile);
+        AliConfig loadedConfig = load(configFile);
+
+        if (loadedConfig.configVersion < AliConfig.CURRENT_VERSION) {
+            LOGGER.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.configVersion, AliConfig.CURRENT_VERSION);
+
+            try {
+                File backupFile = new File(config.getAbsolutePath() + ".bak");
+
+                if (backupFile.exists()) {
+                    if (!backupFile.delete()) {
+                        LOGGER.warn("Failed to delete backup file {}", backupFile);
+                    }
+                }
+
+                if (!config.renameTo(backupFile)) {
+                    LOGGER.warn("Failed to rename config file {} to {}", config, backupFile);
+                }
+
+                saveConfig(configFile);
+                return load(configFile);
+            } catch (Exception e) {
+                LOGGER.warn("Failed to rotate outdated config file!", e);
+            }
+        }
+
+        return loadedConfig;
     }
 
     private static AliConfig load(Path configFilePath) {
@@ -72,10 +99,13 @@ public class ConfigUtils {
     private static void saveConfig(Path configFilePath) {
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
             LOGGER.info("Creating new configuration file {}", configFilePath);
+            AliConfig config = new AliConfig();
+
+            config.configVersion = AliConfig.CURRENT_VERSION;
 
             HolderLookup.Provider lookup = HolderLookup.Provider.create(BuiltInRegistries.REGISTRY.stream().map(Registry::asLookup));
             DynamicOps<JsonElement> ops = lookup.createSerializationContext(JsonOps.INSTANCE);
-            JsonElement json = AliConfig.CODEC.encodeStart(ops, new AliConfig()).getOrThrow((s) -> new RuntimeException("Config save error: " + s));
+            JsonElement json = AliConfig.CODEC.encodeStart(ops, config).getOrThrow((s) -> new RuntimeException("Config save error: " + s));
 
             GSON.toJson(json, writer);
         } catch (IOException e) {
