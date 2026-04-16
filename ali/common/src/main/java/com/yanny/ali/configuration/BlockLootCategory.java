@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +20,9 @@ public class BlockLootCategory extends LootCategory<Block> {
                 ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                 BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                 Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                Ingredient.CODEC.optionalFieldOf("catalyst").forGetter((src) -> Optional.ofNullable(src.getCatalyst())),
+                Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
                 Codec.STRING.listOf().fieldOf("classes").forGetter(src -> src.classes.stream().map(Class::getName).toList())
-        ).apply(instance, (key, icon, hide, catalyst, classNames) -> {
+        ).apply(instance, (key, icon, hide, catalysts, classNames) -> {
             //noinspection unchecked
             List<Class<?>> classList = (List<Class<?>>) (Object) classNames.stream().map(name -> {
                 try {
@@ -30,14 +31,14 @@ public class BlockLootCategory extends LootCategory<Block> {
                     throw new RuntimeException(e);
                 }
             }).toList();
-            return new BlockLootCategory(key, icon, hide, catalyst.orElse(null), classList);
+            return new BlockLootCategory(key, icon, hide, catalysts, classList);
         })
     );
 
     private final List<Class<?>> classes;
 
-    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, @Nullable Ingredient catalyst, List<Class<?>> classes) {
-        super(key, icon, Type.BLOCK, hide, catalyst);
+    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Class<?>> classes) {
+        super(key, icon, Type.BLOCK, hide, catalysts);
         this.classes = classes;
     }
 
