@@ -2,6 +2,7 @@ package com.yanny.ali.platform;
 
 import com.yanny.ali.platform.services.IClientPlatformHelper;
 import com.yanny.ali.platform.services.IPlatformHelper;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ServiceLoader;
 
@@ -31,6 +32,7 @@ public class Services {
         return CLIENT_INSTANCE;
     }
 
+    @NotNull
     public static <T> T load(Class<T> clazz) {
         return ServiceLoader.load(clazz, clazz.getClassLoader())
                 .findFirst()
