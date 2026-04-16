@@ -23,6 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -172,14 +173,13 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     private static <T> Item[] getCatalyst(LootCategory<T> category) {
-        Ingredient catalyst = category.getCatalyst();
+        List<Item> items = new ArrayList<>();
 
-        if (catalyst != null) {
-            //noinspection deprecation
-            return catalyst.items().map(Holder::value).toArray(Item[]::new);
+        for (Ingredient catalyst : category.getCatalysts()) {
+            items.addAll(catalyst.items().map(Holder::value).toList());
         }
 
-        return new Item[0];
+        return items.toArray(Item[]::new);
     }
 
     @FunctionalInterface
