@@ -3,6 +3,7 @@ package com.yanny.ali.manager;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.yanny.ali.platform.Services;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -33,7 +34,7 @@ public class FakeLootDataManager extends SimpleJsonResourceReloadListener {
 
         object.forEach((location, json) -> {
             try {
-                map.put(location, GSON.fromJson(json, LootTable.class));
+                map.put(location, Services.getPlatform().getLootTable(GSON, location, json));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to parse fake loot table {}", location, e);
             }

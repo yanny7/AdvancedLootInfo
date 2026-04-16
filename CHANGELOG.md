@@ -1,6 +1,7 @@
 ## []
 
 - Fixed latest feature not displayed due to old configuration file
+- Fixed fake loot tables not loaded on Forge
 
 ## [1.9.0]
 
