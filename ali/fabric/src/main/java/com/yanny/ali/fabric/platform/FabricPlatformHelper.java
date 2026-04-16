@@ -1,10 +1,13 @@
 package com.yanny.ali.fabric.platform;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import org.slf4j.Logger;
@@ -45,5 +48,10 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
+    }
+
+    @Override
+    public LootTable getLootTable(Gson gson, ResourceLocation location, JsonElement json) {
+        return gson.fromJson(json, LootTable.class);
     }
 }

@@ -11,6 +11,7 @@ import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -180,12 +181,12 @@ public class ReiCompatibility implements REIClientPlugin {
     private static <D extends ReiBaseDisplay, T, U> void registerCategory(CategoryRegistry registry, Map<LootCategory<U>, Holder<D, T, U>> categories) {
         for (Map.Entry<LootCategory<U>, Holder<D, T, U>> entry : categories.entrySet()) {
             ReiBaseCategory<D, U> category = entry.getValue().category;
-            Ingredient catalyst = entry.getKey().getCatalyst();
+            List<Ingredient> catalyst = entry.getKey().getCatalysts();
 
             registry.add(category);
 
             if (!catalyst.isEmpty()) {
-                registry.addWorkstations(category.getCategoryIdentifier(), EntryIngredients.ofIngredient(catalyst));
+                registry.addWorkstations(category.getCategoryIdentifier(), catalyst.stream().map(EntryIngredients::ofIngredient).toArray(EntryIngredient[]::new));
             }
         }
     }

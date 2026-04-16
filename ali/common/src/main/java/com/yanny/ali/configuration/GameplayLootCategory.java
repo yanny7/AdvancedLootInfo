@@ -28,8 +28,8 @@ public class GameplayLootCategory extends LootCategory<ResourceLocation> {
 
     private final List<Pattern> patterns;
 
-    public GameplayLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Pattern> patterns) {
-        super(key, icon, Type.GAMEPLAY, hide, catalyst);
+    public GameplayLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Pattern> patterns) {
+        super(key, icon, Type.GAMEPLAY, hide, catalysts);
         this.patterns = patterns;
     }
 

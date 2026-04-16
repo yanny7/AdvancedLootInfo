@@ -28,8 +28,8 @@ public class TradeLootCategory extends LootCategory<ResourceLocation> {
 
     private final List<Pattern> patterns;
 
-    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Pattern> patterns) {
-        super(key, icon, Type.TRADE, hide, catalyst);
+    public TradeLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Pattern> patterns) {
+        super(key, icon, Type.TRADE, hide, catalysts);
         this.patterns = patterns;
     }
 

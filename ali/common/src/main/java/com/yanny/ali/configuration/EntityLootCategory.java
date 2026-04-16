@@ -34,8 +34,8 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
 
     private final List<Class<?>> classes;
 
-    public EntityLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Class<?>> classes) {
-        super(key, icon, Type.ENTITY, hide, catalyst);
+    public EntityLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Class<?>> classes) {
+        super(key, icon, Type.ENTITY, hide, catalysts);
         this.classes = classes;
     }
 

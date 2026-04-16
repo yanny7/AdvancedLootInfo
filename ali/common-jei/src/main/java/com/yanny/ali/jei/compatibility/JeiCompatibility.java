@@ -21,6 +21,8 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -70,10 +72,10 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        blockCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
-        entityCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
-        gameplayCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
-        tradeCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), category.getCatalyst().getItems()));
+        blockCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), getItems(category.getCatalysts())));
+        entityCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), getItems(category.getCatalysts())));
+        gameplayCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), getItems(category.getCatalysts())));
+        tradeCategories.forEach((category, loot) -> registration.addRecipeCatalysts(loot.getRecipeType(), getItems(category.getCatalysts())));
     }
 
     @Override
@@ -166,6 +168,16 @@ public class JeiCompatibility implements IModPlugin {
         if (recipeType != null) {
             types.computeIfAbsent(recipeType, (p) -> new LinkedList<>()).add(supplier.get());
         }
+    }
+
+    private static ItemStack[] getItems(List<Ingredient> catalysts) {
+        List<ItemStack> items = new ArrayList<>();
+
+        for (Ingredient catalyst : catalysts) {
+            items.addAll(List.of(catalyst.getItems()));
+        }
+
+        return items.toArray(ItemStack[]::new);
     }
 
     @FunctionalInterface

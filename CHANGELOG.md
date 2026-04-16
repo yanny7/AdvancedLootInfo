@@ -1,6 +1,9 @@
 ## []
 
 - Fixed latest feature not displayed due to old configuration file
+- Fixed fake loot tables not loaded on Forge
+- Defined catalyst as list of Ingredients
+- NOTE: Configuration file will reset!
 
 ## [1.9.0]
 

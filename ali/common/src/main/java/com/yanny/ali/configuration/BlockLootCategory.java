@@ -34,8 +34,8 @@ public class BlockLootCategory extends LootCategory<Block> {
 
     private final List<Class<?>> classes;
 
-    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, Ingredient catalyst, List<Class<?>> classes) {
-        super(key, icon, Type.BLOCK, hide, catalyst);
+    public BlockLootCategory(ResourceLocation key, Item icon, boolean hide, List<Ingredient> catalysts, List<Class<?>> classes) {
+        super(key, icon, Type.BLOCK, hide, catalysts);
         this.classes = classes;
     }
 

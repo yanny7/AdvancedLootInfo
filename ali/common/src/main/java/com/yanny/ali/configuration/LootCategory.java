@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.List;
 import java.util.Objects;
 
 public abstract class LootCategory<T> {
@@ -11,14 +12,14 @@ public abstract class LootCategory<T> {
     private final Item icon;
     private final Type type;
     private final boolean hide;
-    private final Ingredient catalyst;
+    private final List<Ingredient> catalysts;
 
-    public LootCategory(ResourceLocation key, Item icon, Type type, boolean hide, Ingredient catalyst) {
+    public LootCategory(ResourceLocation key, Item icon, Type type, boolean hide, List<Ingredient> catalysts) {
         this.key = key;
         this.icon = icon;
         this.type = type;
         this.hide = hide;
-        this.catalyst = catalyst;
+        this.catalysts = catalysts;
     }
 
     public abstract boolean validate(T t);
@@ -54,8 +55,8 @@ public abstract class LootCategory<T> {
         return hide;
     }
 
-    public Ingredient getCatalyst() {
-        return catalyst;
+    public List<Ingredient> getCatalysts() {
+        return catalysts;
     }
 
     public enum Type {
