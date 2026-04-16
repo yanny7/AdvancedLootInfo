@@ -1,5 +1,6 @@
 package com.yanny.ali.configuration;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,6 +10,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class LootCategory<T> {
@@ -16,14 +19,14 @@ public abstract class LootCategory<T> {
     private final Item icon;
     private final Type type;
     private final boolean hide;
-    private final Ingredient catalyst;
+    private final List<Ingredient> catalysts;
 
-    public LootCategory(ResourceLocation key, Item icon, Type type, boolean hide, Ingredient catalyst) {
+    public LootCategory(ResourceLocation key, Item icon, Type type, boolean hide, List<Ingredient> catalysts) {
         this.key = key;
         this.icon = icon;
         this.type = type;
         this.hide = hide;
-        this.catalyst = catalyst;
+        this.catalysts = catalysts;
     }
 
     public LootCategory(LootCategory.Type type, JsonObject jsonObject) {
@@ -31,11 +34,12 @@ public abstract class LootCategory<T> {
         key = ResourceLocation.tryParse(GsonHelper.getAsString(jsonObject, "key"));
         icon = BuiltInRegistries.ITEM.get(new ResourceLocation(GsonHelper.getAsString(jsonObject, "icon")));
         hide = GsonHelper.getAsBoolean(jsonObject, "hide");
+        catalysts = new ArrayList<>();
 
-        if (jsonObject.has("catalyst")) {
-            catalyst = Ingredient.fromJson(jsonObject.get("catalyst"));
-        } else {
-            catalyst = Ingredient.EMPTY;
+        if (jsonObject.has("catalysts")) {
+            for (JsonElement json : jsonObject.getAsJsonArray("catalysts")) {
+                catalysts.add(Ingredient.fromJson(json));
+            }
         }
     }
 
@@ -74,8 +78,8 @@ public abstract class LootCategory<T> {
         return hide;
     }
 
-    public Ingredient getCatalyst() {
-        return catalyst;
+    public List<Ingredient> getCatalysts() {
+        return catalysts;
     }
 
     @NotNull
@@ -87,8 +91,14 @@ public abstract class LootCategory<T> {
         object.addProperty("icon", BuiltInRegistries.ITEM.getKey(icon).toString());
         object.addProperty("hide", hide);
 
-        if (!catalyst.isEmpty()) {
-            object.add("catalyst", catalyst.toJson());
+        if (!catalysts.isEmpty()) {
+            JsonArray array = new JsonArray();
+
+            for (Ingredient catalyst : catalysts) {
+                array.add(catalyst.toJson());
+            }
+
+            object.add("catalysts", array);
         }
 
         toJson(object);

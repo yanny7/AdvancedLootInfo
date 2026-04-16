@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -98,8 +99,10 @@ public class EmiCompatibility implements EmiPlugin {
         if (category != null) {
             registry.addRecipe(supplier.apply(category.getValue()));
 
-            if (!category.getKey().getCatalyst().isEmpty()) {
-                registry.addWorkstation(category.getValue(), EmiIngredient.of(category.getKey().getCatalyst()));
+            if (!category.getKey().getCatalysts().isEmpty()) {
+                for (Ingredient catalyst : category.getKey().getCatalysts()) {
+                    registry.addWorkstation(category.getValue(), EmiIngredient.of(catalyst));
+                }
             }
         }
     }
