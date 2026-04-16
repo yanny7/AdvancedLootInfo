@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -21,7 +22,7 @@ public class TradeLootCategory extends LootCategory<ResourceLocation> {
                     ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                     BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                     Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                    Ingredient.CODEC.optionalFieldOf("catalyst", Ingredient.EMPTY).forGetter(LootCategory::getCatalyst),
+                    Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
                     PATTERN_CODEC.listOf().fieldOf("pattern").forGetter(src -> src.patterns)
             ).apply(instance, TradeLootCategory::new)
     );

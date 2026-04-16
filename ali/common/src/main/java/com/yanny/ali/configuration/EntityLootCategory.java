@@ -9,6 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.Collections;
 import java.util.List;
 
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
@@ -17,9 +18,9 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
                     ResourceLocation.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                     BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                     Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
-                    Ingredient.CODEC.optionalFieldOf("catalyst", Ingredient.EMPTY).forGetter(LootCategory::getCatalyst),
+                    Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
                     Codec.STRING.listOf().fieldOf("classes").forGetter(src -> src.classes.stream().map(Class::getName).toList())
-            ).apply(instance, (key, icon, hide, catalyst, classNames) -> {
+            ).apply(instance, (key, icon, hide, catalysts, classNames) -> {
                 //noinspection unchecked
                 List<Class<?>> classList = (List<Class<?>>) (Object) classNames.stream().map(name -> {
                     try {
@@ -28,7 +29,7 @@ public class EntityLootCategory extends LootCategory<EntityType<?>> {
                         throw new RuntimeException(e);
                     }
                 }).toList();
-                return new EntityLootCategory(key, icon, hide, catalyst, classList);
+                return new EntityLootCategory(key, icon, hide, catalysts, classList);
             })
     );
 
