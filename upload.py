@@ -10,7 +10,7 @@ import requests
 MODRINTH_USER_AGENT = "Modrinth-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 CURSEFORGE_USER_AGENT = "CurseForge-Uploader-Script/1.0 (Yanny/AdvancedLootInfo)"
 
-def calculate_sha512(file_path):
+def calculate_sha512(file_path: str):
     sha512_hash = hashlib.sha512()
 
     with open(file_path, "rb") as f:
@@ -26,7 +26,7 @@ def prepare_dependency(dep_id):
     }
 
 @functools.lru_cache(maxsize=1)
-def get_curseforge_game_version_types_mapping(api_key):
+def get_curseforge_game_version_types_mapping(api_key: str):
     print("CurseForge: Loading minecraft version mappings...")
     url = "https://api.curseforge.com/v1/games/432/version-types/"
     headers = {
@@ -46,7 +46,7 @@ def get_curseforge_game_version_types_mapping(api_key):
         return {}
 
 @functools.lru_cache(maxsize=1)
-def get_curseforge_game_versions_mapping(api_token):
+def get_curseforge_game_versions_mapping(api_token: str):
     print("CurseForge: Loading minecraft version mappings...")
     url = "https://minecraft.curseforge.com/api/game/versions"
     headers = {
@@ -92,7 +92,7 @@ def read_properties(properties_file_path="gradle.properties", keys_to_find=None)
         print(f"Error while reading from file '{properties_file_path}': {e}")
         return None
 
-def map_loader(loader_name):
+def map_loader(loader_name: str):
     if loader_name == "forge":
         return 1
     elif loader_name == "fabric":
@@ -102,7 +102,7 @@ def map_loader(loader_name):
     else:
         return None
 
-def read_changelog(filename="CHANGELOG.md"):
+def read_changelog(filename: str):
     changelog_content = []
     found_first_version_header = False
 
@@ -130,7 +130,7 @@ def read_changelog(filename="CHANGELOG.md"):
 
     return changelog_content
 
-def upload_to_modrinth(api_token, project_id, version_number, mod_file_path, loaders, game_versions, changelog, dependencies, release_type, version_name):
+def upload_to_modrinth(api_token: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, changelog: str, dependencies: list, release_type: str, version_name: str):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
         return
@@ -200,7 +200,7 @@ def upload_to_modrinth(api_token, project_id, version_number, mod_file_path, loa
     except Exception as e:
         print(f"Other Error: {e}")
 
-def upload_to_curseforge(api_token, api_key, project_id, version_number, mod_file_path, loaders, game_versions, release_type, changelog, version_name):
+def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_number: str, mod_file_path: str, loaders: list, game_versions: list, release_type: str, changelog: str, version_name: str):
     if not os.path.exists(mod_file_path):
         print(f"Error: File '{mod_file_path}' was not found!")
         return
@@ -295,21 +295,22 @@ if __name__ == "__main__":
     parser.add_argument("--curseforge-api-token", required=True, help="CurseForge API Token")
     parser.add_argument("--curseforge-api-key", required=True, help="CurseForge API Key")
     parser.add_argument("--release-type", required=True, help="Mod release type (release|beta|alpha)")
+    parser.add_argument("--mod-id", required=True, help="Mod ID (ali|awi)")
 
     args = parser.parse_args()
-    props = read_properties(keys_to_find=["version", "minecraft_version", "mod_name"])
-    version_changelog = read_changelog()
+    props = read_properties(keys_to_find=["ali_version", "awi_version", "minecraft_version", "ali_mod_name", "awi_mod_name"])
+    version_changelog = read_changelog(filename=f"{args.mod_id}/CHANGELOG.md")
 
     mod_loaders = [["forge"], ["neoforge"], ["fabric"]]
     mod_dependencies = list(map(prepare_dependency, ["fRiHVvU7", "u6dRKJwZ", "nfn13YXA", "fJFETWDN"])) # EMI JEI REI LOOTJS
 
     for mod_loader in mod_loaders:
         print (f"processing {mod_loader} launcher")
-        path = f"./ali/{mod_loader[0]}/build/libs"
-        version = f"{props['minecraft_version']}-{props['version']}"
-        file_name = f"{props['mod_name']}-{mod_loader[0]}-{version}.jar"
+        path = f"./{args.mod_id}/{mod_loader[0]}/build/libs"
+        version = f"{props['minecraft_version']}-{props[f"{args.mod_id}_version"]}"
+        file_name = f"{props[f"{args.mod_id}_mod_name"]}-{mod_loader[0]}-{version}.jar"
         file_path = f"{path}/{file_name}"
-        name = f"{re.sub(r'(?<!^)(?=[A-Z])', ' ', props['mod_name'])} {version}"
+        name = f"{re.sub(r'(?<!^)(?=[A-Z])', ' ', props[f"{args.mod_id}_mod_name"])} {version}"
 
         upload_to_modrinth(
             api_token=args.modrinth_api_token,
