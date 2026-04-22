@@ -32,26 +32,27 @@ configurations {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    api "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
     project.ext.commonProjects.each { p ->
-        common(project(path: p, configuration: "namedElements")) { transitive false }
+        common(project(path: p)) { transitive false }
         shadowCommon(project(path: p, configuration: "transformProductionFabric")) { transitive false }
     }
 }
 
-shadowJar {
-    exclude "architectury.common.json"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
+jar {
+    archiveClassifier = "raw"
 }
 
-remapJar {
-    injectAccessWidener = true
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()       // Remove default source set inclusion
+    from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = null           // shadowJar becomes the main artifact
+    from rootProject.file("LICENSE")
 }
 
 sourcesJar {
