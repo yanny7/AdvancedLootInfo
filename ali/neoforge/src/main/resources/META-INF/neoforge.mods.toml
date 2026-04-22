@@ -5,15 +5,15 @@ issueTrackerURL="https://github.com/yanny7/advancedlootinfo/issues" #optional
 
 [[mods]] #mandatory
 modId = "ali" #mandatory
-version = "${version}" #mandatory
-displayName = "${mod_name}" #mandatory
+version = "${ali_version}" #mandatory
+displayName = "${ali_mod_name}" #mandatory
 displayTest = "IGNORE_ALL_VERSION"
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional (see https://docs.neoforged.net/docs/misc/updatechecker/)
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional (displayed in the mod UI)
 logoFile="logo.png" #optional
 logoBlur = false
 authors = "${mod_author}" #optional
-description = '''${description}''' #mandatory (Supports multiline text)
+description = '''${ali_description}''' #mandatory (Supports multiline text)
 
 [[mixins]]
 config = "ali.mixins.json"
@@ -21,7 +21,7 @@ config = "ali.mixins.json"
 config = "ali.neoforge.mixins.json"
 
 #[[mixins]]
-#config = "${mod_id}.lootjs.mixins.json"
+#config = "${ali_mod_id}.lootjs.mixins.json"
 
 [[dependencies.ali]] #optional
 modId = "neoforge" #mandatory

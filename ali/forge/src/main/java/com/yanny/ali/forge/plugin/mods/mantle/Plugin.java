@@ -3,11 +3,11 @@ package com.yanny.ali.forge.plugin.mods.mantle;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
-import com.yanny.ali.plugin.mods.PluginUtils;
 import com.yanny.ali.forge.plugin.mods.mantle.conditions.BlockTagLootCondition;
 import com.yanny.ali.forge.plugin.mods.mantle.functions.RetexturedLootFunction;
 import com.yanny.ali.forge.plugin.mods.mantle.functions.SetFluidLootFunction;
 import com.yanny.ali.forge.plugin.mods.mantle.trades.AncientToolItemListing;
+import com.yanny.ali.plugin.mods.PluginUtils;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
