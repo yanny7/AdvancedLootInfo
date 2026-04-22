@@ -41,6 +41,8 @@ subprojects {
                 "awi_group"                 : awi_group,
                 "awi_description"           : awi_description,
 
+                "java_version"              : java_version,
+
                 "minecraft_version"         : minecraft_version,
                 "minecraft_version_range"   : minecraft_version_range,
 
