@@ -88,7 +88,7 @@ public abstract class ListNode implements IDataNode {
             int startOfNode = buf.writerIndex();
 
             try {
-                buf.writeResourceLocation(node.getId());
+                buf.writeIdentifier(node.getId());
                 node.encode(utils, buf);
                 successfulNodes++;
             } catch (Throwable e) {

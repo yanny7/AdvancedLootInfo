@@ -6,7 +6,7 @@ import com.yanny.awi.api.ITooltipNode;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import java.util.List;
 
 public class BiomeNode extends ListNode {
-    public static final ResourceLocation ID = Utils.modLoc("biome");
+    public static final Identifier ID = Utils.modLoc("biome");
 
     public BiomeNode(IServerUtils utils, Biome biome) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
@@ -40,7 +40,7 @@ public class BiomeNode extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

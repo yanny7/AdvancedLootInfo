@@ -7,7 +7,7 @@ import com.yanny.awi.api.ListNode;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 
 public class PlacedFeatureNode extends ListNode {
-    public static final ResourceLocation ID = Utils.modLoc("placed_feature");
+    public static final Identifier ID = Utils.modLoc("placed_feature");
 
     public PlacedFeatureNode(IServerUtils utils, GenerationStep.Decoration step, HolderSet<PlacedFeature> features) {
         for (Holder<PlacedFeature> placedFeatureHolder : features) {
@@ -43,7 +43,7 @@ public class PlacedFeatureNode extends ListNode {
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }
