@@ -32,7 +32,9 @@ plugins {
 // This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)
 rootProject.name = 'MultiLoader-AdvancedLootInfo'
 
+include("aci:common")
 include("ali:common")
+include("awi:common")
 
 if (settings.emi_enabled == "true") {
     include("ali:common-emi")
@@ -52,8 +54,12 @@ if (settings.lootjs_enabled == "true") {
 
 if (settings.fabric_enabled == "true") {
     include("ali:fabric")
+    include("awi:fabric")
 }
 
 if (settings.forge_enabled == "true") {
     include("ali:forge")
 }
+
+include 'aci'
+include 'aci:common'

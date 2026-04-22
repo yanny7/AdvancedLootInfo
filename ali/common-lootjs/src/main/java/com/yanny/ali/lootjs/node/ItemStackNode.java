@@ -2,8 +2,8 @@ package com.yanny.ali.lootjs.node;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.lootjs.LootJsPlugin;
+import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,8 +1,8 @@
 package com.yanny.ali.lootjs.widget;
 
 import com.yanny.ali.api.*;
-import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.lootjs.node.AddLootNode;
+import com.yanny.ali.plugin.client.WidgetUtils;
 
 public class AddLootWidget extends ListWidget {
     public AddLootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
