@@ -2,10 +2,10 @@ package com.yanny.ali.lootjs.server;
 
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
+import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import org.jetbrains.annotations.NotNull;
 
 public class LootJsFunctionTooltipUtils {

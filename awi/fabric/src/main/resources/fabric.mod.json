@@ -1,0 +1,40 @@
+{
+    "schemaVersion": 1,
+    "id": "${awi_mod_id}",
+    "version": "${awi_version}",
+    "name": "${awi_mod_name}",
+    "description": "${awi_description}",
+    "authors": [
+        "${mod_author}"
+    ],
+    "contact": {
+        "issues": "https://github.com/yanny7/advancedlootinfo/issues",
+        "sources": "https://github.com/yanny7/advancedlootinfo"
+    },
+    "license": "${license}",
+    "icon": "logo.png",
+    "environment": "*",
+    "accessWidener": "awi.accesswidener",
+    "entrypoints": {
+        "main": [
+          "com.yanny.awi.fabric.CommonAliMod"
+        ],
+        "awi": [
+            "com.yanny.awi.plugin.Plugin"
+        ]
+    },
+    "mixins": [
+    ],
+    "depends": {
+        "fabricloader": "*",
+        "fabric": "*",
+        "minecraft": "${minecraft_version}",
+        "java": ">=17"
+    },
+    "suggests": {
+        "emi": "${emi_version_range_fabric}",
+        "jei": "${jei_version_range_fabric}",
+        "rei": "${rei_version_range_fabric}"
+    }
+}
+  
