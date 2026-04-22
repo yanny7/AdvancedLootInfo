@@ -26,20 +26,22 @@ subprojects {
 
     ext {
         expandProps = [
-                "mod_author"                : mod_author,
-                "license"                   : license,
+                "mod_author"                   : mod_author,
+                "license"                      : license,
 
-                "ali_mod_name"              : ali_mod_name,
-                "ali_mod_id"                : ali_mod_id,
-                "ali_version"               : ali_version,
-                "ali_group"                 : ali_group,
-                "ali_description"           : ali_description,
+                "ali_mod_name"                 : ali_mod_name,
+                "ali_mod_id"                   : ali_mod_id,
+                "ali_version"                  : ali_version,
+                "ali_group"                    : ali_group,
+                "ali_description"              : ali_description,
 
-                "awi_mod_name"              : awi_mod_name,
-                "awi_mod_id"                : awi_mod_id,
-                "awi_version"               : awi_version,
-                "awi_group"                 : awi_group,
-                "awi_description"           : awi_description,
+                "awi_mod_name"                 : awi_mod_name,
+                "awi_mod_id"                   : awi_mod_id,
+                "awi_version"                  : awi_version,
+                "awi_group"                    : awi_group,
+                "awi_description"              : awi_description,
+
+                "java_version"                 : java_version,
 
                 "minecraft_version"            : minecraft_version,
                 "minecraft_version_range"      : minecraft_version_range,
