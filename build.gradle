@@ -21,15 +21,22 @@ subprojects {
 
     ext {
         expandProps = [
-                "version"                      : project.version,
-                "group"                        : project.group,
-                "java_version"                 : java_version,
-
-                "mod_name"                     : mod_name,
                 "mod_author"                   : mod_author,
-                "mod_id"                       : mod_id,
                 "license"                      : license,
-                "description"                  : project.description,
+
+                "ali_mod_name"                 : ali_mod_name,
+                "ali_mod_id"                   : ali_mod_id,
+                "ali_version"                  : ali_version,
+                "ali_group"                    : ali_group,
+                "ali_description"              : ali_description,
+
+                "awi_mod_name"                 : awi_mod_name,
+                "awi_mod_id"                   : awi_mod_id,
+                "awi_version"                  : awi_version,
+                "awi_group"                    : awi_group,
+                "awi_description"              : awi_description,
+
+                "java_version"                 : java_version,
 
                 "minecraft_version"            : minecraft_version,
                 "minecraft_version_range"      : minecraft_version_range,
@@ -68,21 +75,38 @@ subprojects {
         def lootjs_available = lootjs_enabled == "true" && project.findProperty("${project.name}_lootjs_enabled") == "true"
 
         ext {
-            commonProjects = [":ali:common"]
+            commonProjects = [":aci:common"]
         }
 
-        if (emi_available) project.ext.commonProjects << ":ali:common-emi"
-        if (jei_available) project.ext.commonProjects << ":ali:common-jei"
-        if (rei_available) project.ext.commonProjects << ":ali:common-rei"
-        if (lootjs_available) project.ext.commonProjects << ":ali:common-lootjs"
+        if (project.parent.name == "ali") {
+            project.ext.commonProjects << ":ali:common"
+
+            if (emi_available) project.ext.commonProjects << ":ali:common-emi"
+            if (jei_available) project.ext.commonProjects << ":ali:common-jei"
+            if (rei_available) project.ext.commonProjects << ":ali:common-rei"
+            if (lootjs_available) project.ext.commonProjects << ":ali:common-lootjs"
+
+            loom {
+                runs {
+                    client {
+                        client()
+                        ideConfigGenerated = true
+                        name = "Run ALI Client"
+                        source(sourceSets.main)
+                    }
+                }
+            }
+        } else if (project.parent.name == "awi") {
+            project.ext.commonProjects << ":awi:common"
+        }
 
         // register tasks that allow running specific combination of recipe viewer and launcher
         viewers.each { viewer ->
             if (project.findProperty("${viewer}_enabled") == "true" && project.findProperty("${project.name}_${viewer}_enabled") == "true") {
-                tasks.register("run${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
+                tasks.register("run${project.parent.name.capitalize()}${project.name.capitalize()}${viewer.capitalize()}Client", GradleBuild) {
                     group = "launchers"
-                    description = "Launch ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
-                    setTasks([":ali:${project.name}:runClient".toString()])
+                    description = "Launch ${project.parent.name.capitalize()} ${project.name.toUpperCase()} with ${viewer.toUpperCase()} recipe viewer"
+                    setTasks([":${project.parent.name}:${project.name}:runClient".toString()])
                     startParameter.projectProperties = ["recipe_viewer": viewer]
                 }
             }
@@ -121,9 +145,16 @@ subprojects {
         }
 
         processResources {
-            from(project(":ali:common").sourceSets.main.resources.srcDirs) {
-                include "pack.mcmeta"
-                include "ali.accesswidener"
+            if (project.parent.name == "ali") {
+                from(project(":ali:common").sourceSets.main.resources.srcDirs) {
+                    include "pack.mcmeta"
+                    include "ali.accesswidener"
+                }
+            } else if (project.parent.name == "awi") {
+                from(project(":awi:common").sourceSets.main.resources.srcDirs) {
+                    include "pack.mcmeta"
+                    include "awi.accesswidener"
+                }
             }
 
             inputs.property "version", project.version
@@ -148,12 +179,23 @@ allprojects {
     apply plugin: "java"
     apply plugin: "architectury-plugin"
 
-    base {
-        archivesName = mod_name
-    }
+    if (project.parent) {
+        if (project.parent.name == "ali") {
+            base {
+                archivesName = "${ali_mod_name}-${project.name}"
+            }
 
-    version = minecraft_version + "-" + project.version
-    group = group
+            version = minecraft_version + "-" + ali_version
+            group = ali_group
+        } else if (project.parent.name == "awi") {
+            base {
+                archivesName = "${awi_mod_name}-${project.name}"
+            }
+
+            version = minecraft_version + "-" + awi_version
+            group = awi_group
+        }
+    }
 
     repositories {
         maven {

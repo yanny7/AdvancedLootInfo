@@ -1,9 +1,9 @@
 {
     "schemaVersion": 1,
-    "id": "ali",
-    "version": "${version}",
-    "name": "${mod_name}",
-    "description": "${description}",
+    "id": "${ali_mod_id}",
+    "version": "${ali_version}",
+    "name": "${ali_mod_name}",
+    "description": "${ali_description}",
     "authors": [
         "${mod_author}"
     ],
