@@ -22,11 +22,11 @@ public abstract class AbstractServer {
     public void readWorldgenInfo(ServerLevel level) {
         AwiServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
         RegistryAccess registryAccess = level.registryAccess();
-        Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
-        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
-        Registry<PlacedFeature> placedFeatureRegistry = registryAccess.registryOrThrow(Registries.PLACED_FEATURE);
-        Registry<ConfiguredFeature<?, ?>> configuredFeatureRegistry = registryAccess.registryOrThrow(Registries.CONFIGURED_FEATURE);
-        Registry<PlacementModifierType<?>> placementModifierTypeRegistry = registryAccess.registryOrThrow(Registries.PLACEMENT_MODIFIER_TYPE);
+        Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
+        Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
+        Registry<PlacedFeature> placedFeatureRegistry = registryAccess.lookupOrThrow(Registries.PLACED_FEATURE);
+        Registry<ConfiguredFeature<?, ?>> configuredFeatureRegistry = registryAccess.lookupOrThrow(Registries.CONFIGURED_FEATURE);
+        Registry<PlacementModifierType<?>> placementModifierTypeRegistry = registryAccess.lookupOrThrow(Registries.PLACEMENT_MODIFIER_TYPE);
 
         for (LevelStem levelStem : levelStemRegistry) {
             new LevelStemNode(serverRegistry, levelStem);
