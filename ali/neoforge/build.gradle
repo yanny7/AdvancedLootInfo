@@ -2,10 +2,6 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
-base {
-    archivesName = "${mod_name}-neoforge"
-}
-
 architectury {
     platformSetupLoomIde()
     neoForge()
@@ -22,7 +18,7 @@ loom {
     runs {
         data {
             data()
-            programArgs "--all", "--mod", "${mod_id}"
+            programArgs "--all", "--mod", "${ali_mod_id}"
             programArgs "--output", "${file('src/main/generated/')}"
             programArgs "--existing", "${file("src/main/resources").absolutePath}"
         }
