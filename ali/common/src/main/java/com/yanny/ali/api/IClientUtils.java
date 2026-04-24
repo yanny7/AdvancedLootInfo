@@ -1,13 +1,6 @@
 package com.yanny.ali.api;
 
-import net.minecraft.resources.Identifier;
+import com.yanny.aci.api.ICommonClientUtils;
 
-import java.util.List;
-
-public interface IClientUtils extends ICommonUtils {
-    List<IWidget> createWidgets(IWidgetUtils registry, List<IDataNode> entries, RelativeRect parent, int maxWidth);
-
-    <T extends IDataNode> IClientRegistry.DataFactory<T> getDataNodeFactory(Identifier id);
-
-    <T extends ITooltipNode> IClientRegistry.TooltipFactory<T> getTooltipNodeFactory(Identifier id);
+public interface IClientUtils extends ICommonClientUtils<IServerUtils, ITooltipNode, IDataNode, IClientUtils, IWidgetUtils>, ICommonUtils {
 }

@@ -1,0 +1,19 @@
+package com.yanny.aci.api;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.resources.Identifier;
+
+import java.util.function.BiFunction;
+
+public interface ICommonClientRegistry<SU extends ICommonServerUtils, TN extends ICommonTooltipNode<SU>, DN extends ICommonDataNode<SU, TN>, CU extends ICommonClientUtils<SU, TN, DN, CU, WU>, WU extends ICommonWidgetUtils<SU, TN, DN>> {
+    void registerWidget(Identifier id, IWidgetFactory<SU, TN, DN, WU> factory);
+
+    void registerDataNode(Identifier id, BiFunction<CU, RegistryFriendlyByteBuf, DN> dataFactory);
+
+    void registerTooltipNode(Identifier id, BiFunction<CU, RegistryFriendlyByteBuf, TN> tooltipFactory);
+
+    @FunctionalInterface
+    interface IWidgetFactory<SU extends ICommonServerUtils, T extends ICommonTooltipNode<SU>, DN extends ICommonDataNode<SU, T>, WU extends ICommonWidgetUtils<SU, T, DN>> {
+        IWidget create(WU registry, DN entry, RelativeRect rect, int maxWidth);
+    }
+}

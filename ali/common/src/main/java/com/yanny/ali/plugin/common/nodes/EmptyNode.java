@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 
 public class EmptyNode implements IDataNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "empty");
+    public static final Identifier ID = Utils.modLoc("empty");
 
     private final ITooltipNode tooltip;
     private final float chance;

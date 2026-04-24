@@ -1,4 +1,4 @@
-package com.yanny.ali.api;
+package com.yanny.aci.api;
 
 import net.minecraft.network.FriendlyByteBuf;
 import org.jetbrains.annotations.NotNull;

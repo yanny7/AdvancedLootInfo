@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class ArrayTooltipNode extends ListTooltipNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "array");
+    public static final Identifier ID = Utils.modLoc("array");
     private static final LoadingCache<CacheKey, ArrayTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new ArrayTooltipNode(data) : null));
 

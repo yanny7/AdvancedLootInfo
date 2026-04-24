@@ -15,8 +15,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static com.yanny.aci.api.ICommonTooltipNode.pad;
+
 public class ErrorTooltipNode implements ITooltipNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "error");
+    public static final Identifier ID = Utils.modLoc("error");
 
     private final String value;
 
@@ -26,7 +28,7 @@ public class ErrorTooltipNode implements ITooltipNode {
 
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
-        return Collections.singletonList(ITooltipNode.pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", value).withStyle(ChatFormatting.RED)));
+        return Collections.singletonList(pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", value).withStyle(ChatFormatting.RED)));
     }
 
     @Override

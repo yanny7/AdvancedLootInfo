@@ -1,8 +1,8 @@
 package com.yanny.ali.jei.compatibility.jei;
 
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.Rect;
-import com.yanny.ali.api.RelativeRect;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.Rect;
+import com.yanny.aci.api.RelativeRect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import net.minecraft.client.gui.GuiGraphics;

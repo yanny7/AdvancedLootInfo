@@ -1,6 +1,6 @@
 package com.yanny.ali.rei.compatibility.rei;
 
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.mixin.MixinVegetationBlock;
 import com.yanny.ali.pip.BlockRenderState;

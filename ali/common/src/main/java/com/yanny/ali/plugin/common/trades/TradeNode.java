@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TradeNode extends ListNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "trade");
+    public static final Identifier ID = Utils.modLoc("trade");
 
     public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
         List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()

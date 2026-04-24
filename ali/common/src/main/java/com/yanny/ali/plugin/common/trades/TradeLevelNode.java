@@ -12,7 +12,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 
 public class TradeLevelNode extends ListNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "trade_level");
+    public static final Identifier ID = Utils.modLoc("trade_level");
 
     public final int level;
 

@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier;
 import java.util.List;
 
 public class SubTradesNode<T> extends ListNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "sub_trades");
+    public static final Identifier ID = Utils.modLoc("sub_trades");
 
     private final ITooltipNode tooltip;
 

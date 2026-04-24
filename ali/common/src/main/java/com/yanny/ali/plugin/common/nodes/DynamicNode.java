@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 
 public class DynamicNode implements IDataNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "dynamic");
+    public static final Identifier ID = Utils.modLoc("dynamic");
 
     private final ITooltipNode tooltip;
     private final float chance;

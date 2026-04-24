@@ -7,7 +7,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 
 public class ModifiedNode extends ListNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "modified");
+    public static final Identifier ID = Utils.modLoc("modified");
 
     private final ITooltipNode tooltip;
 
