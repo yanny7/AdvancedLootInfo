@@ -1,9 +1,9 @@
 package com.yanny.ali.plugin.client.widget;
 
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.RelativeRect;
-import com.yanny.ali.api.WidgetDirection;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.Minecraft;

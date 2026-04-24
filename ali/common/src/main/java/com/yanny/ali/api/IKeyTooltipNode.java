@@ -1,7 +1,8 @@
 package com.yanny.ali.api;
 
-public interface IKeyTooltipNode {
-    IKeyTooltipNode add(ITooltipNode node);
+import com.yanny.aci.api.ICommonKeyTooltipNode;
 
-    ITooltipNode build(String key);
+public interface IKeyTooltipNode extends ICommonKeyTooltipNode<IServerUtils, ITooltipNode> {
+    @Override
+    IKeyTooltipNode add(ITooltipNode node);
 }

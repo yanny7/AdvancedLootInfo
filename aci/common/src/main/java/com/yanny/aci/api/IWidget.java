@@ -1,4 +1,4 @@
-package com.yanny.ali.api;
+package com.yanny.aci.api;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

@@ -1,6 +1,10 @@
 package com.yanny.ali.jei.compatibility.jei;
 
-import com.yanny.ali.api.*;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.BlockLootType;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;

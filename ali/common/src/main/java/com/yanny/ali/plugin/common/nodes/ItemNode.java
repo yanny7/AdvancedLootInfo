@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "item");
+    public static final ResourceLocation ID = Utils.modLoc("item");
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final StreamCodec<RegistryFriendlyByteBuf, TagKey<Item>> ITEM_TAG_STREAM_CODEC =
             ByteBufCodecs.fromCodecWithRegistries(TagKey.codec(Registries.ITEM));

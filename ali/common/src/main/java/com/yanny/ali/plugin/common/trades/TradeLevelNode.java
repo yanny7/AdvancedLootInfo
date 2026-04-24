@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 
 public class TradeLevelNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "trade_level");
+    public static final ResourceLocation ID = Utils.modLoc("trade_level");
 
     public final int level;
 
