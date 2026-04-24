@@ -1,4 +1,4 @@
-package com.yanny.ali.manager;
+package com.yanny.aci.manager;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

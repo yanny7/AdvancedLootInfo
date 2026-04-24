@@ -1,6 +1,6 @@
 package com.yanny.awi.api;
 
-import com.yanny.aci.api.ICommonServerUtils;
+import com.yanny.aci.api.ICoreServerUtils;
 
-public interface IServerUtils extends ICommonServerUtils {
+public interface IServerUtils extends ICoreServerUtils {
 }

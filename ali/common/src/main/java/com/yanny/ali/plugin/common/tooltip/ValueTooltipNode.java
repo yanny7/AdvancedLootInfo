@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("value");

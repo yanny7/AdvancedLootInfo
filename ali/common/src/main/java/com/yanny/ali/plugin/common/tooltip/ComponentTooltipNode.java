@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("component");

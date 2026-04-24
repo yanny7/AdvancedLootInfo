@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface ICommonTooltipNode<SU extends ICommonServerUtils> {
+public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
     ChatFormatting TEXT_STYLE = ChatFormatting.GOLD; //TODO use these or add config
     ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 

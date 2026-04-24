@@ -1,6 +1,6 @@
 package com.yanny.ali.api;
 
-import com.yanny.aci.api.ICommonServerUtils;
+import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -21,7 +21,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICommonServerUtils, ICommonUtils {
+public interface IServerUtils extends ICoreServerUtils, ICommonUtils {
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);

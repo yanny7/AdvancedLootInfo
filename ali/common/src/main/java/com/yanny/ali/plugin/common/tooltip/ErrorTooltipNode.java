@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ErrorTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("error");

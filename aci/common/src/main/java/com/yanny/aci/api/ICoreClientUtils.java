@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public interface ICommonClientUtils<SU extends ICommonServerUtils, TN extends ICommonTooltipNode<SU>, DN extends ICommonDataNode<SU, TN>, CU extends ICommonClientUtils<SU, TN, DN, CU, WU>, WU extends ICommonWidgetUtils<SU, TN, DN>> {
+public interface ICoreClientUtils<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, DN extends ICoreDataNode<SU, TN>, CU extends ICoreClientUtils<SU, TN, DN, CU, WU>, WU extends ICoreWidgetUtils<SU, TN, DN>> {
     List<IWidget> createWidgets(WU registry, List<DN> entries, RelativeRect parent, int maxWidth);
 
     BiFunction<CU, FriendlyByteBuf, DN> getDataNodeFactory(ResourceLocation id);

@@ -3,7 +3,7 @@ package com.yanny.aci.api;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public interface ICommonDataNode<SU extends ICommonServerUtils, TN extends ICommonTooltipNode<SU>> extends Comparable<ICommonDataNode<SU, TN>> {
+public interface ICoreDataNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> extends Comparable<ICoreDataNode<SU, TN>> {
     TN getTooltip();
 
     ResourceLocation getId();
@@ -15,7 +15,7 @@ public interface ICommonDataNode<SU extends ICommonServerUtils, TN extends IComm
     }
 
     @Override
-    default int compareTo(ICommonDataNode o) {
+    default int compareTo(ICoreDataNode o) {
         return Float.compare(o.getChance(), getChance());
     }
 }

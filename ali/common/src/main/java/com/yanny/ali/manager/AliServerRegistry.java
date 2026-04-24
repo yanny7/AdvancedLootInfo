@@ -2,6 +2,9 @@ package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.manager.ClassKeyedMap;
+import com.yanny.aci.manager.CoreServerRegistry;
+import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.platform.Services;
@@ -14,7 +17,6 @@ import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +37,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
@@ -43,12 +44,10 @@ import oshi.util.tuples.Pair;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-public class AliServerRegistry implements IServerRegistry, IServerUtils {
+public class AliServerRegistry extends CoreServerRegistry implements IServerRegistry, IServerUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final List<ManagedRegistry<?, ?>> allRegistries = new ArrayList<>();
     // factories
     private final ManagedRegistry<Class<?>, EntryFactory<?>> entryFactories = registerClassKeyed("entry factories", true, HashMap::new, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE);
     // converters
@@ -76,7 +75,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     private final ICommonUtils utils;
 
-    private ServerLevel serverLevel;
     private LootContext lootContext;
     private ResourceLocation currentLootTable;
 
@@ -85,11 +83,10 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     public void clearData() {
+        super.clearData();
         lootTableMap.clear();
         lootModifierGetters.clear();
         lootModifierMap.clear();
-
-        allRegistries.forEach(ManagedRegistry::clear);
     }
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
@@ -115,7 +112,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     public void setServerLevel(ServerLevel serverLevel) {
-        this.serverLevel = serverLevel;
+        super.setServerLevel(serverLevel);
         this.lootContext = new LootContext(new LootParams(serverLevel, Map.of(), Map.of(), 0F), RandomSource.create(), new LootDataResolver() {
             @Override
             public @Nullable <T> T getElement(LootDataId<T> lootDataId) {
@@ -325,12 +322,6 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
 
     @Nullable
     @Override
-    public ServerLevel getServerLevel() {
-        return serverLevel;
-    }
-
-    @Nullable
-    @Override
     public LootContext getLootContext() {
         return lootContext;
     }
@@ -382,24 +373,7 @@ public class AliServerRegistry implements IServerRegistry, IServerUtils {
     }
 
     public void printRegistrationInfo() {
-        allRegistries.forEach(ManagedRegistry::logStatistics);
-
+        super.printRegistrationInfo();
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
-    }
-
-    public void printRuntimeInfo() {
-        allRegistries.forEach(ManagedRegistry::logMissing);
-    }
-
-    @NotNull
-    private <V> ManagedRegistry<Class<?>, V> registerClassKeyed(String label, boolean reportMissing, Supplier<Map<Class<?>, V>> mapSupplier, @Nullable Registry<?> registry) {
-        return register(label, reportMissing, mapSupplier, Class::getTypeName, registry);
-    }
-
-    @NotNull
-    private <K, V> ManagedRegistry<K, V> register(String label, boolean reportMissing, Supplier<Map<K, V>> mapSupplier, Function<K, String> keyNameGetter, @Nullable Registry<?> registry) {
-        ManagedRegistry<K, V> reg = new ManagedRegistry<>(label, reportMissing, mapSupplier, keyNameGetter, registry);
-        allRegistries.add(reg);
-        return reg;
     }
 }
