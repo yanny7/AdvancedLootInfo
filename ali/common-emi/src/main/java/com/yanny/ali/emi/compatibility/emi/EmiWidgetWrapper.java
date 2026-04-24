@@ -1,7 +1,7 @@
 package com.yanny.ali.emi.compatibility.emi;
 
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.RelativeRect;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

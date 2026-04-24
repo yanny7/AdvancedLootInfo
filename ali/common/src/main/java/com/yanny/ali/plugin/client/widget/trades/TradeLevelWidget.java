@@ -1,6 +1,10 @@
 package com.yanny.ali.plugin.client.widget.trades;
 
-import com.yanny.ali.api.*;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidgetUtils;
+import com.yanny.ali.api.ListWidget;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.common.trades.TradeLevelNode;
 import org.jetbrains.annotations.Nullable;

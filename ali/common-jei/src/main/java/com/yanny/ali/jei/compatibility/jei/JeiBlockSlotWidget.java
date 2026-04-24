@@ -1,6 +1,6 @@
 package com.yanny.ali.jei.compatibility.jei;
 
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.mixin.MixinVegetationBlock;
 import com.yanny.ali.pip.BlockRenderState;
 import com.yanny.ali.platform.Services;

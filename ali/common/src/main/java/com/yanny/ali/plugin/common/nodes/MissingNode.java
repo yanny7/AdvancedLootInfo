@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 
 public class MissingNode implements IDataNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "missing");
+    public static final Identifier ID = Utils.modLoc("missing");
 
     private final ITooltipNode tooltip;
 

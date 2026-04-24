@@ -1,7 +1,7 @@
 package com.yanny.ali.rei.compatibility.rei;
 
-import com.yanny.ali.api.IWidget;
-import com.yanny.ali.api.RelativeRect;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;

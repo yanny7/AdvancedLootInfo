@@ -17,8 +17,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.yanny.aci.api.ICommonTooltipNode.pad;
+
 public class LiteralTooltipNode implements ITooltipNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "literal");
+    public static final Identifier ID = Utils.modLoc("literal");
     private static final LoadingCache<String, LiteralTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new LiteralTooltipNode(data) : null));
 
@@ -40,7 +42,7 @@ public class LiteralTooltipNode implements ITooltipNode {
 
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
-        return Collections.singletonList(ITooltipNode.pad(pad, Component.translatable(text).withStyle(TEXT_STYLE)));
+        return Collections.singletonList(pad(pad, Component.translatable(text).withStyle(TEXT_STYLE)));
     }
 
     @Override

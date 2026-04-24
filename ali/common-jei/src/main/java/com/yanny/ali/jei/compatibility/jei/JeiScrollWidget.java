@@ -1,7 +1,7 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.inputs.IJeiInputHandler;

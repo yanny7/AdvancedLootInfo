@@ -1,6 +1,9 @@
 package com.yanny.ali.api;
 
 import com.mojang.math.Divisor;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.api.WidgetDirection;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;

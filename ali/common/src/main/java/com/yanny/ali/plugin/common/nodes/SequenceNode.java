@@ -11,7 +11,7 @@ import net.minecraft.resources.Identifier;
 import java.util.List;
 
 public class SequenceNode extends CompositeNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "sequence");
+    public static final Identifier ID = Utils.modLoc("sequence");
 
     private final ITooltipNode tooltip;
 

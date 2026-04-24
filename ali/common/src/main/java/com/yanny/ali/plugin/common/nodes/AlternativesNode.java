@@ -11,7 +11,7 @@ import net.minecraft.resources.Identifier;
 import java.util.List;
 
 public class AlternativesNode extends CompositeNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "alternatives");
+    public static final Identifier ID = Utils.modLoc("alternatives");
 
     private final ITooltipNode tooltip;
 

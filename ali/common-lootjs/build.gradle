@@ -16,6 +16,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${neoforge_version}"
 
     compileOnly project(path: ":ali:common")
+    compileOnly project(path: ":aci:common")
 
     compileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
 

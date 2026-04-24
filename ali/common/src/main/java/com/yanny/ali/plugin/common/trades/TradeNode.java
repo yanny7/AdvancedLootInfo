@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class TradeNode extends ListNode {
-    public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "trade");
+    public static final Identifier ID = Utils.modLoc("trade");
 
     public TradeNode(IServerUtils utils, VillagerProfession profession) {
         List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = profession.tradeSetsByLevel().int2ObjectEntrySet()

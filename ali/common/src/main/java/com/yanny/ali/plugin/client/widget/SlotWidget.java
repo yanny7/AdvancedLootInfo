@@ -1,5 +1,8 @@
 package com.yanny.ali.plugin.client.widget;
 
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

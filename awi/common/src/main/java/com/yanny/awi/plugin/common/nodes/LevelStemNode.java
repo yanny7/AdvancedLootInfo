@@ -5,7 +5,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.Holder;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -37,7 +37,7 @@ public class LevelStemNode extends ListNode {
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
 
     }
 

@@ -1,6 +1,6 @@
 package com.yanny.ali.rei.compatibility.rei;
 
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;

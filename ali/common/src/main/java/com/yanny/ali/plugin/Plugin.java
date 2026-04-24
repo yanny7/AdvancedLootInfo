@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin;
 
 import com.mojang.datafixers.util.Pair;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;

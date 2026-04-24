@@ -1,6 +1,8 @@
 package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.ICommonServerUtils;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -26,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICommonUtils {
+public interface IServerUtils extends ICommonServerUtils, ICommonUtils {
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
@@ -58,9 +60,6 @@ public interface IServerUtils extends ICommonUtils {
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
-
-    @Nullable
-    ServerLevel getServerLevel();
 
     @Nullable
     LootContext getLootContext();
