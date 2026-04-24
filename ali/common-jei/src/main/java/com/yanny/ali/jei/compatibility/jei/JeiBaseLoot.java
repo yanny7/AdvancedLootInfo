@@ -1,7 +1,12 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.ali.api.*;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.Rect;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.plugin.client.ClientUtils;

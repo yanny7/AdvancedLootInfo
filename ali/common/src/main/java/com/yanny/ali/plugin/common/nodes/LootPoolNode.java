@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class LootPoolNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "loot_pool");
+    public static final ResourceLocation ID = Utils.modLoc("loot_pool");
 
     private final ITooltipNode tooltip;
 

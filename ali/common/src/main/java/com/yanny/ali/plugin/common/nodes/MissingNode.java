@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class MissingNode implements IDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "missing");
+    public static final ResourceLocation ID = Utils.modLoc("missing");
 
     private final ITooltipNode tooltip;
 

@@ -1,6 +1,6 @@
 package com.yanny.ali.emi.compatibility.emi;
 
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.emi.compatibility.IMouseEvents;
 import dev.emi.emi.api.widget.Bounds;

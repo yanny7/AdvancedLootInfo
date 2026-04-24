@@ -9,7 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class DynamicNode implements IDataNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "dynamic");
+    public static final ResourceLocation ID = Utils.modLoc("dynamic");
 
     private final ITooltipNode tooltip;
     private final float chance;
