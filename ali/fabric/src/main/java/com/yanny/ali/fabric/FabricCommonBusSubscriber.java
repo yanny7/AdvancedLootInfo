@@ -67,7 +67,7 @@ public class FabricCommonBusSubscriber {
         return new IdentifiableResourceReloadListener() {
             @Override
             public ResourceLocation getFabricId() {
-                return ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_loader");
+                return Utils.modLoc("fake_loot_loader");
             }
 
             @NotNull

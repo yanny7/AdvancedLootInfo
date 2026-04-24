@@ -20,9 +20,6 @@ config = "ali.mixins.json"
 [[mixins]]
 config = "ali.neoforge.mixins.json"
 
-#[[mixins]]
-#config = "${ali_mod_id}.lootjs.mixins.json"
-
 [[dependencies.ali]] #optional
 modId = "neoforge" #mandatory
 type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")

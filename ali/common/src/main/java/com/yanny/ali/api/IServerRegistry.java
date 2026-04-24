@@ -1,6 +1,7 @@
 package com.yanny.ali.api;
 
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;

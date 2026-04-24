@@ -18,10 +18,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.ali.api.ITooltipNode.pad;
+import static com.yanny.aci.api.ICommonTooltipNode.pad;
 
 public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "component");
+    public static final ResourceLocation ID = Utils.modLoc("component");
     private static final LoadingCache<CacheKey, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new ComponentTooltipNode(data) : null));
 
