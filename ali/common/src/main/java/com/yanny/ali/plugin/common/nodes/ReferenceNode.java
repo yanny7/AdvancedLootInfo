@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class ReferenceNode extends ListNode {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "reference");
+    public static final ResourceLocation ID = Utils.modLoc("reference");
 
     private final ITooltipNode tooltip;
     private final float chance;

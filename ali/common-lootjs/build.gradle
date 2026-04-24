@@ -16,6 +16,7 @@ dependencies {
     modImplementation "net.neoforged:neoforge:${neoforge_version}"
 
     compileOnly project(path: ":ali:common", configuration: "namedElements")
+    compileOnly project(path: ":aci:common", configuration: "namedElements")
 
     modCompileOnly group:'org.spongepowered', name:'mixin', version:'0.8.5'
 

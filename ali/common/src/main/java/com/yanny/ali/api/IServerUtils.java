@@ -1,13 +1,14 @@
 package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.ICommonServerUtils;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +26,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICommonUtils {
+public interface IServerUtils extends ICommonServerUtils, ICommonUtils {
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
@@ -57,9 +58,6 @@ public interface IServerUtils extends ICommonUtils {
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);
 
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
-
-    @Nullable
-    ServerLevel getServerLevel();
 
     @Nullable
     LootContext getLootContext();

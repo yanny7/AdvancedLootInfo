@@ -1,4 +1,4 @@
-package com.yanny.ali.api;
+package com.yanny.aci.api;
 
 public record Rect(int x, int y, int width, int height) {
     public int right() {

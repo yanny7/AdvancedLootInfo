@@ -1,8 +1,8 @@
 package com.yanny.ali.jei.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.ali.api.RangeValue;
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.api.Rect;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;

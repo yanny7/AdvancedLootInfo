@@ -4,7 +4,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.mixin.MixinBushBlock;
 import me.shedaniel.math.Point;

@@ -2,10 +2,10 @@ package com.yanny.ali.plugin.server;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.api.RangeValue;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
@@ -509,7 +509,7 @@ public class ValueTooltipUtils {
     public static IKeyTooltipNode getIntListTooltip(IServerUtils utils, IntList data) {
         return utils.getValueTooltip(utils, data.toString());
     }
-    
+
     @NotNull
     public static IKeyTooltipNode getItemAttributeModifiersEntryTooltip(IServerUtils utils, ItemAttributeModifiers.Entry entry) {
         return BranchTooltipNode.branch()

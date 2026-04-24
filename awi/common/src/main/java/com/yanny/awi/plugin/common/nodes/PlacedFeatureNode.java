@@ -6,7 +6,7 @@ import com.yanny.awi.api.ITooltipNode;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -33,7 +33,7 @@ public class PlacedFeatureNode extends ListNode {
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
 
     }
 

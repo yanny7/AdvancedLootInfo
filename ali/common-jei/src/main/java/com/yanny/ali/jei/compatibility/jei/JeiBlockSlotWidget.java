@@ -2,7 +2,7 @@ package com.yanny.ali.jei.compatibility.jei;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.mixin.MixinBushBlock;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;

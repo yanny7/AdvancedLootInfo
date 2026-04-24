@@ -2,7 +2,7 @@ package com.yanny.ali.compatibility.common;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.yanny.ali.api.Rect;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
