@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 public class EmptyNode implements IDataNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "empty");
+    public static final ResourceLocation ID = Utils.modLoc("empty");
 
     private final ITooltipNode tooltip;
     private final float chance;

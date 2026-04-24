@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.common.nodes;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ItemNode implements IDataNode, IItemNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "item");
+    public static final ResourceLocation ID = Utils.modLoc("item");
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private final ITooltipNode tooltip;

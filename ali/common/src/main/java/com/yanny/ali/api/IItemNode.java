@@ -1,6 +1,7 @@
 package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;

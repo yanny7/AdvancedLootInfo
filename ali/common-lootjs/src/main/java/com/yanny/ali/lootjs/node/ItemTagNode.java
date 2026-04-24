@@ -1,6 +1,7 @@
 package com.yanny.ali.lootjs.node;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.common.NodeUtils;

@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import static com.yanny.aci.api.ICommonTooltipNode.pad;
+
 public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "branch");
+    public static final ResourceLocation ID = Utils.modLoc("branch");
     private static final LoadingCache<CacheKey, BranchTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new BranchTooltipNode(data) : null));
 
@@ -50,7 +52,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
         List<Component> children = super.getComponents(pad + 1, showAdvancedTooltip);
         List<Component> components = new ArrayList<>(children.size() + 1);
 
-        components.add(ITooltipNode.pad(pad, Component.translatable(key).withStyle(TEXT_STYLE)));
+        components.add(pad(pad, Component.translatable(key).withStyle(TEXT_STYLE)));
         components.addAll(children);
         return components;
     }

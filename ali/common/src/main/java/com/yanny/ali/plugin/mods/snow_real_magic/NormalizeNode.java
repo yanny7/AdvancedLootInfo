@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.mods.snow_real_magic;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;

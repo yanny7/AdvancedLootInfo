@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class AlternativesNode extends CompositeNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "alternatives");
+    public static final ResourceLocation ID = Utils.modLoc("alternatives");
 
     private final ITooltipNode tooltip;
 

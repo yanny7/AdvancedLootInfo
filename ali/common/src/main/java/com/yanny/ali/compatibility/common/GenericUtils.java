@@ -4,9 +4,9 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.Rect;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.Rect;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
@@ -160,7 +160,7 @@ public class GenericUtils {
 
             for (int i = 0; i < lootDataCount; i++) {
                 ResourceLocation location = readerBuf.readResourceLocation();
-                IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).create(utils, readerBuf);
+                IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf);
                 List<ItemStack> items = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readItem);
 
                 lootData.put(location, new LootData(dataNode, items));
@@ -170,14 +170,14 @@ public class GenericUtils {
 
             for (int i = 0; i < tradeDataCount; i++) {
                 ResourceLocation location = readerBuf.readResourceLocation();
-                IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
+                IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, readerBuf);
                 List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
                 List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
                 tradeData.put(location, new TradeData(dataNode, inputs, outputs));
             }
 
             // wandering trader
-            IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).create(utils, readerBuf);
+            IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, readerBuf);
             List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
             List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
 

@@ -1,9 +1,9 @@
 package com.yanny.ali.emi.compatibility.emi;
 
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidget;
 import com.yanny.ali.api.IWidgetUtils;
-import com.yanny.ali.api.RelativeRect;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class SequenceNode extends CompositeNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "sequence");
+    public static final ResourceLocation ID = Utils.modLoc("sequence");
 
     private final ITooltipNode tooltip;
 

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class GroupNode extends CompositeNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "group");
+    public static final ResourceLocation ID = Utils.modLoc("group");
 
     private final ITooltipNode tooltip;
 

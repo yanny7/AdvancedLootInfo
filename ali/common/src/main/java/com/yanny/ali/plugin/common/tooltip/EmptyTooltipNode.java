@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EmptyTooltipNode implements ITooltipNode {
     public static final EmptyTooltipNode EMPTY = new EmptyTooltipNode();
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "empty");
+    public static final ResourceLocation ID = Utils.modLoc("empty");
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {

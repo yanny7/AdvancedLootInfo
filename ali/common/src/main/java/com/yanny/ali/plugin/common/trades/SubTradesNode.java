@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.List;
 
 public class SubTradesNode<T> extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "sub_trades");
+    public static final ResourceLocation ID = Utils.modLoc("sub_trades");
 
     private final ITooltipNode tooltip;
 

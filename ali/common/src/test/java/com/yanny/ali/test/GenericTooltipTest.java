@@ -1,6 +1,6 @@
 package com.yanny.ali.test;
 
-import com.yanny.ali.api.RangeValue;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;

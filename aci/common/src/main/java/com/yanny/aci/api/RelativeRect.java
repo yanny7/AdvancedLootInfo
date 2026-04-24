@@ -1,4 +1,4 @@
-package com.yanny.ali.api;
+package com.yanny.aci.api;
 
 public class RelativeRect {
     public static final RelativeRect ZERO = new RelativeRect(0, 0, 0, 0) {

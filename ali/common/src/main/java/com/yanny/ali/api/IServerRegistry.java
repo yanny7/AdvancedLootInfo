@@ -1,5 +1,6 @@
 package com.yanny.ali.api;
 
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

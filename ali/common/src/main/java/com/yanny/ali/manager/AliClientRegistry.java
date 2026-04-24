@@ -1,9 +1,13 @@
 package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -15,14 +19,15 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
 
 public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final long RELOAD_COOLDOWN_MS = 2000L;
 
     private final Map<ResourceLocation, IWidgetFactory> widgetMap = new HashMap<>();
-    private final Map<ResourceLocation, DataFactory<?>> dataNodeFactoryMap = new HashMap<>();
-    private final Map<ResourceLocation, TooltipFactory<?>> tooltipNodeFactoryMap = new HashMap<>();
+    private final Map<ResourceLocation, BiFunction<IClientUtils, FriendlyByteBuf, IDataNode>> dataNodeFactoryMap = new HashMap<>();
+    private final Map<ResourceLocation, BiFunction<IClientUtils, FriendlyByteBuf, ITooltipNode>> tooltipNodeFactoryMap = new HashMap<>();
     private final ICommonUtils utils;
 
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
@@ -148,17 +153,17 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public void registerWidget(ResourceLocation id, IWidgetFactory factory) {
+    public void registerWidget(ResourceLocation id, IWidgetFactory<IServerUtils, ITooltipNode, IDataNode, IWidgetUtils> factory) {
         widgetMap.put(id, factory);
     }
 
     @Override
-    public <T extends IDataNode> void registerDataNode(ResourceLocation id, DataFactory<T> dataFactory) {
+    public void registerDataNode(ResourceLocation id, BiFunction<IClientUtils, FriendlyByteBuf, IDataNode> dataFactory) {
         dataNodeFactoryMap.put(id, dataFactory);
     }
 
     @Override
-    public <T extends ITooltipNode> void registerTooltipNode(ResourceLocation id, TooltipFactory<T> tooltipFactory) {
+    public void registerTooltipNode(ResourceLocation id, BiFunction<IClientUtils, FriendlyByteBuf, ITooltipNode> tooltipFactory) {
         tooltipNodeFactoryMap.put(id, tooltipFactory);
     }
 
@@ -232,9 +237,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends IDataNode> DataFactory<T> getDataNodeFactory(ResourceLocation id) {
-        //noinspection unchecked
-        DataFactory<T> dataFactory = (DataFactory<T>) dataNodeFactoryMap.get(id);
+    public BiFunction<IClientUtils, FriendlyByteBuf, IDataNode> getDataNodeFactory(ResourceLocation id) {
+        BiFunction<IClientUtils, FriendlyByteBuf, IDataNode> dataFactory = dataNodeFactoryMap.get(id);
 
         return Objects.requireNonNullElseGet(dataFactory, () -> {
             throw new IllegalStateException(String.format("Failed to construct data node - node {%s} was not registered!", id));
@@ -242,9 +246,8 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     }
 
     @Override
-    public <T extends ITooltipNode> TooltipFactory<T> getTooltipNodeFactory(ResourceLocation id) {
-        //noinspection unchecked
-        TooltipFactory<T> tooltipFactory = (TooltipFactory<T>) tooltipNodeFactoryMap.get(id);
+    public BiFunction<IClientUtils, FriendlyByteBuf, ITooltipNode> getTooltipNodeFactory(ResourceLocation id) {
+        BiFunction<IClientUtils, FriendlyByteBuf, ITooltipNode> tooltipFactory = tooltipNodeFactoryMap.get(id);
 
         return Objects.requireNonNullElseGet(tooltipFactory, () -> {
             throw new IllegalStateException(String.format("Failed to construct tooltip node - node {%s} was not registered!", id));

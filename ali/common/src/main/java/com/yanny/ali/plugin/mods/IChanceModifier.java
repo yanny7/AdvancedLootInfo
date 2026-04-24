@@ -1,7 +1,7 @@
 package com.yanny.ali.plugin.mods;
 
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.RangeValue;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.Map;

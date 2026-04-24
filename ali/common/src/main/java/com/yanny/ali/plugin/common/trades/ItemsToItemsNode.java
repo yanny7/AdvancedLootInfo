@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
@@ -15,7 +16,7 @@ import net.minecraft.world.level.ItemLike;
 import java.util.Collections;
 
 public class ItemsToItemsNode extends ListNode {
-    public static final ResourceLocation ID = new ResourceLocation(Utils.MOD_ID, "items_to_items");
+    public static final ResourceLocation ID = Utils.modLoc("items_to_items");
 
     private final ITooltipNode tooltip;
 

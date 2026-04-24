@@ -1,6 +1,10 @@
 package com.yanny.ali.jei.compatibility.jei;
 
-import com.yanny.ali.api.*;
+import com.yanny.aci.api.IWidget;
+import com.yanny.aci.api.Rect;
+import com.yanny.aci.api.RelativeRect;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.compatibility.common.GameplayLootType;
 import com.yanny.ali.compatibility.common.GenericUtils;
