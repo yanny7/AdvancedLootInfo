@@ -10,9 +10,11 @@ import com.yanny.ali.plugin.mods.the_bumblezone.functions.HoneyCompassLocateStru
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.TagItemRemovals;
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.UniquifyIfHasItems;
 import com.yanny.ali.plugin.mods.the_bumblezone.predicates.HoneySlimePredicate;
+import org.jetbrains.annotations.NotNull;
 
 // @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "the_bumblezone";

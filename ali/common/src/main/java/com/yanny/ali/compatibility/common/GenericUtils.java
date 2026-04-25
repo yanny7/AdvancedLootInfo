@@ -135,7 +135,7 @@ public class GenericUtils {
         RegistryFriendlyByteBuf readerBuf = new RegistryFriendlyByteBuf(decompressedBuf, registryAccess);
 
         try {
-            IClientUtils utils = PluginManager.CLIENT_REGISTRY;
+            IClientUtils utils = PluginManager.getInstance().clientRegistry;
             int lootDataCount = readerBuf.readInt();
 
             for (int i = 0; i < lootDataCount; i++) {
@@ -302,7 +302,7 @@ public class GenericUtils {
         LOGGER.info("Starting data registration...");
 
         while (true) {
-            CompletableFuture<byte[]> futureData = PluginManager.CLIENT_REGISTRY.getCurrentDataFuture();
+            CompletableFuture<byte[]> futureData = PluginManager.getInstance().clientRegistry.getCurrentDataFuture();
 
             if (futureData == lastProcessedFuture && futureData.isDone()) {
                 LOGGER.info("Data checks out: Already received. Reusing cached data for registration.");

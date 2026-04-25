@@ -47,11 +47,13 @@ public class TradeNode extends ListNode {
 
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return EmptyTooltipNode.EMPTY;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

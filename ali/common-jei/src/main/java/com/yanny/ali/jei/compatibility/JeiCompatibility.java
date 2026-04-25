@@ -53,7 +53,7 @@ public class JeiCompatibility implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
+        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
         blockCategories.clear();
@@ -86,8 +86,8 @@ public class JeiCompatibility implements IModPlugin {
     }
 
     private void registerData(IRecipeRegistration registration, byte[] fullCompressedData) {
-        AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
+        AliClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
+        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to JEI");

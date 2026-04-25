@@ -1,6 +1,6 @@
 package com.yanny.awi.api;
 
-import com.yanny.aci.api.ICommonWidgetUtils;
+import com.yanny.aci.api.ICoreWidgetUtils;
 
-public interface IWidgetUtils extends ICommonWidgetUtils<IServerUtils, ITooltipNode, IDataNode> {
+public interface IWidgetUtils extends ICoreWidgetUtils<IServerUtils, ITooltipNode, IDataNode> {
 }
