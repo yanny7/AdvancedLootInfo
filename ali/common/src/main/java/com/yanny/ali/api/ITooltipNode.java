@@ -16,10 +16,6 @@ public interface ITooltipNode extends ICoreTooltipNode<IServerUtils> {
         ResourceLocation name = buf.readResourceLocation();
         BiFunction<IClientUtils, FriendlyByteBuf, ITooltipNode> factory = utils.getTooltipNodeFactory(name);
 
-        if (factory != null) {
-            return factory.apply(utils, buf);
-        } else {
-            throw new IllegalStateException("No factory defined for tooltip node " + name);
-        }
+        return factory.apply(utils, buf);
     }
 }

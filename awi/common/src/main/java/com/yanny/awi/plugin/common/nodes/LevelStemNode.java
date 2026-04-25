@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 
 public class LevelStemNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("level_stem");
@@ -41,11 +42,13 @@ public class LevelStemNode extends ListNode {
 
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return null;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

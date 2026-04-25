@@ -7,9 +7,11 @@ import com.yanny.ali.plugin.mods.PluginUtils;
 import com.yanny.ali.plugin.mods.supplementaries.functions.CurseLootFunction;
 import com.yanny.ali.plugin.mods.supplementaries.functions.RandomArrowFunction;
 import com.yanny.ali.plugin.mods.supplementaries.trades.RandomAdventurerMapListing;
+import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "supplementaries";

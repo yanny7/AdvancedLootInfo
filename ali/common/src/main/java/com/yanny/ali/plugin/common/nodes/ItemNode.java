@@ -15,6 +15,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.Collections;
@@ -58,21 +59,25 @@ public class ItemNode implements IDataNode, IItemNode {
         functions = Collections.emptyList();
     }
 
+    @NotNull
     @Override
     public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return item;
     }
 
+    @NotNull
     @Override
     public List<LootItemCondition> getConditions() {
         return conditions;
     }
 
+    @NotNull
     @Override
     public List<LootItemFunction> getFunctions() {
         return functions;
     }
 
+    @NotNull
     @Override
     public RangeValue getCount() {
         return count;
@@ -100,11 +105,13 @@ public class ItemNode implements IDataNode, IItemNode {
         buf.writeFloat(chance);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

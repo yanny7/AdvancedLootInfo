@@ -2,10 +2,18 @@ package com.yanny.aci.api;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-public interface ICoreDataNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> extends Comparable<ICoreDataNode<SU, TN>> {
+public interface ICoreDataNode
+        <
+                SU extends ICoreServerUtils,
+                TN extends ICoreTooltipNode<SU>
+        >
+        extends Comparable<ICoreDataNode<SU, TN>> {
+    @NotNull
     TN getTooltip();
 
+    @NotNull
     ResourceLocation getId();
 
     void encode(SU utils, FriendlyByteBuf buf);

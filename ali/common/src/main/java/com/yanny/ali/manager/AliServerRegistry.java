@@ -37,6 +37,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.apache.commons.lang3.function.TriFunction;
 import org.apache.logging.log4j.util.TriConsumer;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
@@ -45,7 +46,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class AliServerRegistry extends CoreServerRegistry implements IServerRegistry, IServerUtils {
+public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     // factories
@@ -73,13 +74,11 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
-    private final ICommonUtils utils;
-
     private LootContext lootContext;
     private ResourceLocation currentLootTable;
 
     public AliServerRegistry(ICommonUtils utils) {
-        this.utils = utils;
+        super(utils);
     }
 
     public void clearData() {
@@ -99,12 +98,6 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
 
     public void clearLootTables() {
         lootTableMap.clear();
-    }
-
-    public void prepareLootModifiers() {
-        for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
-            lootModifierMap.addAll(lootModifierGetter.apply(this));
-        }
     }
 
     public List<ILootModifier<?>> getLootModifiers() {
@@ -191,6 +184,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
         tradeItemCollectors.put(type, (u, i) -> itemSupplier.apply(u, (type.cast(i))));
     }
 
+    @NotNull
     @Override
     public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
         return entryItemCollectors.get(entry.getClass())
@@ -198,6 +192,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElseGet(List::of);
     }
 
+    @NotNull
     @Override
     public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
         return functionItemCollectors.get(function.getClass())
@@ -205,6 +200,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElseGet(List::of);
     }
 
+    @NotNull
     @Override
     public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
         //noinspection unchecked
@@ -212,6 +208,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(GenericTooltipUtils.getMissingEntryTooltip(u, e)));
     }
 
+    @NotNull
     @Override
     public <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function) {
         return functionTooltips.get(function.getClass())
@@ -219,6 +216,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElseGet(() -> GenericTooltipUtils.getMissingFunctionTooltip(utils, function));
     }
 
+    @NotNull
     @Override
     public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
         return conditionTooltips.get(condition.getClass())
@@ -226,6 +224,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElseGet(() -> GenericTooltipUtils.getMissingConditionTooltip(utils, condition));
     }
 
+    @NotNull
     @Override
     public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
         return ingredientTooltips.get(ingredient.getClass())
@@ -233,6 +232,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElseGet(() -> GenericTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
     }
 
+    @NotNull
     @Override
     public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
         if (value == null) {
@@ -260,6 +260,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
         chanceModifiers.get(condition.getClass()).ifPresent((m) -> m.accept(utils, condition, chance));
     }
 
+    @NotNull
     @Override
     public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, final ItemStack itemStack) {
         return itemStackModifiers.get(function.getClass())
@@ -267,6 +268,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 .orElse(itemStack);
     }
 
+    @NotNull
     @Override
     public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
         return tradeItemListings.get(entry.getClass())
@@ -290,6 +292,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 });
     }
 
+    @NotNull
     @Override
     public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
         return tradeItemCollectors.get(entry.getClass())
@@ -309,6 +312,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
                 });
     }
 
+    @NotNull
     @Override
     public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
         if (numberProvider != null) {
@@ -339,6 +343,7 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
         return lootTableMap.get(resourceLocation);
     }
 
+    @NotNull
     @Override
     public List<LootPool> getLootPools(LootTable lootTable) {
         return Services.getPlatform().getLootPools(lootTable);
@@ -362,18 +367,21 @@ public class AliServerRegistry extends CoreServerRegistry implements IServerRegi
         return hitCount != null && lootTableMap.getOrDefault(resourceLocation, LootTable.EMPTY).getParamSet() == LootTable.DEFAULT_PARAM_SET;
     }
 
+    @NotNull
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
-        return utils.createEntities(type, level);
-    }
-
-    @Override
-    public AliConfig getConfiguration() {
-        return utils.getConfiguration();
+        return commonUtils.createEntities(type, level);
     }
 
     public void printRegistrationInfo() {
         super.printRegistrationInfo();
+        prepareLootModifiers();
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
+    }
+
+    private void prepareLootModifiers() {
+        for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
+            lootModifierMap.addAll(lootModifierGetter.apply(this));
+        }
     }
 }

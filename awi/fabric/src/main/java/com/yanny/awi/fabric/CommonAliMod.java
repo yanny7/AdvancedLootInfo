@@ -1,6 +1,7 @@
 package com.yanny.awi.fabric;
 
 import com.yanny.awi.fabric.network.Server;
+import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractServer;
 import net.fabricmc.api.ModInitializer;
 
@@ -14,5 +15,6 @@ public class CommonAliMod implements ModInitializer {
     @Override
     public void onInitialize() {
         FabricCommonBusSubscriber.registerEvents();
+        PluginManager.getInstance().registerCommonEvent();
     }
 }

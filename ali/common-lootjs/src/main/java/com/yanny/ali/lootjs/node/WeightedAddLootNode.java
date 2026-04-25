@@ -52,11 +52,13 @@ public class WeightedAddLootNode extends ListNode {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

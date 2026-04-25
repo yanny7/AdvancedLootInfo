@@ -50,6 +50,7 @@ import java.util.UUID;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "ali";

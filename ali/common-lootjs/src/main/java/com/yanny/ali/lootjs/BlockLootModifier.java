@@ -6,6 +6,7 @@ import com.yanny.ali.lootjs.mixin.MixinLootModificationByBlock;
 import com.yanny.ali.plugin.mods.PluginUtils;
 import dev.latvian.mods.kubejs.block.state.BlockStatePredicate;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -35,6 +36,7 @@ public class BlockLootModifier extends LootModifier<Block> {
         return predicate.testBlock(value);
     }
 
+    @NotNull
     @Override
     public IType<Block> getType() {
         return IType.BLOCK;

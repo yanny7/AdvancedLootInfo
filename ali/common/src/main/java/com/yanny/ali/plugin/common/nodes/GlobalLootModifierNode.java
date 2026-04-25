@@ -7,6 +7,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class GlobalLootModifierNode implements IDataNode {
     public static final ResourceLocation ID = Utils.modLoc("glm");
@@ -21,11 +22,13 @@ public class GlobalLootModifierNode implements IDataNode {
         tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

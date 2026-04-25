@@ -5,6 +5,7 @@ import com.almostreliable.lootjs.filters.ResourceLocationFilter;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationByTable;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class TableLootModifier extends LootModifier<ResourceLocation> {
     private final ResourceLocationFilter[] tableFilters;
@@ -25,6 +26,7 @@ public class TableLootModifier extends LootModifier<ResourceLocation> {
         return false;
     }
 
+    @NotNull
     @Override
     public IType<ResourceLocation> getType() {
         return IType.LOOT_TABLE;

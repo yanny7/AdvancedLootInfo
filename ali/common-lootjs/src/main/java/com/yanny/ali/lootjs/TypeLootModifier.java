@@ -5,6 +5,7 @@ import com.almostreliable.lootjs.core.LootModificationByType;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationByType;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class TypeLootModifier extends LootModifier<ResourceLocation> {
         return false;
     }
 
+    @NotNull
     @Override
     public IType<ResourceLocation> getType() {
         return IType.LOOT_TABLE;

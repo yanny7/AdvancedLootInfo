@@ -36,7 +36,7 @@ public abstract class ListNode extends CoreListNode<IServerUtils, ITooltipNode, 
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write node in {}", PluginManager.SERVER_REGISTRY.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to write node in {}", PluginManager.getInstance().serverRegistry.getCurrentLootTable(), e);
             }
         }
 

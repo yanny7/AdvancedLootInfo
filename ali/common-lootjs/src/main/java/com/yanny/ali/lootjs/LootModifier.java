@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -52,6 +53,7 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
         }
     }
 
+    @NotNull
     @Override
     public List<IOperation> getOperations() {
         return operations;

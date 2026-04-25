@@ -1,5 +1,6 @@
 package com.yanny.aci.manager;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +33,7 @@ public class ClassKeyedMap<T> implements Map<Class<?>, T> {
         return exactMatchMap.containsValue(value);
     }
 
+    @NotNull
     @Override
     public T put(Class<?> key, T value) {
         exactMatchMap.put(key, value);
@@ -39,6 +41,7 @@ public class ClassKeyedMap<T> implements Map<Class<?>, T> {
         return value;
     }
 
+    @Contract("_ -> fail")
     @Override
     public T remove(Object key) {
         throw new IllegalStateException();
@@ -109,6 +112,7 @@ public class ClassKeyedMap<T> implements Map<Class<?>, T> {
         }
     }
 
+    @Nullable
     private Class<?> findClosestSupertypeKey(Class<?> requestedType) {
         Class<?> current = requestedType.getSuperclass();
 

@@ -58,12 +58,14 @@ public final class RangeValue {
         buf.writeBoolean(isUnknown);
     }
 
+    @NotNull
     public RangeValue multiply(float value) {
         this.min *= value;
         this.max *= value;
         return this;
     }
 
+    @NotNull
     public RangeValue multiply(RangeValue value) {
         this.min *= value.min;
         this.max *= value.max;
@@ -82,12 +84,14 @@ public final class RangeValue {
         this.isRange = true;
     }
 
+    @NotNull
     public RangeValue add(float value) {
         min += value;
         max += value;
         return this;
     }
 
+    @NotNull
     public RangeValue add(RangeValue value) {
         if (isRange || value.isRange) {
             min += value.min;
@@ -126,6 +130,7 @@ public final class RangeValue {
         return isUnknown;
     }
 
+    @NotNull
     public RangeValue clamp(RangeValue min, RangeValue max) {
         if (this.min < min.min && !min.isUnknown && !isUnknown) {
             this.min = min.min;

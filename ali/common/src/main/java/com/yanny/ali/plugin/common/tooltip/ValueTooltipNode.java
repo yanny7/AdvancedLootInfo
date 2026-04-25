@@ -52,6 +52,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         buf.writeUtf(key);
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         if (key == null) {
@@ -103,6 +104,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         return Objects.hash(super.hashCode(), values, isKeyValue, key, translateKey);
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;
@@ -197,6 +199,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
             isKeyValue = true;
         }
 
+        @NotNull
         public ValueTooltipNode build(String key) {
             return build(key, true);
         }

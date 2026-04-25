@@ -68,9 +68,9 @@ public abstract class AbstractServer {
         LOGGER.info("Started reading loot info");
 
         long startTime = System.currentTimeMillis();
-        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
+        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
 
-        AliServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
+        AliServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         Map<ResourceLocation, LootTable> lootTables = collectLootTables(manager);
         Map<ResourceLocation, IDataNode> lootNodes = new HashMap<>();
         Map<ResourceLocation, LootTable> unprocessedLootTables = new HashMap<>(lootTables);
@@ -143,7 +143,7 @@ public abstract class AbstractServer {
 
     @NotNull
     private static List<Item> getItems(Map.Entry<ResourceLocation, LootTable> lootTableMap) {
-        return ItemCollectorUtils.collectLootTable(PluginManager.SERVER_REGISTRY, lootTableMap.getValue());
+        return ItemCollectorUtils.collectLootTable(PluginManager.getInstance().serverRegistry, lootTableMap.getValue());
     }
 
     @NotNull
@@ -426,7 +426,7 @@ public abstract class AbstractServer {
     }
 
     private void writeLootData(FriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        AliServerRegistry utils = PluginManager.SERVER_REGISTRY;
+        AliServerRegistry utils = PluginManager.getInstance().serverRegistry;
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
@@ -462,7 +462,7 @@ public abstract class AbstractServer {
     }
 
     private void writeTradeData(FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
-        AliServerRegistry utils = PluginManager.SERVER_REGISTRY;
+        AliServerRegistry utils = PluginManager.getInstance().serverRegistry;
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 

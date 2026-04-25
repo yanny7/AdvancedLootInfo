@@ -47,11 +47,11 @@ public class AliMod {
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
-        PluginManager.registerCommonEvent();
+        PluginManager.getInstance().registerCommonEvent();
     }
 
     public static void registerClientEvent(@SuppressWarnings("unused") FMLClientSetupEvent event) {
-        PluginManager.registerClientEvent();
+        PluginManager.getInstance().registerClientEvent();
     }
 
     @SubscribeEvent

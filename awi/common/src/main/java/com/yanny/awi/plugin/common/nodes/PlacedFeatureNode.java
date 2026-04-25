@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import org.jetbrains.annotations.NotNull;
 
 public class PlacedFeatureNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("placed_feature");
@@ -37,11 +38,13 @@ public class PlacedFeatureNode extends ListNode {
 
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return null;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

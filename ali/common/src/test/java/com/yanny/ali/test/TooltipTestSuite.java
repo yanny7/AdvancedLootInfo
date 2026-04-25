@@ -93,95 +93,108 @@ public class TooltipTestSuite {
         Language.inject(pair.getA());
         UNUSED = pair.getB();
 
-        PluginManager.registerCommonEvent();
-        PluginManager.registerClientEvent();
-        PluginManager.registerServerEvent();
+        PluginManager.getInstance().registerCommonEvent();
+        PluginManager.getInstance().registerClientEvent();
+        PluginManager.getInstance().registerServerEvent();
         UTILS = new IServerUtils() {
+            @NotNull
             @Override
             public List<Entity> createEntities(EntityType<?> type, Level level) {
-                return PluginManager.SERVER_REGISTRY.createEntities(type, level);
+                return PluginManager.getInstance().serverRegistry.createEntities(type, level);
             }
 
+            @NotNull
             @Override
             public List<LootPool> getLootPools(LootTable lootTable) {
-                return PluginManager.SERVER_REGISTRY.getLootPools(lootTable);
+                return PluginManager.getInstance().serverRegistry.getLootPools(lootTable);
             }
 
+            @NotNull
             @Override
             public <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.SERVER_REGISTRY.collectItems(utils, entry);
+                return PluginManager.getInstance().serverRegistry.collectItems(utils, entry);
             }
 
+            @NotNull
             @Override
             public <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function) {
-                return PluginManager.SERVER_REGISTRY.collectItems(utils, items, function);
+                return PluginManager.getInstance().serverRegistry.collectItems(utils, items, function);
             }
 
+            @NotNull
             @Override
             public <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
-                return PluginManager.SERVER_REGISTRY.getEntryFactory(utils, type);
+                return PluginManager.getInstance().serverRegistry.getEntryFactory(utils, type);
             }
 
+            @NotNull
             @Override
             public <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function) {
-                return PluginManager.SERVER_REGISTRY.getFunctionTooltip(utils, function);
+                return PluginManager.getInstance().serverRegistry.getFunctionTooltip(utils, function);
             }
 
+            @NotNull
             @Override
             public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
-                return PluginManager.SERVER_REGISTRY.getConditionTooltip(utils, condition);
+                return PluginManager.getInstance().serverRegistry.getConditionTooltip(utils, condition);
             }
 
+            @NotNull
             @Override
             public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
-                return PluginManager.SERVER_REGISTRY.getIngredientTooltip(utils, ingredient);
+                return PluginManager.getInstance().serverRegistry.getIngredientTooltip(utils, ingredient);
             }
 
+            @NotNull
             @Override
             public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
-                return PluginManager.SERVER_REGISTRY.getValueTooltip(utils, value);
+                return PluginManager.getInstance().serverRegistry.getValueTooltip(utils, value);
             }
 
             @Override
             public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
-                PluginManager.SERVER_REGISTRY.applyCountModifier(utils, function, count);
+                PluginManager.getInstance().serverRegistry.applyCountModifier(utils, function, count);
             }
 
             @Override
             public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
-                PluginManager.SERVER_REGISTRY.applyChanceModifier(utils, condition, chance);
+                PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance);
             }
 
+            @NotNull
             @Override
             public <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack) {
-                return PluginManager.SERVER_REGISTRY.applyItemStackModifier(utils, function, itemStack);
+                return PluginManager.getInstance().serverRegistry.applyItemStackModifier(utils, function, itemStack);
             }
 
+            @NotNull
             @Override
             public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
-                return PluginManager.SERVER_REGISTRY.getItemListing(utils, entry, condition);
+                return PluginManager.getInstance().serverRegistry.getItemListing(utils, entry, condition);
             }
 
+            @NotNull
             @Override
             public <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry) {
-                return PluginManager.SERVER_REGISTRY.collectItems(utils, entry);
+                return PluginManager.getInstance().serverRegistry.collectItems(utils, entry);
             }
 
+            @NotNull
             @Override
             public RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider) {
-                return PluginManager.SERVER_REGISTRY.convertNumber(utils, numberProvider);
+                return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider);
             }
 
             @Nullable
             @Override
             public ServerLevel getServerLevel() {
-                return PluginManager.SERVER_REGISTRY.getServerLevel();
+                return PluginManager.getInstance().serverRegistry.getServerLevel();
             }
 
             @Nullable
             @Override
             public LootContext getLootContext() {
-                return PluginManager.SERVER_REGISTRY.getLootContext();
+                return PluginManager.getInstance().serverRegistry.getLootContext();
             }
 
             @Nullable
@@ -192,12 +205,13 @@ public class TooltipTestSuite {
 
             @Override
             public LootTable getLootTable(ResourceLocation location) {
-                return PluginManager.SERVER_REGISTRY.getLootTable(location);
+                return PluginManager.getInstance().serverRegistry.getLootTable(location);
             }
 
+            @NotNull
             @Override
             public AliConfig getConfiguration() {
-                AliConfig config = PluginManager.SERVER_REGISTRY.getConfiguration();
+                AliConfig config = PluginManager.getInstance().serverRegistry.getConfiguration();
 
                 config.showInGameNames = false;
                 return config;

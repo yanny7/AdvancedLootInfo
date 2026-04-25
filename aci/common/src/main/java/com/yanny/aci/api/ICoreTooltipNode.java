@@ -39,9 +39,11 @@ public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
         }
     }
 
+    @NotNull
     List<Component> getComponents(int pad, boolean showAdvancedTooltip);
 
     void encode(SU utils, FriendlyByteBuf buf);
 
+    @NotNull
     ResourceLocation getId();
 }

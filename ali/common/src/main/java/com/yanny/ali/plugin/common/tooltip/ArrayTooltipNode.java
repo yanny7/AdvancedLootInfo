@@ -34,6 +34,7 @@ public class ArrayTooltipNode extends ListTooltipNode {
     void encodeNode(FriendlyByteBuf buf) {
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

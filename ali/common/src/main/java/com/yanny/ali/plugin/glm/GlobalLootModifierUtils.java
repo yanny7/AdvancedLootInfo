@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
@@ -40,11 +41,13 @@ public class GlobalLootModifierUtils {
                     return GlobalLootModifierUtils.entityPredicate(conditions, value);
                 }
 
+                @NotNull
                 @Override
                 public List<IOperation> getOperations() {
                     return operationSupplier.apply(conditions.stream().filter((c) -> !entityPredicate(c)).toList());
                 }
 
+                @NotNull
                 @Override
                 public IType<Entity> getType() {
                     return IType.ENTITY;
@@ -57,11 +60,13 @@ public class GlobalLootModifierUtils {
                     return GlobalLootModifierUtils.blockPredicate(conditions, value);
                 }
 
+                @NotNull
                 @Override
                 public List<IOperation> getOperations() {
                     return operationSupplier.apply(conditions.stream().filter((c) -> !blockPredicate(c)).toList());
                 }
 
+                @NotNull
                 @Override
                 public IType<Block> getType() {
                     return IType.BLOCK;
@@ -74,11 +79,13 @@ public class GlobalLootModifierUtils {
                     return GlobalLootModifierUtils.tablePredicate(conditions, value, predicate);
                 }
 
+                @NotNull
                 @Override
                 public List<IOperation> getOperations() {
                     return operationSupplier.apply(conditions.stream().filter((c) -> !tablePredicate(c, predicate)).toList());
                 }
 
+                @NotNull
                 @Override
                 public IType<ResourceLocation> getType() {
                     return IType.LOOT_TABLE;

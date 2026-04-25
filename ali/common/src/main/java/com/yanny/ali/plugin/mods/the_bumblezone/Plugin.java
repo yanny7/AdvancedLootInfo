@@ -9,9 +9,11 @@ import com.yanny.ali.plugin.mods.the_bumblezone.functions.DropContainerItems;
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.HoneyCompassLocateStructure;
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.TagItemRemovals;
 import com.yanny.ali.plugin.mods.the_bumblezone.functions.UniquifyIfHasItems;
+import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "the_bumblezone";

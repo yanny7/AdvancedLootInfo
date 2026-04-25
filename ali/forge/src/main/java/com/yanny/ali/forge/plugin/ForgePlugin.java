@@ -28,6 +28,7 @@ import java.util.function.BiFunction;
 public class ForgePlugin implements IPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @NotNull
     @Override
     public String getModId() {
         return "forge";

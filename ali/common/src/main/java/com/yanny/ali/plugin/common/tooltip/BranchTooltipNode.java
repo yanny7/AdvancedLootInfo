@@ -43,6 +43,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
         buf.writeBoolean(translateKey);
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         if (advancedTooltip && !showAdvancedTooltip) {
@@ -57,6 +58,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
         return components;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;
@@ -125,6 +127,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
             this.advancedTooltip = advancedTooltip;
         }
 
+        @NotNull
         public BranchTooltipNode build(String key) {
             return build(key, true);
         }

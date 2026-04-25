@@ -1,6 +1,7 @@
 package com.yanny.aci.api;
 
 import net.minecraft.network.FriendlyByteBuf;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -8,7 +9,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class CoreListNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, DN extends ICoreDataNode<SU, TN>, CU extends ICoreClientUtils<SU, TN, DN, CU, WU>, WU extends ICoreWidgetUtils<SU, TN, DN>> implements ICoreDataNode<SU, TN> {
+public abstract class CoreListNode
+        <
+                SU extends ICoreServerUtils,
+                TN extends ICoreTooltipNode<SU>,
+                DN extends ICoreDataNode<SU, TN>,
+                CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
+                WU extends ICoreWidgetUtils<SU, TN, DN>
+        >
+        implements ICoreDataNode<SU, TN> {
     @Nullable
     private List<DN> nodes;
 
@@ -34,6 +43,7 @@ public abstract class CoreListNode<SU extends ICoreServerUtils, TN extends ICore
         }
     }
 
+    @NotNull
     public List<DN> nodes() {
         return Objects.requireNonNullElse(nodes, Collections.emptyList());
     }

@@ -69,16 +69,19 @@ public class ItemTagNode implements IDataNode, IItemNode {
         return modified;
     }
 
+    @NotNull
     @Override
     public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return Either.right(tag);
     }
 
+    @NotNull
     @Override
     public List<LootItemCondition> getConditions() {
         return conditions;
     }
 
+    @NotNull
     @Override
     public List<LootItemFunction> getFunctions() {
         return functions;
@@ -103,11 +106,13 @@ public class ItemTagNode implements IDataNode, IItemNode {
         buf.writeFloat(chance);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

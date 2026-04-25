@@ -9,9 +9,11 @@ import com.yanny.ali.plugin.mods.aether.functions.DoubleDrops;
 import com.yanny.ali.plugin.mods.aether.functions.SpawnTNT;
 import com.yanny.ali.plugin.mods.aether.functions.SpawnXP;
 import com.yanny.ali.plugin.mods.aether.functions.WhirlwindSpawnEntity;
+import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "aether";

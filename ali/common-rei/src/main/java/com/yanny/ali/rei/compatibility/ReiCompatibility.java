@@ -42,7 +42,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
-        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
+        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
 
         blockCategories.clear();
         entityCategories.clear();
@@ -66,8 +66,8 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     private void registerData(DisplayRegistry registry, byte[] fullCompressedData) {
-        AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AliConfig config = PluginManager.COMMON_REGISTRY.getConfiguration();
+        AliClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
+        AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 
         LOGGER.info("Adding loot information to REI");

@@ -15,6 +15,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
@@ -22,30 +23,41 @@ import java.util.List;
 import java.util.Map;
 
 public interface IServerUtils extends ICoreServerUtils, ICommonUtils {
+    @NotNull
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
+    @NotNull
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
 
+    @NotNull
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
+    @NotNull
     <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
 
+    @NotNull
     <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition);
 
+    @NotNull
     <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
+    @NotNull
     <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count);
 
     <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance);
 
+    @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
+    @NotNull
     <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition);
 
+    @NotNull
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);
 
+    @NotNull
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
 
     @Nullable
@@ -54,7 +66,9 @@ public interface IServerUtils extends ICoreServerUtils, ICommonUtils {
     @Nullable
     ResourceLocation getCurrentLootTable();
 
+    @Nullable
     LootTable getLootTable(ResourceLocation location);
 
+    @NotNull
     List<LootPool> getLootPools(LootTable lootTable);
 }

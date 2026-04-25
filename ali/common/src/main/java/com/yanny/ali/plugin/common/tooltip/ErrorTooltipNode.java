@@ -26,6 +26,7 @@ public class ErrorTooltipNode implements ITooltipNode {
         this.value = value;
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         return Collections.singletonList(pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", value).withStyle(ChatFormatting.RED)));
@@ -36,6 +37,7 @@ public class ErrorTooltipNode implements ITooltipNode {
         buf.writeUtf(value);
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;
@@ -81,10 +83,12 @@ public class ErrorTooltipNode implements ITooltipNode {
             this.value = value;
         }
 
+        @NotNull
         public Builder add(ITooltipNode node) {
             return this;
         }
 
+        @NotNull
         public ErrorTooltipNode build(String key) {
             return new ErrorTooltipNode(value);
         }

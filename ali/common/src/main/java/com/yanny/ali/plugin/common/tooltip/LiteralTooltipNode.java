@@ -35,11 +35,13 @@ public class LiteralTooltipNode implements ITooltipNode {
         buf.writeUtf(text);
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         return Collections.singletonList(pad(pad, Component.translatable(text).withStyle(TEXT_STYLE)));

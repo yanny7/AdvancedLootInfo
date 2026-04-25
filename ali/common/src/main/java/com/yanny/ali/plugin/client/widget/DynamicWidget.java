@@ -8,6 +8,7 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,16 +16,18 @@ public class DynamicWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public DynamicWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+    public DynamicWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         widget = WidgetUtils.getDynamicWidget(rect, entry);
         bounds = widget.getRect();
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.HORIZONTAL;
@@ -35,6 +38,7 @@ public class DynamicWidget implements IWidget {
         widget.render(guiGraphics, mouseX, mouseY);
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);

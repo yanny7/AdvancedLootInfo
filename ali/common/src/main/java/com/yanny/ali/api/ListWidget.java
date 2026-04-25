@@ -6,6 +6,7 @@ import com.yanny.aci.api.WidgetDirection;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -67,11 +68,13 @@ public abstract class ListWidget implements IWidget {
     @Nullable
     public abstract IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry);
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.VERTICAL;
@@ -111,6 +114,7 @@ public abstract class ListWidget implements IWidget {
         }
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         List<Component> components = new LinkedList<>();

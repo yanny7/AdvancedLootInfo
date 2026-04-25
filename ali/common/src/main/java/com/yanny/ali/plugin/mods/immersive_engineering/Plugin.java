@@ -8,9 +8,11 @@ import com.yanny.ali.plugin.mods.immersive_engineering.functions.*;
 import com.yanny.ali.plugin.mods.immersive_engineering.trades.OreveinMapForEmeralds;
 import com.yanny.ali.plugin.mods.immersive_engineering.trades.RevolverPieceForEmeralds;
 import com.yanny.ali.plugin.mods.immersive_engineering.trades.TradeListing;
+import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "immersiveengineering";

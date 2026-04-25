@@ -5,6 +5,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.mixin.MixinLootModificationByEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 
@@ -21,6 +22,7 @@ public class EntityLootModifier extends LootModifier<Entity> {
         return entityTypes.contains(value.getType());
     }
 
+    @NotNull
     @Override
     public IType<Entity> getType() {
         return IType.ENTITY;

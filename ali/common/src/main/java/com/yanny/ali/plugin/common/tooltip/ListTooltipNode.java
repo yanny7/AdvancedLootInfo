@@ -6,6 +6,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public abstract class ListTooltipNode implements ITooltipNode {
         return Objects.requireNonNullElse(children, Collections.emptyList());
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         List<ITooltipNode> children = getChildren();
@@ -105,6 +107,7 @@ public abstract class ListTooltipNode implements ITooltipNode {
     public abstract static class Builder implements IKeyTooltipNode {
         protected final List<ITooltipNode> children = new ArrayList<>();
 
+        @NotNull
         public Builder add(ITooltipNode node) {
             children.add(node);
             return this;
