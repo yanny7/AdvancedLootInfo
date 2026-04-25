@@ -7,6 +7,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class DynamicNode implements IDataNode {
     public static final Identifier ID = Utils.modLoc("dynamic");
@@ -30,11 +31,13 @@ public class DynamicNode implements IDataNode {
         buf.writeFloat(chance);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;

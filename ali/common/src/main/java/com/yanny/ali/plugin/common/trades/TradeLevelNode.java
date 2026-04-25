@@ -10,6 +10,7 @@ import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
+import org.jetbrains.annotations.NotNull;
 
 public class TradeLevelNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade_level");
@@ -36,11 +37,13 @@ public class TradeLevelNode extends ListNode {
         buf.writeInt(level);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return ValueTooltipNode.value(level).build("ali.property.value.level");
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;

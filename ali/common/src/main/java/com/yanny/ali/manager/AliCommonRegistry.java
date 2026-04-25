@@ -1,6 +1,8 @@
 package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.manager.CoreCommonRegistry;
+import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.ICommonUtils;
 import com.yanny.ali.configuration.AliConfig;
@@ -10,29 +12,34 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Function;
 
-public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
+public class AliCommonRegistry extends CoreCommonRegistry<AliConfig> implements ICommonRegistry, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<EntityType<?>, Function<Level, List<Entity>>> entityVariantsMap = new HashMap<>();
-    private AliConfig configuration;
+    private final ManagedRegistry<EntityType<?>, Function<Level, List<Entity>>> entityVariants = register("entity variants", false, HashMap::new, EntityType::toString, null);
 
-    @Override
-    public <T extends Entity> void registerEntityVariants(EntityType<T> type, Function<Level, List<Entity>> factory) {
-        entityVariantsMap.put(type, factory);
+    public AliCommonRegistry() {
+        super();
     }
 
     @Override
+    public <T extends Entity> void registerEntityVariants(EntityType<T> type, Function<Level, List<Entity>> factory) {
+        entityVariants.put(type, factory);
+    }
+
+    @NotNull
+    @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
-        Function<Level, List<Entity>> factory = entityVariantsMap.get(type);
+        Optional<Function<Level, List<Entity>>> factory = entityVariants.get(type);
         List<Entity> entities = new ArrayList<>();
 
-        if (factory == null) {
-            factory = (l) -> {
+        if (factory.isEmpty()) {
+            factory = Optional.of((l) -> {
                 Entity entity = type.create(l, EntitySpawnReason.LOAD);
 
                 if (entity != null) {
@@ -41,11 +48,11 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
                     LOGGER.warn("Failed to create entity: {} (NULL)", type);
                     return Collections.emptyList();
                 }
-            };
+            });
         }
 
         try {
-            entities.addAll(factory.apply(level));
+            entities.addAll(factory.get().apply(level));
         } catch (Throwable e) {
             LOGGER.warn("Failed to create entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e.getMessage());
         }
@@ -53,16 +60,8 @@ public class AliCommonRegistry implements ICommonRegistry, ICommonUtils {
         return entities;
     }
 
-    @Override
-    public AliConfig getConfiguration() {
-        return configuration;
-    }
-
-    public void loadConfiguration() {
-        configuration = ConfigUtils.readConfiguration();
-    }
-
-    public void printRegistrationInfo() {
-        LOGGER.info("Registered {} entity variants", entityVariantsMap.size());
+    @NotNull
+    protected AliConfig loadConfiguration() {
+        return ConfigUtils.readConfiguration();
     }
 }

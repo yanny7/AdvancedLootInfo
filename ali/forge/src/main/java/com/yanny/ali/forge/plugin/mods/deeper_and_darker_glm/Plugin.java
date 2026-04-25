@@ -5,9 +5,11 @@ import com.yanny.ali.forge.plugin.IForgePlugin;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
+import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IForgePlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "deeperdarker";

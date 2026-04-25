@@ -98,21 +98,25 @@ public class ItemNode implements IDataNode, IItemNode {
         functions = Collections.emptyList();
     }
 
+    @NotNull
     @Override
     public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return item;
     }
 
+    @NotNull
     @Override
     public List<LootItemCondition> getConditions() {
         return conditions;
     }
 
+    @NotNull
     @Override
     public List<LootItemFunction> getFunctions() {
         return functions;
     }
 
+    @NotNull
     @Override
     public RangeValue getCount() {
         return count;
@@ -140,11 +144,13 @@ public class ItemNode implements IDataNode, IItemNode {
         buf.writeFloat(chance);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;

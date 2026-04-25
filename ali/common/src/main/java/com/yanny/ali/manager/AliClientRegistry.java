@@ -1,34 +1,26 @@
 package com.yanny.ali.manager;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.IWidget;
-import com.yanny.aci.api.RelativeRect;
-import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.manager.CoreClientRegistry;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
-import com.yanny.ali.plugin.common.nodes.MissingNode;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.Identifier;
+import com.yanny.ali.plugin.client.widget.MissingWidget;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.BiFunction;
 
-public class AliClientRegistry implements IClientRegistry, IClientUtils {
+public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtils, IServerUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final long RELOAD_COOLDOWN_MS = 2000L;
-
-    private final Map<Identifier, IWidgetFactory> widgetMap = new HashMap<>();
-    private final Map<Identifier, BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode>> dataNodeFactoryMap = new HashMap<>();
-    private final Map<Identifier, BiFunction<IClientUtils, RegistryFriendlyByteBuf, ITooltipNode>> tooltipNodeFactoryMap = new HashMap<>();
-    private final ICommonUtils utils;
 
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
     private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
@@ -42,7 +34,7 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
     private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
 
     public AliClientRegistry(ICommonUtils utils) {
-        this.utils = utils;
+        super(utils);
     }
 
     public CompletableFuture<byte[]> getCurrentDataFuture() {
@@ -152,122 +144,16 @@ public class AliClientRegistry implements IClientRegistry, IClientUtils {
         LOGGER.info("Finished receiving loot data");
     }
 
-    @Override
-    public void registerWidget(Identifier id, IWidgetFactory<IServerUtils, ITooltipNode, IDataNode, IWidgetUtils> factory) {
-        widgetMap.put(id, factory);
-    }
-
-    @Override
-    public void registerDataNode(Identifier id, BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> dataFactory) {
-        dataNodeFactoryMap.put(id, dataFactory);
-    }
-
-    @Override
-    public void registerTooltipNode(Identifier id, BiFunction<IClientUtils, RegistryFriendlyByteBuf, ITooltipNode> tooltipFactory) {
-        tooltipNodeFactoryMap.put(id, tooltipFactory);
-    }
-
-    @Override
-    public List<IWidget> createWidgets(IWidgetUtils utils, List<IDataNode> entries, RelativeRect parent, int maxWidth) {
-        int posX = 0, posY = 0;
-        List<IWidget> widgets = new ArrayList<>(entries.size());
-        WidgetDirection lastDirection = null;
-
-        for (IDataNode entry : entries) {
-            IWidgetFactory widgetFactory = widgetMap.getOrDefault(entry.getId(), widgetMap.get(MissingNode.ID));
-            IWidget widget = widgetFactory.create(utils, entry, new RelativeRect(0, 0, maxWidth, 0, parent), maxWidth);
-
-            widgets.add(widget);
-        }
-
-        int w = 0;
-        int h = 0;
-
-        for (int i = 0; i < widgets.size(); i++) {
-            IWidget widget = widgets.get(i);
-            WidgetDirection direction = widget.getDirection();
-            RelativeRect bounds = widget.getRect();
-
-            if (lastDirection != null) {
-                if (lastDirection == WidgetDirection.HORIZONTAL && direction == WidgetDirection.HORIZONTAL) {
-                    if (parent.getX() + posX + bounds.getWidth() <= maxWidth) {
-                        bounds.setOffset(posX, posY);
-                        posX += bounds.getWidth();
-                    } else {
-                        posX = bounds.getWidth();
-                        posY += widgets.get(i - 1).getRect().getHeight();
-                        bounds.setOffset(0, posY);
-                    }
-                } else {
-                    posX = 0;
-
-                    if (direction != lastDirection) {
-                        if (lastDirection == WidgetDirection.HORIZONTAL) {
-                            posY += widgets.get(i - 1).getRect().getHeight() + IWidget.PADDING;
-                        }
-
-                        bounds.setOffset(posX, posY);
-                    } else {
-                        bounds.setOffset(posX, posY);
-                    }
-
-                    if (direction != WidgetDirection.HORIZONTAL) {
-                        posY += bounds.getHeight() + IWidget.PADDING;
-                    } else {
-                        posX += bounds.getWidth();
-                    }
-                }
-            } else {
-                bounds.setOffset(posX, posY);
-
-                if (direction == WidgetDirection.HORIZONTAL) {
-                    posX += bounds.getWidth();
-                } else {
-                    posY += bounds.getHeight() + IWidget.PADDING;
-                }
-            }
-
-            w = Math.max(w, bounds.getOffsetX() + bounds.getWidth());
-            h = Math.max(h, bounds.getOffsetY() + bounds.getHeight());
-            lastDirection = direction;
-        }
-
-        parent.setDimensions(w, h);
-        return widgets;
-    }
-
-    @Override
-    public BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> getDataNodeFactory(Identifier id) {
-        BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> dataFactory = dataNodeFactoryMap.get(id);
-
-        return Objects.requireNonNullElseGet(dataFactory, () -> {
-            throw new IllegalStateException(String.format("Failed to construct data node - node {%s} was not registered!", id));
-        });
-    }
-
-    @Override
-    public BiFunction<IClientUtils, RegistryFriendlyByteBuf, ITooltipNode> getTooltipNodeFactory(Identifier id) {
-        BiFunction<IClientUtils, RegistryFriendlyByteBuf, ITooltipNode> tooltipFactory = tooltipNodeFactoryMap.get(id);
-
-        return Objects.requireNonNullElseGet(tooltipFactory, () -> {
-            throw new IllegalStateException(String.format("Failed to construct tooltip node - node {%s} was not registered!", id));
-        });
-    }
-
+    @NotNull
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
-        return utils.createEntities(type, level);
+        return commonUtils.createEntities(type, level);
     }
 
+    @NotNull
     @Override
-    public AliConfig getConfiguration() {
-        return utils.getConfiguration();
-    }
-
-    public void printRegistrationInfo() {
-        LOGGER.info("Registered {} widgets", widgetMap.size());
-        LOGGER.info("Registered {} data node factories", dataNodeFactoryMap.size());
-        LOGGER.info("Registered {} tooltip node factories", tooltipNodeFactoryMap.size());
+    public IWidgetFactory<IServerUtils, ITooltipNode, IDataNode, IWidgetUtils> getMissingWidgetFactory() {
+        return MissingWidget::new;
     }
 
     private void startLogging() {

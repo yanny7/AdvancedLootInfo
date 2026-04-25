@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ErrorTooltipNode implements ITooltipNode {
     public static final Identifier ID = Utils.modLoc("error");
@@ -26,6 +26,7 @@ public class ErrorTooltipNode implements ITooltipNode {
         this.value = value;
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         return Collections.singletonList(pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", value).withStyle(ChatFormatting.RED)));
@@ -36,6 +37,7 @@ public class ErrorTooltipNode implements ITooltipNode {
         buf.writeUtf(value);
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;
@@ -81,10 +83,12 @@ public class ErrorTooltipNode implements ITooltipNode {
             this.value = value;
         }
 
+        @NotNull
         public Builder add(ITooltipNode node) {
             return this;
         }
 
+        @NotNull
         public ErrorTooltipNode build(String key) {
             return new ErrorTooltipNode(value);
         }

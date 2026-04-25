@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class LiteralTooltipNode implements ITooltipNode {
     public static final Identifier ID = Utils.modLoc("literal");
@@ -35,11 +35,13 @@ public class LiteralTooltipNode implements ITooltipNode {
         buf.writeUtf(text);
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         return Collections.singletonList(pad(pad, Component.translatable(text).withStyle(TEXT_STYLE)));

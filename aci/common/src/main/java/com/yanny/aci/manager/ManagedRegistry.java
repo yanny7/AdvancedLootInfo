@@ -1,4 +1,4 @@
-package com.yanny.ali.manager;
+package com.yanny.aci.manager;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Registry;

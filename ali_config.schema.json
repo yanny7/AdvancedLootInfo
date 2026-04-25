@@ -5,7 +5,7 @@
   "description": "Main configuration file for the AdvancedLootInfo mod.",
   "type": "object",
   "definitions": {
-    "ResourceLocation": {
+    "Identifier": {
       "type": "string",
       "description": "A Minecraft Resource Location string, typically formatted as 'namespace:path'.",
       "pattern": "^[a-z0-9_.-]+:[a-z0-9_/.-]+$"
@@ -27,7 +27,7 @@
         {
           "required": ["item"],
           "properties": {
-            "item": { "$ref": "#/definitions/ResourceLocation" }
+            "item": { "$ref": "#/definitions/Identifier" }
           },
           "additionalProperties": false,
           "description": "A specific item ID."
@@ -35,7 +35,7 @@
         {
           "required": ["tag"],
           "properties": {
-            "tag": { "$ref": "#/definitions/ResourceLocation" }
+            "tag": { "$ref": "#/definitions/Identifier" }
           },
           "additionalProperties": false,
           "description": "A reference to an item tag (e.g., 'minecraft:logs')."
@@ -57,16 +57,16 @@
       "description": "Defines the common properties for all loot categories.",
       "properties": {
         "key": {
-          "description": "The unique ResourceLocation identifier for this category (e.g., 'ali:plant_loot').",
-          "$ref": "#/definitions/ResourceLocation"
+          "description": "The unique Identifier identifier for this category (e.g., 'ali:plant_loot').",
+          "$ref": "#/definitions/Identifier"
         },
         "type": {
           "description": "The category type (e.g., BLOCK, ENTITY).",
           "$ref": "#/definitions/LootCategoryType"
         },
         "icon": {
-          "description": "The ResourceLocation ID of the item used as the display icon.",
-          "$ref": "#/definitions/ResourceLocation"
+          "description": "The Identifier ID of the item used as the display icon.",
+          "$ref": "#/definitions/Identifier"
         },
         "hide": {
           "type": "boolean",
@@ -150,7 +150,7 @@
     "disabledEntities": {
       "type": "array",
       "description": "List of entities that will not be used for gathering loot tables.",
-      "items": { "$ref": "#/definitions/ResourceLocation" }
+      "items": { "$ref": "#/definitions/Identifier" }
     },
     "logMoreStatistics": {
       "type": "boolean",
@@ -159,7 +159,7 @@
     },
     "showInGameNames": {
       "type": "boolean",
-      "description": "If true, displays names instead of ResourceLocation",
+      "description": "If true, displays names instead of Identifier",
       "default": true
     }
   },
