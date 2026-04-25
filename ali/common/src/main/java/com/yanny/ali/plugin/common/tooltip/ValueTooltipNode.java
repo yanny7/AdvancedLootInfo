@@ -150,7 +150,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
 
     @NotNull
     private static MutableComponent transform(String v) {
-        if (v.charAt(0) == '\uE000') {
+        if (!v.isEmpty() && v.charAt(0) == '\uE000') {
             return Component.translatable(v.substring(1)).withStyle(PARAM_STYLE);
         }
 
