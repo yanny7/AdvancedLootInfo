@@ -9,6 +9,7 @@ import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,16 +27,19 @@ public class NormalizeWidget implements IWidget {
         tooltip = NodeUtils.toComponents(node.getTooltip(), 0, false);
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.HORIZONTAL;
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return tooltip;

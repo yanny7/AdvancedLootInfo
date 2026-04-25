@@ -1,6 +1,7 @@
 package com.yanny.ali.api;
 
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Function;
@@ -13,5 +14,6 @@ sealed public interface IOperation permits IOperation.AddOperation, IOperation.R
 
     record ReplaceOperation(Predicate<ItemStack> predicate, Function<IDataNode, List<IDataNode>> factory) implements IOperation {}
 
+    @NotNull
     Predicate<ItemStack> predicate();
 }

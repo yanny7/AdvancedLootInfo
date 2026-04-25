@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final Identifier ID = Utils.modLoc("branch");
@@ -44,6 +43,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
         buf.writeBoolean(translateKey);
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         if (advancedTooltip && !showAdvancedTooltip) {
@@ -58,6 +58,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
         return components;
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;
@@ -126,6 +127,7 @@ public class BranchTooltipNode extends ListTooltipNode implements ITooltipNode {
             this.advancedTooltip = advancedTooltip;
         }
 
+        @NotNull
         public BranchTooltipNode build(String key) {
             return build(key, true);
         }

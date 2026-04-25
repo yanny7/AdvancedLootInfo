@@ -5,6 +5,7 @@ import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityLootModifier extends AbstractLootModifier<Entity> {
     private final HolderSet<EntityType<?>> entityTypes;
@@ -19,6 +20,7 @@ public class EntityLootModifier extends AbstractLootModifier<Entity> {
         return entityTypes.stream().anyMatch((f) -> f.value().equals(value.getType()));
     }
 
+    @NotNull
     @Override
     public IType<Entity> getType() {
         return IType.ENTITY;

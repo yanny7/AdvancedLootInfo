@@ -17,17 +17,19 @@ public class GlobalLootModifierWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public GlobalLootModifierWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+    public GlobalLootModifierWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         bounds = rect;
         widget = getGlobalLootModifierWidget(bounds, entry);
         bounds.setDimensions(widget.getRect().getWidth(), widget.getRect().getHeight());
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.VERTICAL;
@@ -38,6 +40,7 @@ public class GlobalLootModifierWidget implements IWidget {
         widget.render(guiGraphics, mouseX, mouseY);
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);

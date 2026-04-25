@@ -8,13 +8,14 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.lootjs.node.ItemStackNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemStackWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
     private final boolean modified;
 
-    public ItemStackWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+    public ItemStackWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         ItemStackNode node = (ItemStackNode) entry;
 
         utils.addSlotWidget(node.getModifiedItem(), node, rect);
@@ -24,11 +25,13 @@ public class ItemStackWidget implements IWidget {
         modified = node.isModified();
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.HORIZONTAL;

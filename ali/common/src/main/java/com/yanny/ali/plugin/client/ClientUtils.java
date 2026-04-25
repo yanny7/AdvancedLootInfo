@@ -13,33 +13,39 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
 public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
+    @NotNull
     @Override
     public List<IWidget> createWidgets(IWidgetUtils registry, List<IDataNode> entries, RelativeRect parent, int maxWidth) {
-        return PluginManager.CLIENT_REGISTRY.createWidgets(registry, entries, parent, maxWidth);
+        return PluginManager.getInstance().clientRegistry.createWidgets(registry, entries, parent, maxWidth);
     }
 
+    @NotNull
     @Override
     public BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> getDataNodeFactory(Identifier id) {
-        return PluginManager.CLIENT_REGISTRY.getDataNodeFactory(id);
+        return PluginManager.getInstance().clientRegistry.getDataNodeFactory(id);
     }
 
+    @NotNull
     @Override
     public BiFunction<IClientUtils, RegistryFriendlyByteBuf, ITooltipNode> getTooltipNodeFactory(Identifier id) {
-        return PluginManager.CLIENT_REGISTRY.getTooltipNodeFactory(id);
+        return PluginManager.getInstance().clientRegistry.getTooltipNodeFactory(id);
     }
 
+    @NotNull
     @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
-        return PluginManager.CLIENT_REGISTRY.createEntities(type, level);
+        return PluginManager.getInstance().clientRegistry.createEntities(type, level);
     }
 
+    @NotNull
     @Override
     public AliConfig getConfiguration() {
-        return PluginManager.CLIENT_REGISTRY.getConfiguration();
+        return PluginManager.getInstance().clientRegistry.getConfiguration();
     }
 }

@@ -15,6 +15,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
 import net.minecraft.world.item.trading.TradeSet;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
@@ -53,11 +54,13 @@ public class TradeNode extends ListNode {
 
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return EmptyTooltipNode.EMPTY;
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;

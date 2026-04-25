@@ -6,6 +6,7 @@ import com.almostreliable.lootjs.core.filters.LootTableFilter;
 import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class TableLootModifier extends AbstractLootModifier<Identifier> {
         return predicates.stream().anyMatch((p) -> p.test(value));
     }
 
+    @NotNull
     @Override
     public IType<Identifier> getType() {
         return IType.LOOT_TABLE;

@@ -25,11 +25,11 @@ public class NeoForgeClientBusSubscriber {
 
     @SubscribeEvent
     public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
-        PluginManager.CLIENT_REGISTRY.loggingIn(NetworkRegistry.hasChannel(event.getConnection(), ConnectionProtocol.PLAY, StartMessage.TYPE.id()));
+        PluginManager.getInstance().clientRegistry.loggingIn(NetworkRegistry.hasChannel(event.getConnection(), ConnectionProtocol.PLAY, StartMessage.TYPE.id()));
     }
 
     @SubscribeEvent
     public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
-        PluginManager.CLIENT_REGISTRY.loggingOut();
+        PluginManager.getInstance().clientRegistry.loggingOut();
     }
 }

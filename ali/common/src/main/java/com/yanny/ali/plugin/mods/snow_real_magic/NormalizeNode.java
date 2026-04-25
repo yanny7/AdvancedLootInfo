@@ -46,11 +46,13 @@ public class NormalizeNode implements IDataNode, IItemNode {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;
@@ -77,21 +79,25 @@ public class NormalizeNode implements IDataNode, IItemNode {
         return count;
     }
 
+    @NotNull
     @Override
     public Either<ItemStack, TagKey<? extends ItemLike>> getModifiedItem() {
         return Either.left(ItemStack.EMPTY);
     }
 
+    @NotNull
     @Override
     public List<LootItemCondition> getConditions() {
         return List.of();
     }
 
+    @NotNull
     @Override
     public List<LootItemFunction> getFunctions() {
         return List.of();
     }
 
+    @NotNull
     @Override
     public RangeValue getCount() {
         return new RangeValue();

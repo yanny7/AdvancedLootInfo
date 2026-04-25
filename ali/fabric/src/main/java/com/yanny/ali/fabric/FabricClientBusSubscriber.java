@@ -18,10 +18,10 @@ public class FabricClientBusSubscriber {
     }
 
     private static void onConnect(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
-        PluginManager.CLIENT_REGISTRY.loggingIn(ClientPlayNetworking.canSend(StartMessage.TYPE));
+        PluginManager.getInstance().clientRegistry.loggingIn(ClientPlayNetworking.canSend(StartMessage.TYPE));
     }
 
     private static void onDisconnect(ClientPacketListener clientPacketListener, Minecraft minecraft) {
-        PluginManager.CLIENT_REGISTRY.loggingOut();
+        PluginManager.getInstance().clientRegistry.loggingOut();
     }
 }

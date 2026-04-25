@@ -8,13 +8,14 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemTagWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
     private final boolean modified;
 
-    public ItemTagWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+    public ItemTagWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         ItemTagNode node = (ItemTagNode) entry;
 
         utils.addSlotWidget(node.getModifiedItem(), node, rect);
@@ -24,11 +25,13 @@ public class ItemTagWidget implements IWidget {
         modified = node.isModified();
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.HORIZONTAL;

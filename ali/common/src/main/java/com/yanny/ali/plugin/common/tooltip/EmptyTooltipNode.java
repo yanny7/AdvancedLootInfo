@@ -21,11 +21,13 @@ public class EmptyTooltipNode implements ITooltipNode {
 
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         return Collections.emptyList();
@@ -46,6 +48,7 @@ public class EmptyTooltipNode implements ITooltipNode {
     }
 
     public static class Builder extends ListTooltipNode.Builder {
+        @NotNull
         public EmptyTooltipNode build(String key) {
             return EmptyTooltipNode.EMPTY;
         }

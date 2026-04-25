@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final Identifier ID = Utils.modLoc("value");
@@ -53,6 +53,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         buf.writeUtf(key);
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         if (key == null) {
@@ -104,6 +105,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
         return Objects.hash(super.hashCode(), values, isKeyValue, key, translateKey);
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;
@@ -197,6 +199,7 @@ public class ValueTooltipNode extends ListTooltipNode implements ITooltipNode {
             isKeyValue = true;
         }
 
+        @NotNull
         public ValueTooltipNode build(String key) {
             return build(key, true);
         }
