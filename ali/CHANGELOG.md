@@ -1,3 +1,7 @@
+## []
+
+- Fixed crash on newer Neoforge
+
 ## [1.9.1]
 
 - Fixed latest feature not displayed due to old configuration file

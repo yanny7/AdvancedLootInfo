@@ -32,6 +32,7 @@ import java.util.function.BiFunction;
 public class NeoForgePlugin implements IPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @NotNull
     @Override
     public String getModId() {
         return "neoforge";
@@ -94,7 +95,7 @@ public class NeoForgePlugin implements IPlugin {
             }, tablePredicate);
         });
 
-        for (IGlobalLootModifier globalLootModifier : lootModifierManager.getAllLootMods()) {
+        for (IGlobalLootModifier globalLootModifier : lootModifierManager.getSortedModifiers()) {
             IGlobalLootModifierWrapper wrapper = wrap(utils, globalLootModifier);
 
             try {
