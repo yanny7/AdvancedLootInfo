@@ -8,9 +8,11 @@ import com.yanny.ali.forge.plugin.mods.mantle.functions.RetexturedLootFunction;
 import com.yanny.ali.forge.plugin.mods.mantle.functions.SetFluidLootFunction;
 import com.yanny.ali.forge.plugin.mods.mantle.trades.AncientToolItemListing;
 import com.yanny.ali.plugin.mods.PluginUtils;
+import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
+    @NotNull
     @Override
     public String getModId() {
         return "mantle";

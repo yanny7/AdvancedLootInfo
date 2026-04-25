@@ -1,6 +1,6 @@
 package com.yanny.awi.api;
 
-import com.yanny.aci.api.ICommonTooltipNode;
+import com.yanny.aci.api.ICoreTooltipNode;
 
-public interface ITooltipNode extends ICommonTooltipNode<IServerUtils> {
+public interface ITooltipNode extends ICoreTooltipNode<IServerUtils> {
 }

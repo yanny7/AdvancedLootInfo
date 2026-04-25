@@ -31,6 +31,7 @@ public class LootJsPlugin implements IPlugin {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @NotNull
     @Override
     public String getModId() {
         return "lootjs";

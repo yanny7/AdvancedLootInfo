@@ -11,6 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,11 +43,13 @@ public class TextureWidget implements IWidget {
         this(texture, rect, u, v, rect.getWidth(), rect.getHeight(), 256, 256);
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return rect;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.VERTICAL;
@@ -56,6 +59,7 @@ public class TextureWidget implements IWidget {
         this.components.addAll(NodeUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return components;

@@ -9,6 +9,7 @@ import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.nodes.ReferenceNode;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,11 +27,13 @@ public class ReferenceWidget implements IWidget {
         bounds = widget.getRect();
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.VERTICAL;
@@ -41,6 +44,7 @@ public class ReferenceWidget implements IWidget {
         widget.render(guiGraphics, mouseX, mouseY);
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);

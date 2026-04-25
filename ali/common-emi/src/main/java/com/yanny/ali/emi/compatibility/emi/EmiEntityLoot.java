@@ -71,7 +71,7 @@ public class EmiEntityLoot extends EmiBaseLoot {
                     Level level = Minecraft.getInstance().level;
 
                     if (level != null) {
-                        Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, entityType, level, variant);
+                        Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, entityType, level, variant);
                         GenericUtils.renderEntity(entity, rect, widgetHolder.getWidth(), guiGraphics, mouseX, mouseY);
                     }
                 }

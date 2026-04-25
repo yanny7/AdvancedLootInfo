@@ -1,60 +1,44 @@
 package com.yanny.awi.manager;
 
-import com.mojang.logging.LogUtils;
-import com.yanny.awi.api.IPlugin;
+import com.yanny.aci.manager.CorePluginManager;
+import com.yanny.awi.api.*;
 import com.yanny.awi.platform.Services;
-import org.slf4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PluginManager {
-    private static final Logger LOGGER = LogUtils.getLogger();
+public class PluginManager extends CorePluginManager<Object, ICommonUtils, IServerUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils, AwiCommonRegistry, AwiClientRegistry, AwiServerRegistry, ICommonRegistry, IClientRegistry, IServerRegistry, IPlugin> {
+    private static PluginManager pluginManager;
 
-    public static AwiServerRegistry SERVER_REGISTRY;
-    private static List<IPlugin> PLUGINS;
-
-    public static void registerServerEvent() {
-        registerServerData();
-    }
-
-    public static void reloadServer() {
-        LOGGER.info("Reloading server plugin data...");
-        SERVER_REGISTRY.clearData();
-
-        for (IPlugin plugin : PLUGINS) {
-            try {
-                plugin.registerServer(SERVER_REGISTRY);
-            } catch (Throwable e) {
-                LOGGER.error("Failed to reload {} server part with error: {}", plugin.getModId(), e.getMessage(), e);
-            }
+    public static PluginManager getInstance() {
+        if (pluginManager == null) {
+            pluginManager = new PluginManager();
         }
 
-        SERVER_REGISTRY.printRegistrationInfo();
-        LOGGER.info("Reloading server plugin data finished");
+        return pluginManager;
     }
 
-    public static void deregisterServerEvent() {
-        LOGGER.info("Deregistering server plugin data...");
-        SERVER_REGISTRY.clearData();
-        SERVER_REGISTRY = null;
-        LOGGER.info("Deregistering server plugin data finished");
+    @NotNull
+    @Override
+    protected List<IPlugin> getPlugins() {
+        return Services.getPlatform().getPlugins();
     }
 
-    private static void registerServerData() {
-        LOGGER.info("Registering server plugin data...");
-        SERVER_REGISTRY = new AwiServerRegistry();
+    @NotNull
+    @Override
+    protected AwiCommonRegistry createCommonRegistry() {
+        return new AwiCommonRegistry();
+    }
 
-        PLUGINS = Services.getPlatform().getPlugins();
+    @NotNull
+    @Override
+    protected AwiClientRegistry createClientRegistry(AwiCommonRegistry commonRegistry) {
+        return new AwiClientRegistry(commonRegistry);
+    }
 
-        for (IPlugin plugin : PLUGINS) {
-            try {
-                plugin.registerServer(SERVER_REGISTRY);
-            } catch (Throwable e) {
-                LOGGER.error("Failed to register {} server part with error: {}", plugin.getModId(), e.getMessage(), e);
-            }
-        }
-
-        SERVER_REGISTRY.printRegistrationInfo();
-        LOGGER.info("Registering server plugin data finished");
+    @NotNull
+    @Override
+    protected AwiServerRegistry createServerRegistry(AwiCommonRegistry commonRegistry) {
+        return new AwiServerRegistry(commonRegistry);
     }
 }

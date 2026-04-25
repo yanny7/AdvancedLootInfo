@@ -1,14 +1,14 @@
 package com.yanny.ali.api;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.CommonListNode;
+import com.yanny.aci.api.CoreListNode;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import org.slf4j.Logger;
 
 import java.util.List;
 
-public abstract class ListNode extends CommonListNode<IServerUtils, ITooltipNode, IDataNode, IClientUtils, IWidgetUtils> implements IDataNode {
+public abstract class ListNode extends CoreListNode<IServerUtils, ITooltipNode, IDataNode, IClientUtils, IWidgetUtils> implements IDataNode {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public ListNode() {
@@ -36,7 +36,7 @@ public abstract class ListNode extends CommonListNode<IServerUtils, ITooltipNode
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write node in {}", PluginManager.SERVER_REGISTRY.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to write node in {}", PluginManager.getInstance().serverRegistry.getCurrentLootTable(), e);
             }
         }
 

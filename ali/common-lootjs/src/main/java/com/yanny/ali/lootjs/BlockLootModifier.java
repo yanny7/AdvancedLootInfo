@@ -4,6 +4,7 @@ import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.yanny.ali.api.IServerUtils;
 import dev.latvian.mods.kubejs.block.state.BlockStatePredicate;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class BlockLootModifier extends AbstractLootModifier<Block> {
         return predicate.testBlock(value);
     }
 
+    @NotNull
     @Override
     public IType<Block> getType() {
         return IType.BLOCK;

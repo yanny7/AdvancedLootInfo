@@ -7,6 +7,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -30,11 +31,13 @@ public class SequenceNode extends CompositeNode {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

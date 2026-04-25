@@ -72,7 +72,7 @@ public class JeiEntityLoot extends JeiBaseLoot<EntityLootType, EntityType<?>> {
                 Level level = Minecraft.getInstance().level;
 
                 if (level != null) {
-                    Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, recipe.entityType(), level, recipe.variant());
+                    Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, recipe.entityType(), level, recipe.variant());
                     GenericUtils.renderEntity(entity, rect, CATEGORY_WIDTH, guiGraphics, (int) mouseX, (int) mouseY);
                 }
             }

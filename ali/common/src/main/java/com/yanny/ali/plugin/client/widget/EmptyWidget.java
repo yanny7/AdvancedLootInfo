@@ -8,6 +8,7 @@ import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,22 +16,25 @@ public class EmptyWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public EmptyWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+    public EmptyWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         bounds = rect;
         bounds.setDimensions(18, 18);
         widget = WidgetUtils.getEmptyWidget(rect, entry);
     }
 
+    @NotNull
     @Override
     public RelativeRect getRect() {
         return bounds;
     }
 
+    @NotNull
     @Override
     public WidgetDirection getDirection() {
         return WidgetDirection.HORIZONTAL;
     }
 
+    @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
         return widget.getTooltipComponents(mouseX, mouseY);

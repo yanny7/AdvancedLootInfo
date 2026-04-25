@@ -33,6 +33,7 @@ public class Plugin implements IPlugin {
         }
     }
 
+    @NotNull
     @Override
     public String getModId() {
         return "porting_lib_loot";

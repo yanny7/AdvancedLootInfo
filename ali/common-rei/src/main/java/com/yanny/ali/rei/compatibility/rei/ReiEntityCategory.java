@@ -57,7 +57,7 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
             Level level = Minecraft.getInstance().level;
 
             if (level != null) {
-                Entity entity = EntityStorage.getEntity(PluginManager.COMMON_REGISTRY, display.getEntityType(), level, display.getVariant());
+                Entity entity = EntityStorage.getEntity(PluginManager.getInstance().commonRegistry, display.getEntityType(), level, display.getVariant());
 
                 graphics.pose().pushPose();
                 graphics.pose().translate(bounds1.getX(), bounds1.getY(), 0);
