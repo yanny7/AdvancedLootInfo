@@ -7,6 +7,7 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class MissingNode implements IDataNode {
     public static final ResourceLocation ID = Utils.modLoc("missing");
@@ -21,11 +22,13 @@ public class MissingNode implements IDataNode {
         tooltip = ITooltipNode.decodeNode(utils, buf);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

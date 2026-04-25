@@ -20,7 +20,7 @@ public abstract class AbstractServer {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public void readWorldgenInfo(ServerLevel level) {
-        AwiServerRegistry serverRegistry = PluginManager.SERVER_REGISTRY;
+        AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
         Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);

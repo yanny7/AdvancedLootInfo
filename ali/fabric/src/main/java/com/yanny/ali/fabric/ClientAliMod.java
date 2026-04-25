@@ -9,6 +9,6 @@ public class ClientAliMod implements ClientModInitializer {
     public void onInitializeClient() {
         FabricClientBusSubscriber.registerEvents();
         NetworkUtils.registerClient();
-        PluginManager.registerClientEvent();
+        PluginManager.getInstance().registerClientEvent();
     }
 }

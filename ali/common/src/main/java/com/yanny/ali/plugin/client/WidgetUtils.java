@@ -97,16 +97,19 @@ public class WidgetUtils {
         String txt = Integer.toString(level);
         int txtWidth = Minecraft.getInstance().font.width(txt);
         return new IWidget() {
+            @NotNull
             @Override
             public RelativeRect getRect() {
                 return r;
             }
 
+            @NotNull
             @Override
             public WidgetDirection getDirection() {
                 return WidgetDirection.VERTICAL;
             }
 
+            @NotNull
             @Override
             public List<Component> getTooltipComponents(int mouseX, int mouseY) {
                 return components;

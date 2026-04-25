@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-import static com.yanny.aci.api.ICommonTooltipNode.pad;
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("component");
@@ -45,6 +45,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
         buf.writeUtf(key);
     }
 
+    @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
         if (key == null) {
@@ -60,6 +61,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
         return components;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;
@@ -139,6 +141,7 @@ public class ComponentTooltipNode extends ListTooltipNode implements ITooltipNod
             this.values = values;
         }
 
+        @NotNull
         public ComponentTooltipNode build(String key) {
             String internKey = key.intern();
             CacheKey cacheKey = new CacheKey(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values));

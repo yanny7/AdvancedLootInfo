@@ -2,10 +2,18 @@ package com.yanny.aci.api;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
-public interface ICommonDataNode<SU extends ICommonServerUtils, TN extends ICommonTooltipNode<SU>> extends Comparable<ICommonDataNode<SU, TN>> {
+public interface ICoreDataNode
+        <
+                SU extends ICoreServerUtils,
+                TN extends ICoreTooltipNode<SU>
+        >
+        extends Comparable<ICoreDataNode<SU, TN>> {
+    @NotNull
     TN getTooltip();
 
+    @NotNull
     ResourceLocation getId();
 
     void encode(SU utils, RegistryFriendlyByteBuf buf);
@@ -15,7 +23,7 @@ public interface ICommonDataNode<SU extends ICommonServerUtils, TN extends IComm
     }
 
     @Override
-    default int compareTo(ICommonDataNode o) {
+    default int compareTo(ICoreDataNode o) {
         return Float.compare(o.getChance(), getChance());
     }
 }

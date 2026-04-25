@@ -11,6 +11,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -34,11 +35,13 @@ public class BiomeNode extends ListNode {
 
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return null;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

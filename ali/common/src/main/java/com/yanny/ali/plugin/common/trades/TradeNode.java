@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
@@ -39,11 +40,13 @@ public class TradeNode extends ListNode {
 
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return EmptyTooltipNode.EMPTY;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;

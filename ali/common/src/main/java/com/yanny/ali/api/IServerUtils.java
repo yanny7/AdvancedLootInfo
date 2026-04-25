@@ -1,12 +1,11 @@
 package com.yanny.ali.api;
 
 import com.mojang.datafixers.util.Either;
-import com.yanny.aci.api.ICommonServerUtils;
+import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -20,43 +19,58 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICommonServerUtils, ICommonUtils {
+public interface IServerUtils extends ICoreServerUtils, ICommonUtils {
+    @NotNull
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
+    @NotNull
     <T extends LootItemFunction> List<Item> collectItems(IServerUtils utils, List<Item> items, T function);
 
+    @NotNull
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
+    @NotNull
     <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
 
+    @NotNull
     <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition);
 
+    @NotNull
     <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
+    @NotNull
     <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value);
 
+    @NotNull
     <T extends ItemSubPredicate> ITooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate);
 
+    @NotNull
     <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
 
+    @NotNull
     ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
 
     <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
 
+    @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
+    @NotNull
     <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition);
 
+    @NotNull
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);
 
+    @NotNull
     RangeValue convertNumber(IServerUtils utils, @Nullable NumberProvider numberProvider);
 
     @Nullable
@@ -65,8 +79,6 @@ public interface IServerUtils extends ICommonServerUtils, ICommonUtils {
     @Nullable
     ResourceLocation getCurrentLootTable();
 
-    LootTable getLootTable(Either<ResourceLocation, LootTable> either);
-
     @Nullable
-    HolderLookup.Provider lookupProvider();
+    LootTable getLootTable(Either<ResourceLocation, LootTable> either);
 }

@@ -3,14 +3,17 @@ package com.yanny.ali.api;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public interface ILootModifier<T> {
     boolean predicate(T value);
 
+    @NotNull
     List<IOperation> getOperations();
 
+    @NotNull
     IType<T> getType();
 
     sealed interface IType<T> permits IType.BlockType, IType.EntityType, IType.LootTableType {

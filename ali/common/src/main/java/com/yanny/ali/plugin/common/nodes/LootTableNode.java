@@ -4,6 +4,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -27,11 +28,13 @@ public class LootTableNode extends ListNode {
         ITooltipNode.encodeNode(utils, tooltip, buf);
     }
 
+    @NotNull
     @Override
     public ITooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public ResourceLocation getId() {
         return ID;
