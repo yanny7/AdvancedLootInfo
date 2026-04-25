@@ -43,8 +43,8 @@ public class EmiCompatibility implements EmiPlugin {
     }
 
     private void registerData(EmiRegistry registry, byte[] fullCompressedData) {
-        AliClientRegistry clientRegistry = PluginManager.CLIENT_REGISTRY;
-        AliCommonRegistry commonRegistry = PluginManager.COMMON_REGISTRY;
+        AliClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
+        AliCommonRegistry commonRegistry = PluginManager.getInstance().commonRegistry;
         AliConfig config = commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
 

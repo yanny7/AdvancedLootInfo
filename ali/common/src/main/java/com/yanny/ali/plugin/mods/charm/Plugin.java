@@ -12,10 +12,11 @@ import com.yanny.ali.plugin.mods.charm.extra.AnvilRepair;
 import com.yanny.ali.plugin.mods.charm.generic.*;
 import com.yanny.ali.plugin.mods.charm.lumberjack.BarkForLogs;
 import com.yanny.ali.plugin.mods.charm.lumberjack.SaplingsForEmeralds;
+import org.jetbrains.annotations.NotNull;
 
 // @AliEntrypoint
 public class Plugin implements IPlugin {
-
+    @NotNull
     @Override
     public String getModId() {
         return "charm";

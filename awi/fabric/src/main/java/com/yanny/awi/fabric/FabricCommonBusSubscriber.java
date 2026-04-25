@@ -23,7 +23,7 @@ public class FabricCommonBusSubscriber {
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
         if (!serverLoaded) { // to be safe, handle only once for world loading (should be called only once for overworld, but who knows?)
-            PluginManager.registerServerEvent();
+            PluginManager.getInstance().registerServerEvent();
             CommonAliMod.SERVER.readWorldgenInfo(server.overworld());
             serverLoaded = true;
         }
@@ -31,12 +31,12 @@ public class FabricCommonBusSubscriber {
 
     private static void onServerStopping(MinecraftServer server) {
         serverLoaded = false;
-        PluginManager.deregisterServerEvent();
+        PluginManager.getInstance().deregisterServerEvent();
     }
 
     private static void onReload(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         if (success) {
-            PluginManager.reloadServer();
+            PluginManager.getInstance().reloadServer();
             CommonAliMod.SERVER.readWorldgenInfo(server.overworld());
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {

@@ -1,17 +1,6 @@
 package com.yanny.ali.api;
 
-public interface IPlugin {
-    String getModId();
+import com.yanny.aci.api.ICorePlugin;
 
-    default void registerClient(IClientRegistry registry) {
-
-    }
-
-    default void registerServer(IServerRegistry registry) {
-
-    }
-
-    default void registerCommon(ICommonRegistry registry) {
-
-    }
+public interface IPlugin extends ICorePlugin<IServerUtils, ITooltipNode, IDataNode, IClientUtils, IWidgetUtils, ICommonRegistry, IClientRegistry, IServerRegistry> {
 }
