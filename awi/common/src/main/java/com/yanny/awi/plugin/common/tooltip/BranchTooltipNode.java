@@ -1,15 +1,14 @@
-package com.yanny.ali.plugin.common.tooltip;
+package com.yanny.awi.plugin.common.tooltip;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.yanny.aci.tooltip.CoreBranchTooltipNode;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IKeyTooltipNode;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
+import com.yanny.awi.Utils;
+import com.yanny.awi.api.IClientUtils;
+import com.yanny.awi.api.IKeyTooltipNode;
+import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +18,6 @@ import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("branch");
     private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, BranchTooltipNode> CACHE = CacheBuilder.newBuilder()
-            .recordStats()
             .build(CacheLoader.from(BranchTooltipNode::new));
 
     private BranchTooltipNode(CacheKey<IServerUtils, ITooltipNode> cacheKey) {
@@ -48,9 +46,7 @@ public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITool
     }
 
     public static void logCacheStatistics(IServerUtils utils) {
-        if (utils.getConfiguration().logMoreStatistics) {
-            CoreTooltipUtils.logCacheStatistics(CACHE, ID);
-        }
+        // TODO
     }
 
     public static class Builder extends CoreBranchTooltipNode.Builder<IServerUtils, ITooltipNode, BranchTooltipNode, IKeyTooltipNode> implements IKeyTooltipNode {
