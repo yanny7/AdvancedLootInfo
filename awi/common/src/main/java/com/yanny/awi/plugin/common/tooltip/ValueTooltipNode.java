@@ -10,7 +10,7 @@ import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class ValueTooltipNode extends CoreValueTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
-    public static final ResourceLocation ID = Utils.modLoc("value");
+    public static final Identifier ID = Utils.modLoc("value");
     private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, ValueTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from(ValueTooltipNode::new));
 
@@ -30,7 +30,7 @@ public class ValueTooltipNode extends CoreValueTooltipNode<IServerUtils, IToolti
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

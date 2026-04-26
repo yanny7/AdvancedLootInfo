@@ -3,7 +3,7 @@ package com.yanny.aci.tooltip;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -21,7 +21,7 @@ public class CoreTooltipUtils {
         }
     }
 
-    public static void logCacheStatistics(LoadingCache<?, ?> cache, ResourceLocation id) {
+    public static void logCacheStatistics(LoadingCache<?, ?> cache, Identifier id) {
         CacheStats stats = cache.stats();
 
         LOGGER.info("Statistics for Cache: {}", id);

@@ -11,7 +11,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.List;
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class ComponentTooltipNode extends CoreComponentTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
-    public static final ResourceLocation ID = Utils.modLoc("component");
+    public static final Identifier ID = Utils.modLoc("component");
     private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new ComponentTooltipNode(data) : null));
 
@@ -30,7 +30,7 @@ public class ComponentTooltipNode extends CoreComponentTooltipNode<IServerUtils,
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

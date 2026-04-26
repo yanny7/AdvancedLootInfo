@@ -9,13 +9,13 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class LiteralTooltipNode extends CoreLiteralTooltipNode<IServerUtils> implements ITooltipNode {
-    public static final ResourceLocation ID = Utils.modLoc("literal");
+    public static final Identifier ID = Utils.modLoc("literal");
     private static final LoadingCache<String, LiteralTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((LiteralTooltipNode::new)));
 
@@ -25,7 +25,7 @@ public class LiteralTooltipNode extends CoreLiteralTooltipNode<IServerUtils> imp
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

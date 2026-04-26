@@ -10,13 +10,13 @@ import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
-    public static final ResourceLocation ID = Utils.modLoc("branch");
+    public static final Identifier ID = Utils.modLoc("branch");
     private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, BranchTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from(BranchTooltipNode::new));
 
@@ -26,7 +26,7 @@ public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITool
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

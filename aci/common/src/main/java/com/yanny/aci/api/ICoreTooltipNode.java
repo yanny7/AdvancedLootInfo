@@ -41,7 +41,7 @@ public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
     }
 
     static <SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> void encodeNode(SU utils, TN node, RegistryFriendlyByteBuf buf) {
-        buf.writeResourceLocation(node.getId());
+        buf.writeIdentifier(node.getId());
         node.encode(utils, buf);
     }
 
@@ -52,7 +52,7 @@ public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
             CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
             WU extends ICoreWidgetUtils<SU, TN, DN>
     > TN decodeNode(CU utils, RegistryFriendlyByteBuf buf) {
-        ResourceLocation name = buf.readResourceLocation();
+        Identifier name = buf.readIdentifier();
         BiFunction<CU, RegistryFriendlyByteBuf, TN> factory = utils.getTooltipNodeFactory(name);
 
         return factory.apply(utils, buf);

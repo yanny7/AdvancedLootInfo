@@ -7,11 +7,11 @@ import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public class ErrorTooltipNode extends CoreErrorTooltipNode<IServerUtils, ITooltipNode, IKeyTooltipNode> implements ITooltipNode, IKeyTooltipNode {
-    public static final ResourceLocation ID = Utils.modLoc("error");
+    public static final Identifier ID = Utils.modLoc("error");
 
     private ErrorTooltipNode(String value) {
         super(value);
@@ -19,7 +19,7 @@ public class ErrorTooltipNode extends CoreErrorTooltipNode<IServerUtils, IToolti
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 
