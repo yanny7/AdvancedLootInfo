@@ -11,8 +11,7 @@ import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
@@ -440,6 +439,16 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
         super.printRegistrationInfo();
         prepareLootModifiers();
         LOGGER.info("Registered {} loot modifiers", lootModifierMap.size());
+    }
+
+    @Override
+    public void printRuntimeInfo() {
+        super.printRuntimeInfo();
+        ArrayTooltipNode.logCacheStatistics(this);
+        BranchTooltipNode.logCacheStatistics(this);
+        ComponentTooltipNode.logCacheStatistics(this);
+        LiteralTooltipNode.logCacheStatistics(this);
+        ValueTooltipNode.logCacheStatistics(this);
     }
 
     private void prepareLootModifiers() {
