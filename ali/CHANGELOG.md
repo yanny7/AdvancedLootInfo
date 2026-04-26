@@ -1,6 +1,7 @@
 ## []
 
 - Fixed crash on newer Neoforge
+- Fixed sporadic crash when hovering over item
 
 ## [1.9.1]
 

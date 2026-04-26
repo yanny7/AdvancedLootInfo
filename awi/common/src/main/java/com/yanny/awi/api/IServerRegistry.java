@@ -3,19 +3,14 @@ package com.yanny.awi.api;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 public interface IServerRegistry {
+    <T extends PlacedFeature> void registerFeatureCollector(IServerUtils utils, BiFunction<IServerUtils, T, FeatureHolder> getter);
 
-    @NotNull
-    <T extends PlacedFeature> FeatureHolder registerFeatureCollector(IServerUtils utils, T placedFeature);
+    <T extends FeatureConfiguration> void registerItemCollector(IServerUtils utils, BiFunction<IServerUtils, T, List<Item>> getter);
 
-    @NotNull
-    <T extends FeatureConfiguration> List<Item> registerItemCollector(IServerUtils utils, T configuredFeature);
-
-    @NotNull
-    <T extends FeatureConfiguration> ITooltipNode registerFeatureTooltip(IServerUtils utils, T configuredFeature);
-
+    <T extends FeatureConfiguration> void registerFeatureTooltip(IServerUtils utils, BiFunction<IServerUtils, T, ITooltipNode> getter);
 }
