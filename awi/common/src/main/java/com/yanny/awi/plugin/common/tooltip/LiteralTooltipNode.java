@@ -8,7 +8,7 @@ import com.yanny.awi.Utils;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class LiteralTooltipNode extends CoreLiteralTooltipNode<IServerUtils> imp
     }
 
     @NotNull
-    public static LiteralTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static LiteralTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         return decode(utils, buf, LiteralTooltipNode::new);
     }
 

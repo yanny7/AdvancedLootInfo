@@ -9,7 +9,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class ComponentTooltipNode extends CoreComponentTooltipNode<IServerUtils,
     }
 
     @NotNull
-    public static ComponentTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static ComponentTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         return decode(utils, buf, ComponentTooltipNode::new);
     }
 

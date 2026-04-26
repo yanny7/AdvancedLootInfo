@@ -9,7 +9,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +57,7 @@ public class ValueTooltipNode extends CoreValueTooltipNode<IServerUtils, IToolti
     }
 
     @NotNull
-    public static ValueTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static ValueTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         return decode(utils, buf, ValueTooltipNode::new);
     }
 

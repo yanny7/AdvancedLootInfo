@@ -1,7 +1,7 @@
 package com.yanny.aci.tooltip;
 
 import com.yanny.aci.api.*;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public abstract class CoreLiteralTooltipNode<SU extends ICoreServerUtils> implem
     }
 
     @Override
-    public final void encode(SU utils, FriendlyByteBuf buf) {
+    public final void encode(SU utils, RegistryFriendlyByteBuf buf) {
         buf.writeUtf(text);
     }
 
@@ -61,7 +61,7 @@ public abstract class CoreLiteralTooltipNode<SU extends ICoreServerUtils> implem
             CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
             WU extends ICoreWidgetUtils<SU, TN, DN>,
             T extends ICoreTooltipNode<SU>
-    > T decode(CU ignoredUtils, FriendlyByteBuf buf, Function<String, T> factory) {
+    > T decode(CU ignoredUtils, RegistryFriendlyByteBuf buf, Function<String, T> factory) {
         String text = buf.readUtf();
         return factory.apply(text);
     }

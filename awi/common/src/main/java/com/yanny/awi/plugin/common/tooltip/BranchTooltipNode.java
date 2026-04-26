@@ -9,7 +9,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITool
     }
 
     @NotNull
-    public static BranchTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static BranchTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         return decode(utils, buf, BranchTooltipNode::new);
     }
 

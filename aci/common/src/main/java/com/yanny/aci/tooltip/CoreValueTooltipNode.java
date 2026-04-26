@@ -2,7 +2,7 @@ package com.yanny.aci.tooltip;
 
 import com.google.common.collect.ImmutableList;
 import com.yanny.aci.api.*;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public abstract class CoreValueTooltipNode<SU extends ICoreServerUtils, TN exten
     }
 
     @Override
-    protected final void encodeNode(FriendlyByteBuf buf) {
+    protected final void encodeNode(RegistryFriendlyByteBuf buf) {
         buf.writeInt(values.size());
 
         for (String value : values) {
@@ -119,7 +119,7 @@ public abstract class CoreValueTooltipNode<SU extends ICoreServerUtils, TN exten
             CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
             WU extends ICoreWidgetUtils<SU, TN, DN>,
             T extends ICoreTooltipNode<SU>
-    > T decode(CU utils, FriendlyByteBuf buf, Function<CacheKey<SU, TN>, T> factory) {
+    > T decode(CU utils, RegistryFriendlyByteBuf buf, Function<CacheKey<SU, TN>, T> factory) {
         List<TN> children = CoreListTooltipNode.decodeChildren(utils, buf);
         int size = buf.readInt();
         List<String> values;

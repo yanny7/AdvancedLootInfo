@@ -3,7 +3,7 @@ package com.yanny.aci.tooltip;
 import com.yanny.aci.api.ICoreKeyTooltipNode;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.ICoreTooltipNode;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public abstract class CoreEmptyTooltipNode<SU extends ICoreServerUtils, TN exten
     protected CoreEmptyTooltipNode() {}
 
     @Override
-    public final void encode(SU utils, FriendlyByteBuf buf) {
+    public final void encode(SU utils, RegistryFriendlyByteBuf buf) {
     }
 
     @NotNull

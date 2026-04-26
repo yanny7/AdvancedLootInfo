@@ -3,6 +3,7 @@ package com.yanny.aci.tooltip;
 import com.yanny.aci.api.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,7 @@ public abstract class CoreErrorTooltipNode<SU extends ICoreServerUtils, TN exten
     }
 
     @Override
-    public final void encode(SU utils, FriendlyByteBuf buf) {
+    public final void encode(SU utils, RegistryFriendlyByteBuf buf) {
         buf.writeUtf(value);
     }
 
