@@ -1,11 +1,11 @@
-package com.yanny.ali.plugin.common.tooltip;
+package com.yanny.awi.plugin.common.tooltip;
 
 import com.yanny.aci.tooltip.CoreErrorTooltipNode;
-import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IKeyTooltipNode;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
+import com.yanny.awi.Utils;
+import com.yanny.awi.api.IClientUtils;
+import com.yanny.awi.api.IKeyTooltipNode;
+import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class ErrorTooltipNode extends CoreErrorTooltipNode<IServerUtils, IToolti
 
     @NotNull
     public static ErrorTooltipNode.Builder error(String value) {
-        return new ErrorTooltipNode.Builder(value);
+        return new Builder(value);
     }
 
     @NotNull
