@@ -1,3 +1,7 @@
+## []
+
+- Fixed sporadic crash when hovering over item
+
 ## [1.9.1]
 
 - Fixed latest feature not displayed due to old configuration file

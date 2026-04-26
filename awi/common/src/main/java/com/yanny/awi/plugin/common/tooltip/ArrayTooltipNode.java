@@ -1,15 +1,14 @@
-package com.yanny.ali.plugin.common.tooltip;
+package com.yanny.awi.plugin.common.tooltip;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.yanny.aci.tooltip.CoreArrayTooltipNode;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.ali.Utils;
-import com.yanny.ali.api.IClientUtils;
-import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import net.minecraft.network.RegistryFriendlyByteBuf;
+import com.yanny.awi.Utils;
+import com.yanny.awi.api.IClientUtils;
+import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.api.ITooltipNode;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,7 +17,6 @@ import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 public class ArrayTooltipNode extends CoreArrayTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("array");
     private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, ArrayTooltipNode> CACHE = CacheBuilder.newBuilder()
-            .recordStats()
             .build(CacheLoader.from(ArrayTooltipNode::new));
 
     private ArrayTooltipNode(CacheKey<IServerUtils, ITooltipNode> cacheKey) {
@@ -32,7 +30,7 @@ public class ArrayTooltipNode extends CoreArrayTooltipNode<IServerUtils, IToolti
     }
 
     @NotNull
-    public static ArrayTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
+    public static ArrayTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
         return decode(utils, buf, ArrayTooltipNode::new);
     }
 
@@ -42,9 +40,7 @@ public class ArrayTooltipNode extends CoreArrayTooltipNode<IServerUtils, IToolti
     }
 
     public static void logCacheStatistics(IServerUtils utils) {
-        if (utils.getConfiguration().logMoreStatistics) {
-            CoreTooltipUtils.logCacheStatistics(CACHE, ID);
-        }
+        // TODO
     }
 
     public static class Builder extends CoreArrayTooltipNode.Builder<IServerUtils, ITooltipNode, ArrayTooltipNode> {

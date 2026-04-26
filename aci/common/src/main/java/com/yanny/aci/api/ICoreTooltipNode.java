@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
     ChatFormatting TEXT_STYLE = ChatFormatting.GOLD; //TODO use these or add config
@@ -37,6 +38,24 @@ public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
         } else {
             return Component.literal("null");
         }
+    }
+
+    static <SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> void encodeNode(SU utils, TN node, FriendlyByteBuf buf) {
+        buf.writeResourceLocation(node.getId());
+        node.encode(utils, buf);
+    }
+
+    static <
+            SU extends ICoreServerUtils,
+            TN extends ICoreTooltipNode<SU>,
+            DN extends ICoreDataNode<SU, TN>,
+            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
+            WU extends ICoreWidgetUtils<SU, TN, DN>
+    > TN decodeNode(CU utils, FriendlyByteBuf buf) {
+        ResourceLocation name = buf.readResourceLocation();
+        BiFunction<CU, FriendlyByteBuf, TN> factory = utils.getTooltipNodeFactory(name);
+
+        return factory.apply(utils, buf);
     }
 
     @NotNull
