@@ -1,4 +1,4 @@
-## []
+## [1.10.0]
 
 - Fixed crash on newer Neoforge
 - Fixed sporadic crash when hovering over item
