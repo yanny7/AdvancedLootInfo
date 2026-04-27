@@ -1,15 +1,14 @@
 package com.yanny.ali.configuration;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.yanny.ali.Utils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class AliConfig {
-    public static final int CURRENT_VERSION = 1;
+    public static final int CURRENT_VERSION = 2;
 
     public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(
@@ -61,11 +60,11 @@ public class AliConfig {
 
     public AliConfig() {
         blockCategories = new ArrayList<>();
-        blockCategories.add(new BlockLootCategory(Utils.modLoc("plant_loot"), Items.DIAMOND_HOE, false, of(), List.of(BushBlock.class)));
-        blockCategories.add(new BlockLootCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, false, of(), Collections.singletonList(Block.class)));
+        blockCategories.add(new BlockLootCategory(Utils.modLoc("plant_loot"), Items.DIAMOND_HOE, false, of(), List.of(Either.left(BlockTags.CROPS))));
+        blockCategories.add(new BlockLootCategory(Utils.modLoc("block_loot"), Items.DIAMOND_PICKAXE, false, of(), Collections.emptyList()));
 
         entityCategories = new ArrayList<>();
-        entityCategories.add(new EntityLootCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, false, of(), Collections.singletonList(Entity.class)));
+        entityCategories.add(new EntityLootCategory(Utils.modLoc("entity_loot"), Items.SKELETON_SKULL, false, of(), Collections.emptyList()));
 
         gameplayCategories = new ArrayList<>();
         gameplayCategories.add(new GameplayLootCategory(Utils.modLoc("chest_loot"), Items.CHEST, false, of(), List.of(
