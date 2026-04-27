@@ -1,6 +1,7 @@
 ## []
 
 - Fixed sporadic crash when hovering over item
+- Block and Entity categories use tags/blocks/entityTypes instead of classes for filtering
 
 ## [1.9.1]
 
