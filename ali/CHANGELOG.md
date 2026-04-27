@@ -1,4 +1,4 @@
-## []
+## [1.10.0]
 
 - Fixed sporadic crash when hovering over item
 - Block and Entity categories use tags/blocks/entityTypes instead of classes for filtering
