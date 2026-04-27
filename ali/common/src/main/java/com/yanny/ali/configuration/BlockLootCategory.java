@@ -1,10 +1,13 @@
 package com.yanny.ali.configuration;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -13,35 +16,35 @@ import java.util.Collections;
 import java.util.List;
 
 public class BlockLootCategory extends LootCategory<Block> {
+    private static final Codec<TagKey<Block>> BLOCK_TAG_CODEC = TagKey.hashedCodec(Registries.BLOCK);
+    private static final Codec<Block> BLOCK_CODEC = BuiltInRegistries.BLOCK.byNameCodec();
+    private static final Codec<Either<TagKey<Block>, Block>> TAG_OR_BLOCK_CODEC = Codec.either(BLOCK_TAG_CODEC, BLOCK_CODEC);
     public static final MapCodec<BlockLootCategory> CODEC = RecordCodecBuilder.mapCodec((instance) ->
         instance.group(
                 Identifier.CODEC.fieldOf("key").forGetter(LootCategory::getKey),
                 BuiltInRegistries.ITEM.byNameCodec().fieldOf("icon").forGetter(LootCategory::getIcon),
                 Codec.BOOL.optionalFieldOf("hide", false).forGetter(LootCategory::isHidden),
                 Ingredient.CODEC.listOf().optionalFieldOf("catalysts", Collections.emptyList()).forGetter(LootCategory::getCatalysts),
-                Codec.STRING.listOf().fieldOf("classes").forGetter(src -> src.classes.stream().map(Class::getName).toList())
-        ).apply(instance, (key, icon, hide, catalysts, classNames) -> {
-            //noinspection unchecked
-            List<Class<?>> classList = (List<Class<?>>) (Object) classNames.stream().map(name -> {
-                try {
-                    return Class.forName(name);
-                } catch (ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }).toList();
-            return new BlockLootCategory(key, icon, hide, catalysts, classList);
-        })
+                TAG_OR_BLOCK_CODEC.listOf().fieldOf("blocks").forGetter(src -> src.blocks)
+        ).apply(instance, BlockLootCategory::new)
     );
 
-    private final List<Class<?>> classes;
+    private final List<Either<TagKey<Block>, Block>> blocks;
 
-    public BlockLootCategory(Identifier key, Item icon, boolean hide, List<Ingredient> catalysts, List<Class<?>> classes) {
+    public BlockLootCategory(Identifier key, Item icon, boolean hide, List<Ingredient> catalysts, List<Either<TagKey<Block>, Block>> blocks) {
         super(key, icon, Type.BLOCK, hide, catalysts);
-        this.classes = classes;
+        this.blocks = blocks;
     }
 
     @Override
     public boolean validate(Block block) {
-        return classes.stream().anyMatch((p) -> p.isAssignableFrom(block.getClass()));
+        if (blocks.isEmpty()) {
+            return true;
+        }
+
+        return blocks.stream().anyMatch((either) -> either.map(
+                (tag) -> block.builtInRegistryHolder().is(tag),
+                (bl) -> bl == block
+        ));
     }
 }
