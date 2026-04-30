@@ -7,7 +7,7 @@ import com.yanny.awi.api.IKeyTooltipNode;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ITooltipNode;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +42,7 @@ public class ErrorTooltipNode extends CoreErrorTooltipNode<IServerUtils, IToolti
     }
 
     @NotNull
-    public static ErrorTooltipNode decode(IClientUtils utils, FriendlyByteBuf buf) {
+    public static ErrorTooltipNode decode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         return decode(utils, buf, ErrorTooltipNode::new);
     }
 

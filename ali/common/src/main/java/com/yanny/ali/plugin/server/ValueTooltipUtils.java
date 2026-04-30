@@ -7,13 +7,22 @@ import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
+import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.commands.arguments.NbtPathArgument;
+import net.minecraft.core.*;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentPredicate;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.network.Filterable;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -26,10 +35,9 @@ import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 
@@ -242,11 +250,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getCompoundTagTooltip(IServerUtils utils, CompoundTag tag) {
-        return utils.getValueTooltip(utils, tag.toString());
-    }
-
-    @NotNull
     public static IKeyTooltipNode getItemStackTooltip(IServerUtils utils, ItemStack item) {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, item.getItem()).build("ali.property.value.item"))
@@ -396,11 +399,6 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, data.fadeColors()).build("ali.property.value.fade_colors"))
                 .add(utils.getValueTooltip(utils, data.hasTrail()).build("ali.property.value.has_trail"))
                 .add(utils.getValueTooltip(utils, data.hasTwinkle()).build("ali.property.value.has_twinkle"));
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getIntListTooltip(IServerUtils utils, IntList data) {
-        return utils.getValueTooltip(utils, data.toString());
     }
 
     @NotNull
@@ -609,10 +607,5 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getSlotPredicateTooltip(IServerUtils utils, SlotsPredicate predicate) {
         return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getEitherHolderTooltip(IServerUtils utils, EitherHolder<T> holder) {
-        return holder.asEither().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
     }
 }

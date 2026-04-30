@@ -15,12 +15,10 @@ import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.*;
 import net.minecraft.server.network.Filterable;
@@ -35,7 +33,10 @@ import net.minecraft.world.entity.animal.WolfVariant;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Instrument;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimPattern;
@@ -366,6 +367,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Property.class, ValueTooltipUtils::getPropertyTooltip);
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
         registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
+        registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
         registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
         registry.registerValueTooltip(SetStewEffectFunction.EffectEntry.class, ValueTooltipUtils::getEffectEntryTooltip);
         registry.registerValueTooltip(ListOperation.class, ValueTooltipUtils::getListOperationTooltip);
@@ -380,7 +382,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ItemAttributeModifiersPredicate.EntryPredicate.class, ValueTooltipUtils::getEntryPredicateTooltip);
         registry.registerValueTooltip(DataComponentPatch.class, ValueTooltipUtils::getDataComponentPatchTooltip);
         registry.registerValueTooltip(FireworkExplosion.class, ValueTooltipUtils::getFireworkExplosionTooltip);
-        registry.registerValueTooltip(IntList.class, ValueTooltipUtils::getIntListTooltip);
         registry.registerValueTooltip(ItemAttributeModifiers.Entry.class, ValueTooltipUtils::getItemAttributeModifiersEntryTooltip);
         registry.registerValueTooltip(AttributeModifier.class, ValueTooltipUtils::getAttributeModifierTooltip);
         registry.registerValueTooltip(FoodProperties.PossibleEffect.class, ValueTooltipUtils::getPossibleEffectTooltip);
@@ -400,7 +401,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntityPredicate.LocationWrapper.class, ValueTooltipUtils::getLocationWrapperTooltip);
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
-        registry.registerValueTooltip(EitherHolder.class, ValueTooltipUtils::getEitherHolderTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithEnchantedBonusCondition.class, TooltipUtils::applyRandomChanceWithLooting);

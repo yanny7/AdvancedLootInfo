@@ -4,12 +4,14 @@ import com.yanny.aci.api.ICoreKeyTooltipNode;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.ICoreTooltipNode;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.EitherHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -40,6 +42,8 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(Component.class, this::getComponentTooltip);
         registry.registerValueTooltip(UUID.class, this::getUUIDTooltip);
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
+        registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
+        registry.registerValueTooltip(EitherHolder.class, this::getEitherHolderTooltip);
     }
 
     private TKeyTooltipNode getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -135,5 +139,15 @@ public class CommonValueTooltip<
     @NotNull
     public TKeyTooltipNode getCompoundTagTooltip(TServerUtils utils, CompoundTag tag) {
         return utils.getValueTooltip(utils, tag.toString());
+    }
+
+    @NotNull
+    public TKeyTooltipNode getIntListTooltip(TServerUtils utils, IntList data) {
+        return utils.getValueTooltip(utils, data.toString());
+    }
+
+    @NotNull
+    public TKeyTooltipNode getEitherHolderTooltip(TServerUtils utils, EitherHolder<?> holder) {
+        return holder.asEither().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
     }
 }

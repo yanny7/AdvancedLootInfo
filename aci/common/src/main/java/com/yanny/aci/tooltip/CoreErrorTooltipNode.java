@@ -72,7 +72,7 @@ public abstract class CoreErrorTooltipNode<
             TTooltipNode extends ICoreTooltipNode<?>,
             TClientUtils extends ICoreClientUtils<TTooltipNode, ?, ?, TClientUtils>,
             SELF         extends ICoreTooltipNode<?>
-            > SELF decode(TClientUtils ignoredUtils, FriendlyByteBuf buf, Function<String, SELF> factory) {
+            > SELF decode(TClientUtils ignoredUtils, RegistryFriendlyByteBuf buf, Function<String, SELF> factory) {
         String value = buf.readUtf();
         return factory.apply(value);
     }

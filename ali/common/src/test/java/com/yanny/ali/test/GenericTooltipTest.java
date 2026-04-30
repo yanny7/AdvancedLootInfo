@@ -63,7 +63,7 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -790,11 +790,6 @@ public class GenericTooltipTest {
                 "  -> Has Trail: true",
                 "  -> Has Twinkle: false"
         ));
-    }
-
-    @Test
-    public void testIntListTooltip() {
-        assertTooltip(ValueTooltipUtils.getIntListTooltip(UTILS, IntList.of(1, 2, 3)).build("ali.property.value.colors"), List.of("Colors: [1, 2, 3]"));
     }
 
     @Test

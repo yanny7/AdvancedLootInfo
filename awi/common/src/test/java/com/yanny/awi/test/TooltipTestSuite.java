@@ -11,6 +11,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.Bootstrap;
@@ -26,6 +27,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
@@ -70,6 +72,11 @@ public class TooltipTestSuite {
             @Override
             public @Nullable ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
+            }
+
+            @Override
+            public @Nullable HolderLookup.Provider lookupProvider() {
+                return PluginManager.getInstance().serverRegistry.lookupProvider();
             }
 
             @Override
@@ -139,13 +146,13 @@ public class TooltipTestSuite {
 
     @NotNull
     private static ResourceManager loadClientResources() {
-        LanguageManager languageManager = new LanguageManager(LanguageManager.DEFAULT_LANGUAGE_CODE);
+        LanguageManager languageManager = new LanguageManager("en_us", (lang) -> {});
         ReloadableResourceManager resourceManager = new ReloadableResourceManager(PackType.CLIENT_RESOURCES);
 
         resourceManager.registerReloadListener(languageManager);
 
         Path resourcePackDirectory = new File("src/test/resources").toPath();
-        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"));
+        ClientPackSource clientpacksource = new ClientPackSource(resourcePackDirectory.resolve("assets"), LevelStorageSource.parseValidator(resourcePackDirectory.resolve("allowed_symlinks.txt")));
         PackRepository resourcePackRepository = new PackRepository(clientpacksource);
 
         resourcePackRepository.reload();
