@@ -10,11 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class CoreEmptyTooltipNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> implements ICoreTooltipNode<SU>, ICoreKeyTooltipNode<SU, TN, KTN> {
+public abstract class CoreEmptyTooltipNode<
+        TServerUtils    extends ICoreServerUtils<?, ?, ?>,
+        TTooltipNode    extends ICoreTooltipNode<?>,
+        TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
+        > implements ICoreTooltipNode<TServerUtils>, ICoreKeyTooltipNode<TTooltipNode, TKeyTooltipNode> {
     protected CoreEmptyTooltipNode() {}
 
     @Override
-    public final void encode(SU utils, RegistryFriendlyByteBuf buf) {
+    public final void encode(TServerUtils utils, RegistryFriendlyByteBuf buf) {
     }
 
     @NotNull
@@ -30,35 +34,39 @@ public abstract class CoreEmptyTooltipNode<SU extends ICoreServerUtils, TN exten
 
     @NotNull
     @Override
-    public KTN add(TN node) {
+    public TKeyTooltipNode add(TTooltipNode node) {
         //noinspection unchecked
-        return (KTN) this;
+        return (TKeyTooltipNode) this;
     }
 
     @NotNull
     @Override
-    public TN build(String key) {
+    public TTooltipNode build(String key) {
         //noinspection unchecked
-        return (TN) this;
+        return (TTooltipNode) this;
     }
 
-    public static class Builder<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> extends CoreListTooltipNode.Builder<SU, TN, KTN> {
-        private final CoreEmptyTooltipNode<SU, TN, KTN> node;
+    public static class Builder<
+            TServerUtils    extends ICoreServerUtils<?, ?, ?>,
+            TTooltipNode    extends ICoreTooltipNode<?>,
+            TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
+            > extends CoreListTooltipNode.Builder<TTooltipNode, TKeyTooltipNode> {
+        private final CoreEmptyTooltipNode<TServerUtils, TTooltipNode, TKeyTooltipNode> node;
 
-        public Builder(CoreEmptyTooltipNode<SU, TN, KTN> node) {
+        public Builder(CoreEmptyTooltipNode<TServerUtils, TTooltipNode, TKeyTooltipNode> node) {
             this.node = node;
         }
 
         @NotNull
         @Override
-        public TN build(String key) {
+        public TTooltipNode build(String key) {
             //noinspection unchecked
-            return (TN) node;
+            return (TTooltipNode) node;
         }
 
-        public TN build() {
+        public TTooltipNode build() {
             //noinspection unchecked
-            return (TN) node;
+            return (TTooltipNode) node;
         }
     }
 }

@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.aci;
+package com.yanny.awi.platform;
 
 import javax.annotation.ParametersAreNonnullByDefault;

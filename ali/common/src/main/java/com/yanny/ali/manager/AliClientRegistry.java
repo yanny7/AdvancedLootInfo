@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtils, IServerUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
+public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final long RELOAD_COOLDOWN_MS = 2000L;
 
@@ -152,7 +152,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public IWidgetFactory<IServerUtils, ITooltipNode, IDataNode, IWidgetUtils> getMissingWidgetFactory() {
+    public IWidgetFactory<IDataNode, IWidgetUtils> getMissingWidgetFactory() {
         return MissingWidget::new;
     }
 

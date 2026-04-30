@@ -1,14 +1,16 @@
 package com.yanny.ali.manager;
 
 import com.yanny.aci.manager.CorePluginManager;
-import com.yanny.ali.api.*;
-import com.yanny.ali.configuration.AliConfig;
+import com.yanny.ali.api.IClientRegistry;
+import com.yanny.ali.api.ICommonRegistry;
+import com.yanny.ali.api.IPlugin;
+import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PluginManager extends CorePluginManager<AliConfig, ICommonUtils, IServerUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils, AliCommonRegistry, AliClientRegistry, AliServerRegistry, ICommonRegistry, IClientRegistry, IServerRegistry, IPlugin> {
+public class PluginManager extends CorePluginManager<ICommonRegistry, IServerRegistry, AliCommonRegistry, AliClientRegistry, AliServerRegistry, IClientRegistry, IPlugin> {
     private static PluginManager pluginManager;
 
     public static PluginManager getInstance() {

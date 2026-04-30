@@ -22,11 +22,11 @@ import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class ValueTooltipNode extends CoreValueTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("value");
-    private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, ValueTooltipNode> CACHE = CacheBuilder.newBuilder()
+    private static final LoadingCache<CacheKey<ITooltipNode>, ValueTooltipNode> CACHE = CacheBuilder.newBuilder()
             .recordStats()
             .build(CacheLoader.from(ValueTooltipNode::new));
 
-    private ValueTooltipNode(CacheKey<IServerUtils, ITooltipNode> cacheKey) {
+    private ValueTooltipNode(CacheKey<ITooltipNode> cacheKey) {
         super(cacheKey);
     }
 
@@ -69,7 +69,7 @@ public class ValueTooltipNode extends CoreValueTooltipNode<IServerUtils, IToolti
         }
     }
 
-    public static class Builder extends CoreValueTooltipNode.Builder<IServerUtils, ITooltipNode, ValueTooltipNode, IKeyTooltipNode> implements IKeyTooltipNode {
+    public static class Builder extends CoreValueTooltipNode.Builder<ITooltipNode, IKeyTooltipNode, ValueTooltipNode> implements IKeyTooltipNode {
         public Builder(List<String> values) {
             super(values, (k) -> getFromCache(CACHE, k));
         }
