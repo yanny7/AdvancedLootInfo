@@ -21,10 +21,10 @@ import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class ComponentTooltipNode extends CoreComponentTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
     public static final Identifier ID = Utils.modLoc("component");
-    private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
+    private static final LoadingCache<CacheKey<ITooltipNode>, ComponentTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from((data) -> data != null ? new ComponentTooltipNode(data) : null));
 
-    private ComponentTooltipNode(CacheKey<IServerUtils, ITooltipNode> cacheKey) {
+    private ComponentTooltipNode(CacheKey<ITooltipNode> cacheKey) {
         super(cacheKey);
     }
 

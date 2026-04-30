@@ -1,7 +1,10 @@
 package com.yanny.aci.tooltip;
 
 import com.google.common.collect.ImmutableList;
-import com.yanny.aci.api.*;
+import com.yanny.aci.api.ICoreClientUtils;
+import com.yanny.aci.api.ICoreKeyTooltipNode;
+import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.ICoreTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -16,11 +19,14 @@ import java.util.function.Function;
 
 import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
-public abstract class CoreComponentTooltipNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> extends CoreListTooltipNode<SU, TN> implements ICoreTooltipNode<SU> {
+public abstract class CoreComponentTooltipNode<
+        TServerUtils extends ICoreServerUtils<?, ?, ?>,
+        TTooltipNode extends ICoreTooltipNode<TServerUtils>
+        > extends CoreListTooltipNode<TServerUtils, TTooltipNode> implements ICoreTooltipNode<TServerUtils> {
     private final List<Component> values;
     private final String key;
 
-    protected CoreComponentTooltipNode(CacheKey<SU, TN> cacheKey) {
+    protected CoreComponentTooltipNode(CacheKey<TTooltipNode> cacheKey) {
         super(cacheKey.children);
         key = cacheKey.key;
         values = cacheKey.values;
@@ -64,7 +70,7 @@ public abstract class CoreComponentTooltipNode<SU extends ICoreServerUtils, TN e
         }
 
         //noinspection unchecked
-        CoreComponentTooltipNode<SU, TN> that = (CoreComponentTooltipNode<SU, TN>) o;
+        CoreComponentTooltipNode<TServerUtils, TTooltipNode> that = (CoreComponentTooltipNode<TServerUtils, TTooltipNode>) o;
         return Objects.equals(values, that.values) && Objects.equals(key, that.key);
     }
 
@@ -84,14 +90,12 @@ public abstract class CoreComponentTooltipNode<SU extends ICoreServerUtils, TN e
 
     @NotNull
     protected static <
-            SU extends ICoreServerUtils,
-            TN extends ICoreTooltipNode<SU>,
-            DN extends ICoreDataNode<SU, TN>,
-            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-            WU extends ICoreWidgetUtils<SU, TN, DN>,
-            T extends ICoreTooltipNode<SU>
-    > T decode(CU utils, RegistryFriendlyByteBuf buf, Function<CacheKey<SU, TN>, T> factory) {
-        List<TN> children = CoreListTooltipNode.decodeChildren(utils, buf);
+            TServerUtils extends ICoreServerUtils<?, ?, ?>,
+            TTooltipNode extends ICoreTooltipNode<TServerUtils>,
+            TClientUtils extends ICoreClientUtils<TTooltipNode, ?, ?, TClientUtils>,
+            SELF         extends CoreComponentTooltipNode<?, ?>
+    > SELF decode(TClientUtils utils, RegistryFriendlyByteBuf buf, Function<CacheKey<TTooltipNode>, SELF> factory) {
+        List<TTooltipNode> children = CoreListTooltipNode.decodeChildren(utils, buf);
         int size = buf.readInt();
         List<Component> values;
 
@@ -117,23 +121,27 @@ public abstract class CoreComponentTooltipNode<SU extends ICoreServerUtils, TN e
         return component;
     }
 
-    public static class Builder<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, T extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> extends CoreListTooltipNode.Builder<SU, TN, KTN> {
-        private final List<Component> values;
-        private final Function<CacheKey<SU, TN>, T> factory;
+    public record CacheKey<TTooltipNode extends ICoreTooltipNode<?>>(List<TTooltipNode> children, String key, List<Component> values) {}
 
-        public Builder(List<Component> values, Function<CacheKey<SU, TN>, T> factory) {
+    public static class Builder<
+            TServerUtils    extends ICoreServerUtils<?, ?, ?>,
+            TTooltipNode    extends ICoreTooltipNode<TServerUtils>,
+            SELF            extends CoreComponentTooltipNode<?, ?>,
+            TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
+            > extends CoreListTooltipNode.Builder<TTooltipNode, TKeyTooltipNode> {
+        private final List<Component> values;
+        private final Function<CacheKey<TTooltipNode>, SELF> factory;
+
+        public Builder(List<Component> values, Function<CacheKey<TTooltipNode>, SELF> factory) {
             this.values = values;
             this.factory = factory;
         }
 
         @NotNull
-        public TN build(String key) {
+        public TTooltipNode build(String key) {
             String internKey = key.intern();
             //noinspection unchecked
-            return (TN) factory.apply(new CacheKey<>(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values)));
+            return (TTooltipNode) factory.apply(new CacheKey<>(ImmutableList.copyOf(children), internKey, ImmutableList.copyOf(values)));
         }
-    }
-
-    public record CacheKey<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>>(List<TN> children, String key, List<Component> values) {
     }
 }

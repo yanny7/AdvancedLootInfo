@@ -9,7 +9,6 @@ import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
@@ -251,22 +250,6 @@ public class NodeUtils {
         }
 
         return sum;
-    }
-
-    @NotNull
-    public static List<Component> toComponents(List<ITooltipNode> tooltip, int pad, boolean showAdvancedTooltip) {
-        List<Component> components = new ArrayList<>();
-
-        for (ITooltipNode node : tooltip) {
-            components.addAll(toComponents(node, pad, showAdvancedTooltip));
-        }
-
-        return components;
-    }
-
-    @NotNull
-    public static List<Component> toComponents(ITooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
-        return tooltip.getComponents(pad, showAdvancedTooltip);
     }
 
     public static void processLootModifier(ILootModifier<?> modifier, LootTableNode node) {

@@ -3,19 +3,19 @@ package com.yanny.aci.manager;
 import com.yanny.aci.api.ICoreCommonUtils;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class CoreCommonRegistry<CN> extends BaseRegistry implements ICoreCommonUtils<CN> {
-    private final CN configuration;
+public abstract class CoreCommonRegistry<TConfig> extends BaseRegistry implements ICoreCommonUtils<TConfig> {
+    private final TConfig configuration;
 
     public CoreCommonRegistry() {
         configuration = loadConfiguration();
     }
 
     @NotNull
-    protected abstract CN loadConfiguration();
+    protected abstract TConfig loadConfiguration();
 
     @NotNull
     @Override
-    public final CN getConfiguration() {
+    public final TConfig getConfiguration() {
         return configuration;
     }
 }

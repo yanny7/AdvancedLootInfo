@@ -20,6 +20,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -51,7 +52,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
+public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtils, ITooltipNode, IServerUtils, IKeyTooltipNode> implements IServerRegistry, IServerUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     // factories
@@ -267,6 +268,52 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
                     .map((v) -> v.apply(utils, value))
                     .orElseGet(() -> ErrorTooltipNode.error("[" + valueClass.getName() + "]"));
         }
+    }
+
+    @NotNull
+    @Override
+    public ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
+        if (keyTooltipNode instanceof BranchTooltipNode.Builder builder) {
+            return builder.build("ali.property.branch.values");
+        } else if (keyTooltipNode instanceof ErrorTooltipNode.Builder builder) {
+            return builder.build();
+        } else if (keyTooltipNode instanceof ArrayTooltipNode.Builder builder) {
+            return builder.build();
+        } else if (keyTooltipNode instanceof EmptyTooltipNode.Builder builder) {
+            return builder.build();
+        } else {
+            return keyTooltipNode.build("ali.property.value.null");
+        }
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getBranchNode() {
+        return BranchTooltipNode.branch();
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getBranchNode(boolean isAdvancedTooltip) {
+        return BranchTooltipNode.branch(isAdvancedTooltip);
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getValueNode(Object... value) {
+        return ValueTooltipNode.value(value);
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getComponentNode(Component... values) {
+        return ComponentTooltipNode.values(values);
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getEmptyNode() {
+        return EmptyTooltipNode.empty();
     }
 
     @NotNull

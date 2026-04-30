@@ -7,20 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public interface ICoreClientUtils
-        <
-                SU extends ICoreServerUtils,
-                TN extends ICoreTooltipNode<SU>,
-                DN extends ICoreDataNode<SU, TN>,
-                CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-                WU extends ICoreWidgetUtils<SU, TN, DN>
+public interface ICoreClientUtils<
+        TTooltipNode extends ICoreTooltipNode<?>,
+        TDataNode    extends ICoreDataNode<?, ?>,
+        TWidgetUtils extends ICoreWidgetUtils<?>,
+        SELF         extends ICoreClientUtils<?, ?, ?, ?>
         > {
     @NotNull
-    List<IWidget> createWidgets(WU utils, List<DN> entries, RelativeRect parent, int maxWidth);
+    List<IWidget> createWidgets(TWidgetUtils utils, List<TDataNode> entries, RelativeRect parent, int maxWidth);
 
     @NotNull
-    BiFunction<CU, RegistryFriendlyByteBuf, DN> getDataNodeFactory(Identifier id);
+    BiFunction<SELF, RegistryFriendlyByteBuf, TDataNode> getDataNodeFactory(Identifier id);
 
     @NotNull
-    BiFunction<CU, RegistryFriendlyByteBuf, TN> getTooltipNodeFactory(Identifier id);
+    BiFunction<SELF, RegistryFriendlyByteBuf, TTooltipNode> getTooltipNodeFactory(Identifier id);
 }

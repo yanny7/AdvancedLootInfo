@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICoreServerUtils, ICommonUtils {
+public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltipNode, IServerUtils>, ICommonUtils {
     @NotNull
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 

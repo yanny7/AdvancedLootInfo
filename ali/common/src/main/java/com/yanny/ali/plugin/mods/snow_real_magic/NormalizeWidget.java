@@ -3,10 +3,10 @@ package com.yanny.ali.plugin.mods.snow_real_magic;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class NormalizeWidget implements IWidget {
         bounds = rect;
         bounds.setDimensions(18, 18);
         widget = WidgetUtils.getUnknownWidget(rect);
-        tooltip = NodeUtils.toComponents(node.getTooltip(), 0, false);
+        tooltip = CoreTooltipUtils.toComponents(node.getTooltip(), 0, false);
     }
 
     @NotNull

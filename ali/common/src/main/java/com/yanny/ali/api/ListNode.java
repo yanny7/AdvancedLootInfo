@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 
 import java.util.List;
 
-public abstract class ListNode extends CoreListNode<IServerUtils, ITooltipNode, IDataNode, IClientUtils, IWidgetUtils> implements IDataNode {
+public abstract class ListNode extends CoreListNode<IServerUtils, ITooltipNode, IDataNode, IClientUtils> implements IDataNode {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public ListNode() {

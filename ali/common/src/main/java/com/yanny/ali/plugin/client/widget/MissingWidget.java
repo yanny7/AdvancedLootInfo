@@ -3,10 +3,10 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +26,7 @@ public class MissingWidget implements IWidget {
         widget = WidgetUtils.getMissingWidget(rect);
 
         components.add(Component.translatable("ali.enum.group_type.missing"));
-        components.addAll(NodeUtils.toComponents(entry.getTooltip(), 0, false));
+        components.addAll(CoreTooltipUtils.toComponents(entry.getTooltip(), 0, false));
     }
 
     public MissingWidget(RelativeRect rect) {
