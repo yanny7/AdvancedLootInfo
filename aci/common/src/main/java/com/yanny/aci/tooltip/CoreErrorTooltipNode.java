@@ -1,33 +1,32 @@
 package com.yanny.aci.tooltip;
 
-import com.yanny.aci.api.*;
-import net.minecraft.ChatFormatting;
+import com.yanny.aci.api.ICoreClientUtils;
+import com.yanny.aci.api.ICoreKeyTooltipNode;
+import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.ICoreTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import static com.yanny.aci.api.ICoreTooltipNode.pad;
-
-public abstract class CoreErrorTooltipNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> implements ICoreTooltipNode<SU>, ICoreKeyTooltipNode<SU, TN, KTN> {
+public abstract class CoreErrorTooltipNode<
+        TServerUtils    extends ICoreServerUtils<?, ?, ?>,
+        TTooltipNode    extends ICoreTooltipNode<?>,
+        TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
+        > implements ICoreTooltipNode<TServerUtils>, ICoreKeyTooltipNode<TTooltipNode, TKeyTooltipNode> {
     private final String value;
 
     protected CoreErrorTooltipNode(String value) {
         this.value = value;
     }
 
-    @NotNull
-    @Override
-    public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
-        return Collections.singletonList(pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", value).withStyle(ChatFormatting.RED)));
+    protected String getValue() {
+        return value;
     }
 
     @Override
-    public final void encode(SU utils, FriendlyByteBuf buf) {
+    public final void encode(TServerUtils utils, FriendlyByteBuf buf) {
         buf.writeUtf(value);
     }
 
@@ -38,7 +37,7 @@ public abstract class CoreErrorTooltipNode<SU extends ICoreServerUtils, TN exten
         }
 
         //noinspection unchecked
-        CoreErrorTooltipNode<SU, TN, KTN> that = (CoreErrorTooltipNode<SU, TN, KTN>) o;
+        CoreErrorTooltipNode<TServerUtils, TTooltipNode, TKeyTooltipNode> that = (CoreErrorTooltipNode<TServerUtils, TTooltipNode, TKeyTooltipNode>) o;
         return Objects.equals(value, that.value);
     }
 
@@ -56,55 +55,56 @@ public abstract class CoreErrorTooltipNode<SU extends ICoreServerUtils, TN exten
 
     @NotNull
     @Override
-    public KTN add(TN node) {
+    public TKeyTooltipNode add(TTooltipNode node) {
         //noinspection unchecked
-        return (KTN) this;
+        return (TKeyTooltipNode) this;
     }
 
     @NotNull
     @Override
-    public TN build(String key) {
+    public TTooltipNode build(String key) {
         //noinspection unchecked
-        return (TN) this;
+        return (TTooltipNode) this;
     }
 
     @NotNull
     protected static <
-            SU extends ICoreServerUtils,
-            TN extends ICoreTooltipNode<SU>,
-            DN extends ICoreDataNode<SU, TN>,
-            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-            WU extends ICoreWidgetUtils<SU, TN, DN>,
-            T extends ICoreTooltipNode<SU>
-    > T decode(CU ignoredUtils, FriendlyByteBuf buf, Function<String, T> factory) {
+            TTooltipNode extends ICoreTooltipNode<?>,
+            TClientUtils extends ICoreClientUtils<TTooltipNode, ?, ?, TClientUtils>,
+            SELF         extends ICoreTooltipNode<?>
+            > SELF decode(TClientUtils ignoredUtils, FriendlyByteBuf buf, Function<String, SELF> factory) {
         String value = buf.readUtf();
         return factory.apply(value);
     }
 
-    public static class Builder<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> extends CoreListTooltipNode.Builder<SU, TN, KTN> {
+    public static class Builder<
+            TServerUtils    extends ICoreServerUtils<?, ?, ?>,
+            TTooltipNode    extends ICoreTooltipNode<?>,
+            TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
+            > extends CoreListTooltipNode.Builder<TTooltipNode, TKeyTooltipNode> {
         private final String value;
-        private final Function<String, CoreErrorTooltipNode<SU, TN, KTN>> factory;
+        private final Function<String, CoreErrorTooltipNode<TServerUtils, TTooltipNode, TKeyTooltipNode>> factory;
 
-        public Builder(String value, Function<String, CoreErrorTooltipNode<SU, TN, KTN>> factory) {
+        public Builder(String value, Function<String, CoreErrorTooltipNode<TServerUtils, TTooltipNode, TKeyTooltipNode>> factory) {
             this.value = value;
             this.factory = factory;
         }
 
         @NotNull
-        public KTN add(TN node) {
+        public TKeyTooltipNode add(TTooltipNode node) {
             //noinspection unchecked
-            return (KTN) this;
+            return (TKeyTooltipNode) this;
         }
 
         @NotNull
-        public TN build(String key) {
+        public TTooltipNode build(String key) {
             //noinspection unchecked
-            return (TN) factory.apply(value);
+            return (TTooltipNode) factory.apply(value);
         }
 
-        public TN build() {
+        public TTooltipNode build() {
             //noinspection unchecked
-            return (TN) factory.apply(value);
+            return (TTooltipNode) factory.apply(value);
         }
     }
 }

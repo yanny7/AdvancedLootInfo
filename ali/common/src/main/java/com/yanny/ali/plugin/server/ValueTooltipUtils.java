@@ -6,18 +6,12 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -26,9 +20,11 @@ import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetAttributesFunction;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStatsTooltip;
@@ -62,11 +58,6 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, modifier.amount).build("ali.property.value.amount"))
                 .add(utils.getValueTooltip(utils, modifier.id).build("ali.property.value.uuid"))
                 .add(utils.getValueTooltip(utils, Arrays.asList(modifier.slots)).build("ali.property.branch.equipment_slots"));
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getUUIDTooltip(IServerUtils ignoredUtils, UUID uuid) {
-        return ValueTooltipNode.value(uuid);
     }
 
     @NotNull
@@ -328,11 +319,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getCompoundTagTooltip(IServerUtils utils, CompoundTag tag) {
-        return utils.getValueTooltip(utils, tag.toString());
-    }
-
-    @NotNull
     public static IKeyTooltipNode getAdvancementPredicateTooltip(IServerUtils utils, PlayerPredicate.AdvancementPredicate predicate) {
         if (predicate instanceof PlayerPredicate.AdvancementDonePredicate donePredicate) {
             return utils.getValueTooltip(utils, donePredicate.state);
@@ -362,68 +348,8 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getBooleanTooltip(IServerUtils ignoredUtils, Boolean value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getIntegerTooltip(IServerUtils ignoredUtils, int value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getLongTooltip(IServerUtils ignoredUtils, Long value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getByteTooltip(IServerUtils ignoredUtils, Byte value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getStringTooltip(IServerUtils ignoredUtils, String value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getFloatTooltip(IServerUtils ignoredUtils, Float value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getDoubleTooltip(IServerUtils ignoredUtils, Double value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getEnumTooltip(IServerUtils ignoredUtils, Enum<?> value) {
-        return ValueTooltipNode.value(value.name());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getResourceLocationTooltip(IServerUtils ignoredUtils, ResourceLocation value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
     public static <T> IKeyTooltipNode getBuiltInRegistryTooltip(IServerUtils utils, Registry<T> registry, T value) {
         return utils.getValueTooltip(utils, registry.getKey(value));
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getResourceKeyTooltip(IServerUtils utils, ResourceKey<T> value) {
-        return utils.getValueTooltip(utils, value.location());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getTagKeyTooltip(IServerUtils utils, TagKey<?> value) {
-        return utils.getValueTooltip(utils, value.location());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getComponentTooltip(IServerUtils ignoredUtils, Component component) {
-        return ComponentTooltipNode.values(component.copy());
     }
 
     @NotNull
@@ -442,31 +368,5 @@ public class ValueTooltipUtils {
         }
 
         return EmptyTooltipNode.empty();
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getHolderTooltip(IServerUtils utils, Holder<T> holder) {
-        return utils.getValueTooltip(utils, holder.value());
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    @NotNull
-    public static <T> IKeyTooltipNode getOptionalTooltip(IServerUtils utils, Optional<T> optional) {
-        return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(EmptyTooltipNode.empty());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getCollectionTooltip(IServerUtils utils, @Nullable Collection<?> collection) {
-        if (collection == null || collection.isEmpty()) {
-            return EmptyTooltipNode.empty();
-        }
-
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
-
-        for (Object o : collection) {
-            tooltip.add(TooltipUtils.buildTooltip(utils.getValueTooltip(utils, o)));
-        }
-
-        return tooltip;
     }
 }

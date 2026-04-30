@@ -6,15 +6,28 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ITooltipNode;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
+
+import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
 public class ErrorTooltipNode extends CoreErrorTooltipNode<IServerUtils, ITooltipNode, IKeyTooltipNode> implements ITooltipNode, IKeyTooltipNode {
     public static final ResourceLocation ID = Utils.modLoc("error");
 
     private ErrorTooltipNode(String value) {
         super(value);
+    }
+
+    @NotNull
+    @Override
+    public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
+        return Collections.singletonList(pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", getValue()).withStyle(ChatFormatting.RED)));
     }
 
     @NotNull

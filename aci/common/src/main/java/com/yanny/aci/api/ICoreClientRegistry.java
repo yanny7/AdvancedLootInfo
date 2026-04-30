@@ -6,23 +6,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
 
-public interface ICoreClientRegistry
-        <
-                SU extends ICoreServerUtils,
-                TN extends ICoreTooltipNode<SU>,
-                DN extends ICoreDataNode<SU, TN>,
-                CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-                WU extends ICoreWidgetUtils<SU, TN, DN>
+public interface ICoreClientRegistry<
+        TTooltipNode extends ICoreTooltipNode<?>,
+        TDataNode    extends ICoreDataNode<?, ?>,
+        TWidgetUtils extends ICoreWidgetUtils<?>,
+        TClientUtils extends ICoreClientUtils<?, ?, ?, ?>
         > {
-    void registerWidget(ResourceLocation id, IWidgetFactory<SU, TN, DN, WU> factory);
+    void registerWidget(ResourceLocation id, IWidgetFactory<TDataNode, TWidgetUtils> factory);
 
-    void registerDataNode(ResourceLocation id, BiFunction<CU, FriendlyByteBuf, DN> dataFactory);
+    void registerDataNode(ResourceLocation id, BiFunction<TClientUtils, FriendlyByteBuf, TDataNode> dataFactory);
 
-    void registerTooltipNode(ResourceLocation id, BiFunction<CU, FriendlyByteBuf, TN> tooltipFactory);
+    void registerTooltipNode(ResourceLocation id, BiFunction<TClientUtils, FriendlyByteBuf, TTooltipNode> tooltipFactory);
 
     @FunctionalInterface
-    interface IWidgetFactory<SU extends ICoreServerUtils, T extends ICoreTooltipNode<SU>, DN extends ICoreDataNode<SU, T>, WU extends ICoreWidgetUtils<SU, T, DN>> {
+    interface IWidgetFactory<
+            TDataNode    extends ICoreDataNode<?, ?>,
+            TWidgetUtils extends ICoreWidgetUtils<?>
+            > {
         @NotNull
-        IWidget create(WU registry, DN entry, RelativeRect rect, int maxWidth);
+        IWidget create(TWidgetUtils registry, TDataNode entry, RelativeRect rect, int maxWidth);
     }
 }

@@ -319,7 +319,7 @@ public class TooltipUtils {
                     } else if (element instanceof LootItemFunction function) {
                         tooltip.add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
                     } else {
-                        tooltip.add(buildTooltip(utils.getValueTooltip(utils, element)));
+                        tooltip.add(utils.buildTooltip(utils.getValueTooltip(utils, element)));
                     }
                 }
             } else {
@@ -348,21 +348,7 @@ public class TooltipUtils {
             return tooltip.build();
         }
 
-        return buildTooltip(getElementTooltip(utils, element));
-    }
-
-    public static ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
-        if (keyTooltipNode instanceof BranchTooltipNode.Builder builder) {
-            return builder.build("ali.property.branch.values");
-        } else if (keyTooltipNode instanceof ErrorTooltipNode.Builder builder) {
-            return builder.build();
-        } else if (keyTooltipNode instanceof ArrayTooltipNode.Builder builder) {
-            return builder.build();
-        } else if (keyTooltipNode instanceof EmptyTooltipNode.Builder builder) {
-            return builder.build();
-        } else {
-            return keyTooltipNode.build("ali.property.value.null");
-        }
+        return utils.buildTooltip(getElementTooltip(utils, element));
     }
 
     private static IKeyTooltipNode getElementTooltip(IServerUtils utils, JsonElement element) {

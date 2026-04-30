@@ -43,7 +43,10 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerC
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
@@ -160,11 +163,6 @@ public class GenericTooltipTest {
                 "    -> CHEST",
                 "    -> HEAD"
         ));
-    }
-
-    @Test
-    public void testUUIDTooltip() {
-        assertTooltip(ValueTooltipUtils.getUUIDTooltip(UTILS, UUID.nameUUIDFromBytes(new byte[]{1, 2, 3})).build("ali.property.value.uuid"), List.of("UUID: 5289df73-7df5-3326-bcdd-22597afb1fac"));
     }
 
     @Test

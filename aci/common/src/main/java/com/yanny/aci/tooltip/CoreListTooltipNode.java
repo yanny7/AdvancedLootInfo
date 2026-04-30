@@ -1,6 +1,9 @@
 package com.yanny.aci.tooltip;
 
-import com.yanny.aci.api.*;
+import com.yanny.aci.api.ICoreClientUtils;
+import com.yanny.aci.api.ICoreKeyTooltipNode;
+import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.ICoreTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -11,17 +14,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> implements ICoreTooltipNode<SU> {
+public abstract class CoreListTooltipNode<
+        TServerUtils extends ICoreServerUtils<?, ?, ?>,
+        TTooltipNode extends ICoreTooltipNode<TServerUtils>
+        > implements ICoreTooltipNode<TServerUtils> {
     @Nullable
-    private List<TN> children;
+    private List<TTooltipNode> children;
 
-    protected CoreListTooltipNode(List<TN> children) {
+    protected CoreListTooltipNode(List<TTooltipNode> children) {
         this.children = children;
     }
 
     protected abstract void encodeNode(FriendlyByteBuf buf);
 
-    public void addNode(TN node) {
+    public void addNode(TTooltipNode node) {
         if (children == null) {
             children = new ArrayList<>();
         }
@@ -29,14 +35,14 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
         children.add(node);
     }
 
-    public List<TN> getChildren() {
+    public List<TTooltipNode> getChildren() {
         return Objects.requireNonNullElse(children, Collections.emptyList());
     }
 
     @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
-        List<TN> children = getChildren();
+        List<TTooltipNode> children = getChildren();
         List<Component> components;
         int count = children.size();
 
@@ -47,7 +53,7 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
         } else {
             components = new ArrayList<>(count);
 
-            for (TN child : children) {
+            for (TTooltipNode child : children) {
                 components.addAll(child.getComponents(pad, showAdvancedTooltip));
             }
         }
@@ -56,12 +62,12 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
     }
 
     @Override
-    public final void encode(SU utils, FriendlyByteBuf buf) {
-        List<TN> children = getChildren();
+    public final void encode(TServerUtils utils, FriendlyByteBuf buf) {
+        List<TTooltipNode> children = getChildren();
 
         buf.writeInt(children.size());
 
-        for (TN child : children) {
+        for (TTooltipNode child : children) {
             ICoreTooltipNode.encodeNode(utils, child, buf);
         }
 
@@ -75,7 +81,7 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
         }
 
         //noinspection unchecked
-        CoreListTooltipNode<SU, TN> that = (CoreListTooltipNode<SU, TN>) o;
+        CoreListTooltipNode<TServerUtils, TTooltipNode> that = (CoreListTooltipNode<TServerUtils, TTooltipNode>) o;
         return Objects.equals(children, that.children);
     }
 
@@ -85,12 +91,9 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
     }
 
     public static <
-            SU extends ICoreServerUtils,
-            TN extends ICoreTooltipNode<SU>,
-            DN extends ICoreDataNode<SU, TN>,
-            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-            WU extends ICoreWidgetUtils<SU, TN, DN>
-    > List<TN> decodeChildren(CU utils, FriendlyByteBuf buf) {
+            TTooltipNode extends ICoreTooltipNode<?>,
+            TClientUtils extends ICoreClientUtils<TTooltipNode, ?, ?, TClientUtils>
+            > List<TTooltipNode> decodeChildren(TClientUtils utils, FriendlyByteBuf buf) {
         int count = buf.readInt();
 
         if (count == 0) {
@@ -98,7 +101,7 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
         } else if (count == 1) {
             return Collections.singletonList(ICoreTooltipNode.decodeNode(utils, buf));
         } else {
-            List<TN> children = new ArrayList<>(count);
+            List<TTooltipNode> children = new ArrayList<>(count);
 
             for (int i = 0; i < count; i++) {
                 children.add(ICoreTooltipNode.decodeNode(utils, buf));
@@ -108,14 +111,17 @@ public abstract class CoreListTooltipNode<SU extends ICoreServerUtils, TN extend
         }
     }
 
-    public abstract static class Builder<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> implements ICoreKeyTooltipNode<SU, TN, KTN> {
-        protected final List<TN> children = new ArrayList<>();
+    public abstract static class Builder<
+            TTooltipNode    extends ICoreTooltipNode<?>,
+            TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
+            > implements ICoreKeyTooltipNode<TTooltipNode, TKeyTooltipNode> {
+        protected final List<TTooltipNode> children = new ArrayList<>();
 
         @NotNull
-        public KTN add(TN node) {
+        public TKeyTooltipNode add(TTooltipNode node) {
             children.add(node);
             //noinspection unchecked
-            return (KTN) this;
+            return (TKeyTooltipNode) this;
         }
     }
 }

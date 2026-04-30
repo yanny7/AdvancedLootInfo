@@ -9,22 +9,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class CoreListNode
-        <
-                SU extends ICoreServerUtils,
-                TN extends ICoreTooltipNode<SU>,
-                DN extends ICoreDataNode<SU, TN>,
-                CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-                WU extends ICoreWidgetUtils<SU, TN, DN>
+public abstract class CoreListNode<
+        TServerUtils extends ICoreServerUtils<?, ?, ?>,
+        TTooltipNode extends ICoreTooltipNode<TServerUtils>,
+        TDataNode    extends ICoreDataNode<TServerUtils, TTooltipNode>,
+        TClientUtils extends ICoreClientUtils<TTooltipNode, TDataNode, ?, TClientUtils>
         >
-        implements ICoreDataNode<SU, TN> {
+        implements ICoreDataNode<TServerUtils, TTooltipNode> {
     @Nullable
-    private List<DN> nodes;
+    private List<TDataNode> nodes;
 
     public CoreListNode() {
     }
 
-    public CoreListNode(CU utils, FriendlyByteBuf buf) {
+    public CoreListNode(TClientUtils utils, FriendlyByteBuf buf) {
         int count = buf.readInt();
 
         if (count == 0) {
@@ -44,11 +42,11 @@ public abstract class CoreListNode
     }
 
     @NotNull
-    public List<DN> nodes() {
+    public List<TDataNode> nodes() {
         return Objects.requireNonNullElse(nodes, Collections.emptyList());
     }
 
-    public void addChildren(DN node) {
+    public void addChildren(TDataNode node) {
         if (nodes == null) {
             nodes = new ArrayList<>();
         }
@@ -61,14 +59,14 @@ public abstract class CoreListNode
             return;
         }
 
-        for (DN node : nodes) {
-            if (node instanceof CoreListNode<?, ?, ?, ?, ?> listNode) {
+        for (TDataNode node : nodes) {
+            if (node instanceof CoreListNode<?, ?, ?, ?> listNode) {
                 listNode.optimizeList();
             }
         }
 
         nodes.removeIf(node -> {
-            if (node instanceof CoreListNode<?, ?, ?, ?, ?> listNode) {
+            if (node instanceof CoreListNode<?, ?, ?, ?> listNode) {
                 return listNode.nodes().isEmpty();
             }
 
@@ -80,5 +78,5 @@ public abstract class CoreListNode
         }
     }
 
-    public abstract void encodeNode(SU utils, FriendlyByteBuf buf);
+    public abstract void encodeNode(TServerUtils utils, FriendlyByteBuf buf);
 }

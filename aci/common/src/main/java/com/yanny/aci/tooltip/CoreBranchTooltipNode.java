@@ -1,7 +1,10 @@
 package com.yanny.aci.tooltip;
 
 import com.google.common.collect.ImmutableList;
-import com.yanny.aci.api.*;
+import com.yanny.aci.api.ICoreClientUtils;
+import com.yanny.aci.api.ICoreKeyTooltipNode;
+import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.ICoreTooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +17,15 @@ import java.util.function.Function;
 
 import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
-public abstract class CoreBranchTooltipNode<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> extends CoreListTooltipNode<SU, TN> {
+public abstract class CoreBranchTooltipNode<
+        TServerUtils extends ICoreServerUtils<?, ?, ?>,
+        TTooltipNode extends ICoreTooltipNode<TServerUtils>
+        > extends CoreListTooltipNode<TServerUtils, TTooltipNode> {
     private final String key;
     private final boolean translateKey;
     private final boolean advancedTooltip;
 
-    protected CoreBranchTooltipNode(CacheKey<SU, TN> cacheKey) {
+    protected CoreBranchTooltipNode(CacheKey<TTooltipNode> cacheKey) {
         super(cacheKey.children);
         key = cacheKey.key;
         advancedTooltip = cacheKey.advancedTooltip;
@@ -59,7 +65,7 @@ public abstract class CoreBranchTooltipNode<SU extends ICoreServerUtils, TN exte
         }
 
         //noinspection unchecked
-        CoreBranchTooltipNode<SU, TN> that = (CoreBranchTooltipNode<SU, TN>) o;
+        CoreBranchTooltipNode<TServerUtils, TTooltipNode> that = (CoreBranchTooltipNode<TServerUtils, TTooltipNode>) o;
         return advancedTooltip == that.advancedTooltip
                 && translateKey == that.translateKey
                 && Objects.equals(key, that.key);
@@ -82,38 +88,40 @@ public abstract class CoreBranchTooltipNode<SU extends ICoreServerUtils, TN exte
 
     @NotNull
     protected static <
-            SU extends ICoreServerUtils,
-            TN extends ICoreTooltipNode<SU>,
-            DN extends ICoreDataNode<SU, TN>,
-            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-            WU extends ICoreWidgetUtils<SU, TN, DN>,
-            T extends ICoreTooltipNode<SU>
-    > T decode(CU utils, FriendlyByteBuf buf, Function<CacheKey<SU, TN>, T> factory) {
-        List<TN> children = CoreListTooltipNode.decodeChildren(utils, buf);
+            TServerUtils extends ICoreServerUtils<?, ?, ?>,
+            TTooltipNode extends ICoreTooltipNode<TServerUtils>,
+            TClientUtils extends ICoreClientUtils<TTooltipNode, ?, ?, TClientUtils>,
+            SELF         extends ICoreTooltipNode<?>
+            > SELF decode(TClientUtils utils, FriendlyByteBuf buf, Function<CacheKey<TTooltipNode>, SELF> factory) {
+        List<TTooltipNode> children = CoreListTooltipNode.decodeChildren(utils, buf);
         String key = buf.readUtf();
         boolean advancedTooltip = buf.readBoolean();
         boolean translateKey = buf.readBoolean();
         return factory.apply(new CacheKey<>(children, key, advancedTooltip, translateKey));
     }
 
-    public record CacheKey<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>>(List<TN> children, String key, boolean advancedTooltip, boolean translateKey) {}
+    public record CacheKey<TTooltipNode extends ICoreTooltipNode<?>>(List<TTooltipNode> children, String key, boolean advancedTooltip, boolean translateKey) {}
 
-    public static class Builder<SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>, T extends ICoreTooltipNode<SU>, KTN extends ICoreKeyTooltipNode<SU, TN, KTN>> extends CoreListTooltipNode.Builder<SU, TN, KTN> {
+    public static class Builder<
+            TTooltipNOde    extends ICoreTooltipNode<?>,
+            TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>,
+            SELF            extends CoreBranchTooltipNode<?, ?>
+            > extends CoreListTooltipNode.Builder<TTooltipNOde, TKeyTooltipNode> {
         private final boolean advancedTooltip;
-        private final Function<CacheKey<SU, TN>, T> factory;
+        private final Function<CacheKey<TTooltipNOde>, SELF> factory;
 
-        public Builder(boolean advancedTooltip, Function<CacheKey<SU, TN>, T> factory) {
+        public Builder(boolean advancedTooltip, Function<CacheKey<TTooltipNOde>, SELF> factory) {
             this.advancedTooltip = advancedTooltip;
             this.factory = factory;
         }
 
         @NotNull
-        public TN build(String key) {
+        public TTooltipNOde build(String key) {
             //noinspection unchecked
-            return (TN) build(key, true);
+            return (TTooltipNOde) build(key, true);
         }
 
-        public T build(String key, boolean translateKey) {
+        public SELF build(String key, boolean translateKey) {
             String internKey = key.intern();
             return factory.apply(new CacheKey<>(ImmutableList.copyOf(children), internKey, advancedTooltip, translateKey));
         }
