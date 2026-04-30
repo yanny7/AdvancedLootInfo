@@ -1,13 +1,16 @@
 package com.yanny.awi.manager;
 
 import com.yanny.aci.manager.CorePluginManager;
-import com.yanny.awi.api.*;
+import com.yanny.awi.api.IClientRegistry;
+import com.yanny.awi.api.ICommonRegistry;
+import com.yanny.awi.api.IPlugin;
+import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.platform.Services;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PluginManager extends CorePluginManager<Object, ICommonUtils, IServerUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils, AwiCommonRegistry, AwiClientRegistry, AwiServerRegistry, ICommonRegistry, IClientRegistry, IServerRegistry, IPlugin> {
+public class PluginManager extends CorePluginManager<ICommonRegistry, IServerRegistry, AwiCommonRegistry, AwiClientRegistry, AwiServerRegistry, IClientRegistry, IPlugin> {
     private static PluginManager pluginManager;
 
     public static PluginManager getInstance() {

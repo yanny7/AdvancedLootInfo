@@ -2,7 +2,7 @@ package com.yanny.aci.api;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface ICoreCommonUtils<CN> {
+public interface ICoreCommonUtils<TConfig> {
     @NotNull
-    CN getConfiguration();
+    TConfig getConfiguration();
 }
