@@ -1,23 +1,27 @@
 package com.yanny.aci.manager;
 
 import com.yanny.aci.api.ICoreCommonUtils;
+import com.yanny.aci.api.ICoreKeyTooltipNode;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.ICoreTooltipNode;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CoreServerRegistry
-        <
-                CN,
-                BU extends ICoreCommonUtils<CN>
+public abstract class CoreServerRegistry<
+        TConfig,
+        TCommonUtils extends ICoreCommonUtils<TConfig>,
+        TTooltipNode extends ICoreTooltipNode<?>,
+        TServerUtils extends ICoreServerUtils<?, ?, ?>,
+        TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>
         >
         extends BaseRegistry
-        implements ICoreServerUtils, ICoreCommonUtils<CN> {
+        implements ICoreServerUtils<TKeyTooltipNode, TTooltipNode, TServerUtils>, ICoreCommonUtils<TConfig> {
     private ServerLevel serverLevel;
-    protected final BU commonUtils;
+    protected final TCommonUtils commonUtils;
 
-    public CoreServerRegistry(BU registry) {
+    public CoreServerRegistry(TCommonUtils registry) {
         commonUtils = registry;
     }
 
@@ -39,7 +43,7 @@ public abstract class CoreServerRegistry
 
     @NotNull
     @Override
-    public CN getConfiguration() {
+    public TConfig getConfiguration() {
         return commonUtils.getConfiguration();
     }
 }

@@ -2,6 +2,7 @@ package com.yanny.ali.plugin;
 
 import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
@@ -22,12 +23,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.*;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -65,10 +61,6 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.*;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
 
 @AliEntrypoint
 public class Plugin implements IPlugin {
@@ -132,6 +124,8 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerServer(IServerRegistry registry) {
+        new CommonValueTooltip<ITooltipNode, IKeyTooltipNode, IServerUtils, IServerRegistry>().registerAll(registry);
+
         registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
         registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
         registry.registerItemCollector(AlternativesEntry.class, ItemCollectorUtils::collectComposite);
@@ -344,11 +338,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(TrimPattern.class, RegistriesTooltipUtils::getTrimPatternTooltip);
         registry.registerValueTooltip(JukeboxSong.class, RegistriesTooltipUtils::getJukeboxSongTooltip);
 
-        registry.registerValueTooltip(ResourceLocation.class, ValueTooltipUtils::getResourceLocationTooltip);
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
-        registry.registerValueTooltip(Holder.class, ValueTooltipUtils::getHolderTooltip);
         registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
-        registry.registerValueTooltip(Optional.class, ValueTooltipUtils::getOptionalTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
         registry.registerValueTooltip(TagPredicate.class, ValueTooltipUtils::getTagPredicateTooltip);
@@ -368,28 +359,13 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
         registry.registerValueTooltip(BlockPos.class, ValueTooltipUtils::getBlockPosTooltip);
         registry.registerValueTooltip(CopyCustomDataFunction.CopyOperation.class, ValueTooltipUtils::getCopyOperationTooltip);
-        registry.registerValueTooltip(CompoundTag.class, ValueTooltipUtils::getCompoundTagTooltip);
         registry.registerValueTooltip(ItemStack.class, ValueTooltipUtils::getItemStackTooltip);
         registry.registerValueTooltip(MinMaxBounds.Ints.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
         registry.registerValueTooltip(MinMaxBounds.Doubles.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
-        registry.registerValueTooltip(ResourceKey.class, ValueTooltipUtils::getResourceKeyTooltip);
-        registry.registerValueTooltip(TagKey.class, ValueTooltipUtils::getTagKeyTooltip);
         registry.registerValueTooltip(ApplyBonusCount.Formula.class, ValueTooltipUtils::getFormulaTooltip);
         registry.registerValueTooltip(Property.class, ValueTooltipUtils::getPropertyTooltip);
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
-        registry.registerValueTooltip(UUID.class, ValueTooltipUtils::getUUIDTooltip);
         registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
-        registry.registerValueTooltip(Collection.class, ValueTooltipUtils::getCollectionTooltip);
-        registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
-        registry.registerValueTooltip(Component.class, ValueTooltipUtils::getComponentTooltip);
-        registry.registerValueTooltip(String.class, ValueTooltipUtils::getStringTooltip);
-        registry.registerValueTooltip(Boolean.class, ValueTooltipUtils::getBooleanTooltip);
-        registry.registerValueTooltip(Integer.class, ValueTooltipUtils::getIntegerTooltip);
-        registry.registerValueTooltip(Long.class, ValueTooltipUtils::getLongTooltip);
-        registry.registerValueTooltip(Float.class, ValueTooltipUtils::getFloatTooltip);
-        registry.registerValueTooltip(Double.class, ValueTooltipUtils::getDoubleTooltip);
-        registry.registerValueTooltip(Byte.class, ValueTooltipUtils::getByteTooltip);
-        registry.registerValueTooltip(Enum.class, ValueTooltipUtils::getEnumTooltip);
         registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
         registry.registerValueTooltip(SetStewEffectFunction.EffectEntry.class, ValueTooltipUtils::getEffectEntryTooltip);
         registry.registerValueTooltip(ListOperation.class, ValueTooltipUtils::getListOperationTooltip);

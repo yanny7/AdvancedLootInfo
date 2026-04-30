@@ -1,6 +1,7 @@
 package com.yanny.ali.api;
 
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.RangeValue;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
@@ -24,7 +25,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public interface IServerRegistry {
+public interface IServerRegistry extends ICoreServerRegistry<IServerUtils, IKeyTooltipNode> {
     <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier);
 
     <T extends LootItemFunction> void registerItemCollector(Class<T> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier);
@@ -36,8 +37,6 @@ public interface IServerRegistry {
     <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
 
     <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
-
-    <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, IKeyTooltipNode> getter);
 
     <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
 

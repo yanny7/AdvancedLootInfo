@@ -4,13 +4,13 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.plugin.client.ClientUtils;
-import com.yanny.ali.plugin.common.NodeUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -94,7 +94,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                            -> tooltipBuilder.addAll(NodeUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                            -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
             Optional<ItemStack> left = h.item.left();
             Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
