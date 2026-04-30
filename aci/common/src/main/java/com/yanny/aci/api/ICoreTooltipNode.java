@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
+public interface ICoreTooltipNode<TServerUtils extends ICoreServerUtils<?, ?, ?>> {
     ChatFormatting TEXT_STYLE = ChatFormatting.GOLD; //TODO use these or add config
     ChatFormatting PARAM_STYLE = ChatFormatting.AQUA;
 
@@ -40,18 +40,18 @@ public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
         }
     }
 
-    static <SU extends ICoreServerUtils, TN extends ICoreTooltipNode<SU>> void encodeNode(SU utils, TN node, RegistryFriendlyByteBuf buf) {
+    static <
+            TServerUtils extends ICoreServerUtils<?, ?, ?>,
+            TTooltipNode extends ICoreTooltipNode<TServerUtils>
+            > void encodeNode(TServerUtils utils, TTooltipNode node, RegistryFriendlyByteBuf buf) {
         buf.writeIdentifier(node.getId());
         node.encode(utils, buf);
     }
 
     static <
-            SU extends ICoreServerUtils,
-            TN extends ICoreTooltipNode<SU>,
-            DN extends ICoreDataNode<SU, TN>,
-            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-            WU extends ICoreWidgetUtils<SU, TN, DN>
-    > TN decodeNode(CU utils, RegistryFriendlyByteBuf buf) {
+            TN extends ICoreTooltipNode<?>,
+            CU extends ICoreClientUtils<TN, ?, ?, CU>
+            > TN decodeNode(CU utils, RegistryFriendlyByteBuf buf) {
         Identifier name = buf.readIdentifier();
         BiFunction<CU, RegistryFriendlyByteBuf, TN> factory = utils.getTooltipNodeFactory(name);
 
@@ -61,7 +61,7 @@ public interface ICoreTooltipNode<SU extends ICoreServerUtils> {
     @NotNull
     List<Component> getComponents(int pad, boolean showAdvancedTooltip);
 
-    void encode(SU utils, RegistryFriendlyByteBuf buf);
+    void encode(TServerUtils utils, RegistryFriendlyByteBuf buf);
 
     @NotNull
     Identifier getId();

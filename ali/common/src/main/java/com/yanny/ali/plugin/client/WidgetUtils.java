@@ -5,10 +5,10 @@ import com.mojang.math.Divisor;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.client.widget.TextureWidget;
-import com.yanny.ali.plugin.common.NodeUtils;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -104,7 +104,7 @@ public class WidgetUtils {
     @NotNull
     public static IWidget getLevelWidget(RelativeRect rect, IDataNode node, int level) {
         RelativeRect r = new RelativeRect(0, 0, 18, 18, rect);
-        List<Component> components = NodeUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
+        List<Component> components = CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
         String txt = Integer.toString(level);
         int txtWidth = Minecraft.getInstance().font.width(txt);
         return new IWidget() {

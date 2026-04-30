@@ -2,9 +2,9 @@ package com.yanny.ali.test.utils;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.datagen.LanguageHolder;
-import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -30,7 +30,7 @@ public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void assertTooltip(ITooltipNode tooltip, List<String> expected) {
-        List<Component> components = NodeUtils.toComponents(tooltip, 0, true);
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -51,7 +51,7 @@ public class TestUtils {
     }
 
     public static void assertTooltip(List<ITooltipNode> tooltip, List<String> expected) {
-        List<Component> components = NodeUtils.toComponents(tooltip, 0, true);
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -68,7 +68,7 @@ public class TestUtils {
     }
 
     public static void assertUnorderedTooltip(ITooltipNode tooltip, List<Object> expected) {
-        List<Component> components = NodeUtils.toComponents(tooltip, 0, true);
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
         int cmpIndex = 0;
         int expIndex = 0;
 

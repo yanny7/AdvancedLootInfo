@@ -1,6 +1,8 @@
 package com.yanny.aci.tooltip;
 
-import com.yanny.aci.api.*;
+import com.yanny.aci.api.ICoreClientUtils;
+import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.ICoreTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +14,7 @@ import java.util.function.Function;
 
 import static com.yanny.aci.api.ICoreTooltipNode.pad;
 
-public abstract class CoreLiteralTooltipNode<SU extends ICoreServerUtils> implements ICoreTooltipNode<SU> {
+public abstract class CoreLiteralTooltipNode<TServerUtils extends ICoreServerUtils<?, ?, ?>> implements ICoreTooltipNode<TServerUtils> {
     private final String text;
 
     protected CoreLiteralTooltipNode(String text) {
@@ -20,7 +22,7 @@ public abstract class CoreLiteralTooltipNode<SU extends ICoreServerUtils> implem
     }
 
     @Override
-    public final void encode(SU utils, RegistryFriendlyByteBuf buf) {
+    public final void encode(TServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeUtf(text);
     }
 
@@ -37,7 +39,7 @@ public abstract class CoreLiteralTooltipNode<SU extends ICoreServerUtils> implem
         }
 
         //noinspection unchecked
-        CoreLiteralTooltipNode<SU> that = (CoreLiteralTooltipNode<SU>) o;
+        CoreLiteralTooltipNode<TServerUtils> that = (CoreLiteralTooltipNode<TServerUtils>) o;
         return Objects.equals(text, that.text);
     }
 
@@ -55,13 +57,9 @@ public abstract class CoreLiteralTooltipNode<SU extends ICoreServerUtils> implem
 
     @NotNull
     protected static <
-            SU extends ICoreServerUtils,
-            TN extends ICoreTooltipNode<SU>,
-            DN extends ICoreDataNode<SU, TN>,
-            CU extends ICoreClientUtils<SU, TN, DN, CU, WU>,
-            WU extends ICoreWidgetUtils<SU, TN, DN>,
-            T extends ICoreTooltipNode<SU>
-    > T decode(CU ignoredUtils, RegistryFriendlyByteBuf buf, Function<String, T> factory) {
+            TClientUtils extends ICoreClientUtils<?, ?, ?, ?>,
+            SELF         extends CoreLiteralTooltipNode<?>
+            > SELF decode(TClientUtils ignoredUtils, RegistryFriendlyByteBuf buf, Function<String, SELF> factory) {
         String text = buf.readUtf();
         return factory.apply(text);
     }

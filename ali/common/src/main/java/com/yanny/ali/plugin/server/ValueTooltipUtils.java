@@ -10,28 +10,20 @@ import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
-import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.TypedDataComponent;
-import net.minecraft.core.component.predicates.AttributeModifiersPredicate;
-import net.minecraft.core.component.predicates.FireworkExplosionPredicate;
-import net.minecraft.core.component.predicates.WritableBookPredicate;
-import net.minecraft.core.component.predicates.WrittenBookPredicate;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.predicates.*;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.inventory.SlotRange;
-import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -44,12 +36,9 @@ import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getDataComponentExactPredicateTooltip;
@@ -83,11 +72,6 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, modifier.amount()).build("ali.property.value.amount"))
                 .add(utils.getValueTooltip(utils, modifier.id()).build("ali.property.value.id"))
                 .add(utils.getValueTooltip(utils, modifier.slots()).build("ali.property.branch.equipment_slots"));
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getUUIDTooltip(IServerUtils ignoredUtils, UUID uuid) {
-        return ValueTooltipNode.value(uuid);
     }
 
     @NotNull
@@ -270,11 +254,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getCompoundTagTooltip(IServerUtils utils, CompoundTag tag) {
-        return utils.getValueTooltip(utils, tag.toString());
-    }
-
-    @NotNull
     public static IKeyTooltipNode getItemStackTooltip(IServerUtils utils, ItemStack item) {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, item.getItem()).build("ali.property.value.item"))
@@ -293,68 +272,8 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getBooleanTooltip(IServerUtils ignoredUtils, Boolean value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getIntegerTooltip(IServerUtils ignoredUtils, int value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getLongTooltip(IServerUtils ignoredUtils, Long value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getByteTooltip(IServerUtils ignoredUtils, Byte value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getStringTooltip(IServerUtils ignoredUtils, String value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getFloatTooltip(IServerUtils ignoredUtils, Float value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getDoubleTooltip(IServerUtils ignoredUtils, Double value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getEnumTooltip(IServerUtils ignoredUtils, Enum<?> value) {
-        return ValueTooltipNode.value(value.name());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getIdentifierTooltip(IServerUtils ignoredUtils, Identifier value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @NotNull
     public static <T> IKeyTooltipNode getBuiltInRegistryTooltip(IServerUtils utils, Registry<T> registry, T value) {
         return utils.getValueTooltip(utils, registry.getKey(value));
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getResourceKeyTooltip(IServerUtils utils, ResourceKey<T> value) {
-        return utils.getValueTooltip(utils, value.identifier());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getTagKeyTooltip(IServerUtils utils, TagKey<?> value) {
-        return utils.getValueTooltip(utils, value.location());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getComponentTooltip(IServerUtils ignoredUtils, Component component) {
-        return ComponentTooltipNode.values(component.copy());
     }
 
     @NotNull
@@ -375,11 +294,6 @@ public class ValueTooltipUtils {
         return EmptyTooltipNode.empty();
     }
 
-    @NotNull
-    public static <T> IKeyTooltipNode getHolderTooltip(IServerUtils utils, Holder<T> holder) {
-        return utils.getValueTooltip(utils, holder.value());
-    }
-
     public static <T> IKeyTooltipNode getHolderSetTooltip(IServerUtils utils, HolderSet<T> holderSet) {
         IKeyTooltipNode tooltip;
         Either<TagKey<T>, List<Holder<T>>> either = holderSet.unwrap();
@@ -398,27 +312,6 @@ public class ValueTooltipUtils {
                 list.forEach((holder) -> tooltip.add(utils.getValueTooltip(utils, holder).build("ali.property.value.null")));
             }
         });
-
-        return tooltip;
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    @NotNull
-    public static <T> IKeyTooltipNode getOptionalTooltip(IServerUtils utils, Optional<T> optional) {
-        return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(EmptyTooltipNode.empty());
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getCollectionTooltip(IServerUtils utils, @Nullable Collection<?> collection) {
-        if (collection == null || collection.isEmpty()) {
-            return EmptyTooltipNode.empty();
-        }
-
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
-
-        for (Object o : collection) {
-            tooltip.add(TooltipUtils.buildTooltip(utils.getValueTooltip(utils, o)));
-        }
 
         return tooltip;
     }
@@ -501,11 +394,6 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, data.fadeColors()).build("ali.property.value.fade_colors"))
                 .add(utils.getValueTooltip(utils, data.hasTrail()).build("ali.property.value.has_trail"))
                 .add(utils.getValueTooltip(utils, data.hasTwinkle()).build("ali.property.value.has_twinkle"));
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getIntListTooltip(IServerUtils utils, IntList data) {
-        return utils.getValueTooltip(utils, data.toString());
     }
 
     @NotNull
@@ -707,11 +595,6 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getSlotPredicateTooltip(IServerUtils utils, SlotsPredicate predicate) {
         return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getEitherHolderTooltip(IServerUtils utils, EitherHolder<T> holder) {
-        return holder.contents().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
     }
 
     @NotNull

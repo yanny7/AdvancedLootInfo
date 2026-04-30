@@ -17,10 +17,10 @@ import static com.yanny.aci.tooltip.CoreTooltipUtils.getFromCache;
 
 public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITooltipNode> implements ITooltipNode {
     public static final Identifier ID = Utils.modLoc("branch");
-    private static final LoadingCache<CacheKey<IServerUtils, ITooltipNode>, BranchTooltipNode> CACHE = CacheBuilder.newBuilder()
+    private static final LoadingCache<CacheKey<ITooltipNode>, BranchTooltipNode> CACHE = CacheBuilder.newBuilder()
             .build(CacheLoader.from(BranchTooltipNode::new));
 
-    private BranchTooltipNode(CacheKey<IServerUtils, ITooltipNode> cacheKey) {
+    private BranchTooltipNode(CacheKey<ITooltipNode> cacheKey) {
         super(cacheKey);
     }
 
@@ -49,7 +49,7 @@ public class BranchTooltipNode extends CoreBranchTooltipNode<IServerUtils, ITool
         // TODO
     }
 
-    public static class Builder extends CoreBranchTooltipNode.Builder<IServerUtils, ITooltipNode, BranchTooltipNode, IKeyTooltipNode> implements IKeyTooltipNode {
+    public static class Builder extends CoreBranchTooltipNode.Builder<ITooltipNode, IKeyTooltipNode, BranchTooltipNode> implements IKeyTooltipNode {
         public Builder(boolean advancedTooltip) {
             super(advancedTooltip, (key) -> getFromCache(CACHE, key));
         }
