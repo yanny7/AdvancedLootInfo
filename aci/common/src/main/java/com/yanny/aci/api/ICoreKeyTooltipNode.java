@@ -2,15 +2,13 @@ package com.yanny.aci.api;
 
 import org.jetbrains.annotations.NotNull;
 
-public interface ICoreKeyTooltipNode
-        <
-                SU extends ICoreServerUtils,
-                TN extends ICoreTooltipNode<SU>,
-                KTN extends ICoreKeyTooltipNode<SU, TN, KTN>
+public interface ICoreKeyTooltipNode<
+        TTooltipNode extends ICoreTooltipNode<?>,
+        SELF         extends ICoreKeyTooltipNode<?, ?>
         > {
     @NotNull
-    KTN add(TN node);
+    SELF add(TTooltipNode node);
 
     @NotNull
-    TN build(String key);
+    TTooltipNode build(String key);
 }

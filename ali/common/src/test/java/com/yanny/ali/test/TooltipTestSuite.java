@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
@@ -220,6 +221,37 @@ public class TooltipTestSuite {
             @Override
             public ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
+            }
+
+            @NotNull
+            @Override
+            public ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
+                return PluginManager.getInstance().serverRegistry.buildTooltip(keyTooltipNode);
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getBranchNode() {
+                return PluginManager.getInstance().serverRegistry.getBranchNode();
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getBranchNode(boolean isAdvancedTooltip) {
+                return PluginManager.getInstance().serverRegistry.getBranchNode(isAdvancedTooltip);
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getValueNode(Object... value) {
+                return PluginManager.getInstance().serverRegistry.getValueNode(value);
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getComponentNode(Component... values) {
+                return PluginManager.getInstance().serverRegistry.getComponentNode(values);
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getEmptyNode() {
+                return PluginManager.getInstance().serverRegistry.getEmptyNode();
             }
 
             @Nullable

@@ -3,8 +3,8 @@ package com.yanny.ali.plugin.client.widget;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -55,7 +55,7 @@ public class TextureWidget implements IWidget {
     }
 
     public void tooltipText(ITooltipNode tooltip) {
-        this.components.addAll(NodeUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
+        this.components.addAll(CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 
     @NotNull

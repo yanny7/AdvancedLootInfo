@@ -769,11 +769,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testIntListTooltip() {
-        assertTooltip(ValueTooltipUtils.getIntListTooltip(UTILS, IntList.of(1, 2, 3)).build("ali.property.value.colors"), List.of("Colors: [1, 2, 3]"));
-    }
-
-    @Test
     public void testFilterableTooltip() {
         assertTooltip(ValueTooltipUtils.getFilterableTooltip(UTILS, new Filterable<>("Hello", Optional.of("World"))).build("ali.property.branch.page"), List.of(
                 "Page:",
