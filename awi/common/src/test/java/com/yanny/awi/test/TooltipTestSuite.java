@@ -26,6 +26,7 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
@@ -93,13 +94,28 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public @NotNull IKeyTooltipNode getKeyValueNode(Object key, Object value) {
+                return PluginManager.getInstance().serverRegistry.getKeyValueNode(key, value);
+            }
+
+            @Override
             public @NotNull IKeyTooltipNode getComponentNode(Component... values) {
                 return PluginManager.getInstance().serverRegistry.getComponentNode(values);
             }
 
             @Override
+            public @NotNull ITooltipNode getLiteralNode(String translatable) {
+                return PluginManager.getInstance().serverRegistry.getLiteralNode(translatable);
+            }
+
+            @Override
             public @NotNull IKeyTooltipNode getEmptyNode() {
                 return PluginManager.getInstance().serverRegistry.getEmptyNode();
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getErrorNode(String error) {
+                return PluginManager.getInstance().serverRegistry.getErrorNode(error);
             }
 
             @Override
@@ -118,8 +134,13 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends IntProvider> ITooltipNode getIntProviderTooltip(IServerUtils utils, T entry) {
+            public @NotNull <T extends IntProvider> IKeyTooltipNode getIntProviderTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getIntProviderTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends RuleTest> IKeyTooltipNode getRuleTestTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getRuleTestTooltip(utils, entry);
             }
 
             @Override

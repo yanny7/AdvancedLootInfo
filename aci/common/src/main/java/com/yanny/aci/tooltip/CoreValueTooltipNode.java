@@ -61,7 +61,7 @@ public abstract class CoreValueTooltipNode<
         if (isKeyValue) {
             Component k = transform(values.get(0)).withStyle(TEXT_STYLE);
             Component value = transform(values.get(1)).withStyle(PARAM_STYLE);
-            Component keyValue = Component.translatable("ali.util.advanced_loot_info.key_value", k, value);
+            Component keyValue = Component.translatable("aci.util.key_value", k, value);
 
             components.add(pad(pad, Component.translatable(key, keyValue).withStyle(TEXT_STYLE)));
         } else {
@@ -70,7 +70,7 @@ public abstract class CoreValueTooltipNode<
             if (translateKey) {
                 components.add(pad(pad, Component.translatable(key, val).withStyle(TEXT_STYLE)));
             } else {
-                components.add(pad(pad, Component.translatable("ali.util.advanced_loot_info.key_value", key, val[0]).withStyle(TEXT_STYLE)));
+                components.add(pad(pad, Component.translatable("aci.util.key_value", key, val[0]).withStyle(TEXT_STYLE)));
             }
         }
 

@@ -192,7 +192,7 @@ public class GlobalLootModifierUtils {
                     IKeyTooltipNode tooltip = utils.getValueTooltip(utils, modifier.getName());
 
                     tooltip.add(TooltipUtils.getJsonTooltip(utils, modifier.serialize()));
-                    return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build("ali.util.advanced_loot_info.auto_detected"))));
+                    return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build("aci.util.auto_detected"))));
                 } catch (Throwable e) {
                     if (utils.getConfiguration().logMoreStatistics) {
                         LOGGER.warn("Failed to get GLM info from serialized data for {}", modifier.getName(), e);
@@ -202,7 +202,7 @@ public class GlobalLootModifierUtils {
                     IKeyTooltipNode fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
 
                     TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
-                    tooltip.add(fieldsTooltip.build("ali.util.advanced_loot_info.auto_detected"));
+                    tooltip.add(fieldsTooltip.build("aci.util.auto_detected"));
                     tooltip.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
                     return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build())));
                 }

@@ -214,13 +214,28 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public @NotNull IKeyTooltipNode getKeyValueNode(Object key, Object value) {
+                return PluginManager.getInstance().serverRegistry.getKeyValueNode(key, value);
+            }
+
+            @Override
             public @NotNull IKeyTooltipNode getComponentNode(Component... values) {
                 return PluginManager.getInstance().serverRegistry.getComponentNode(values);
             }
 
             @Override
+            public @NotNull ITooltipNode getLiteralNode(String translatable) {
+                return PluginManager.getInstance().serverRegistry.getLiteralNode(translatable);
+            }
+
+            @Override
             public @NotNull IKeyTooltipNode getEmptyNode() {
                 return PluginManager.getInstance().serverRegistry.getEmptyNode();
+            }
+
+            @Override
+            public @NotNull IKeyTooltipNode getErrorNode(String error) {
+                return PluginManager.getInstance().serverRegistry.getErrorNode(error);
             }
 
             @Nullable

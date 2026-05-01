@@ -254,7 +254,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     @Override
     public ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
         if (keyTooltipNode instanceof BranchTooltipNode.Builder builder) {
-            return builder.build("ali.property.branch.values");
+            return builder.build("aci.util.values");
         } else if (keyTooltipNode instanceof ErrorTooltipNode.Builder builder) {
             return builder.build();
         } else if (keyTooltipNode instanceof ArrayTooltipNode.Builder builder) {
@@ -262,7 +262,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
         } else if (keyTooltipNode instanceof EmptyTooltipNode.Builder builder) {
             return builder.build();
         } else {
-            return keyTooltipNode.build("ali.property.value.null");
+            return keyTooltipNode.build("aci.util.null");
         }
     }
 
@@ -284,6 +284,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
         return ValueTooltipNode.value(value);
     }
 
+    @Override
+    public @NotNull IKeyTooltipNode getKeyValueNode(Object key, Object value) {
+        return ValueTooltipNode.keyValue(key, value);
+    }
+
     @NotNull
     @Override
     public IKeyTooltipNode getComponentNode(Component... values) {
@@ -292,8 +297,20 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
+    public ITooltipNode getLiteralNode(String translatable) {
+        return LiteralTooltipNode.translatable(translatable);
+    }
+
+    @NotNull
+    @Override
     public IKeyTooltipNode getEmptyNode() {
         return EmptyTooltipNode.empty();
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getErrorNode(String error) {
+        return ErrorTooltipNode.error(error);
     }
 
     @Override

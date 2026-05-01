@@ -29,8 +29,17 @@ public interface ICoreServerUtils<
     TKeyTooltipNode getValueNode(Object ...value);
 
     @NotNull
+    TKeyTooltipNode getKeyValueNode(Object key, Object value);
+
+    @NotNull
     TKeyTooltipNode getComponentNode(Component ...values);
 
     @NotNull
+    TTooltipNode getLiteralNode(String translatable);
+
+    @NotNull
     TKeyTooltipNode getEmptyNode();
+
+    @NotNull
+    TKeyTooltipNode getErrorNode(String error);
 }

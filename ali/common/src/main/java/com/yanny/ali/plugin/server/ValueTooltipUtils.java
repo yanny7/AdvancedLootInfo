@@ -10,10 +10,8 @@ import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
@@ -42,11 +40,6 @@ public class ValueTooltipUtils {
         }
 
         return tooltip;
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getPropertyTooltip(IServerUtils utils, Property<?> property) {
-        return utils.getValueTooltip(utils, property.getName());
     }
 
     @NotNull
@@ -345,11 +338,6 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getIntRangeTooltip(IServerUtils utils, IntRange range) {
         return ValueTooltipNode.value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max)));
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getBuiltInRegistryTooltip(IServerUtils utils, Registry<T> registry, T value) {
-        return utils.getValueTooltip(utils, registry.getKey(value));
     }
 
     @NotNull

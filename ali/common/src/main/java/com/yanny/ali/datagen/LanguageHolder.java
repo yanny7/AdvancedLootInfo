@@ -1,10 +1,12 @@
 package com.yanny.ali.datagen;
 
+import com.yanny.aci.tooltip.CoreLanguageHolder;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
+    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>(CoreLanguageHolder.TRANSLATION_MAP);
 
     static {
         TRANSLATION_MAP.put("emi.category.ali.block_loot", "Block Drops");
@@ -281,7 +283,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
         TRANSLATION_MAP.put("ali.property.value.nbt_provider", "Nbt Provider: %s");
-        TRANSLATION_MAP.put("ali.property.value.null", "%s");
         TRANSLATION_MAP.put("ali.property.value.operation", "Operation: %s");
         TRANSLATION_MAP.put("ali.property.value.options", "Options: %s");
         TRANSLATION_MAP.put("ali.property.value.percent", "Percent: %s");
@@ -323,34 +324,9 @@ public class LanguageHolder {
 
         TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
 
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.missing", "Not implemented: %s");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values", "%s%s");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.two_values_with_space", "%s %s");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.1", "  ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.2", "    ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.3", "      ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.4", "        ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.5", "          ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.6", "            ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.7", "              ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.8", "                ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.9", "                  ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.10", "                    ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.11", "                      ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.12", "                        ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.13", "                          ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.14", "                            ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.15", "                              ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.16", "                                ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.17", "                                  ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.18", "                                    ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.19", "                                      ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.pad.20", "                                        ->");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.key_value", "%s: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.any", "ANY");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.auto_detected", "Auto-detected: %s");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.accepts", "Accepts:");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");
