@@ -57,11 +57,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getPropertyTooltip(IServerUtils utils, Property<?> property) {
-        return utils.getValueTooltip(utils, property.getName());
-    }
-
-    @NotNull
     public static IKeyTooltipNode getModifierTooltip(IServerUtils utils, SetAttributesFunction.Modifier modifier) {
         return BranchTooltipNode.branch()
                 .add(utils.getValueTooltip(utils, modifier.attribute()).build("ali.property.value.attribute"))
@@ -265,11 +260,6 @@ public class ValueTooltipUtils {
     @NotNull
     public static IKeyTooltipNode getIntRangeTooltip(IServerUtils utils, IntRange range) {
         return ValueTooltipNode.value(RangeValue.rangeToString(utils.convertNumber(utils, range.min), utils.convertNumber(utils, range.max)));
-    }
-
-    @NotNull
-    public static <T> IKeyTooltipNode getBuiltInRegistryTooltip(IServerUtils utils, Registry<T> registry, T value) {
-        return utils.getValueTooltip(utils, registry.getKey(value));
     }
 
     @NotNull

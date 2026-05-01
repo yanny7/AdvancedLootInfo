@@ -48,7 +48,6 @@ import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
@@ -154,11 +153,6 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testPropertyTooltip() {
-        assertTooltip(ValueTooltipUtils.getPropertyTooltip(UTILS, EnumProperty.create("bed", BedPart.class)).build("ali.property.value.null"), List.of("bed"));
-    }
-
-    @Test
     public void testModifierTooltip() {
         assertTooltip(ValueTooltipUtils.getModifierTooltip(UTILS, new SetAttributesFunction.ModifierBuilder(
                 ResourceLocation.withDefaultNamespace("armor"),
@@ -221,8 +215,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build("ali.property.value.null"), List.of("minecraft:bypasses_armor: true"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build("ali.property.value.null"), List.of("minecraft:bypasses_armor: false"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build("aci.util.null"), List.of("minecraft:bypasses_armor: true"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build("aci.util.null"), List.of("minecraft:bypasses_armor: false"));
     }
 
     @Test

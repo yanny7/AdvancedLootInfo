@@ -38,8 +38,8 @@ import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getRegistryTooltip;
-import static com.yanny.ali.plugin.server.ValueTooltipUtils.getBuiltInRegistryTooltip;
 
 public class RegistriesTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
