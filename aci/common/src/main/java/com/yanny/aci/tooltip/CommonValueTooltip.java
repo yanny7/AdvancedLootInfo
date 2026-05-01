@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,6 +44,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(UUID.class, this::getUUIDTooltip);
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
         registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
+        registry.registerValueTooltip(EitherHolder.class, this::getEitherHolderTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
     }
 
@@ -144,6 +146,11 @@ public class CommonValueTooltip<
     @NotNull
     public TKeyTooltipNode getIntListTooltip(TServerUtils utils, IntList data) {
         return utils.getValueTooltip(utils, data.toString());
+    }
+
+    @NotNull
+    public TKeyTooltipNode getEitherHolderTooltip(TServerUtils utils, EitherHolder<?> holder) {
+        return holder.asEither().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
     }
 
     @NotNull

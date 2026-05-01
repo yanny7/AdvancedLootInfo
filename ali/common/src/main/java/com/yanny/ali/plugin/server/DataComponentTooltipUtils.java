@@ -83,7 +83,7 @@ public class DataComponentTooltipUtils {
     public static ITooltipNode getAdventureModePredicateTooltip(IServerUtils utils, AdventureModePredicate value) {
         return ArrayTooltipNode.array()
                 .add(getCollectionTooltip(utils, "ali.property.branch.predicate", value.predicates).build("ali.property.branch.blocks"))
-                .add(getCollectionTooltip(utils, "ali.property.value.null", value.tooltip).build("ali.property.branch.tooltip"))
+                .add(getCollectionTooltip(utils, "aci.util.null", value.tooltip).build("ali.property.branch.tooltip"))
                 .add(utils.getValueTooltip(utils, value.showInTooltip).build("ali.property.value.show_in_tooltip"))
                 .build();
     }

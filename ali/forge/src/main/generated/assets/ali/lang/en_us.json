@@ -23,6 +23,7 @@
   "aci.util.pad.7": "              ->",
   "aci.util.pad.8": "                ->",
   "aci.util.pad.9": "                  ->",
+  "aci.util.removed": "REMOVED",
   "aci.util.two_values": "%s%s",
   "aci.util.two_values_with_space": "%s %s",
   "aci.util.values": "Values:",

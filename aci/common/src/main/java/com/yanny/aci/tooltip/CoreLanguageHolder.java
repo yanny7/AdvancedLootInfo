@@ -34,5 +34,6 @@ public class CoreLanguageHolder {
         TRANSLATION_MAP.put("aci.util.key_value", "%s: %s");
         TRANSLATION_MAP.put("aci.util.null", "%s");
         TRANSLATION_MAP.put("aci.util.values", "Values:");
+        TRANSLATION_MAP.put("aci.util.removed", "REMOVED");
     }
 }

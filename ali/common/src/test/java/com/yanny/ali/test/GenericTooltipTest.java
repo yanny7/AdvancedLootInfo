@@ -46,7 +46,6 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
-import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
@@ -680,7 +679,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testCollectionPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getCollectionPredicateTooltip(UTILS, "ali.property.value.null", Optional.of(
+        assertTooltip(GenericTooltipUtils.getCollectionPredicateTooltip(UTILS, "aci.util.null", Optional.of(
                 new CollectionPredicate<>(
                         Optional.of(CollectionContentsPredicate.of(
                                 new ItemWritableBookPredicate.PagePredicate("Hello"),
@@ -896,7 +895,7 @@ public class GenericTooltipTest {
                 2.5,
                 0.25,
                 0.3f
-        )).build("ali.property.value.null"), List.of(
+        )).build("aci.util.null"), List.of(
                 "minecraft:village_desert",
                 "  -> X: 2.5",
                 "  -> Z: 0.25",
@@ -953,7 +952,7 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getSuspiciousStewEffectEntryTooltip(UTILS, new SuspiciousStewEffects.Entry(
                 MobEffects.DAMAGE_BOOST,
                 5
-        )).build("ali.property.value.null"), List.of(
+        )).build("aci.util.null"), List.of(
                 "minecraft:strength",
                 "  -> Duration: 5"
         ));
