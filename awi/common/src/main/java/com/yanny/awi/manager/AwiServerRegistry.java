@@ -5,16 +5,14 @@ import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
 import com.yanny.awi.api.*;
 import com.yanny.awi.plugin.common.tooltip.*;
-import com.yanny.awi.plugin.server.FeatureConfigurationTooltipUtils;
-import com.yanny.awi.plugin.server.IntProviderTooltipUtils;
-import com.yanny.awi.plugin.server.PlacementModifierTooltipUtils;
-import com.yanny.awi.plugin.server.TooltipUtils;
+import com.yanny.awi.plugin.server.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +26,8 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, ITooltipNode>> featureTooltips = registerClassKeyed("feature tooltips", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, ITooltipNode>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, ITooltipNode>> intProviderTooltips = registerClassKeyed("int provider tooltips", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, IKeyTooltipNode>> intProviderTooltips = registerClassKeyed("int provider tooltips", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, IKeyTooltipNode>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
 
     public AwiServerRegistry(ICommonUtils registry) {
@@ -54,9 +53,15 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
     }
 
     @Override
-    public <T extends IntProvider> void registerIntProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends IntProvider> void registerIntProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, IKeyTooltipNode> getter) {
         //noinspection unchecked
         intProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends RuleTest> void registerRuleTestTooltip(Class<T> type, BiFunction<IServerUtils, T, IKeyTooltipNode> getter) {
+        //noinspection unchecked
+        ruleTestTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -88,15 +93,25 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
                 .orElseGet(() -> PlacementModifierTooltipUtils.getMissingPlacementModifierTooltip(utils, entry));
     }
 
+    @NotNull
     @Override
-    public @NotNull <T extends IntProvider> ITooltipNode getIntProviderTooltip(IServerUtils utils, T entry) {
+    public <T extends IntProvider> IKeyTooltipNode getIntProviderTooltip(IServerUtils utils, T entry) {
         return intProviderTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> IntProviderTooltipUtils.getMissingIntProviderTooltip(utils, entry));
     }
 
+    @NotNull
     @Override
-    public @NotNull <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
+    public <T extends RuleTest> IKeyTooltipNode getRuleTestTooltip(IServerUtils utils, T entry) {
+        return ruleTestTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> RuleTestTooltipUtils.getMissingRuleTestTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
         if (value == null) {
             return EmptyTooltipNode.empty();
         }
@@ -116,7 +131,7 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
     @Override
     public ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
         if (keyTooltipNode instanceof BranchTooltipNode.Builder builder) {
-            return builder.build("awi.property.branch.values");
+            return builder.build("aci.util.values");
         } else if (keyTooltipNode instanceof ErrorTooltipNode.Builder builder) {
             return builder.build();
         } else if (keyTooltipNode instanceof ArrayTooltipNode.Builder builder) {
@@ -124,7 +139,7 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
         } else if (keyTooltipNode instanceof EmptyTooltipNode.Builder builder) {
             return builder.build();
         } else {
-            return keyTooltipNode.build("awi.property.value.null");
+            return keyTooltipNode.build("aci.util.null");
         }
     }
 
@@ -148,14 +163,32 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
 
     @NotNull
     @Override
+    public IKeyTooltipNode getKeyValueNode(Object key, Object value) {
+        return ValueTooltipNode.keyValue(key, value);
+    }
+
+    @NotNull
+    @Override
     public IKeyTooltipNode getComponentNode(Component... values) {
         return ComponentTooltipNode.values(values);
     }
 
     @NotNull
     @Override
+    public ITooltipNode getLiteralNode(String translatable) {
+        return LiteralTooltipNode.translatable(translatable);
+    }
+
+    @NotNull
+    @Override
     public IKeyTooltipNode getEmptyNode() {
         return EmptyTooltipNode.empty();
+    }
+
+    @NotNull
+    @Override
+    public IKeyTooltipNode getErrorNode(String error) {
+        return ErrorTooltipNode.error(error);
     }
 
     @Override

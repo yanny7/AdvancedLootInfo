@@ -1,17 +1,26 @@
 package com.yanny.awi.datagen;
 
+import com.yanny.aci.tooltip.CoreLanguageHolder;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>();
+    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>(CoreLanguageHolder.TRANSLATION_MAP);
 
     static {
-        TRANSLATION_MAP.put("awi.util.value.missing", "Not implemented: %s");
+        TRANSLATION_MAP.put("awi.property.value.discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s");
+        TRANSLATION_MAP.put("awi.property.value.size", "Size: %s");
+        TRANSLATION_MAP.put("awi.property.value.block", "Block: %s");
 
-        TRANSLATION_MAP.put("awi.property.value.count", "Count: %s");
-        TRANSLATION_MAP.put("awi.property.value.null", "%s");
+        TRANSLATION_MAP.put("awi.property.branch.target_states", "Target States:");
+        TRANSLATION_MAP.put("awi.property.branch.state", "State:");
+        TRANSLATION_MAP.put("awi.property.branch.target", "Target:");
+        TRANSLATION_MAP.put("awi.property.branch.properties", "Properties:");
 
-        TRANSLATION_MAP.put("awi.property.branch.values", "Values:");
+        TRANSLATION_MAP.put("awi.feature_configuration.count", "Count: %s");
+        TRANSLATION_MAP.put("awi.feature_configuration.ore", "Ore:");
+
+        TRANSLATION_MAP.put("awi.rule_test.always_true", "Always True");
     }
 }
