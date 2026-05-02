@@ -51,7 +51,7 @@ public class JsonSellPotionTradeOffer extends BaseAccessor<VillagerTrades.ItemLi
                 EmptyTooltipNode.EMPTY,
                 Either.left(sell),
                 new RangeValue(),
-                EmptyTooltipNode.EMPTY, // List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "ali.property.value.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
+                EmptyTooltipNode.EMPTY, // List.of(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.effects", "aci.util.null", POTIONS, RegistriesTooltipUtils::getPotionTooltip)),
                 maxUses,
                 experience,
                 multiplier,

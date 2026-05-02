@@ -5,8 +5,8 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltip
     <T extends PlacementModifier> ITooltipNode getPlacementModifierTooltip(IServerUtils utils, T entry);
 
     @NotNull
-    <T extends IntProvider> ITooltipNode getIntProviderTooltip(IServerUtils utils, T entry);
+    <T extends IntProvider> IKeyTooltipNode getIntProviderTooltip(IServerUtils utils, T entry);
 
     @NotNull
-    <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value);
+    <T extends RuleTest> IKeyTooltipNode getRuleTestTooltip(IServerUtils utils, T entry);
 }
