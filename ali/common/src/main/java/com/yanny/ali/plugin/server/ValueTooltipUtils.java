@@ -31,7 +31,6 @@ import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.LootContextArg;
@@ -58,11 +57,6 @@ public class ValueTooltipUtils {
         }
 
         return tooltip;
-    }
-
-    @NotNull
-    public static IKeyTooltipNode getPropertyTooltip(IServerUtils utils, Property<?> property) {
-        return utils.getValueTooltip(utils, property.getName());
     }
 
     @NotNull
@@ -273,11 +267,6 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static <T> IKeyTooltipNode getBuiltInRegistryTooltip(IServerUtils utils, Registry<T> registry, T value) {
-        return utils.getValueTooltip(utils, registry.getKey(value));
-    }
-
-    @NotNull
     public static IKeyTooltipNode getMinMaxBoundsTooltip(IServerUtils ignoredUtils, MinMaxBounds.Ints ints) {
         if (ints != MinMaxBounds.Ints.ANY) {
             return ValueTooltipNode.value(GenericTooltipUtils.toString(ints));
@@ -310,7 +299,7 @@ public class ValueTooltipUtils {
         left.ifPresent((tagKey) -> tooltip.add(utils.getValueTooltip(utils, tagKey).build("ali.property.value.tag")));
         right.ifPresent((list) -> {
             if (!list.isEmpty()) {
-                list.forEach((holder) -> tooltip.add(utils.getValueTooltip(utils, holder).build("ali.property.value.null")));
+                list.forEach((holder) -> tooltip.add(utils.getValueTooltip(utils, holder).build("aci.util.null")));
             }
         });
 
@@ -455,7 +444,7 @@ public class ValueTooltipUtils {
                 IKeyTooltipNode t = utils.getValueTooltip(utils, action.type());
 
                 t.add(utils.getDataComponentTypeTooltip(utils, action.type(), action.value()));
-                tooltip.add(t.build("ali.property.value.null"));
+                tooltip.add(t.build("aci.util.null"));
             });
 
             return tooltip;

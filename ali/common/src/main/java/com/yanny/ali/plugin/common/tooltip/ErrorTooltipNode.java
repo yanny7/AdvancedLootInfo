@@ -27,7 +27,7 @@ public class ErrorTooltipNode extends CoreErrorTooltipNode<IServerUtils, IToolti
     @NotNull
     @Override
     public List<Component> getComponents(int pad, boolean showAdvancedTooltip) {
-        return Collections.singletonList(pad(pad, Component.translatable("ali.util.advanced_loot_info.missing", getValue()).withStyle(ChatFormatting.RED)));
+        return Collections.singletonList(pad(pad, Component.translatable("aci.util.missing", getValue()).withStyle(ChatFormatting.RED)));
     }
 
     @NotNull

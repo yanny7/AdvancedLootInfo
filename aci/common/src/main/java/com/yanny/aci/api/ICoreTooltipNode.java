@@ -17,13 +17,13 @@ public interface ICoreTooltipNode<TServerUtils extends ICoreServerUtils<?, ?, ?>
 
     @NotNull
     static Component pair(Object value1, Object value2) {
-        return Component.translatable("ali.util.advanced_loot_info.two_values_with_space", convertObject(value1), convertObject(value2));
+        return Component.translatable("aci.util.two_values_with_space", convertObject(value1), convertObject(value2));
     }
 
     @NotNull
     static Component pad(int count, Object arg) {
         if (count > 0) {
-            return pair(Component.translatable("ali.util.advanced_loot_info.pad." + count), convertObject(arg));
+            return pair(Component.translatable("aci.util.pad." + count), convertObject(arg));
         } else {
             return convertObject(arg);
         }

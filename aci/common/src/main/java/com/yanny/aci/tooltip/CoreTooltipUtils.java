@@ -3,8 +3,10 @@ package com.yanny.aci.tooltip;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.ICoreKeyTooltipNode;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.ICoreTooltipNode;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -57,5 +59,14 @@ public class CoreTooltipUtils {
             TTooltipNode extends ICoreTooltipNode<TServerUtils>
             > List<Component> toComponents(TTooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
         return tooltip.getComponents(pad, showAdvancedTooltip);
+    }
+
+    @NotNull
+    public static <
+            T,
+            TKeyTooltipNode extends ICoreKeyTooltipNode<?, ?>,
+            TServerUtils    extends ICoreServerUtils<TKeyTooltipNode, ?, TServerUtils>
+            > TKeyTooltipNode getBuiltInRegistryTooltip(TServerUtils utils, Registry<T> registry, T value) {
+        return utils.getValueTooltip(utils, registry.getKey(value));
     }
 }

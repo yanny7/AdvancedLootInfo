@@ -314,7 +314,7 @@ public class TooltipUtils {
                 } else if (t instanceof BranchTooltipNode.Builder builder) {
                     tooltip.add(builder.build(f.getName() + ":", false));
                 } else if (t instanceof ErrorTooltipNode.Builder) {
-                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "[" + f.getType().getName() + "]").build("ali.property.value.null"));
+                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "[" + f.getType().getName() + "]").build("aci.util.null"));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

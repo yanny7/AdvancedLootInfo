@@ -65,7 +65,7 @@ public class LootJsGenericTooltipUtils {
                     .add(utils.getIngredientTooltip(utils, ingredient));
         } else if (predicate instanceof ItemFilterImpl.ByTag(TagKey<Item> tag)) {
             return ValueTooltipNode.value("TAG")
-                    .add(utils.getValueTooltip(utils, tag).build("ali.property.value.null"));
+                    .add(utils.getValueTooltip(utils, tag).build("aci.util.null"));
         } else if (predicate instanceof ItemFilterImpl.AnyOfToolAction toolAction) {
             return ValueTooltipNode.value("ANY_OF_TOOL_ACTION")
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build("ali.property.branch.abilities"));
@@ -94,7 +94,7 @@ public class LootJsGenericTooltipUtils {
         IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
         switch (filter) {
-            case IdFilter.ByLocation byLocation -> tooltip.add(utils.getValueTooltip(utils, byLocation.location()).build("ali.property.value.null"));
+            case IdFilter.ByLocation byLocation -> tooltip.add(utils.getValueTooltip(utils, byLocation.location()).build("aci.util.null"));
             case IdFilter.ByPattern byPattern -> tooltip.add(utils.getValueTooltip(utils, byPattern.toString()).build("ali.property.value.pattern"));
             case IdFilter.ByMod byMod -> tooltip.add(utils.getValueTooltip(utils, byMod.mod()).build("ali.property.value.mod"));
             case IdFilter.Or or -> tooltip.add(utils.getValueTooltip(utils, or.filters()).build("ali.property.branch.or"));
