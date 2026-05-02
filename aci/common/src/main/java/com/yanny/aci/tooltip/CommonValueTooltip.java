@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.EitherHolder;
+import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -44,6 +45,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
         registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
         registry.registerValueTooltip(EitherHolder.class, this::getEitherHolderTooltip);
+        registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
     }
 
     private TKeyTooltipNode getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -61,83 +63,83 @@ public class CommonValueTooltip<
     }
 
     @NotNull
-    public TKeyTooltipNode getHolderTooltip(TServerUtils utils, Holder<?> holder) {
+    private TKeyTooltipNode getHolderTooltip(TServerUtils utils, Holder<?> holder) {
         return utils.getValueTooltip(utils, holder.value());
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public TKeyTooltipNode getOptionalTooltip(TServerUtils utils, Optional<?> optional) {
+    private TKeyTooltipNode getOptionalTooltip(TServerUtils utils, Optional<?> optional) {
         return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(utils.getEmptyNode());
     }
 
     @NotNull
-    public TKeyTooltipNode getBooleanTooltip(TServerUtils utils, Boolean value) {
+    private TKeyTooltipNode getBooleanTooltip(TServerUtils utils, Boolean value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getIntegerTooltip(TServerUtils utils, int value) {
+    private TKeyTooltipNode getIntegerTooltip(TServerUtils utils, int value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getLongTooltip(TServerUtils utils, Long value) {
+    private TKeyTooltipNode getLongTooltip(TServerUtils utils, Long value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getByteTooltip(TServerUtils utils, Byte value) {
+    private TKeyTooltipNode getByteTooltip(TServerUtils utils, Byte value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getStringTooltip(TServerUtils utils, String value) {
+    private TKeyTooltipNode getStringTooltip(TServerUtils utils, String value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getFloatTooltip(TServerUtils utils, Float value) {
+    private TKeyTooltipNode getFloatTooltip(TServerUtils utils, Float value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getDoubleTooltip(TServerUtils utils, Double value) {
+    private TKeyTooltipNode getDoubleTooltip(TServerUtils utils, Double value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getEnumTooltip(TServerUtils utils, Enum<?> value) {
+    private TKeyTooltipNode getEnumTooltip(TServerUtils utils, Enum<?> value) {
         return utils.getValueNode(value.name());
     }
 
     @NotNull
-    public TKeyTooltipNode getIdentifierTooltip(TServerUtils utils, Identifier value) {
+    private TKeyTooltipNode getIdentifierTooltip(TServerUtils utils, Identifier value) {
         return utils.getValueNode(value);
     }
 
     @NotNull
-    public TKeyTooltipNode getResourceKeyTooltip(TServerUtils utils, ResourceKey<?> value) {
+    private TKeyTooltipNode getResourceKeyTooltip(TServerUtils utils, ResourceKey<?> value) {
         return utils.getValueTooltip(utils, value.identifier());
     }
 
     @NotNull
-    public TKeyTooltipNode getTagKeyTooltip(TServerUtils utils, TagKey<?> value) {
+    private TKeyTooltipNode getTagKeyTooltip(TServerUtils utils, TagKey<?> value) {
         return utils.getValueTooltip(utils, value.location());
     }
 
     @NotNull
-    public TKeyTooltipNode getComponentTooltip(TServerUtils utils, Component component) {
+    private TKeyTooltipNode getComponentTooltip(TServerUtils utils, Component component) {
         return utils.getComponentNode(component.copy());
     }
 
     @NotNull
-    public TKeyTooltipNode getUUIDTooltip(TServerUtils utils, UUID uuid) {
+    private TKeyTooltipNode getUUIDTooltip(TServerUtils utils, UUID uuid) {
         return utils.getValueNode(uuid);
     }
 
     @NotNull
-    public TKeyTooltipNode getCompoundTagTooltip(TServerUtils utils, CompoundTag tag) {
+    private TKeyTooltipNode getCompoundTagTooltip(TServerUtils utils, CompoundTag tag) {
         return utils.getValueTooltip(utils, tag.toString());
     }
 
@@ -149,5 +151,10 @@ public class CommonValueTooltip<
     @NotNull
     public TKeyTooltipNode getEitherHolderTooltip(TServerUtils utils, EitherHolder<?> holder) {
         return holder.contents().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
+    }
+
+    @NotNull
+    private TKeyTooltipNode getPropertyTooltip(TServerUtils utils, Property<?> property) {
+        return utils.getValueTooltip(utils, property.getName());
     }
 }
