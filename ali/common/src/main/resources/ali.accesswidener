@@ -205,6 +205,8 @@ accessible field net/minecraft/world/item/crafting/Ingredient$TagValue tag Lnet/
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/level/storage/loot/LootDataResolver;)V
 accessible method net/minecraft/world/level/storage/loot/LootDataManager apply (Ljava/util/Map;)V
+accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
+accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> ([Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

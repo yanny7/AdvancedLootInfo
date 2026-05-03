@@ -7,6 +7,7 @@ import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
 import com.yanny.ali.lootjs.mixin.MixinModifyLootAction;
@@ -15,11 +16,17 @@ import com.yanny.ali.lootjs.mixin.MixinReplaceLootAction;
 import com.yanny.ali.lootjs.modifier.CustomPlayerFunction;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.node.*;
+import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
+import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.AllOfCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -27,6 +34,9 @@ import org.slf4j.Logger;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedChance;
+import static com.yanny.ali.plugin.common.NodeUtils.getEnchantedCount;
 
 public abstract class LootModifier<T> implements ILootModifier<T> {
     protected static final Logger LOGGER = LogUtils.getLogger();
@@ -67,7 +77,27 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
         } else if (action instanceof GroupedLootAction groupedLootAction) {
             operations.add(new IOperation.AddOperation((itemStack) -> true, new GroupLootNode(utils, groupedLootAction, functions, conditions)));
         } else if (action instanceof RemoveLootAction removeLootAction) {
-            operations.add(new IOperation.RemoveOperation(((MixinRemoveLootAction) removeLootAction).getPredicate()));
+            Function<IDataNode, IDataNode> factory = (c) -> {
+                if (c instanceof ItemStackNode || c instanceof ItemTagNode || c instanceof ModifiedNode) {
+                    return c; // do not replace self!
+                }
+                if (conditions.isEmpty()) {
+                    return null; // remove item
+                }
+
+                if (c instanceof ItemNode i) {
+                    Map<Enchantment, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
+                    Map<Enchantment, Map<Integer, RangeValue>> enchantedCount = getEnchantedCount(utils, i.getFunctions());
+                    List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
+
+                    allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));
+                    ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions);
+                    return new ItemNode(i.getChance(), i.getCount(), i.getModifiedItem(), tooltip, i.getFunctions(), i.getConditions());
+                }
+
+                return c;
+            };
+            operations.add(new IOperation.RemoveOperation(((MixinRemoveLootAction) removeLootAction).getPredicate(), factory));
         } else if (action instanceof ReplaceLootAction replaceLootAction) {
             MixinReplaceLootAction lootAction = (MixinReplaceLootAction) replaceLootAction;
             Function<IDataNode, List<IDataNode>> factory = (c) -> {

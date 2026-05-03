@@ -1,3 +1,7 @@
+## []
+
+- Fixed conditionally removed loot not displayed (LootJS)
+
 ## [1.10.0]
 
 - Fixed sporadic crash when hovering over item

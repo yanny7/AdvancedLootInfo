@@ -246,24 +246,33 @@ public class NodeUtils {
             if (operation instanceof IOperation.AddOperation addOperation) {
                 node.addChildren(addOperation.node());
             } else if (operation instanceof IOperation.RemoveOperation removeOperation) {
-                removeItem(node, removeOperation.predicate());
+                removeItem(node, removeOperation.factory(), removeOperation.predicate());
             } else if (operation instanceof IOperation.ReplaceOperation replaceOperation) {
                 replaceItem(node, replaceOperation.factory(), replaceOperation.predicate());
             }
         }
     }
 
-    private static void removeItem(IDataNode node, Predicate<ItemStack> predicate) {
+    private static void removeItem(IDataNode node, Function<IDataNode, IDataNode> factory, Predicate<ItemStack> predicate) {
         if (node instanceof ListNode listNode) {
-            listNode.nodes().removeIf((n) -> {
-                if (n instanceof IItemNode itemNode) {
-                    return predicateEither(itemNode, predicate);
-                } else {
-                    removeItem(n, predicate);
-                }
+            var iterator = listNode.nodes().listIterator();
 
-                return false;
-            });
+            while (iterator.hasNext()) {
+                IDataNode n = iterator.next();
+
+                if (n instanceof IItemNode itemNode && predicateEither(itemNode, predicate)) {
+                    IDataNode replacement = factory.apply(n);
+
+                    if (replacement == null) {
+                        iterator.remove();
+                    } else {
+                        iterator.set(replacement);
+                    }
+                } else if (n instanceof ListNode) {
+                    removeItem(n, factory, predicate);
+                }
+            }
+
             removeEmptyNodes(node);
         }
     }
@@ -281,8 +290,8 @@ public class NodeUtils {
                     }
 
                     return result.get(0);
-                } else if (n instanceof ListNode l) {
-                    replaceItem(l, factory, predicate);
+                } else if (n instanceof ListNode) {
+                    replaceItem(n, factory, predicate);
                 }
 
                 return n;
