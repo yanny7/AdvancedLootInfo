@@ -13,6 +13,7 @@ import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -46,9 +47,18 @@ public class ServerUtilsTest {
                 "Random Chance:",
                 "  -> Probability: 0.5"
         ));
-        assertTooltip(UTILS.getConditionTooltip(UTILS, new UnknownCondition(true)), List.of(
+        assertTooltip(UTILS.getConditionTooltip(UTILS, new UnknownCondition(
+                true,
+                WeatherCheck.weather().setRaining(true).build(),
+                EnchantRandomlyFunction.randomEnchantment().build())
+        ), List.of(
                 "Auto-detected: minecraft:unknown",
-                "  -> valid: true"
+                "  -> valid: true",
+                "  -> condition:",
+                "    -> Weather Check:",
+                "      -> Is Raining: true",
+                "  -> function:",
+                "    -> Enchant Randomly:"
         ));
     }
 
@@ -59,7 +69,7 @@ public class ServerUtilsTest {
                 "  -> Item: minecraft:emerald",
                 "  -> Count: 1"
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("ali.property.value.value"), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("aci.util.missing"), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }
@@ -126,7 +136,7 @@ public class ServerUtilsTest {
         }
     }
 
-    private record UnknownCondition(boolean valid) implements LootItemCondition {
+    private record UnknownCondition(boolean valid, LootItemCondition condition, LootItemFunction function) implements LootItemCondition {
         @NotNull
         @Override
         public LootItemConditionType getType() {

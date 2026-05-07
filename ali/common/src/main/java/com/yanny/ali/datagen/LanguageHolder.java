@@ -33,29 +33,6 @@ public class LanguageHolder {
          * PREDICATES
          */
 
-        TRANSLATION_MAP.put("ali.type.condition.all_of", "All Of:");
-        TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
-        TRANSLATION_MAP.put("ali.type.condition.block_state_property", "Block State Property:");
-        TRANSLATION_MAP.put("ali.type.condition.damage_source_properties", "Damage Source Properties:");
-        TRANSLATION_MAP.put("ali.type.condition.entity_properties", "Entity Properties:");
-        TRANSLATION_MAP.put("ali.type.condition.entity_scores", "Entity Scores:");
-        TRANSLATION_MAP.put("ali.type.condition.inverted", "Inverted:");
-        TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Killed by player");
-        TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
-        TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
-        TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
-        TRANSLATION_MAP.put("ali.type.condition.random_chance_with_looting", "Random Chance With Looting:");
-        TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
-        TRANSLATION_MAP.put("ali.type.condition.survives_explosion", "Survives Explosion");
-        TRANSLATION_MAP.put("ali.type.condition.table_bonus", "Table Bonus:");
-        TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
-        TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
-        TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
-
-        // Forge
-        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
-        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
-
         // LootJS
         TRANSLATION_MAP.put("ali.type.condition.and", "And:");
         TRANSLATION_MAP.put("ali.type.condition.any_biome", "Any Biome:");
@@ -78,20 +55,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.or", "Or:");
         TRANSLATION_MAP.put("ali.type.condition.player_predicate", "Player Predicate:");
         TRANSLATION_MAP.put("ali.type.condition.random_chance_with_enchantment", "Random Chance With Enchantment:");
-
-        // Aether
-        TRANSLATION_MAP.put("ali.type.condition.config_enabled", "Must Be Enabled In Config");
-
-        // The Bumblezone
-        TRANSLATION_MAP.put("ali.type.condition.essence_only_spawn", "Essence Only Spawn");
-
-        // Moonlight
-        TRANSLATION_MAP.put("ali.type.condition.optional_property", "Optional Property");
-
-        // Mantle
-        TRANSLATION_MAP.put("ali.type.condition.block_tag", "Block Tag");
-        TRANSLATION_MAP.put("ali.type.condition.contains_item", "Contains Item");
-        TRANSLATION_MAP.put("ali.type.condition.empty", "Empty");
 
         /*
          * MODIFIERS
@@ -128,53 +91,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.custom_player", "Custom Player Modifier:");
         TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
 
-        // Aether
-        TRANSLATION_MAP.put("ali.type.function.spawn_xp", "Spawn XP");
-        TRANSLATION_MAP.put("ali.type.function.spawn_tnt", "Spawn TNT");
-        TRANSLATION_MAP.put("ali.type.function.double_drops", "Double Drops");
-        TRANSLATION_MAP.put("ali.type.function.whirlwind_spawn_entity", "Whirlwind Spawn Entity");
-
         // Farmer's delight
         TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
         TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
-
-        // Supplementaries
-        TRANSLATION_MAP.put("ali.type.function.random_arrow", "Random Arrow");
-        TRANSLATION_MAP.put("ali.type.function.curse_loot", "Curse Loot");
-
-        // The Bumblezone
-        TRANSLATION_MAP.put("ali.type.function.drop_container_items", "Drop Container Items");
-        TRANSLATION_MAP.put("ali.type.function.honey_compass_locate_structure", "Honey Compass Locate Structure");
-        TRANSLATION_MAP.put("ali.type.function.tag_item_removals", "Tag Item Removals");
-        TRANSLATION_MAP.put("ali.type.function.uniquify_if_has_items", "Uniquify If Has Items");
-
-        // Deeper and Darker
-        TRANSLATION_MAP.put("ali.type.function.set_painting_variant", "Set Painting Variant");
-
-        // Immersive Engineering
-        TRANSLATION_MAP.put("ali.type.function.bluprintz", "Bluprintz Easter Egg");
-        TRANSLATION_MAP.put("ali.type.function.conveyor_cover", "Apply Conveyor Cover");
-        TRANSLATION_MAP.put("ali.type.function.property_count", "Get Count From Property");
-        TRANSLATION_MAP.put("ali.type.function.revolver_perk", "Revolver Perk");
-        TRANSLATION_MAP.put("ali.type.function.windmill", "Set Windmill Sails");
-
-        // Mantle
-        TRANSLATION_MAP.put("ali.type.function.retexture_block_entity", "Retexture Block Entity");
-        TRANSLATION_MAP.put("ali.type.function.set_fluid", "Set Fluid");
-
-        // Trades
-        TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
-
-        TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
-        TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");
-        TRANSLATION_MAP.put("ali.enum.group_type.alternatives", "Selects only first successful entry");
-        TRANSLATION_MAP.put("ali.enum.group_type.sequence", "Selects entries sequentially until first failed");
-        TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
-        TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
-        TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
-
-        // Snow Real Magic
-        TRANSLATION_MAP.put("ali.enum.group_type.normalize", "Drops block buried in snow");
 
         TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");
         TRANSLATION_MAP.put("ali.property.branch.all", "All:");

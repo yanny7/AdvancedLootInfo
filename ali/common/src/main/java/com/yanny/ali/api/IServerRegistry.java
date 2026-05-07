@@ -2,6 +2,7 @@ package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -20,18 +21,18 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public interface IServerRegistry extends ICoreServerRegistry<IServerUtils, IKeyTooltipNode> {
+public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends LootPoolEntryContainer> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Item>> itemSupplier);
 
     <T extends LootItemFunction> void registerItemCollector(Class<T> type, TriFunction<IServerUtils, List<Item>, T, List<Item>> itemSupplier);
 
     <T extends LootPoolEntryContainer> void registerEntry(Class<T> type, EntryFactory<T> entryFactory);
 
-    <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
-    <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
-    <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
     <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
 
@@ -43,7 +44,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils, IKeyT
 
     void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter);
 
-    <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, ITooltipNode, IDataNode> supplier);
+    <T extends VillagerTrades.ItemListing> void registerItemListing(Class<T> type, TriFunction<IServerUtils, T, TooltipNode, IDataNode> supplier);
 
     <T extends VillagerTrades.ItemListing> void registerItemListingCollector(Class<T> type, BiFunction<IServerUtils, T, Pair<List<Item>, List<Item>>> itemSupplier);
 

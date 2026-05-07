@@ -1,14 +1,10 @@
 package com.yanny.ali.plugin.server;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.plugin.common.tooltip.*;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.RandomSource;
@@ -41,7 +37,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static void applyRandomChance(IServerUtils utils, LootItemRandomChanceCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public static void applyRandomChance(IServerUtils ignoredUtils, LootItemRandomChanceCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceMap : chance.entrySet()) {
             for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
                 levelEntry.getValue().multiply(condition.probability);
@@ -49,7 +45,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyRandomChanceWithLooting(IServerUtils utils, LootItemRandomChanceWithLootingCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public static void applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithLootingCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         Enchantment enchantment = Enchantments.MOB_LOOTING;
 
         if (chance.containsKey(enchantment)) {
@@ -71,7 +67,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyTableBonus(IServerUtils utils, BonusLevelTableCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public static void applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
         Enchantment enchantment = condition.enchantment;
 
         if (condition.values.length > 0) {
@@ -115,7 +111,7 @@ public class TooltipUtils {
         }
     }
 
-    public static void applyBonus(IServerUtils utils, ApplyBonusCount function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+    public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, Map<Enchantment, Map<Integer, RangeValue>> count) {
         if (function.predicates.length == 0) {
             Enchantment enchantment = function.enchantment;
 
@@ -187,7 +183,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static ItemStack applyEnchantRandomlyItemStackModifier(IServerUtils utils, EnchantRandomlyFunction function, ItemStack itemStack) {
+    public static ItemStack applyEnchantRandomlyItemStackModifier(IServerUtils ignoredUtils, EnchantRandomlyFunction function, ItemStack itemStack) {
         if (itemStack.isEnchantable() && function.predicates.length == 0) {
             boolean isBook = itemStack.is(Items.BOOK);
             ItemStack finalItemStack = itemStack;
@@ -208,7 +204,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static ItemStack applyEnchantWithLevelsItemStackModifier(IServerUtils utils, EnchantWithLevelsFunction function, ItemStack itemStack) {
+    public static ItemStack applyEnchantWithLevelsItemStackModifier(IServerUtils ignoredUtils, EnchantWithLevelsFunction function, ItemStack itemStack) {
         if (itemStack.isEnchantable() && function.predicates.length == 0) {
             if (itemStack.is(Items.BOOK)) {
                 itemStack = Items.ENCHANTED_BOOK.getDefaultInstance();
@@ -218,7 +214,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static ItemStack applySetAttributesItemStackModifier(IServerUtils utils, SetAttributesFunction function, ItemStack itemStack) {
+    public static ItemStack applySetAttributesItemStackModifier(IServerUtils ignoredUtils, SetAttributesFunction function, ItemStack itemStack) {
         if (function.predicates.length == 0) {
             for (SetAttributesFunction.Modifier modifier : function.modifiers) {
                 UUID id = modifier.id;
@@ -239,7 +235,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static ItemStack applySetNameItemStackModifier(IServerUtils utils, SetNameFunction function, ItemStack itemStack) {
+    public static ItemStack applySetNameItemStackModifier(IServerUtils ignoredUtils, SetNameFunction function, ItemStack itemStack) {
         if (function.predicates.length == 0) {
             itemStack.setHoverName(function.name);
         }
@@ -247,7 +243,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static ItemStack applyItemStackModifier(IServerUtils utils, LootItemFunction function, ItemStack itemStack) {
+    public static ItemStack applyItemStackModifier(IServerUtils ignoredUtils, LootItemFunction function, ItemStack itemStack) {
         if (function instanceof LootItemConditionalFunction conditional && conditional.predicates.length > 0) {
             return itemStack;
         }
@@ -256,7 +252,7 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static void addObjectFields(IServerUtils utils, IKeyTooltipNode tooltip, Object object, Class<?> baseClass) {
+    public static void addObjectFields(IServerUtils utils, TooltipBuilder tooltip, Object object, Class<?> baseClass) {
         if (object.getClass().isEnum()) {
             return;
         }
@@ -273,22 +269,14 @@ public class TooltipUtils {
                 f.setAccessible(true);
 
                 Object obj = f.get(object);
-                IKeyTooltipNode t;
+                String key = f.getName();
 
                 if (obj instanceof LootItemCondition condition) {
-                    t = BranchTooltipNode.branch().add(GenericTooltipUtils.getConditionListTooltip(utils, Collections.singletonList(condition)));
+                    tooltip.add(TooltipBuilder.array((b) -> b.add(utils.getConditionTooltip(utils, condition)).rawKey(key)));
                 } else if (obj instanceof LootItemFunction function) {
-                    t = BranchTooltipNode.branch().add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
+                    tooltip.add(TooltipBuilder.array((b) -> b.add(utils.getFunctionTooltip(utils, function)).rawKey(key)));
                 } else {
-                    t = utils.getValueTooltip(utils, obj);
-                }
-
-                if (t instanceof ValueTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(f.getName(), false));
-                } else if (t instanceof BranchTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(f.getName() + ":", false));
-                } else if (t instanceof ErrorTooltipNode.Builder) {
-                    tooltip.add(ValueTooltipNode.keyValue(f.getName(), "[" + f.getType().getName() + "]").build("aci.util.null"));
+                    tooltip.add(utils.getValueTooltip(utils, obj).rawKey(key));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
@@ -296,92 +284,55 @@ public class TooltipUtils {
         });
     }
 
-    public static IKeyTooltipNode getArrayTooltip(IServerUtils utils, Object value) {
+    @NotNull
+    public static TooltipBuilder getArrayTooltip(IServerUtils utils, Object value) {
         Class<?> componentType = value.getClass().getComponentType();
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
         int length = Array.getLength(value);
 
         if (componentType == LootItemCondition.class) {
-            List<LootItemCondition> values = new ArrayList<>();
+            return TooltipBuilder.array((b) -> {
+                List<LootItemCondition> values = new ArrayList<>();
 
-            for (int i = 0; i < length; i++) {
-                values.add((LootItemCondition) Array.get(value, i));
-            }
+                for (int i = 0; i < length; i++) {
+                    values.add((LootItemCondition) Array.get(value, i));
+                }
 
-            return GenericTooltipUtils.getSubConditionsTooltip(utils, values);
+                b.add(GenericTooltipUtils.getSubConditionsTooltip(utils, values));
+            });
         } else {
             if (length > 0) {
-                for (int i = 0; i < length; i++) {
-                    Object element = Array.get(value, i);
+                return TooltipBuilder.array((b) -> {
+                    for (int i = 0; i < length; i++) {
+                        Object element = Array.get(value, i);
 
-                    if (element instanceof LootItemCondition condition) {
-                        tooltip.add(GenericTooltipUtils.getConditionListTooltip(utils, Collections.singletonList(condition)));
-                    } else if (element instanceof LootItemFunction function) {
-                        tooltip.add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
-                    } else {
-                        tooltip.add(utils.buildTooltip(utils.getValueTooltip(utils, element)));
+                        if (element instanceof LootItemCondition condition) {
+                            b.add(GenericTooltipUtils.getConditionListTooltip(utils, Collections.singletonList(condition)));
+                        } else if (element instanceof LootItemFunction function) {
+                            b.add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
+                        } else {
+                            b.add(utils.getValueTooltip(utils, element));
+                        }
                     }
-                }
+                });
             } else {
-                return ValueTooltipNode.value("[]");
+                return TooltipBuilder.value("[]");
             }
         }
-
-        return tooltip;
     }
 
-    public static ITooltipNode getJsonTooltip(IServerUtils utils, JsonElement element) {
+    public static TooltipBuilder getJsonTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {
-            ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
-            JsonObject object = element.getAsJsonObject();
-
-            object.asMap().forEach((key, e) -> {
-                IKeyTooltipNode t = getElementTooltip(utils, e);
-
-                if (t instanceof ValueTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(key, false));
-                } else if (t instanceof BranchTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(key + ":", false));
-                }
-            });
-
-            return tooltip.build();
+            return TooltipBuilder.array((b) -> element.getAsJsonObject().asMap().forEach((key, e) -> b.add(getElementTooltip(utils, e).rawKey(key))));
         }
 
-        return utils.buildTooltip(getElementTooltip(utils, element));
+        return getElementTooltip(utils, element);
     }
 
-    private static IKeyTooltipNode getElementTooltip(IServerUtils utils, JsonElement element) {
+    private static TooltipBuilder getElementTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {
-            JsonObject jsonObject = element.getAsJsonObject();
-            BranchTooltipNode.Builder tooltip = BranchTooltipNode.branch();
-
-            jsonObject.asMap().forEach((key, e) -> {
-                IKeyTooltipNode t = getElementTooltip(utils, e);
-
-                if (t instanceof ValueTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(key, false));
-                } else if (t instanceof BranchTooltipNode.Builder builder) {
-                    tooltip.add(builder.build(key + ":", false));
-                }
-            });
-
-            return tooltip;
+            return TooltipBuilder.array((b) -> element.getAsJsonObject().asMap().forEach((key, e) -> b.add(getElementTooltip(utils, e)).rawKey(key)));
         } else if (element.isJsonArray()) {
-            JsonArray jsonArray = element.getAsJsonArray();
-            ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
-
-            jsonArray.forEach((e) -> {
-                IKeyTooltipNode t = getElementTooltip(utils, e);
-
-                if (t instanceof ValueTooltipNode.Builder builder) {
-                    array.add(builder.build("", false));
-                } else if (t instanceof BranchTooltipNode.Builder builder) {
-                    array.add(builder.build(":", false));
-                }
-            });
-
-            return BranchTooltipNode.branch().add(array.build());
+            return TooltipBuilder.array((b) -> element.getAsJsonArray().forEach((e) -> b.add(getElementTooltip(utils, e))));
         } else if (element.isJsonPrimitive()) {
             JsonPrimitive jsonPrimitive = element.getAsJsonPrimitive();
 
@@ -394,7 +345,7 @@ public class TooltipUtils {
             }
         }
 
-        return EmptyTooltipNode.empty();
+        return TooltipBuilder.empty();
     }
 
     private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {

@@ -135,7 +135,7 @@ public class TooltipTest {
                 "  -> 2-5 (Fortune II)",
                 "  -> 2-6 (Fortune III)"
         ));
-        
+
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(LootingEnchantFunction.lootingMultiplier(ConstantValue.exactly(2)).build()))), List.of(
                 "Count: 1",
                 "  -> 3 (Looting I)",

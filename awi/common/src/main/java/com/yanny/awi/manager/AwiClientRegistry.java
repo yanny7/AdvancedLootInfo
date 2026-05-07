@@ -4,7 +4,7 @@ import com.yanny.aci.manager.CoreClientRegistry;
 import com.yanny.awi.api.*;
 import org.jetbrains.annotations.NotNull;
 
-public class AwiClientRegistry extends CoreClientRegistry<Object, ICommonUtils, ITooltipNode, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
+public class AwiClientRegistry extends CoreClientRegistry<Object, ICommonUtils, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
     public AwiClientRegistry(ICommonUtils registry) {
         super(registry);
     }

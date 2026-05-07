@@ -7,20 +7,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiFunction;
 
 public interface ICoreClientRegistry<
-        TTooltipNode extends ICoreTooltipNode<?>,
-        TDataNode    extends ICoreDataNode<?, ?>,
+        TDataNode    extends ICoreDataNode<?>,
         TWidgetUtils extends ICoreWidgetUtils<?>,
-        TClientUtils extends ICoreClientUtils<?, ?, ?, ?>
+        TClientUtils extends ICoreClientUtils<?, ?, ?>
         > {
     void registerWidget(ResourceLocation id, IWidgetFactory<TDataNode, TWidgetUtils> factory);
 
     void registerDataNode(ResourceLocation id, BiFunction<TClientUtils, FriendlyByteBuf, TDataNode> dataFactory);
 
-    void registerTooltipNode(ResourceLocation id, BiFunction<TClientUtils, FriendlyByteBuf, TTooltipNode> tooltipFactory);
-
     @FunctionalInterface
     interface IWidgetFactory<
-            TDataNode    extends ICoreDataNode<?, ?>,
+            TDataNode    extends ICoreDataNode<?>,
             TWidgetUtils extends ICoreWidgetUtils<?>
             > {
         @NotNull

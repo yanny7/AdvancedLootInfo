@@ -3,17 +3,15 @@ package com.yanny.ali.lootjs.node;
 import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.mixin.MixinWeightedAddLootAction;
 import com.yanny.ali.lootjs.mixin.MixinWeightedRandomList;
-import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -27,7 +25,7 @@ import java.util.List;
 public class WeightedAddLootNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "weighted_add_loot");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
     public WeightedAddLootNode(IServerUtils utils, WeightedAddLootAction lootAction, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinWeightedAddLootAction action = (MixinWeightedAddLootAction) lootAction;
@@ -44,17 +42,17 @@ public class WeightedAddLootNode extends ListNode {
 
     public WeightedAddLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -65,11 +63,12 @@ public class WeightedAddLootNode extends ListNode {
     }
 
     @NotNull
-    public static ITooltipNode getTooltip(IServerUtils utils, MixinWeightedAddLootAction action) {
-        return ArrayTooltipNode.array()
-                .add(LiteralTooltipNode.translatable("ali.enum.group_type.random"))
-                .add(EntryTooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)))
-                .add(ValueTooltipNode.value(action.getAllowDuplicateLoot()).build("ali.property.value.allow_duplicate_loot"))
+    public static TooltipNode getTooltip(IServerUtils utils, MixinWeightedAddLootAction action) {
+        return TooltipBuilder.array((b) -> b
+                        .add(TooltipBuilder.keyOnly("ali.enum.group_type.random"))
+                        .add(EntryTooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)))
+                        .add(TooltipBuilder.value(action.getAllowDuplicateLoot()).build("ali.property.value.allow_duplicate_loot"))
+                )
                 .build();
     }
 }

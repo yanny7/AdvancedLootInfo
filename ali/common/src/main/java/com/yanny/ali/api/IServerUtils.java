@@ -2,6 +2,7 @@ package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltipNode, IServerUtils>, ICommonUtils {
+public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
@@ -33,16 +34,13 @@ public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltip
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
-    <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
+    <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function);
 
     @NotNull
-    <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition);
+    <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition);
 
     @NotNull
-    <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
-
-    @NotNull
-    <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value);
+    <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count);
 
@@ -52,7 +50,7 @@ public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltip
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
     @NotNull
-    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition);
+    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition);
 
     @NotNull
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);

@@ -2,7 +2,11 @@ package com.yanny.ali.lootjs.node;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.*;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -26,7 +30,7 @@ import java.util.Map;
 public class ItemStackNode implements IDataNode, IItemNode {
     public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "item_stack");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final ItemStack itemStack;
@@ -54,9 +58,9 @@ public class ItemStackNode implements IDataNode, IItemNode {
         }
     }
 
-    public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public ItemStackNode(IClientUtils ignoredUtils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -101,7 +105,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeItem(itemStack);
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);
@@ -109,7 +113,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -120,7 +124,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @NotNull
-    private static ITooltipNode getItemTooltip(IServerUtils utils, int baseCount, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    private static TooltipNode getItemTooltip(IServerUtils utils, int baseCount, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         Map<Enchantment, Map<Integer, RangeValue>> chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
         Map<Enchantment, Map<Integer, RangeValue>> countMap = getCount(utils, baseCount, functions);
 

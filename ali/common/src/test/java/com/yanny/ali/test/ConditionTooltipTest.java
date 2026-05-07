@@ -238,6 +238,6 @@ public class ConditionTooltipTest {
                 "Weather Check:",
                 "  -> Is Thundering: false"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().build()), List.of("Weather Check:"));
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().build()), List.of());
     }
 }

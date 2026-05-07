@@ -1,6 +1,7 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.ILootModifier;
@@ -11,7 +12,6 @@ import com.yanny.ali.manager.FakeLootDataManager;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.ItemCollectorUtils;
 import io.netty.buffer.ByteBuf;
@@ -393,7 +393,7 @@ public abstract class AbstractServer {
             return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
         } catch (Throwable e) {
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
-            return new MissingNode(EmptyTooltipNode.EMPTY);
+            return new MissingNode(TooltipNode.EMPTY_INSTANCE);
         }
     }
 

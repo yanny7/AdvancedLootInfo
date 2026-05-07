@@ -1,9 +1,8 @@
 package com.yanny.ali.plugin.server;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.tooltip.ComponentTooltipNode;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
@@ -29,25 +28,25 @@ public class RegistriesTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static IKeyTooltipNode getEntryTypeTooltip(IServerUtils utils, LootPoolEntryType type) {
+    public static TooltipBuilder getEntryTypeTooltip(IServerUtils utils, LootPoolEntryType type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, type);
     }
 
     @NotNull
-    public static IKeyTooltipNode getFunctionTypeTooltip(IServerUtils utils, LootItemFunctionType type) {
+    public static TooltipBuilder getFunctionTypeTooltip(IServerUtils utils, LootItemFunctionType type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_FUNCTION_TYPE, type);
     }
 
     @NotNull
-    public static IKeyTooltipNode getConditionTypeTooltip(IServerUtils utils, LootItemConditionType type) {
+    public static TooltipBuilder getConditionTypeTooltip(IServerUtils utils, LootItemConditionType type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_CONDITION_TYPE, type);
     }
 
     @NotNull
-    public static IKeyTooltipNode getBlockTooltip(IServerUtils utils, Block block) {
+    public static TooltipBuilder getBlockTooltip(IServerUtils utils, Block block) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return ComponentTooltipNode.values(block.getName());
+                return TooltipBuilder.component(block.getName());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Block name: {}", BuiltInRegistries.BLOCK.getKey(block), e);
             }
@@ -57,10 +56,10 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getItemTooltip(IServerUtils utils, Item item) {
+    public static TooltipBuilder getItemTooltip(IServerUtils utils, Item item) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return ComponentTooltipNode.values(item.getName(item.getDefaultInstance()));
+                return TooltipBuilder.component(item.getName(item.getDefaultInstance()));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Item name: {}", BuiltInRegistries.ITEM.getKey(item), e);
             }
@@ -70,10 +69,10 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getEntityTypeTooltip(IServerUtils utils, EntityType<?> entityType) {
+    public static TooltipBuilder getEntityTypeTooltip(IServerUtils utils, EntityType<?> entityType) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return ComponentTooltipNode.values(entityType.getDescription());
+                return TooltipBuilder.component(entityType.getDescription());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized EntityType name: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entityType), e);
             }
@@ -83,25 +82,25 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getBannerPatternTooltip(IServerUtils utils, BannerPattern bannerPattern) {
+    public static TooltipBuilder getBannerPatternTooltip(IServerUtils utils, BannerPattern bannerPattern) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BANNER_PATTERN, bannerPattern);
     }
 
     @NotNull
-    public static IKeyTooltipNode getBlockEntityTypeTooltip(IServerUtils utils, BlockEntityType<?> blockEntityType) {
+    public static TooltipBuilder getBlockEntityTypeTooltip(IServerUtils utils, BlockEntityType<?> blockEntityType) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType);
     }
 
     @NotNull
-    public static IKeyTooltipNode getPotionTooltip(IServerUtils utils, Potion potion) {
+    public static TooltipBuilder getPotionTooltip(IServerUtils utils, Potion potion) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.POTION, potion);
     }
 
     @NotNull
-    public static IKeyTooltipNode getMobEffectTooltip(IServerUtils utils, MobEffect mobEffect) {
+    public static TooltipBuilder getMobEffectTooltip(IServerUtils utils, MobEffect mobEffect) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return ComponentTooltipNode.values(mobEffect.getDisplayName());
+                return TooltipBuilder.component(mobEffect.getDisplayName());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized MobEffect name: {}", BuiltInRegistries.MOB_EFFECT.getKey(mobEffect), e);
             }
@@ -111,20 +110,20 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getLootNbtProviderTypeTooltip(IServerUtils utils, LootNbtProviderType providerType) {
+    public static TooltipBuilder getLootNbtProviderTypeTooltip(IServerUtils utils, LootNbtProviderType providerType) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, providerType);
     }
 
     @NotNull
-    public static IKeyTooltipNode getFluidTooltip(IServerUtils utils, Fluid fluid) {
+    public static TooltipBuilder getFluidTooltip(IServerUtils utils, Fluid fluid) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLUID, fluid);
     }
 
     @NotNull
-    public static IKeyTooltipNode getEnchantmentTooltip(IServerUtils utils, Enchantment enchantment) {
+    public static TooltipBuilder getEnchantmentTooltip(IServerUtils utils, Enchantment enchantment) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return ComponentTooltipNode.values(enchantment.getFullname(1));
+                return TooltipBuilder.component(enchantment.getFullname(1));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Enchantment name: {}", BuiltInRegistries.ENCHANTMENT.getKey(enchantment), e);
             }
@@ -134,10 +133,10 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getAttributeTooltip(IServerUtils utils, Attribute attribute) {
+    public static TooltipBuilder getAttributeTooltip(IServerUtils utils, Attribute attribute) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return ComponentTooltipNode.values(Component.translatable(attribute.getDescriptionId()));
+                return TooltipBuilder.component(Component.translatable(attribute.getDescriptionId()));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Attribute name: {}", BuiltInRegistries.ATTRIBUTE.getKey(attribute), e);
             }

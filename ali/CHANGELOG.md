@@ -1,6 +1,7 @@
 ## []
 
 - Fixed conditionally removed loot not displayed (LootJS)
+- Dropped support for most mods except LootJS (Support should be done by mod owners)
 
 ## [1.10.0]
 

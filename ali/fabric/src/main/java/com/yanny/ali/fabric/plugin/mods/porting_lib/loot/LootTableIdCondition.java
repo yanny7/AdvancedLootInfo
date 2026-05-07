@@ -1,7 +1,7 @@
 package com.yanny.ali.fabric.plugin.mods.porting_lib.loot;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
@@ -22,7 +22,7 @@ public class LootTableIdCondition extends BaseAccessor<Object> implements ICondi
     }
 
     @Override
-    public ITooltipNode getTooltip(IServerUtils utils) {
+    public TooltipNode getTooltip(IServerUtils utils) {
         return utils.getValueTooltip(utils, targetLootTableId).build("ali.type.condition.loot_table_id");
     }
 }

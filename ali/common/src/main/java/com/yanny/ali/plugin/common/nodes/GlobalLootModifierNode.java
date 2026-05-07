@@ -1,10 +1,10 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -12,19 +12,19 @@ import org.jetbrains.annotations.NotNull;
 public class GlobalLootModifierNode implements IDataNode {
     public static final ResourceLocation ID = Utils.modLoc("glm");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
-    public GlobalLootModifierNode(ITooltipNode tooltip) {
+    public GlobalLootModifierNode(TooltipNode tooltip) {
         this.tooltip = tooltip;
     }
 
     public GlobalLootModifierNode(IClientUtils utils, FriendlyByteBuf buf) {
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -36,6 +36,6 @@ public class GlobalLootModifierNode implements IDataNode {
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 }

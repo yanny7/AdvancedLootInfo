@@ -2,9 +2,9 @@ package com.yanny.ali.lootjs.node;
 
 import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.AddLootAction;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.Utils;
@@ -22,7 +22,7 @@ import java.util.List;
 public class AddLootNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "add_loot");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
     private final AddLootAction.AddType addType;
 
     public AddLootNode(IServerUtils utils, AddLootAction lootAction, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
@@ -53,7 +53,7 @@ public class AddLootNode extends ListNode {
 
     public AddLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
         addType = buf.readEnum(AddLootAction.AddType.class);
     }
 
@@ -63,13 +63,13 @@ public class AddLootNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
         buf.writeEnum(addType);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 

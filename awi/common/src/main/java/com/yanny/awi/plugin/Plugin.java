@@ -1,7 +1,10 @@
 package com.yanny.awi.plugin;
 
 import com.yanny.aci.tooltip.CommonValueTooltip;
-import com.yanny.awi.api.*;
+import com.yanny.awi.api.AwiEntrypoint;
+import com.yanny.awi.api.IPlugin;
+import com.yanny.awi.api.IServerRegistry;
+import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.*;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -24,7 +27,7 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        new CommonValueTooltip<ITooltipNode, IKeyTooltipNode, IServerUtils, IServerRegistry>().registerAll(registry);
+        new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
         registry.registerValueTooltip(IntProvider.class, ValueTooltipUtils::getIntProviderTooltip);
         registry.registerValueTooltip(RuleTest.class, ValueTooltipUtils::getRuleTestTooltip);

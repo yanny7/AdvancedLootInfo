@@ -1,8 +1,8 @@
 package com.yanny.ali.plugin.common.trades;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.item.Item;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrades.EmeraldsForVillagerTypeItem> {
-    public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing, ITooltipNode conditions) {
+    public EmeraldsForVillagerTypeItemNode(IServerUtils utils, VillagerTrades.EmeraldsForVillagerTypeItem listing, TooltipNode conditions) {
         super(utils, listing, conditions);
     }
 
@@ -27,7 +27,7 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
         for (Map.Entry<VillagerType, Item> entry : listing.trades.entrySet()) {
             VillagerType type = entry.getKey();
             Item item = entry.getValue();
-            ITooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
+            TooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
 
             nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }

@@ -5,9 +5,9 @@ import com.almostreliable.lootjs.loot.action.AddLootAction;
 import com.almostreliable.lootjs.loot.action.GroupedLootAction;
 import com.almostreliable.lootjs.loot.action.WeightedAddLootAction;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
@@ -24,7 +24,7 @@ import java.util.List;
 public class GroupLootNode extends ListNode {
     public static final ResourceLocation ID = new ResourceLocation(LootJsPlugin.ID, "grouped_loot");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
     public GroupLootNode(IServerUtils utils, GroupedLootAction lootPool, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinGroupedLootAction action = (MixinGroupedLootAction) lootPool;
@@ -42,17 +42,17 @@ public class GroupLootNode extends ListNode {
 
     public GroupLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 

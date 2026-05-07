@@ -1,12 +1,10 @@
 package com.yanny.ali.fabric.plugin;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.fabric.mixin.MixinCombinedIngredient;
-import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AllIngredient;
@@ -20,36 +18,34 @@ public class LootJsIngredientTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static ITooltipNode getCustomIngredientTooltip(IServerUtils utils, CustomIngredientImpl ingredient) {
+    public static TooltipNode getCustomIngredientTooltip(IServerUtils utils, CustomIngredientImpl ingredient) {
         CustomIngredient i = ingredient.getCustomIngredient();
 
         if (i instanceof AnyIngredient anyIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) anyIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
-            for (Ingredient i2 : ingredients) {
-                tooltip.add(utils.getIngredientTooltip(utils, i2));
-            }
-
-            return tooltip.build("ali.property.branch.any");
+            return TooltipBuilder.array((b) -> {
+                for (Ingredient i2 : ingredients) {
+                    b.add(utils.getIngredientTooltip(utils, i2));
+                }
+            }).build("ali.property.branch.any");
         } else if (i instanceof AllIngredient allIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) allIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
 
-            for (Ingredient i2 : ingredients) {
-                tooltip.add(utils.getIngredientTooltip(utils, i2));
-            }
-
-            return tooltip.build("ali.property.branch.all");
+            return TooltipBuilder.array((b) -> {
+                for (Ingredient i2 : ingredients) {
+                    b.add(utils.getIngredientTooltip(utils, i2));
+                }
+            }).build("ali.property.branch.all");
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
-            return EmptyTooltipNode.EMPTY;
+            return TooltipNode.EMPTY_INSTANCE;
         } else {
             LOGGER.warn("Missing tooltip for fabric custom ingredient {}", i.getClass().getCanonicalName());
         }
 
-        return EmptyTooltipNode.EMPTY;
+        return TooltipNode.EMPTY_INSTANCE;
     }
 }

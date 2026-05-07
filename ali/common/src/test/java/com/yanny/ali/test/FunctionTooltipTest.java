@@ -181,9 +181,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetAttributesTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes().build()), List.of(
-                "Set Attributes:"
-        ));
+        assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes().build()), List.of());
         assertTooltip(FunctionTooltipUtils.getSetAttributesTooltip(UTILS, (SetAttributesFunction) SetAttributesFunction.setAttributes()
                 .withModifier(new SetAttributesFunction.ModifierBuilder("armor", Attributes.ARMOR, AttributeModifier.Operation.MULTIPLY_TOTAL, UniformGenerator.between(1, 5))
                         .forSlot(EquipmentSlot.HEAD)

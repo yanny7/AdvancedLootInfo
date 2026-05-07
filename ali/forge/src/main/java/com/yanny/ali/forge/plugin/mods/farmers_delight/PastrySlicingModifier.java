@@ -1,7 +1,11 @@
 package com.yanny.ali.forge.plugin.mods.farmers_delight;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.*;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.IOperation;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.forge.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
@@ -37,7 +41,7 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IGlobal
 
             count.put(null, Map.of(0, new RangeValue(1, 7)));
 
-            ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
+            TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
             IDataNode node = new ItemNode(1, new RangeValue(1, 7), pastrySlice.getDefaultInstance(), tooltip, Collections.emptyList(), c);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));
