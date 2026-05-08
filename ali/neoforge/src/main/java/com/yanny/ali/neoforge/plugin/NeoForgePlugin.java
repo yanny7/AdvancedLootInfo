@@ -4,12 +4,12 @@ import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.neoforge.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
@@ -49,19 +49,19 @@ public class NeoForgePlugin implements IPlugin {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanItemPerformAbility condition) {
+    public static TooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanItemPerformAbility condition) {
         MixinCanItemPerformAbility cond = (MixinCanItemPerformAbility) condition;
         return utils.getValueTooltip(utils, cond.getAbility()).build("ali.type.condition.can_item_perform_ability");
     }
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition condition) {
+    public static TooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition condition) {
         MixinLootTableIdCondition cond = (MixinLootTableIdCondition) condition;
         return utils.getValueTooltip(utils, cond.getTargetLootTableId()).build("ali.type.condition.loot_table_id");
     }
 
-    private static IKeyTooltipNode getItemAbilityTooltip(IServerUtils utils, ItemAbility ability) {
+    private static TooltipBuilder getItemAbilityTooltip(IServerUtils utils, ItemAbility ability) {
         return utils.getValueTooltip(utils, ability.name());
     }
 
@@ -85,9 +85,10 @@ public class NeoForgePlugin implements IPlugin {
             List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getConditions());
 
             return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
-                ITooltipNode tooltip = ArrayTooltipNode.array()
-                        .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
-                        .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+                TooltipNode tooltip = TooltipBuilder.array((b) -> b
+                                .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
+                                .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+                        )
                         .build();
                 IDataNode node = NodeUtils.getReferenceNode(utils, ((MixinAddTableLootModifier) m).getTable().identifier(), c, tooltip);
                 return List.of(new IOperation.AddOperation((i) -> true, node));

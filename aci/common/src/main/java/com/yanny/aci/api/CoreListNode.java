@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class CoreListNode<
-        TServerUtils extends ICoreServerUtils<?, ?, ?>,
-        TTooltipNode extends ICoreTooltipNode<TServerUtils>,
-        TDataNode    extends ICoreDataNode<TServerUtils, TTooltipNode>,
-        TClientUtils extends ICoreClientUtils<TTooltipNode, TDataNode, ?, TClientUtils>
+        TServerUtils extends ICoreServerUtils<?>,
+        TDataNode    extends ICoreDataNode<TServerUtils>,
+        TClientUtils extends ICoreClientUtils<TDataNode, ?, TClientUtils>
         >
-        implements ICoreDataNode<TServerUtils, TTooltipNode> {
+        implements ICoreDataNode<TServerUtils> {
     @Nullable
     private List<TDataNode> nodes;
 
@@ -60,13 +59,13 @@ public abstract class CoreListNode<
         }
 
         for (TDataNode node : nodes) {
-            if (node instanceof CoreListNode<?, ?, ?, ?> listNode) {
+            if (node instanceof CoreListNode<?, ?, ?> listNode) {
                 listNode.optimizeList();
             }
         }
 
         nodes.removeIf(node -> {
-            if (node instanceof CoreListNode<?, ?, ?, ?> listNode) {
+            if (node instanceof CoreListNode<?, ?, ?> listNode) {
                 return listNode.nodes().isEmpty();
             }
 

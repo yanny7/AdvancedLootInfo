@@ -3,8 +3,12 @@ package com.yanny.ali.plugin.common.nodes;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -64,22 +68,22 @@ public class ItemNode implements IDataNode, IItemNode {
     private static final StreamCodec<RegistryFriendlyByteBuf, Either<ItemStack, TagKey<? extends ItemLike>>> EITHER_CODEC =
             ByteBufCodecs.either(ItemStack.OPTIONAL_STREAM_CODEC, ITEM_LIKE_TAG_CODEC);
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
     private final List<LootItemCondition> conditions;
     private final List<LootItemFunction> functions;
     private final Either<ItemStack, TagKey<? extends ItemLike>> item;
     private final RangeValue count;
     private final float chance;
 
-    public ItemNode(float chance, RangeValue count, ItemStack item, ITooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(float chance, RangeValue count, ItemStack item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this(chance, count, Either.left(item), tooltip, functions, conditions);
     }
 
-    public ItemNode(float chance, RangeValue count, TagKey<? extends ItemLike> tag, ITooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(float chance, RangeValue count, TagKey<? extends ItemLike> tag, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this(chance, count, Either.right(tag), tooltip, functions, conditions);
     }
 
-    public ItemNode(float chance, RangeValue count, Either<ItemStack, TagKey<? extends ItemLike>> item, ITooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public ItemNode(float chance, RangeValue count, Either<ItemStack, TagKey<? extends ItemLike>> item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this.chance = chance;
         this.count = count;
         this.item = item;
@@ -90,7 +94,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         item = EITHER_CODEC.decode(buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
         count = new RangeValue(buf);
         chance = buf.readFloat();
 
@@ -139,14 +143,14 @@ public class ItemNode implements IDataNode, IItemNode {
             LOGGER.warn("Failed to encode {}/{}", BuiltInRegistries.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
         }
 
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
         count.encode(buf);
         buf.writeFloat(chance);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 

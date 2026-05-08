@@ -4,7 +4,6 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
@@ -29,12 +28,6 @@ public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
     @Override
     public BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> getDataNodeFactory(Identifier id) {
         return PluginManager.getInstance().clientRegistry.getDataNodeFactory(id);
-    }
-
-    @NotNull
-    @Override
-    public BiFunction<IClientUtils, RegistryFriendlyByteBuf, ITooltipNode> getTooltipNodeFactory(Identifier id) {
-        return PluginManager.getInstance().clientRegistry.getTooltipNodeFactory(id);
     }
 
     @NotNull

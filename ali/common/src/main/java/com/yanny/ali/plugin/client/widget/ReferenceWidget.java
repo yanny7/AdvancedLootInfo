@@ -19,7 +19,7 @@ public class ReferenceWidget implements IWidget {
 
     public ReferenceWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         if (entry instanceof ListNode listNode && !listNode.nodes().isEmpty()) {
-            widget = new LootTableWidget(utils, ((ReferenceNode) entry).nodes().get(0), rect, maxWidth, entry);
+            widget = new LootTableWidget(utils, ((ReferenceNode) entry).nodes().getFirst(), rect, maxWidth, entry);
         } else {
             widget = new MissingWidget(rect);
         }

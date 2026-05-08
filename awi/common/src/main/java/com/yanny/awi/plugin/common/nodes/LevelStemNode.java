@@ -1,8 +1,8 @@
 package com.yanny.awi.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
-import com.yanny.awi.api.ITooltipNode;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -44,7 +44,7 @@ public class LevelStemNode extends ListNode {
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return null;
     }
 

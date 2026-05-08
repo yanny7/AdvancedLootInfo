@@ -4,7 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.ali.api.ITooltipNode;
+import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -54,7 +54,7 @@ public class TextureWidget implements IWidget {
         return WidgetDirection.VERTICAL;
     }
 
-    public void tooltipText(ITooltipNode tooltip) {
+    public void tooltipText(TooltipNode tooltip) {
         this.components.addAll(CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 

@@ -1,11 +1,10 @@
 package com.yanny.ali.plugin.common.trades;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -49,8 +48,8 @@ public class TradeNode extends ListNode {
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
-        return EmptyTooltipNode.EMPTY;
+    public TooltipNode getTooltip() {
+        return TooltipNode.EMPTY_INSTANCE;
     }
 
     @NotNull

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
@@ -42,12 +43,12 @@ public class ForgePlugin implements IPlugin {
     }
 
     @NotNull
-    public static ITooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
+    public static TooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
         return utils.getValueTooltip(utils, cond.action().name()).build("ali.type.condition.can_tool_perform_action");
     }
 
     @NotNull
-    public static ITooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
+    public static TooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
         return utils.getValueTooltip(utils, cond.id()).build("ali.type.condition.loot_table_id");
     }
 

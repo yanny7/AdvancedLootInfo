@@ -137,6 +137,11 @@ accessible method net/minecraft/world/item/slot/RangeSlotSource <init> (Lnet/min
 accessible method net/minecraft/world/item/slot/LimitSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;I)V
 accessible method net/minecraft/world/item/slot/FilteredSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;Lnet/minecraft/advancements/criterion/ItemPredicate;)V
 accessible method net/minecraft/world/item/slot/GroupSlotSource <init> (Ljava/util/List;)V
+accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
+accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> (Ljava/util/List;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher <init> (Ljava/lang/String;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher <init> (Ljava/util/Optional;Ljava/util/Optional;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher <init> (Ljava/lang/String;Lnet/minecraft/advancements/critereon/StatePropertiesPredicate$ValueMatcher;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

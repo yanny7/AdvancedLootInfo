@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -11,26 +12,26 @@ import java.util.List;
 public class LootPoolNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("loot_pool");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
-    public LootPoolNode(List<IDataNode> children, ITooltipNode tooltip) {
+    public LootPoolNode(List<IDataNode> children, TooltipNode tooltip) {
         children.forEach(this::addChildren);
         this.tooltip = tooltip;
     }
 
     public LootPoolNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
