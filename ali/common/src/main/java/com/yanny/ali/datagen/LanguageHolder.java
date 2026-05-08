@@ -52,6 +52,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
         TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
 
+        // Forge
+        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
+        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
+
         // LootJS
         TRANSLATION_MAP.put("ali.type.condition.and", "And:");
         TRANSLATION_MAP.put("ali.type.condition.any_biome", "Any Biome:");

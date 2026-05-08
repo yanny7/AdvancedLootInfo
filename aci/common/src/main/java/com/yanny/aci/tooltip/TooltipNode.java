@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class TooltipNode {
@@ -175,13 +174,7 @@ public class TooltipNode {
     private MutableComponent formatValue(String value) {
         MutableComponent comp;
 
-        if ((flags & FLAG_COMPONENT) != 0) {
-            try {
-                comp = Objects.requireNonNullElseGet(Component.Serializer.fromJson(value), Component::empty);
-            } catch (Throwable e) {
-                comp = Component.literal("Error: Invalid Component JSON!").withStyle(ERROR_STYLE);
-            }
-        } else if (!value.isEmpty() && value.charAt(0) == TooltipBuilder.TRANSLATE_MARKER) {
+        if (!value.isEmpty() && value.charAt(0) == TooltipBuilder.TRANSLATE_MARKER) {
             comp = Component.translatable(value.substring(1));
         } else {
             comp = Component.literal(value);
