@@ -33,6 +33,25 @@ public class LanguageHolder {
          * PREDICATES
          */
 
+        TRANSLATION_MAP.put("ali.type.condition.all_of", "All Of:");
+        TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
+        TRANSLATION_MAP.put("ali.type.condition.block_state_property", "Block State Property:");
+        TRANSLATION_MAP.put("ali.type.condition.damage_source_properties", "Damage Source Properties:");
+        TRANSLATION_MAP.put("ali.type.condition.entity_properties", "Entity Properties:");
+        TRANSLATION_MAP.put("ali.type.condition.entity_scores", "Entity Scores:");
+        TRANSLATION_MAP.put("ali.type.condition.inverted", "Inverted:");
+        TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Killed by player");
+        TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
+        TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
+        TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
+        TRANSLATION_MAP.put("ali.type.condition.random_chance_with_looting", "Random Chance With Looting:");
+        TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
+        TRANSLATION_MAP.put("ali.type.condition.survives_explosion", "Survives Explosion");
+        TRANSLATION_MAP.put("ali.type.condition.table_bonus", "Table Bonus:");
+        TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
+        TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
+        TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
+
         // LootJS
         TRANSLATION_MAP.put("ali.type.condition.and", "And:");
         TRANSLATION_MAP.put("ali.type.condition.any_biome", "Any Biome:");
@@ -94,6 +113,17 @@ public class LanguageHolder {
         // Farmer's delight
         TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
         TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
+
+        // Trades
+        TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
+
+        TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
+        TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");
+        TRANSLATION_MAP.put("ali.enum.group_type.alternatives", "Selects only first successful entry");
+        TRANSLATION_MAP.put("ali.enum.group_type.sequence", "Selects entries sequentially until first failed");
+        TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
+        TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
+        TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
 
         TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");
         TRANSLATION_MAP.put("ali.property.branch.all", "All:");

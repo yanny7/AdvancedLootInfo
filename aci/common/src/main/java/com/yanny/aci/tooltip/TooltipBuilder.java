@@ -14,6 +14,7 @@ public class TooltipBuilder {
     private MultiKey translatableKey;
     private String rawKey;
     private String[] values;
+    private Component componentValue;
 
     private boolean isArray = false;
     private boolean isAdvancedOnly = false;
@@ -109,7 +110,7 @@ public class TooltipBuilder {
         TooltipBuilder builder = new TooltipBuilder();
 
         builder.isComponent = true;
-        builder.values = new String[]{Component.Serializer.toJson(component.copy())};
+        builder.componentValue = component;
         return builder;
     }
 
@@ -171,19 +172,20 @@ public class TooltipBuilder {
             return TooltipNode.EMPTY_INSTANCE;
         }
 
-        if (!forceVisible && values == null && children.isEmpty()) {
+        if (!forceVisible && values == null && componentValue == null && children.isEmpty()) {
             return TooltipNode.EMPTY_INSTANCE;
         }
 
         String finalKeyStr = rawKey;
         String[] finalValues = values;
+        Component finalComponent = componentValue;
         short finalFlags = getFlags();
         List<TooltipNode> finalChildren = new ArrayList<>(children);
 
         if (translatableKey != null && rawKey == null) {
             boolean isComplex = isArray || finalChildren.size() > 1 || (finalChildren.size() == 1 && finalChildren.get(0).isComplex());
 
-            if (finalChildren.size() == 1 && finalValues == null && !isComplex && !isError) {
+            if (finalChildren.size() == 1 && finalValues == null && finalComponent == null && !isComplex && !isError) {
                 TooltipNode child = finalChildren.get(0);
                 finalKeyStr = translatableKey.single();
                 finalValues = child.getValues();
@@ -193,7 +195,7 @@ public class TooltipBuilder {
             }
         }
 
-        return createNode(finalKeyStr, finalValues, finalFlags, finalChildren);
+        return createNode(finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
     }
 
     private short getFlags() {
@@ -204,14 +206,15 @@ public class TooltipBuilder {
         if (isError) flags |= TooltipNode.FLAG_ERROR;
         if (rawKey != null) flags |= TooltipNode.FLAG_RAW_KEY;
         if (translatableKey != null || rawKey != null) flags |= TooltipNode.FLAG_HAS_KEY;
-        if (values != null && values.length > 0) flags |= TooltipNode.FLAG_HAS_VALUE;
+        if ((values != null && values.length > 0) || componentValue != null) flags |= TooltipNode.FLAG_HAS_VALUE;
         if (isComponent) flags |= TooltipNode.FLAG_COMPONENT;
 
         return flags;
     }
 
-    private TooltipNode createNode(@Nullable String key, @Nullable String @Nullable[] values, short flags, List<TooltipNode> children) {
-        return TooltipNode.getOrCreate(key, values, flags, children);
+    @NotNull
+    private TooltipNode createNode(@Nullable String key, @Nullable String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
+        return TooltipNode.getOrCreate(key, values, component, flags, children);
     }
 
     public record MultiKey(String single, String plural) {}

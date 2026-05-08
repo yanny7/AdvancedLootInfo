@@ -37,16 +37,18 @@ public class TooltipNode {
             .recordStats()
             .build(CacheLoader.from(TooltipNode::new));
 
-    public static final TooltipNode EMPTY_INSTANCE = getOrCreate(null, null, FLAG_EMPTY, List.of());
+    public static final TooltipNode EMPTY_INSTANCE = getOrCreate(null, null, null, FLAG_EMPTY, List.of());
 
     private @Nullable final String key;
-    private @Nullable final String @Nullable[] values;
+    private @Nullable final String[] values;
+    private @Nullable final Component component;
     private final short flags;
     private final List<TooltipNode> children;
 
     private TooltipNode(CacheKey cacheKey) {
         this.key = cacheKey.key();
         this.values = cacheKey.values() != null ? cacheKey.values().toArray(new String[0]) : null;
+        this.component = cacheKey.componentValue();
         this.flags = cacheKey.flags();
         this.children = cacheKey.children();
     }
@@ -80,7 +82,7 @@ public class TooltipNode {
 
         List<Component> lines = new ArrayList<>();
         MutableComponent currentLine = indent(indentLevel);
-        boolean hasContent = (key != null || (values != null && values.length > 0));
+        boolean hasContent = (key != null || component != null || (values != null && values.length > 0));
         boolean isBranching = (flags & FLAG_ARRAY) != 0 || !children.isEmpty() || (hasContent && indentLevel > 0);
 
         if (indentLevel > 0 && isBranching) {
@@ -94,7 +96,7 @@ public class TooltipNode {
                 } else {
                     currentLine.append(Component.literal(key).withStyle(TEXT_STYLE));
 
-                    if (!children.isEmpty() || (flags & FLAG_ARRAY) != 0) {
+                    if ((!children.isEmpty() || (flags & FLAG_ARRAY) != 0) && values == null) {
                         currentLine.append(Component.literal(":").withStyle(TEXT_STYLE));
                     }
                 }
@@ -114,6 +116,11 @@ public class TooltipNode {
                         }
                     }
                 }
+
+                if (component != null) {
+                    currentLine.append(Component.literal(": ").withStyle(TEXT_STYLE));
+                    currentLine.append(component).withStyle(VALUE_STYLE);
+                }
             } else {
                 if (values != null && values.length > 0) {
                     Object[] valArgs = new Object[values.length];
@@ -127,6 +134,8 @@ public class TooltipNode {
                     }
 
                     currentLine.append(Component.translatable(key, valArgs).withStyle(TEXT_STYLE));
+                } else if (component != null) {
+                    currentLine.append(Component.translatable(key, component.copy().withStyle(VALUE_STYLE)).withStyle(TEXT_STYLE));
                 } else {
                     currentLine.append(Component.translatable(key).withStyle(TEXT_STYLE));
                 }
@@ -143,6 +152,8 @@ public class TooltipNode {
                     currentLine.append(formatValue(value));
                 }
             }
+        } else if (component != null) {
+            currentLine.append(component.copy().withStyle(VALUE_STYLE));
         }
 
         String rawText = currentLine.getString().replace("->", "").trim();
@@ -191,11 +202,15 @@ public class TooltipNode {
         }
 
         if ((flags & FLAG_HAS_VALUE) != 0 && values != null) {
-            buf.writeVarInt(values.length);
+            if ((flags & FLAG_COMPONENT) != 0) {
+                buf.writeComponent(component != null ? component : Component.empty());
+            } else {
+                buf.writeVarInt(values.length);
 
-            for (String value : values) {
-                assert value != null;
-                buf.writeUtf(value);
+                for (String value : values) {
+                    assert value != null;
+                    buf.writeUtf(value);
+                }
             }
         }
 
@@ -210,6 +225,7 @@ public class TooltipNode {
         short flags = buf.readShort();
         String key = null;
         String[] values = null;
+        Component component = null;
 
         if ((flags & FLAG_EMPTY) != 0) {
             return EMPTY_INSTANCE;
@@ -220,12 +236,16 @@ public class TooltipNode {
         }
 
         if ((flags & FLAG_HAS_VALUE) != 0) {
-            int valCount =  buf.readVarInt();
+            if ((flags & FLAG_COMPONENT) != 0) {
+                component = buf.readComponent();
+            } else {
+                int valCount = buf.readVarInt();
 
-            values = new String[valCount];
+                values = new String[valCount];
 
-            for (int i = 0; i < valCount; i++) {
-                values[i] = buf.readUtf();
+                for (int i = 0; i < valCount; i++) {
+                    values[i] = buf.readUtf();
+                }
             }
         }
 
@@ -236,13 +256,13 @@ public class TooltipNode {
             children.add(decode(buf));
         }
 
-        return getOrCreate(key, values, flags, children);
+        return getOrCreate(key, values, component, flags, children);
     }
 
     @NotNull
-    public static TooltipNode getOrCreate(@Nullable String key, String @Nullable[] values, short flags, List<TooltipNode> children) {
+    public static TooltipNode getOrCreate(@Nullable String key, String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
         if ((flags & FLAG_EMPTY) != 0) {
-            return getFromCache(CACHE, new CacheKey(null, null, FLAG_EMPTY, List.of()));
+            return getFromCache(CACHE, new CacheKey(null, null, null, FLAG_EMPTY, List.of()));
         }
 
         List<String> valList = null;
@@ -258,6 +278,7 @@ public class TooltipNode {
         CacheKey cacheKey = new CacheKey(
                 key != null ? key.intern() : null,
                 valList,
+                component,
                 flags,
                 List.copyOf(children)
         );
@@ -284,5 +305,5 @@ public class TooltipNode {
         }
     }
 
-    record CacheKey(@Nullable String key, @Nullable List<String> values, short flags, List<TooltipNode> children) {}
+    record CacheKey(@Nullable String key, @Nullable List<String> values, @Nullable Component componentValue, short flags, List<TooltipNode> children) {}
 }
