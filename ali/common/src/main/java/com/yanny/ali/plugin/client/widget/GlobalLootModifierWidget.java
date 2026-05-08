@@ -4,7 +4,6 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,7 @@ public class GlobalLootModifierWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public GlobalLootModifierWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
+    public GlobalLootModifierWidget(IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         bounds = rect;
         widget = getGlobalLootModifierWidget(bounds, entry);
         bounds.setDimensions(widget.getRect().getWidth(), widget.getRect().getHeight());

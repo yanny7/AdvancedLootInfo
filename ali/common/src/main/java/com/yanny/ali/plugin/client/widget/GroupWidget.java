@@ -8,6 +8,7 @@ import com.yanny.ali.api.ListWidget;
 import com.yanny.ali.plugin.client.WidgetUtils;
 
 public class GroupWidget extends ListWidget {
+
     public GroupWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(utils, entry, rect, maxWidth);
     }

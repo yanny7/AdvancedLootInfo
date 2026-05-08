@@ -5,6 +5,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
-public interface ICoreWidgetUtils<TDataNode extends ICoreDataNode<?, ?>> {
+public interface ICoreWidgetUtils<TDataNode extends ICoreDataNode<?>> {
     void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, TDataNode entry, RelativeRect rect);
 }

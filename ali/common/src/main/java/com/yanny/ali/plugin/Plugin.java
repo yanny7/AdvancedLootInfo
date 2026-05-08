@@ -12,14 +12,12 @@ import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
-import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.*;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
@@ -59,7 +57,6 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
@@ -90,14 +87,14 @@ public class Plugin implements IPlugin {
         registry.registerWidget(LootTableNode.ID, LootTableWidget::new);
         registry.registerWidget(LootPoolNode.ID, LootPoolWidget::new);
         registry.registerWidget(ItemNode.ID, ItemWidget::new);
-        registry.registerWidget(EmptyNode.ID, EmptyWidget::new);
+        registry.registerWidget(EmptyNode.ID, (entry2, rect2, ignoredMaxWidth3, ignoredMaxWidth4) -> new EmptyWidget(rect2, ignoredMaxWidth3, ignoredMaxWidth4));
         registry.registerWidget(ReferenceNode.ID, ReferenceWidget::new);
-        registry.registerWidget(DynamicNode.ID, DynamicWidget::new);
+        registry.registerWidget(DynamicNode.ID, (entry1, rect1, ignoredMaxWidth1, ignoredMaxWidth2) -> new DynamicWidget(rect1, ignoredMaxWidth1, ignoredMaxWidth2));
         registry.registerWidget(AlternativesNode.ID, AlternativesWidget::new);
         registry.registerWidget(SequenceNode.ID, SequentialWidget::new);
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
         registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
-        registry.registerWidget(GlobalLootModifierNode.ID, GlobalLootModifierWidget::new);
+        registry.registerWidget(GlobalLootModifierNode.ID, (entry, rect, ignoredMaxWidth, ignoredMaxWidth2) -> new GlobalLootModifierWidget(rect, ignoredMaxWidth, ignoredMaxWidth2));
         registry.registerWidget(MissingNode.ID, MissingWidget::new);
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
@@ -122,19 +119,11 @@ public class Plugin implements IPlugin {
         registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
         registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
         registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
-
-        registry.registerTooltipNode(ArrayTooltipNode.ID, ArrayTooltipNode::decode);
-        registry.registerTooltipNode(BranchTooltipNode.ID, BranchTooltipNode::decode);
-        registry.registerTooltipNode(ComponentTooltipNode.ID, ComponentTooltipNode::decode);
-        registry.registerTooltipNode(EmptyTooltipNode.ID, EmptyTooltipNode::decode);
-        registry.registerTooltipNode(ErrorTooltipNode.ID, ErrorTooltipNode::decode);
-        registry.registerTooltipNode(LiteralTooltipNode.ID, LiteralTooltipNode::decode);
-        registry.registerTooltipNode(ValueTooltipNode.ID, ValueTooltipNode::decode);
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        new CommonValueTooltip<ITooltipNode, IKeyTooltipNode, IServerUtils, IServerRegistry>().registerAll(registry);
+        new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
         registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
         registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
@@ -389,7 +378,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(DataComponentPredicate.Type.class, RegistriesTooltipUtils::getDataComponentPredicateTypeTooltip);
 
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
-        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
         registry.registerValueTooltip(TagPredicate.class, ValueTooltipUtils::getTagPredicateTooltip);
@@ -409,6 +397,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
         registry.registerValueTooltip(BlockPos.class, ValueTooltipUtils::getBlockPosTooltip);
         registry.registerValueTooltip(CopyCustomDataFunction.CopyOperation.class, ValueTooltipUtils::getCopyOperationTooltip);
+        registry.registerValueTooltip(PlayerPredicate.AdvancementDonePredicate.class, ValueTooltipUtils::getAdvancementDonePredicateTooltip);
+        registry.registerValueTooltip(PlayerPredicate.AdvancementCriterionsPredicate.class, ValueTooltipUtils::getAdvancementCriterionsPredicateTooltip);
         registry.registerValueTooltip(ItemStack.class, ValueTooltipUtils::getItemStackTooltip);
         registry.registerValueTooltip(MinMaxBounds.Ints.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
         registry.registerValueTooltip(MinMaxBounds.Doubles.class, ValueTooltipUtils::getMinMaxBoundsTooltip);

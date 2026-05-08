@@ -123,6 +123,11 @@ accessible method net/minecraft/world/level/storage/loot/functions/ToggleTooltip
 accessible method net/minecraft/world/level/storage/loot/functions/SetOminousBottleAmplifierFunction <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V
 accessible method net/minecraft/world/item/enchantment/ItemEnchantments <init> (Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;)V
 accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Lnet/minecraft/world/item/ItemStack;
+accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
+accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> (Ljava/util/List;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher <init> (Ljava/lang/String;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher <init> (Ljava/util/Optional;Ljava/util/Optional;)V
+accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher <init> (Ljava/lang/String;Lnet/minecraft/advancements/critereon/StatePropertiesPredicate$ValueMatcher;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 sealed public interface IOperation permits IOperation.AddOperation, IOperation.RemoveOperation, IOperation.ReplaceOperation {
     record AddOperation(Predicate<ItemStack> predicate, IDataNode node) implements IOperation {}
 
-    record RemoveOperation(Predicate<ItemStack> predicate) implements IOperation {}
+    record RemoveOperation(Predicate<ItemStack> predicate, Function<IDataNode, IDataNode> factory) implements IOperation {}
 
     record ReplaceOperation(Predicate<ItemStack> predicate, Function<IDataNode, List<IDataNode>> factory) implements IOperation {}
 
