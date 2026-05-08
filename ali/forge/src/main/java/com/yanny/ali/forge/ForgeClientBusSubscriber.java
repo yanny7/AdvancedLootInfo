@@ -6,7 +6,6 @@ import com.yanny.ali.manager.PluginManager;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -20,11 +19,6 @@ public class ForgeClientBusSubscriber {
         if (level.isClientSide()) {
             EntityStorage.onUnloadLevel();
         }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
-        PluginManager.getInstance().clientRegistry.setHolderLookupProvider(event.getEntity().registryAccess());
     }
 
     @SubscribeEvent

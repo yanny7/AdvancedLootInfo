@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ReferenceWidget implements IWidget {
     private final RelativeRect bounds;
@@ -22,7 +21,7 @@ public class ReferenceWidget implements IWidget {
         if (entry instanceof ListNode listNode && !listNode.nodes().isEmpty()) {
             widget = new LootTableWidget(utils, ((ReferenceNode) entry).nodes().getFirst(), rect, maxWidth, entry);
         } else {
-            widget = new MissingWidget(Objects.requireNonNull(utils.lookupProvider()), rect);
+            widget = new MissingWidget(rect);
         }
 
         bounds = widget.getRect();

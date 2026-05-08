@@ -6,7 +6,6 @@ import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
@@ -76,7 +75,7 @@ public class TooltipNode {
         return (flags & FLAG_ADVANCED) != 0 && !isAdvanced;
     }
 
-    public List<Component> getComponents(HolderLookup.Provider provider, int indentLevel, boolean isAdvanced) {
+    public List<Component> getComponents(int indentLevel, boolean isAdvanced) {
         if (isEmpty(isAdvanced)) {
             return List.of();
         }
@@ -113,7 +112,7 @@ public class TooltipNode {
                         }
 
                         if (value != null) {
-                            currentLine.append(formatValue(provider, value));
+                            currentLine.append(formatValue(value));
                         }
                     }
                 }
@@ -130,7 +129,7 @@ public class TooltipNode {
                         String value = values[i];
 
                         if (value != null) {
-                            valArgs[i] = formatValue(provider, value);
+                            valArgs[i] = formatValue(value);
                         }
                     }
 
@@ -150,7 +149,7 @@ public class TooltipNode {
                 }
 
                 if (value != null) {
-                    currentLine.append(formatValue(provider, value));
+                    currentLine.append(formatValue(value));
                 }
             }
         } else if (component != null) {
@@ -166,14 +165,14 @@ public class TooltipNode {
         int childIndent = (key != null || values != null) ? indentLevel + 1 : indentLevel;
 
         for (TooltipNode child : children) {
-            lines.addAll(child.getComponents(provider, childIndent, isAdvanced));
+            lines.addAll(child.getComponents(childIndent, isAdvanced));
         }
 
         return lines;
     }
 
     @NotNull
-    private MutableComponent formatValue(HolderLookup.Provider provider, String value) {
+    private MutableComponent formatValue(String value) {
         MutableComponent comp;
 
         if (!value.isEmpty() && value.charAt(0) == TooltipBuilder.TRANSLATE_MARKER) {
