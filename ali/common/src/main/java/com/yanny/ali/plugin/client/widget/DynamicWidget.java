@@ -4,21 +4,19 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 
 public class DynamicWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public DynamicWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
-        widget = WidgetUtils.getDynamicWidget(Objects.requireNonNull(utils.lookupProvider()), rect, entry);
+    public DynamicWidget(IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
+        widget = WidgetUtils.getDynamicWidget(rect, entry);
         bounds = widget.getRect();
     }
 

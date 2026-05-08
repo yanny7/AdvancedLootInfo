@@ -25,7 +25,6 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -86,7 +85,6 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         RelativeRect rect = new RelativeRect(0, y, CATEGORY_WIDTH, 0);
         LootTableWidget widget = new LootTableWidget(getUtils(slotWidgets), display.getLootData(), rect, CATEGORY_WIDTH);
         ReiWidgetWrapper widgetWrapper = new ReiWidgetWrapper(widget);
-        HolderLookup.Provider provider = Minecraft.getInstance().level.registryAccess();
 
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
         widgets.add(widgetWrapper);
@@ -98,13 +96,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 ItemStack itemStack = left.get();
                 EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
 
-                stack.tooltip(CoreTooltipUtils.toComponents(provider, h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
+                stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
             } else if (right.isPresent()) {
                 TagKey<? extends ItemLike> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
-                ingredient.map((stack) -> stack.tooltip(CoreTooltipUtils.toComponents(provider, h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                ingredient.map((stack) -> stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entries(ingredient).markOutput());
             }
 
@@ -116,11 +114,6 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     @NotNull
     private IWidgetUtils getUtils(List<Holder> widgets) {
         return new ClientUtils() {
-            @Override
-            public HolderLookup.Provider lookupProvider() {
-                return Minecraft.getInstance().level.registryAccess();
-            }
-
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 widgets.add(new Holder(item, entry, rect));

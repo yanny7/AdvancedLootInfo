@@ -16,8 +16,6 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -82,11 +80,6 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     @NotNull
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
         return new ClientUtils() {
-            @Override
-            public HolderLookup.Provider lookupProvider() {
-                return Minecraft.getInstance().level.registryAccess();
-            }
-
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotWidgets.add(new EmiBaseLoot.Holder(this, item, entry, rect, recipe));
