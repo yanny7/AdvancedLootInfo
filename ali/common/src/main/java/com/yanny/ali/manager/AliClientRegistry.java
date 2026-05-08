@@ -5,7 +5,6 @@ import com.yanny.aci.manager.CoreClientRegistry;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.client.widget.MissingWidget;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -34,14 +33,8 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtil
 
     private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
 
-    private HolderLookup.Provider provider = null;
-
     public AliClientRegistry(ICommonUtils utils) {
         super(utils);
-    }
-
-    public void setHolderLookupProvider(HolderLookup.Provider provider) {
-        this.provider = provider;
     }
 
     public CompletableFuture<byte[]> getCurrentDataFuture() {
@@ -194,12 +187,6 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtil
                 Thread.currentThread().interrupt();
             }
         }
-    }
-
-    @NotNull
-    @Override
-    public HolderLookup.Provider lookupProvider() {
-        return provider;
     }
 
     private static class DataReceiver {

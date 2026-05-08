@@ -1,7 +1,6 @@
 package com.yanny.aci.tooltip;
 
 import com.yanny.aci.api.ICoreServerUtils;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -11,19 +10,19 @@ import java.util.List;
 
 public class CoreTooltipUtils {
     @NotNull
-    public static List<Component> toComponents(HolderLookup.Provider provider, List<TooltipNode> tooltip, int pad, boolean showAdvancedTooltip) {
+    public static List<Component> toComponents(List<TooltipNode> tooltip, int pad, boolean showAdvancedTooltip) {
         List<Component> components = new ArrayList<>();
 
         for (TooltipNode node : tooltip) {
-            components.addAll(toComponents(provider, node, pad, showAdvancedTooltip));
+            components.addAll(toComponents(node, pad, showAdvancedTooltip));
         }
 
         return components;
     }
 
     @NotNull
-    public static List<Component> toComponents(HolderLookup.Provider provider, TooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
-        return tooltip.getComponents(provider, pad, showAdvancedTooltip);
+    public static List<Component> toComponents(TooltipNode tooltip, int pad, boolean showAdvancedTooltip) {
+        return tooltip.getComponents(pad, showAdvancedTooltip);
     }
 
     @NotNull

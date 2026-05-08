@@ -18,7 +18,6 @@ public class FabricClientBusSubscriber {
     }
 
     private static void onConnect(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
-        PluginManager.getInstance().clientRegistry.setHolderLookupProvider(clientPacketListener.registryAccess());
         PluginManager.getInstance().clientRegistry.loggingIn(ClientPlayNetworking.canSend(StartMessage.TYPE));
     }
 
