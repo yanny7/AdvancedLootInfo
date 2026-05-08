@@ -1,9 +1,9 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IServerUtils;
-import com.yanny.awi.api.ITooltipNode;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PlacedFeatureNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("placed_feature");
@@ -31,7 +32,7 @@ public class PlacedFeatureNode extends ListNode {
 
             FeatureConfiguration featureConfiguration = configuredFeature.config(); // values
 
-            List<Component> components = CoreTooltipUtils.toComponents(utils.getFeatureTooltip(utils, featureConfiguration), 0, false);
+            List<Component> components = CoreTooltipUtils.toComponents(Objects.requireNonNull(utils.lookupProvider()), utils.getFeatureTooltip(utils, featureConfiguration), 0, false);
 
             for (Component component : components) {
                 System.out.println(component.toString());
@@ -50,7 +51,7 @@ public class PlacedFeatureNode extends ListNode {
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return null;
     }
 

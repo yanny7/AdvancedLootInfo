@@ -12,9 +12,9 @@ public abstract class CorePluginManager<
         TCommonRegistry,
         TServerRegistry,
         TCoreCommonRegistry extends CoreCommonRegistry<?>,
-        TCoreClientRegistry extends CoreClientRegistry<?, ?, ?, ?, ?, ?>,
-        TCoreServerRegistry extends CoreServerRegistry<?, ?, ?, ?, ?>,
-        TClientRegistry     extends ICoreClientRegistry<?, ?, ?, ?>,
+        TCoreClientRegistry extends CoreClientRegistry<?, ?, ?, ?, ?>,
+        TCoreServerRegistry extends CoreServerRegistry<?, ?, ?>,
+        TClientRegistry     extends ICoreClientRegistry<?, ?, ?>,
         TPlugin             extends ICorePlugin<TCommonRegistry, TClientRegistry, TServerRegistry>
         > {
     private static final Logger LOGGER = LogUtils.getLogger();

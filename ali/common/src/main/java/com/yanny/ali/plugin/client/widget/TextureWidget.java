@@ -4,10 +4,12 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.ali.api.ITooltipNode;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -24,9 +26,11 @@ public class TextureWidget implements IWidget {
     protected final int regionHeight;
     protected final int textureWidth;
     protected final int textureHeight;
+    private final HolderLookup.Provider provider;
     private final List<Component> components = new LinkedList<>();
 
-    public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+    public TextureWidget(HolderLookup.Provider provider, ResourceLocation texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+        this.provider = provider;
         this.texture = texture;
         this.rect = rect;
         this.u = u;
@@ -38,8 +42,8 @@ public class TextureWidget implements IWidget {
         rect.setDimensions(rect.getWidth(), rect.getHeight());
     }
 
-    public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v) {
-        this(texture, rect, u, v, rect.getWidth(), rect.getHeight(), 256, 256);
+    public TextureWidget(HolderLookup.Provider provider, ResourceLocation texture, RelativeRect rect, int u, int v) {
+        this(provider, texture, rect, u, v, rect.getWidth(), rect.getHeight(), 256, 256);
     }
 
     @NotNull
@@ -54,8 +58,8 @@ public class TextureWidget implements IWidget {
         return WidgetDirection.VERTICAL;
     }
 
-    public void tooltipText(ITooltipNode tooltip) {
-        this.components.addAll(CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
+    public void tooltipText(TooltipNode tooltip) {
+        this.components.addAll(CoreTooltipUtils.toComponents(provider, tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 
     @NotNull

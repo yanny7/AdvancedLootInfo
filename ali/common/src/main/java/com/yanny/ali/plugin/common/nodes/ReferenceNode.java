@@ -1,5 +1,6 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -11,10 +12,10 @@ import java.util.List;
 public class ReferenceNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("reference");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
     private final float chance;
 
-    public ReferenceNode(List<IDataNode> children, float chance, ITooltipNode tooltip) {
+    public ReferenceNode(List<IDataNode> children, float chance, TooltipNode tooltip) {
         children.forEach(this::addChildren);
         this.chance = chance;
         this.tooltip = tooltip;
@@ -22,19 +23,19 @@ public class ReferenceNode extends ListNode {
 
     public ReferenceNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
         chance = buf.readFloat();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
         buf.writeFloat(chance);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 

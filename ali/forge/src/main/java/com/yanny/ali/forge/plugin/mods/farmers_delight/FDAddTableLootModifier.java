@@ -1,10 +1,13 @@
 package com.yanny.ali.forge.plugin.mods.farmers_delight;
 
-import com.yanny.ali.api.*;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.ILootModifier;
+import com.yanny.ali.api.IOperation;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.forge.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
-import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierAccessor;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
@@ -34,9 +37,10 @@ public class FDAddTableLootModifier extends GlobalLootModifier implements IGloba
         List<LootItemCondition> conditionList = Arrays.asList(this.conditions);
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
-            ITooltipNode tooltip = ArrayTooltipNode.array()
-                    .add(LiteralTooltipNode.translatable("ali.enum.group_type.all"))
-                    .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+            TooltipNode tooltip = TooltipBuilder.array((b) -> b
+                            .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
+                            .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+                    )
                     .build();
             IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.location(), c, tooltip);
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));

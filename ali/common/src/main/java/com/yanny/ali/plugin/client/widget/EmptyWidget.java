@@ -11,15 +11,16 @@ import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class EmptyWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public EmptyWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
+    public EmptyWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         bounds = rect;
         bounds.setDimensions(18, 18);
-        widget = WidgetUtils.getEmptyWidget(rect, entry);
+        widget = WidgetUtils.getEmptyWidget(Objects.requireNonNull(utils.lookupProvider()), rect, entry);
     }
 
     @NotNull

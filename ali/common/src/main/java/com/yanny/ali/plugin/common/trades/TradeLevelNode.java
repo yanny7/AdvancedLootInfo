@@ -1,12 +1,11 @@
 package com.yanny.ali.plugin.common.trades;
 
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.api.ListNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -22,7 +21,7 @@ public class TradeLevelNode extends ListNode {
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {
-                addChildren(utils.getItemListing(utils, itemListing, EmptyTooltipNode.EMPTY));
+                addChildren(utils.getItemListing(utils, itemListing, TooltipNode.EMPTY_INSTANCE));
             }
         }
     }
@@ -39,8 +38,8 @@ public class TradeLevelNode extends ListNode {
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
-        return ValueTooltipNode.value(level).build("ali.property.value.level");
+    public TooltipNode getTooltip() {
+        return TooltipBuilder.value(level).build("ali.property.value.level");
     }
 
     @NotNull

@@ -19,7 +19,7 @@ public class EmiLootSlotWidget extends SlotWidget {
 
     public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
         super(ingredient, x, y);
-        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips).forEach(this::appendTooltip);
+        CoreTooltipUtils.toComponents(Minecraft.getInstance().level.registryAccess(), entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips).forEach(this::appendTooltip);
         setCount(count);
     }
 
