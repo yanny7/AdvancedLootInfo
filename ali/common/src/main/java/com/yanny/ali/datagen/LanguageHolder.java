@@ -82,20 +82,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.condition.match_player_custom", "Match Player Custom:");
         TRANSLATION_MAP.put("ali.type.condition.match_structure", "Match Structure:");
 
-        // Aether
-        TRANSLATION_MAP.put("ali.type.condition.config_enabled", "Must Be Enabled In Config");
-
-        // The Bumblezone
-        TRANSLATION_MAP.put("ali.type.condition.essence_only_spawn", "Essence Only Spawn");
-
-        // Moonlight
-        TRANSLATION_MAP.put("ali.type.condition.optional_property", "Optional Property");
-
-        // Mantle
-        TRANSLATION_MAP.put("ali.type.condition.block_tag", "Block Tag");
-        TRANSLATION_MAP.put("ali.type.condition.contains_item", "Contains Item");
-        TRANSLATION_MAP.put("ali.type.condition.empty", "Empty");
-
         /*
          * MODIFIERS
          */
@@ -146,39 +132,9 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.function.player_action", "Player Action:");
         TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
 
-        // Aether
-        TRANSLATION_MAP.put("ali.type.function.spawn_xp", "Spawn XP");
-        TRANSLATION_MAP.put("ali.type.function.spawn_tnt", "Spawn TNT");
-        TRANSLATION_MAP.put("ali.type.function.double_drops", "Double Drops");
-        TRANSLATION_MAP.put("ali.type.function.whirlwind_spawn_entity", "Whirlwind Spawn Entity");
-
         // Farmer's delight
         TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
         TRANSLATION_MAP.put("ali.type.function.smoker_cook", "Smoker Cook");
-
-        // Supplementaries
-        TRANSLATION_MAP.put("ali.type.function.random_arrow", "Random Arrow");
-        TRANSLATION_MAP.put("ali.type.function.curse_loot", "Curse Loot");
-
-        // The Bumblezone
-        TRANSLATION_MAP.put("ali.type.function.drop_container_loot", "Drop Container Loot");
-        TRANSLATION_MAP.put("ali.type.function.honey_compass_locate_structure", "Honey Compass Locate Structure");
-        TRANSLATION_MAP.put("ali.type.function.tag_item_removals", "Tag Item Removals");
-        TRANSLATION_MAP.put("ali.type.function.uniquify_if_has_items", "Uniquify If Has Items");
-
-        // Deeper and Darker
-        TRANSLATION_MAP.put("ali.type.function.set_painting_variant", "Set Painting Variant");
-
-        // Immersive Engineering
-        TRANSLATION_MAP.put("ali.type.function.bluprintz", "Bluprintz Easter Egg");
-        TRANSLATION_MAP.put("ali.type.function.conveyor_cover", "Apply Conveyor Cover");
-        TRANSLATION_MAP.put("ali.type.function.property_count", "Get Count From Property");
-        TRANSLATION_MAP.put("ali.type.function.revolver_perk", "Revolver Perk");
-        TRANSLATION_MAP.put("ali.type.function.windmill", "Set Windmill Sails");
-
-        // Mantle
-        TRANSLATION_MAP.put("ali.type.function.retexture_block_entity", "Retexture Block Entity");
-        TRANSLATION_MAP.put("ali.type.function.set_fluid", "Set Fluid");
 
         // Trades
         TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");

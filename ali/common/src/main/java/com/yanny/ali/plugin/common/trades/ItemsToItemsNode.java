@@ -2,11 +2,14 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -19,7 +22,7 @@ import java.util.Collections;
 public class ItemsToItemsNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("items_to_items");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
@@ -29,7 +32,7 @@ public class ItemsToItemsNode extends ListNode {
                             int maxUses,
                             int xp,
                             float priceMultiplier,
-                            ITooltipNode condition) {
+                            TooltipNode condition) {
         this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), new RangeValue(), output, outputCount, maxUses, xp, priceMultiplier, condition);
     }
 
@@ -43,43 +46,43 @@ public class ItemsToItemsNode extends ListNode {
                             int maxUses,
                             int xp,
                             float priceMultiplier,
-                            ITooltipNode condition) {
-        this(utils, input1, input1Count, EmptyTooltipNode.EMPTY, input2, input2Count, EmptyTooltipNode.EMPTY, output, outputCount, EmptyTooltipNode.EMPTY, maxUses, xp, priceMultiplier, condition);
+                            TooltipNode condition) {
+        this(utils, input1, input1Count, TooltipNode.EMPTY_INSTANCE, input2, input2Count, TooltipNode.EMPTY_INSTANCE, output, outputCount, TooltipNode.EMPTY_INSTANCE, maxUses, xp, priceMultiplier, condition);
     }
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
                             RangeValue input1Count,
-                            ITooltipNode input1Condition,
+                            TooltipNode input1Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> input2,
                             RangeValue input2Count,
-                            ITooltipNode input2Condition,
+                            TooltipNode input2Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
                             RangeValue outputCount,
-                            ITooltipNode outputCondition,
+                            TooltipNode outputCondition,
                             int maxUses,
                             int xp,
                             float priceMultiplier,
-                            ITooltipNode condition) {
+                            TooltipNode condition) {
         addChildren(getChildren(input1, input1Count, input1Condition));
         addChildren(getChildren(input2, input2Count, input2Condition));
         addChildren(getChildren(output, outputCount, outputCondition));
-        tooltip = ArrayTooltipNode.array()
+        tooltip = TooltipBuilder.array((b) -> b
                 .add(condition)
                 .add(utils.getValueTooltip(utils, maxUses).build("ali.property.value.uses"))
                 .add(utils.getValueTooltip(utils, xp).build("ali.property.value.villager_xp"))
                 .add(utils.getValueTooltip(utils, priceMultiplier).build("ali.property.value.price_multiplier"))
-                .build();
+        ).build();
     }
 
     public ItemsToItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -91,10 +94,10 @@ public class ItemsToItemsNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 
-    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, ITooltipNode condition) {
+    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {
         return item.map(
                 (i) -> new ItemNode(1, count, i, condition, Collections.emptyList(), Collections.emptyList()),
                 (t) -> new ItemNode(1, count, t, condition, Collections.emptyList(), Collections.emptyList())

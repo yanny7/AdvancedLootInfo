@@ -1,9 +1,7 @@
 package com.yanny.aci.tooltip;
 
-import com.yanny.aci.api.ICoreKeyTooltipNode;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
-import com.yanny.aci.api.ICoreTooltipNode;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -20,10 +18,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class CommonValueTooltip<
-        TTooltipNode    extends ICoreTooltipNode<TServerUtils>,
-        TKeyTooltipNode extends ICoreKeyTooltipNode<TTooltipNode, TKeyTooltipNode>,
-        TServerUtils    extends ICoreServerUtils<TKeyTooltipNode, TTooltipNode, TServerUtils>,
-        TServerRegistry extends ICoreServerRegistry<TServerUtils, TKeyTooltipNode>
+        TServerUtils    extends ICoreServerUtils<TServerUtils>,
+        TServerRegistry extends ICoreServerRegistry<TServerUtils>
         > {
     public void registerAll(TServerRegistry registry) {
         registry.registerValueTooltip(Collection.class, this::getCollectionTooltip);
@@ -48,98 +44,96 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
     }
 
-    private TKeyTooltipNode getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
+    private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
         if (collection.isEmpty()) {
-            return utils.getEmptyNode();
+            return TooltipBuilder.empty();
         }
 
-        TKeyTooltipNode tooltip = utils.getBranchNode();
-
-        for (Object o : collection) {
-            tooltip.add(utils.buildTooltip(utils.getValueTooltip(utils, o)));
-        }
-
-        return tooltip;
+        return TooltipBuilder.array((b) -> {
+            for (Object o : collection) {
+                b.add(utils.getValueTooltip(utils, o));
+            }
+        });
     }
 
     @NotNull
-    private TKeyTooltipNode getHolderTooltip(TServerUtils utils, Holder<?> holder) {
+    private TooltipBuilder getHolderTooltip(TServerUtils utils, Holder<?> holder) {
         return utils.getValueTooltip(utils, holder.value());
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    private TKeyTooltipNode getOptionalTooltip(TServerUtils utils, Optional<?> optional) {
-        return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(utils.getEmptyNode());
+    private TooltipBuilder getOptionalTooltip(TServerUtils utils, Optional<?> optional) {
+        return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(TooltipBuilder.empty());
     }
 
     @NotNull
-    private TKeyTooltipNode getBooleanTooltip(TServerUtils utils, Boolean value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getBooleanTooltip(TServerUtils utils, Boolean value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getIntegerTooltip(TServerUtils utils, int value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getIntegerTooltip(TServerUtils utils, int value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getLongTooltip(TServerUtils utils, Long value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getLongTooltip(TServerUtils utils, Long value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getByteTooltip(TServerUtils utils, Byte value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getByteTooltip(TServerUtils utils, Byte value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getStringTooltip(TServerUtils utils, String value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getStringTooltip(TServerUtils utils, String value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getFloatTooltip(TServerUtils utils, Float value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getFloatTooltip(TServerUtils utils, Float value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getDoubleTooltip(TServerUtils utils, Double value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getDoubleTooltip(TServerUtils utils, Double value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getEnumTooltip(TServerUtils utils, Enum<?> value) {
-        return utils.getValueNode(value.name());
+    private TooltipBuilder getEnumTooltip(TServerUtils utils, Enum<?> value) {
+        return TooltipBuilder.value(value.name());
     }
 
     @NotNull
-    private TKeyTooltipNode getResourceLocationTooltip(TServerUtils utils, ResourceLocation value) {
-        return utils.getValueNode(value);
+    private TooltipBuilder getResourceLocationTooltip(TServerUtils utils, ResourceLocation value) {
+        return TooltipBuilder.value(value);
     }
 
     @NotNull
-    private TKeyTooltipNode getResourceKeyTooltip(TServerUtils utils, ResourceKey<?> value) {
+    private TooltipBuilder getResourceKeyTooltip(TServerUtils utils, ResourceKey<?> value) {
         return utils.getValueTooltip(utils, value.location());
     }
 
     @NotNull
-    private TKeyTooltipNode getTagKeyTooltip(TServerUtils utils, TagKey<?> value) {
+    private TooltipBuilder getTagKeyTooltip(TServerUtils utils, TagKey<?> value) {
         return utils.getValueTooltip(utils, value.location());
     }
 
     @NotNull
-    private TKeyTooltipNode getComponentTooltip(TServerUtils utils, Component component) {
-        return utils.getComponentNode(component.copy());
+    private TooltipBuilder getComponentTooltip(TServerUtils utils, Component component) {
+        return TooltipBuilder.component(component);
     }
 
     @NotNull
-    private TKeyTooltipNode getUUIDTooltip(TServerUtils utils, UUID uuid) {
-        return utils.getValueNode(uuid);
+    private TooltipBuilder getUUIDTooltip(TServerUtils utils, UUID uuid) {
+        return TooltipBuilder.value(uuid);
     }
 
     @NotNull
-    private TKeyTooltipNode getCompoundTagTooltip(TServerUtils utils, CompoundTag tag) {
+    private TooltipBuilder getCompoundTagTooltip(TServerUtils utils, CompoundTag tag) {
         return utils.getValueTooltip(utils, tag.toString());
     }
 
@@ -154,7 +148,7 @@ public class CommonValueTooltip<
     }
 
     @NotNull
-    private TKeyTooltipNode getPropertyTooltip(TServerUtils utils, Property<?> property) {
+    private TooltipBuilder getPropertyTooltip(TServerUtils utils, Property<?> property) {
         return utils.getValueTooltip(utils, property.getName());
     }
 }

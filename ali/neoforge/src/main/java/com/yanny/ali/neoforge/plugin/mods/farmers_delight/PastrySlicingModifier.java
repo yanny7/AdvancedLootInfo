@@ -38,7 +38,7 @@ public class PastrySlicingModifier extends GlobalLootModifier implements IGlobal
 
             count.put(null, Map.of(0, new RangeValue(1, 7)));
 
-            ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
+            TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
             IDataNode node = new ItemNode(1, new RangeValue(1, 7), pastrySlice.getDefaultInstance(), tooltip, Collections.emptyList(), c);
 
             return Collections.singletonList(new IOperation.AddOperation((itemStack) -> true, node));

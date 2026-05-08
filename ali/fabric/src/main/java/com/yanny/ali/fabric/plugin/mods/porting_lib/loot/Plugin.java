@@ -29,7 +29,7 @@ public class Plugin implements IPlugin {
             LOOT_MODIFIER_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootModifier");
             LOOT_TABLE_ID_CONDITION_CLASS = Class.forName("io.github.fabricators_of_create.porting_lib.loot.LootTableIdCondition");
         } catch (ClassNotFoundException e) {
-            LOGGER.warn("Unable to obtain GLM classes: {}", e.getMessage(), e);
+            LOGGER.warn("Unable to obtain GLM classes: {}, mod is not available", e.getMessage());
         }
     }
 

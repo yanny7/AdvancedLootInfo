@@ -3,7 +3,6 @@ package com.yanny.ali.lootjs.server;
 import com.almostreliable.lootjs.core.filters.IdFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilter;
 import com.almostreliable.lootjs.core.filters.ItemFilterImpl;
-import com.yanny.ali.api.IKeyTooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
 import com.yanny.ali.plugin.common.tooltip.ValueTooltipNode;
@@ -26,86 +25,82 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getCollectionToolt
 
 public class LootJsGenericTooltipUtils {
     @NotNull
-    public static IKeyTooltipNode getItemFilterTooltip(IServerUtils utils, ItemFilter predicate) {
+    public static TooltipBuilder getItemFilterTooltip(IServerUtils utils, ItemFilter predicate) {
         if (predicate == ItemFilter.NONE) {
-            return ValueTooltipNode.value("NONE");
+            return TooltipBuilder.value("NONE");
         } else if (predicate == ItemFilter.ANY) {
-            return ValueTooltipNode.value("ANY");
+            return TooltipBuilder.value("ANY");
         } else if (predicate == ItemFilter.EMPTY) {
-            return ValueTooltipNode.value("EMPTY");
+            return TooltipBuilder.value("EMPTY");
         } else if (predicate == ItemFilter.ARMOR) {
-            return ValueTooltipNode.value("ARMOR");
+            return TooltipBuilder.value("ARMOR");
         } else if (predicate == ItemFilter.EDIBLE) {
-            return ValueTooltipNode.value("EDIBLE");
+            return TooltipBuilder.value("EDIBLE");
         } else if (predicate == ItemFilter.DAMAGEABLE) {
-            return ValueTooltipNode.value("DAMAGEABLE");
+            return TooltipBuilder.value("DAMAGEABLE");
         } else if (predicate == ItemFilter.DAMAGED) {
-            return ValueTooltipNode.value("ENCHANTABLE");
+            return TooltipBuilder.value("ENCHANTABLE");
         } else if (predicate == ItemFilter.ENCHANTED) {
-            return ValueTooltipNode.value("ENCHANTED");
+            return TooltipBuilder.value("ENCHANTED");
         } else if (predicate == ItemFilter.BLOCK_ITEM) {
-            return ValueTooltipNode.value("BLOCK_ITEM");
+            return TooltipBuilder.value("BLOCK_ITEM");
         } else if (predicate instanceof ItemFilterImpl.HasEnchantment(IdFilter filter, MinMaxBounds.Ints levelBounds, DataComponentType<ItemEnchantments> type)) {
-            return ValueTooltipNode.value("HAS_ENCHANTMENT")
+            return TooltipBuilder.value("HAS_ENCHANTMENT")
                     .add(utils.getValueTooltip(utils, filter).build("ali.property.branch.filter"))
                     .add(utils.getValueTooltip(utils, levelBounds).build("ali.property.value.levels"))
                     .add(utils.getValueTooltip(utils, type).build("ali.property.value.component"));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlot(EquipmentSlot equipmentSlot)) {
-            return ValueTooltipNode.value("EQUIPMENT_SLOT")
+            return TooltipBuilder.value("EQUIPMENT_SLOT")
                     .add(utils.getValueTooltip(utils, equipmentSlot).build("ali.property.value.slot"));
         } else if (predicate instanceof ItemFilterImpl.IsEquipmentSlotGroup(EquipmentSlotGroup equipmentSlotGroup)) {
-            return ValueTooltipNode.value("EQUIPMENT_SLOT_GROUP")
+            return TooltipBuilder.value("EQUIPMENT_SLOT_GROUP")
                     .add(utils.getValueTooltip(utils, equipmentSlotGroup).build("ali.property.value.slot_group"));
         } else if (predicate instanceof ItemFilterImpl.ByItem(ItemStack itemStack, boolean checkComponents)) {
-            return ValueTooltipNode.value("ITEM")
+            return TooltipBuilder.value("ITEM")
                     .add(utils.getValueTooltip(utils, itemStack).build("ali.property.branch.item"))
                     .add(utils.getValueTooltip(utils, checkComponents).build("ali.property.value.check_components"));
         } else if (predicate instanceof ItemFilterImpl.ByIngredient(Ingredient ingredient)) {
-            return ValueTooltipNode.value("INGREDIENT")
+            return TooltipBuilder.value("INGREDIENT")
                     .add(utils.getIngredientTooltip(utils, ingredient));
         } else if (predicate instanceof ItemFilterImpl.ByTag(TagKey<Item> tag)) {
-            return ValueTooltipNode.value("TAG")
+            return TooltipBuilder.value("TAG")
                     .add(utils.getValueTooltip(utils, tag).build("aci.util.null"));
         } else if (predicate instanceof ItemFilterImpl.AnyOfToolAction toolAction) {
-            return ValueTooltipNode.value("ANY_OF_TOOL_ACTION")
+            return TooltipBuilder.value("ANY_OF_TOOL_ACTION")
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build("ali.property.branch.abilities"));
         } else if (predicate instanceof ItemFilterImpl.AllOfToolAction toolAction) {
-            return ValueTooltipNode.value("ALL_OF_TOOL_ACTION")
+            return TooltipBuilder.value("ALL_OF_TOOL_ACTION")
                     .add(utils.getValueTooltip(utils, toolAction.toolActions()).build("ali.property.branch.abilities"));
         } else if (predicate instanceof ItemFilterImpl.Not(ItemFilter itemFilter)) {
-            return ValueTooltipNode.value("NOT")
+            return TooltipBuilder.value("NOT")
                     .add(utils.getValueTooltip(utils, itemFilter).build("ali.property.branch.filter"));
         } else if (predicate instanceof ItemFilterImpl.AllOf allOf) {
-            return ValueTooltipNode.value("ALL_OF")
+            return TooltipBuilder.value("ALL_OF")
                     .add(getCollectionTooltip(utils, "ali.property.value.filter", Arrays.asList(allOf.itemFilters())).build("ali.property.branch.filters"));
         } else if (predicate instanceof ItemFilterImpl.AnyOf allOf) {
-            return ValueTooltipNode.value("ANY_OF")
+            return TooltipBuilder.value("ANY_OF")
                     .add(getCollectionTooltip(utils, "ali.property.value.filter", Arrays.asList(allOf.itemFilters())).build("ali.property.branch.filters"));
         } else if (predicate instanceof ItemFilterImpl.Custom custom) {
-            return ValueTooltipNode.value("CUSTOM")
+            return TooltipBuilder.value("CUSTOM")
                     .add(utils.getValueTooltip(utils, Optional.ofNullable(custom.description())).build("ali.property.value.description"));
         }
 
-        return ValueTooltipNode.value("UNKNOWN");
+        return TooltipBuilder.value("UNKNOWN");
     }
 
     @NotNull
-    public static IKeyTooltipNode getIdFilterTooltip(IServerUtils utils, IdFilter filter) {
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
-
-        switch (filter) {
-            case IdFilter.ByLocation byLocation -> tooltip.add(utils.getValueTooltip(utils, byLocation.location()).build("aci.util.null"));
-            case IdFilter.ByPattern byPattern -> tooltip.add(utils.getValueTooltip(utils, byPattern.toString()).build("ali.property.value.pattern"));
-            case IdFilter.ByMod byMod -> tooltip.add(utils.getValueTooltip(utils, byMod.mod()).build("ali.property.value.mod"));
-            case IdFilter.Or or -> tooltip.add(utils.getValueTooltip(utils, or.filters()).build("ali.property.branch.or"));
+    public static TooltipBuilder getIdFilterTooltip(IServerUtils utils, IdFilter filter) {
+        return switch (filter) {
+            case IdFilter.ByLocation byLocation -> utils.getValueTooltip(utils, byLocation.location());
+            case IdFilter.ByPattern byPattern -> utils.getValueTooltip(utils, byPattern.toString()).key("ali.property.value.pattern");
+            case IdFilter.ByMod byMod -> utils.getValueTooltip(utils, byMod.mod()).key("ali.property.value.mod");
+            case IdFilter.Or or -> utils.getValueTooltip(utils, or.filters()).key("ali.property.branch.or");
             default -> throw new IllegalStateException("Unexpected IdFilter type: " + filter);
-        }
-
-        return tooltip;
+        };
     }
 
     @NotNull
-    public static IKeyTooltipNode getItemAbilityTooltip(IServerUtils utils, ItemAbility itemAbility) {
+    public static TooltipBuilder getItemAbilityTooltip(IServerUtils utils, ItemAbility itemAbility) {
         return utils.getValueTooltip(utils, itemAbility.name());
     }
 }

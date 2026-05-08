@@ -3,7 +3,11 @@ package com.yanny.ali.test;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.ali.api.*;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerRegistry;
+import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.server.LootConditionTypes;
@@ -25,7 +29,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
@@ -136,25 +139,25 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function) {
+            public <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function) {
                 return PluginManager.getInstance().serverRegistry.getFunctionTooltip(utils, function);
             }
 
             @NotNull
             @Override
-            public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
+            public <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition) {
                 return PluginManager.getInstance().serverRegistry.getConditionTooltip(utils, condition);
             }
 
             @NotNull
             @Override
-            public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+            public <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
                 return PluginManager.getInstance().serverRegistry.getIngredientTooltip(utils, ingredient);
             }
 
             @NotNull
             @Override
-            public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
+            public <T> TooltipBuilder getValueTooltip(IServerUtils utils, @Nullable T value) {
                 return PluginManager.getInstance().serverRegistry.getValueTooltip(utils, value);
             }
 
@@ -194,7 +197,7 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition) {
+            public <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition) {
                 return PluginManager.getInstance().serverRegistry.getItemListing(utils, entry, condition);
             }
 
@@ -214,52 +217,6 @@ public class TooltipTestSuite {
             @Override
             public ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
-            }
-
-            @NotNull
-            @Override
-            public ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
-                return PluginManager.getInstance().serverRegistry.buildTooltip(keyTooltipNode);
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getBranchNode() {
-                return PluginManager.getInstance().serverRegistry.getBranchNode();
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getBranchNode(boolean isAdvancedTooltip) {
-                return PluginManager.getInstance().serverRegistry.getBranchNode(isAdvancedTooltip);
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getValueNode(Object... value) {
-                return PluginManager.getInstance().serverRegistry.getValueNode(value);
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getKeyValueNode(Object key, Object value) {
-                return PluginManager.getInstance().serverRegistry.getKeyValueNode(key, value);
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getComponentNode(Component... values) {
-                return PluginManager.getInstance().serverRegistry.getComponentNode(values);
-            }
-
-            @Override
-            public @NotNull ITooltipNode getLiteralNode(String translatable) {
-                return PluginManager.getInstance().serverRegistry.getLiteralNode(translatable);
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getEmptyNode() {
-                return PluginManager.getInstance().serverRegistry.getEmptyNode();
-            }
-
-            @Override
-            public @NotNull IKeyTooltipNode getErrorNode(String error) {
-                return PluginManager.getInstance().serverRegistry.getErrorNode(error);
             }
 
             @Nullable

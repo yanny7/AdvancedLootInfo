@@ -4,12 +4,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public interface ICoreDataNode<
-        TServerUtils extends ICoreServerUtils<?, ?, ?>,
-        TTooltipNode extends ICoreTooltipNode<?>
-        > extends Comparable<ICoreDataNode<?, ?>> {
+public interface ICoreDataNode<TServerUtils extends ICoreServerUtils<?>> extends Comparable<ICoreDataNode<?>> {
     @NotNull
-    TTooltipNode getTooltip();
+    TooltipNode getTooltip();
 
     @NotNull
     ResourceLocation getId();
@@ -21,7 +18,7 @@ public interface ICoreDataNode<
     }
 
     @Override
-    default int compareTo(ICoreDataNode<?, ?> o) {
+    default int compareTo(ICoreDataNode<?> o) {
         return Float.compare(o.getChance(), getChance());
     }
 }

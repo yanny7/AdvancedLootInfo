@@ -12,7 +12,6 @@ import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
-import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.*;
 import com.yanny.ali.plugin.server.*;
 import net.minecraft.advancements.critereon.*;
@@ -113,19 +112,11 @@ public class Plugin implements IPlugin {
         registry.registerDataNode(TradeLevelNode.ID, TradeLevelNode::new);
         registry.registerDataNode(SubTradesNode.ID, SubTradesNode::new);
         registry.registerDataNode(ItemsToItemsNode.ID, ItemsToItemsNode::new);
-
-        registry.registerTooltipNode(ArrayTooltipNode.ID, ArrayTooltipNode::decode);
-        registry.registerTooltipNode(BranchTooltipNode.ID, BranchTooltipNode::decode);
-        registry.registerTooltipNode(ComponentTooltipNode.ID, ComponentTooltipNode::decode);
-        registry.registerTooltipNode(EmptyTooltipNode.ID, EmptyTooltipNode::decode);
-        registry.registerTooltipNode(ErrorTooltipNode.ID, ErrorTooltipNode::decode);
-        registry.registerTooltipNode(LiteralTooltipNode.ID, LiteralTooltipNode::decode);
-        registry.registerTooltipNode(ValueTooltipNode.ID, ValueTooltipNode::decode);
     }
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        new CommonValueTooltip<ITooltipNode, IKeyTooltipNode, IServerUtils, IServerRegistry>().registerAll(registry);
+        new CommonValueTooltip<IServerUtils, IServerRegistry>().registerAll(registry);
 
         registry.registerItemCollector(LootItem.class, ItemCollectorUtils::collectItems);
         registry.registerItemCollector(TagEntry.class, ItemCollectorUtils::collectTags);
@@ -360,6 +351,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
         registry.registerValueTooltip(BlockPos.class, ValueTooltipUtils::getBlockPosTooltip);
         registry.registerValueTooltip(CopyCustomDataFunction.CopyOperation.class, ValueTooltipUtils::getCopyOperationTooltip);
+        registry.registerValueTooltip(PlayerPredicate.AdvancementDonePredicate.class, ValueTooltipUtils::getAdvancementDonePredicateTooltip);
+        registry.registerValueTooltip(PlayerPredicate.AdvancementCriterionsPredicate.class, ValueTooltipUtils::getAdvancementCriterionsPredicateTooltip);
         registry.registerValueTooltip(ItemStack.class, ValueTooltipUtils::getItemStackTooltip);
         registry.registerValueTooltip(MinMaxBounds.Ints.class, ValueTooltipUtils::getMinMaxBoundsTooltip);
         registry.registerValueTooltip(MinMaxBounds.Doubles.class, ValueTooltipUtils::getMinMaxBoundsTooltip);

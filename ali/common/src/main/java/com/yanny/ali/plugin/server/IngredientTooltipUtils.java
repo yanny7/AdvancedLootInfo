@@ -1,28 +1,24 @@
 package com.yanny.ali.plugin.server;
 
-import com.yanny.ali.api.IKeyTooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.ErrorTooltipNode;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 
 public class IngredientTooltipUtils {
     @NotNull
-    public static ITooltipNode getIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
-        IKeyTooltipNode tooltip = BranchTooltipNode.branch();
-
-        for (Ingredient.Value value : ingredient.values) {
-            if (value instanceof Ingredient.ItemValue itemValue) {
-                tooltip.add(utils.getValueTooltip(utils, itemValue.item()).build("ali.property.branch.item"));
-            } else if (value instanceof Ingredient.TagValue tagValue) {
-                tooltip.add(utils.getValueTooltip(utils, tagValue.tag()).build("ali.property.value.tag"));
-            } else {
-                tooltip.add(ErrorTooltipNode.error(value.getClass().getSimpleName()).build());
+    public static TooltipNode getIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
+        return TooltipBuilder.array((b) -> {
+            for (Ingredient.Value value : ingredient.values) {
+                if (value instanceof Ingredient.ItemValue itemValue) {
+                    b.add(utils.getValueTooltip(utils, itemValue.item()).build("ali.property.branch.item"));
+                } else if (value instanceof Ingredient.TagValue tagValue) {
+                    b.add(utils.getValueTooltip(utils, tagValue.tag()).build("ali.property.value.tag"));
+                } else {
+                    b.add(TooltipBuilder.error(value.getClass().getSimpleName()).build());
+                }
             }
-        }
-
-        return tooltip.build("ali.property.branch.items");
+        }).build("ali.property.branch.items");
     }
 }

@@ -187,6 +187,19 @@ public class GenericTooltipTest {
                 "  -> facing: east",
                 "  -> level: 3"
         ));
+        assertTooltip(ValueTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, new StatePropertiesPredicate(List.of(
+                new StatePropertiesPredicate.ExactPropertyMatcher("facing", "east"),
+                new StatePropertiesPredicate.RangedPropertyMatcher("level", "1", "5"),
+                new StatePropertiesPredicate.RangedPropertyMatcher("level", null, "5"),
+                new StatePropertiesPredicate.RangedPropertyMatcher("level", "1", null),
+                new StatePropertiesPredicate.RangedPropertyMatcher("level", null, null)
+        ))).build(), List.of(
+                "facing: east",
+                "level: 1-5",
+                "level: ≤5",
+                "level: ≥1",
+                "level: any"
+        ));
     }
 
     @Test
@@ -608,6 +621,11 @@ public class GenericTooltipTest {
                 "Game Types:",
                 "  -> SPECTATOR"
         ));
+    }
+
+    @Test
+    public void testPropertyMatcherTooltip() {
+        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(UTILS, new StatePropertiesPredicate.ExactPropertyMatcher("hello", "world")).build(), List.of("hello: world"));
     }
 
     @Test
