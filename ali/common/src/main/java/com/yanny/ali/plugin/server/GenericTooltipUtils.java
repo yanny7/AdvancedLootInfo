@@ -187,8 +187,8 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getMissingConsumableEffectTooltip(IServerUtils utils, ConsumeEffect effect) {
-        IKeyTooltipNode tooltip = getConsumeEffectTypeTooltip(utils, effect.getType());
+    public static TooltipNode getMissingConsumableEffectTooltip(IServerUtils utils, ConsumeEffect effect) {
+        TooltipBuilder tooltip = getConsumeEffectTypeTooltip(utils, effect.getType());
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
@@ -335,7 +335,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
+    public static TooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
         return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents).build("ali.property.branch.expected_components");
     }
 
@@ -386,7 +386,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceKey<Recipe<?>>, Boolean> entry) {
-        return TooltipBuilder.keyValue(entry.getKey().location(), entry.getValue());
+        return TooltipBuilder.keyValue(entry.getKey().location().toString(), entry.getValue());
     }
 
     @NotNull
@@ -421,10 +421,9 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getDataComponentEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Boolean> entry) {
+    public static TooltipBuilder getDataComponentEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Boolean> entry) {
         return getDataComponentTypeTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.value"))
-                .build("aci.util.null");
+                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.value"));
     }
 
     @NotNull

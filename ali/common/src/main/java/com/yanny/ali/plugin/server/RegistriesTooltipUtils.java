@@ -70,7 +70,7 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getConsumeEffectTypeTooltip(IServerUtils utils, ConsumeEffect.Type<?> type) {
+    public static TooltipBuilder getConsumeEffectTypeTooltip(IServerUtils utils, ConsumeEffect.Type<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.CONSUME_EFFECT_TYPE, type);
     }
 
@@ -267,42 +267,42 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getSoundEventTooltip(IServerUtils utils, SoundEvent soundEvent) {
+    public static TooltipBuilder getSoundEventTooltip(IServerUtils utils, SoundEvent soundEvent) {
         return getRegistryTooltip(utils, Registries.SOUND_EVENT, soundEvent);
     }
 
     @NotNull
-    public static IKeyTooltipNode getDamageTypeTooltip(IServerUtils utils, DamageType damageType) {
+    public static TooltipBuilder getDamageTypeTooltip(IServerUtils utils, DamageType damageType) {
         return getRegistryTooltip(utils, Registries.DAMAGE_TYPE, damageType);
     }
 
     @NotNull
-    public static IKeyTooltipNode getVillagerTypeTooltip(IServerUtils utils, VillagerType villagerType) {
+    public static TooltipBuilder getVillagerTypeTooltip(IServerUtils utils, VillagerType villagerType) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.VILLAGER_TYPE, villagerType);
     }
 
     @NotNull
-    public static IKeyTooltipNode getWolfSoundVariantTooltip(IServerUtils utils, WolfSoundVariant wolfSoundVariant) {
+    public static TooltipBuilder getWolfSoundVariantTooltip(IServerUtils utils, WolfSoundVariant wolfSoundVariant) {
         return getRegistryTooltip(utils, Registries.WOLF_SOUND_VARIANT, wolfSoundVariant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getPigVariantTooltip(IServerUtils utils, PigVariant pigVariant) {
+    public static TooltipBuilder getPigVariantTooltip(IServerUtils utils, PigVariant pigVariant) {
         return getRegistryTooltip(utils, Registries.PIG_VARIANT, pigVariant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getCowVariantTooltip(IServerUtils utils, CowVariant cowVariant) {
+    public static TooltipBuilder getCowVariantTooltip(IServerUtils utils, CowVariant cowVariant) {
         return getRegistryTooltip(utils, Registries.COW_VARIANT, cowVariant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getChickenVariantTooltip(IServerUtils utils, ChickenVariant chickenVariant) {
+    public static TooltipBuilder getChickenVariantTooltip(IServerUtils utils, ChickenVariant chickenVariant) {
         return getRegistryTooltip(utils, Registries.CHICKEN_VARIANT, chickenVariant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getDataComponentPredicateTypeTooltip(IServerUtils utils, DataComponentPredicate.Type<?> type) {
+    public static TooltipBuilder getDataComponentPredicateTypeTooltip(IServerUtils utils, DataComponentPredicate.Type<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, type);
     }
 }

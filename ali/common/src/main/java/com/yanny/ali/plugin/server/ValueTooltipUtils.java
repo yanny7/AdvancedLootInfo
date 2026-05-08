@@ -12,7 +12,10 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.TypedDataComponent;
-import net.minecraft.core.component.predicates.*;
+import net.minecraft.core.component.predicates.AttributeModifiersPredicate;
+import net.minecraft.core.component.predicates.FireworkExplosionPredicate;
+import net.minecraft.core.component.predicates.WritableBookPredicate;
+import net.minecraft.core.component.predicates.WrittenBookPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -585,49 +588,54 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getInputPredicateTooltip(IServerUtils utils, InputPredicate predicate) {
-        return BranchTooltipNode.branch()
+    public static TooltipBuilder getInputPredicateTooltip(IServerUtils utils, InputPredicate predicate) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, predicate.forward()).build("ali.property.value.forward"))
                 .add(utils.getValueTooltip(utils, predicate.backward()).build("ali.property.value.backward"))
                 .add(utils.getValueTooltip(utils, predicate.left()).build("ali.property.value.left"))
                 .add(utils.getValueTooltip(utils, predicate.right()).build("ali.property.value.right"))
                 .add(utils.getValueTooltip(utils, predicate.jump()).build("ali.property.value.jump"))
                 .add(utils.getValueTooltip(utils, predicate.sneak()).build("ali.property.value.sneak"))
-                .add(utils.getValueTooltip(utils, predicate.sprint()).build("ali.property.value.sprint"));
+                .add(utils.getValueTooltip(utils, predicate.sprint()).build("ali.property.value.sprint"))
+        );
     }
 
     @NotNull
-    public static <T> IKeyTooltipNode getStandaloneTooltip(IServerUtils utils, ListOperation.StandAlone<T> predicate) {
-        return BranchTooltipNode.branch()
+    public static <T> TooltipBuilder getStandaloneTooltip(IServerUtils utils, ListOperation.StandAlone<T> predicate) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, predicate.value()).build("ali.property.branch.values"))
-                .add(utils.getValueTooltip(utils, predicate.operation()).build("ali.property.value.list_operation"));
+                .add(utils.getValueTooltip(utils, predicate.operation()).build("ali.property.value.list_operation"))
+        );
     }
 
     @NotNull
-    public static IKeyTooltipNode getDamageReductionTooltip(IServerUtils utils, BlocksAttacks.DamageReduction value) {
-        return BranchTooltipNode.branch()
+    public static TooltipBuilder getDamageReductionTooltip(IServerUtils utils, BlocksAttacks.DamageReduction value) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, value.horizontalBlockingAngle()).build("ali.property.value.horizontal_blocking_angle"))
                 .add(utils.getValueTooltip(utils, value.type()).build("ali.property.branch.damage_types"))
                 .add(utils.getValueTooltip(utils, value.base()).build("ali.property.value.base"))
-                .add(utils.getValueTooltip(utils, value.factor()).build("ali.property.value.factor"));
+                .add(utils.getValueTooltip(utils, value.factor()).build("ali.property.value.factor"))
+        );
     }
 
     @NotNull
-    public static IKeyTooltipNode getItemDamageTooltip(IServerUtils utils, BlocksAttacks.ItemDamageFunction value) {
-        return BranchTooltipNode.branch()
+    public static TooltipBuilder getItemDamageTooltip(IServerUtils utils, BlocksAttacks.ItemDamageFunction value) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, value.threshold()).build("ali.property.value.threshold"))
                 .add(utils.getValueTooltip(utils, value.base()).build("ali.property.value.base"))
-                .add(utils.getValueTooltip(utils, value.factor()).build("ali.property.value.factor"));
+                .add(utils.getValueTooltip(utils, value.factor()).build("ali.property.value.factor"))
+        );
     }
 
     @NotNull
-    public static IKeyTooltipNode getDataComponentMatchersTooltip(IServerUtils utils, DataComponentMatchers dataComponentMatchers) {
+    public static TooltipBuilder getDataComponentMatchersTooltip(IServerUtils utils, DataComponentMatchers dataComponentMatchers) {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
-            return BranchTooltipNode.branch()
+            return TooltipBuilder.array((b) -> b
                     .add(getDataComponentExactPredicateTooltip(utils, dataComponentMatchers.exact()))
-                    .add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build("ali.property.branch.partial_matchers"));
+                    .add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build("ali.property.branch.partial_matchers"))
+            );
         }
 
-        return EmptyTooltipNode.empty();
+        return TooltipBuilder.empty();
     }
 }

@@ -304,7 +304,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     }
 
     @Override
-    public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+    public <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
         return consumeEffectTooltips.get(effect.getClass())
                 .map((i) -> i.apply(utils, effect))
                 .orElseGet(() -> GenericTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));

@@ -138,27 +138,28 @@ public class DataComponentTooltipUtils {
                 .add(utils.getValueTooltip(utils, consumable.animation()).build("ali.property.value.animation"))
                 .add(utils.getValueTooltip(utils, consumable.sound()).build("ali.property.value.sound"))
                 .add(utils.getValueTooltip(utils, consumable.hasConsumeParticles()).build("ali.property.value.has_custom_particles"))
-                .add(GenericTooltipUtils.getCollectionTooltip(utils, consumable.onConsumeEffects(), utils::getConsumeEffectTooltip).build("ali.property.branch.on_consume_effects"))
+                .add(GenericTooltipUtils.getCollectionTooltip(utils, consumable.onConsumeEffects(), (u, c) -> TooltipBuilder.array((x) -> x.add(utils.getConsumeEffectTooltip(u, c)))).build("ali.property.branch.on_consume_effects"))
                 )
                 .build();
     }
 
     @NotNull
-    public static ITooltipNode getUseRemainderTooltip(IServerUtils utils, UseRemainder remainder) {
+    public static TooltipNode getUseRemainderTooltip(IServerUtils utils, UseRemainder remainder) {
         return utils.getValueTooltip(utils, remainder.convertInto()).build("ali.property.branch.convert_into");
     }
 
     @NotNull
-    public static ITooltipNode getUseCooldownTooltip(IServerUtils utils, UseCooldown cooldown) {
-        return ArrayTooltipNode.array()
+    public static TooltipNode getUseCooldownTooltip(IServerUtils utils, UseCooldown cooldown) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, cooldown.seconds()).build("ali.property.value.seconds"))
                 .add(utils.getValueTooltip(utils, cooldown.cooldownGroup()).build("ali.property.value.cooldown_group"))
+                )
                 .build();
     }
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getDamageResistantTooltip(IServerUtils utils, DamageResistant resistant) {
+    public static TooltipNode getDamageResistantTooltip(IServerUtils utils, DamageResistant resistant) {
         return utils.getValueTooltip(utils, resistant.types()).build("ali.property.value.type");
     }
 
@@ -214,7 +215,7 @@ public class DataComponentTooltipUtils {
     @Unmodifiable
     @NotNull
     public static TooltipNode getDeathProtectionTooltip(IServerUtils utils, DeathProtection protection) {
-        return GenericTooltipUtils.getCollectionTooltip(utils, protection.deathEffects(), utils::getConsumeEffectTooltip).build("ali.property.branch.death_effects");
+        return GenericTooltipUtils.getCollectionTooltip(utils, protection.deathEffects(), (u, c) -> TooltipBuilder.array((x) -> x.add(utils.getConsumeEffectTooltip(u, c)))).build("ali.property.branch.death_effects");
     }
 
     @Unmodifiable
@@ -287,7 +288,7 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getFloatValueTooltip(IServerUtils utils, float value) {
+    public static TooltipNode getFloatValueTooltip(IServerUtils utils, float value) {
         return utils.getValueTooltip(utils, value).build("ali.property.value.value");
     }
 
