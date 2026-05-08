@@ -1,17 +1,18 @@
 package com.yanny.aci.api;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
 
 public interface ICoreClientUtils<
-        TTooltipNode extends ICoreTooltipNode<?>,
-        TDataNode    extends ICoreDataNode<?, ?>,
+        TDataNode    extends ICoreDataNode<?>,
         TWidgetUtils extends ICoreWidgetUtils<?>,
-        SELF         extends ICoreClientUtils<?, ?, ?, ?>
+        SELF         extends ICoreClientUtils<?, ?, ?>
         > {
     @NotNull
     List<IWidget> createWidgets(TWidgetUtils utils, List<TDataNode> entries, RelativeRect parent, int maxWidth);
@@ -19,6 +20,6 @@ public interface ICoreClientUtils<
     @NotNull
     BiFunction<SELF, RegistryFriendlyByteBuf, TDataNode> getDataNodeFactory(ResourceLocation id);
 
-    @NotNull
-    BiFunction<SELF, RegistryFriendlyByteBuf, TTooltipNode> getTooltipNodeFactory(ResourceLocation id);
+    @Nullable
+    HolderLookup.Provider lookupProvider();
 }

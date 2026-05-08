@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemListingWidget implements IWidget {
     private final List<IWidget> widgets;
@@ -27,7 +28,7 @@ public class ItemListingWidget implements IWidget {
 
         addWidget(utils, rect, node.nodes().get(0), 0, maxWidth);
         addWidget(utils, rect, node.nodes().get(1), 20, maxWidth);
-        widgets.add(WidgetUtils.getArrowWidget(new RelativeRect(40, 0, 24, 18, rect), entry));
+        widgets.add(WidgetUtils.getArrowWidget(Objects.requireNonNull(utils.lookupProvider()), new RelativeRect(40, 0, 24, 18, rect), entry));
         addWidget(utils, rect, node.nodes().get(2), 66, maxWidth);
 
         bounds = rect;

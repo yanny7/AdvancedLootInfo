@@ -3,6 +3,7 @@ package com.yanny.ali.api;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -27,7 +28,7 @@ import oshi.util.tuples.Pair;
 import java.util.List;
 import java.util.Map;
 
-public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltipNode, IServerUtils>, ICommonUtils {
+public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
     <T extends LootPoolEntryContainer> List<Item> collectItems(IServerUtils utils, T entry);
 
@@ -38,25 +39,22 @@ public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltip
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
-    <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function);
+    <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function);
 
     @NotNull
-    <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition);
+    <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition);
 
     @NotNull
-    <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
+    <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
 
     @NotNull
-    <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value);
+    <T extends ItemSubPredicate> TooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate);
 
     @NotNull
-    <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate);
+    <T extends DataComponentPredicate> TooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate);
 
     @NotNull
-    <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
-
-    @NotNull
-    ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
+    TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
 
     <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect);
 
@@ -68,7 +66,7 @@ public interface IServerUtils extends ICoreServerUtils<IKeyTooltipNode, ITooltip
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);
 
     @NotNull
-    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, ITooltipNode condition);
+    <T extends VillagerTrades.ItemListing> IDataNode getItemListing(IServerUtils utils, T entry, TooltipNode condition);
 
     @NotNull
     <T extends VillagerTrades.ItemListing> Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, T entry);

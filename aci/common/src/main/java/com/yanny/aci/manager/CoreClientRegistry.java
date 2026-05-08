@@ -14,21 +14,19 @@ import java.util.function.BiFunction;
 public abstract class CoreClientRegistry<
         TConfig,
         TCommonUtils extends ICoreCommonUtils<TConfig>,
-        TTooltipNode extends ICoreTooltipNode<?>,
-        TDataNode    extends ICoreDataNode<?, ?>,
+        TDataNode    extends ICoreDataNode<?>,
         TWidgetUtils extends ICoreWidgetUtils<?>,
-        TClientUtils extends ICoreClientUtils<?, ?, ?, ?>
+        TClientUtils extends ICoreClientUtils<?, ?, ?>
         >
         extends
         BaseRegistry
         implements
-        ICoreClientUtils<TTooltipNode, TDataNode, TWidgetUtils, TClientUtils>,
+        ICoreClientUtils<TDataNode, TWidgetUtils, TClientUtils>,
         ICoreCommonUtils<TConfig>,
-        ICoreClientRegistry<TTooltipNode, TDataNode, TWidgetUtils, TClientUtils> {
+        ICoreClientRegistry<TDataNode, TWidgetUtils, TClientUtils> {
 
     private final ManagedRegistry<ResourceLocation, IWidgetFactory<TDataNode, TWidgetUtils>> widgetMap = register("node widgets", false, HashMap::new, ResourceLocation::toString, null);
     private final ManagedRegistry<ResourceLocation, BiFunction<TClientUtils, RegistryFriendlyByteBuf, TDataNode>> dataNodeFactoryMap = register("data node factories", false, HashMap::new, ResourceLocation::toString, null);
-    private final ManagedRegistry<ResourceLocation, BiFunction<TClientUtils, RegistryFriendlyByteBuf, TTooltipNode>> tooltipNodeFactoryMap = register("tooltip node factories", false, HashMap::new, ResourceLocation::toString, null);
 
     protected final TCommonUtils commonUtils;
 
@@ -47,11 +45,6 @@ public abstract class CoreClientRegistry<
     @Override
     public final void registerDataNode(ResourceLocation id, BiFunction<TClientUtils, RegistryFriendlyByteBuf, TDataNode> dataFactory) {
         dataNodeFactoryMap.put(id, dataFactory);
-    }
-
-    @Override
-    public final void registerTooltipNode(ResourceLocation id, BiFunction<TClientUtils, RegistryFriendlyByteBuf, TTooltipNode> tooltipFactory) {
-        tooltipNodeFactoryMap.put(id, tooltipFactory);
     }
 
     @NotNull
@@ -130,14 +123,6 @@ public abstract class CoreClientRegistry<
         Optional<BiFunction<TClientUtils, RegistryFriendlyByteBuf, TDataNode>> dataFactory = dataNodeFactoryMap.get(id);
 
         return dataFactory.orElseThrow(() -> new IllegalStateException(String.format("Failed to construct data node - node {%s} was not registered!", id)));
-    }
-
-    @NotNull
-    @Override
-    public final BiFunction<TClientUtils, RegistryFriendlyByteBuf, TTooltipNode> getTooltipNodeFactory(ResourceLocation id) {
-        Optional<BiFunction<TClientUtils, RegistryFriendlyByteBuf, TTooltipNode>> tooltipFactory = tooltipNodeFactoryMap.get(id);
-
-        return tooltipFactory.orElseThrow(() -> new IllegalStateException(String.format("Failed to construct tooltip node - node {%s} was not registered!", id)));
     }
 
     @NotNull

@@ -3,7 +3,7 @@ package com.yanny.ali.test.utils;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
-import com.yanny.ali.api.ITooltipNode;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.datagen.LanguageHolder;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -26,11 +26,13 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.function.BiFunction;
 
+import static com.yanny.ali.test.TooltipTestSuite.UTILS;
+
 public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static void assertTooltip(ITooltipNode tooltip, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
+    public static void assertTooltip(TooltipNode tooltip, List<String> expected) {
+        List<Component> components = CoreTooltipUtils.toComponents(Objects.requireNonNull(UTILS.lookupProvider()), tooltip, 0, true);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -50,8 +52,8 @@ public class TestUtils {
         Assertions.assertAll(executables);
     }
 
-    public static void assertTooltip(List<ITooltipNode> tooltip, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
+    public static void assertTooltip(List<TooltipNode> tooltip, List<String> expected) {
+        List<Component> components = CoreTooltipUtils.toComponents(Objects.requireNonNull(UTILS.lookupProvider()), tooltip, 0, true);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
@@ -67,8 +69,8 @@ public class TestUtils {
         Assertions.assertAll(executables);
     }
 
-    public static void assertUnorderedTooltip(ITooltipNode tooltip, List<Object> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
+    public static void assertUnorderedTooltip(TooltipNode tooltip, List<Object> expected) {
+        List<Component> components = CoreTooltipUtils.toComponents(Objects.requireNonNull(UTILS.lookupProvider()), tooltip, 0, true);
         int cmpIndex = 0;
         int expIndex = 0;
 
@@ -80,8 +82,8 @@ public class TestUtils {
                 assertTooltip(component, string);
                 cmpIndex++;
                 expIndex++;
-            } else if (object instanceof List list) {
-                List<Object> mutableList = new LinkedList<Object>(list);
+            } else if (object instanceof List<?> list) {
+                List<Object> mutableList = new LinkedList<>(list);
 
                 for (Object obj : list) {
                     if (obj instanceof String) {

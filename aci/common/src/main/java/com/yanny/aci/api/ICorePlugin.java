@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ICorePlugin<
         TCommonRegistry,
-        TClientRegistry extends ICoreClientRegistry<?, ?, ?, ?>,
+        TClientRegistry extends ICoreClientRegistry<?, ?, ?>,
         TServerRegistry
         > {
     @NotNull

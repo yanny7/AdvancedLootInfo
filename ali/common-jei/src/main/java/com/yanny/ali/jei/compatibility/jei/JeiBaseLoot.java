@@ -26,6 +26,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -97,7 +98,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                            -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                            -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(utils.lookupProvider(), h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
             Optional<ItemStack> left = h.item.left();
             Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
@@ -179,6 +180,11 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     @NotNull
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
+            @Override
+            public HolderLookup.Provider lookupProvider() {
+                return Minecraft.getInstance().level.registryAccess();
+            }
+
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotParams.add(new Holder(item, entry, rect));

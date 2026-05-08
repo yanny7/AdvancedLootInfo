@@ -8,32 +8,34 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MissingWidget implements IWidget {
     private final List<Component> components;
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public MissingWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
+    public MissingWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         bounds = rect;
         bounds.setDimensions(18, 18);
         components = new ArrayList<>();
-        widget = WidgetUtils.getMissingWidget(rect);
+        widget = WidgetUtils.getMissingWidget(Objects.requireNonNull(utils.lookupProvider()), rect);
 
         components.add(Component.translatable("ali.enum.group_type.missing"));
-        components.addAll(CoreTooltipUtils.toComponents(entry.getTooltip(), 0, false));
+        components.addAll(CoreTooltipUtils.toComponents(Objects.requireNonNull(utils.lookupProvider()), entry.getTooltip(), 0, false));
     }
 
-    public MissingWidget(RelativeRect rect) {
+    public MissingWidget(HolderLookup.Provider provider, RelativeRect rect) {
         bounds = rect;
         bounds.setDimensions(18, 18);
         components = List.of(Component.translatable("ali.enum.group_type.missing"));
-        widget = WidgetUtils.getMissingWidget(rect);
+        widget = WidgetUtils.getMissingWidget(provider, rect);
     }
 
     @NotNull

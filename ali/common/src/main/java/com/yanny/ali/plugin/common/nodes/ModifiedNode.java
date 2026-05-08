@@ -1,7 +1,11 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class ModifiedNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("modified");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
     public ModifiedNode(IServerUtils ignoredUtils, IDataNode original, IDataNode modified) {
         tooltip = EntryTooltipUtils.getAlternativesTooltip();
@@ -20,17 +24,17 @@ public class ModifiedNode extends ListNode {
 
     public ModifiedNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
