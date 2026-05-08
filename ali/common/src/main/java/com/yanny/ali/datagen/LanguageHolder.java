@@ -148,9 +148,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.sheep", "Sheep:");
         TRANSLATION_MAP.put("ali.type.entity_sub_predicate.slime", "Slime:");
 
-        // The Bumblezone
-        TRANSLATION_MAP.put("ali.type.entity_sub_predicate.honey_slime", "Honey Slime:");
-
         TRANSLATION_MAP.put("ali.type.consume_effect.apply_effects", "Apply Effects:");
         TRANSLATION_MAP.put("ali.type.consume_effect.clear_all_effects", "Clear All Effects:");
         TRANSLATION_MAP.put("ali.type.consume_effect.play_sound", "Play Sound:");
@@ -164,9 +161,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
         TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
         TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
-
-        // Snow Real Magic
-        TRANSLATION_MAP.put("ali.enum.group_type.normalize", "Drops block buried in snow");
 
         TRANSLATION_MAP.put("ali.property.branch.abilities", "Abilities:");
         TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");
