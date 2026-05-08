@@ -78,14 +78,14 @@ public class Plugin implements IPlugin {
         registry.registerWidget(LootTableNode.ID, LootTableWidget::new);
         registry.registerWidget(LootPoolNode.ID, LootPoolWidget::new);
         registry.registerWidget(ItemNode.ID, ItemWidget::new);
-        registry.registerWidget(EmptyNode.ID, (entry2, rect2, ignoredMaxWidth3, ignoredMaxWidth4) -> new EmptyWidget(rect2, ignoredMaxWidth3, ignoredMaxWidth4));
+        registry.registerWidget(EmptyNode.ID, EmptyWidget::new);
         registry.registerWidget(ReferenceNode.ID, ReferenceWidget::new);
-        registry.registerWidget(DynamicNode.ID, (entry1, rect1, ignoredMaxWidth1, ignoredMaxWidth2) -> new DynamicWidget(rect1, ignoredMaxWidth1, ignoredMaxWidth2));
+        registry.registerWidget(DynamicNode.ID, DynamicWidget::new);
         registry.registerWidget(AlternativesNode.ID, AlternativesWidget::new);
         registry.registerWidget(SequenceNode.ID, SequentialWidget::new);
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
         registry.registerWidget(ModifiedNode.ID, ModifiedWidget::new);
-        registry.registerWidget(GlobalLootModifierNode.ID, (entry, rect, ignoredMaxWidth, ignoredMaxWidth2) -> new GlobalLootModifierWidget(rect, ignoredMaxWidth, ignoredMaxWidth2));
+        registry.registerWidget(GlobalLootModifierNode.ID, GlobalLootModifierWidget::new);
         registry.registerWidget(MissingNode.ID, MissingWidget::new);
 
         registry.registerWidget(TradeNode.ID, TradeWidget::new);
