@@ -7,18 +7,18 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 public class DynamicWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public DynamicWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
-        widget = WidgetUtils.getDynamicWidget(rect, entry);
+    public DynamicWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
+        widget = WidgetUtils.getDynamicWidget(Objects.requireNonNull(utils.lookupProvider()), rect, entry);
         bounds = widget.getRect();
     }
 

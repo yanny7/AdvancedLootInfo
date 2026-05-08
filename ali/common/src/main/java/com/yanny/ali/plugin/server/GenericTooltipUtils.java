@@ -8,8 +8,6 @@ import com.mojang.serialization.MapCodec;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.tooltip.*;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -138,15 +136,15 @@ public class GenericTooltipUtils {
         return tooltip.build("aci.util.auto_detected");
     }
 
-    public static ITooltipNode getMissingItemSubPredicateTooltip(IServerUtils utils, ItemSubPredicate predicate) {
-        IKeyTooltipNode tooltip = ValueTooltipNode.value(predicate.getClass().getName());
+    public static TooltipNode getMissingItemSubPredicateTooltip(IServerUtils utils, ItemSubPredicate predicate) {
+        TooltipBuilder tooltip = TooltipBuilder.value(predicate.getClass().getName());
 
         TooltipUtils.addObjectFields(utils, tooltip, predicate, ItemSubPredicate.class);
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
-    public static ITooltipNode getMissingEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
-        IKeyTooltipNode tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
+    public static TooltipNode getMissingEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
+        TooltipBuilder tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
@@ -166,8 +164,8 @@ public class GenericTooltipUtils {
         return tooltip.build("ali.util.advanced_loot_info.auto_detected");
     }
 
-    public static ITooltipNode getMissingDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
-        IKeyTooltipNode tooltip = RegistriesTooltipUtils.getDataComponentTypeTooltip(utils, type);
+    public static TooltipNode getMissingDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+        TooltipBuilder tooltip = RegistriesTooltipUtils.getDataComponentTypeTooltip(utils, type);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
@@ -276,61 +274,51 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
-        String key = ValueTooltipNode.translate(((TranslatableContents) stat.type().getDisplayName().getContents()).getKey());
+    public static TooltipBuilder getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
+        String key = TooltipBuilder.translate(((TranslatableContents) stat.type().getDisplayName().getContents()).getKey());
         Holder<?> value = stat.value();
 
         return TooltipBuilder.array((b) -> {
             if (value.value() instanceof Item item) {
                 b.add(utils.getValueTooltip(utils, item)
-                        .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("aci.util.null"))
+                        .add(TooltipBuilder.keyValue(key, toString(stat.range())).build("aci.util.null"))
                         .build("ali.property.value.item"));
             } else if (value.value() instanceof Block block) {
                 b.add(utils.getValueTooltip(utils, block)
-                        .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("aci.util.null"))
+                        .add(TooltipBuilder.keyValue(key, toString(stat.range())).build("aci.util.null"))
                         .build("ali.property.value.block"));
             } else if (value.value() instanceof EntityType<?> entityType) {
                 b.add(utils.getValueTooltip(utils, entityType)
-                        .add(ValueTooltipNode.keyValue(key, toString(stat.range())).build("aci.util.null"))
+                        .add(TooltipBuilder.keyValue(key, toString(stat.range())).build("aci.util.null"))
                         .build("ali.property.value.entity_type"));
             } else if (value.value() instanceof ResourceLocation resourceLocation) {
                 b.add(utils.getValueTooltip(utils, resourceLocation)
-                        .add(ValueTooltipNode.keyValue(ValueTooltipNode.translate(getTranslationKey(resourceLocation)), toString(stat.range())).build("aci.util.null"))
+                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(resourceLocation)), toString(stat.range())).build("aci.util.null"))
                         .build("ali.property.value.id"));
-            } else {
-                tooltip = EmptyTooltipNode.EMPTY;
             }
         });
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <T> IKeyTooltipNode getStandaloneTooltip(IServerUtils utils, String value, Optional<ListOperation.StandAlone<T>> standalone) {
-        if (standalone.isPresent()) {
-            IKeyTooltipNode tooltip = BranchTooltipNode.branch();
-            ListOperation.StandAlone<T> s = standalone.get();
+    public static <T> TooltipBuilder getStandaloneTooltip(IServerUtils utils, String value, Optional<ListOperation.StandAlone<T>> standalone) {
+        return standalone.map((s) -> TooltipBuilder.array((b) -> {
+            b.add(getCollectionTooltip(utils, value, s.value()).build("aci.util.values"));
+            b.add(utils.getValueTooltip(utils, s.operation()).build("ali.property.value.list_operation"));
+        })).orElseGet(TooltipBuilder::empty);
 
-            tooltip.add(getCollectionTooltip(utils, value, s.value()).build("aci.util.values"));
-            tooltip.add(utils.getValueTooltip(utils, s.operation()).build("ali.property.value.list_operation"));
-
-            return tooltip;
-        }
-
-        return TooltipBuilder.empty();
     }
 
     @NotNull
-    public static <T> IKeyTooltipNode getFilterableTooltip(IServerUtils utils, String value, Collection<Filterable<T>> data) {
-        IKeyTooltipNode tooltips = BranchTooltipNode.branch();
-
-        for (Filterable<T> d : data) {
-            tooltips.add(BranchTooltipNode.branch()
-                    .add(utils.getValueTooltip(utils, d.raw()).build("ali.property.value.raw"))
-                    .add(utils.getValueTooltip(utils, d.filtered()).build("ali.property.value.filtered"))
-                    .build(value));
-        }
-
-        return tooltips;
+    public static <T> TooltipBuilder getFilterableTooltip(IServerUtils utils, String value, Collection<Filterable<T>> data) {
+        return TooltipBuilder.array((b) -> {
+            for (Filterable<T> d : data) {
+                b.add(TooltipBuilder.array((c) -> c
+                        .add(utils.getValueTooltip(utils, d.raw()).build("ali.property.value.raw"))
+                        .add(utils.getValueTooltip(utils, d.filtered()).build("ali.property.value.filtered"))
+                ).key(value));
+            }
+        });
     }
 
     @NotNull
@@ -377,8 +365,8 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getStringEntryTooltip(IServerUtils ignoredUtils, Map.Entry<String, String> entry) {
-        return ValueTooltipNode.keyValue(entry.getKey(), entry.getValue()).build("aci.util.null");
+    public static TooltipBuilder getStringEntryTooltip(IServerUtils ignoredUtils, Map.Entry<String, String> entry) {
+        return TooltipBuilder.keyValue(entry.getKey(), entry.getValue());
     }
 
     @NotNull
@@ -405,7 +393,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getAdvancementEntryTooltip(IServerUtils utils, Map.Entry<ResourceLocation, PlayerPredicate.AdvancementPredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(getAdvancementPredicateTooltip(utils, entry.getValue()));
+                .add(utils.getValueTooltip(utils, entry.getValue()));
     }
 
     @NotNull
@@ -447,7 +435,7 @@ public class GenericTooltipUtils {
         entry.getValue().ifPresent((v) -> builder.add(utils.getDataComponentTypeTooltip(utils, entry.getKey(), v)));
 
         if (entry.getValue().isEmpty()) {
-            builder.add(LiteralTooltipNode.translatable("aci.util.removed"));
+            builder.add(TooltipBuilder.keyOnly("aci.util.removed"));
         }
 
         return builder;
@@ -455,12 +443,12 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getItemSubPredicateEntryTooltip(IServerUtils utils, Map.Entry<ItemSubPredicate.Type<?>, ItemSubPredicate> entry) {
-        return utils.getItemSubPredicateTooltip(utils, entry.getValue());
+        return TooltipBuilder.array((b) -> b.add(utils.getItemSubPredicateTooltip(utils, entry.getValue())));
     }
 
     @NotNull
     public static TooltipBuilder getSlotRangePredicateEntryTooltip(IServerUtils utils, Map.Entry<SlotRange, ItemPredicate> entry) {
-        return ValueTooltipNode.keyValue(entry.getKey().toString(), entry.getKey().slots().toString())
+        return TooltipBuilder.keyValue(entry.getKey().toString(), entry.getKey().slots().toString())
                 .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.branch.predicate"));
     }
 

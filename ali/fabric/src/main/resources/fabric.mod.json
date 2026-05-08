@@ -27,7 +27,6 @@
         ],
         "ali": [
             "com.yanny.ali.plugin.Plugin",
-            "com.yanny.ali.fabric.plugin.FabricLootJsPlugin",
             "com.yanny.ali.fabric.plugin.mods.farmers_delight.Plugin",
             "com.yanny.ali.fabric.plugin.mods.porting_lib.loot.Plugin"
         ],

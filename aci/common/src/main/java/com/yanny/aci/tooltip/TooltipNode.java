@@ -6,6 +6,7 @@ import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -57,7 +58,7 @@ public class TooltipNode {
     }
 
     public boolean isComplex() {
-        return (flags & FLAG_ARRAY) != 0 || children.size() > 1 || (children.size() == 1 && children.get(0).isComplex());
+        return (flags & FLAG_ARRAY) != 0 || children.size() > 1 || (children.size() == 1 && children.getFirst().isComplex());
     }
 
     @NotNull
@@ -73,7 +74,7 @@ public class TooltipNode {
         return (flags & FLAG_ADVANCED) != 0 && !isAdvanced;
     }
 
-    public List<Component> getComponents(int indentLevel, boolean isAdvanced) {
+    public List<Component> getComponents(HolderLookup.Provider provider, int indentLevel, boolean isAdvanced) {
         if (isEmpty(isAdvanced)) {
             return List.of();
         }
@@ -94,7 +95,7 @@ public class TooltipNode {
                 } else {
                     currentLine.append(Component.literal(key).withStyle(TEXT_STYLE));
 
-                    if (!children.isEmpty() || (flags & FLAG_ARRAY) != 0) {
+                    if ((!children.isEmpty() || (flags & FLAG_ARRAY) != 0) && values == null) {
                         currentLine.append(Component.literal(":").withStyle(TEXT_STYLE));
                     }
                 }
@@ -110,7 +111,7 @@ public class TooltipNode {
                         }
 
                         if (value != null) {
-                            currentLine.append(formatValue(value));
+                            currentLine.append(formatValue(provider, value));
                         }
                     }
                 }
@@ -122,7 +123,7 @@ public class TooltipNode {
                         String value = values[i];
 
                         if (value != null) {
-                            valArgs[i] = formatValue(value);
+                            valArgs[i] = formatValue(provider, value);
                         }
                     }
 
@@ -140,7 +141,7 @@ public class TooltipNode {
                 }
 
                 if (value != null) {
-                    currentLine.append(formatValue(value));
+                    currentLine.append(formatValue(provider, value));
                 }
             }
         }
@@ -154,19 +155,19 @@ public class TooltipNode {
         int childIndent = (key != null || values != null) ? indentLevel + 1 : indentLevel;
 
         for (TooltipNode child : children) {
-            lines.addAll(child.getComponents(childIndent, isAdvanced));
+            lines.addAll(child.getComponents(provider, childIndent, isAdvanced));
         }
 
         return lines;
     }
 
     @NotNull
-    private MutableComponent formatValue(String value) {
+    private MutableComponent formatValue(HolderLookup.Provider provider, String value) {
         MutableComponent comp;
 
         if ((flags & FLAG_COMPONENT) != 0) {
             try {
-                comp = Objects.requireNonNullElseGet(Component.Serializer.fromJson(value), Component::empty);
+                comp = Objects.requireNonNullElseGet(Component.Serializer.fromJson(value, provider), Component::empty);//TODO FIXME!!!
             } catch (Throwable e) {
                 comp = Component.literal("Error: Invalid Component JSON!").withStyle(ERROR_STYLE);
             }

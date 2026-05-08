@@ -1,5 +1,6 @@
 package com.yanny.aci.api;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;

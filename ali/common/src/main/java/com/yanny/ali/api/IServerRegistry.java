@@ -39,11 +39,11 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
-    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
-    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
-    <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
     <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
 

@@ -58,7 +58,8 @@ public class ServerUtilsTest {
                 "    -> Weather Check:",
                 "      -> Is Raining: true",
                 "  -> function:",
-                "    -> Enchant Randomly:"
+                "    -> Enchant Randomly:",
+                "      -> Only Compatible: true"
         ));
     }
 

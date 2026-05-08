@@ -32,12 +32,6 @@ public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
 
     @NotNull
     @Override
-    public BiFunction<IClientUtils, RegistryFriendlyByteBuf, TooltipNode> getTooltipNodeFactory(ResourceLocation id) {
-        return PluginManager.getInstance().clientRegistry.getTooltipNodeFactory(id);
-    }
-
-    @NotNull
-    @Override
     public List<Entity> createEntities(EntityType<?> type, Level level) {
         return PluginManager.getInstance().clientRegistry.createEntities(type, level);
     }

@@ -4,11 +4,7 @@ import com.almostreliable.lootjs.loot.condition.*;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.TooltipNode;
 import com.yanny.ali.lootjs.mixin.MixinCustomParamPredicate;
-import com.yanny.ali.plugin.common.tooltip.BranchTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.EmptyTooltipNode;
-import com.yanny.ali.plugin.common.tooltip.LiteralTooltipNode;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.jetbrains.annotations.NotNull;
@@ -50,12 +46,12 @@ public class LootJsConditionTooltipUtils {
                             .add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available"))
                     )
                     .build("ali.type.condition.match_entity_custom");
-        } else if (cond.getParam() == LootContextParams.KILLER_ENTITY) {
+        } else if (cond.getParam() == LootContextParams.ATTACKING_ENTITY) {
             return TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available"))
                     )
                     .build("ali.type.condition.match_attacker_custom");
-        } else if (cond.getParam() == LootContextParams.DIRECT_KILLER_ENTITY) {
+        } else if (cond.getParam() == LootContextParams.DIRECT_ATTACKING_ENTITY) {
             return TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available"))
                     )

@@ -188,11 +188,11 @@ public class GenericTooltipTest {
                 "  -> level: 3"
         ));
         assertTooltip(ValueTooltipUtils.getStatePropertiesPredicateTooltip(UTILS, new StatePropertiesPredicate(List.of(
-                new StatePropertiesPredicate.ExactPropertyMatcher("facing", "east"),
-                new StatePropertiesPredicate.RangedPropertyMatcher("level", "1", "5"),
-                new StatePropertiesPredicate.RangedPropertyMatcher("level", null, "5"),
-                new StatePropertiesPredicate.RangedPropertyMatcher("level", "1", null),
-                new StatePropertiesPredicate.RangedPropertyMatcher("level", null, null)
+                new StatePropertiesPredicate.PropertyMatcher("facing", new StatePropertiesPredicate.ExactMatcher("east")),
+                new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.of("1"), Optional.of("5"))),
+                new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.empty(), Optional.of("5"))),
+                new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.of("1"), Optional.empty())),
+                new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.empty(), Optional.empty()))
         ))).build(), List.of(
                 "facing: east",
                 "level: 1-5",
@@ -625,7 +625,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testPropertyMatcherTooltip() {
-        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(UTILS, new StatePropertiesPredicate.ExactPropertyMatcher("hello", "world")).build(), List.of("hello: world"));
+        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(UTILS, new StatePropertiesPredicate.PropertyMatcher("hello", new StatePropertiesPredicate.ExactMatcher("world"))).build(), List.of("hello: world"));
     }
 
     @Test
@@ -637,7 +637,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Ints.atLeast(4)
         );
 
-        assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, statMatcher), List.of(
+        assertTooltip(GenericTooltipUtils.getStatMatcherTooltip(UTILS, statMatcher).build(), List.of(
                 "Block: minecraft:cobblestone",
                 "  -> Times Mined: ≥4"
         ));

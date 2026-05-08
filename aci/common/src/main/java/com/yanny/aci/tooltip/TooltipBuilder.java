@@ -1,5 +1,6 @@
 package com.yanny.aci.tooltip;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,11 +106,11 @@ public class TooltipBuilder {
     }
 
     @NotNull
-    public static TooltipBuilder component(Component component) {
+    public static TooltipBuilder component(HolderLookup.Provider provider, Component component) {
         TooltipBuilder builder = new TooltipBuilder();
 
         builder.isComponent = true;
-        builder.values = new String[]{Component.Serializer.toJson(component.copy())};
+        builder.values = new String[]{Component.Serializer.toJson(component.copy(), provider)};
         return builder;
     }
 
@@ -181,10 +182,10 @@ public class TooltipBuilder {
         List<TooltipNode> finalChildren = new ArrayList<>(children);
 
         if (translatableKey != null && rawKey == null) {
-            boolean isComplex = isArray || finalChildren.size() > 1 || (finalChildren.size() == 1 && finalChildren.get(0).isComplex());
+            boolean isComplex = isArray || finalChildren.size() > 1 || (finalChildren.size() == 1 && finalChildren.getFirst().isComplex());
 
             if (finalChildren.size() == 1 && finalValues == null && !isComplex && !isError) {
-                TooltipNode child = finalChildren.get(0);
+                TooltipNode child = finalChildren.getFirst();
                 finalKeyStr = translatableKey.single();
                 finalValues = child.getValues();
                 finalChildren.clear();

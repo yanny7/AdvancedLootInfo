@@ -1,8 +1,10 @@
 package com.yanny.aci.api;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -17,4 +19,7 @@ public interface ICoreClientUtils<
 
     @NotNull
     BiFunction<SELF, RegistryFriendlyByteBuf, TDataNode> getDataNodeFactory(ResourceLocation id);
+
+    @Nullable
+    HolderLookup.Provider lookupProvider();
 }

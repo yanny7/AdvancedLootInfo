@@ -12,6 +12,7 @@ import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
@@ -26,8 +27,8 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
@@ -50,6 +51,7 @@ import java.util.concurrent.ExecutionException;
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
+    public static HolderLookup.Provider LOOKUP;
 
     private static Set<String> UNUSED;
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -64,6 +66,7 @@ public class TooltipTestSuite {
 
         Language.inject(pair.getA());
         UNUSED = pair.getB();
+        LOOKUP = VanillaRegistries.createLookup();
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
@@ -76,7 +79,7 @@ public class TooltipTestSuite {
 
             @Override
             public @Nullable HolderLookup.Provider lookupProvider() {
-                return PluginManager.getInstance().serverRegistry.lookupProvider();
+                return LOOKUP;
             }
 
             @Override

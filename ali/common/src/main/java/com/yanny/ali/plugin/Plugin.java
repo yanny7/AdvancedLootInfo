@@ -18,7 +18,6 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.*;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
@@ -49,7 +48,6 @@ import net.minecraft.world.level.block.entity.BannerPattern;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.saveddata.maps.MapDecorationType;
@@ -331,7 +329,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(JukeboxSong.class, RegistriesTooltipUtils::getJukeboxSongTooltip);
 
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
-        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
         registry.registerValueTooltip(TagPredicate.class, ValueTooltipUtils::getTagPredicateTooltip);

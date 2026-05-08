@@ -1,9 +1,11 @@
 package com.yanny.aci.tooltip;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -13,9 +15,7 @@ import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class CommonValueTooltip<
         TServerUtils    extends ICoreServerUtils<TServerUtils>,
@@ -42,6 +42,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
         registry.registerValueTooltip(EitherHolder.class, this::getEitherHolderTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
+        registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
     }
 
     private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -124,7 +125,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getComponentTooltip(TServerUtils utils, Component component) {
-        return TooltipBuilder.component(component);
+        return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), component);
     }
 
     @NotNull
@@ -138,17 +139,37 @@ public class CommonValueTooltip<
     }
 
     @NotNull
-    public TKeyTooltipNode getIntListTooltip(TServerUtils utils, IntList data) {
+    public TooltipBuilder getIntListTooltip(TServerUtils utils, IntList data) {
         return utils.getValueTooltip(utils, data.toString());
     }
 
     @NotNull
-    public TKeyTooltipNode getEitherHolderTooltip(TServerUtils utils, EitherHolder<?> holder) {
+    public TooltipBuilder getEitherHolderTooltip(TServerUtils utils, EitherHolder<?> holder) {
         return holder.asEither().map((v) -> utils.getValueTooltip(utils, v.value()), (k) -> utils.getValueTooltip(utils, k));
     }
 
     @NotNull
     private TooltipBuilder getPropertyTooltip(TServerUtils utils, Property<?> property) {
         return utils.getValueTooltip(utils, property.getName());
+    }
+
+    public TooltipBuilder getHolderSetTooltip(TServerUtils utils, HolderSet<?> holderSet) {
+        //noinspection unchecked
+        Either<TagKey<?>, List<Holder<?>>> either = (Either<TagKey<?>, List<Holder<?>>>)(Object) holderSet.unwrap();
+        Optional<TagKey<?>> left = either.left();
+        Optional<List<Holder<?>>> right = either.right();
+
+        if (left.isEmpty() && right.orElse(List.of()).isEmpty()) {
+            return TooltipBuilder.empty();
+        }
+
+        return TooltipBuilder.array((b) -> {
+            left.ifPresent((tagKey) -> b.add(utils.getValueTooltip(utils, tagKey).build("ali.property.value.tag")));
+            right.ifPresent((list) -> {
+                if (!list.isEmpty()) {
+                    list.forEach((holder) -> b.add(utils.getValueTooltip(utils, holder)));
+                }
+            });
+        });
     }
 }

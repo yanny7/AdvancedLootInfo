@@ -196,7 +196,7 @@ public class TooltipUtils {
     }
 
     @NotNull
-    public static ItemStack applyEnchantRandomlyItemStackModifier(IServerUtils ignoredUtils, EnchantRandomlyFunction function, ItemStack itemStack) {
+    public static ItemStack applyEnchantRandomlyItemStackModifier(IServerUtils utils, EnchantRandomlyFunction function, ItemStack itemStack) {
         if (itemStack.isEnchantable() && function.predicates.isEmpty()) {
             boolean isBook = itemStack.is(Items.BOOK);
             boolean compatible = !isBook && function.onlyCompatible;

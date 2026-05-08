@@ -248,7 +248,7 @@ public class NodeUtils {
         for (IOperation operation : operations) {
             if (operation instanceof IOperation.AddOperation addOperation) {
                 node.addChildren(addOperation.node());
-            } else if (operation instanceof IOperation.RemoveOperation(Predicate<ItemStack> predicate, Function<IDataNode, List<IDataNode>> factory)) {
+            } else if (operation instanceof IOperation.RemoveOperation(Predicate<ItemStack> predicate, Function<IDataNode, IDataNode> factory)) {
                 removeItem(node, factory, predicate);
             } else if (operation instanceof IOperation.ReplaceOperation(Predicate<ItemStack> predicate, Function<IDataNode, List<IDataNode>> factory)) {
                 replaceItem(node, factory, predicate);

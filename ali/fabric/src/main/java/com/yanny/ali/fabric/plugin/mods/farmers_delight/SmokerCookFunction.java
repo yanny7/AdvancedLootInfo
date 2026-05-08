@@ -19,7 +19,7 @@ public class SmokerCookFunction extends ConditionalFunction implements IFunction
     @Override
     public TooltipNode getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> b
-                        .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
+                        .add(getSubConditionsTooltip(utils, predicates).build("ali.property.branch.conditions"))
                 )
                 .build("ali.type.function.smoker_cook");
     }

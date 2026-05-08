@@ -10,6 +10,8 @@ import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class ItemTagWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
@@ -21,7 +23,7 @@ public class ItemTagWidget implements IWidget {
         utils.addSlotWidget(node.getModifiedItem(), node, rect);
         bounds = rect;
         bounds.setDimensions(18, 18);
-        widget = WidgetUtils.getUnknownWidget(rect);
+        widget = WidgetUtils.getUnknownWidget(Objects.requireNonNull(utils.lookupProvider()), rect);
         modified = node.isModified();
     }
 

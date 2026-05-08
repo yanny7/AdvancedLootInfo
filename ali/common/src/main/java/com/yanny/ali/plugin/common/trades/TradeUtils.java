@@ -2,9 +2,10 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -223,7 +224,7 @@ public class TradeUtils {
     }
 
     @NotNull
-    public static SubTradesNode<VillagerTrades.TypeSpecificTrade> getNode(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing, ITooltipNode condition) {
+    public static SubTradesNode<VillagerTrades.TypeSpecificTrade> getNode(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing, TooltipNode condition) {
         return new SubTradesNode<>(utils, listing, condition) {
             @Override
             public List<IDataNode> getSubTrades(IServerUtils utils, VillagerTrades.TypeSpecificTrade listing) {
@@ -231,7 +232,7 @@ public class TradeUtils {
 
                 for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
                     VillagerType type = entry.getKey();
-                    ITooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
+                    TooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
 
                     nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
                 }

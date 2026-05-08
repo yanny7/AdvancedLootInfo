@@ -33,7 +33,7 @@ public class FunctionTooltipUtils {
     public static TooltipNode getCopyCustomDataTooltip(IServerUtils utils, CopyCustomDataFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.source.getType()).build("ali.property.value.source"))
-                        .add(getCollectionTooltip(utils, "ali.property.branch.operation", fun.operations).build("ali.property.branch.operations"))
+                        .add(getCollectionTooltip(utils, "ali.property.branch.operation", fun.operations).build("ali.property.branch.copy_operations"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 )
                 .build("ali.type.function.copy_custom_data");
@@ -145,9 +145,10 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSequenceTooltip(IServerUtils utils, SequenceFunction fun) {
-        return BranchTooltipNode.branch()
-                .add(GenericTooltipUtils.getFunctionListTooltip(utils, fun.functions))
+    public static TooltipNode getSequenceTooltip(IServerUtils utils, SequenceFunction fun) {
+        return TooltipBuilder.array((b) -> b
+                        .add(GenericTooltipUtils.getFunctionListTooltip(utils, fun.functions))
+                )
                 .build("ali.type.function.sequence");
     }
 
@@ -285,7 +286,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetItemTooltip(IServerUtils utils, SetItemFunction fun) {
+    public static TooltipNode getSetItemTooltip(IServerUtils utils, SetItemFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.item).build("ali.property.value.item"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
@@ -294,34 +295,34 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetComponentsTooltip(IServerUtils utils, SetComponentsFunction fun) {
+    public static TooltipNode getSetComponentsTooltip(IServerUtils utils, SetComponentsFunction fun) {
         return utils.getValueTooltip(utils, fun.components)
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 .build("ali.type.function.set_components");
     }
 
     @NotNull
-    public static ITooltipNode getModifyContentsTooltip(IServerUtils utils, ModifyContainerContents fun) {
+    public static TooltipNode getModifyContentsTooltip(IServerUtils utils, ModifyContainerContents fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.component).build("ali.property.value.container"))
-                        .add(BranchTooltipNode.branch().add(utils.getFunctionTooltip(utils, fun.modifier)).build("ali.property.branch.modifier"))
+                        .add(TooltipBuilder.branch((c) -> c.add(utils.getFunctionTooltip(utils, fun.modifier))).build("ali.property.branch.modifier"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 )
                 .build("ali.type.function.modify_contents");
     }
 
     @NotNull
-    public static ITooltipNode getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
+    public static TooltipNode getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.filter).build("ali.property.branch.filter"))
-                        .add(BranchTooltipNode.branch().add(utils.getFunctionTooltip(utils, fun.modifier)).build("ali.property.branch.modifier"))
+                        .add(TooltipBuilder.branch((c) -> c.add(utils.getFunctionTooltip(utils, fun.modifier))).build("ali.property.branch.modifier"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
                 )
                 .build("ali.type.function.filtered");
     }
 
     @NotNull
-    public static ITooltipNode getCopyComponentsTooltip(IServerUtils utils, CopyComponentsFunction fun) {
+    public static TooltipNode getCopyComponentsTooltip(IServerUtils utils, CopyComponentsFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.source).build("ali.property.value.source"))
                         .add(utils.getValueTooltip(utils, fun.include).build("ali.property.branch.include"))
@@ -332,7 +333,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetFireworksTooltip(IServerUtils utils, SetFireworksFunction fun) {
+    public static TooltipNode getSetFireworksTooltip(IServerUtils utils, SetFireworksFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(getStandaloneTooltip(utils, "ali.property.branch.explosion", fun.explosions).build("ali.property.branch.explosions"))
                         .add(utils.getValueTooltip(utils, fun.flightDuration).build("ali.property.value.flight_duration"))
@@ -342,7 +343,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetFireworkExplosionTooltip(IServerUtils utils, SetFireworkExplosionFunction fun) {
+    public static TooltipNode getSetFireworkExplosionTooltip(IServerUtils utils, SetFireworkExplosionFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.shape).build("ali.property.value.shape"))
                         .add(utils.getValueTooltip(utils, fun.colors).build("ali.property.value.colors"))
@@ -355,7 +356,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetBookCoverTooltip(IServerUtils utils, SetBookCoverFunction fun) {
+    public static TooltipNode getSetBookCoverTooltip(IServerUtils utils, SetBookCoverFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.author).build("ali.property.value.author"))
                         .add(utils.getValueTooltip(utils, fun.title).build("ali.property.branch.title"))
@@ -366,7 +367,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetWrittenBookPagesTooltip(IServerUtils utils, SetWrittenBookPagesFunction fun) {
+    public static TooltipNode getSetWrittenBookPagesTooltip(IServerUtils utils, SetWrittenBookPagesFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(getFilterableTooltip(utils, "ali.property.branch.page", fun.pages).build("ali.property.branch.pages"))
                         .add(utils.getValueTooltip(utils, fun.pageOperation).build("ali.property.value.list_operation"))
@@ -376,7 +377,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetWritableBookPagesTooltip(IServerUtils utils, SetWritableBookPagesFunction fun) {
+    public static TooltipNode getSetWritableBookPagesTooltip(IServerUtils utils, SetWritableBookPagesFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(getFilterableTooltip(utils, "ali.property.branch.page", fun.pages).build("ali.property.branch.pages"))
                         .add(utils.getValueTooltip(utils, fun.pageOperation).build("ali.property.value.list_operation"))
@@ -386,7 +387,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
+    public static TooltipNode getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
         return TooltipBuilder.array((b) -> b
                         .add(getMapTooltip(utils, fun.values, GenericTooltipUtils::getToggleEntryTooltip).build("ali.property.branch.components"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
@@ -395,7 +396,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
+    public static TooltipNode getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.amplifierGenerator).build("ali.property.value.amplifier"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
@@ -404,7 +405,7 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
+    public static TooltipNode getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
         return TooltipBuilder.array((b) -> b
                         .add(utils.getValueTooltip(utils, fun.valueProvider).build("ali.property.value.value"))
                         .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))

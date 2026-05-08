@@ -11,6 +11,7 @@ import com.yanny.ali.plugin.client.widget.TextureWidget;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -25,75 +26,75 @@ public class WidgetUtils {
     private static final int GROUP_WIDGET_HEIGHT = 18;
 
     @NotNull
-    public static IWidget getAllWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 0, GROUP_WIDGET_HEIGHT);
+    public static IWidget getAllWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 0, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getRandomWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getRandomWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getSequentialWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getSequentialWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 2 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getAlternativesWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getAlternativesWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 3 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getDynamicWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+    public static IWidget getDynamicWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 4 * GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getUnknownWidget(RelativeRect rect) {
-        return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 30, 0);
+    public static IWidget getUnknownWidget(HolderLookup.Provider provider, RelativeRect rect) {
+        return new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 30, 0);
     }
 
     @NotNull
-    public static IWidget getMissingWidget(RelativeRect rect) {
-        return new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 48, 0);
+    public static IWidget getMissingWidget(HolderLookup.Provider provider, RelativeRect rect) {
+        return new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 48, 0);
     }
 
     @NotNull
-    public static IWidget getEmptyWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 66, 0);
+    public static IWidget getEmptyWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, 18, 18, rect), 66, 0);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getArrowWidget(RelativeRect rect, IDataNode node) {
-        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, 24, 18, rect), 53, 18);
+    public static IWidget getArrowWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(provider, TEXTURE_LOC, new RelativeRect(0, 0, 24, 18, rect), 53, 18);
 
         widget.tooltipText(node.getTooltip());
         return widget;
     }
 
     @NotNull
-    public static IWidget getLevelWidget(RelativeRect rect, IDataNode node, int level) {
+    public static IWidget getLevelWidget(HolderLookup.Provider provider, RelativeRect rect, IDataNode node, int level) {
         RelativeRect r = new RelativeRect(0, 0, 18, 18, rect);
-        List<Component> components = CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
+        List<Component> components = CoreTooltipUtils.toComponents(provider, node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
         String txt = Integer.toString(level);
         int txtWidth = Minecraft.getInstance().font.width(txt);
         return new IWidget() {
