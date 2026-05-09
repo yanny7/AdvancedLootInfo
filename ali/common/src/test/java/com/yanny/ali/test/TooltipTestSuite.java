@@ -189,7 +189,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+            public <T extends SlotSource> TooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
                 return PluginManager.getInstance().serverRegistry.getSlotSourceTooltip(utils, slotSource);
             }
 

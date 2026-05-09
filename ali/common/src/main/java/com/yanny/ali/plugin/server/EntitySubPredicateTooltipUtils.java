@@ -1,5 +1,7 @@
 package com.yanny.ali.plugin.server;
 
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.criterion.*;
 import org.jetbrains.annotations.NotNull;

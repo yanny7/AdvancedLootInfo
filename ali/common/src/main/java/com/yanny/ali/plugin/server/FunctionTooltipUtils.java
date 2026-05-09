@@ -312,16 +312,16 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
+    public static TooltipNode getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
         return TooltipBuilder.array((b) -> {
-                b.add(utils.getValueTooltip(utils, fun.filter).build("ali.property.branch.filter"));
+            b.add(utils.getValueTooltip(utils, fun.filter).build("ali.property.branch.filter"));
 
-                fun.onPass.ifPresent(f -> b.add(utils.getFunctionTooltip(utils, f)).build("ali.property.branch.on_pass"));
-                fun.onFail.ifPresent(f -> b.add(utils.getFunctionTooltip(utils, f)).build("ali.property.branch.on_fail"));
+            fun.onPass.ifPresent(f -> b.add(TooltipBuilder.array((c) -> c.add(utils.getFunctionTooltip(utils, f))).build("ali.property.branch.on_pass")));
+            fun.onFail.ifPresent(f -> b.add(TooltipBuilder.array((c) -> c.add(utils.getFunctionTooltip(utils, f))).build("ali.property.branch.on_fail")));
 
-                b.add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
-                        .build("ali.type.function.filtered");
-        });
+            b.add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                    .build("ali.type.function.filtered");
+        }).build();
     }
 
     @NotNull
@@ -420,9 +420,11 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getDiscardItemTooltip(IServerUtils utils, DiscardItem fun) {
-        return BranchTooltipNode.branch()
+    public static TooltipNode getDiscardItemTooltip(IServerUtils utils, DiscardItem fun) {
+        return TooltipBuilder.array((b) -> b
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                )
+                .showEmpty()
                 .build("ali.type.function.discard_item");
     }
 }

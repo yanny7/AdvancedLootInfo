@@ -84,14 +84,15 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return ArrayTooltipNode.array()
-                .add(LiteralTooltipNode.translatable("ali.enum.group_type.slot"))
+    public static TooltipNode getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return TooltipBuilder.array((b) -> b
+                .add(TooltipBuilder.keyOnly("ali.enum.group_type.slot"))
                 .add(utils.getSlotSourceTooltip(utils, slotSource))
                 .add(getQualityTooltip(quality))
                 .add(getChanceTooltip(chance))
                 .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
                 .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
+                )
                 .build();
     }
 

@@ -110,7 +110,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getIdentifierTooltip(TServerUtils utils, Identifier value) {
-        return utils.getValueNode(value);
+        return TooltipBuilder.value(value);
     }
 
     @NotNull

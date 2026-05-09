@@ -195,7 +195,7 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
+    public static TooltipBuilder getSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.SLOT_SOURCE_TYPE, slotSource.codec());
     }
 
@@ -314,7 +314,7 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, ZombieNautilusVariant zombieNautilusVariant) {
+    public static TooltipBuilder getZombieNautilusVariantTooltip(IServerUtils utils, ZombieNautilusVariant zombieNautilusVariant) {
         return getRegistryTooltip(utils, Registries.ZOMBIE_NAUTILUS_VARIANT, zombieNautilusVariant);
     }
 }

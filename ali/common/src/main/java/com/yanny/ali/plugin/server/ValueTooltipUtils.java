@@ -18,6 +18,7 @@ import net.minecraft.core.component.predicates.WritableBookPredicate;
 import net.minecraft.core.component.predicates.WrittenBookPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.network.Filterable;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.inventory.SlotRange;
@@ -642,25 +643,26 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getLootContextArgTooltip(IServerUtils utils, LootContextArg<?> lootContextArg) {
+    public static TooltipBuilder getLootContextArgTooltip(IServerUtils utils, LootContextArg<?> lootContextArg) {
         return utils.getValueTooltip(utils, lootContextArg.contextParam());
     }
 
     @NotNull
-    public static IKeyTooltipNode getContextKeyTooltip(IServerUtils utils, ContextKey<?> contextKey) {
+    public static TooltipBuilder getContextKeyTooltip(IServerUtils utils, ContextKey<?> contextKey) {
         return utils.getValueTooltip(utils, contextKey.name());
     }
 
     @NotNull
-    public static IKeyTooltipNode getSlotRangeTooltip(IServerUtils utils, SlotRange slotRange) {
+    public static TooltipBuilder getSlotRangeTooltip(IServerUtils utils, SlotRange slotRange) {
         return utils.getValueTooltip(utils, slotRange.toString());
     }
 
     @NotNull
-    public static IKeyTooltipNode getKineticWeaponConditionTooltip(IServerUtils utils, KineticWeapon.Condition condition) {
-        return BranchTooltipNode.branch()
+    public static TooltipBuilder getKineticWeaponConditionTooltip(IServerUtils utils, KineticWeapon.Condition condition) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, condition.maxDurationTicks()).build("ali.property.value.max_duration_ticks"))
                 .add(utils.getValueTooltip(utils, condition.minSpeed()).build("ali.property.value.min_speed"))
-                .add(utils.getValueTooltip(utils, condition.minRelativeSpeed()).build("ali.property.value.min_relative_speed"));
+                .add(utils.getValueTooltip(utils, condition.minRelativeSpeed()).build("ali.property.value.min_relative_speed"))
+        );
     }
 }

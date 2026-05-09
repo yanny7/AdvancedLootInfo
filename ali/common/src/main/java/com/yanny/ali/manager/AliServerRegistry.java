@@ -23,7 +23,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -182,7 +181,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     }
 
     @Override
-    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         slotSourceTooltips.put(type, (u, s) -> getter.apply(u, type.cast(s)));
     }
 
@@ -319,7 +318,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     }
 
     @Override
-    public <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+    public <T extends SlotSource> TooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
         return slotSourceTooltips.get(slotSource.getClass())
                 .map((i) -> i.apply(utils, slotSource))
                 .orElseGet(() -> GenericTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource));

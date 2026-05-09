@@ -59,7 +59,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect);
 
-    <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource);
+    <T extends SlotSource> TooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
 

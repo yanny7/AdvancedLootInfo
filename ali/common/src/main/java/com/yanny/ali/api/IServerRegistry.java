@@ -49,7 +49,7 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
-    <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter);
+    <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter);
 
     <T extends NumberProvider> void registerNumberProvider(Class<T> type, BiFunction<IServerUtils, T, RangeValue> converter);
 

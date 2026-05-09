@@ -139,9 +139,6 @@ accessible method net/minecraft/world/item/slot/FilteredSlotSource <init> (Lnet/
 accessible method net/minecraft/world/item/slot/GroupSlotSource <init> (Ljava/util/List;)V
 accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
 accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> (Ljava/util/List;)V
-accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$ExactMatcher <init> (Ljava/lang/String;)V
-accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$RangedMatcher <init> (Ljava/util/Optional;Ljava/util/Optional;)V
-accessible method net/minecraft/advancements/critereon/StatePropertiesPredicate$PropertyMatcher <init> (Ljava/lang/String;Lnet/minecraft/advancements/critereon/StatePropertiesPredicate$ValueMatcher;)V
 
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount
 accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$Formula

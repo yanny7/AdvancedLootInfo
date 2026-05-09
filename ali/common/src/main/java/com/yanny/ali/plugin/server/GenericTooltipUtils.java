@@ -8,8 +8,6 @@ import com.mojang.serialization.MapCodec;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
-import com.yanny.ali.plugin.common.tooltip.*;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -212,8 +210,8 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getMissingSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
-        IKeyTooltipNode tooltip = getSlotSourceTooltip(utils, slotSource);
+    public static TooltipNode getMissingSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
+        TooltipBuilder tooltip = getSlotSourceTooltip(utils, slotSource);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
@@ -298,14 +296,12 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSlotListTooltip(IServerUtils utils, List<SlotSource> slots) {
-        ArrayTooltipNode.Builder array = ArrayTooltipNode.array();
-
-        for (SlotSource slot : slots) {
-            array.add(utils.getSlotSourceTooltip(utils, slot));
-        }
-
-        return array.build();
+    public static TooltipBuilder getSlotListTooltip(IServerUtils utils, List<SlotSource> slots) {
+        return TooltipBuilder.array((b) -> {
+            for (SlotSource slot : slots) {
+                b.add(utils.getSlotSourceTooltip(utils, slot));
+            }
+        });
     }
 
     @NotNull
@@ -352,9 +348,9 @@ public class GenericTooltipUtils {
                 b.add(utils.getValueTooltip(utils, entityType)
                         .add(TooltipBuilder.keyValue(key, toString(stat.range())).build("aci.util.null"))
                         .build("ali.property.value.entity_type"));
-            } else if (value.value() instanceof Identifier Identifier) {
-                b.add(utils.getValueTooltip(utils, Identifier)
-                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(resourceLocation)), toString(stat.range())).build("aci.util.null"))
+            } else if (value.value() instanceof Identifier identifier) {
+                b.add(utils.getValueTooltip(utils, identifier)
+                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(identifier)), toString(stat.range())).build("aci.util.null"))
                         .build("ali.property.value.id"));
             }
         });
@@ -422,7 +418,7 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceKey<Recipe<?>>, Boolean> entry) {
-        return TooltipBuilder.keyValue(entry.getKey().identifier(), entry.getValue()).build("aci.util.null");
+        return TooltipBuilder.keyValue(entry.getKey().identifier().toString(), entry.getValue());
     }
 
     @NotNull

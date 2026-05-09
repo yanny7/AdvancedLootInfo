@@ -5,7 +5,6 @@ import com.google.gson.JsonPrimitive;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.plugin.common.tooltip.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
