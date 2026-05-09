@@ -16,6 +16,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SetStewEffectFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -91,7 +92,7 @@ public class ServerUtilsTest {
                         "      -> Duration: 6"
                 )
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("ali.property.value.value"), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("aci.util.missing"), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }

@@ -2,10 +2,14 @@ package com.yanny.ali.plugin.common.trades;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
-import com.yanny.ali.api.*;
+import com.yanny.ali.api.IClientUtils;
+import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
-import com.yanny.ali.plugin.common.tooltip.ArrayTooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -18,39 +22,39 @@ import java.util.Collections;
 public class ItemsToItemsNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("items_to_items");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
 
     public ItemsToItemsNode(IServerUtils utils,
                             Either<ItemStack, TagKey<? extends ItemLike>> input1,
                             RangeValue input1Count,
-                            ITooltipNode input1Condition,
+                            TooltipNode input1Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> input2,
                             RangeValue input2Count,
-                            ITooltipNode input2Condition,
+                            TooltipNode input2Condition,
                             Either<ItemStack, TagKey<? extends ItemLike>> output,
                             RangeValue outputCount,
-                            ITooltipNode outputModifier,
+                            TooltipNode outputModifier,
                             RangeValue maxUses,
                             RangeValue xp,
                             ITooltipNode tooltip) {
         addChildren(getChildren(input1, input1Count, input1Condition));
         addChildren(getChildren(input2, input2Count, input2Condition));
         addChildren(getChildren(output, outputCount, outputModifier));
-        this.tooltip = ArrayTooltipNode.array()
+        tooltip = TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, maxUses.toString()).build("ali.property.value.uses"))
                 .add(utils.getValueTooltip(utils, xp.toString()).build("ali.property.value.villager_xp"))
                 .add(tooltip)
-                .build();
+        ).build();
     }
 
     public ItemsToItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
     }
 
     @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
@@ -62,10 +66,10 @@ public class ItemsToItemsNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
     }
 
-    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, ITooltipNode condition) {
+    private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {
         return item.map(
                 (i) -> new ItemNode(1, count, i, condition, Collections.emptyList(), Collections.emptyList()),
                 (t) -> new ItemNode(1, count, t, condition, Collections.emptyList(), Collections.emptyList())

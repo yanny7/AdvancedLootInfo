@@ -1,40 +1,43 @@
 package com.yanny.ali.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
-import com.yanny.ali.api.ITooltipNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public class SlotNode implements IDataNode {
     public static final Identifier ID = Identifier.fromNamespaceAndPath(Utils.MOD_ID, "slot");
 
-    private final ITooltipNode tooltip;
+    private final TooltipNode tooltip;
     private final float chance;
 
-    public SlotNode(float chance, ITooltipNode tooltip) {
+    public SlotNode(float chance, TooltipNode tooltip) {
         this.chance = chance;
         this.tooltip = tooltip;
     }
 
     public SlotNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip = ITooltipNode.decodeNode(utils, buf);
+        tooltip = TooltipNode.decode(buf);
         chance = buf.readFloat();
     }
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        ITooltipNode.encodeNode(utils, tooltip, buf);
+        tooltip.encode(buf);
         buf.writeFloat(chance);
     }
 
+    @NotNull
     @Override
-    public ITooltipNode getTooltip() {
+    public TooltipNode getTooltip() {
         return tooltip;
     }
 
+    @NotNull
     @Override
     public Identifier getId() {
         return ID;

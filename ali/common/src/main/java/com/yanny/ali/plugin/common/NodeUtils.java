@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.common;
 
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
@@ -47,7 +48,7 @@ public class NodeUtils {
         RangeValue count = getEnchantedCount(utils, allFunctions).get(null).get(0);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedCount = getEnchantedCount(utils, allFunctions);
-        ITooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions);
+        TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions);
         Either<ItemStack, TagKey<? extends ItemLike>> either = itemGetter.apply(allFunctions);
 
         if (either.left().isPresent() && either.left().get().isEmpty()) {
@@ -61,7 +62,7 @@ public class NodeUtils {
     public static AlternativesNode getAlternativesNode(IServerUtils utils, AlternativesEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
-        ITooltipNode tooltip = EntryTooltipUtils.getAlternativesTooltip();
+        TooltipNode tooltip = EntryTooltipUtils.getAlternativesTooltip();
 
         return new AlternativesNode(children, tooltip);
     }
@@ -71,7 +72,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        ITooltipNode tooltip = EntryTooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions);
+        TooltipNode tooltip = EntryTooltipUtils.getDynamicTooltip(utils, entry.quality, chance, allFunctions, allConditions);
 
         return new DynamicNode(chance, tooltip);
     }
@@ -82,7 +83,7 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        ITooltipNode tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions);
+        TooltipNode tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions);
 
         return new EmptyNode(chance, tooltip);
     }
@@ -91,7 +92,7 @@ public class NodeUtils {
     public static GroupNode getGroupNode(IServerUtils utils, EntryGroup entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
-        ITooltipNode tooltip = EntryTooltipUtils.getGroupTooltip();
+        TooltipNode tooltip = EntryTooltipUtils.getGroupTooltip();
 
         return new GroupNode(children, tooltip);
     }
@@ -100,7 +101,7 @@ public class NodeUtils {
     public static SequenceNode getSequenceNode(IServerUtils utils, SequentialEntry entry, float rawChance, int sumWeight, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<IDataNode> children = getChildren(utils, entry.children, rawChance, sumWeight, functions, allConditions);
-        ITooltipNode tooltip = EntryTooltipUtils.getSequentialTooltip();
+        TooltipNode tooltip = EntryTooltipUtils.getSequentialTooltip();
 
         return new SequenceNode(children, tooltip);
     }
@@ -111,7 +112,7 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         LootTable lootTable = utils.getLootTable(entry.contents.mapLeft(ResourceKey::identifier));
-        ITooltipNode tooltip = EntryTooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight);
+        TooltipNode tooltip = EntryTooltipUtils.getReferenceTooltip(entry, rawChance, sumWeight);
         List<IDataNode> children;
 
         if (lootTable != null) {
@@ -124,7 +125,7 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static ReferenceNode getReferenceNode(IServerUtils utils, Identifier table, List<LootItemCondition> conditions, ITooltipNode tooltip) {
+    public static ReferenceNode getReferenceNode(IServerUtils utils, Identifier table, List<LootItemCondition> conditions, TooltipNode tooltip) {
         LootTable lootTable = utils.getLootTable(Either.left(table));
         List<IDataNode> children;
 
@@ -143,7 +144,7 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        ITooltipNode tooltip = EntryTooltipUtils.getSlotTooltip(utils, entry.slotSource, entry.quality, enchantedChance, allFunctions, allConditions);
+        TooltipNode tooltip = EntryTooltipUtils.getSlotTooltip(utils, entry.slotSource, entry.quality, enchantedChance, allFunctions, allConditions);
 
         return new SlotNode(chance, tooltip);
     }
@@ -153,7 +154,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
         List<LootItemCondition> allConditions = Stream.concat(conditions.stream(), entry.conditions.stream()).toList();
         int sumWeight = getTotalWeight(entry.entries);
-        ITooltipNode tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls));
+        TooltipNode tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, entry.rolls), utils.convertNumber(utils, entry.bonusRolls));
         List<IDataNode> children = getChildren(utils, entry.entries, rawChance, sumWeight, allFunctions, allConditions);
 
         return new LootPoolNode(children, tooltip);
@@ -161,7 +162,7 @@ public class NodeUtils {
 
     @NotNull
     public static LootTableNode getLootTableNode(List<ILootModifier<?>> modifiers) {
-        ITooltipNode tooltip = EntryTooltipUtils.getLootTableTooltip();
+        TooltipNode tooltip = EntryTooltipUtils.getLootTableTooltip();
         List<IDataNode> children = new ArrayList<>();
         LootTableNode node = new LootTableNode(children, tooltip);
 
@@ -175,7 +176,7 @@ public class NodeUtils {
     @NotNull
     public static LootTableNode getLootTableNode(List<ILootModifier<?>> modifiers, IServerUtils utils, LootTable entry, float rawChance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         List<LootItemFunction> allFunctions = Stream.concat(functions.stream(), entry.functions.stream()).toList();
-        ITooltipNode tooltip = EntryTooltipUtils.getLootTableTooltip();
+        TooltipNode tooltip = EntryTooltipUtils.getLootTableTooltip();
         List<IDataNode> children = entry.pools.stream().map((lootPool) -> (IDataNode) getLootPoolNode(utils, lootPool, rawChance, allFunctions, conditions)).toList();
         LootTableNode node = new LootTableNode(children, tooltip);
 
@@ -258,25 +259,34 @@ public class NodeUtils {
         for (IOperation operation : operations) {
             if (operation instanceof IOperation.AddOperation addOperation) {
                 node.addChildren(addOperation.node());
-            } else if (operation instanceof IOperation.RemoveOperation(Predicate<ItemStack> predicate)) {
-                removeItem(node, predicate);
+            } else if (operation instanceof IOperation.RemoveOperation(Predicate<ItemStack> predicate, Function<IDataNode, IDataNode> factory)) {
+                removeItem(node, factory, predicate);
             } else if (operation instanceof IOperation.ReplaceOperation(Predicate<ItemStack> predicate, Function<IDataNode, List<IDataNode>> factory)) {
                 replaceItem(node, factory, predicate);
             }
         }
     }
 
-    private static void removeItem(IDataNode node, Predicate<ItemStack> predicate) {
+    private static void removeItem(IDataNode node, Function<IDataNode, IDataNode> factory, Predicate<ItemStack> predicate) {
         if (node instanceof ListNode listNode) {
-            listNode.nodes().removeIf((n) -> {
-                if (n instanceof IItemNode itemNode) {
-                    return predicateEither(itemNode, predicate);
-                } else {
-                    removeItem(n, predicate);
-                }
+            var iterator = listNode.nodes().listIterator();
 
-                return false;
-            });
+            while (iterator.hasNext()) {
+                IDataNode n = iterator.next();
+
+                if (n instanceof IItemNode itemNode && predicateEither(itemNode, predicate)) {
+                    IDataNode replacement = factory.apply(n);
+
+                    if (replacement == null) {
+                        iterator.remove();
+                    } else {
+                        iterator.set(replacement);
+                    }
+                } else if (n instanceof ListNode) {
+                    removeItem(n, factory, predicate);
+                }
+            }
+
             removeEmptyNodes(node);
         }
     }
@@ -294,8 +304,8 @@ public class NodeUtils {
                     }
 
                     return result.getFirst();
-                } else if (n instanceof ListNode l) {
-                    replaceItem(l, factory, predicate);
+                } else if (n instanceof ListNode) {
+                    replaceItem(n, factory, predicate);
                 }
 
                 return n;

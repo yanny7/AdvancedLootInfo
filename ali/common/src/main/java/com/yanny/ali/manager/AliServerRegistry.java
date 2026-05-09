@@ -7,11 +7,12 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
+import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
-import com.yanny.ali.plugin.common.tooltip.*;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -20,7 +21,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -52,7 +52,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtils, ITooltipNode, IServerUtils, IKeyTooltipNode> implements IServerRegistry, IServerUtils, ICommonUtils {
+public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtils, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     // factories
@@ -63,15 +63,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootPoolEntryContainer, List<Item>>> entryItemCollectors = registerClassKeyed("entry item collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
     // tooltips
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, ITooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, ITooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, ITooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, IKeyTooltipNode>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, ITooltipNode>> dataComponentPredicateTooltips = registerClassKeyed("data component predicate tooltips", true, HashMap::new, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE);
-    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, ITooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
-    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, ITooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter, BuiltInRegistries.DATA_COMPONENT_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConsumeEffect, ITooltipNode>> consumeEffectTooltips = registerClassKeyed("consume effect tooltips", true, HashMap::new, BuiltInRegistries.CONSUME_EFFECT_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, SlotSource, ITooltipNode>> slotSourceTooltips = registerClassKeyed("slot source tooltips", true, HashMap::new, BuiltInRegistries.SLOT_SOURCE_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, TooltipNode>> dataComponentPredicateTooltips = registerClassKeyed("data component predicate tooltips", true, HashMap::new, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE);
+    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, TooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
+    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, TooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter, BuiltInRegistries.DATA_COMPONENT_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConsumeEffect, TooltipNode>> consumeEffectTooltips = registerClassKeyed("consume effect tooltips", true, HashMap::new, BuiltInRegistries.CONSUME_EFFECT_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, SlotSource, TooltipNode>> slotSourceTooltips = registerClassKeyed("slot source tooltips", true, HashMap::new, BuiltInRegistries.SLOT_SOURCE_TYPE);
     // modifiers
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
@@ -133,49 +133,49 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     }
 
     @Override
-    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         functionTooltips.put(type, (u, f) -> getter.apply(u, type.cast(f)));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         conditionTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
     @Override
-    public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         ingredientTooltips.put(type, (u, i) -> getter.apply(u, type.cast(i)));
     }
 
     @Override
-    public <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, IKeyTooltipNode> getter) {
+    public <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         valueTooltips.put(type, (u, v) -> getter.apply(u, type.cast(v)));
     }
 
     @Override
-    public <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         dataComponentPredicateTooltips.put(type, (u, i) -> getter.apply(u, type.cast(i)));
     }
 
     @Override
-    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         //noinspection unchecked
         entitySubPredicateTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
-    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         //noinspection unchecked
         dataComponentTypeTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
-    public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         consumeEffectTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
     @Override
-    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, ITooltipNode> getter) {
+    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
         slotSourceTooltips.put(type, (u, s) -> getter.apply(u, type.cast(s)));
     }
 
@@ -230,7 +230,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public <T extends LootItemFunction> ITooltipNode getFunctionTooltip(IServerUtils utils, T function) {
+    public <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function) {
         return functionTooltips.get(function.getClass())
                 .map((f) -> f.apply(utils, function))
                 .orElseGet(() -> GenericTooltipUtils.getMissingFunctionTooltip(utils, function));
@@ -238,7 +238,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public <T extends LootItemCondition> ITooltipNode getConditionTooltip(IServerUtils utils, T condition) {
+    public <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition) {
         return conditionTooltips.get(condition.getClass())
                 .map((c) -> c.apply(utils, condition))
                 .orElseGet(() -> GenericTooltipUtils.getMissingConditionTooltip(utils, condition));
@@ -246,7 +246,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public <T extends Ingredient> ITooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+    public <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
         return ingredientTooltips.get(ingredient.getClass())
                 .map((i) -> i.apply(utils, ingredient))
                 .orElseGet(() -> GenericTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
@@ -254,9 +254,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public <T> IKeyTooltipNode getValueTooltip(IServerUtils utils, @Nullable T value) {
+    public <T> TooltipBuilder getValueTooltip(IServerUtils utils, @Nullable T value) {
         if (value == null) {
-            return EmptyTooltipNode.empty();
+            return TooltipBuilder.empty();
         }
 
         Class<?> valueClass = value.getClass();
@@ -266,76 +266,13 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
         } else {
             return valueTooltips.get(valueClass)
                     .map((v) -> v.apply(utils, value))
-                    .orElseGet(() -> ErrorTooltipNode.error("[" + valueClass.getName() + "]"));
+                    .orElseGet(() -> GenericTooltipUtils.getMissingValueTooltip(utils, value));
         }
     }
 
     @NotNull
     @Override
-    public ITooltipNode buildTooltip(IKeyTooltipNode keyTooltipNode) {
-        if (keyTooltipNode instanceof BranchTooltipNode.Builder builder) {
-            return builder.build("aci.util.values");
-        } else if (keyTooltipNode instanceof ErrorTooltipNode.Builder builder) {
-            return builder.build();
-        } else if (keyTooltipNode instanceof ArrayTooltipNode.Builder builder) {
-            return builder.build();
-        } else if (keyTooltipNode instanceof EmptyTooltipNode.Builder builder) {
-            return builder.build();
-        } else {
-            return keyTooltipNode.build("aci.util.null");
-        }
-    }
-
-    @NotNull
-    @Override
-    public IKeyTooltipNode getBranchNode() {
-        return BranchTooltipNode.branch();
-    }
-
-    @NotNull
-    @Override
-    public IKeyTooltipNode getBranchNode(boolean isAdvancedTooltip) {
-        return BranchTooltipNode.branch(isAdvancedTooltip);
-    }
-
-    @NotNull
-    @Override
-    public IKeyTooltipNode getValueNode(Object... value) {
-        return ValueTooltipNode.value(value);
-    }
-
-    @Override
-    public @NotNull IKeyTooltipNode getKeyValueNode(Object key, Object value) {
-        return ValueTooltipNode.keyValue(key, value);
-    }
-
-    @NotNull
-    @Override
-    public IKeyTooltipNode getComponentNode(Component... values) {
-        return ComponentTooltipNode.values(values);
-    }
-
-    @NotNull
-    @Override
-    public ITooltipNode getLiteralNode(String translatable) {
-        return LiteralTooltipNode.translatable(translatable);
-    }
-
-    @NotNull
-    @Override
-    public IKeyTooltipNode getEmptyNode() {
-        return EmptyTooltipNode.empty();
-    }
-
-    @NotNull
-    @Override
-    public IKeyTooltipNode getErrorNode(String error) {
-        return ErrorTooltipNode.error(error);
-    }
-
-    @NotNull
-    @Override
-    public <T extends DataComponentPredicate> ITooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
+    public <T extends DataComponentPredicate> TooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
         return dataComponentPredicateTooltips.get(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
                 .orElseGet(() -> GenericTooltipUtils.getMissingDataComponentPredicateTooltip(utils, predicate));
@@ -343,7 +280,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public <T extends EntitySubPredicate> ITooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+    public <T extends EntitySubPredicate> TooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
         return entitySubPredicateTooltips.get(predicate.codec())
                 .map((i) -> i.apply(utils, predicate))
                 .orElseGet(() -> GenericTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
@@ -351,21 +288,21 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
 
     @NotNull
     @Override
-    public ITooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+    public TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
         return dataComponentTypeTooltips.get(type)
                 .map((i) -> i.apply(utils, value))
                 .orElseGet(() -> GenericTooltipUtils.getMissingDataComponentTypeTooltip(utils, type, value));
     }
 
     @Override
-    public <T extends ConsumeEffect> ITooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+    public <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
         return consumeEffectTooltips.get(effect.getClass())
                 .map((i) -> i.apply(utils, effect))
                 .orElseGet(() -> GenericTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));
     }
 
     @Override
-    public <T extends SlotSource> ITooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+    public <T extends SlotSource> TooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
         return slotSourceTooltips.get(slotSource.getClass())
                 .map((i) -> i.apply(utils, slotSource))
                 .orElseGet(() -> GenericTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource));
@@ -462,11 +399,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     @Override
     public void printRuntimeInfo() {
         super.printRuntimeInfo();
-        ArrayTooltipNode.logCacheStatistics(this);
-        BranchTooltipNode.logCacheStatistics(this);
-        ComponentTooltipNode.logCacheStatistics(this);
-        LiteralTooltipNode.logCacheStatistics(this);
-        ValueTooltipNode.logCacheStatistics(this);
+
+        if (this.getConfiguration().logMoreStatistics) {
+            TooltipNode.logCacheStatistics();
+        }
     }
 
     private void prepareLootModifiers() {
