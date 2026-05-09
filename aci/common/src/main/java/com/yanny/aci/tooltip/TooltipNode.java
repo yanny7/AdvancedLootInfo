@@ -170,7 +170,7 @@ public class TooltipNode {
             lines.add(currentLine);
         }
 
-        int childIndent = (key != null || values != null) ? indentLevel + 1 : indentLevel;
+        int childIndent = (key != null || values != null || component != null) ? indentLevel + 1 : indentLevel;
 
         for (TooltipNode child : children) {
             lines.addAll(child.getComponents(childIndent, isAdvanced));
@@ -203,10 +203,10 @@ public class TooltipNode {
             buf.writeUtf(key);
         }
 
-        if ((flags & FLAG_HAS_VALUE) != 0 && values != null) {
+        if ((flags & FLAG_HAS_VALUE) != 0) {
             if ((flags & FLAG_COMPONENT) != 0) {
                 buf.writeComponent(component != null ? component : Component.empty());
-            } else {
+            } else if (values != null) {
                 buf.writeVarInt(values.length);
 
                 for (String value : values) {

@@ -92,11 +92,18 @@ public class ConditionTooltipTest {
     public void testEntityPropertiesTooltip() {
         assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(UTILS, (LootItemEntityPropertyCondition) LootItemEntityPropertyCondition.hasProperties(
                 LootContext.EntityTarget.KILLER,
-                EntityPredicate.Builder.entity().team("blue")
+                EntityPredicate.Builder.entity()
+                        .team("blue")
+                        .equipment(EntityEquipmentPredicate.Builder.equipment()
+                                .mainhand(ItemPredicate.Builder.item().of(Items.TRIDENT).build())
+                                .build())
         ).build()).build(), List.of(
             "Entity Properties:",
             "  -> Target: KILLER",
             "  -> Predicate:",
+            "    -> Entity Equipment:",
+            "      -> Main Hand:",
+            "        -> Item: minecraft:trident",
             "    -> Team: blue"
         ));
     }

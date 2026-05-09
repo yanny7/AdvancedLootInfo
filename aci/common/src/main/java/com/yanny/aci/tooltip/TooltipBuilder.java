@@ -203,6 +203,14 @@ public class TooltipBuilder {
                 finalKeyStr = translatableKey.single();
                 finalValues = child.getValues();
                 finalComponent = child.getComponent();
+
+                if (finalValues != null || finalComponent != null) {
+                    finalFlags |= TooltipNode.FLAG_HAS_VALUE;
+                }
+                if (finalComponent != null) {
+                    finalFlags |= TooltipNode.FLAG_COMPONENT;
+                }
+
                 finalChildren.clear();
             } else {
                 if (potentiallyMergeable) {
