@@ -2,7 +2,6 @@ package com.yanny.ali.fabric.plugin;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.fabric.mixin.MixinCombinedIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
@@ -18,7 +17,7 @@ public class LootJsIngredientTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static TooltipNode getCustomIngredientTooltip(IServerUtils utils, CustomIngredientImpl ingredient) {
+    public static TooltipBuilder getCustomIngredientTooltip(IServerUtils utils, CustomIngredientImpl ingredient) {
         CustomIngredient i = ingredient.getCustomIngredient();
 
         if (i instanceof AnyIngredient anyIngredient) {
@@ -27,25 +26,25 @@ public class LootJsIngredientTooltipUtils {
 
             return TooltipBuilder.array((b) -> {
                 for (Ingredient i2 : ingredients) {
-                    b.add(utils.getIngredientTooltip(utils, i2));
+                    b.add(utils.getValueTooltip(utils, i2));
                 }
-            }).build("ali.property.branch.any");
+            }).key("ali.property.branch.any");
         } else if (i instanceof AllIngredient allIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) allIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
 
             return TooltipBuilder.array((b) -> {
                 for (Ingredient i2 : ingredients) {
-                    b.add(utils.getIngredientTooltip(utils, i2));
+                    b.add(utils.getValueTooltip(utils, i2));
                 }
-            }).build("ali.property.branch.all");
+            }).key("ali.property.branch.all");
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
-            return TooltipNode.EMPTY_INSTANCE;
+            return TooltipBuilder.empty();
         } else {
             LOGGER.warn("Missing tooltip for fabric custom ingredient {}", i.getClass().getCanonicalName());
         }
 
-        return TooltipNode.EMPTY_INSTANCE;
+        return TooltipBuilder.empty();
     }
 }

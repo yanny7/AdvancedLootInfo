@@ -49,8 +49,8 @@ public class EntryTooltipUtils {
             b.add(TooltipBuilder.keyOnly("ali.enum.group_type.dynamic"));
             b.add(getQualityTooltip(quality));
             b.add(getChanceTooltip(getBaseMap(chance * 100)));
-            b.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
-            b.add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+            b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
+            b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
     }
 
@@ -70,8 +70,8 @@ public class EntryTooltipUtils {
             b.add(TooltipBuilder.keyOnly("ali.enum.group_type.empty"));
             b.add(getQualityTooltip(quality));
             b.add(getChanceTooltip(chance));
-            b.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
-            b.add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+            b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
+            b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
     }
 
@@ -82,8 +82,8 @@ public class EntryTooltipUtils {
             b.add(getQualityTooltip(quality));
             b.add(getChanceTooltip(chance));
             b.add(getCountTooltip(count));
-            b.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
-            b.add(GenericTooltipUtils.getFunctionsTooltip(utils, functions));
+            b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
+            b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
     }
 

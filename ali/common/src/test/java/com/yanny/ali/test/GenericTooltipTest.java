@@ -2,7 +2,6 @@ package com.yanny.ali.test;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.*;
 import net.minecraft.world.effect.MobEffects;
@@ -48,6 +46,7 @@ import java.util.Objects;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
+import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class GenericTooltipTest {
     @Test
@@ -206,8 +205,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testTagPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build("aci.util.null"), List.of("minecraft:bypasses_armor: true"));
-        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build("aci.util.null"), List.of("minecraft:bypasses_armor: false"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: true"));
+        assertTooltip(ValueTooltipUtils.getTagPredicateTooltip(UTILS, TagPredicate.isNot(DamageTypeTags.BYPASSES_ARMOR)).build(), List.of("minecraft:bypasses_armor: false"));
     }
 
     @Test
@@ -344,15 +343,13 @@ public class GenericTooltipTest {
                 "  -> Tag: minecraft:beds"
         ));
         assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block()
-                .of(Blocks.STONE, Blocks.COBBLESTONE)
+                .of(Blocks.STONE)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST).build())
                 .hasNbt(compoundTag)
                 .build()
         ).build("ali.property.branch.block_predicate"), List.of(
                 "Block Predicate:",
-                "  -> Blocks:",
-                "    -> minecraft:stone",
-                "    -> minecraft:cobblestone",
+                "  -> Block: minecraft:stone",
                 "  -> Properties:",
                 "    -> facing: east",
                 "  -> Nbt: {test:3.0f}"
@@ -522,11 +519,13 @@ public class GenericTooltipTest {
                 "Entity Sub Predicate:",
                 "  -> Is In Open Water: true"
         ));
-        assertTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
+        assertUnorderedTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
                 .setGameType(GameType.SURVIVAL)
                 .addStat(Stats.BLOCK_MINED.get(Blocks.COBBLESTONE), MinMaxBounds.Ints.atLeast(4))
                 .addStat(Stats.ITEM_USED.get(Items.SALMON), MinMaxBounds.Ints.atLeast(5))
+                .addStat(Stats.ENTITY_KILLED.get(EntityType.BAT), MinMaxBounds.Ints.atLeast(5))
+                .addStat(Stats.CUSTOM.get(Stats.LEAVE_GAME), MinMaxBounds.Ints.between(1, 10))
                 .addRecipe(new ResourceLocation("recipe1"), true)
                 .addRecipe(new ResourceLocation("recipe2"), false)
                 .checkAdvancementDone(new ResourceLocation("first"), true)
@@ -536,10 +535,16 @@ public class GenericTooltipTest {
                 "  -> Level: ≥3",
                 "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
-                "    -> Item: minecraft:salmon",
-                "      -> Times Used: ≥5",
-                "    -> Block: minecraft:cobblestone",
-                "      -> Times Mined: ≥4",
+                List.of(
+                        "    -> Item: minecraft:salmon",
+                        "      -> Times Used: ≥5",
+                        "    -> Block: minecraft:cobblestone",
+                        "      -> Times Mined: ≥4",
+                        "    -> Entity Type: minecraft:bat",
+                        "      -> You killed %s %s: ≥5", //FIXME this should be fixed
+                        "    -> Id: minecraft:leave_game",
+                        "      -> Games Quit: 1-10"
+                ),
                 "  -> Recipes:",
                 "    -> minecraft:recipe1: true",
                 "    -> minecraft:recipe2: false",
@@ -561,31 +566,8 @@ public class GenericTooltipTest {
     }
 
     @Test
-    public void testPropertyMatcherTooltip() {
-        assertTooltip(GenericTooltipUtils.getPropertyMatcherTooltip(UTILS, new StatePropertiesPredicate.ExactPropertyMatcher("hello", "world")).build(), List.of("hello: world"));
-    }
-
-    @Test
-    public void testStatsTooltip() {
-        Map<Stat<?>, MinMaxBounds.Ints> statMap = new LinkedHashMap<>();
-
-        statMap.put(Stats.BLOCK_MINED.get(Blocks.COBBLESTONE), MinMaxBounds.Ints.atLeast(2));
-        statMap.put(Stats.ITEM_USED.get(Items.SALMON), MinMaxBounds.Ints.atLeast(3));
-        statMap.put(Stats.ENTITY_KILLED.get(EntityType.BAT), MinMaxBounds.Ints.atLeast(5));
-        statMap.put(Stats.CUSTOM.get(Stats.LEAVE_GAME), MinMaxBounds.Ints.between(1, 10));
-
-        assertTooltip(GenericTooltipUtils.getStatsTooltip(UTILS, Map.of()).build("ali.property.branch.stats"), List.of());
-        assertTooltip(GenericTooltipUtils.getStatsTooltip(UTILS, statMap).build("ali.property.branch.stats"), List.of(
-                "Stats:",
-                "  -> Block: minecraft:cobblestone",
-                "    -> Times Mined: ≥2",
-                "  -> Item: minecraft:salmon",
-                "    -> Times Used: ≥3",
-                "  -> Entity Type: minecraft:bat",
-                "    -> You killed %s %s: ≥5", //FIXME this should be fixed
-                "  -> Id: minecraft:leave_game",
-                "    -> Games Quit: 1-10"
-        ));
+    public void testExactPropertyMatcherTooltip() {
+        assertTooltip(ValueTooltipUtils.getExactPropertyMatcherTooltip(UTILS, new StatePropertiesPredicate.ExactPropertyMatcher("hello", "world")).build(), List.of("hello: world"));
     }
 
     @Test

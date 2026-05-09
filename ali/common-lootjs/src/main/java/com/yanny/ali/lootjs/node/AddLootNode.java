@@ -45,9 +45,9 @@ public class AddLootNode extends ListNode {
 
         addType = mixinAddLootAction.getType();
         tooltip = switch (mixinAddLootAction.getType()) {
-            case DEFAULT -> EntryTooltipUtils.getGroupTooltip();
-            case SEQUENCE -> EntryTooltipUtils.getSequentialTooltip();
-            case ALTERNATIVES -> EntryTooltipUtils.getAlternativesTooltip();
+            case DEFAULT -> EntryTooltipUtils.getGroupTooltip().build();
+            case SEQUENCE -> EntryTooltipUtils.getSequentialTooltip().build();
+            case ALTERNATIVES -> EntryTooltipUtils.getAlternativesTooltip().build();
         };
     }
 

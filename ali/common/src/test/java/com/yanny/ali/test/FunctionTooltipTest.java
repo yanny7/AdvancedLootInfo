@@ -94,6 +94,14 @@ public class FunctionTooltipTest {
                     "    -> facing"
                 )
         ));
+        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
+                .copy(BlockStateProperties.LIT)
+                .build()
+        ).build(), List.of(
+                "Copy State:",
+                "  -> Block: minecraft:furnace",
+                "  -> Property: lit"
+        ));
     }
 
     @Test
@@ -207,8 +215,7 @@ public class FunctionTooltipTest {
                 "    -> Attribute: minecraft:generic.armor_toughness",
                 "    -> Operation: MULTIPLY_BASE",
                 "    -> Amount: 3",
-                "    -> Equipment Slots:",
-                "      -> MAINHAND"
+                "    -> Equipment Slot: MAINHAND"
         ));
     }
 
@@ -323,8 +330,7 @@ public class FunctionTooltipTest {
         ).build(), List.of(
                 "Set Lore:",
                 "  -> Replace: true",
-                "  -> Lore:",
-                "    -> Block Drops",
+                "  -> Lore: Block Drops",
                 "  -> Resolution Context: KILLER"
         ));
     }

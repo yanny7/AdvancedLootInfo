@@ -181,6 +181,10 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Enchantment.class, RegistriesTooltipUtils::getEnchantmentTooltip);
         registry.registerValueTooltip(Attribute.class, RegistriesTooltipUtils::getAttributeTooltip);
 
+        registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
+        registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
+        registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);
+
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
@@ -210,6 +214,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
         registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
         registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
+        registry.registerValueTooltip(StatePropertiesPredicate.ExactPropertyMatcher.class, ValueTooltipUtils::getExactPropertyMatcherTooltip);
+        registry.registerValueTooltip(StatePropertiesPredicate.RangedPropertyMatcher.class, ValueTooltipUtils::getRangedPropertyMatcherTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithLootingCondition.class, TooltipUtils::applyRandomChanceWithLooting);

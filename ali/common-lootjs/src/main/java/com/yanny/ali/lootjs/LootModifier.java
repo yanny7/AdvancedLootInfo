@@ -8,7 +8,7 @@ import com.almostreliable.lootjs.loot.action.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
 import com.yanny.ali.lootjs.mixin.MixinModifyLootAction;
@@ -92,8 +92,8 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                     List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
 
                     allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));
-                    TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions);
-                    return new ItemNode(i.getChance(), i.getCount(), i.getModifiedItem(), tooltip, i.getFunctions(), i.getConditions());
+                    TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, enchantedChance, enchantedCount, i.getFunctions(), allConditions);
+                    return new ItemNode(i.getChance(), i.getCount(), i.getModifiedItem(), tooltip.build(), i.getFunctions(), i.getConditions());
                 }
 
                 return c;

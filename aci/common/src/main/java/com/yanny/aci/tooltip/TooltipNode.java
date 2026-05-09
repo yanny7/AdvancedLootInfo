@@ -57,8 +57,17 @@ public class TooltipNode {
         return values;
     }
 
-    public boolean isComplex() {
-        return (flags & FLAG_ARRAY) != 0 || children.size() > 1 || (children.size() == 1 && children.get(0).isComplex());
+    @Nullable
+    public Component getComponent() {
+        return component;
+    }
+
+    public boolean hasChildren() {
+        return !children.isEmpty();
+    }
+
+    public boolean hasKey() {
+        return (flags & FLAG_HAS_KEY) != 0;
     }
 
     @NotNull

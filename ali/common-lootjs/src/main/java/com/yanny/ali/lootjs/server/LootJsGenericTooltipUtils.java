@@ -112,8 +112,7 @@ public class LootJsGenericTooltipUtils {
                 Ingredient i = ingredient.get(0);
 
                 if (!i.isEmpty()) {
-                    return TooltipBuilder.value("INGREDIENT")
-                            .add(utils.getIngredientTooltip(utils, i));
+                    return TooltipBuilder.value("INGREDIENT").add(utils.getValueTooltip(utils, i));
                 }
             }
         }

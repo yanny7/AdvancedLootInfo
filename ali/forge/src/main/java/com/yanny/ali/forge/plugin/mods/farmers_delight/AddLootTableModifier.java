@@ -38,7 +38,7 @@ public class AddLootTableModifier extends GlobalLootModifier implements IGlobalL
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
                             .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
-                            .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+                            .add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c))
                     )
                     .build();
             IDataNode node = NodeUtils.getReferenceNode(utils, lootTable, c, tooltip);

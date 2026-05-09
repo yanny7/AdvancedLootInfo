@@ -29,7 +29,7 @@ public class GroupLootNode extends ListNode {
     public GroupLootNode(IServerUtils utils, GroupedLootAction lootPool, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         MixinGroupedLootAction action = (MixinGroupedLootAction) lootPool;
 
-        tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0));
+        tooltip = EntryTooltipUtils.getLootPoolTooltip(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)).build();
 
         for (ILootHandler entry : ((MixinCompositeLootAction) lootPool).getHandlers()) {
             if (entry instanceof AddLootAction addLootAction) {

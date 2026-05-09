@@ -7,24 +7,22 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
 
 public class ConditionTooltipUtils {
     private static final DecimalFormat FLOAT_FORMAT = new DecimalFormat("0.####");
 
     @NotNull
     public static TooltipBuilder getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
-        return getSubConditionsTooltip(utils, Arrays.asList(cond.terms)).key("ali.type.condition.all_of");
+        return utils.getValueTooltip(utils, cond.terms).key("ali.type.condition.all_of");
     }
 
     @NotNull
     public static TooltipBuilder getAnyOfTooltip(IServerUtils utils, AnyOfCondition cond) {
-        return getSubConditionsTooltip(utils, Arrays.asList(cond.terms)).key("ali.type.condition.any_of");
+        return utils.getValueTooltip(utils, cond.terms).key("ali.type.condition.any_of");
     }
 
     @NotNull
@@ -58,7 +56,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getInvertedTooltip(IServerUtils utils, InvertedLootItemCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getConditionTooltip(utils, cond.term)))
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.term)))
                 .key("ali.type.condition.inverted");
     }
 

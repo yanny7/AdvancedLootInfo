@@ -45,7 +45,7 @@ public class CommonValueTooltip<
             return TooltipBuilder.empty();
         }
 
-        return TooltipBuilder.array((b) -> {
+        return TooltipBuilder.branch((b) -> {
             for (Object o : collection) {
                 b.add(utils.getValueTooltip(utils, o));
             }

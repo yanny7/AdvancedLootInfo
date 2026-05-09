@@ -1,7 +1,7 @@
 package com.yanny.ali.forge.plugin.mods.farmers_delight;
 
 import com.yanny.aci.api.RangeValue;
-import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
@@ -46,12 +46,12 @@ public class ReplaceItemModifier extends GlobalLootModifier implements IGlobalLo
                 List<LootItemCondition> allConditions = Stream.concat(c.stream(), node.getConditions().stream()).toList();
                 Map<Enchantment, Map<Integer, RangeValue>> chance = NodeUtils.getEnchantedChance(utils, allConditions, 1);
                 Map<Enchantment, Map<Integer, RangeValue>> count = NodeUtils.getEnchantedCount(utils, Collections.emptyList());
-                TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
+                TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), allConditions);
 
                 if (!c.isEmpty()) {
-                    nodes.add(new ModifiedNode(utils, src, new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip, Collections.emptyList(), allConditions)));
+                    nodes.add(new ModifiedNode(utils, src, new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions)));
                 } else {
-                    nodes.add(new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip, Collections.emptyList(), allConditions));
+                    nodes.add(new ItemNode(1, new RangeValue(addedCount), addedItem.getDefaultInstance(), tooltip.build(), Collections.emptyList(), allConditions));
                 }
 
                 return nodes;

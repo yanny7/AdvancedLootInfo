@@ -9,22 +9,38 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetAttributesFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStatsTooltip;
 
 public class ValueTooltipUtils {
+    @NotNull
+    public static TooltipBuilder getConditionTooltip(IServerUtils utils, LootItemCondition condition) {
+        return utils.getConditionTooltip(utils, condition);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFunctionTooltip(IServerUtils utils, LootItemFunction function) {
+        return utils.getFunctionTooltip(utils, function);
+    }
+
+    @NotNull
+    public static TooltipBuilder getIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
+        return utils.getIngredientTooltip(utils, ingredient);
+    }
+
     @NotNull
     public static TooltipBuilder getFormulaTooltip(IServerUtils utils, ApplyBonusCount.Formula formula) {
         TooltipBuilder tooltip = utils.getValueTooltip(utils, formula.getType());
@@ -47,8 +63,8 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, modifier.operation).build("ali.property.value.operation"))
                 .add(utils.getValueTooltip(utils, modifier.amount).build("ali.property.value.amount"))
                 .add(utils.getValueTooltip(utils, modifier.id).build("ali.property.value.uuid"))
-                .add(utils.getValueTooltip(utils, Arrays.asList(modifier.slots)).build("ali.property.branch.equipment_slots"))
-        );
+                .add(utils.getValueTooltip(utils, modifier.slots).build(TooltipBuilder.multi("ali.property.value.equipment_slot", "ali.property.branch.equipment_slots")))
+        ).key("ali.property.branch.modifier");
     }
 
     @NotNull
@@ -61,7 +77,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getStatePropertiesPredicateTooltip(IServerUtils utils, StatePropertiesPredicate propertiesPredicate) {
-        return GenericTooltipUtils.getCollectionTooltip(utils, propertiesPredicate.properties, GenericTooltipUtils::getPropertyMatcherTooltip);
+        return utils.getValueTooltip(utils, propertiesPredicate.properties);
     }
 
     @NotNull
@@ -168,7 +184,7 @@ public class ValueTooltipUtils {
         if (blockPredicate != BlockPredicate.ANY) {
             return TooltipBuilder.array((b) -> b
                     .add(utils.getValueTooltip(utils, blockPredicate.tag).build("ali.property.value.tag"))
-                    .add(utils.getValueTooltip(utils, blockPredicate.blocks).build("ali.property.branch.blocks"))
+                    .add(utils.getValueTooltip(utils, blockPredicate.blocks).build(TooltipBuilder.multi("ali.property.value.block", "ali.property.branch.blocks")))
                     .add(utils.getValueTooltip(utils, blockPredicate.properties).build("ali.property.branch.properties"))
                     .add(utils.getValueTooltip(utils, blockPredicate.nbt).build("ali.property.value.nbt"))
             );
@@ -244,11 +260,11 @@ public class ValueTooltipUtils {
         if (itemPredicate != ItemPredicate.ANY) {
             return TooltipBuilder.array((b) -> b
                     .add(utils.getValueTooltip(utils, itemPredicate.tag).build("ali.property.value.tag"))
-                    .add(utils.getValueTooltip(utils, itemPredicate.items).build("ali.property.branch.items"))
+                    .add(utils.getValueTooltip(utils, itemPredicate.items).build(TooltipBuilder.multi("ali.property.value.item", "ali.property.branch.items")))
                     .add(utils.getValueTooltip(utils, itemPredicate.count).build("ali.property.value.count"))
                     .add(utils.getValueTooltip(utils, itemPredicate.durability).build("ali.property.value.durability"))
-                    .add(utils.getValueTooltip(utils, Arrays.asList(itemPredicate.enchantments)).build("ali.property.branch.enchantments"))
-                    .add(utils.getValueTooltip(utils, Arrays.asList(itemPredicate.storedEnchantments)).build("ali.property.branch.stored_enchantments"))
+                    .add(utils.getValueTooltip(utils, itemPredicate.enchantments).build("ali.property.branch.enchantments"))
+                    .add(utils.getValueTooltip(utils, itemPredicate.storedEnchantments).build("ali.property.branch.stored_enchantments"))
                     .add(utils.getValueTooltip(utils, itemPredicate.potion).build("ali.property.value.potion"))
                     .add(utils.getValueTooltip(utils, itemPredicate.nbt).build("ali.property.value.nbt"))
             );
@@ -282,7 +298,7 @@ public class ValueTooltipUtils {
                     } else if (entitySubPredicate instanceof PlayerPredicate playerPredicate) {
                         b.add(utils.getValueTooltip(utils, playerPredicate.level).build("ali.property.value.level"));
                         b.add(utils.getValueTooltip(utils, playerPredicate.gameType).build("ali.property.value.game_type"));
-                        b.add(getStatsTooltip(utils, playerPredicate.stats).build("ali.property.branch.stats"));
+                        b.add(getMapTooltip(utils, playerPredicate.stats, GenericTooltipUtils::getStatsEntryTooltip).build("ali.property.branch.stats"));
                         b.add(getMapTooltip(utils, playerPredicate.recipes, GenericTooltipUtils::getRecipeEntryTooltip).build("ali.property.branch.recipes"));
                         b.add(getMapTooltip(utils, playerPredicate.advancements, GenericTooltipUtils::getAdvancementEntryTooltip).build("ali.property.branch.advancements"));
                         b.add(utils.getValueTooltip(utils, playerPredicate.lookingAt).build("ali.property.branch.looking_at"));
@@ -315,7 +331,7 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, copyOperation.sourcePathText).build("ali.property.value.source"))
                 .add(utils.getValueTooltip(utils, copyOperation.targetPathText).build("ali.property.value.target"))
                 .add(utils.getValueTooltip(utils, copyOperation.op).build("ali.property.value.merge_strategy"))
-        );
+        ).key("ali.property.branch.operation");
     }
 
     @NotNull
@@ -363,5 +379,30 @@ public class ValueTooltipUtils {
         }
 
         return TooltipBuilder.empty();
+    }
+
+    @NotNull
+    public static TooltipBuilder getExactPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.ExactPropertyMatcher matcher) {
+        return TooltipBuilder.keyValue(matcher.name, matcher.value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRangedPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.RangedPropertyMatcher matcher) {
+        String min = matcher.minValue;
+        String max = matcher.maxValue;
+
+        if (min != null) {
+            if (max != null) {
+                return TooltipBuilder.value(matcher.name, min, max).key("ali.property.value.ranged_property_both");
+            } else {
+                return TooltipBuilder.value(matcher.name, min).key("ali.property.value.ranged_property_gte");
+            }
+        } else {
+            if (max != null) {
+                return TooltipBuilder.value(matcher.name, max).key("ali.property.value.ranged_property_lte");
+            } else {
+                return TooltipBuilder.value(matcher.name).key("ali.property.value.ranged_property_any");
+            }
+        }
     }
 }

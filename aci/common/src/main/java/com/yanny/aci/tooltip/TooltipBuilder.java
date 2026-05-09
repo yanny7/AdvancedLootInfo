@@ -1,14 +1,19 @@
 package com.yanny.aci.tooltip;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class TooltipBuilder {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     static final char TRANSLATE_MARKER = '\uE000';
 
     private MultiKey translatableKey;
@@ -167,6 +172,10 @@ public class TooltipBuilder {
         return this;
     }
 
+    public boolean hasKey() {
+        return rawKey != null || translatableKey != null;
+    }
+
     public TooltipNode build() {
         if (isEmptyForced) {
             return TooltipNode.EMPTY_INSTANCE;
@@ -183,14 +192,29 @@ public class TooltipBuilder {
         List<TooltipNode> finalChildren = new ArrayList<>(children);
 
         if (translatableKey != null && rawKey == null) {
-            boolean isComplex = isArray || finalChildren.size() > 1 || (finalChildren.size() == 1 && finalChildren.get(0).isComplex());
+            boolean isSingleSimpleChild = !finalChildren.isEmpty() && !finalChildren.get(0).hasChildren() && !finalChildren.get(0).hasKey();
+            boolean parentIsEligible = finalValues == null && finalComponent == null && !isError;
+            boolean potentiallyMergeable = parentIsEligible && isSingleSimpleChild;
+            boolean canBeMerged = potentiallyMergeable && !isArray && finalChildren.size() == 1;
+            boolean hasMultiKey = !Objects.equals(translatableKey.plural, translatableKey.single);
 
-            if (finalChildren.size() == 1 && finalValues == null && finalComponent == null && !isComplex && !isError) {
+            if (canBeMerged && hasMultiKey) {
                 TooltipNode child = finalChildren.get(0);
                 finalKeyStr = translatableKey.single();
                 finalValues = child.getValues();
+                finalComponent = child.getComponent();
                 finalChildren.clear();
             } else {
+                if (potentiallyMergeable) {
+                    if (!hasMultiKey) {
+                        LOGGER.info("Tooltip node {} could be merged if defined singular form", translatableKey.plural);
+                    }
+
+                    if (isArray) {
+                        LOGGER.info("Tooltip node {} could be merged if it wasn't forced to be an array", translatableKey.plural);
+                    }
+                }
+
                 finalKeyStr = translatableKey.plural();
             }
         }

@@ -91,7 +91,8 @@ public class ServerUtilsTest {
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
         )).build(), List.of(
             "Auto-detected: minecraft:unknown",
-                "  -> builder: [java.lang.StringBuilder]",
+                "  -> builder:",
+                "    -> Not implemented: [java.lang.StringBuilder]",
                 "  -> primitiveArray:",
                 "    -> true",
                 "    -> false",
@@ -105,11 +106,9 @@ public class ServerUtilsTest {
                 "    -> Set Damage:",
                 "      -> Damage: 0.50",
                 "      -> Add: false",
-                "  -> conditions: []",
                 "  -> builders:",
                 "    -> Not implemented: [java.lang.StringBuilder]",
                 "    -> Not implemented: [java.lang.StringBuilder]",
-                "  -> empty: []",
                 "  -> enumValue: attached",
                 "  -> primitive: true",
                 "  -> state: false",

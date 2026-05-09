@@ -167,6 +167,10 @@ public class ConditionTooltipTest {
                 "    -> minecraft:andesite",
                 "    -> minecraft:diorite"
         ));
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE)).build()).build(), List.of(
+                "Match Tool:",
+                "  -> Item: minecraft:andesite"
+        ));
     }
 
     @Test

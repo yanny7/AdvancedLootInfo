@@ -15,7 +15,6 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -42,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -242,7 +242,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
         Class<?> valueClass = value.getClass();
 
         if (valueClass.isArray()) {
-            return TooltipUtils.getArrayTooltip(utils, value);
+            return TooltipBuilder.branch((b) -> {
+                for (int i = 0; i < Array.getLength(value); i++) {
+                    b.add(utils.getValueTooltip(utils, Array.get(value, i)));
+                }
+            });
         } else {
             return valueTooltips.get(valueClass)
                     .map((v) -> v.apply(utils, value))

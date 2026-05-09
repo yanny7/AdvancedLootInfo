@@ -7,10 +7,6 @@ import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.Arrays;
-
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getSubConditionsTooltip;
-
 @ClassAccessor("vectorwing.farmersdelight.common.loot.function.CopyMealFunction")
 public class CopyMealFunction extends ConditionalFunction implements IFunctionTooltip {
     public CopyMealFunction(LootItemConditionalFunction conditionalFunction) {
@@ -19,7 +15,7 @@ public class CopyMealFunction extends ConditionalFunction implements IFunctionTo
 
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
-        return TooltipBuilder.array((b) -> b.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions")))
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicates).build("ali.property.branch.conditions")))
                 .key("ali.type.function.copy_meal");
     }
 }
