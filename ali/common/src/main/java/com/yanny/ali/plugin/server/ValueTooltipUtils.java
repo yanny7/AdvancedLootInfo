@@ -7,7 +7,8 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -634,7 +635,7 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getDataComponentMatchersTooltip(IServerUtils utils, DataComponentMatchers dataComponentMatchers) {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
             return TooltipBuilder.array((b) -> b
-                    .add(utils.getValueTooltip(utils, dataComponentMatchers.exact()))
+                    .add(utils.getValueTooltip(utils, dataComponentMatchers.exact()).build("ali.property.branch.expected_components"))
                     .add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build("ali.property.branch.partial_matchers"))
             );
         }
@@ -667,26 +668,28 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getItemStackTemplateTooltip(IServerUtils utils, ItemStackTemplate itemStackTemplate) {
-        return BranchTooltipNode.branch()
+    public static TooltipBuilder getItemStackTemplateTooltip(IServerUtils utils, ItemStackTemplate itemStackTemplate) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, itemStackTemplate.item()).build("ali.property.value.item"))
                 .add(utils.getValueTooltip(utils, itemStackTemplate.count()).build("ali.property.value.count"))
-                .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build("ali.property.branch.components"));
+                .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build("ali.property.branch.components"))
+        );
     }
 
     @NotNull
-    public static IKeyTooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate predicate) {
+    public static TooltipBuilder getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate predicate) {
         return utils.getValueTooltip(utils, predicate.expectedComponents);
     }
 
     @NotNull
-    public static IKeyTooltipNode getFoodPredicateTooltip(IServerUtils utils, FoodPredicate predicate) {
+    public static TooltipBuilder getFoodPredicateTooltip(IServerUtils utils, FoodPredicate predicate) {
         if (predicate != FoodPredicate.ANY) {
-            return BranchTooltipNode.branch()
+            return TooltipBuilder.array((b) -> b
                     .add(utils.getValueTooltip(utils, predicate.level()).build("ali.property.value.level"))
-                    .add(utils.getValueTooltip(utils, predicate.saturation()).build("ali.property.value.saturation"));
+                    .add(utils.getValueTooltip(utils, predicate.saturation()).build("ali.property.value.saturation"))
+            );
         }
 
-        return EmptyTooltipNode.empty();
+        return TooltipBuilder.empty();
     }
 }

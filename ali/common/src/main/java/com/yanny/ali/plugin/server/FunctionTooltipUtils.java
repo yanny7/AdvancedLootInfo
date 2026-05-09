@@ -432,18 +432,20 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getSetRandomDyesTooltip(IServerUtils utils, SetRandomDyesFunction fun) {
-        return BranchTooltipNode.branch()
+    public static TooltipNode getSetRandomDyesTooltip(IServerUtils utils, SetRandomDyesFunction fun) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, fun.numberOfDyes).build("ali.property.value.number_of_dyes"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                )
                 .build("ali.type.function.set_random_dyes");
     }
 
     @NotNull
-    public static ITooltipNode getSetRandomPotionsTooltip(IServerUtils utils, SetRandomPotionFunction fun) {
-        return BranchTooltipNode.branch()
+    public static TooltipNode getSetRandomPotionsTooltip(IServerUtils utils, SetRandomPotionFunction fun) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, fun.options).build("ali.property.branch.options"))
                 .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
+                )
                 .build("ali.type.function.set_random_potions");
     }
 }

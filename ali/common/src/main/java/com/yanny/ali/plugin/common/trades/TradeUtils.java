@@ -3,8 +3,6 @@ package com.yanny.ali.plugin.common.trades;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import net.minecraft.world.item.Item;
@@ -26,10 +24,10 @@ public class TradeUtils {
                 utils.getValueTooltip(utils, trade.wants.components()).build("ali.property.branch.expected_components"),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
                 trade.additionalWants.map((t) -> utils.convertNumber(utils, t.count())).orElse(new RangeValue()),
-                trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(EmptyTooltipNode.empty()).build("ali.property.branch.expected_components"),
+                trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build("ali.property.branch.expected_components"),
                 Either.left(trade.gives.create()),
                 new RangeValue(trade.gives.count()),
-                GenericTooltipUtils.getFunctionListTooltip(utils, trade.givenItemModifiers),
+                GenericTooltipUtils.getFunctionListTooltip(utils, trade.givenItemModifiers).build(),
                 utils.convertNumber(utils, trade.maxUses),
                 utils.convertNumber(utils, trade.xp),
                 utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build("ali.property.branch.double_trade_price_enchantments")

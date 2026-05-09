@@ -5,7 +5,7 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.client.WidgetUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 

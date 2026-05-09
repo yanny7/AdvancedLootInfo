@@ -325,32 +325,32 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static IKeyTooltipNode getEnvironmentAttributeTooltip(IServerUtils utils, EnvironmentAttribute<?> attribute) {
+    public static TooltipBuilder getEnvironmentAttributeTooltip(IServerUtils utils, EnvironmentAttribute<?> attribute) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENVIRONMENT_ATTRIBUTE, attribute);
     }
 
     @NotNull
-    public static IKeyTooltipNode getWorldClockTooltip(IServerUtils utils, WorldClock clock) {
+    public static TooltipBuilder getWorldClockTooltip(IServerUtils utils, WorldClock clock) {
         return getRegistryTooltip(utils, Registries.WORLD_CLOCK, clock);
     }
 
     @NotNull
-    public static IKeyTooltipNode getPigSoundVariantTooltip(IServerUtils utils, PigSoundVariant variant) {
+    public static TooltipBuilder getPigSoundVariantTooltip(IServerUtils utils, PigSoundVariant variant) {
         return getRegistryTooltip(utils, Registries.PIG_SOUND_VARIANT, variant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getCowSoundVariantTooltip(IServerUtils utils, CowSoundVariant variant) {
+    public static TooltipBuilder getCowSoundVariantTooltip(IServerUtils utils, CowSoundVariant variant) {
         return getRegistryTooltip(utils, Registries.COW_SOUND_VARIANT, variant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getChickenSoundVariantTooltip(IServerUtils utils, ChickenSoundVariant variant) {
+    public static TooltipBuilder getChickenSoundVariantTooltip(IServerUtils utils, ChickenSoundVariant variant) {
         return getRegistryTooltip(utils, Registries.CHICKEN_SOUND_VARIANT, variant);
     }
 
     @NotNull
-    public static IKeyTooltipNode getCatSoundVariantTooltip(IServerUtils utils, CatSoundVariant variant) {
+    public static TooltipBuilder getCatSoundVariantTooltip(IServerUtils utils, CatSoundVariant variant) {
         return getRegistryTooltip(utils, Registries.CAT_SOUND_VARIANT, variant);
     }
 }

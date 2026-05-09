@@ -36,11 +36,11 @@ public class ItemsToItemsNode extends ListNode {
                             TooltipNode outputModifier,
                             RangeValue maxUses,
                             RangeValue xp,
-                            ITooltipNode tooltip) {
+                            TooltipNode tooltip) {
         addChildren(getChildren(input1, input1Count, input1Condition));
         addChildren(getChildren(input2, input2Count, input2Condition));
         addChildren(getChildren(output, outputCount, outputModifier));
-        tooltip = TooltipBuilder.array((b) -> b
+        this.tooltip = TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, maxUses.toString()).build("ali.property.value.uses"))
                 .add(utils.getValueTooltip(utils, xp.toString()).build("ali.property.value.villager_xp"))
                 .add(tooltip)

@@ -166,10 +166,11 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static ITooltipNode getEnvironmentAttributeCheckTooltip(IServerUtils utils, EnvironmentAttributeCheck<?> cond) {
-        return BranchTooltipNode.branch()
+    public static TooltipNode getEnvironmentAttributeCheckTooltip(IServerUtils utils, EnvironmentAttributeCheck<?> cond) {
+        return TooltipBuilder.array((b) -> b
                 .add(utils.getValueTooltip(utils, cond.attribute()).build("ali.property.value.attribute"))
                 .add(utils.getValueTooltip(utils, cond.value()).build("ali.property.value.value"))
+                )
                 .build("ali.type.condition.environment_attribute_check");
     }
 }
