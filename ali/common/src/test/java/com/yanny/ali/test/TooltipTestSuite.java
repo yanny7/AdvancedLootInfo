@@ -133,19 +133,19 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function) {
+            public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
                 return PluginManager.getInstance().serverRegistry.getFunctionTooltip(utils, function);
             }
 
             @NotNull
             @Override
-            public <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition) {
+            public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
                 return PluginManager.getInstance().serverRegistry.getConditionTooltip(utils, condition);
             }
 
             @NotNull
             @Override
-            public <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+            public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
                 return PluginManager.getInstance().serverRegistry.getIngredientTooltip(utils, ingredient);
             }
 

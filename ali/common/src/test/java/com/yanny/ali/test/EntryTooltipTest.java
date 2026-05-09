@@ -18,14 +18,14 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class EntryTooltipTest {
     @Test
     public void testLootTableTooltip() {
-        assertTooltip(EntryTooltipUtils.getLootTableTooltip(), List.of(
+        assertTooltip(EntryTooltipUtils.getLootTableTooltip().build(), List.of(
                 "Selects all entries"
         ));
     }
 
     @Test
     public void testLootPoolTooltip() {
-        assertTooltip(EntryTooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)), List.of(
+        assertTooltip(EntryTooltipUtils.getLootPoolTooltip(new RangeValue(2, 3), new RangeValue(1, 2)).build(), List.of(
                 "Selects random entry",
                 "Rolls: 3-5x"
         ));
@@ -33,14 +33,14 @@ public class EntryTooltipTest {
 
     @Test
     public void testAlternativesTooltip() {
-        assertTooltip(EntryTooltipUtils.getAlternativesTooltip(), List.of(
+        assertTooltip(EntryTooltipUtils.getAlternativesTooltip().build(), List.of(
                 "Selects only first successful entry"
         ));
     }
 
     @Test
     public void testDynamicTooltip() {
-        assertTooltip(EntryTooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()), List.of(
+        assertTooltip(EntryTooltipUtils.getDynamicTooltip(UTILS, 10, 0.3f, List.of(), List.of()).build(), List.of(
                 "Dynamic block-specific drops",
                 "Quality: 10",
                 "Chance: 30%"
@@ -49,14 +49,14 @@ public class EntryTooltipTest {
 
     @Test
     public void testGroupTooltip() {
-        assertTooltip(EntryTooltipUtils.getGroupTooltip(), List.of(
+        assertTooltip(EntryTooltipUtils.getGroupTooltip().build(), List.of(
                 "Selects all entries"
         ));
     }
 
     @Test
     public void testSequentialTooltip() {
-        assertTooltip(EntryTooltipUtils.getSequentialTooltip(), List.of(
+        assertTooltip(EntryTooltipUtils.getSequentialTooltip().build(), List.of(
                 "Selects entries sequentially until first failed"
         ));
     }
@@ -82,7 +82,7 @@ public class EntryTooltipTest {
                 countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
-        ), List.of(
+        ).build(), List.of(
                 "Quality: 3",
                 "Chance: 1.25%",
                 "  -> 0.10% (Looting I)",
@@ -102,7 +102,7 @@ public class EntryTooltipTest {
                 countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().build()),
                 List.of(ExplosionCondition.survivesExplosion().build())
-        ), List.of(
+        ).build(), List.of(
                 "Quality: 3",
                 "Chance: 1.25%",
                 "  -> 0.10% (Looting I)",

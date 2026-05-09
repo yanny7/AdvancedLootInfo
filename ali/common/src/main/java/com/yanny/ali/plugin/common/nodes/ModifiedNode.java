@@ -17,7 +17,7 @@ public class ModifiedNode extends ListNode {
     private final TooltipNode tooltip;
 
     public ModifiedNode(IServerUtils ignoredUtils, IDataNode original, IDataNode modified) {
-        tooltip = EntryTooltipUtils.getAlternativesTooltip();
+        tooltip = EntryTooltipUtils.getAlternativesTooltip().build();
         addChildren(modified);
         addChildren(original);
     }

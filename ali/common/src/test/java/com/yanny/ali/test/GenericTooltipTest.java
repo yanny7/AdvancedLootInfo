@@ -86,7 +86,7 @@ public class GenericTooltipTest {
                 EntryTooltipUtils.getBaseMap(2, 10),
                 List.of(),
                 List.of()
-        ), List.of(
+        ).build(), List.of(
                 "Chance: 2.50%",
                 "Count: 2-10"
         ));
@@ -97,7 +97,7 @@ public class GenericTooltipTest {
                 countMap,
                 List.of(ApplyExplosionDecay.explosionDecay().when(ExplosionCondition.survivesExplosion()).build(), SmeltItemFunction.smelted().build()),
                 List.of(LootItemKilledByPlayerCondition.killedByPlayer().build())
-        ), List.of(
+        ).build(), List.of(
                 "Quality: 5",
                 "Chance: 2.50%",
                 "  -> 1.50% (Looting I)",

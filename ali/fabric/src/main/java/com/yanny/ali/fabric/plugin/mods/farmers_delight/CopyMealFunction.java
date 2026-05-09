@@ -1,7 +1,6 @@
 package com.yanny.ali.fabric.plugin.mods.farmers_delight;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ConditionalFunction;
@@ -19,10 +18,8 @@ public class CopyMealFunction extends ConditionalFunction implements IFunctionTo
     }
 
     @Override
-    public TooltipNode getTooltip(IServerUtils utils) {
-        return TooltipBuilder.array((b) -> b
-                        .add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions"))
-                )
-                .build("ali.type.function.copy_meal");
+    public TooltipBuilder getTooltip(IServerUtils utils) {
+        return TooltipBuilder.array((b) -> b.add(getSubConditionsTooltip(utils, Arrays.asList(predicates)).build("ali.property.branch.conditions")))
+                .key("ali.type.function.copy_meal");
     }
 }

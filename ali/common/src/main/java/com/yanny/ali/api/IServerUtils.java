@@ -2,6 +2,7 @@ package com.yanny.ali.api;
 
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -34,13 +35,13 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
-    <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function);
+    <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function);
 
     @NotNull
-    <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition);
+    <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition);
 
     @NotNull
-    <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
+    <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count);
 

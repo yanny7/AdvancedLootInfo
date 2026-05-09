@@ -29,12 +29,12 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class ServerUtilsTest {
     @Test
     public void testGetFunctionTooltip() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 0-5",
                 "  -> Add: false"
         ));
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown",
                 "  -> item: minecraft:andesite",
                 "  -> value: 0-5"
@@ -43,7 +43,7 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetConditionTooltip() {
-        assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()), List.of(
+        assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()).build(), List.of(
                 "Random Chance:",
                 "  -> Probability: 0.5"
         ));
@@ -51,7 +51,7 @@ public class ServerUtilsTest {
                 true,
                 WeatherCheck.weather().setRaining(true).build(),
                 EnchantRandomlyFunction.randomEnchantment().build())
-        ), List.of(
+        ).build(), List.of(
                 "Auto-detected: minecraft:unknown",
                 "  -> valid: true",
                 "  -> condition:",
@@ -89,7 +89,7 @@ public class ServerUtilsTest {
                 false,
                 SetStewEffectFunction.stewEffect().withEffect(MobEffects.ABSORPTION, ConstantValue.exactly(2)).build(),
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
-        )), List.of(
+        )).build(), List.of(
             "Auto-detected: minecraft:unknown",
                 "  -> builder: [java.lang.StringBuilder]",
                 "  -> primitiveArray:",

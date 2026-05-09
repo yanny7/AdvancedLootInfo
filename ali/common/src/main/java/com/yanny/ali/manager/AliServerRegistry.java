@@ -14,7 +14,7 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
+import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,9 +60,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, List<Item>, LootItemFunction, List<Item>>> functionItemCollectors = registerClassKeyed("function item collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, VillagerTrades.ItemListing, Pair<List<Item>, List<Item>>>> tradeItemCollectors = registerClassKeyed("trade item collectors", false, HashMap::new, null);
     // tooltips
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipNode>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipNode>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipNode>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemFunction, TooltipBuilder>> functionTooltips = registerClassKeyed("function tooltips", true, HashMap::new, BuiltInRegistries.LOOT_FUNCTION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipBuilder>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     // modifiers
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
@@ -130,17 +130,17 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     }
 
     @Override
-    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends LootItemFunction> void registerFunctionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         functionTooltips.put(type, (u, f) -> getter.apply(u, type.cast(f)));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends LootItemCondition> void registerConditionTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         conditionTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
     @Override
-    public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends Ingredient> void registerIngredientTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         ingredientTooltips.put(type, (u, i) -> getter.apply(u, type.cast(i)));
     }
 
@@ -205,31 +205,31 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     public <T extends LootPoolEntryContainer> EntryFactory<T> getEntryFactory(IServerUtils utils, T type) {
         //noinspection unchecked
         return (EntryFactory<T>) entryFactories.get(type.getClass())
-                .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(GenericTooltipUtils.getMissingEntryTooltip(u, e)));
+                .orElseGet(() -> (u, e, c, s, f, o) -> new MissingNode(MissingTooltipUtils.getMissingEntryTooltip(u, e).build()));
     }
 
     @NotNull
     @Override
-    public <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function) {
+    public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
         return functionTooltips.get(function.getClass())
                 .map((f) -> f.apply(utils, function))
-                .orElseGet(() -> GenericTooltipUtils.getMissingFunctionTooltip(utils, function));
+                .orElseGet(() -> MissingTooltipUtils.getMissingFunctionTooltip(utils, function));
     }
 
     @NotNull
     @Override
-    public <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition) {
+    public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
         return conditionTooltips.get(condition.getClass())
                 .map((c) -> c.apply(utils, condition))
-                .orElseGet(() -> GenericTooltipUtils.getMissingConditionTooltip(utils, condition));
+                .orElseGet(() -> MissingTooltipUtils.getMissingConditionTooltip(utils, condition));
     }
 
     @NotNull
     @Override
-    public <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+    public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
         return ingredientTooltips.get(ingredient.getClass())
                 .map((i) -> i.apply(utils, ingredient))
-                .orElseGet(() -> GenericTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
+                .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));
     }
 
     @NotNull
@@ -246,7 +246,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
         } else {
             return valueTooltips.get(valueClass)
                     .map((v) -> v.apply(utils, value))
-                    .orElseGet(() -> GenericTooltipUtils.getMissingValueTooltip(utils, value));
+                    .orElseGet(() -> MissingTooltipUtils.getMissingValueTooltip(utils, value));
         }
     }
 
@@ -285,7 +285,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
                     } catch (Throwable ignored) {}
 
                     try {
-                        return new MissingNode(GenericTooltipUtils.getMissingItemListingTooltip(utils, entry));
+                        return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, entry).build());
                     } catch (Throwable e) {
                         return new MissingNode(TooltipNode.EMPTY_INSTANCE);
                     }
