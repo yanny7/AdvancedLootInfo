@@ -25,7 +25,6 @@ public class TooltipBuilder {
     private boolean isAdvancedOnly = false;
     private boolean isError = false;
     private boolean isEmptyForced = false;
-    private boolean isComponent = false;
     private boolean forceVisible = false;
 
     private final List<TooltipNode> children = new ArrayList<>();
@@ -114,7 +113,6 @@ public class TooltipBuilder {
     public static TooltipBuilder component(Component component) {
         TooltipBuilder builder = new TooltipBuilder();
 
-        builder.isComponent = true;
         builder.componentValue = component;
         return builder;
     }
@@ -204,7 +202,7 @@ public class TooltipBuilder {
                 finalValues = child.getValues();
                 finalComponent = child.getComponent();
 
-                if (finalValues != null || finalComponent != null) {
+                if (finalValues != null) {
                     finalFlags |= TooltipNode.FLAG_HAS_VALUE;
                 }
                 if (finalComponent != null) {
@@ -238,8 +236,8 @@ public class TooltipBuilder {
         if (isError) flags |= TooltipNode.FLAG_ERROR;
         if (rawKey != null) flags |= TooltipNode.FLAG_RAW_KEY;
         if (translatableKey != null || rawKey != null) flags |= TooltipNode.FLAG_HAS_KEY;
-        if ((values != null && values.length > 0) || componentValue != null) flags |= TooltipNode.FLAG_HAS_VALUE;
-        if (isComponent) flags |= TooltipNode.FLAG_COMPONENT;
+        if (values != null && values.length > 0) flags |= TooltipNode.FLAG_HAS_VALUE;
+        if (componentValue != null) flags |= TooltipNode.FLAG_COMPONENT;
 
         return flags;
     }

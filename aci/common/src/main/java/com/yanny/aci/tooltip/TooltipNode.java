@@ -39,7 +39,7 @@ public class TooltipNode {
     public static final TooltipNode EMPTY_INSTANCE = getOrCreate(null, null, null, FLAG_EMPTY, List.of());
 
     private @Nullable final String key;
-    private @Nullable final String[] values;
+    private final String @Nullable[] values;
     private @Nullable final Component component;
     private final short flags;
     private final List<TooltipNode> children;
@@ -70,17 +70,12 @@ public class TooltipNode {
         return (flags & FLAG_HAS_KEY) != 0;
     }
 
-    @NotNull
-    private MutableComponent indent(int level) {
-        return Component.literal("  ".repeat(level));
-    }
-
     public boolean isEmpty(boolean isAdvanced) {
-        if ((flags & FLAG_EMPTY) != 0) {
+        if (is(FLAG_EMPTY)) {
             return true;
         }
 
-        return (flags & FLAG_ADVANCED) != 0 && !isAdvanced;
+        return is(FLAG_ADVANCED) && !isAdvanced;
     }
 
     public List<Component> getComponents(int indentLevel, boolean isAdvanced) {
@@ -90,93 +85,119 @@ public class TooltipNode {
 
         List<Component> lines = new ArrayList<>();
         MutableComponent currentLine = indent(indentLevel);
-        boolean hasContent = (key != null || component != null || (values != null && values.length > 0));
-        boolean isBranching = (flags & FLAG_ARRAY) != 0 || !children.isEmpty() || (hasContent && indentLevel > 0);
+        boolean hasContent = is(FLAG_HAS_KEY) || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT);
+        boolean isBranching = is(FLAG_ARRAY) || !children.isEmpty() || (hasContent && indentLevel > 0);
 
         if (indentLevel > 0 && isBranching) {
             currentLine.append(Component.literal("-> ").withStyle(ChatFormatting.DARK_GRAY));
         }
 
-        if (key != null) {
-            if ((flags & FLAG_RAW_KEY) != 0) {
-                if (!key.isEmpty() && key.charAt(0) == TooltipBuilder.TRANSLATE_MARKER) {
-                    currentLine.append(Component.translatable(key.substring(1)).withStyle(TEXT_STYLE));
-                } else {
-                    currentLine.append(Component.literal(key).withStyle(TEXT_STYLE));
+        if (is(FLAG_HAS_KEY)) {
+            assert key != null;
 
-                    if ((!children.isEmpty() || (flags & FLAG_ARRAY) != 0) && values == null) {
-                        currentLine.append(Component.literal(":").withStyle(TEXT_STYLE));
-                    }
-                }
-
-                if (values != null && values.length > 0) {
-                    currentLine.append(Component.literal(": ").withStyle(TEXT_STYLE));
-
-                    for (int i = 0; i < values.length; i++) {
-                        String value = values[i];
-
-                        if (i > 0) {
-                            currentLine.append(Component.literal(" "));
-                        }
-
-                        if (value != null) {
-                            currentLine.append(formatValue(value));
-                        }
-                    }
-                }
-
-                if (component != null) {
-                    currentLine.append(Component.literal(": ").withStyle(TEXT_STYLE));
-                    currentLine.append(component).withStyle(VALUE_STYLE);
-                }
+            if (is(FLAG_RAW_KEY)) {
+                appendRawKey(currentLine);
+                appendValuesAndComponentWithColon(currentLine);
             } else {
-                if (values != null && values.length > 0) {
-                    Object[] valArgs = new Object[values.length];
-
-                    for (int i = 0; i < values.length; i++) {
-                        String value = values[i];
-
-                        if (value != null) {
-                            valArgs[i] = formatValue(value);
-                        }
-                    }
-
-                    currentLine.append(Component.translatable(key, valArgs).withStyle(TEXT_STYLE));
-                } else if (component != null) {
-                    currentLine.append(Component.translatable(key, component.copy().withStyle(VALUE_STYLE)).withStyle(TEXT_STYLE));
-                } else {
-                    currentLine.append(Component.translatable(key).withStyle(TEXT_STYLE));
-                }
+                appendTranslatableKeyWithValuesAndComponent(currentLine);
             }
-        } else if (values != null && values.length > 0) {
-            for (int i = 0; i < values.length; i++) {
-                String value = values[i];
-
-                if (i > 0) {
-                    currentLine.append(Component.literal(" "));
-                }
-
-                if (value != null) {
-                    currentLine.append(formatValue(value));
-                }
-            }
-        } else if (component != null) {
-            currentLine.append(component.copy().withStyle(VALUE_STYLE));
+        } else {
+            appendValuesAncComponentDirectly(currentLine);
         }
 
         String rawText = currentLine.getString().replace("->", "").trim();
 
-        if (!rawText.isEmpty() || (flags & FLAG_ERROR) != 0) {
+        if (!rawText.isEmpty() || is(FLAG_ERROR)) {
             lines.add(currentLine);
         }
 
-        int childIndent = (key != null || values != null || component != null) ? indentLevel + 1 : indentLevel;
+        int childIndent = (is(FLAG_HAS_KEY) || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT)) ? indentLevel + 1 : indentLevel;
 
         for (TooltipNode child : children) {
             lines.addAll(child.getComponents(childIndent, isAdvanced));
         }
 
         return lines;
+    }
+
+    private boolean is(short flag) {
+        return (flags & flag) != 0;
+    }
+
+    private void appendRawKey(MutableComponent line) {
+        assert key != null;
+
+        if (!key.isEmpty() && key.charAt(0) == TooltipBuilder.TRANSLATE_MARKER) {
+            line.append(Component.translatable(key.substring(1)).withStyle(TEXT_STYLE));
+        } else {
+            line.append(Component.literal(key).withStyle(TEXT_STYLE));
+
+            if ((!children.isEmpty() || is(FLAG_ARRAY))) {
+                line.append(Component.literal(":").withStyle(TEXT_STYLE));
+            }
+        }
+    }
+
+    private void appendTranslatableKeyWithValuesAndComponent(MutableComponent line) {
+        assert key != null;
+
+        if (is(FLAG_HAS_VALUE)) {
+            assert values != null;
+            Object[] valArgs = new Object[values.length];
+
+            for (int i = 0; i < values.length; i++) {
+                valArgs[i] = formatValue(values[i]);
+            }
+
+            line.append(Component.translatable(key, valArgs).withStyle(TEXT_STYLE));
+        } else if (is(FLAG_COMPONENT)) {
+            assert component != null;
+            line.append(Component.translatable(key, component.copy().withStyle(VALUE_STYLE)).withStyle(TEXT_STYLE));
+        } else {
+            line.append(Component.translatable(key).withStyle(TEXT_STYLE));
+        }
+    }
+
+    private void appendValuesAndComponentWithColon(MutableComponent line) {
+        if (is(FLAG_HAS_VALUE)) {
+            assert values != null;
+            line.append(Component.literal(": ").withStyle(TEXT_STYLE));
+
+            for (int i = 0; i < values.length; i++) {
+                if (i > 0) {
+                    line.append(Component.literal(" "));
+                }
+
+                line.append(formatValue(values[i]));
+            }
+        }
+
+        if (is(FLAG_COMPONENT)) {
+            assert component != null;
+            line.append(Component.literal(": ").withStyle(TEXT_STYLE));
+            line.append(component).withStyle(VALUE_STYLE);
+        }
+    }
+
+    private void appendValuesAncComponentDirectly(MutableComponent line) {
+        if (is(FLAG_HAS_VALUE)) {
+            assert values != null;
+            for (int i = 0; i < values.length; i++) {
+                if (i > 0) {
+                    line.append(Component.literal(" "));
+                }
+
+                line.append(formatValue(values[i]));
+            }
+        } else if (is(FLAG_COMPONENT)) {
+            assert component != null;
+            line.append(component.copy().withStyle(VALUE_STYLE));
+        }
+    }
+
+    @NotNull
+    private MutableComponent indent(int level) {
+        return Component.literal("  ".repeat(level));
     }
 
     @NotNull
@@ -189,30 +210,32 @@ public class TooltipNode {
             comp = Component.literal(value);
         }
 
-        return (flags & FLAG_ERROR) != 0 ? comp.withStyle(ERROR_STYLE) : comp.withStyle(VALUE_STYLE);
+        return is(FLAG_ERROR) ? comp.withStyle(ERROR_STYLE) : comp.withStyle(VALUE_STYLE);
     }
 
     public void encode(FriendlyByteBuf buf) {
         buf.writeShort(flags);
 
-        if ((flags & FLAG_EMPTY) != 0) {
+        if (is(FLAG_EMPTY)) {
             return;
         }
 
-        if ((flags & FLAG_HAS_KEY) != 0 && key != null) {
+        if (is(FLAG_HAS_KEY)) {
+            assert key != null;
             buf.writeUtf(key);
         }
 
-        if ((flags & FLAG_HAS_VALUE) != 0) {
-            if ((flags & FLAG_COMPONENT) != 0) {
-                buf.writeComponent(component != null ? component : Component.empty());
-            } else if (values != null) {
-                buf.writeVarInt(values.length);
+        if (is(FLAG_COMPONENT)) {
+            assert component != null;
+            buf.writeComponent(component);
+        }
 
-                for (String value : values) {
-                    assert value != null;
-                    buf.writeUtf(value);
-                }
+        if (is(FLAG_HAS_VALUE)) {
+            assert values != null;
+            buf.writeVarInt(values.length);
+
+            for (String value : values) {
+                buf.writeUtf(value);
             }
         }
 
@@ -237,17 +260,17 @@ public class TooltipNode {
             key = buf.readUtf();
         }
 
+        if ((flags & FLAG_COMPONENT) != 0) {
+            component = buf.readComponent();
+        }
+
         if ((flags & FLAG_HAS_VALUE) != 0) {
-            if ((flags & FLAG_COMPONENT) != 0) {
-                component = buf.readComponent();
-            } else {
-                int valCount = buf.readVarInt();
+            int valCount = buf.readVarInt();
 
-                values = new String[valCount];
+            values = new String[valCount];
 
-                for (int i = 0; i < valCount; i++) {
-                    values[i] = buf.readUtf();
-                }
+            for (int i = 0; i < valCount; i++) {
+                values[i] = buf.readUtf();
             }
         }
 
@@ -269,11 +292,12 @@ public class TooltipNode {
 
         List<String> valList = null;
 
-        if (values != null) {
+        if ((flags & FLAG_HAS_VALUE) != 0) {
+            assert values != null;
             valList = new ArrayList<>(values.length);
 
             for (String value : values) {
-                valList.add(value != null ? value.intern() : null);
+                valList.add(value.intern());
             }
         }
 
