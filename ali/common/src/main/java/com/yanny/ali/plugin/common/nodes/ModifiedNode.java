@@ -24,12 +24,12 @@ public class ModifiedNode extends ListNode {
 
     public ModifiedNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 
     @NotNull

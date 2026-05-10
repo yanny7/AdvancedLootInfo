@@ -11,4 +11,6 @@ public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
 
     @Nullable
     ServerLevel getServerLevel();
+
+    int getTranslationKeyIndex(String key);
 }

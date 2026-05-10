@@ -5,6 +5,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.CacheStats;
 import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.ICoreClientUtils;
+import com.yanny.aci.api.ICoreServerUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -30,6 +32,7 @@ public class TooltipNode {
     public static final short FLAG_HAS_KEY   = 1 << 5;
     public static final short FLAG_HAS_VALUE = 1 << 6;
     public static final short FLAG_COMPONENT = 1 << 7;
+    public static final short FLAG_INDEX_KEY = 1 << 8;
 
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final LoadingCache<CacheKey, TooltipNode> CACHE = CacheBuilder.newBuilder()
@@ -213,7 +216,18 @@ public class TooltipNode {
         return is(FLAG_ERROR) ? comp.withStyle(ERROR_STYLE) : comp.withStyle(VALUE_STYLE);
     }
 
-    public void encode(FriendlyByteBuf buf) {
+    public void encode(ICoreServerUtils<?> utils, FriendlyByteBuf buf) {
+        int keyIndex = -1;
+        short flags = this.flags;
+
+        if (key != null) {
+            keyIndex = utils.getTranslationKeyIndex(key);
+
+            if (keyIndex != -1) {
+                flags |= FLAG_INDEX_KEY;
+            }
+        }
+
         buf.writeShort(flags);
 
         if (is(FLAG_EMPTY)) {
@@ -221,8 +235,12 @@ public class TooltipNode {
         }
 
         if (is(FLAG_HAS_KEY)) {
-            assert key != null;
-            buf.writeUtf(key);
+            if (keyIndex >= 0) {
+                buf.writeVarInt(keyIndex);
+            } else {
+                assert key != null;
+                buf.writeUtf(key);
+            }
         }
 
         if (is(FLAG_COMPONENT)) {
@@ -242,11 +260,11 @@ public class TooltipNode {
         buf.writeVarInt(children.size());
 
         for (TooltipNode child : children) {
-            child.encode(buf);
+            child.encode(utils, buf);
         }
     }
 
-    public static TooltipNode decode(FriendlyByteBuf buf) {
+    public static TooltipNode decode(ICoreClientUtils<?, ?, ?> utils, FriendlyByteBuf buf) {
         short flags = buf.readShort();
         String key = null;
         String[] values = null;
@@ -257,7 +275,16 @@ public class TooltipNode {
         }
 
         if ((flags & FLAG_HAS_KEY) != 0) {
-            key = buf.readUtf();
+            if ((flags & FLAG_INDEX_KEY) != 0) {
+                key = utils.getTranslationKey(buf.readVarInt());
+
+                if (key == null) {
+                    LOGGER.warn("Unable to decode indexed key! Version mismatch!");
+                    key = "aci.util.missing";
+                }
+            } else {
+                key = buf.readUtf();
+            }
         }
 
         if ((flags & FLAG_COMPONENT) != 0) {
@@ -278,7 +305,7 @@ public class TooltipNode {
         List<TooltipNode> children = new ArrayList<>(childCount);
 
         for (int i = 0; i < childCount; i++) {
-            children.add(decode(buf));
+            children.add(decode(utils, buf));
         }
 
         return getOrCreate(key, values, component, flags, children);

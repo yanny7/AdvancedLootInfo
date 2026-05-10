@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.api.*;
+import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
 import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
@@ -47,6 +48,7 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerCommon(ICommonRegistry registry) {
+        LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
         registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
     }
 

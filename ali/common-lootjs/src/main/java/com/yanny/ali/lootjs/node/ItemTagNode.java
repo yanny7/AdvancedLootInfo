@@ -58,9 +58,9 @@ public class ItemTagNode implements IDataNode, IItemNode {
         }
     }
 
-    public ItemTagNode(IClientUtils ignoredUtils, FriendlyByteBuf buf) {
+    public ItemTagNode(IClientUtils utils, FriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -104,7 +104,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);

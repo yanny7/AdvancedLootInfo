@@ -3,6 +3,7 @@ package com.yanny.aci.api;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -17,4 +18,7 @@ public interface ICoreClientUtils<
 
     @NotNull
     BiFunction<SELF, FriendlyByteBuf, TDataNode> getDataNodeFactory(ResourceLocation id);
+
+    @Nullable
+    String getTranslationKey(int index);
 }

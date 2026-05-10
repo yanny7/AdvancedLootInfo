@@ -24,12 +24,12 @@ public class LootPoolNode extends ListNode {
 
     public LootPoolNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 
     @NotNull

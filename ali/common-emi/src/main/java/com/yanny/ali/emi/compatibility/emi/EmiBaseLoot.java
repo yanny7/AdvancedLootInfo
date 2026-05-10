@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -80,6 +81,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     @NotNull
     private IWidgetUtils getEmiUtils(EmiRecipe recipe) {
         return new ClientUtils() {
+            @Nullable
+            @Override
+            public String getTranslationKey(int index) {
+                return null;
+            }
+
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotWidgets.add(new Holder(this, item, entry, rect, recipe));

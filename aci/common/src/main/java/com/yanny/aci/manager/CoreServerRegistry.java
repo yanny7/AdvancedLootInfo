@@ -8,11 +8,14 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class CoreServerRegistry<
         TConfig,
-        TCommonUtils extends ICoreCommonUtils<TConfig>,
+        TCommonUtils extends CoreCommonRegistry<TConfig>,
         TServerUtils extends ICoreServerUtils<?>
         >
-        extends BaseRegistry
-        implements ICoreServerUtils<TServerUtils>, ICoreCommonUtils<TConfig> {
+        extends
+        BaseRegistry
+        implements
+        ICoreServerUtils<TServerUtils>,
+        ICoreCommonUtils<TConfig> {
     private ServerLevel serverLevel;
     protected final TCommonUtils commonUtils;
 
@@ -34,5 +37,11 @@ public abstract class CoreServerRegistry<
     @Override
     public TConfig getConfiguration() {
         return commonUtils.getConfiguration();
+    }
+
+    @Override
+    public int getTranslationKeyIndex(String key) {
+        Integer value = commonUtils.getDictionary().getOrDefault(key, -1);
+        return value == null ? -1 : value;
     }
 }

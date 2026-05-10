@@ -46,7 +46,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtils, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
+public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     // factories
@@ -77,7 +77,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, ICommonUtil
     private LootContext lootContext;
     private ResourceLocation currentLootTable;
 
-    public AliServerRegistry(ICommonUtils utils) {
+    public AliServerRegistry(AliCommonRegistry utils) {
         super(utils);
     }
 

@@ -19,7 +19,7 @@ public class MissingNode implements IDataNode {
     }
 
     public MissingNode(IClientUtils utils, FriendlyByteBuf buf) {
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @NotNull
@@ -36,6 +36,6 @@ public class MissingNode implements IDataNode {
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 }
