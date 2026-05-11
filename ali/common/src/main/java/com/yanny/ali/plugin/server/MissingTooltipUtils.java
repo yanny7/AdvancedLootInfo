@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -32,7 +33,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType()), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get entry info from serialized data for {} in {}", BuiltInRegistries.LOOT_POOL_ENTRY_TYPE.getKey(entry.getType()), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
@@ -52,7 +53,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get function info from serialized data for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get function info from serialized data for {} in {}", BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(function.getType()), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
@@ -72,7 +73,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get condition info from serialized data for {} in {}", BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(condition.getType()), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
@@ -89,7 +90,7 @@ public class MissingTooltipUtils {
             tooltip.add(TooltipUtils.getJsonTooltip(utils, ingredient.toJson()));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), utils.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, ingredient, Ingredient.class);

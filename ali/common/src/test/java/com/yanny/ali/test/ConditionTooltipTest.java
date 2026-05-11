@@ -178,6 +178,12 @@ public class ConditionTooltipTest {
                 "Match Tool:",
                 "  -> Item: minecraft:andesite"
         ));
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
+                ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.MOB_LOOTING, MinMaxBounds.Ints.ANY))
+        ).build()).build(), List.of(
+                "Match Tool:",
+                "  -> Enchantment: minecraft:looting"
+        ));
     }
 
     @Test

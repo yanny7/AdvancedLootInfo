@@ -26,6 +26,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(Boolean.class, this::getBooleanTooltip);
         registry.registerValueTooltip(Integer.class, this::getIntegerTooltip);
         registry.registerValueTooltip(Long.class, this::getLongTooltip);
+        registry.registerValueTooltip(Short.class, this::getShortTooltip);
         registry.registerValueTooltip(Byte.class, this::getByteTooltip);
         registry.registerValueTooltip(String.class, this::getStringTooltip);
         registry.registerValueTooltip(Float.class, this::getFloatTooltip);
@@ -79,6 +80,11 @@ public class CommonValueTooltip<
     }
 
     @NotNull
+    private TooltipBuilder getShortTooltip(TServerUtils utils, Short value) {
+        return TooltipBuilder.value(value);
+    }
+
+    @NotNull
     private TooltipBuilder getByteTooltip(TServerUtils utils, Byte value) {
         return TooltipBuilder.value(value);
     }
@@ -95,7 +101,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getDoubleTooltip(TServerUtils utils, Double value) {
-        return TooltipBuilder.value(value);
+        return TooltipBuilder.value((float) (double) value);
     }
 
     @NotNull

@@ -213,11 +213,11 @@ public class TooltipBuilder {
             } else {
                 if (potentiallyMergeable) {
                     if (!hasMultiKey) {
-                        LOGGER.info("Tooltip node {} could be merged if defined singular form", translatableKey.plural);
+                        LOGGER.info("Tooltip node {} could be merged if defined singular form in {}", translatableKey.plural, TooltipContext.get());
                     }
 
                     if (isArray) {
-                        LOGGER.info("Tooltip node {} could be merged if it wasn't forced to be an array", translatableKey.plural);
+                        LOGGER.info("Tooltip node {} could be merged if it wasn't forced to be an array in {}", translatableKey.plural, TooltipContext.get());
                     }
                 }
 

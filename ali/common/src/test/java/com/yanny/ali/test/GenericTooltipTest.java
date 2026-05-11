@@ -1,6 +1,7 @@
 package com.yanny.ali.test;
 
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import net.minecraft.advancements.critereon.*;
@@ -396,6 +397,11 @@ public class GenericTooltipTest {
                 "    -> Amplifier: ≥5",
                 "    -> Duration: 1-2"
         ));
+        assertTooltip(ValueTooltipUtils.getMobEffectPredicateTooltip(UTILS, MobEffectsPredicate.effects()
+                .and(MobEffects.ABSORPTION, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, null, null))
+        ).build(TooltipBuilder.multi("ali.property.value.mob_effect", "ali.property.branch.mob_effects")), List.of(
+                "Mob Effect: minecraft:absorption"
+        ));
     }
 
     @Test
@@ -488,14 +494,17 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, EnchantmentPredicate.ANY).build("ali.property.value.enchantment"), List.of());
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(null, MinMaxBounds.Ints.atLeast(1))).build("ali.property.value.enchantment"), List.of(
-                "Enchantment: ANY",
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, EnchantmentPredicate.ANY).build(), List.of());
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(null, MinMaxBounds.Ints.atLeast(1))).build(), List.of(
+                "Enchantments:",
                 "  -> Level: ≥1"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Enchantments.FALL_PROTECTION, MinMaxBounds.Ints.atMost(2))).build("ali.property.value.enchantment"), List.of(
                 "Enchantment: minecraft:feather_falling",
                 "  -> Level: ≤2"
+        ));
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Enchantments.FALL_PROTECTION, MinMaxBounds.Ints.ANY)).build("ali.property.value.enchantment"), List.of(
+                "Enchantment: minecraft:feather_falling"
         ));
     }
 

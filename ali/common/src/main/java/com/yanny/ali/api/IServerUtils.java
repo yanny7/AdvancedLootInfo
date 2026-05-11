@@ -63,9 +63,6 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     LootContext getLootContext();
 
     @Nullable
-    ResourceLocation getCurrentLootTable();
-
-    @Nullable
     LootTable getLootTable(ResourceLocation location);
 
     @NotNull

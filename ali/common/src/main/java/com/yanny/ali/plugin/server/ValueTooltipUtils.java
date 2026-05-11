@@ -7,7 +7,6 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
@@ -106,7 +104,7 @@ public class ValueTooltipUtils {
                     .add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer).build("ali.property.branch.distance_to_player"))
                     .add(utils.getValueTooltip(utils, entityPredicate.location).build("ali.property.branch.location"))
                     .add(utils.getValueTooltip(utils, entityPredicate.steppingOnLocation).build("ali.property.branch.stepping_on_location"))
-                    .add(utils.getValueTooltip(utils, entityPredicate.effects).build("ali.property.branch.mob_effects"))
+                    .add(utils.getValueTooltip(utils, entityPredicate.effects).build(TooltipBuilder.multi("ali.property.value.mob_effect", "ali.property.branch.mob_effects")))
                     .add(utils.getValueTooltip(utils, entityPredicate.nbt).build("ali.property.value.nbt"))
                     .add(utils.getValueTooltip(utils, entityPredicate.flags).build("ali.property.branch.entity_flags"))
                     .add(utils.getValueTooltip(utils, entityPredicate.equipment).build("ali.property.branch.entity_equipment"))
@@ -263,7 +261,7 @@ public class ValueTooltipUtils {
                     .add(utils.getValueTooltip(utils, itemPredicate.items).build(TooltipBuilder.multi("ali.property.value.item", "ali.property.branch.items")))
                     .add(utils.getValueTooltip(utils, itemPredicate.count).build("ali.property.value.count"))
                     .add(utils.getValueTooltip(utils, itemPredicate.durability).build("ali.property.value.durability"))
-                    .add(utils.getValueTooltip(utils, itemPredicate.enchantments).build("ali.property.branch.enchantments"))
+                    .add(utils.getValueTooltip(utils, itemPredicate.enchantments).build(TooltipBuilder.multi("ali.property.value.enchantment", "ali.property.branch.enchantments")))
                     .add(utils.getValueTooltip(utils, itemPredicate.storedEnchantments).build("ali.property.branch.stored_enchantments"))
                     .add(utils.getValueTooltip(utils, itemPredicate.potion).build("ali.property.value.potion"))
                     .add(utils.getValueTooltip(utils, itemPredicate.nbt).build("ali.property.value.nbt"))
@@ -276,8 +274,18 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEnchantmentPredicateTooltip(IServerUtils utils, EnchantmentPredicate enchantmentPredicate) {
         if (enchantmentPredicate != EnchantmentPredicate.ANY) {
-            return utils.getValueTooltip(utils, Objects.requireNonNullElse(enchantmentPredicate.enchantment, Component.translatable("ali.util.advanced_loot_info.any")))
-                    .add(utils.getValueTooltip(utils, enchantmentPredicate.level).build("ali.property.value.level"));
+            if (enchantmentPredicate.enchantment != null) {
+                TooltipBuilder builder = utils.getValueTooltip(utils, enchantmentPredicate.enchantment);
+
+                if (enchantmentPredicate.level != MinMaxBounds.Ints.ANY) {
+                    builder.add(utils.getValueTooltip(utils, enchantmentPredicate.level).build("ali.property.value.level"));
+                }
+
+                return builder;
+            } else {
+                return TooltipBuilder.keyOnly("ali.property.branch.enchantments")
+                        .add(utils.getValueTooltip(utils, enchantmentPredicate.level).build("ali.property.value.level"));
+            }
         }
 
         return TooltipBuilder.empty();

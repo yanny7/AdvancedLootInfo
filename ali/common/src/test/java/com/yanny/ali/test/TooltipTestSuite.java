@@ -206,12 +206,6 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.getLootContext();
             }
 
-            @Nullable
-            @Override
-            public ResourceLocation getCurrentLootTable() {
-                return null;
-            }
-
             @Override
             public LootTable getLootTable(ResourceLocation location) {
                 return PluginManager.getInstance().serverRegistry.getLootTable(location);

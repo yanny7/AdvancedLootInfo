@@ -75,7 +75,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
     private LootContext lootContext;
-    private ResourceLocation currentLootTable;
 
     public AliServerRegistry(AliCommonRegistry utils) {
         super(utils);
@@ -90,10 +89,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public void addLootTable(ResourceLocation resourceLocation, LootTable lootTable) {
         lootTableMap.put(resourceLocation, lootTable);
-    }
-
-    public void setCurrentLootTable(@Nullable ResourceLocation location) {
-        currentLootTable = location;
     }
 
     public void clearLootTables() {
@@ -332,12 +327,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @Override
     public LootContext getLootContext() {
         return lootContext;
-    }
-
-    @Nullable
-    @Override
-    public ResourceLocation getCurrentLootTable() {
-        return currentLootTable;
     }
 
     @Nullable
