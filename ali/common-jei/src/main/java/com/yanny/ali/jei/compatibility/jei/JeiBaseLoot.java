@@ -31,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.LinkedList;
@@ -178,6 +179,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     @NotNull
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
+            @Nullable
+            @Override
+            public String getTranslationKey(int index) {
+                return null;
+            }
+
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 slotParams.add(new Holder(item, entry, rect));

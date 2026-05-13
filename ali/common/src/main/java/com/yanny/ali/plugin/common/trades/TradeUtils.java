@@ -6,6 +6,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -53,7 +54,7 @@ public class TradeUtils {
                 TooltipNode.EMPTY_INSTANCE,
                 Either.left(listing.item.getDefaultInstance()),
                 new RangeValue(),
-                TooltipBuilder.keyOnly("ali.type.function.dyed_randomly").build(),
+                TooltipBuilder.keyOnly(Lang.Functions.DYED_RANDOMLY).build(),
                 listing.maxUses,
                 listing.villagerXp,
                 0.2F,
@@ -88,7 +89,7 @@ public class TradeUtils {
                 TooltipNode.EMPTY_INSTANCE,
                 Either.left(Items.ENCHANTED_BOOK.getDefaultInstance()),
                 new RangeValue(),
-                TooltipBuilder.keyOnly("ali.type.function.enchant_randomly").build(),
+                TooltipBuilder.keyOnly(Lang.Functions.ENCHANT_RANDOMLY).build(),
                 12,
                 listing.villagerXp,
                 0.2F,
@@ -99,10 +100,10 @@ public class TradeUtils {
     @NotNull
     public static ItemsToItemsNode getNode(IServerUtils utils, VillagerTrades.EnchantedItemForEmeralds listing, TooltipNode condition) {
         TooltipNode tooltip = TooltipBuilder.branch((b) -> b
-                        .add(utils.getValueTooltip(utils, UniformGenerator.between(5, 19)).build("ali.property.value.levels"))
-                        .add(utils.getValueTooltip(utils, false).build("ali.property.value.treasure"))
+                        .add(utils.getValueTooltip(utils, UniformGenerator.between(5, 19)).build(Lang.Value.LEVELS))
+                        .add(utils.getValueTooltip(utils, false).build(Lang.Value.TREASURE))
                 )
-                .build("ali.type.function.enchant_with_levels");
+                .build(Lang.Functions.ENCHANT_WITH_LEVELS);
 
         return new ItemsToItemsNode(
                 utils,
@@ -212,8 +213,8 @@ public class TradeUtils {
                 Either.left(map),
                 new RangeValue(),
                 TooltipBuilder.array((b) -> b
-                                .add(utils.getValueTooltip(utils, listing.destination).build("ali.property.value.destination"))
-                                .add(utils.getValueTooltip(utils, listing.destinationType).build("ali.property.value.map_decoration"))
+                                .add(utils.getValueTooltip(utils, listing.destination).build(Lang.Value.DESTINATION))
+                                .add(utils.getValueTooltip(utils, listing.destinationType).build(Lang.Value.MAP_DECORATION))
                         )
                         .build(),
                 listing.maxUses,

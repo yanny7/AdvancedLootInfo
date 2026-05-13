@@ -2,6 +2,7 @@ package com.yanny.ali.api;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.CoreListNode;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public abstract class ListNode extends CoreListNode<IServerUtils, IDataNode, ICl
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write node in {}", PluginManager.getInstance().serverRegistry.getCurrentLootTable(), e);
+                LOGGER.warn("Failed to write node in {}", TooltipContext.get(), e);
             }
         }
 

@@ -61,7 +61,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         itemStack = ItemStack.STREAM_CODEC.decode(buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -106,7 +106,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         ItemStack.STREAM_CODEC.encode(buf, itemStack);
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);
@@ -129,7 +129,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = getCount(utils, baseCount, functions);
 
-        return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions);
+        return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
     }
 
     @NotNull

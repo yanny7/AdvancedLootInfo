@@ -23,13 +23,13 @@ public class ReferenceNode extends ListNode {
 
     public ReferenceNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
         chance = buf.readFloat();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
         buf.writeFloat(chance);
     }
 

@@ -83,6 +83,11 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public int getTranslationKeyIndex(String key) {
+                return PluginManager.getInstance().serverRegistry.getTranslationKeyIndex(key);
+            }
+
+            @Override
             public @NotNull <T extends FeatureConfiguration> List<Item> getItemCollector(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getItemCollector(utils, entry);
             }

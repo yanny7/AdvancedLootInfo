@@ -9,6 +9,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -69,15 +70,15 @@ public class ItemsToItemsNode extends ListNode {
         addChildren(getChildren(output, outputCount, outputCondition));
         tooltip = TooltipBuilder.array((b) -> b
                 .add(condition)
-                .add(utils.getValueTooltip(utils, maxUses).build("ali.property.value.uses"))
-                .add(utils.getValueTooltip(utils, xp).build("ali.property.value.villager_xp"))
-                .add(utils.getValueTooltip(utils, priceMultiplier).build("ali.property.value.price_multiplier"))
+                .add(utils.getValueTooltip(utils, maxUses).build(Lang.Value.USES))
+                .add(utils.getValueTooltip(utils, xp).build(Lang.Value.VILLAGER_XP))
+                .add(utils.getValueTooltip(utils, priceMultiplier).build(Lang.Value.PRICE_MULTIPLIER))
         ).build();
     }
 
     public ItemsToItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @NotNull
@@ -94,7 +95,7 @@ public class ItemsToItemsNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 
     private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {

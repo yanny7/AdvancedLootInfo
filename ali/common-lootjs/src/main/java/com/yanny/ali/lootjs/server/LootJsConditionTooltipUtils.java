@@ -2,8 +2,8 @@ package com.yanny.ali.lootjs.server;
 
 import com.almostreliable.lootjs.loot.condition.*;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.lootjs.mixin.MixinCustomParamPredicate;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -13,11 +13,9 @@ import java.util.Arrays;
 
 public class LootJsConditionTooltipUtils {
     @NotNull
-    public static TooltipNode matchBiomeTooltip(IServerUtils utils, MatchBiome condition) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, condition.biomes()).build("ali.property.branch.biomes"))
-                )
-                .build("ali.type.condition.match_biome");
+    public static TooltipBuilder matchBiomeTooltip(IServerUtils utils, MatchBiome condition) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, condition.biomes()).build("ali.property.branch.biomes")))
+                .key("ali.type.condition.match_biome");
     }
 
     @NotNull
@@ -38,7 +36,7 @@ public class LootJsConditionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode customParamPredicateTooltip(IServerUtils ignoredUtils, CustomParamPredicate<?> condition) {
+    public static TooltipBuilder customParamPredicateTooltip(IServerUtils ignoredUtils, CustomParamPredicate<?> condition) {
         MixinCustomParamPredicate<?> cond = (MixinCustomParamPredicate<?>) condition;
 
         if (cond.getParam() == LootContextParams.THIS_ENTITY) {
@@ -62,7 +60,7 @@ public class LootJsConditionTooltipUtils {
                     )
                     .build("ali.type.condition.block_entity");
         } else {
-            return TooltipNode.EMPTY_INSTANCE;
+            return TooltipBuilder.empty();
         }
     }
 

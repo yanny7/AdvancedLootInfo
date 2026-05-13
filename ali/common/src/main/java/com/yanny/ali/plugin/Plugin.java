@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.api.*;
+import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
 import com.yanny.ali.plugin.client.widget.trades.SubTradesWidget;
@@ -70,6 +71,7 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerCommon(ICommonRegistry registry) {
+        LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
         registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
     }
 
@@ -328,6 +330,10 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(TrimPattern.class, RegistriesTooltipUtils::getTrimPatternTooltip);
         registry.registerValueTooltip(JukeboxSong.class, RegistriesTooltipUtils::getJukeboxSongTooltip);
 
+        registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
+        registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
+        registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);
+
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
@@ -357,6 +363,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
         registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
         registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
+        registry.registerValueTooltip(StatePropertiesPredicate.ExactPropertyMatcher.class, ValueTooltipUtils::getExactPropertyMatcherTooltip);
+        registry.registerValueTooltip(StatePropertiesPredicate.RangedPropertyMatcher.class, ValueTooltipUtils::getRangedPropertyMatcherTooltip);
         registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
         registry.registerValueTooltip(SetStewEffectFunction.EffectEntry.class, ValueTooltipUtils::getEffectEntryTooltip);
         registry.registerValueTooltip(ListOperation.class, ValueTooltipUtils::getListOperationTooltip);

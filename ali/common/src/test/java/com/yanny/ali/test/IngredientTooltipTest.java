@@ -14,10 +14,9 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class IngredientTooltipTest {
     @Test
     public void ingredientTest() {
-        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)), List.of(
+        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)).build(), List.of(
                 "Items:",
-                "  -> Item:",
-                "    -> Item: minecraft:acacia_fence",
+                "  -> Item: minecraft:acacia_fence",
                 "    -> Count: 1",
                 "    -> Components:",
                 "      -> minecraft:max_stack_size",
@@ -30,8 +29,7 @@ public class IngredientTooltipTest {
                 "        -> Show In Tooltip: true",
                 "      -> minecraft:rarity",
                 "        -> Rarity: COMMON",
-                "  -> Item:",
-                "    -> Item: minecraft:acacia_door",
+                "  -> Item: minecraft:acacia_door",
                 "    -> Count: 1",
                 "    -> Components:",
                 "      -> minecraft:max_stack_size",
@@ -45,7 +43,7 @@ public class IngredientTooltipTest {
                 "      -> minecraft:rarity",
                 "        -> Rarity: COMMON"
         ));
-        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(ItemTags.ACACIA_LOGS)), List.of(
+        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(ItemTags.ACACIA_LOGS)).build(), List.of(
                 "Items:",
                 "  -> Tag: minecraft:acacia_logs"
         ));

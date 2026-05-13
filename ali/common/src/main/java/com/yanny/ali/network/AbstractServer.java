@@ -1,6 +1,7 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -90,7 +91,7 @@ public abstract class AbstractServer {
 
         serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
-        lootTableItems = collectLootTableItems(lootTables, fakeLootTables); //FIXME merge with fake after processing!!!
+        lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
 
         chunks.clear();
 
@@ -199,7 +200,7 @@ public abstract class AbstractServer {
                 ResourceLocation location = resourceKey.location();
                 LootTable lootTable = lootTables.remove(location);
 
-                serverRegistry.setCurrentLootTable(location);
+                TooltipContext.set(location);
 
                 if (config.blockCategories.stream().filter((f) -> f.validate(block)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                     List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
@@ -241,7 +242,7 @@ public abstract class AbstractServer {
                     }
                 }
 
-                serverRegistry.setCurrentLootTable(null);
+                TooltipContext.clear();
             }
         }
 
@@ -275,7 +276,7 @@ public abstract class AbstractServer {
                         ResourceLocation location = resourceKey.location();
                         LootTable lootTable = lootTables.remove(location);
 
-                        serverRegistry.setCurrentLootTable(location);
+                        TooltipContext.set(location);
 
                         if (config.entityCategories.stream().filter((f) -> f.validate(entityType)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                             List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
@@ -317,7 +318,7 @@ public abstract class AbstractServer {
                             }
                         }
 
-                        serverRegistry.setCurrentLootTable(null);
+                        TooltipContext.clear();
                     }
                 }
             }
@@ -335,7 +336,7 @@ public abstract class AbstractServer {
         for (Map.Entry<ResourceLocation, LootTable> entry : lootTables.entrySet()) {
             ResourceLocation location = entry.getKey();
 
-            serverRegistry.setCurrentLootTable(location);
+            TooltipContext.set(location);
 
             if (config.gameplayCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 LootTable lootTable = entry.getValue();
@@ -356,7 +357,7 @@ public abstract class AbstractServer {
                 }
             }
 
-            serverRegistry.setCurrentLootTable(null);
+            TooltipContext.clear();
         }
 
         lootTables.clear();
@@ -372,7 +373,7 @@ public abstract class AbstractServer {
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             ResourceLocation location = entry.getKey().location();
 
-            serverRegistry.setCurrentLootTable(location);
+            TooltipContext.set(location);
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap = null;
@@ -397,7 +398,7 @@ public abstract class AbstractServer {
                 }
             }
 
-            serverRegistry.setCurrentLootTable(null);
+            TooltipContext.clear();
         }
 
         return nodes;
@@ -459,7 +460,7 @@ public abstract class AbstractServer {
             int startOfNode = buf.writerIndex();
 
             try {
-                utils.setCurrentLootTable(nodeEntry.getKey());
+                TooltipContext.set(nodeEntry.getKey());
                 buf.writeResourceLocation(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
                 ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode(buf, lootTableItemStacks.getOrDefault(nodeEntry.getKey(), Collections.emptyList()));
@@ -468,7 +469,7 @@ public abstract class AbstractServer {
                 buf.writerIndex(startOfNode);
                 LOGGER.warn("Failed to write loot data in {}", nodeEntry.getKey(), e);
             } finally {
-                utils.setCurrentLootTable(null);
+                TooltipContext.clear();
             }
         }
 
@@ -497,7 +498,7 @@ public abstract class AbstractServer {
             try {
                 Pair<List<Item>, List<Item>> pair = items.getOrDefault(nodeEntry.getKey(), new Pair<>(Collections.emptyList(), Collections.emptyList()));
 
-                utils.setCurrentLootTable(nodeEntry.getKey());
+                TooltipContext.set(nodeEntry.getKey());
                 buf.writeResourceLocation(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
                 buf.writeCollection(pair.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
@@ -507,7 +508,7 @@ public abstract class AbstractServer {
                 buf.writerIndex(startOfNode);
                 LOGGER.warn("Failed to write trade data in {}", nodeEntry.getKey(), e);
             } finally {
-                utils.setCurrentLootTable(null);
+                TooltipContext.clear();
             }
         }
 
@@ -522,7 +523,7 @@ public abstract class AbstractServer {
         int wtStart = buf.writerIndex();
 
         try {
-            utils.setCurrentLootTable(ResourceLocation.withDefaultNamespace("wandering_trader"));
+            TooltipContext.set(ResourceLocation.withDefaultNamespace("wandering_trader"));
             wanderingTraderNode.encode(utils, buf);
             buf.writeCollection(wanderingTraderItems.getA(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
             buf.writeCollection(wanderingTraderItems.getB(), (b, i) -> b.writeResourceLocation(BuiltInRegistries.ITEM.getKey(i)));
@@ -535,7 +536,7 @@ public abstract class AbstractServer {
             buf.writeCollection(List.of(), (b, i) -> {});
             buf.writeCollection(List.of(), (b, i) -> {});
         } finally {
-            utils.setCurrentLootTable(null);
+            TooltipContext.clear();
         }
 
         trades.clear();
