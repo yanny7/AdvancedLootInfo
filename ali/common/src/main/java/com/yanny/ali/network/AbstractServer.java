@@ -90,7 +90,7 @@ public abstract class AbstractServer {
 
         serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
-        lootTableItems = collectLootTableItems(lootTables, fakeLootTables); //FIXME merge with fake after processing!!!
+        lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
 
         chunks.clear();
 

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.fabric.mixin.MixinCombinedIngredient;
+import com.yanny.ali.language.Lang;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AllIngredient;
@@ -28,7 +29,7 @@ public class LootJsIngredientTooltipUtils {
                 for (Ingredient i2 : ingredients) {
                     b.add(utils.getValueTooltip(utils, i2));
                 }
-            }).key("ali.property.branch.any");
+            }).key(Lang.Branch.ANY);
         } else if (i instanceof AllIngredient allIngredient) {
             MixinCombinedIngredient combinedIngredient = (MixinCombinedIngredient) allIngredient;
             Ingredient[] ingredients = combinedIngredient.getIngredients();
@@ -37,7 +38,7 @@ public class LootJsIngredientTooltipUtils {
                 for (Ingredient i2 : ingredients) {
                     b.add(utils.getValueTooltip(utils, i2));
                 }
-            }).key("ali.property.branch.all");
+            }).key(Lang.Branch.ALL);
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
             return TooltipBuilder.empty();

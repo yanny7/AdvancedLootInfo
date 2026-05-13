@@ -44,7 +44,7 @@ public class ConditionTooltipTest {
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
         ).build()).build(), List.of(
-                "Any of:",
+                "Any Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
                 "    -> Value: 1 - 8",

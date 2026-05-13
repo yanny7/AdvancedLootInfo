@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.*;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
@@ -117,7 +118,7 @@ public class NodeUtils {
         if (lootTable != null) {
             children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, chance, allFunctions, allConditions));
         } else {
-            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, entry.name).build("ali.property.value.loot_table")));
+            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, entry.name).build(Lang.Value.LOOT_TABLE)));
         }
 
         return new ReferenceNode(children, chance, tooltip);
@@ -131,7 +132,7 @@ public class NodeUtils {
         if (lootTable != null) {
             children = Collections.singletonList(getLootTableNode(Collections.emptyList(), utils, lootTable, 1, Collections.emptyList(), conditions));
         } else {
-            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, table).build("ali.property.value.loot_table")));
+            children = Collections.singletonList(new MissingNode(utils.getValueTooltip(utils, table).build(Lang.Value.LOOT_TABLE)));
         }
 
         return new ReferenceNode(children, 1, tooltip);

@@ -5,6 +5,7 @@ import com.almostreliable.lootjs.filters.ResourceLocationFilter;
 import com.almostreliable.lootjs.loot.condition.AnyStructure;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.mods.PluginUtils;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -76,10 +77,10 @@ public class LootJsGenericTooltipUtils {
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).build("ali.property.value.enchantment"));
+                    tooltip.add(utils.getValueTooltip(utils, byLocation.get(0).location()).build(Lang.Value.ENCHANTMENT));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build("ali.property.value.levels"));
+                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build(Lang.Value.LEVELS));
                     }
 
                     return tooltip;
@@ -96,10 +97,10 @@ public class LootJsGenericTooltipUtils {
                     int min = Math.min(minMax.get(0), minMax.get(1));
                     int max = Math.max(minMax.get(0), minMax.get(1));
 
-                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).toString()).build("ali.property.value.enchantment"));
+                    tooltip.add(utils.getValueTooltip(utils, byPattern.get(0).toString()).build(Lang.Value.ENCHANTMENT));
 
                     if (min != 1 && max != 255) {
-                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build("ali.property.value.levels"));
+                        tooltip.add(utils.getValueTooltip(utils, IntRange.range(min, max)).build(Lang.Value.LEVELS));
                     }
 
                     return tooltip;

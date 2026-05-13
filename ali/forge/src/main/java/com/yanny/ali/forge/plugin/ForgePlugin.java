@@ -10,6 +10,7 @@ import com.yanny.ali.forge.mixin.MixinCanToolPerformAction;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.forge.mixin.MixinLootTableIdCondition;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
@@ -45,12 +46,12 @@ public class ForgePlugin implements IPlugin {
 
     @NotNull
     public static TooltipBuilder getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
-        return utils.getValueTooltip(utils, ((MixinCanToolPerformAction) cond).getAction().name()).key("ali.type.condition.can_tool_perform_action");
+        return utils.getValueTooltip(utils, ((MixinCanToolPerformAction) cond).getAction().name()).key(Lang.Conditions.CAN_TOOL_PERFORM_ACTION);
     }
 
     @NotNull
     public static TooltipBuilder getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
-        return utils.getValueTooltip(utils, ((MixinLootTableIdCondition) cond).getTargetLootTableId()).key("ali.type.condition.loot_table_id");
+        return utils.getValueTooltip(utils, ((MixinLootTableIdCondition) cond).getTargetLootTableId()).key(Lang.Conditions.LOOT_TABLE_ID);
     }
 
     @NotNull

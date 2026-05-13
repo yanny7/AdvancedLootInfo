@@ -1,6 +1,5 @@
 package com.yanny.ali.test;
 
-import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -50,11 +49,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
-import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
 import java.io.File;
@@ -62,7 +59,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -80,9 +76,6 @@ import java.util.concurrent.ExecutionException;
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
 
-    private static Set<String> UNUSED;
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     @BeforeSuite
     static void beforeAllTests() throws NoSuchFieldException, IllegalAccessException {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
@@ -92,10 +85,7 @@ public class TooltipTestSuite {
         injectLootCondition();
 
         ResourceManager resourceManager = loadClientResources();
-        Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
-
-        Language.inject(pair.getA());
-        UNUSED = pair.getB();
+        Language.inject(TestUtils.loadDefaultLanguage(resourceManager));
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
@@ -220,14 +210,6 @@ public class TooltipTestSuite {
                 return config;
             }
         };
-
-        LOGGER.info("----- Translation keys ({}) -----", UNUSED.size());
-    }
-
-    @AfterSuite
-    static void afterAllTests() {
-        LOGGER.info("----- Unused translation keys ({}) -----", UNUSED.size());
-        UNUSED.stream().sorted().forEach(LOGGER::info);
     }
 
     @NotNull

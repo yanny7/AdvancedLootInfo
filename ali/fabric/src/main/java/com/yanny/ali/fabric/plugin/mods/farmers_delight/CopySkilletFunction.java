@@ -2,6 +2,7 @@ package com.yanny.ali.fabric.plugin.mods.farmers_delight;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ConditionalFunction;
 import com.yanny.ali.plugin.mods.IFunctionTooltip;
@@ -15,7 +16,7 @@ public class CopySkilletFunction extends ConditionalFunction implements IFunctio
 
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicates).build("ali.property.branch.conditions")))
-                .key("ali.type.function.copy_skillet");
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicates).build(Lang.Branch.CONDITIONS)))
+                .key(Lang.Functions.COPY_SKILLET);
     }
 }

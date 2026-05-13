@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.MobEffectsPredicate;
 import net.minecraft.advancements.critereon.PlayerPredicate;
@@ -69,22 +70,22 @@ public class GenericTooltipUtils {
             TooltipBuilder itemTooltip = utils.getValueTooltip(utils, item);
 
             itemTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
-            return itemTooltip.key("ali.property.value.item");
+            return itemTooltip.key(Lang.Value.ITEM);
         } else if (value instanceof Block block) {
             TooltipBuilder blockTooltip = utils.getValueTooltip(utils, block);
 
             blockTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
-            return blockTooltip.key("ali.property.value.block");
+            return blockTooltip.key(Lang.Value.BLOCK);
         } else if (value instanceof EntityType<?> entityType) {
             TooltipBuilder entityTooltip = utils.getValueTooltip(utils, entityType);
 
             entityTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
-            return entityTooltip.key("ali.property.value.entity_type");
+            return entityTooltip.key(Lang.Value.ENTITY_TYPE);
         } else if (value instanceof ResourceLocation resourceLocation) {
             TooltipBuilder locationTooltip = utils.getValueTooltip(utils, resourceLocation);
 
             locationTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(resourceLocation)), toString(ints)).build());
-            return locationTooltip.key("ali.property.value.id");
+            return locationTooltip.key(Lang.Value.ID);
         }
 
         return TooltipBuilder.empty();
@@ -103,28 +104,28 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getIntRangeEntryTooltip(IServerUtils utils, Map.Entry<String, IntRange> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.limit"));
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.LIMIT));
     }
 
     @NotNull
     public static TooltipBuilder getMobEffectPredicateEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, MobEffectsPredicate.MobEffectInstancePredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue().amplifier).build("ali.property.value.amplifier"))
-                .add(utils.getValueTooltip(utils, entry.getValue().duration).build("ali.property.value.duration"))
-                .add(utils.getValueTooltip(utils, entry.getValue().ambient).build("ali.property.value.is_ambient"))
-                .add(utils.getValueTooltip(utils, entry.getValue().visible).build("ali.property.value.is_visible"));
+                .add(utils.getValueTooltip(utils, entry.getValue().amplifier).build(Lang.Value.AMPLIFIER))
+                .add(utils.getValueTooltip(utils, entry.getValue().duration).build(Lang.Value.DURATION))
+                .add(utils.getValueTooltip(utils, entry.getValue().ambient).build(Lang.Value.IS_AMBIENT))
+                .add(utils.getValueTooltip(utils, entry.getValue().visible).build(Lang.Value.IS_VISIBLE));
     }
 
     @NotNull
     public static TooltipBuilder getEnchantmentLevelsEntryTooltip(IServerUtils utils, Map.Entry<Enchantment, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.levels"));
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.LEVELS));
     }
 
     @NotNull
     public static TooltipBuilder getMobEffectDurationEntryTooltip(IServerUtils utils, Map.Entry<MobEffect, NumberProvider> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.duration"));
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.DURATION));
     }
 
     @NotNull

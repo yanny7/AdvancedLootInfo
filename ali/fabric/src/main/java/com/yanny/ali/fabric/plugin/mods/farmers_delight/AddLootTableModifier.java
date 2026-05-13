@@ -6,6 +6,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierAccessor;
@@ -38,7 +39,7 @@ public class AddLootTableModifier extends BaseAccessor<Object> implements IGloba
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
-                            .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
+                            .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                             .add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c))
                     )
                     .build();

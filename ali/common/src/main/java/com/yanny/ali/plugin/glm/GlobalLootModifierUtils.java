@@ -1,12 +1,16 @@
 package com.yanny.ali.plugin.glm;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
+import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.EntityTypePredicate;
 import net.minecraft.resources.ResourceLocation;
@@ -180,29 +184,30 @@ public class GlobalLootModifierUtils {
     }
 
     public static Optional<ILootModifier<?>> getMissingGlobalLootModifier(IServerUtils utils, IGlobalLootModifierWrapper modifier, ILootTableIdConditionPredicate predicate) {
-//        if (modifier.isLootModifier()) { FIXME !!!!!!!!!!!!!!
-//            return getLootModifier(modifier.getConditions(), (conditions) -> {
-//
-//                try {
-//                    TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
-//
-//                    tooltip.add(TooltipUtils.getJsonTooltip(utils, modifier.serialize()));
-//                    return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build("aci.util.auto_detected"))));
-//                } catch (Throwable e) {
-//                    if (utils.getConfiguration().logMoreStatistics) {
-//                        LOGGER.warn("Failed to get GLM info from serialized data for {}", modifier.getName(), e);
-//                    }
-//
-//                    ArrayTooltipNode.Builder tooltip = ArrayTooltipNode.array();
-//                    TooltipBuilder fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
-//
-//                    TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
-//                    tooltip.add(fieldsTooltip.build("aci.util.auto_detected"));
-//                    tooltip.add(GenericTooltipUtils.getConditionsTooltip(utils, conditions));
-//                    return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build())));
-//                }
-//            }, predicate);
-//        }
+        if (modifier.isLootModifier()) {
+            return getLootModifier(modifier.getConditions(), (conditions) -> {
+
+                try {
+                    TooltipBuilder tooltip = utils.getValueTooltip(utils, modifier.getName());
+
+                    tooltip.add(TooltipUtils.getJsonTooltip(utils, modifier.serialize()));
+                    return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build(CoreLang.Utils.AUTO_DETECTED))));
+                } catch (Throwable e) {
+                    if (utils.getConfiguration().logMoreStatistics) {
+                        LOGGER.warn("Failed to get GLM info from serialized data for {}", modifier.getName(), e);
+                    }
+
+                    TooltipBuilder tooltip = TooltipBuilder.array((b) -> {
+                        TooltipBuilder fieldsTooltip = utils.getValueTooltip(utils, modifier.getName());
+
+                        TooltipUtils.addObjectFields(utils, fieldsTooltip, modifier, modifier.getLootModifierClass());
+                        b.add(fieldsTooltip.build(CoreLang.Utils.AUTO_DETECTED));
+                        b.add(utils.getValueTooltip(utils, conditions));
+                    });
+                    return List.of(new IOperation.AddOperation((i) -> true, new GlobalLootModifierNode(tooltip.build())));
+                }
+            }, predicate);
+        }
 
         return Optional.empty();
     }

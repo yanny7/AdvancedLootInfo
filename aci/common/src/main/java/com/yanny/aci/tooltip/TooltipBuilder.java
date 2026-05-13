@@ -1,6 +1,7 @@
 package com.yanny.aci.tooltip;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.language.IMultiKey;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +17,7 @@ public class TooltipBuilder {
 
     static final char TRANSLATE_MARKER = '\uE000';
 
-    private MultiKey translatableKey;
+    private IMultiKey translatableKey;
     private String rawKey;
     private String[] values;
     private Component componentValue;
@@ -28,11 +29,6 @@ public class TooltipBuilder {
     private boolean forceVisible = false;
 
     private final List<TooltipNode> children = new ArrayList<>();
-
-    @NotNull
-    public static MultiKey multi(String s, String p) {
-        return new MultiKey(s, p);
-    }
 
     @NotNull
     public static String translate(String key) {
@@ -79,6 +75,15 @@ public class TooltipBuilder {
 
     @NotNull
     public static TooltipBuilder keyOnly(String key) {
+        TooltipBuilder builder = new TooltipBuilder();
+
+        builder.key(key);
+        builder.forceVisible = true;
+        return builder;
+    }
+
+    @NotNull
+    public static TooltipBuilder keyOnly(IMultiKey key) {
         TooltipBuilder builder = new TooltipBuilder();
 
         builder.key(key);
@@ -146,7 +151,7 @@ public class TooltipBuilder {
         return this.key(k).build();
     }
 
-    public TooltipNode build(MultiKey mk) {
+    public TooltipNode build(IMultiKey mk) {
         return this.key(mk).build();
     }
 
@@ -155,7 +160,7 @@ public class TooltipBuilder {
         return this;
     }
 
-    public TooltipBuilder key(MultiKey mk) {
+    public TooltipBuilder key(IMultiKey mk) {
         this.translatableKey = mk;
         return this;
     }
@@ -194,11 +199,11 @@ public class TooltipBuilder {
             boolean parentIsEligible = finalValues == null && finalComponent == null && !isError;
             boolean potentiallyMergeable = parentIsEligible && isSingleSimpleChild;
             boolean canBeMerged = potentiallyMergeable && !isArray && finalChildren.size() == 1;
-            boolean hasMultiKey = !Objects.equals(translatableKey.plural, translatableKey.single);
+            boolean hasMultiKey = !Objects.equals(translatableKey.plural(), translatableKey.singular());
 
             if (canBeMerged && hasMultiKey) {
                 TooltipNode child = finalChildren.get(0);
-                finalKeyStr = translatableKey.single();
+                finalKeyStr = translatableKey.singular();
                 finalValues = child.getValues();
                 finalComponent = child.getComponent();
 
@@ -213,15 +218,19 @@ public class TooltipBuilder {
             } else {
                 if (potentiallyMergeable) {
                     if (!hasMultiKey) {
-                        LOGGER.info("Tooltip node {} could be merged if defined singular form in {}", translatableKey.plural, TooltipContext.get());
+                        LOGGER.info("Tooltip {} could be merged if defined singular form in {}", translatableKey.plural(), TooltipContext.get());
                     }
 
                     if (isArray) {
-                        LOGGER.info("Tooltip node {} could be merged if it wasn't forced to be an array in {}", translatableKey.plural, TooltipContext.get());
+                        LOGGER.info("Tooltip {} could be merged if it wasn't forced to be an array in {}", translatableKey.plural(), TooltipContext.get());
                     }
                 }
 
-                finalKeyStr = translatableKey.plural();
+                if (hasMultiKey && (finalChildren.isEmpty() || values != null)) {
+                    finalKeyStr = translatableKey.singular();
+                } else {
+                    finalKeyStr = translatableKey.plural();
+                }
             }
         }
 
@@ -247,5 +256,5 @@ public class TooltipBuilder {
         return TooltipNode.getOrCreate(key, values, component, flags, children);
     }
 
-    public record MultiKey(String single, String plural) {}
+    public record MultiKey(String singular, String plural) implements IMultiKey {}
 }

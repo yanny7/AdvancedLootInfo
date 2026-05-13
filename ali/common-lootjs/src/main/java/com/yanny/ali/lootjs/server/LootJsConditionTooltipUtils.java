@@ -3,6 +3,7 @@ package com.yanny.ali.lootjs.server;
 import com.almostreliable.lootjs.loot.condition.*;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.lootjs.mixin.*;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -18,7 +19,7 @@ public class LootJsConditionTooltipUtils {
         //noinspection unchecked
         List<LootItemCondition> conditions = (List<LootItemCondition>)(List<?>)List.of(((MixinAndCondition) condition).getConditions());
 
-        return utils.getValueTooltip(utils, conditions).key("ali.type.condition.and");
+        return utils.getValueTooltip(utils, conditions).key(Lang.Conditions.AND);
     }
 
     @NotNull
@@ -26,17 +27,17 @@ public class LootJsConditionTooltipUtils {
         MixinBiomeCheck cond = (MixinBiomeCheck) condition;
 
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.getBiomes()).build("ali.property.branch.biomes"));
-            b.add(utils.getValueTooltip(utils, cond.getTags()).build("ali.property.branch.tags"));
-        }).key("ali.type.condition.any_biome");
+            b.add(utils.getValueTooltip(utils, cond.getBiomes()).build(Lang.Branch.BIOMES));
+            b.add(utils.getValueTooltip(utils, cond.getTags()).build(Lang.Branch.TAGS));
+        }).key(Lang.Conditions.ANY_BIOME);
     }
 
     @NotNull
     public static TooltipBuilder anyDimensionTooltip(IServerUtils utils, AnyDimension condition) {
         MixinAnyDimension cond = (MixinAnyDimension) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getDimensions()).build("ali.property.branch.dimensions")))
-                .key("ali.type.condition.any_dimension");
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getDimensions()).build(Lang.Branch.DIMENSIONS)))
+                .key(Lang.Conditions.ANY_DIMENSION);
     }
 
     @NotNull
@@ -44,9 +45,9 @@ public class LootJsConditionTooltipUtils {
         MixinAnyStructure cond = (MixinAnyStructure) condition;
 
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.getStructureLocators()).build("ali.property.branch.structures"));
-            b.add(utils.getValueTooltip(utils, cond.getExact()).build("ali.property.value.exact"));
-        }).key("ali.type.condition.any_structure");
+            b.add(utils.getValueTooltip(utils, cond.getStructureLocators()).build(Lang.Branch.STRUCTURES));
+            b.add(utils.getValueTooltip(utils, cond.getExact()).build(Lang.Value.EXACT));
+        }).key(Lang.Conditions.ANY_STRUCTURE);
     }
 
     @NotNull
@@ -54,9 +55,9 @@ public class LootJsConditionTooltipUtils {
         MixinBiomeCheck cond = (MixinBiomeCheck) condition;
 
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.getBiomes()).build("ali.property.branch.biomes"));
-            b.add(utils.getValueTooltip(utils, cond.getTags()).build("ali.property.branch.tags"));
-        }).key("ali.type.condition.biome");
+            b.add(utils.getValueTooltip(utils, cond.getBiomes()).build(Lang.Branch.BIOMES));
+            b.add(utils.getValueTooltip(utils, cond.getTags()).build(Lang.Branch.TAGS));
+        }).key(Lang.Conditions.BIOME);
     }
 
     @NotNull
@@ -64,9 +65,9 @@ public class LootJsConditionTooltipUtils {
         MixinContainsLootCondition cond = (MixinContainsLootCondition) condition;
 
         return TooltipBuilder.array((b) -> {
-            b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build("ali.property.value.item_filter"));
-            b.add(utils.getValueTooltip(utils, cond.getExact()).build("ali.property.value.exact"));
-        }).key("ali.type.condition.match_loot");
+            b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER));
+            b.add(utils.getValueTooltip(utils, cond.getExact()).build(Lang.Value.EXACT));
+        }).key(Lang.Conditions.MATCH_LOOT);
     }
 
     @NotNull
@@ -74,17 +75,17 @@ public class LootJsConditionTooltipUtils {
         MixinCustomParamPredicate<?> cond = (MixinCustomParamPredicate<?>) condition;
 
         if (cond.getParam() == LootContextParams.THIS_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available")))
-                    .key("ali.type.condition.entity_predicate");
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
+                    .key(Lang.Conditions.ENTITY_PREDICATE);
         } else if (cond.getParam() == LootContextParams.KILLER_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available")))
-                    .key("ali.type.condition.killer_predicate");
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
+                    .key(Lang.Conditions.KILLER_PREDICATE);
         } else if (cond.getParam() == LootContextParams.DIRECT_KILLER_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available")))
-                    .key("ali.type.condition.direct_killer_predicate");
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
+                    .key(Lang.Conditions.DIRECT_KILLER_PREDICATE);
         } else if (cond.getParam() == LootContextParams.BLOCK_ENTITY) {
-            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available")))
-                    .key("ali.type.condition.block_predicate");
+            return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
+                    .key(Lang.Conditions.BLOCK_PREDICATE);
         } else {
             return TooltipBuilder.empty();
         }
@@ -94,8 +95,8 @@ public class LootJsConditionTooltipUtils {
     public static TooltipBuilder isLightLevelTooltip(IServerUtils utils, IsLightLevel condition) {
         MixinIsLightLevel cond = (MixinIsLightLevel) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, IntRange.range(cond.getMin(), cond.getMax())).build("ali.property.value.value")))
-                .key("ali.type.condition.light_level");
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, IntRange.range(cond.getMin(), cond.getMax())).build(Lang.Value.VALUE)))
+                .key(Lang.Conditions.LIGHT_LEVEL);
     }
 
     @NotNull
@@ -108,9 +109,9 @@ public class LootJsConditionTooltipUtils {
         MixinMainHandTableBonus cond = (MixinMainHandTableBonus) condition;
 
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.getEnchantment()).build("ali.property.value.enchantment"));
-            b.add(utils.getValueTooltip(utils, Arrays.toString(cond.getValues())).build("ali.property.value.values"));
-        }).key("ali.type.condition.random_chance_with_enchantment");
+            b.add(utils.getValueTooltip(utils, cond.getEnchantment()).build(Lang.Value.ENCHANTMENT));
+            b.add(utils.getValueTooltip(utils, Arrays.toString(cond.getValues())).build(Lang.Value.VALUES));
+        }).key(Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTMENT);
     }
 
     @NotNull
@@ -119,18 +120,18 @@ public class LootJsConditionTooltipUtils {
 
         switch (cond.getSlot()) {
             case MAINHAND -> {
-                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build("ali.property.value.item_filter")))
-                        .key("ali.type.condition.match_mainhand");
+                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER)))
+                        .key(Lang.Conditions.MATCH_MAINHAND);
             }
             case OFFHAND -> {
-                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build("ali.property.value.item_filter")))
-                        .key("ali.type.condition.match_offhand");
+                return TooltipBuilder.array((b) -> b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER)))
+                        .key(Lang.Conditions.MATCH_OFFHAND);
             }
             default -> {
                 return TooltipBuilder.array((b) -> {
-                    b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build("ali.property.value.item_filter"));
-                    b.add(utils.getValueTooltip(utils, cond.getSlot()).build("ali.property.value.slot"));
-                }).key("ali.type.condition.match_equipment_slot");
+                    b.add(LootJsGenericTooltipUtils.getItemFilterTooltip(utils, cond.getPredicate()).build(Lang.Value.ITEM_FILTER));
+                    b.add(utils.getValueTooltip(utils, cond.getSlot()).build(Lang.Value.SLOT));
+                }).key(Lang.Conditions.MATCH_EQUIPMENT_SLOT);
             }
         }
     }
@@ -139,16 +140,16 @@ public class LootJsConditionTooltipUtils {
     public static TooltipBuilder matchKillerDistanceTooltip(IServerUtils utils, MatchKillerDistance condition) {
         MixinMatchKillerDistance cond = (MixinMatchKillerDistance) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build("ali.property.value.predicate")))
-                .key("ali.type.condition.distance_to_killer");
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE)))
+                .key(Lang.Conditions.DISTANCE_TO_KILLER);
     }
 
     @NotNull
     public static TooltipBuilder matchPlayerTooltip(IServerUtils utils, MatchPlayer condition) {
         MixinMatchPlayer cond = (MixinMatchPlayer) condition;
 
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build("ali.property.value.predicate")))
-                .key("ali.type.condition.match_player");
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE)))
+                .key(Lang.Conditions.MATCH_PLAYER);
     }
 
     @NotNull
@@ -156,7 +157,7 @@ public class LootJsConditionTooltipUtils {
         MixinNotCondition cond = (MixinNotCondition) condition;
 
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, (LootItemCondition) cond.getCondition())))
-                .key("ali.type.condition.not");
+                .key(Lang.Conditions.NOT);
     }
 
     @NotNull
@@ -164,13 +165,13 @@ public class LootJsConditionTooltipUtils {
         //noinspection unchecked
         List<LootItemCondition> conditions = (List<LootItemCondition>)(List<?>)List.of(((MixinOrCondition) condition).getConditions());
 
-        return utils.getValueTooltip(utils, conditions).key("ali.type.condition.or");
+        return utils.getValueTooltip(utils, conditions).key(Lang.Conditions.OR);
     }
 
     @NotNull
     public static TooltipBuilder playerParamPredicateTooltip(IServerUtils ignoredUtils, PlayerParamPredicate ignoredCondition) {
-        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly("ali.property.value.detail_not_available")))
-                .key("ali.type.condition.player_predicate");
+        return TooltipBuilder.array((b) -> b.add(TooltipBuilder.keyOnly(Lang.Error.DETAIL_NOT_AVAILABLE)))
+                .key(Lang.Conditions.PLAYER_PREDICATE);
     }
 
     @NotNull
@@ -178,8 +179,8 @@ public class LootJsConditionTooltipUtils {
         MixinWrappedDamageSourceCondition cond = (MixinWrappedDamageSourceCondition) condition;
 
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, cond.getPredicate()).build("ali.property.branch.predicate"));
-            b.add(utils.getValueTooltip(utils, cond.getSourceNames()).build("ali.property.branch.source_names"));
-        }).key("ali.type.condition.match_damage_source");
+            b.add(utils.getValueTooltip(utils, cond.getPredicate()).build(Lang.Branch.PREDICATE));
+            b.add(utils.getValueTooltip(utils, cond.getSourceNames()).build(Lang.Branch.SOURCE_NAMES));
+        }).key(Lang.Conditions.MATCH_DAMAGE_SOURCE);
     }
 }

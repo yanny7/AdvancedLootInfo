@@ -1,5 +1,7 @@
 package com.yanny.ali.test;
 
+import com.yanny.aci.language.CoreLang;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -64,12 +66,11 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetValueTooltip() {
-        assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build("ali.property.branch.item"), List.of(
-                "Item:",
-                "  -> Item: minecraft:emerald",
+        assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEMS), List.of(
+                "Item: minecraft:emerald",
                 "  -> Count: 1"
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("aci.util.missing"), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }

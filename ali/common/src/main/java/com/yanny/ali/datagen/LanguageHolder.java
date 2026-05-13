@@ -1,14 +1,25 @@
 package com.yanny.ali.datagen;
 
-import com.yanny.aci.tooltip.CoreLanguageHolder;
+import com.yanny.aci.language.CoreLang;
+import com.yanny.ali.language.Lang;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>(CoreLanguageHolder.TRANSLATION_MAP);
+    public static final Map<String, String> TRANSLATION_MAP;
 
     static {
+        CoreLang.register(Lang.Conditions.class);
+        CoreLang.register(Lang.Functions.class);
+        CoreLang.register(Lang.Value.class);
+        CoreLang.register(Lang.Branch.class);
+        CoreLang.register(Lang.Description.class);
+        CoreLang.register(Lang.Group.class);
+        CoreLang.register(Lang.Error.class);
+
+        TRANSLATION_MAP = new HashMap<>(CoreLang.TRANSLATION_MAP);
+
         TRANSLATION_MAP.put("emi.category.ali.block_loot", "Block Drops");
         TRANSLATION_MAP.put("emi.category.ali.plant_loot", "Plant Drops");
         TRANSLATION_MAP.put("emi.category.ali.entity_loot", "Entity Drops");
@@ -22,267 +33,10 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.piglin_bartering", "Piglin Bartering");
         TRANSLATION_MAP.put("emi.category.ali.sniffer_digging", "Sniffer Digging");
 
-        TRANSLATION_MAP.put("ali.description.rolls", "Rolls: %s%s");
-        TRANSLATION_MAP.put("ali.description.chance", "Chance: %s%s");
-        TRANSLATION_MAP.put("ali.description.chance_bonus", "%s (%s %s)");
-        TRANSLATION_MAP.put("ali.description.count", "Count: %s");
-        TRANSLATION_MAP.put("ali.description.count_bonus", "%s (%s %s)");
-        TRANSLATION_MAP.put("ali.description.quality", "Quality: %s");
-
-        /*
-         * PREDICATES
-         */
-
-        TRANSLATION_MAP.put("ali.type.condition.all_of", "All Of:");
-        TRANSLATION_MAP.put("ali.type.condition.any_of", "Any of:");
-        TRANSLATION_MAP.put("ali.type.condition.block_state_property", "Block State Property:");
-        TRANSLATION_MAP.put("ali.type.condition.damage_source_properties", "Damage Source Properties:");
-        TRANSLATION_MAP.put("ali.type.condition.entity_properties", "Entity Properties:");
-        TRANSLATION_MAP.put("ali.type.condition.entity_scores", "Entity Scores:");
-        TRANSLATION_MAP.put("ali.type.condition.inverted", "Inverted:");
-        TRANSLATION_MAP.put("ali.type.condition.killed_by_player", "Killed by player");
-        TRANSLATION_MAP.put("ali.type.condition.location_check", "Location Check:");
-        TRANSLATION_MAP.put("ali.type.condition.match_tool", "Match Tool:");
-        TRANSLATION_MAP.put("ali.type.condition.random_chance", "Random Chance:");
-        TRANSLATION_MAP.put("ali.type.condition.random_chance_with_looting", "Random Chance With Looting:");
-        TRANSLATION_MAP.put("ali.type.condition.reference", "Reference: %s");
-        TRANSLATION_MAP.put("ali.type.condition.survives_explosion", "Survives Explosion");
-        TRANSLATION_MAP.put("ali.type.condition.table_bonus", "Table Bonus:");
-        TRANSLATION_MAP.put("ali.type.condition.time_check", "Time Check:");
-        TRANSLATION_MAP.put("ali.type.condition.value_check", "Value Check:");
-        TRANSLATION_MAP.put("ali.type.condition.weather_check", "Weather Check:");
-
-        // Forge
-        TRANSLATION_MAP.put("ali.type.condition.can_tool_perform_action", "Can Tool Perform Action: %s");
-        TRANSLATION_MAP.put("ali.type.condition.loot_table_id", "Loot Table Id: %s");
-
-        // LootJS
-        TRANSLATION_MAP.put("ali.type.condition.and", "And:");
-        TRANSLATION_MAP.put("ali.type.condition.any_biome", "Any Biome:");
-        TRANSLATION_MAP.put("ali.type.condition.any_dimension", "Any Dimension:");
-        TRANSLATION_MAP.put("ali.type.condition.any_structure", "Any Structure:");
-        TRANSLATION_MAP.put("ali.type.condition.biome", "Biome:");
-        TRANSLATION_MAP.put("ali.type.condition.block_predicate", "Block Predicate:");
-        TRANSLATION_MAP.put("ali.type.condition.direct_killer_predicate", "Direct Killer Predicate:");
-        TRANSLATION_MAP.put("ali.type.condition.distance_to_killer", "Distance To Killer:");
-        TRANSLATION_MAP.put("ali.type.condition.entity_predicate", "Entity Predicate:");
-        TRANSLATION_MAP.put("ali.type.condition.killer_predicate", "Killer Predicate:");
-        TRANSLATION_MAP.put("ali.type.condition.light_level", "Light Level:");
-        TRANSLATION_MAP.put("ali.type.condition.match_damage_source", "Match Damage Source:");
-        TRANSLATION_MAP.put("ali.type.condition.match_equipment_slot", "Match Equipment Slot:");
-        TRANSLATION_MAP.put("ali.type.condition.match_loot", "Match Loot:");
-        TRANSLATION_MAP.put("ali.type.condition.match_mainhand", "Match Mainhand:");
-        TRANSLATION_MAP.put("ali.type.condition.match_offhand", "Match Offhand:");
-        TRANSLATION_MAP.put("ali.type.condition.match_player", "Match Player:");
-        TRANSLATION_MAP.put("ali.type.condition.not", "Not:");
-        TRANSLATION_MAP.put("ali.type.condition.or", "Or:");
-        TRANSLATION_MAP.put("ali.type.condition.player_predicate", "Player Predicate:");
-        TRANSLATION_MAP.put("ali.type.condition.random_chance_with_enchantment", "Random Chance With Enchantment:");
-
-        /*
-         * MODIFIERS
-         */
-
-        TRANSLATION_MAP.put("ali.type.function.apply_bonus", "Apply Bonus:");
-        TRANSLATION_MAP.put("ali.type.function.copy_name", "Copy Name:");
-        TRANSLATION_MAP.put("ali.type.function.copy_nbt", "Copy Nbt:");
-        TRANSLATION_MAP.put("ali.type.function.copy_state", "Copy State:");
-        TRANSLATION_MAP.put("ali.type.function.enchant_randomly", "Enchant Randomly:");
-        TRANSLATION_MAP.put("ali.type.function.enchant_with_levels", "Enchant With Levels:");
-        TRANSLATION_MAP.put("ali.type.function.exploration_map", "Exploration Map:");
-        TRANSLATION_MAP.put("ali.type.function.explosion_decay", "Explosion Decay");
-        TRANSLATION_MAP.put("ali.type.function.fill_player_head", "Fill Player Head:");
-        TRANSLATION_MAP.put("ali.type.function.furnace_smelt", "Furnace Smelt");
-        TRANSLATION_MAP.put("ali.type.function.limit_count", "Limit Count:");
-        TRANSLATION_MAP.put("ali.type.function.looting_enchant", "Looting Enchant:");
-        TRANSLATION_MAP.put("ali.type.function.reference", "Reference:");
-        TRANSLATION_MAP.put("ali.type.function.set_attributes", "Set Attributes:");
-        TRANSLATION_MAP.put("ali.type.function.set_banner_pattern", "Set Banner Pattern:");
-        TRANSLATION_MAP.put("ali.type.function.set_contents", "Set Contents:");
-        TRANSLATION_MAP.put("ali.type.function.set_count", "Set Count:");
-        TRANSLATION_MAP.put("ali.type.function.set_damage", "Set Damage:");
-        TRANSLATION_MAP.put("ali.type.function.set_enchantments", "Set Enchantments:");
-        TRANSLATION_MAP.put("ali.type.function.set_instrument", "Set Instrument:");
-        TRANSLATION_MAP.put("ali.type.function.set_loot_table", "Set Loot Table:");
-        TRANSLATION_MAP.put("ali.type.function.set_lore", "Set Lore:");
-        TRANSLATION_MAP.put("ali.type.function.set_name", "Set Name:");
-        TRANSLATION_MAP.put("ali.type.function.set_nbt", "Set Nbt:");
-        TRANSLATION_MAP.put("ali.type.function.set_potion", "Set Potion:");
-        TRANSLATION_MAP.put("ali.type.function.set_stew_effect", "Set Stew Effect:");
-
-        // LootJS
-        TRANSLATION_MAP.put("ali.type.function.custom_player", "Custom Player Modifier:");
-        TRANSLATION_MAP.put("ali.type.function.modified_item", "Modified dynamically!");
-
-        // Farmer's delight
-        TRANSLATION_MAP.put("ali.type.function.copy_meal", "Copy Meal");
-        TRANSLATION_MAP.put("ali.type.function.copy_skillet", "Copy Skillet");
-
-        // Trades
-        TRANSLATION_MAP.put("ali.type.function.dyed_randomly", "Dyed Randomly");
-
-        TRANSLATION_MAP.put("ali.enum.group_type.all", "Selects all entries");
-        TRANSLATION_MAP.put("ali.enum.group_type.random", "Selects random entry");
-        TRANSLATION_MAP.put("ali.enum.group_type.alternatives", "Selects only first successful entry");
-        TRANSLATION_MAP.put("ali.enum.group_type.sequence", "Selects entries sequentially until first failed");
-        TRANSLATION_MAP.put("ali.enum.group_type.dynamic", "Dynamic block-specific drops");
-        TRANSLATION_MAP.put("ali.enum.group_type.empty", "Drops nothing");
-        TRANSLATION_MAP.put("ali.enum.group_type.missing", "Not implemented");
-
-        TRANSLATION_MAP.put("ali.property.branch.advancements", "Advancements:");
-        TRANSLATION_MAP.put("ali.property.branch.all", "All:");
-        TRANSLATION_MAP.put("ali.property.branch.any", "Any:");
-        TRANSLATION_MAP.put("ali.property.branch.banner_patterns", "Banner Patterns:");
-        TRANSLATION_MAP.put("ali.property.branch.bees", "Bees:");
-        TRANSLATION_MAP.put("ali.property.branch.biomes", "Biomes:");
-        TRANSLATION_MAP.put("ali.property.branch.block_predicate", "Block Predicate:");
-        TRANSLATION_MAP.put("ali.property.branch.blocks", "Blocks:");
-        TRANSLATION_MAP.put("ali.property.branch.chest", "Chest:");
-        TRANSLATION_MAP.put("ali.property.branch.conditions", "Predicates:");
-        TRANSLATION_MAP.put("ali.property.branch.criterions", "Criterions:");
-        TRANSLATION_MAP.put("ali.property.branch.dimensions", "Dimensions:");
-        TRANSLATION_MAP.put("ali.property.branch.direct_entity", "Direct Entity:");
-        TRANSLATION_MAP.put("ali.property.branch.distance_to_player", "Distance to Player:");
-        TRANSLATION_MAP.put("ali.property.branch.effects", "Effects:");
-        TRANSLATION_MAP.put("ali.property.branch.enchantments", "Enchantments:");
-        TRANSLATION_MAP.put("ali.property.branch.entity_equipment", "Entity Equipment:");
-        TRANSLATION_MAP.put("ali.property.branch.entity_flags", "Entity Flags:");
-        TRANSLATION_MAP.put("ali.property.branch.entity_sub_predicate", "Entity Sub Predicate:");
-        TRANSLATION_MAP.put("ali.property.branch.equipment_slots", "Equipment Slots:");
-        TRANSLATION_MAP.put("ali.property.branch.feet", "Feet:");
-        TRANSLATION_MAP.put("ali.property.branch.fluid_predicate", "Fluid Predicate:");
-        TRANSLATION_MAP.put("ali.property.branch.head", "Head:");
-        TRANSLATION_MAP.put("ali.property.branch.item", "Item:");
-        TRANSLATION_MAP.put("ali.property.branch.items", "Items:");
-        TRANSLATION_MAP.put("ali.property.branch.legs", "Legs:");
-        TRANSLATION_MAP.put("ali.property.branch.location", "Location:");
-        TRANSLATION_MAP.put("ali.property.branch.lore", "Lore:");
-        TRANSLATION_MAP.put("ali.property.branch.mainhand", "Main Hand:");
-        TRANSLATION_MAP.put("ali.property.branch.mob_effects", "Mob Effects:");
-        TRANSLATION_MAP.put("ali.property.branch.modifier", "Modifier:");
-        TRANSLATION_MAP.put("ali.property.branch.offhand", "Offhand:");
-        TRANSLATION_MAP.put("ali.property.branch.operation", "Operation:");
-        TRANSLATION_MAP.put("ali.property.branch.operations", "Operations:");
-        TRANSLATION_MAP.put("ali.property.branch.passenger", "Passenger:");
-        TRANSLATION_MAP.put("ali.property.branch.predicate", "Predicate:");
-        TRANSLATION_MAP.put("ali.property.branch.properties", "Properties:");
-        TRANSLATION_MAP.put("ali.property.branch.recipes", "Recipes:");
-        TRANSLATION_MAP.put("ali.property.branch.scores", "Scores:");
-        TRANSLATION_MAP.put("ali.property.branch.source_entity", "Source Entity:");
-        TRANSLATION_MAP.put("ali.property.branch.source_names", "Source Names:");
-        TRANSLATION_MAP.put("ali.property.branch.stats", "Stats:");
-        TRANSLATION_MAP.put("ali.property.branch.stepping_on_location", "Stepping on Location:");
-        TRANSLATION_MAP.put("ali.property.branch.stored_enchantments", "Stored Enchantments:");
-        TRANSLATION_MAP.put("ali.property.branch.structures", "Structures:");
-        TRANSLATION_MAP.put("ali.property.branch.stuck_entity", "Stuck Entity:");
-        TRANSLATION_MAP.put("ali.property.branch.tags", "Tags:");
-        TRANSLATION_MAP.put("ali.property.branch.targeted_entity", "Targeted Entity:");
-        TRANSLATION_MAP.put("ali.property.branch.vehicle", "Vehicle:");
-
-        TRANSLATION_MAP.put("ali.property.value.absolute", "Absolute: %s");
-        TRANSLATION_MAP.put("ali.property.value.add", "Add: %s");
-        TRANSLATION_MAP.put("ali.property.value.allow_duplicate_loot", "Allow Duplicate Loot: %s");
-        TRANSLATION_MAP.put("ali.property.value.amount", "Amount: %s");
-        TRANSLATION_MAP.put("ali.property.value.amplifier", "Amplifier: %s");
-        TRANSLATION_MAP.put("ali.property.value.append", "Append: %s");
-        TRANSLATION_MAP.put("ali.property.value.attribute", "Attribute: %s");
-        TRANSLATION_MAP.put("ali.property.value.banner_pattern", "Banner Pattern: %s");
-        TRANSLATION_MAP.put("ali.property.value.biome", "Biome: %s");
-        TRANSLATION_MAP.put("ali.property.value.block", "Block: %s");
-        TRANSLATION_MAP.put("ali.property.value.block_entity_type", "Block Entity Type: %s");
-        TRANSLATION_MAP.put("ali.property.value.blocks_on_fire", "Blocks On Fire: %s");
-        TRANSLATION_MAP.put("ali.property.value.bonus_multiplier", "Bonus Multiplier: %s");
-        TRANSLATION_MAP.put("ali.property.value.chance", "Chance: %s");
-        TRANSLATION_MAP.put("ali.property.value.color", "Color: %s");
-        TRANSLATION_MAP.put("ali.property.value.count", "Count: %s");
-        TRANSLATION_MAP.put("ali.property.value.damage", "Damage: %s");
-        TRANSLATION_MAP.put("ali.property.value.destination", "Destination: %s");
-        TRANSLATION_MAP.put("ali.property.value.detail_not_available", "Detail Not Available");
-        TRANSLATION_MAP.put("ali.property.value.dimension", "Dimension: %s");
-        TRANSLATION_MAP.put("ali.property.value.done", "Done: %s");
-        TRANSLATION_MAP.put("ali.property.value.durability", "Durability: %s");
-        TRANSLATION_MAP.put("ali.property.value.duration", "Duration: %s");
-        TRANSLATION_MAP.put("ali.property.value.effect", "Effect: %s");
-        TRANSLATION_MAP.put("ali.property.value.enchantment", "Enchantment: %s");
-        TRANSLATION_MAP.put("ali.property.value.entity_type", "Entity Type: %s");
-        TRANSLATION_MAP.put("ali.property.value.equipment_slot", "Equipment Slot: %s");
-        TRANSLATION_MAP.put("ali.property.value.exact", "Exact: %s");
-        TRANSLATION_MAP.put("ali.property.value.extra_rounds", "Extra Rounds: %s");
-        TRANSLATION_MAP.put("ali.property.value.fluid", "Fluid: %s");
-        TRANSLATION_MAP.put("ali.property.value.formula", "Formula: %s");
-        TRANSLATION_MAP.put("ali.property.value.game_type", "Game Type: %s");
-        TRANSLATION_MAP.put("ali.property.value.horizontal", "Horizontal: %s");
-        TRANSLATION_MAP.put("ali.property.value.id", "Id: %s");
-        TRANSLATION_MAP.put("ali.property.value.in_open_water", "Is In Open Water: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_ambient", "Is Ambient: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_baby", "Is Baby: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_crouching", "Is Crouching: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_on_fire", "Is On Fire: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_raining", "Is Raining: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_sprinting", "Is Sprinting: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_swimming", "Is Swimming: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_thundering", "Is Thundering: %s");
-        TRANSLATION_MAP.put("ali.property.value.is_visible", "Is Visible: %s");
-        TRANSLATION_MAP.put("ali.property.value.item", "Item: %s");
-        TRANSLATION_MAP.put("ali.property.value.item_filter", "Item Filter: %s");
-        TRANSLATION_MAP.put("ali.property.value.level", "Level: %s");
-        TRANSLATION_MAP.put("ali.property.value.levels", "Levels: %s");
-        TRANSLATION_MAP.put("ali.property.value.light", "Light: %s");
-        TRANSLATION_MAP.put("ali.property.value.limit", "Limit: %s");
-        TRANSLATION_MAP.put("ali.property.value.loot_table", "Loot Table: %s");
-        TRANSLATION_MAP.put("ali.property.value.lore", "Lore: %s");
-        TRANSLATION_MAP.put("ali.property.value.map_decoration", "Map Decoration: %s");
-        TRANSLATION_MAP.put("ali.property.value.merge_strategy", "Merge Strategy: %s");
-        TRANSLATION_MAP.put("ali.property.value.mob_effect", "Mob Effect: %s");
-        TRANSLATION_MAP.put("ali.property.value.multiplier", "Multiplier: %s");
-        TRANSLATION_MAP.put("ali.property.value.name", "Name: %s");
-        TRANSLATION_MAP.put("ali.property.value.nbt", "Nbt: %s");
-        TRANSLATION_MAP.put("ali.property.value.nbt_provider", "Nbt Provider: %s");
-        TRANSLATION_MAP.put("ali.property.value.operation", "Operation: %s");
-        TRANSLATION_MAP.put("ali.property.value.options", "Options: %s");
-        TRANSLATION_MAP.put("ali.property.value.percent", "Percent: %s");
-        TRANSLATION_MAP.put("ali.property.value.period", "Period: %s");
-        TRANSLATION_MAP.put("ali.property.value.potion", "Potion: %s");
-        TRANSLATION_MAP.put("ali.property.value.price_multiplier", "Price Multiplier: %s");
-        TRANSLATION_MAP.put("ali.property.value.probability", "Probability: %s");
-        TRANSLATION_MAP.put("ali.property.value.property", "Property: %s");
-        TRANSLATION_MAP.put("ali.property.value.provider", "Provider: %s");
-        TRANSLATION_MAP.put("ali.property.value.range", "Range: %s");
-        TRANSLATION_MAP.put("ali.property.value.ranged_property_any", "%s: any");
-        TRANSLATION_MAP.put("ali.property.value.ranged_property_both", "%s: %s-%s");
-        TRANSLATION_MAP.put("ali.property.value.ranged_property_gte", "%s: ≥%s");
-        TRANSLATION_MAP.put("ali.property.value.ranged_property_lte", "%s: ≤%s");
-        TRANSLATION_MAP.put("ali.property.value.replace", "Replace: %s");
-        TRANSLATION_MAP.put("ali.property.value.resolution_context", "Resolution Context: %s");
-        TRANSLATION_MAP.put("ali.property.value.search_radius", "Search Radius: %s");
-        TRANSLATION_MAP.put("ali.property.value.seed", "Seed: %s");
-        TRANSLATION_MAP.put("ali.property.value.size", "Size: %s");
-        TRANSLATION_MAP.put("ali.property.value.skip_known_structures", "Skip Known Structures: %s");
-        TRANSLATION_MAP.put("ali.property.value.slot", "Slot: %s");
-        TRANSLATION_MAP.put("ali.property.value.smokey", "Smokey: %s");
-        TRANSLATION_MAP.put("ali.property.value.source", "Source: %s");
-        TRANSLATION_MAP.put("ali.property.value.structure", "Structure: %s");
-        TRANSLATION_MAP.put("ali.property.value.tag", "Tag: %s");
-        TRANSLATION_MAP.put("ali.property.value.target", "Target: %s");
-        TRANSLATION_MAP.put("ali.property.value.team", "Team: %s");
-        TRANSLATION_MAP.put("ali.property.value.treasure", "Treasure: %s");
-        TRANSLATION_MAP.put("ali.property.value.uses", "Uses: %s");
-        TRANSLATION_MAP.put("ali.property.value.uuid", "UUID: %s");
-        TRANSLATION_MAP.put("ali.property.value.value", "Value: %s");
-        TRANSLATION_MAP.put("ali.property.value.values", "Values: %s");
-        TRANSLATION_MAP.put("ali.property.value.variant", "Variant: %s");
-        TRANSLATION_MAP.put("ali.property.value.villager_type", "Villager Type: %s");
-        TRANSLATION_MAP.put("ali.property.value.villager_xp", "XP: %s");
-        TRANSLATION_MAP.put("ali.property.value.x", "X: %s");
-        TRANSLATION_MAP.put("ali.property.value.y", "Y: %s");
-        TRANSLATION_MAP.put("ali.property.value.z", "Z: %s");
-        TRANSLATION_MAP.put("ali.property.value.zoom", "Zoom: %s");
-
         TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
 
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
-        TRANSLATION_MAP.put("ali.util.advanced_loot_info.any", "ANY");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.accepts", "Accepts:");
 
         TRANSLATION_MAP.put("ali/loot_table/chests/abandoned_mineshaft", "Abandoned Mineshaft Chest");

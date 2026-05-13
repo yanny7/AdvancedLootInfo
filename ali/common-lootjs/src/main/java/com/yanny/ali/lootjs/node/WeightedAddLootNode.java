@@ -8,6 +8,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.lootjs.Utils;
 import com.yanny.ali.lootjs.mixin.MixinWeightedAddLootAction;
@@ -64,11 +65,10 @@ public class WeightedAddLootNode extends ListNode {
 
     @NotNull
     public static TooltipNode getTooltip(IServerUtils utils, MixinWeightedAddLootAction action) {
-        return TooltipBuilder.array((b) -> b
-                        .add(TooltipBuilder.keyOnly("ali.enum.group_type.random"))
-                        .add(EntryTooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)))
-                        .add(TooltipBuilder.value(action.getAllowDuplicateLoot()).build("ali.property.value.allow_duplicate_loot"))
-                )
-                .build();
+        return TooltipBuilder.array((b) -> {
+            b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
+            b.add(EntryTooltipUtils.getRolls(utils.convertNumber(utils, action.getNumberProvider()), new RangeValue(0)));
+            b.add(TooltipBuilder.value(action.getAllowDuplicateLoot()).build(Lang.Value.ALLOW_DUPLICATE_LOOT));
+        }).build();
     }
 }

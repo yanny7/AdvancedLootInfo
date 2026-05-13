@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.server;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IServerUtils;
@@ -39,7 +40,7 @@ public class MissingTooltipUtils {
             TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class);
         }
 
-        return tooltip.key("aci.util.auto_detected");
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
@@ -59,7 +60,7 @@ public class MissingTooltipUtils {
             TooltipUtils.addObjectFields(utils, tooltip, function, LootItemFunction.class);
         }
 
-        return tooltip.key("aci.util.auto_detected");
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
@@ -79,7 +80,7 @@ public class MissingTooltipUtils {
             TooltipUtils.addObjectFields(utils, tooltip, condition, LootItemCondition.class);
         }
 
-        return tooltip.key("aci.util.auto_detected");
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
@@ -96,7 +97,7 @@ public class MissingTooltipUtils {
             TooltipUtils.addObjectFields(utils, tooltip, ingredient, Ingredient.class);
         }
 
-        return tooltip.key("aci.util.auto_detected");
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
@@ -104,11 +105,11 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = TooltipBuilder.value(itemListing.getClass().getName());
 
         TooltipUtils.addObjectFields(utils, tooltip, itemListing, VillagerTrades.ItemListing.class);
-        return tooltip.key("aci.util.auto_detected");
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
     @NotNull
     public static TooltipBuilder getMissingValueTooltip(IServerUtils ignoredUtils, Object object) {
-        return TooltipBuilder.error("[" + object.getClass().getTypeName() + "]").key("aci.util.missing");
+        return TooltipBuilder.error("[" + object.getClass().getTypeName() + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
     }
 }

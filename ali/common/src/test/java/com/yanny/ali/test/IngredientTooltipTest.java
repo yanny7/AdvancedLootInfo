@@ -16,11 +16,9 @@ public class IngredientTooltipTest {
     public void ingredientTest() {
         assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)).build(), List.of(
                 "Items:",
-                "  -> Item:",
-                "    -> Item: minecraft:acacia_fence",
+                "  -> Item: minecraft:acacia_fence",
                 "    -> Count: 1",
-                "  -> Item:",
-                "    -> Item: minecraft:acacia_door",
+                "  -> Item: minecraft:acacia_door",
                 "    -> Count: 1"
         ));
         assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(ItemTags.ACACIA_LOGS)).build(), List.of(
