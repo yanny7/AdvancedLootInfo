@@ -138,6 +138,7 @@ public final class Lang {
         EFFECT("effect", "Effect: %s"),
         ENCHANTMENT("enchantment", "Enchantment: %s"),
         ENTITY_TYPE("entity_type", "Entity Type: %s"),
+        EQUIPMENT_SLOT("equipment_slot", "Equipment Slot: %s"),
         EXACT("exact", "Exact: %s"),
         EXTRA_ROUNDS("extra_rounds", "Extra Rounds: %s"),
         FLUID("fluid", "Fluid: %s"),
@@ -162,6 +163,7 @@ public final class Lang {
         LIGHT("light", "Light: %s"),
         LIMIT("limit", "Limit: %s"),
         LOOT_TABLE("loot_table", "Loot Table: %s"),
+        LORE("lore", "Lore: %s"),
         MAP_DECORATION("map_decoration", "Map Decoration: %s"),
         MERGE_STRATEGY("merge_strategy", "Merge Strategy: %s"),
         MOB_EFFECT("mob_effect", "Mob Effect: %s"),
@@ -176,6 +178,7 @@ public final class Lang {
         POTION("potion", "Potion: %s"),
         PRICE_MULTIPLIER("price_multiplier", "Price Multiplier: %s"),
         PROBABILITY("probability", "Probability: %s"),
+        PROPERTY("property", "Property: %s"),
         PROVIDER("provider", "Provider: %s"),
         RANGE("range", "Range: %s"),
         RANGED_ANY("ranged_property_any", "%s: any"),
@@ -228,7 +231,7 @@ public final class Lang {
         ANY("any", "Any:"),
         BANNER_PATTERNS("banner_patterns", "Banner Patterns:"),
         BIOMES("biomes", "Biomes:"),
-        BLOCKS("block", "blocks", "Block: %s", "Blocks:"),
+        BLOCKS(Value.BLOCK, "blocks", "Blocks:"),
         BLOCK_PREDICATE("block_predicate", "Block Predicate:"),
         CHEST("chest", "Chest:"),
         CONDITION("condition", "Predicate:"),
@@ -237,28 +240,28 @@ public final class Lang {
         DIMENSIONS("dimensions", "Dimensions:"),
         DIRECT_ENTITY("direct_entity", "Direct Entity:"),
         DISTANCE_TO_PLAYER("distance_to_player", "Distance to Player:"),
-        ENCHANTMENTS("enchantment", "enchantments", "Enchantment: %s", "Enchantments:"),
+        ENCHANTMENTS(Value.ENCHANTMENT, "enchantments", "Enchantments:"),
         ENTITY_EQUIPMENT("entity_equipment", "Entity Equipment:"),
         ENTITY_FLAGS("entity_flags", "Entity Flags:"),
         ENTITY_SUB_PREDICATE("entity_sub_predicate", "Entity Sub Predicate:"),
-        EQUIPMENT_SLOTS("equipment_slot", "equipment_slots", "Equipment Slot: %s", "Equipment Slots:"),
+        EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         FEET("feet", "Feet:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
         HEAD("head", "Head:"),
-        ITEMS("item", "items", "Item: %s", "Items:"),
+        ITEMS(Value.ITEM, "items", "Items:"),
         LEGS("legs", "Legs:"),
         LOCATION("location", "Location:"),
         LOOKING_AT("looking_at", "Looking At:"),
-        LORE("lore", "lore", "Lore: %s", "Lore:"),
+        LORE(Value.LORE, "lore", "Lore:"),
         MAINHAND("mainhand", "Main Hand:"),
-        MOB_EFFECTS("mob_effect", "mob_effects", "Mob Effect: %s", "Mob Effects:"),
+        MOB_EFFECTS(Value.MOB_EFFECT, "mob_effects", "Mob Effects:"),
         MODIFIER("modifier", "Modifier:"),
         OFFHAND("offhand", "Offhand:"),
         OPERATION("operation", "Operation:"),
         OPERATIONS("operations", "Operations:"),
         PASSENGER("passenger", "Passenger:"),
         PREDICATE("predicate", "Predicate:"),
-        PROPERTIES("property", "properties", "Property: %s", "Properties:"),
+        PROPERTIES(Value.PROPERTY, "properties", "Properties:"),
         RECIPES("recipes", "Recipes:"),
         SCORES("scores", "Scores:"),
         SOURCE_ENTITY("source_entity", "Source Entity:"),
@@ -275,8 +278,8 @@ public final class Lang {
 
         private final Translation translation;
 
-        Branch(String s, String p, String se, String pe) {
-            this.translation = new Translation("ali.property.value." + s, "ali.property.branch." + p, se, pe);
+        Branch(ITooltipKey s, String k, String e) {
+            this.translation = new Translation(s.singular(), "ali.property.branch." + k, s.englishSingular(), e);
         }
 
         Branch(String k, String e) {
