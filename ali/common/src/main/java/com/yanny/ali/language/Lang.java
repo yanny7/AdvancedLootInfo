@@ -248,6 +248,7 @@ public final class Lang {
         FEET("feet", "Feet:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
         HEAD("head", "Head:"),
+        ITEM("item", "Item:"),
         ITEMS(Value.ITEM, "items", "Items:"),
         LEGS("legs", "Legs:"),
         LOCATION("location", "Location:"),

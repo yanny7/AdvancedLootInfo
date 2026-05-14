@@ -66,8 +66,9 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetValueTooltip() {
-        assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEMS), List.of(
-                "Item: minecraft:emerald",
+        assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
+                "Item:",
+                "  -> Item: minecraft:emerald",
                 "  -> Count: 1"
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(

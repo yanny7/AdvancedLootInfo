@@ -355,10 +355,11 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getItemStackTooltip(IServerUtils utils, ItemStack item) {
-        return utils.getValueTooltip(utils, item.getItem())
-                .add(utils.getValueTooltip(utils, item.getCount()).build(Lang.Value.COUNT))
-                .add(utils.getValueTooltip(utils, item.getTag()).build(Lang.Value.TAG))
-                .key(Lang.Value.ITEM);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, item.getItem()).build(Lang.Value.ITEM));
+            b.add(utils.getValueTooltip(utils, item.getCount()).build(Lang.Value.COUNT));
+            b.add(utils.getValueTooltip(utils, item.getTag()).build(Lang.Value.TAG));
+        });
     }
 
     @NotNull
