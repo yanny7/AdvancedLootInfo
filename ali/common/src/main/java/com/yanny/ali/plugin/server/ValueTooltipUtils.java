@@ -359,7 +359,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, item.getItem()).build(Lang.Value.ITEM));
             b.add(utils.getValueTooltip(utils, item.getCount()).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, item.getTag()).build(Lang.Value.TAG));
-        });
+        }).key(Lang.Branch.ITEM);
     }
 
     @NotNull
