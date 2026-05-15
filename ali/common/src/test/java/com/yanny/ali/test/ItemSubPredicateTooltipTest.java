@@ -234,16 +234,14 @@ public class ItemSubPredicateTooltipTest {
                 "Attribute Modifiers:",
                 "  -> Contains:",
                 "    -> Modifier:",
-                "      -> Attributes:",
-                "        -> minecraft:generic.armor",
+                "      -> Attribute: minecraft:generic.armor",
                 "      -> Id: minecraft:help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
                 "      -> Slot: ARMOR",
                 "  -> Counts:",
                 "    -> Modifier:",
-                "      -> Attributes:",
-                "        -> minecraft:generic.gravity",
+                "      -> Attribute: minecraft:generic.gravity",
                 "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
@@ -256,10 +254,8 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(HolderSet.direct(Holder.direct(TooltipTestSuite.LOOKUP.lookup(Registries.TRIM_PATTERN).orElseThrow().get(TrimPatterns.EYE).orElseThrow().value()))
         ))).build(), List.of(
                 "Trim:",
-                "  -> Materials:",
-                "    -> minecraft:gold",
-                "  -> Patterns:",
-                "    -> minecraft:eye"
+                "  -> Material: minecraft:gold",
+                "  -> Pattern: minecraft:eye"
         ));
     }
 
@@ -269,8 +265,7 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(HolderSet.direct(LOOKUP.lookup(Registries.JUKEBOX_SONG).orElseThrow().get(JukeboxSongs.PIGSTEP).orElseThrow()))
         )).build(), List.of(
                 "Jukebox Playable:",
-                "  -> Songs:",
-                "    -> minecraft:pigstep"
+                "  -> Song: minecraft:pigstep"
         ));
     }
 }

@@ -259,9 +259,10 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSetComponentsTooltip(IServerUtils utils, SetComponentsFunction fun) {
-        return utils.getValueTooltip(utils, fun.components)
-                .add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                .key(Lang.Functions.SET_COMPONENTS);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.components).build(Lang.Branch.COMPONENTS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).showEmpty().key(Lang.Functions.SET_COMPONENTS);
     }
 
     @NotNull

@@ -146,8 +146,7 @@ public class DataComponentTooltipTest {
                 "      -> part: foot",
                 "  -> Predicate:",
                 "    -> Block: minecraft:bell",
-                "Tooltip:",
-                "  -> Bell",
+                "Tooltip: Bell",
                 "Show In Tooltip: true"
         ));
     }

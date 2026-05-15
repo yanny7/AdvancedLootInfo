@@ -282,8 +282,7 @@ public class GenericTooltipTest {
                 "        -> minecraft:diorite",
                 "  -> Entity Sub Predicate:",
                 "    -> Type: minecraft:cat",
-                "      -> Variants:",
-                "        -> minecraft:persian",
+                "      -> Variant: minecraft:persian",
                 "  -> Vehicle:",
                 "    -> Team: blue",
                 "  -> Passenger:",
@@ -616,8 +615,7 @@ public class GenericTooltipTest {
     @Test
     public void testGameTypeTooltip() {
         assertTooltip(ValueTooltipUtils.getGameTypePredicateTooltip(UTILS, GameTypePredicate.of(GameType.SPECTATOR)).build(Lang.Branch.GAME_TYPES), List.of(
-                "Game Types:",
-                "  -> SPECTATOR"
+                "Game Type: SPECTATOR"
         ));
     }
 

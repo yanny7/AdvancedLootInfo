@@ -68,8 +68,7 @@ public class EntitySubPredicateTooltipTest {
                 .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
                 .build()).build(), List.of(
                 "Player:",
-                "  -> Game Types:",
-                "    -> SURVIVAL",
+                "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
                 "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥100",
@@ -122,32 +121,28 @@ public class EntitySubPredicateTooltipTest {
                 Holder.direct(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.CALICO)))
         )).build(), List.of(
                 "Type: minecraft:cat",
-                "  -> Variants:",
-                "    -> minecraft:calico"
+                "  -> Variant: minecraft:calico"
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.PAINTING.createPredicate(
                 HolderSet.direct(LOOKUP.lookup(Registries.PAINTING_VARIANT).orElseThrow().get(PaintingVariants.BOMB).orElseThrow())
         )).build(), List.of(
                 "Type: minecraft:painting",
-                "  -> Variants:",
-                "    -> minecraft:bomb"
+                "  -> Variant: minecraft:bomb"
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.frogVariant(
                 Holder.direct(Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.get(FrogVariant.TEMPERATE)))
         )).build(), List.of(
                 "Type: minecraft:frog",
-                "  -> Variants:",
-                "    -> minecraft:temperate"
+                "  -> Variant: minecraft:temperate"
         ));
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.wolfVariant(
                 HolderSet.direct(LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).get(WolfVariants.ASHEN).orElseThrow())
         )).build(), List.of(
                 "Type: minecraft:wolf",
-                "  -> Variants:",
-                "    -> minecraft:ashen"
+                "  -> Variant: minecraft:ashen"
         ));
     }
 }
