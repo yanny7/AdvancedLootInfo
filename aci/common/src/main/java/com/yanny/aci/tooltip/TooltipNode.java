@@ -136,7 +136,7 @@ public class TooltipNode {
         } else {
             line.append(Component.literal(key).withStyle(TEXT_STYLE));
 
-            if ((!children.isEmpty() || is(FLAG_ARRAY))) {
+            if ((!children.isEmpty() && !is(FLAG_HAS_VALUE)) || is(FLAG_ARRAY)) {
                 line.append(Component.literal(":").withStyle(TEXT_STYLE));
             }
         }
