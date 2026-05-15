@@ -182,7 +182,9 @@ public class ConditionTooltipTest {
                 ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.MOB_LOOTING, MinMaxBounds.Ints.ANY))
         ).build()).build(), List.of(
                 "Match Tool:",
-                "  -> Enchantment: minecraft:looting"
+                "  -> Enchantments:",
+                "    -> Predicate:",
+                "      -> Enchantment: minecraft:looting"
         ));
     }
 

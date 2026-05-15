@@ -274,22 +274,10 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getEnchantmentPredicateTooltip(IServerUtils utils, EnchantmentPredicate enchantmentPredicate) {
-        if (enchantmentPredicate != EnchantmentPredicate.ANY) {
-            if (enchantmentPredicate.enchantment != null) {
-                TooltipBuilder builder = utils.getValueTooltip(utils, enchantmentPredicate.enchantment);
-
-                if (enchantmentPredicate.level != MinMaxBounds.Ints.ANY) {
-                    builder.add(utils.getValueTooltip(utils, enchantmentPredicate.level).build(Lang.Value.LEVEL));
-                }
-
-                return builder;
-            } else {
-                return TooltipBuilder.keyOnly(Lang.Branch.ENCHANTMENTS)
-                        .add(utils.getValueTooltip(utils, enchantmentPredicate.level).build(Lang.Value.LEVEL));
-            }
-        }
-
-        return TooltipBuilder.empty();
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, enchantmentPredicate.enchantment).build(Lang.Branch.ENCHANTMENTS));
+            b.add(utils.getValueTooltip(utils, enchantmentPredicate.level).build(Lang.Value.LEVEL));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
