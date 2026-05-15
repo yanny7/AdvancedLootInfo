@@ -129,8 +129,7 @@ public class FunctionTooltipTest {
                 .build()
         ).build(), List.of(
                 "Enchant Randomly:",
-                "  -> Enchantments:",
-                "    -> minecraft:channeling",
+                "  -> Enchantment: minecraft:channeling",
                 "  -> Only Compatible: true"
         ));
     }
@@ -221,7 +220,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSequenceTooltip(UTILS, SequenceFunction.of(List.of(
                 ApplyExplosionDecay.explosionDecay().build(),
                 SmeltItemFunction.smelted().build()
-        ))), List.of(
+        ))).build(), List.of(
                 "Sequence:",
                 "  -> Explosion Decay",
                 "  -> Furnace Smelt"
@@ -260,7 +259,7 @@ public class FunctionTooltipTest {
                 "      -> Operation: ADD_MULTIPLIED_BASE",
                 "      -> Amount: 3",
                 "      -> Id: minecraft:chest",
-                "      -> Equipment Slots: MAINHAND",
+                "      -> Equipment Slot: MAINHAND",
                 "  -> Replace: false"
         ));
     }
@@ -444,7 +443,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetItemTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetItemTooltip(UTILS, new SetItemFunction(List.of(), Holder.direct(Items.MUSIC_DISC_MALL))).build(), List.of(
                 "Set Item:",
                 "  -> Item: minecraft:music_disc_mall"
         ));
@@ -455,7 +454,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetComponentsTooltip(UTILS, (SetComponentsFunction) SetComponentsFunction
                 .setComponent(DataComponents.DAMAGE, 5)
                 .build()
-        ), List.of(
+        ).build(), List.of(
                 "Set Components:",
                 "  -> minecraft:damage",
                 "    -> Value: 5"
@@ -468,7 +467,7 @@ public class FunctionTooltipTest {
                 List.of(),
                 ContainerComponentManipulators.CONTAINER,
                 ApplyExplosionDecay.explosionDecay().build()
-        )), List.of(
+        )).build(), List.of(
                 "Modify Contents:",
                 "  -> Container: minecraft:container",
                 "  -> Modifier:",
@@ -482,7 +481,7 @@ public class FunctionTooltipTest {
                 List.of(),
                 ItemPredicate.Builder.item().of(ItemTags.COALS).build(),
                 ApplyExplosionDecay.explosionDecay().build()
-        )), List.of(
+        )).build(), List.of(
                 "Filtered:",
                 "  -> Filter:",
                 "    -> Items:",
@@ -501,7 +500,7 @@ public class FunctionTooltipTest {
                 .exclude(DataComponents.BEES)
                 .exclude(DataComponents.DYED_COLOR)
                 .build()
-        ), List.of(
+        ).build(), List.of(
                 "Copy Components:",
                 "  -> Source: BLOCK_ENTITY",
                 "  -> Include:",
@@ -525,7 +524,7 @@ public class FunctionTooltipTest {
                         new ListOperation.Insert(0)
                 )),
                 Optional.of(10)
-        )), List.of(
+        )).build(), List.of(
                 "Set Fireworks:",
                 "  -> Explosions:",
                 "    -> Values:",
@@ -556,7 +555,7 @@ public class FunctionTooltipTest {
                 Optional.of(IntList.of(3, 4)),
                 Optional.of(false),
                 Optional.of(true)
-        )), List.of(
+        )).build(), List.of(
                 "Set Firework Explosion:",
                 "  -> Shape: CREEPER",
                 "  -> Colors: [1, 2]",
@@ -573,7 +572,7 @@ public class FunctionTooltipTest {
                 Optional.of(new Filterable<>("Hello", Optional.of("World"))),
                 Optional.of("Yanny"),
                 Optional.of(3)
-        )), List.of(
+        )).build(), List.of(
                 "Set Book Cover:",
                 "  -> Author: Yanny",
                 "  -> Title:",
@@ -592,7 +591,7 @@ public class FunctionTooltipTest {
                         new Filterable<>(Component.literal("Bye"), Optional.of(Component.literal("Ahoj")))
                 ),
                 new ListOperation.Insert(0)
-        )), List.of(
+        )).build(), List.of(
                 "Set Written Book Pages:",
                 "  -> Pages:",
                 "    -> Page:",
@@ -615,7 +614,7 @@ public class FunctionTooltipTest {
                         new Filterable<>("Keep", Optional.of("Calm"))
                 ),
                 new ListOperation.ReplaceSection(1, Optional.of(4))
-        )), List.of(
+        )).build(), List.of(
                 "Set Writable Book Pages:",
                 "  -> Pages:",
                 "    -> Page:",
@@ -637,7 +636,7 @@ public class FunctionTooltipTest {
         map.put(new ToggleTooltips.ComponentToggle<>(DataComponents.BASE_COLOR, (dyeColor, b) -> DyeColor.BLACK), true);
         map.put(new ToggleTooltips.ComponentToggle<>(DataComponents.DAMAGE, (damage, b) -> 5), false);
 
-        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, new ToggleTooltips(List.of(), map)), List.of(
+        assertTooltip(FunctionTooltipUtils.getToggleTooltipsTooltip(UTILS, new ToggleTooltips(List.of(), map)).build(), List.of(
                 "Toggle Tooltips:",
                 "  -> Components:",
                 "    -> minecraft:base_color",
@@ -652,7 +651,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetOminousBottleAmplifierTooltip(UTILS, new SetOminousBottleAmplifierFunction(
                 List.of(),
                 UniformGenerator.between(0.5F, 4.99F)
-        )), List.of(
+        )).build(), List.of(
                 "Set Ominous Bottle Amplifier:",
                 "  -> Amplifier: 0.50-4.99"
         ));
@@ -663,7 +662,7 @@ public class FunctionTooltipTest {
         assertTooltip(FunctionTooltipUtils.getSetCustomModelDataTooltip(UTILS, new SetCustomModelDataFunction(
                 List.of(),
                 ConstantValue.exactly(3.14F)
-        )), List.of(
+        )).build(), List.of(
                 "Set Custom Model Data:",
                 "  -> Value: 3.14"
         ));

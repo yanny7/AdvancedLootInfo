@@ -39,7 +39,7 @@ public class ConditionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
+    public static TooltipBuilder getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.active()).build(Lang.Value.ACTIVE)))
                 .key(Lang.Conditions.ENCHANTMENT_ACTIVE_CHECK);
     }
@@ -89,7 +89,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.probability()).build(Lang.Value.PROBABILITY)))
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.chance()).build(Lang.Value.CHANCE)))
                 .isAdvancedTooltip().key(Lang.Conditions.RANDOM_CHANCE);
     }
 
@@ -98,8 +98,8 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.unenchantedChance()).build(Lang.Value.UNENCHANTED_CHANCE));
             b.add(utils.getValueTooltip(utils, cond.enchantedChance()).build(Lang.Branch.ENCHANTED_CHANCE));
-            b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTEMENT));
-        });
+            b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTMENT));
+        }).key(Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS);
     }
 
     @NotNull

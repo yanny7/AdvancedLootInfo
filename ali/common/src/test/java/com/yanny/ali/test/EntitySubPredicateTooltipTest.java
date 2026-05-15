@@ -31,12 +31,12 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class EntitySubPredicateTooltipTest {
     @Test
     public void testLightningBoltPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))).build(), List.of(
                 "Lightning Bolt:",
                 "  -> Blocks On Fire: ≤5"
         ));
         assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS,
-                new LightningBoltPredicate(MinMaxBounds.Ints.between(1, 5), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
+                new LightningBoltPredicate(MinMaxBounds.Ints.between(1, 5), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))).build(), List.of(
                 "Lightning Bolt:",
                 "  -> Blocks On Fire: 1-5",
                 "  -> Stuck Entity:",
@@ -46,10 +46,10 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testFishingHookPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.ANY), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.ANY).build(), List.of(
                 "Fishing Hook:"
         ));
-        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)).build(), List.of(
                 "Fishing Hook:",
                 "  -> Is In Open Water: true"
         ));
@@ -66,7 +66,7 @@ public class EntitySubPredicateTooltipTest {
                 .addStat(Stats.ITEM_USED, Items.CHICKEN.builtInRegistryHolder(), MinMaxBounds.Ints.atMost(10))
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(EntityType.WARDEN)))
                 .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
-                .build()), List.of(
+                .build()).build(), List.of(
                 "Player:",
                 "  -> Game Types:",
                 "    -> SURVIVAL",
@@ -85,14 +85,13 @@ public class EntitySubPredicateTooltipTest {
                 "        -> test2: false",
                 "        -> test: true",
                 "  -> Looking At:",
-                "    -> Entity Types:",
-                "      -> minecraft:warden"
+                "    -> Entity Type: minecraft:warden"
         ));
     }
 
     @Test
     public void testSlimePredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))).build(), List.of(
                 "Slime:",
                 "  -> Size: 0-2"
         ));
@@ -100,7 +99,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testRaiderPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, RaiderPredicate.CAPTAIN_WITHOUT_RAID), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, RaiderPredicate.CAPTAIN_WITHOUT_RAID).build(), List.of(
                 "Raider:",
                 "  -> Has Raid: false",
                 "  -> Is Captain: true"
@@ -110,7 +109,7 @@ public class EntitySubPredicateTooltipTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testVariantPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityVariantPredicateType<Axolotl>.Instance)EntitySubPredicates.AXOLOTL.createPredicate(Axolotl.Variant.BLUE)), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityVariantPredicateType<Axolotl>.Instance)EntitySubPredicates.AXOLOTL.createPredicate(Axolotl.Variant.BLUE)).build(), List.of(
                 "Type: minecraft:axolotl",
                 "  -> Variant: BLUE"
         ));
@@ -121,7 +120,7 @@ public class EntitySubPredicateTooltipTest {
     public void testHolderVariantPredicateTooltip() {
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.catVariant(
                 Holder.direct(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.CALICO)))
-        )), List.of(
+        )).build(), List.of(
                 "Type: minecraft:cat",
                 "  -> Variants:",
                 "    -> minecraft:calico"
@@ -129,7 +128,7 @@ public class EntitySubPredicateTooltipTest {
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.PAINTING.createPredicate(
                 HolderSet.direct(LOOKUP.lookup(Registries.PAINTING_VARIANT).orElseThrow().get(PaintingVariants.BOMB).orElseThrow())
-        )), List.of(
+        )).build(), List.of(
                 "Type: minecraft:painting",
                 "  -> Variants:",
                 "    -> minecraft:bomb"
@@ -137,7 +136,7 @@ public class EntitySubPredicateTooltipTest {
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.frogVariant(
                 Holder.direct(Objects.requireNonNull(BuiltInRegistries.FROG_VARIANT.get(FrogVariant.TEMPERATE)))
-        )), List.of(
+        )).build(), List.of(
                 "Type: minecraft:frog",
                 "  -> Variants:",
                 "    -> minecraft:temperate"
@@ -145,7 +144,7 @@ public class EntitySubPredicateTooltipTest {
 
         assertTooltip(EntitySubPredicateTooltipUtils.getHolderVariantPredicateTooltip(UTILS, (EntitySubPredicates.EntityHolderVariantPredicateType<CatVariant>.Instance) EntitySubPredicates.wolfVariant(
                 HolderSet.direct(LOOKUP.lookupOrThrow(Registries.WOLF_VARIANT).get(WolfVariants.ASHEN).orElseThrow())
-        )), List.of(
+        )).build(), List.of(
                 "Type: minecraft:wolf",
                 "  -> Variants:",
                 "    -> minecraft:ashen"

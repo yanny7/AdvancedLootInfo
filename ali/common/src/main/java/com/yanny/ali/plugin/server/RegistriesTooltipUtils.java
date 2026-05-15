@@ -4,11 +4,9 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -141,7 +139,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getEnchantmentTooltip(IServerUtils utils, Enchantment enchantment) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return TooltipBuilder.value(TooltipBuilder.translate(enchantment.getDescriptionId()));
+                return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), enchantment.description());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Enchantment name", e);
             }

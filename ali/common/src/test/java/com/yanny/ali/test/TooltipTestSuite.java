@@ -97,6 +97,7 @@ public class TooltipTestSuite {
 
         ResourceManager resourceManager = loadClientResources();
         Language.inject(TestUtils.loadDefaultLanguage(resourceManager));
+        LOOKUP = VanillaRegistries.createLookup();
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
@@ -152,19 +153,19 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends ItemSubPredicate> TooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
+            public <T extends ItemSubPredicate> TooltipBuilder getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
                 return PluginManager.getInstance().serverRegistry.getItemSubPredicateTooltip(utils, predicate);
             }
 
             @NotNull
             @Override
-            public <T extends EntitySubPredicate> TooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+            public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
                 return PluginManager.getInstance().serverRegistry.getEntitySubPredicateTooltip(utils, predicate);
             }
 
             @NotNull
             @Override
-            public TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+            public TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
                 return PluginManager.getInstance().serverRegistry.getDataComponentTypeTooltip(utils, type, value);
             }
 

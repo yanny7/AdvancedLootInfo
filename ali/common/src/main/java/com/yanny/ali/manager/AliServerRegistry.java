@@ -71,9 +71,9 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, LootItemCondition, TooltipBuilder>> conditionTooltips = registerClassKeyed("condition tooltips", true, HashMap::new, BuiltInRegistries.LOOT_CONDITION_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, TooltipNode>> itemSubPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new, BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE);
-    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, TooltipNode>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
-    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, TooltipNode>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter, BuiltInRegistries.DATA_COMPONENT_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ItemSubPredicate, TooltipBuilder>> itemSubPredicateTooltips = registerClassKeyed("item sub predicate tooltips", true, HashMap::new, BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE);
+    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, TooltipBuilder>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
+    private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter, BuiltInRegistries.DATA_COMPONENT_TYPE);
     // modifiers
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Holder<Enchantment>, Map<Integer, RangeValue>>>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
@@ -150,18 +150,18 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends ItemSubPredicate> void registerItemSubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         itemSubPredicateTooltips.put(type, (u, i) -> getter.apply(u, type.cast(i)));
     }
 
     @Override
-    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         entitySubPredicateTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
 
     @Override
-    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         dataComponentTypeTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
@@ -273,26 +273,26 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public <T extends ItemSubPredicate> TooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
+    public <T extends ItemSubPredicate> TooltipBuilder getItemSubPredicateTooltip(IServerUtils utils, T predicate) {
         return itemSubPredicateTooltips.get(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> GenericTooltipUtils.getMissingItemSubPredicateTooltip(utils, predicate));
+                .orElseGet(() -> MissingTooltipUtils.getMissingItemSubPredicateTooltip(utils, predicate));
     }
 
     @NotNull
     @Override
-    public <T extends EntitySubPredicate> TooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+    public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
         return entitySubPredicateTooltips.get(predicate.codec())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> GenericTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
+                .orElseGet(() -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
     }
 
     @NotNull
     @Override
-    public TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+    public TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
         return dataComponentTypeTooltips.get(type)
                 .map((i) -> i.apply(utils, value))
-                .orElseGet(() -> GenericTooltipUtils.getMissingDataComponentTypeTooltip(utils, type, value));
+                .orElseGet(() -> MissingTooltipUtils.getMissingDataComponentTypeTooltip(utils, type, value));
     }
 
     @Override

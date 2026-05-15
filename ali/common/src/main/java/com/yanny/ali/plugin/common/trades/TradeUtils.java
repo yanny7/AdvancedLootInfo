@@ -171,7 +171,7 @@ public class TradeUtils {
                 TooltipNode.EMPTY_INSTANCE,
                 Either.left(stew),
                 new RangeValue(),
-                DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(utils, listing.effects),
+                DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(utils, listing.effects).build(),
                 12,
                 listing.xp,
                 listing.priceMultiplier,
@@ -233,7 +233,7 @@ public class TradeUtils {
 
                 for (Map.Entry<VillagerType, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
                     VillagerType type = entry.getKey();
-                    TooltipNode cond = utils.getValueTooltip(utils, type.toString()).build("ali.property.value.villager_type");
+                    TooltipNode cond = utils.getValueTooltip(utils, type.toString()).build(Lang.Value.VILLAGER_TYPE);
 
                     nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
                 }

@@ -1,22 +1,29 @@
 package com.yanny.ali.plugin.server;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IServerUtils;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.storage.loot.Deserializers;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+
+import java.util.Objects;
 
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
@@ -28,8 +35,10 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getEntryTypeTooltip(utils, entry.getType());
 
         try {
-            Gson lootGson = Deserializers.createLootTableSerializer().create();
-            JsonElement jsonElement = lootGson.toJsonTree(entry);
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, entry).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -48,8 +57,10 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getFunctionTypeTooltip(utils, function.getType());
 
         try {
-            Gson lootGson = Deserializers.createFunctionSerializer().create();
-            JsonElement jsonElement = lootGson.toJsonTree(function);
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, function).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -68,8 +79,10 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getConditionTypeTooltip(utils, condition.getType());
 
         try {
-            Gson lootGson = Deserializers.createConditionSerializer().create();
-            JsonElement jsonElement = lootGson.toJsonTree(condition);
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, condition).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -88,7 +101,10 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = TooltipBuilder.value(ingredient.getClass().getName());
 
         try {
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, ingredient.toJson()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            JsonElement jsonElement = Ingredient.CODEC.encodeStart(registryOps, ingredient).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
                 LOGGER.warn("Failed to get ingredient info from serialized data for {} in {}", ingredient.getClass().getName(), TooltipContext.get(), e);
@@ -99,6 +115,57 @@ public class MissingTooltipUtils {
 
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
+
+    @NotNull
+    public static TooltipBuilder getMissingItemSubPredicateTooltip(IServerUtils utils, ItemSubPredicate predicate) {
+        TooltipBuilder tooltip = TooltipBuilder.value(predicate.getClass().getName());
+
+        TooltipUtils.addObjectFields(utils, tooltip, predicate, ItemSubPredicate.class);
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
+    @NotNull
+    public static TooltipBuilder getMissingEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
+        TooltipBuilder tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<EntitySubPredicate> codec = ((MapCodec<EntitySubPredicate>) predicate.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, predicate).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get entity sub predicate info from serialized data for {} in {}", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()), TooltipContext.get(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, predicate, EntitySubPredicate.class);
+        }
+
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
+    @NotNull
+    public static TooltipBuilder getMissingDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+        TooltipBuilder tooltip = RegistriesTooltipUtils.getDataComponentTypeTooltip(utils, type);
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            Codec<Object> codec = ((Codec<Object>) type.codec());
+            JsonElement jsonElement = Objects.requireNonNull(codec).encodeStart(registryOps, value).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get data component type info from serialized data for {} in {}", BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(type), TooltipContext.get(), e);
+            }
+        }
+
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
 
     @NotNull
     public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {

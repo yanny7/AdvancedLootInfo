@@ -1,6 +1,7 @@
 package com.yanny.ali.plugin.server;
 
 import com.mojang.authlib.properties.Property;
+import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
@@ -10,23 +11,32 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentPredicate;
 import net.minecraft.core.component.TypedDataComponent;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +46,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStatTranslationKey;
 
 public class ValueTooltipUtils {
     @NotNull
@@ -54,6 +65,16 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate entitySubPredicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getEntitySubPredicateTooltip(utils, entitySubPredicate)));
+    }
+
+    @NotNull
+    public static TooltipBuilder getItemSubPredicateTooltip(IServerUtils utils, ItemSubPredicate itemSubPredicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getItemSubPredicateTooltip(utils, itemSubPredicate)));
+    }
+
+    @NotNull
     public static TooltipBuilder getFormulaTooltip(IServerUtils utils, ApplyBonusCount.Formula formula) {
         TooltipBuilder tooltip = utils.getValueTooltip(utils, formula.getType().id());
 
@@ -69,13 +90,13 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getModifierTooltip(IServerUtils utils, SetAttributesFunction.Modifier modifier) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, modifier.attribute()).build(Lang.Value.ATTRIBUTE))
-                .add(utils.getValueTooltip(utils, modifier.operation()).build(Lang.Value.OPERATION))
-                .add(utils.getValueTooltip(utils, modifier.amount()).build(Lang.Value.AMOUNT))
-                .add(utils.getValueTooltip(utils, modifier.id()).build(Lang.Value.ID))
-                .add(utils.getValueTooltip(utils, modifier.slots()).build(Lang.Branch.EQUIPMENT_SLOTS))
-        ).key(Lang.Branch.MODIFIER);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, modifier.attribute()).build(Lang.Value.ATTRIBUTE));
+            b.add(utils.getValueTooltip(utils, modifier.operation()).build(Lang.Value.OPERATION));
+            b.add(utils.getValueTooltip(utils, modifier.amount()).build(Lang.Value.AMOUNT));
+            b.add(utils.getValueTooltip(utils, modifier.id()).build(Lang.Value.ID));
+            b.add(utils.getValueTooltip(utils, modifier.slots()).build(Lang.Branch.EQUIPMENT_SLOTS));
+        }).key(Lang.Branch.MODIFIER);
     }
 
     @NotNull
@@ -88,17 +109,17 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getStatePropertiesPredicateTooltip(IServerUtils utils, StatePropertiesPredicate propertiesPredicate) {
-        return utils.getValueTooltip(utils, propertiesPredicate.properties);
+        return utils.getValueTooltip(utils, propertiesPredicate.properties());
     }
 
     @NotNull
     public static TooltipBuilder getDamageSourcePredicateTooltip(IServerUtils utils, DamageSourcePredicate damagePredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, damagePredicate.tags()).build(Lang.Branch.TAGS))
-                .add(utils.getValueTooltip(utils, damagePredicate.directEntity()).build(Lang.Branch.DIRECT_ENTITY))
-                .add(utils.getValueTooltip(utils, damagePredicate.sourceEntity()).build(Lang.Branch.SOURCE_ENTITY))
-                .add(utils.getValueTooltip(utils, damagePredicate.isDirect()).build(Lang.Value.IS_DIRECT))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, damagePredicate.tags()).build(Lang.Branch.TAGS));
+            b.add(utils.getValueTooltip(utils, damagePredicate.directEntity()).build(Lang.Branch.DIRECT_ENTITY));
+            b.add(utils.getValueTooltip(utils, damagePredicate.sourceEntity()).build(Lang.Branch.SOURCE_ENTITY));
+            b.add(utils.getValueTooltip(utils, damagePredicate.isDirect()).build(Lang.Value.IS_DIRECT));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -108,23 +129,23 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getEntityPredicateTooltip(IServerUtils utils, EntityPredicate entityPredicate) {
-        return TooltipBuilder.branch((b) -> b
-                .add(utils.getValueTooltip(utils, entityPredicate.entityType()).build(Lang.Branch.ENTITY_TYPES))
-                .add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer()).build(Lang.Branch.DISTANCE_TO_PLAYER))
-                .add(utils.getValueTooltip(utils, entityPredicate.location()).build(Lang.Branch.LOCATION))
-                .add(utils.getValueTooltip(utils, entityPredicate.movement()).build(Lang.Branch.MOVEMENT))
-                .add(utils.getValueTooltip(utils, entityPredicate.periodicTick()).build(Lang.Branch.MOVEMENT))
-                .add(utils.getValueTooltip(utils, entityPredicate.effects()).build(Lang.Branch.MOB_EFFECTS))
-                .add(utils.getValueTooltip(utils, entityPredicate.nbt()).build(Lang.Value.NBT))
-                .add(utils.getValueTooltip(utils, entityPredicate.flags()).build(Lang.Branch.ENTITY_FLAGS))
-                .add(utils.getValueTooltip(utils, entityPredicate.equipment()).build(Lang.Branch.ENTITY_EQUIPMENT))
-                .add(utils.getValueTooltip(utils, entityPredicate.subPredicate()).build(Lang.Branch.ENTITY_SUB_PREDICATE))
-                .add(utils.getValueTooltip(utils, entityPredicate.vehicle()).build(Lang.Branch.VEHICLE))
-                .add(utils.getValueTooltip(utils, entityPredicate.passenger()).build(Lang.Branch.PASSENGER))
-                .add(utils.getValueTooltip(utils, entityPredicate.targetedEntity()).build(Lang.Branch.TARGETED_ENTITY))
-                .add(utils.getValueTooltip(utils, entityPredicate.team()).build(Lang.Value.TEAM))
-                .add(utils.getValueTooltip(utils, entityPredicate.slots()).build(Lang.Branch.SLOTS))
-        );
+        return TooltipBuilder.branch((b) -> {
+            b.add(utils.getValueTooltip(utils, entityPredicate.entityType()).build(Lang.Branch.ENTITY_TYPES));
+            b.add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer()).build(Lang.Branch.DISTANCE_TO_PLAYER));
+            b.add(utils.getValueTooltip(utils, entityPredicate.location()).build(Lang.Branch.LOCATION));
+            b.add(utils.getValueTooltip(utils, entityPredicate.movement()).build(Lang.Branch.MOVEMENT));
+            b.add(utils.getValueTooltip(utils, entityPredicate.periodicTick()).build(Lang.Value.PERIODIC_TICK));
+            b.add(utils.getValueTooltip(utils, entityPredicate.effects()).build(Lang.Branch.MOB_EFFECTS));
+            b.add(utils.getValueTooltip(utils, entityPredicate.nbt()).build(Lang.Value.NBT));
+            b.add(utils.getValueTooltip(utils, entityPredicate.flags()).build(Lang.Branch.ENTITY_FLAGS));
+            b.add(utils.getValueTooltip(utils, entityPredicate.equipment()).build(Lang.Branch.ENTITY_EQUIPMENT));
+            b.add(utils.getValueTooltip(utils, entityPredicate.subPredicate()).build(Lang.Branch.ENTITY_SUB_PREDICATE));
+            b.add(utils.getValueTooltip(utils, entityPredicate.vehicle()).build(Lang.Branch.VEHICLE));
+            b.add(utils.getValueTooltip(utils, entityPredicate.passenger()).build(Lang.Branch.PASSENGER));
+            b.add(utils.getValueTooltip(utils, entityPredicate.targetedEntity()).build(Lang.Branch.TARGETED_ENTITY));
+            b.add(utils.getValueTooltip(utils, entityPredicate.team()).build(Lang.Value.TEAM));
+            b.add(utils.getValueTooltip(utils, entityPredicate.slots()).build(Lang.Branch.SLOTS));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -134,37 +155,37 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDistancePredicateTooltip(IServerUtils utils, DistancePredicate distancePredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, distancePredicate.x()).build(Lang.Value.X))
-                .add(utils.getValueTooltip(utils, distancePredicate.y()).build(Lang.Value.Y))
-                .add(utils.getValueTooltip(utils, distancePredicate.z()).build(Lang.Value.Z))
-                .add(utils.getValueTooltip(utils, distancePredicate.horizontal()).build(Lang.Value.HORIZONTAL))
-                .add(utils.getValueTooltip(utils, distancePredicate.absolute()).build(Lang.Value.ABSOLUTE))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, distancePredicate.x()).build(Lang.Value.X));
+            b.add(utils.getValueTooltip(utils, distancePredicate.y()).build(Lang.Value.Y));
+            b.add(utils.getValueTooltip(utils, distancePredicate.z()).build(Lang.Value.Z));
+            b.add(utils.getValueTooltip(utils, distancePredicate.horizontal()).build(Lang.Value.HORIZONTAL));
+            b.add(utils.getValueTooltip(utils, distancePredicate.absolute()).build(Lang.Value.ABSOLUTE));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
     public static TooltipBuilder getLocationPredicateTooltip(IServerUtils utils, LocationPredicate locationPredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, locationPredicate.position()).build(Lang.Branch.POSITION))
-                .add(utils.getValueTooltip(utils, locationPredicate.biomes()).build(Lang.Branch.BIOMES))
-                .add(utils.getValueTooltip(utils, locationPredicate.structures()).build(Lang.Branch.STRUCTURES))
-                .add(utils.getValueTooltip(utils, locationPredicate.dimension()).build(Lang.Value.DIMENSION))
-                .add(utils.getValueTooltip(utils, locationPredicate.smokey()).build(Lang.Value.SMOKEY))
-                .add(utils.getValueTooltip(utils, locationPredicate.light()).build(Lang.Value.LIGHT))
-                .add(utils.getValueTooltip(utils, locationPredicate.block()).build(Lang.Branch.BLOCK_PREDICATE))
-                .add(utils.getValueTooltip(utils, locationPredicate.fluid()).build(Lang.Branch.FLUID_PREDICATE))
-                .add(utils.getValueTooltip(utils, locationPredicate.canSeeSky()).build(Lang.Value.CAN_SEE_SKY))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, locationPredicate.position()).build(Lang.Branch.POSITION));
+            b.add(utils.getValueTooltip(utils, locationPredicate.biomes()).build(Lang.Branch.BIOMES));
+            b.add(utils.getValueTooltip(utils, locationPredicate.structures()).build(Lang.Branch.STRUCTURES));
+            b.add(utils.getValueTooltip(utils, locationPredicate.dimension()).build(Lang.Value.DIMENSION));
+            b.add(utils.getValueTooltip(utils, locationPredicate.smokey()).build(Lang.Value.SMOKEY));
+            b.add(utils.getValueTooltip(utils, locationPredicate.light()).build(Lang.Value.LIGHT));
+            b.add(utils.getValueTooltip(utils, locationPredicate.block()).build(Lang.Branch.BLOCK_PREDICATE));
+            b.add(utils.getValueTooltip(utils, locationPredicate.fluid()).build(Lang.Branch.FLUID_PREDICATE));
+            b.add(utils.getValueTooltip(utils, locationPredicate.canSeeSky()).build(Lang.Value.CAN_SEE_SKY));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
     public static TooltipBuilder getPositionPredicateTooltip(IServerUtils utils, LocationPredicate.PositionPredicate positionPredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, positionPredicate.x()).build("ali.property.value.x"))
-                .add(utils.getValueTooltip(utils, positionPredicate.y()).build("ali.property.value.y"))
-                .add(utils.getValueTooltip(utils, positionPredicate.z()).build("ali.property.value.z"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, positionPredicate.x()).build(Lang.Value.X));
+            b.add(utils.getValueTooltip(utils, positionPredicate.y()).build(Lang.Value.Y));
+            b.add(utils.getValueTooltip(utils, positionPredicate.z()).build(Lang.Value.Z));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -174,11 +195,11 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, BlockPredicate blockPredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, blockPredicate.blocks()).build(Lang.Branch.BLOCKS))
-                .add(utils.getValueTooltip(utils, blockPredicate.properties()).build(Lang.Branch.PROPERTIES))
-                .add(utils.getValueTooltip(utils, blockPredicate.nbt()).build(Lang.Value.NBT))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, blockPredicate.blocks()).build(Lang.Branch.BLOCKS));
+            b.add(utils.getValueTooltip(utils, blockPredicate.properties()).build(Lang.Branch.PROPERTIES));
+            b.add(utils.getValueTooltip(utils, blockPredicate.nbt()).build(Lang.Value.NBT));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -188,10 +209,10 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFluidPredicateTooltip(IServerUtils utils, FluidPredicate fluidPredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, fluidPredicate.fluids()).build(Lang.Branch.FLUIDS))
-                .add(utils.getValueTooltip(utils, fluidPredicate.properties()).build(Lang.Branch.PROPERTIES))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fluidPredicate.fluids()).build(Lang.Branch.FLUIDS));
+            b.add(utils.getValueTooltip(utils, fluidPredicate.properties()).build(Lang.Branch.PROPERTIES));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -201,49 +222,46 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getEntityFlagsPredicateTooltip(IServerUtils utils, EntityFlagsPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.isOnGround()).build(Lang.Value.IS_ON_GROUND))
-                .add(utils.getValueTooltip(utils, predicate.isOnFire()).build(Lang.Value.IS_ON_FIRE))
-                .add(utils.getValueTooltip(utils, predicate.isBaby()).build(Lang.Value.IS_BABY))
-                .add(utils.getValueTooltip(utils, predicate.isCrouching()).build(Lang.Value.IS_CROUCHING))
-                .add(utils.getValueTooltip(utils, predicate.isSprinting()).build(Lang.Value.IS_SPRINTING))
-                .add(utils.getValueTooltip(utils, predicate.isSwimming()).build(Lang.Value.IS_SWIMMING))
-                .add(utils.getValueTooltip(utils, predicate.isFlying()).build(Lang.Value.IS_FLYING))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.isOnGround()).build(Lang.Value.IS_ON_GROUND));
+            b.add(utils.getValueTooltip(utils, predicate.isOnFire()).build(Lang.Value.IS_ON_FIRE));
+            b.add(utils.getValueTooltip(utils, predicate.isBaby()).build(Lang.Value.IS_BABY));
+            b.add(utils.getValueTooltip(utils, predicate.isCrouching()).build(Lang.Value.IS_CROUCHING));
+            b.add(utils.getValueTooltip(utils, predicate.isSprinting()).build(Lang.Value.IS_SPRINTING));
+            b.add(utils.getValueTooltip(utils, predicate.isSwimming()).build(Lang.Value.IS_SWIMMING));
+            b.add(utils.getValueTooltip(utils, predicate.isFlying()).build(Lang.Value.IS_FLYING));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
     public static TooltipBuilder getEntityEquipmentPredicateTooltip(IServerUtils utils, EntityEquipmentPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.head()).build(Lang.Branch.HEAD))
-                .add(utils.getValueTooltip(utils, predicate.chest()).build(Lang.Branch.CHEST))
-                .add(utils.getValueTooltip(utils, predicate.legs()).build(Lang.Branch.LEGS))
-                .add(utils.getValueTooltip(utils, predicate.feet()).build(Lang.Branch.FEET))
-                .add(utils.getValueTooltip(utils, predicate.body()).build(Lang.Branch.BODY))
-                .add(utils.getValueTooltip(utils, predicate.mainhand()).build(Lang.Branch.MAINHAND))
-                .add(utils.getValueTooltip(utils, predicate.offhand()).build(Lang.Branch.OFFHAND))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.head()).build(Lang.Branch.HEAD));
+            b.add(utils.getValueTooltip(utils, predicate.chest()).build(Lang.Branch.CHEST));
+            b.add(utils.getValueTooltip(utils, predicate.legs()).build(Lang.Branch.LEGS));
+            b.add(utils.getValueTooltip(utils, predicate.feet()).build(Lang.Branch.FEET));
+            b.add(utils.getValueTooltip(utils, predicate.body()).build(Lang.Branch.BODY));
+            b.add(utils.getValueTooltip(utils, predicate.mainhand()).build(Lang.Branch.MAINHAND));
+            b.add(utils.getValueTooltip(utils, predicate.offhand()).build(Lang.Branch.OFFHAND));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
     public static TooltipBuilder getItemPredicateTooltip(IServerUtils utils, ItemPredicate itemPredicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, itemPredicate.items()).build(Lang.Branch.ITEMS))
-                .add(utils.getValueTooltip(utils, itemPredicate.count()).build(Lang.Value.COUNT))
-                .add(utils.getValueTooltip(utils, itemPredicate.components()).build(Lang.Branch.COMPONENTS))
-                .add(getMapTooltip(utils, itemPredicate.subPredicates(), GenericTooltipUtils::getItemSubPredicateEntryTooltip).build(Lang.Branch.ITEM_PREDICATES))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, itemPredicate.items()).build(Lang.Branch.ITEMS));
+            b.add(utils.getValueTooltip(utils, itemPredicate.count()).build(Lang.Value.COUNT));
+            b.add(utils.getValueTooltip(utils, itemPredicate.components()).build(Lang.Branch.COMPONENTS));
+            b.add(getMapTooltip(utils, itemPredicate.subPredicates(), GenericTooltipUtils::getItemSubPredicateEntryTooltip).build(Lang.Branch.ITEM_PREDICATES));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
     public static TooltipBuilder getEnchantmentPredicateTooltip(IServerUtils utils, EnchantmentPredicate enchantmentPredicate) {
-        return utils.getValueTooltip(utils, enchantmentPredicate.enchantments())
-                .add(utils.getValueTooltip(utils, enchantmentPredicate.level()).build(Lang.Value.LEVEL));
-    }
-
-    @NotNull
-    public static TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate entitySubPredicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, entitySubPredicate)));
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, enchantmentPredicate.enchantments()).build(Lang.Branch.ENCHANTMENTS));
+            b.add(utils.getValueTooltip(utils, enchantmentPredicate.level()).build(Lang.Value.LEVEL));
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -253,17 +271,17 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getCopyOperationTooltip(IServerUtils utils, CopyCustomDataFunction.CopyOperation copyOperation) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, copyOperation.sourcePath()).build(Lang.Value.SOURCE_PATH))
-                .add(utils.getValueTooltip(utils, copyOperation.targetPath()).build(Lang.Value.TARGET_PATH))
-                .add(utils.getValueTooltip(utils, copyOperation.op).build(Lang.Value.MERGE_STRATEGY))
-        ).key(Lang.Branch.OPERATION);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, copyOperation.sourcePath()).build(Lang.Value.SOURCE_PATH));
+            b.add(utils.getValueTooltip(utils, copyOperation.targetPath()).build(Lang.Value.TARGET_PATH));
+            b.add(utils.getValueTooltip(utils, copyOperation.op()).build(Lang.Value.MERGE_STRATEGY));
+        }).key(Lang.Branch.OPERATION);
     }
 
     @NotNull
     public static TooltipBuilder getEffectEntryTooltip(IServerUtils utils, SetStewEffectFunction.EffectEntry entry) {
         return utils.getValueTooltip(utils, entry.effect())
-                .add(utils.getValueTooltip(utils,entry.duration()).build("ali.property.value.duration"));
+                .add(utils.getValueTooltip(utils,entry.duration()).build(Lang.Value.DURATION));
     }
 
     @NotNull
@@ -313,29 +331,57 @@ public class ValueTooltipUtils {
         return TooltipBuilder.empty();
     }
 
+
     @NotNull
-    public static TooltipBuilder getExactPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.ExactPropertyMatcher matcher) {
-        return TooltipBuilder.keyValue(matcher.name, matcher.value);
+    public static TooltipBuilder getPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.PropertyMatcher propertyMatcher) {
+        String name = propertyMatcher.name();
+
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.ExactMatcher(String value)) {
+            return TooltipBuilder.keyValue(name, value);
+        }
+        if (propertyMatcher.valueMatcher() instanceof StatePropertiesPredicate.RangedMatcher(Optional<String> minValue, Optional<String> maxValue)) {
+            if (minValue.isPresent()) {
+                if (maxValue.isPresent()) {
+                    return TooltipBuilder.value(name, minValue.get(), maxValue.get()).key(Lang.Value.RANGED_BOTH);
+                } else {
+                    return TooltipBuilder.value(name, minValue.get()).key(Lang.Value.RANGED_GTE);
+                }
+            } else {
+                if (maxValue.isPresent()) {
+                    return TooltipBuilder.value(name, maxValue.get()).key(Lang.Value.RANGED_LTE);
+                } else {
+                    return TooltipBuilder.value(name).key(Lang.Value.RANGED_ANY);
+                }
+            }
+        }
+
+        return TooltipBuilder.empty();
     }
 
     @NotNull
-    public static TooltipBuilder getRangedPropertyMatcherTooltip(IServerUtils ignoredUtils, StatePropertiesPredicate.RangedPropertyMatcher matcher) {
-        String min = matcher.minValue;
-        String max = matcher.maxValue;
+    public static TooltipBuilder getStatMatcherTooltip(IServerUtils utils, PlayerPredicate.StatMatcher<?> stat) {
+        String key = TooltipBuilder.translate(((TranslatableContents) stat.type().getDisplayName().getContents()).getKey());
+        Holder<?> value = stat.value();
 
-        if (min != null) {
-            if (max != null) {
-                return TooltipBuilder.value(matcher.name, min, max).key(Lang.Value.RANGED_BOTH);
-            } else {
-                return TooltipBuilder.value(matcher.name, min).key(Lang.Value.RANGED_GTE);
+        return TooltipBuilder.array((b) -> {
+            if (value.value() instanceof Item item) {
+                b.add(utils.getValueTooltip(utils, item)
+                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .build(Lang.Value.ITEM));
+            } else if (value.value() instanceof Block block) {
+                b.add(utils.getValueTooltip(utils, block)
+                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .build(Lang.Value.BLOCK));
+            } else if (value.value() instanceof EntityType<?> entityType) {
+                b.add(utils.getValueTooltip(utils, entityType)
+                        .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
+                        .build(Lang.Value.ENTITY_TYPE));
+            } else if (value.value() instanceof ResourceLocation resourceLocation) {
+                b.add(utils.getValueTooltip(utils, resourceLocation)
+                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getStatTranslationKey(resourceLocation)), GenericTooltipUtils.toString(stat.range())).build())
+                        .build(Lang.Value.ID));
             }
-        } else {
-            if (max != null) {
-                return TooltipBuilder.value(matcher.name, max).key(Lang.Value.RANGED_LTE);
-            } else {
-                return TooltipBuilder.value(matcher.name).key(Lang.Value.RANGED_ANY);
-            }
-        }
+        });
     }
 
     @NotNull
@@ -343,10 +389,10 @@ public class ValueTooltipUtils {
         TooltipBuilder tooltip = utils.getValueTooltip(utils, operation.mode());
 
         if (operation instanceof ListOperation.Insert(int offset)) {
-            tooltip.add(utils.getValueTooltip(utils, offset).build("ali.property.value.offset"));
+            tooltip.add(utils.getValueTooltip(utils, offset).build(Lang.Value.OFFSET));
         } else if (operation instanceof ListOperation.ReplaceSection(int offset, Optional<Integer> size)) {
-            tooltip.add(utils.getValueTooltip(utils, offset).build("ali.property.value.offset"));
-            tooltip.add(utils.getValueTooltip(utils, size).build("ali.property.value.size"));
+            tooltip.add(utils.getValueTooltip(utils, offset).build(Lang.Value.OFFSET));
+            tooltip.add(utils.getValueTooltip(utils, size).build(Lang.Value.SIZE));
         }
 
         return tooltip;
@@ -354,19 +400,20 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static <T> TooltipBuilder getFilterableTooltip(IServerUtils utils, Filterable<T> data) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, data.raw()).build("ali.property.value.raw"))
-                .add(utils.getValueTooltip(utils, data.filtered()).build("ali.property.value.filtered"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, data.raw()).build(Lang.Value.RAW));
+            b.add(utils.getValueTooltip(utils, data.filtered()).build(Lang.Value.FILTERED));
+        });
     }
 
     @NotNull
     public static TooltipBuilder getFireworkPredicateTooltip(IServerUtils utils, ItemFireworkExplosionPredicate.FireworkPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.shape()).build("ali.property.value.shape"))
-                .add(utils.getValueTooltip(utils, predicate.trail()).build("ali.property.value.trail"))
-                .add(utils.getValueTooltip(utils, predicate.twinkle()).build("ali.property.value.twinkle"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.shape()).build(Lang.Value.SHAPE));
+            b.add(utils.getValueTooltip(utils, predicate.trail()).build(Lang.Value.TRAIL));
+            b.add(utils.getValueTooltip(utils, predicate.twinkle()).build(Lang.Value.TWINKLE));
+            b.key(Lang.Branch.PREDICATE);
+        });
     }
 
     @NotNull
@@ -396,23 +443,24 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getPagePredicateTooltip(IServerUtils ignoredUtils, ItemWritableBookPredicate.PagePredicate predicate) {
-        return TooltipBuilder.value(predicate.contents());
+        return TooltipBuilder.value(predicate.contents()).key(Lang.Value.PAGE);
     }
 
     @NotNull
     public static TooltipBuilder getPagePredicateTooltip(IServerUtils utils, ItemWrittenBookPredicate.PagePredicate predicate) {
-        return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), predicate.contents());
+        return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), predicate.contents()).key(Lang.Value.PAGE);
     }
 
     @NotNull
     public static TooltipBuilder getEntryPredicateTooltip(IServerUtils utils, ItemAttributeModifiersPredicate.EntryPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.attribute()).build("ali.property.branch.attributes"))
-                .add(utils.getValueTooltip(utils, predicate.id()).build("ali.property.value.id"))
-                .add(utils.getValueTooltip(utils, predicate.amount()).build("ali.property.value.amount"))
-                .add(utils.getValueTooltip(utils, predicate.operation()).build("ali.property.value.operation"))
-                .add(utils.getValueTooltip(utils, predicate.slot()).build("ali.property.value.slot"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.attribute()).build(Lang.Branch.ATTRIBUTES));
+            b.add(utils.getValueTooltip(utils, predicate.id()).build(Lang.Value.ID));
+            b.add(utils.getValueTooltip(utils, predicate.amount()).build(Lang.Value.AMOUNT));
+            b.add(utils.getValueTooltip(utils, predicate.operation()).build(Lang.Value.OPERATION));
+            b.add(utils.getValueTooltip(utils, predicate.slot()).build(Lang.Value.SLOT));
+            b.key(Lang.Branch.MODIFIER);
+        });
     }
 
     @NotNull
@@ -422,73 +470,74 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFireworkExplosionTooltip(IServerUtils utils, FireworkExplosion data) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, data.shape()).build("ali.property.value.shape"))
-                .add(utils.getValueTooltip(utils, data.colors()).build("ali.property.value.colors"))
-                .add(utils.getValueTooltip(utils, data.fadeColors()).build("ali.property.value.fade_colors"))
-                .add(utils.getValueTooltip(utils, data.hasTrail()).build("ali.property.value.has_trail"))
-                .add(utils.getValueTooltip(utils, data.hasTwinkle()).build("ali.property.value.has_twinkle"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, data.shape()).build(Lang.Value.SHAPE));
+            b.add(utils.getValueTooltip(utils, data.colors()).build(Lang.Value.COLORS));
+            b.add(utils.getValueTooltip(utils, data.fadeColors()).build(Lang.Value.FADE_COLORS));
+            b.add(utils.getValueTooltip(utils, data.hasTrail()).build(Lang.Value.HAS_TRAIL));
+            b.add(utils.getValueTooltip(utils, data.hasTwinkle()).build(Lang.Value.HAS_TWINKLE));
+            b.key(Lang.Branch.EXPLOSION);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getItemAttributeModifiersEntryTooltip(IServerUtils utils, ItemAttributeModifiers.Entry entry) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, entry.attribute()).build("ali.property.value.attribute"))
-                .add(utils.getValueTooltip(utils, entry.modifier()).build("ali.property.branch.modifier"))
-                .add(utils.getValueTooltip(utils, entry.slot()).build("ali.property.value.slot"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, entry.attribute()).build(Lang.Value.ATTRIBUTE));
+            b.add(utils.getValueTooltip(utils, entry.modifier()).build(Lang.Branch.MODIFIER));
+            b.add(utils.getValueTooltip(utils, entry.slot()).build(Lang.Value.SLOT));
+            b.key(Lang.Branch.MODIFIER);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getAttributeModifierTooltip(IServerUtils utils, AttributeModifier modifier) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, modifier.id()).build("ali.property.value.id"))
-                .add(utils.getValueTooltip(utils, modifier.amount()).build("ali.property.value.amount"))
-                .add(utils.getValueTooltip(utils, modifier.operation()).build("ali.property.value.operation"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, modifier.id()).build(Lang.Value.ID));
+            b.add(utils.getValueTooltip(utils, modifier.amount()).build(Lang.Value.AMOUNT));
+            b.add(utils.getValueTooltip(utils, modifier.operation()).build(Lang.Value.OPERATION));
+        });
     }
 
     @NotNull
     public static TooltipBuilder getPossibleEffectTooltip(IServerUtils utils, FoodProperties.PossibleEffect effect) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, effect.effect()).build("ali.property.value.effect"))
-                .add(utils.getValueTooltip(utils, effect.probability()).build("ali.property.value.probability"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, effect.effect()).build(Lang.Branch.EFFECT));
+            b.add(utils.getValueTooltip(utils, effect.probability()).build(Lang.Value.PROBABILITY));
+        }).key(Lang.Branch.POSSIBLE_EFFECT);
     }
 
     @NotNull
     public static TooltipBuilder getMobEffectInstanceTooltip(IServerUtils utils, MobEffectInstance effect) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, effect.getEffect());
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, effect.getEffect()).build(Lang.Value.EFFECT));
+            b.add(utils.getValueTooltip(utils, effect.getDuration()).build(Lang.Value.DURATION));
+            b.add(utils.getValueTooltip(utils, effect.getAmplifier()).build(Lang.Value.AMPLIFIER));
+            b.add(utils.getValueTooltip(utils, effect.isAmbient()).build(Lang.Value.AMBIENT));
+            b.add(utils.getValueTooltip(utils, effect.isVisible()).build(Lang.Value.IS_VISIBLE));
+            b.add(utils.getValueTooltip(utils, effect.showIcon()).build(Lang.Value.SHOW_ICON));
 
-        tooltip.add(utils.getValueTooltip(utils, effect.getDuration()).build("ali.property.value.duration"));
-        tooltip.add(utils.getValueTooltip(utils, effect.getAmplifier()).build("ali.property.value.amplifier"));
-        tooltip.add(utils.getValueTooltip(utils, effect.isAmbient()).build("ali.property.value.ambient"));
-        tooltip.add(utils.getValueTooltip(utils, effect.isVisible()).build("ali.property.value.is_visible"));
-        tooltip.add(utils.getValueTooltip(utils, effect.showIcon()).build("ali.property.value.show_icon"));
-
-        if (effect.hiddenEffect != null) {
-            tooltip.add(utils.getValueTooltip(utils, effect.hiddenEffect).build("ali.property.value.hidden_effect"));
-        }
-
-        return tooltip;
+            if (effect.hiddenEffect != null) {
+                b.add(utils.getValueTooltip(utils, effect.hiddenEffect).build(Lang.Branch.HIDDEN_EFFECT));
+            }
+        }).key(Lang.Branch.EFFECT);
     }
 
     @NotNull
     public static TooltipBuilder getRuleTooltip(IServerUtils utils, Tool.Rule rule) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, rule.blocks()).build("ali.property.branch.blocks"))
-                .add(utils.getValueTooltip(utils, rule.correctForDrops()).build("ali.property.value.correct_for_drops"))
-                .add(utils.getValueTooltip(utils, rule.speed()).build("ali.property.value.speed"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, rule.blocks()).build(Lang.Branch.BLOCKS));
+            b.add(utils.getValueTooltip(utils, rule.correctForDrops()).build(Lang.Value.CORRECT_FOR_DROPS));
+            b.add(utils.getValueTooltip(utils, rule.speed()).build(Lang.Value.SPEED));
+        }).key(Lang.Branch.RULE);
     }
 
     @NotNull
     public static TooltipBuilder getMapDecorationEntryTooltip(IServerUtils utils, MapDecorations.Entry entry) {
         return utils.getValueTooltip(utils, entry.type())
-                .add(utils.getValueTooltip(utils, entry.x()).build("ali.property.value.x"))
-                .add(utils.getValueTooltip(utils, entry.z()).build("ali.property.value.z"))
-                .add(utils.getValueTooltip(utils, entry.rotation()).build("ali.property.value.rotation"));
+                .add(utils.getValueTooltip(utils, entry.x()).build(Lang.Value.X))
+                .add(utils.getValueTooltip(utils, entry.z()).build(Lang.Value.Z))
+                .add(utils.getValueTooltip(utils, entry.rotation()).build(Lang.Value.ROTATION));
     }
 
     @NotNull
@@ -499,7 +548,7 @@ public class ValueTooltipUtils {
                     TooltipBuilder t = utils.getValueTooltip(utils, action.type());
 
                     t.add(utils.getDataComponentTypeTooltip(utils, action.type(), action.value()));
-                    b.add(t.build("aci.util.null"));
+                    b.add(t);
                 });
             });
         }
@@ -510,42 +559,43 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getSuspiciousStewEffectEntryTooltip(IServerUtils utils, SuspiciousStewEffects.Entry entry) {
         return utils.getValueTooltip(utils, entry.effect())
-                .add(utils.getValueTooltip(utils, entry.duration()).build("ali.property.value.duration"));
+                .add(utils.getValueTooltip(utils, entry.duration()).build(Lang.Value.DURATION));
     }
 
     @NotNull
     public static TooltipBuilder getGlobalPosTooltip(IServerUtils utils, GlobalPos globalPos) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, globalPos.dimension()).build("ali.property.value.dimension"))
-                .add(utils.getValueTooltip(utils, globalPos.pos()).build("ali.property.multi.position"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, globalPos.dimension()).build(Lang.Value.DIMENSION));
+            b.add(utils.getValueTooltip(utils, globalPos.pos()).build("ali.property.multi.position"));
+        });
     }
 
     @NotNull
     public static TooltipBuilder getBeehiveBlockEntityOccupantTooltip(IServerUtils utils, BeehiveBlockEntity.Occupant occupant) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, occupant.entityData().copyTag().getAsString()).build("ali.property.value.entity_data"))
-                .add(utils.getValueTooltip(utils, occupant.ticksInHive()).build("ali.property.value.ticks_in_hive"))
-                .add(utils.getValueTooltip(utils, occupant.minTicksInHive()).build("ali.property.value.min_ticks_in_hive"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, occupant.entityData().copyTag().getAsString()).build(Lang.Value.ENTITY_DATA));
+            b.add(utils.getValueTooltip(utils, occupant.ticksInHive()).build(Lang.Value.TICKS_IN_HIVE));
+            b.add(utils.getValueTooltip(utils, occupant.minTicksInHive()).build(Lang.Value.MIN_TICKS_IN_HIVE));
+            b.key(Lang.Branch.OCCUPANT);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getAuthPropertyTooltip(IServerUtils utils, Property property) {
         return TooltipBuilder.array((b) -> {
-                b.add(utils.getValueTooltip(utils, property.name()).build("ali.property.value.name"));
-                b.add(utils.getValueTooltip(utils, property.value()).build("ali.property.value.value"));
+            b.add(utils.getValueTooltip(utils, property.name()).build(Lang.Value.NAME));
+            b.add(utils.getValueTooltip(utils, property.value()).build(Lang.Value.VALUE));
 
-                if (property.signature() != null) {
-                    b.add(utils.getValueTooltip(utils, property.signature()).build("ali.property.value.signature"));
-                }
-        });
+            if (property.signature() != null) {
+                b.add(utils.getValueTooltip(utils, property.signature()).build(Lang.Value.SIGNATURE));
+            }
+        }).key(Lang.Branch.PROPERTY);
     }
 
     @NotNull
     public static <A, B extends Predicate<A>> TooltipBuilder getCollectionCountsPredicateEntryTooltip(IServerUtils utils, CollectionCountsPredicate.Entry<A, B> entry) {
         return utils.getValueTooltip(utils, entry.test())
-                .add(utils.getValueTooltip(utils, entry.count()).build("ali.property.value.count"));
+                .add(utils.getValueTooltip(utils, entry.count()).build(Lang.Value.COUNT));
     }
 
     @NotNull
@@ -556,7 +606,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getBannerPatternLayerTooltip(IServerUtils utils, BannerPatternLayers.Layer layer) {
         return utils.getValueTooltip(utils, layer.pattern())
-                .add(utils.getValueTooltip(utils, layer.color()).build("ali.property.value.color"));
+                .add(utils.getValueTooltip(utils, layer.color()).build(Lang.Value.COLOR));
     }
 
     @NotNull
@@ -569,40 +619,40 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             switch (levelBasedValue) {
                 case LevelBasedValue.Constant(float value) ->
-                        b.add(utils.getValueTooltip(utils, value).build("ali.property.value.constant"));
+                        b.add(utils.getValueTooltip(utils, value).build(Lang.Value.CONSTANT));
                 case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
                     b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, value).build("ali.property.branch.value"))
-                            .add(utils.getValueTooltip(utils, min).build("ali.property.value.min"))
-                            .add(utils.getValueTooltip(utils, max).build("ali.property.value.max"))
-                            .build("ali.property.branch.clamped")
+                            .add(utils.getValueTooltip(utils, value).build(Lang.Branch.VALUE))
+                            .add(utils.getValueTooltip(utils, min).build(Lang.Value.MIN))
+                            .add(utils.getValueTooltip(utils, max).build(Lang.Value.MAX))
+                            .build(Lang.Branch.CLAMPED)
                     ));
                 }
                 case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
                     b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, numerator).build("ali.property.branch.numerator"))
-                            .add(utils.getValueTooltip(utils, denominator).build("ali.property.branch.denominator"))
-                            .build("ali.property.branch.fraction")
+                            .add(utils.getValueTooltip(utils, numerator).build(Lang.Branch.NUMERATOR))
+                            .add(utils.getValueTooltip(utils, denominator).build(Lang.Branch.DENOMINATOR))
+                            .build(Lang.Branch.FRACTION)
                     ));
                 }
                 case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
                     b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, base).build("ali.property.value.base"))
-                            .add(utils.getValueTooltip(utils, perLevelAboveFirst).build("ali.property.value.per_level"))
-                            .build("ali.property.branch.linear")
+                            .add(utils.getValueTooltip(utils, base).build(Lang.Value.BASE))
+                            .add(utils.getValueTooltip(utils, perLevelAboveFirst).build(Lang.Value.PER_LEVEL))
+                            .build(Lang.Branch.LINEAR)
                     ));
                 }
                 case LevelBasedValue.LevelsSquared(float added) -> {
                     b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, added).build("ali.property.value.added"))
-                            .build("ali.property.branch.level_squared")
+                            .add(utils.getValueTooltip(utils, added).build(Lang.Value.ADDED))
+                            .build(Lang.Branch.LEVEL_SQUARED)
                     ));
                 }
                 case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
                     b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, values.toString()).build("ali.property.value.values"))
-                            .add(utils.getValueTooltip(utils, fallback).build("ali.property.branch.fallback"))
-                            .build("ali.property.branch.lookup")
+                            .add(utils.getValueTooltip(utils, values.toString()).build(Lang.Value.VALUES))
+                            .add(utils.getValueTooltip(utils, fallback).build(Lang.Branch.FALLBACK))
+                            .build(Lang.Branch.LOOKUP)
                     ));
                 }
                 default -> {}
@@ -613,11 +663,11 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getLocationWrapperTooltip(IServerUtils utils, EntityPredicate.LocationWrapper locationWrapper) {
         if (locationWrapper.located().isPresent() || locationWrapper.affectsMovement().isPresent() || locationWrapper.steppingOn().isPresent()) {
-            return TooltipBuilder.array((b) -> b
-                    .add(utils.getValueTooltip(utils, locationWrapper.located()).build("ali.property.branch.located"))
-                    .add(utils.getValueTooltip(utils, locationWrapper.steppingOn()).build("ali.property.branch.stepping_on_location"))
-                    .add(utils.getValueTooltip(utils, locationWrapper.affectsMovement()).build("ali.property.branch.affects_movement"))
-            );
+            return TooltipBuilder.array((b) -> {
+                b.add(utils.getValueTooltip(utils, locationWrapper.located()).build(Lang.Branch.LOCATED));
+                b.add(utils.getValueTooltip(utils, locationWrapper.steppingOn()).build(Lang.Branch.STEPPING_ON_LOCATION));
+                b.add(utils.getValueTooltip(utils, locationWrapper.affectsMovement()).build(Lang.Branch.AFFECTS_MOVEMENT));
+            });
         }
 
         return TooltipBuilder.empty();
@@ -625,19 +675,41 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMovementPredicateTooltip(IServerUtils utils, MovementPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.x()).build("ali.property.value.x"))
-                .add(utils.getValueTooltip(utils, predicate.y()).build("ali.property.value.y"))
-                .add(utils.getValueTooltip(utils, predicate.z()).build("ali.property.value.z"))
-                .add(utils.getValueTooltip(utils, predicate.speed()).build("ali.property.value.speed"))
-                .add(utils.getValueTooltip(utils, predicate.horizontalSpeed()).build("ali.property.value.horizontal_speed"))
-                .add(utils.getValueTooltip(utils, predicate.verticalSpeed()).build("ali.property.value.vertical_speed"))
-                .add(utils.getValueTooltip(utils, predicate.fallDistance()).build("ali.property.value.fall_distance"))
-        );
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.x()).build(Lang.Value.X));
+            b.add(utils.getValueTooltip(utils, predicate.y()).build(Lang.Value.Y));
+            b.add(utils.getValueTooltip(utils, predicate.z()).build(Lang.Value.Z));
+            b.add(utils.getValueTooltip(utils, predicate.speed()).build(Lang.Value.SPEED));
+            b.add(utils.getValueTooltip(utils, predicate.horizontalSpeed()).build(Lang.Value.HORIZONTAL_SPEED));
+            b.add(utils.getValueTooltip(utils, predicate.verticalSpeed()).build(Lang.Value.VERTICAL_SPEED));
+            b.add(utils.getValueTooltip(utils, predicate.fallDistance()).build(Lang.Value.FALL_DISTANCE));
+        });
     }
 
     @NotNull
     public static TooltipBuilder getSlotPredicateTooltip(IServerUtils utils, SlotsPredicate predicate) {
         return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
+    }
+
+    public static TooltipBuilder getHolderSetTooltip(IServerUtils utils, HolderSet<?> holderSet) {
+        //noinspection unchecked
+        Either<TagKey<?>, List<Holder<?>>> either = (Either<TagKey<?>, List<Holder<?>>>)(Object) holderSet.unwrap();
+        Optional<TagKey<?>> left = either.left();
+        Optional<List<Holder<?>>> right = either.right();
+
+        if (left.isEmpty() && right.orElse(List.of()).isEmpty()) {
+            return TooltipBuilder.empty();
+        }
+
+        return left
+                .map(tagKey -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, tagKey).key(Lang.Value.TAG))))
+                .orElseGet(() -> TooltipBuilder.branch((b) -> {
+                    List<Holder<?>> list = right.get();
+
+                    if (!list.isEmpty()) {
+                        list.forEach((holder) -> b.add(utils.getValueTooltip(utils, holder)));
+                    }
+                }));
+
     }
 }

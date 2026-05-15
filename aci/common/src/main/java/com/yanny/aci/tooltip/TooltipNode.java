@@ -246,7 +246,7 @@ public class TooltipNode {
 
         if (is(FLAG_COMPONENT)) {
             assert component != null;
-            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, component != null ? component : Component.empty());
+            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(buf, component);
         }
 
         if (is(FLAG_HAS_VALUE)) {

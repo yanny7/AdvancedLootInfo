@@ -29,7 +29,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getCopyCustomDataTooltip(IServerUtils utils, CopyCustomDataFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.source.getType()).build(Lang.Value.NBT_PROVIDER));
+            b.add(utils.getValueTooltip(utils, fun.source.getType()).build(Lang.Value.SOURCE));
             b.add(utils.getValueTooltip(utils, fun.operations).build(Lang.Branch.COPY_OPERATIONS));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }).key(Lang.Functions.COPY_CUSTOM_DATA);
@@ -125,8 +125,8 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getSequenceTooltip(IServerUtils utils, SequenceFunction fun) {
-        return TooltipBuilder.array((b) -> b.add(GenericTooltipUtils.getFunctionListTooltip(utils, fun.functions)))
+    public static TooltipBuilder getSequenceTooltip(IServerUtils utils, SequenceFunction fun) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, fun.functions)))
                 .key(Lang.Functions.SEQUENCE);
     }
 
@@ -223,11 +223,11 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getSetNbtTooltip(IServerUtils utils, SetNbtFunction fun) {
+    public static TooltipBuilder getSetCustomDataTooltip(IServerUtils utils, SetCustomDataFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.tag.getAsString()).build(Lang.Value.TAG));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }).key(Lang.Functions.SET_NBT);
+        }).key(Lang.Functions.SET_CUSTOM_DATA);
     }
 
     @NotNull
@@ -250,129 +250,118 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getSetItemTooltip(IServerUtils utils, SetItemFunction fun) {
+    public static TooltipBuilder getSetItemTooltip(IServerUtils utils, SetItemFunction fun) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.item).build(Lang.Value.ITEM));
-            b.add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }).showEmpty().key(Lang.Functions.SET_ITEM);
     }
 
     @NotNull
-    public static TooltipNode getSetComponentsTooltip(IServerUtils utils, SetComponentsFunction fun) {
+    public static TooltipBuilder getSetComponentsTooltip(IServerUtils utils, SetComponentsFunction fun) {
         return utils.getValueTooltip(utils, fun.components)
-                .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
+                .add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
                 .key(Lang.Functions.SET_COMPONENTS);
     }
 
     @NotNull
-    public static TooltipNode getModifyContentsTooltip(IServerUtils utils, ModifyContainerContents fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.component).build("ali.property.value.container"))
-                        .add(TooltipBuilder.branch((c) -> c.add(utils.getFunctionTooltip(utils, fun.modifier))).build("ali.property.branch.modifier"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.modify_contents");
+    public static TooltipBuilder getModifyContentsTooltip(IServerUtils utils, ModifyContainerContents fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.component).build(Lang.Value.CONTAINER));
+            b.add(TooltipBuilder.branch((c) -> c.add(utils.getValueTooltip(utils, fun.modifier))).build(Lang.Branch.MODIFIER));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.MODIFY_CONTENTS);
     }
 
     @NotNull
-    public static TooltipNode getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.filter).build("ali.property.branch.filter"))
-                        .add(TooltipBuilder.branch((c) -> c.add(utils.getFunctionTooltip(utils, fun.modifier))).build("ali.property.branch.modifier"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.filtered");
+    public static TooltipBuilder getFilteredTooltip(IServerUtils utils, FilteredFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.filter).build(Lang.Branch.FILTER));
+            b.add(TooltipBuilder.branch((c) -> c.add(utils.getValueTooltip(utils, fun.modifier))).build(Lang.Branch.MODIFIER));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.FILTERED);
     }
 
     @NotNull
-    public static TooltipNode getCopyComponentsTooltip(IServerUtils utils, CopyComponentsFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.source).build("ali.property.value.source"))
-                        .add(utils.getValueTooltip(utils, fun.include).build("ali.property.branch.include"))
-                        .add(utils.getValueTooltip(utils, fun.exclude).build("ali.property.branch.exclude"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.copy_components");
+    public static TooltipBuilder getCopyComponentsTooltip(IServerUtils utils, CopyComponentsFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.source).build(Lang.Value.SOURCE));
+            b.add(utils.getValueTooltip(utils, fun.include).build(Lang.Branch.INCLUDE));
+            b.add(utils.getValueTooltip(utils, fun.exclude).build(Lang.Branch.EXCLUDE));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.COPY_COMPONENTS);
     }
 
     @NotNull
-    public static TooltipNode getSetFireworksTooltip(IServerUtils utils, SetFireworksFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(getStandaloneTooltip(utils, "ali.property.branch.explosion", fun.explosions).build("ali.property.branch.explosions"))
-                        .add(utils.getValueTooltip(utils, fun.flightDuration).build("ali.property.value.flight_duration"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_fireworks");
+    public static TooltipBuilder getSetFireworksTooltip(IServerUtils utils, SetFireworksFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(getStandaloneTooltip(utils, fun.explosions).build(Lang.Branch.EXPLOSIONS));
+            b.add(utils.getValueTooltip(utils, fun.flightDuration).build(Lang.Value.FLIGHT_DURATION));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_FIREWORKS);
     }
 
     @NotNull
-    public static TooltipNode getSetFireworkExplosionTooltip(IServerUtils utils, SetFireworkExplosionFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.shape).build("ali.property.value.shape"))
-                        .add(utils.getValueTooltip(utils, fun.colors).build("ali.property.value.colors"))
-                        .add(utils.getValueTooltip(utils, fun.fadeColors).build("ali.property.value.fade_colors"))
-                        .add(utils.getValueTooltip(utils, fun.trail).build("ali.property.value.trail"))
-                        .add(utils.getValueTooltip(utils, fun.twinkle).build("ali.property.value.twinkle"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_firework_explosion");
+    public static TooltipBuilder getSetFireworkExplosionTooltip(IServerUtils utils, SetFireworkExplosionFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.shape).build(Lang.Value.SHAPE));
+            b.add(utils.getValueTooltip(utils, fun.colors).build(Lang.Value.COLORS));
+            b.add(utils.getValueTooltip(utils, fun.fadeColors).build(Lang.Value.FADE_COLORS));
+            b.add(utils.getValueTooltip(utils, fun.trail).build(Lang.Value.TRAIL));
+            b.add(utils.getValueTooltip(utils, fun.twinkle).build(Lang.Value.TWINKLE));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_FIREWORK_EXPLOSION);
     }
 
     @NotNull
-    public static TooltipNode getSetBookCoverTooltip(IServerUtils utils, SetBookCoverFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.author).build("ali.property.value.author"))
-                        .add(utils.getValueTooltip(utils, fun.title).build("ali.property.branch.title"))
-                        .add(utils.getValueTooltip(utils, fun.generation).build("ali.property.value.generation"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_book_cover");
+    public static TooltipBuilder getSetBookCoverTooltip(IServerUtils utils, SetBookCoverFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.author).build(Lang.Value.AUTHOR));
+            b.add(utils.getValueTooltip(utils, fun.title).build(Lang.Branch.TITLE));
+            b.add(utils.getValueTooltip(utils, fun.generation).build(Lang.Value.GENERATION));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_BOOK_COVER);
     }
 
     @NotNull
-    public static TooltipNode getSetWrittenBookPagesTooltip(IServerUtils utils, SetWrittenBookPagesFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(getFilterableTooltip(utils, "ali.property.branch.page", fun.pages).build("ali.property.branch.pages"))
-                        .add(utils.getValueTooltip(utils, fun.pageOperation).build("ali.property.value.list_operation"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_written_book_pages");
+    public static TooltipBuilder getSetWrittenBookPagesTooltip(IServerUtils utils, SetWrittenBookPagesFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(getFilterableTooltip(utils, Lang.Branch.PAGE, fun.pages).build(Lang.Branch.PAGES));
+            b.add(utils.getValueTooltip(utils, fun.pageOperation).build(Lang.Value.LIST_OPERATION));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_WRITTEN_BOOK_PAGES);
     }
 
     @NotNull
-    public static TooltipNode getSetWritableBookPagesTooltip(IServerUtils utils, SetWritableBookPagesFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(getFilterableTooltip(utils, "ali.property.branch.page", fun.pages).build("ali.property.branch.pages"))
-                        .add(utils.getValueTooltip(utils, fun.pageOperation).build("ali.property.value.list_operation"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_writable_book_pages");
+    public static TooltipBuilder getSetWritableBookPagesTooltip(IServerUtils utils, SetWritableBookPagesFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(getFilterableTooltip(utils, Lang.Branch.PAGE, fun.pages).build(Lang.Branch.PAGES));
+            b.add(utils.getValueTooltip(utils, fun.pageOperation).build(Lang.Value.LIST_OPERATION));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_WRITABLE_BOOK_PAGES);
     }
 
     @NotNull
-    public static TooltipNode getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(getMapTooltip(utils, fun.values, GenericTooltipUtils::getToggleEntryTooltip).build("ali.property.branch.components"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.toggle_tooltips");
+    public static TooltipBuilder getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(getMapTooltip(utils, fun.values, GenericTooltipUtils::getToggleEntryTooltip).build(Lang.Branch.COMPONENTS));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.TOGGLE_TOOLTIPS);
     }
 
     @NotNull
-    public static TooltipNode getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.amplifierGenerator).build("ali.property.value.amplifier"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_ominous_bottle_amplifier");
+    public static TooltipBuilder getSetOminousBottleAmplifierTooltip(IServerUtils utils, SetOminousBottleAmplifierFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.amplifierGenerator).build(Lang.Value.AMPLIFIER));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_OMINOUS_BOTTLE_AMPLIFIER);
     }
 
     @NotNull
-    public static TooltipNode getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, fun.valueProvider).build("ali.property.value.value"))
-                        .add(getSubConditionsTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS))
-                )
-                .build("ali.type.function.set_custom_model_data");
+    public static TooltipBuilder getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, fun.valueProvider).build(Lang.Value.VALUE));
+            b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
+        }).key(Lang.Functions.SET_CUSTOM_MODEL_DATA);
     }
 }

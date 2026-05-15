@@ -86,8 +86,7 @@ public class ConditionTooltipTest {
                 "    -> minecraft:bypasses_armor: true",
                 "    -> minecraft:is_explosion: false",
                 "  -> Direct Entity:",
-                "    -> Entity Types:",
-                "      -> minecraft:warden",
+                "    -> Entity Type: minecraft:warden",
                 "  -> Source Entity:",
                 "    -> Team: Blue",
                 "  -> Is Direct: true"
@@ -96,11 +95,11 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEnchantmentActiveCheck() {
-        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentActiveCheck().build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentActiveCheck().build()).build(), List.of(
                 "Enchantment Active Check:",
                 "  -> Active: true"
         ));
-        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentInactiveCheck().build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentInactiveCheck().build()).build(), List.of(
                 "Enchantment Active Check:",
                 "  -> Active: false"
         ));
@@ -113,7 +112,7 @@ public class ConditionTooltipTest {
                 EntityPredicate.Builder.entity()
                         .team("blue")
                         .equipment(EntityEquipmentPredicate.Builder.equipment()
-                                .mainhand(ItemPredicate.Builder.item().of(Items.TRIDENT).build())
+                                .mainhand(ItemPredicate.Builder.item().of(Items.TRIDENT))
                                 .build())
         ).build()).build(), List.of(
             "Entity Properties:",
@@ -195,12 +194,6 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE)).build()).build(), List.of(
                 "Match Tool:",
                 "  -> Item: minecraft:andesite"
-        ));
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
-                ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.MOB_LOOTING, MinMaxBounds.Ints.ANY))
-        ).build()).build(), List.of(
-                "Match Tool:",
-                "  -> Enchantment: minecraft:looting"
         ));
     }
 

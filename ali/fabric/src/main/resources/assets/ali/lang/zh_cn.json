@@ -1,7 +1,7 @@
 {
   "aci.util.auto_detected": "自动检测：%s",
-  "aci.util.removed": "已移除",
   "aci.util.missing": "未实现：%s",
+  "aci.util.removed": "已移除",
   "ali.description.chance": "概率：%s%s",
   "ali.description.chance_bonus": "%s（%s %s）",
   "ali.description.count": "数量：%s",

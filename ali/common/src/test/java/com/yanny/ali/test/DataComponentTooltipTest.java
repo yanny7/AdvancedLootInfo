@@ -64,27 +64,27 @@ public class DataComponentTooltipTest {
 
         tag.putInt("test", 5);
 
-        assertTooltip(DataComponentTooltipUtils.getCustomDataTooltip(UTILS, CustomData.of(tag)), List.of("Tag: {test:5}"));
+        assertTooltip(DataComponentTooltipUtils.getCustomDataTooltip(UTILS, CustomData.of(tag)).build(), List.of("Tag: {test:5}"));
     }
 
     @Test
     public void testIntTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getIntTooltip(UTILS, 13), List.of("Value: 13"));
+        assertTooltip(DataComponentTooltipUtils.getIntTooltip(UTILS, 13).build(), List.of("Value: 13"));
     }
 
     @Test
     public void testUnbreakableTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getUnbreakableTooltip(UTILS, new Unbreakable(true)), List.of("Show In Tooltip: true"));
+        assertTooltip(DataComponentTooltipUtils.getUnbreakableTooltip(UTILS, new Unbreakable(true)).build(), List.of("Show In Tooltip: true"));
     }
 
     @Test
     public void testCustomNameTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCustomNameTooltip(UTILS, Component.literal("Hello")), List.of("Custom Name: Hello"));
+        assertTooltip(DataComponentTooltipUtils.getCustomNameTooltip(UTILS, Component.literal("Hello")).build(), List.of("Custom Name: Hello"));
     }
 
     @Test
     public void testItemNameTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getItemNameTooltip(UTILS, Component.literal("Hello")), List.of("Item Name: Hello"));
+        assertTooltip(DataComponentTooltipUtils.getItemNameTooltip(UTILS, Component.literal("Hello")).build(), List.of("Item Name: Hello"));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getItemLoreTooltip(UTILS, new ItemLore(
                 List.of(Component.literal("Hello"), Component.literal("World")),
                 List.of(Component.literal("Lorem"), Component.literal("Ipsum"))
-        )), List.of(
+        )).build(), List.of(
                 "Lines:",
                 "  -> Hello",
                 "  -> World",
@@ -104,7 +104,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testRarityTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getRarityTooltip(UTILS, Rarity.EPIC), List.of("Rarity: EPIC"));
+        assertTooltip(DataComponentTooltipUtils.getRarityTooltip(UTILS, Rarity.EPIC).build(), List.of("Rarity: EPIC"));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class DataComponentTooltipTest {
         map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE), 2);
         map.put(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.MENDING), 1);
 
-        assertUnorderedTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, new ItemEnchantments(map, true)), List.of(
+        assertUnorderedTooltip(DataComponentTooltipUtils.getItemEnchantmentsTooltip(UTILS, new ItemEnchantments(map, true)).build(), List.of(
                 "Enchantments:",
                 List.of(
                         "  -> minecraft:mending",
@@ -137,7 +137,7 @@ public class DataComponentTooltipTest {
                                 .of(Blocks.BELL).build()
                 ),
                 true
-        )), List.of(
+        )).build(), List.of(
                 "Blocks:",
                 "  -> Predicate:",
                 "    -> Blocks:",
@@ -145,8 +145,7 @@ public class DataComponentTooltipTest {
                 "    -> Properties:",
                 "      -> part: foot",
                 "  -> Predicate:",
-                "    -> Blocks:",
-                "      -> minecraft:bell",
+                "    -> Block: minecraft:bell",
                 "Tooltip:",
                 "  -> Bell",
                 "Show In Tooltip: true"
@@ -177,7 +176,7 @@ public class DataComponentTooltipTest {
                         )
                 ),
                 false
-        )), List.of(
+        )).build(), List.of(
                 "Modifiers:",
                 "  -> Modifier:",
                 "    -> Attribute: minecraft:generic.armor",
@@ -199,17 +198,17 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testCustomModelDataTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getCustomModelDataTooltip(UTILS, new CustomModelData(5)), List.of("Value: 5"));
+        assertTooltip(DataComponentTooltipUtils.getCustomModelDataTooltip(UTILS, new CustomModelData(5)).build(), List.of("Value: 5"));
     }
 
     @Test
     public void testEmptyTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getEmptyTooltip(UTILS, Unit.INSTANCE), List.of());
+        assertTooltip(DataComponentTooltipUtils.getEmptyTooltip(UTILS, Unit.INSTANCE).build(), List.of());
     }
 
     @Test
     public void testBoolTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBoolTooltip(UTILS, true), List.of("Value: true"));
+        assertTooltip(DataComponentTooltipUtils.getBoolTooltip(UTILS, true).build(), List.of("Value: true"));
     }
 
     @Test
@@ -230,7 +229,7 @@ public class DataComponentTooltipTest {
                                 0.25f
                         )
                 )
-        )), List.of(
+        )).build(), List.of(
                 "Nutrition: 5",
                 "Saturation: 2.5",
                 "Can Always Eat: false",
@@ -250,16 +249,18 @@ public class DataComponentTooltipTest {
                 "    -> minecraft:rarity",
                 "      -> Rarity: COMMON",
                 "Effects:",
-                "  -> Effect:",
-                "    -> Effect: minecraft:luck",
+                "  -> Possible Effect:",
+                "    -> Effect:",
+                "      -> Effect: minecraft:luck",
                 "      -> Duration: 0",
                 "      -> Amplifier: 0",
                 "      -> Ambient: false",
                 "      -> Is Visible: true",
                 "      -> Show Icon: true",
                 "    -> Probability: 0.5",
-                "  -> Effect:",
-                "    -> Effect: minecraft:blindness",
+                "  -> Possible Effect:",
+                "    -> Effect:",
+                "      -> Effect: minecraft:blindness",
                 "      -> Duration: 5",
                 "      -> Amplifier: 0",
                 "      -> Ambient: false",
@@ -286,7 +287,7 @@ public class DataComponentTooltipTest {
                 ),
                 0.5f,
                 10
-        )), List.of(
+        )).build(), List.of(
                 "Rules:",
                 "  -> Rule:",
                 "    -> Blocks:",
@@ -295,8 +296,7 @@ public class DataComponentTooltipTest {
                 "    -> Correct For Drops: true",
                 "    -> Speed: 2.5",
                 "  -> Rule:",
-                "    -> Blocks:",
-                "      -> minecraft:furnace",
+                "    -> Block: minecraft:furnace",
                 "Default Mining Speed: 0.5",
                 "Damage Per Block: 10"
         ));
@@ -307,7 +307,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getDyedColorTooltip(UTILS, new DyedItemColor(
                 12345,
                 true
-        )), List.of(
+        )).build(), List.of(
                 "RGB: 12345",
                 "Show In Tooltip: true"
         ));
@@ -315,12 +315,12 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testMapColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getMapColorTooltip(UTILS, new MapItemColor(54321)), List.of("RGB: 54321"));
+        assertTooltip(DataComponentTooltipUtils.getMapColorTooltip(UTILS, new MapItemColor(54321)).build(), List.of("RGB: 54321"));
     }
 
     @Test
     public void testMapIdTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getMapIdTooltip(UTILS, new MapId(654)), List.of("Value: 654"));
+        assertTooltip(DataComponentTooltipUtils.getMapIdTooltip(UTILS, new MapId(654)).build(), List.of("Value: 654"));
     }
 
     @Test
@@ -330,7 +330,7 @@ public class DataComponentTooltipTest {
         map.put("Village", new MapDecorations.Entry(MapDecorationTypes.DESERT_VILLAGE, 100, 200, 25.5f));
         map.put("Player", new MapDecorations.Entry(MapDecorationTypes.PLAYER, 10, 20, 90));
 
-        assertTooltip(DataComponentTooltipUtils.getMapDecorationsTooltip(UTILS, new MapDecorations(map)), List.of(
+        assertTooltip(DataComponentTooltipUtils.getMapDecorationsTooltip(UTILS, new MapDecorations(map)).build(), List.of(
                 "Decorations:",
                 "  -> Decoration: Village",
                 "    -> minecraft:village_desert",
@@ -347,7 +347,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testMapPostProcessingTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getMapPostProcessingTooltip(UTILS, MapPostProcessing.SCALE), List.of("Value: SCALE"));
+        assertTooltip(DataComponentTooltipUtils.getMapPostProcessingTooltip(UTILS, MapPostProcessing.SCALE).build(), List.of("Value: SCALE"));
     }
 
     @Test
@@ -355,7 +355,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getChargedProjectilesTooltip(UTILS, ChargedProjectiles.of(List.of(
                 new ItemStack(Holder.direct(Items.ARROW), 25),
                 new ItemStack(Holder.direct(Items.SNOWBALL), 2)
-        ))), List.of(
+        ))).build(), List.of(
                 "Items:",
                 "  -> Item:",
                 "    -> Item: minecraft:arrow",
@@ -393,7 +393,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getBundleContentsTooltip(UTILS, new BundleContents(List.of(
                 new ItemStack(Holder.direct(Items.COAL_BLOCK)),
                 new ItemStack(Holder.direct(Items.DIORITE))
-        ))), List.of(
+        ))).build(), List.of(
                 "Items:",
                 "  -> Item:",
                 "    -> Item: minecraft:coal_block",
@@ -436,17 +436,19 @@ public class DataComponentTooltipTest {
                         new MobEffectInstance(MobEffects.BLINDNESS, 5, 2),
                         new MobEffectInstance(MobEffects.ABSORPTION)
                 )
-        )), List.of(
+        )).build(), List.of(
                 "Potion: minecraft:harming",
                 "Custom Color: 5",
                 "Custom Effects:",
-                "  -> minecraft:blindness",
+                "  -> Effect:",
+                "    -> Effect: minecraft:blindness",
                 "    -> Duration: 5",
                 "    -> Amplifier: 2",
                 "    -> Ambient: false",
                 "    -> Is Visible: true",
                 "    -> Show Icon: true",
-                "  -> minecraft:absorption",
+                "  -> Effect:",
+                "    -> Effect: minecraft:absorption",
                 "    -> Duration: 0",
                 "    -> Amplifier: 0",
                 "    -> Ambient: false",
@@ -460,7 +462,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getSuspiciousStewEffectsTooltip(UTILS, new SuspiciousStewEffects(List.of(
                 new SuspiciousStewEffects.Entry(MobEffects.ABSORPTION, 2),
                 new SuspiciousStewEffects.Entry(MobEffects.LUCK, 3)
-        ))), List.of(
+        ))).build(), List.of(
                 "Effects:",
                 "  -> minecraft:absorption",
                 "    -> Duration: 2",
@@ -474,7 +476,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getWritableBookContentTooltip(UTILS, new WritableBookContent(List.of(
                 new Filterable<>("Hello", Optional.of("World")),
                 new Filterable<>("Lorem", Optional.of("Ipsum"))
-        ))), List.of(
+        ))).build(), List.of(
                 "Pages:",
                 "  -> Page:",
                 "    -> Raw: Hello",
@@ -496,7 +498,7 @@ public class DataComponentTooltipTest {
                         new Filterable<>(Component.literal("Sum"), Optional.of(Component.literal("Rum")))
                 ),
                 true
-        )), List.of(
+        )).build(), List.of(
                 "Title:",
                 "  -> Raw: Hello",
                 "  -> Filtered: World",
@@ -519,7 +521,7 @@ public class DataComponentTooltipTest {
                 LOOKUP.lookupOrThrow(Registries.TRIM_MATERIAL).getOrThrow(TrimMaterials.NETHERITE),
                 LOOKUP.lookupOrThrow(Registries.TRIM_PATTERN).getOrThrow(TrimPatterns.SILENCE),
                 true
-        )), List.of(
+        )).build(), List.of(
                 "Material: minecraft:netherite",
                 "Pattern: minecraft:silence",
                 "Show In Tooltip: true"
@@ -533,7 +535,7 @@ public class DataComponentTooltipTest {
         map.put(Holder.direct(Blocks.STONE), BlockStateProperties.VERTICAL_DIRECTION);
         map.put(Holder.direct(Blocks.FURNACE), BlockStateProperties.LIT);
 
-        assertTooltip(DataComponentTooltipUtils.getDebugStickStateTooltip(UTILS, new DebugStickState(map)), List.of(
+        assertTooltip(DataComponentTooltipUtils.getDebugStickStateTooltip(UTILS, new DebugStickState(map)).build(), List.of(
                 "Properties:",
                 "  -> Block: minecraft:stone",
                 "    -> Property: vertical_direction",
@@ -545,7 +547,7 @@ public class DataComponentTooltipTest {
     @Test
     public void testInstrumentTooltip() {
         assertTooltip(DataComponentTooltipUtils.getHolderTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.INSTRUMENT)
-                .getOrThrow(Instruments.SING_GOAT_HORN)), List.of("Value: minecraft:sing_goat_horn"));
+                .getOrThrow(Instruments.SING_GOAT_HORN)).build(), List.of("Value: minecraft:sing_goat_horn"));
     }
 
     @Test
@@ -553,14 +555,14 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayable(
                 EitherHolder.fromEither(Either.right(JukeboxSongs.PIGSTEP)),
                 true
-        )), List.of(
+        )).build(), List.of(
                 "Song: minecraft:pigstep",
                 "Show In Tooltip: true"
         ));
         assertTooltip(DataComponentTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayable(
                 EitherHolder.fromEither(Either.left(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP))),
                 true
-        )), List.of(
+        )).build(), List.of(
                 "Song: minecraft:pigstep",
                 "Show In Tooltip: true"
         ));
@@ -571,7 +573,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getRecipesTooltip(UTILS, List.of(
                 ResourceLocation.withDefaultNamespace("recipe1"),
                 ResourceLocation.withDefaultNamespace("recipe2")
-        )), List.of(
+        )).build(), List.of(
                 "Recipes:",
                 "  -> minecraft:recipe1",
                 "  -> minecraft:recipe2"
@@ -583,7 +585,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getLodestoneTrackerTooltip(UTILS, new LodestoneTracker(
                 Optional.of(GlobalPos.of(Level.END, new BlockPos(1, 2, 3))),
                 true
-        )), List.of(
+        )).build(), List.of(
                 "Global Position:",
                 "  -> Dimension: minecraft:the_end",
                 "  -> Position: [X: 1, Y: 2, Z: 3]",
@@ -599,7 +601,7 @@ public class DataComponentTooltipTest {
                 IntList.of(),
                 true,
                 false
-        )), List.of(
+        )).build(), List.of(
                 "Shape: LARGE_BALL",
                 "Colors: [1, 2, 3]",
                 "Fade Colors: []",
@@ -616,7 +618,7 @@ public class DataComponentTooltipTest {
                         new FireworkExplosion(FireworkExplosion.Shape.STAR, IntList.of(), IntList.of(), true, true),
                         new FireworkExplosion(FireworkExplosion.Shape.CREEPER, IntList.of(), IntList.of(), true, true)
                 )
-        )), List.of(
+        )).build(), List.of(
                 "Flight Duration: 10",
                 "Explosions:",
                 "  -> Explosion:",
@@ -645,7 +647,7 @@ public class DataComponentTooltipTest {
                 Optional.of("Hello"),
                 Optional.of(UUID.nameUUIDFromBytes(new byte[]{1, 1, 1, 1})),
                 map
-        )), List.of(
+        )).build(), List.of(
                 "Name: Hello",
                 "UUID: 3b5b9852-567e-3761-8aac-7f5f2d74ef74",
                 "Properties:",
@@ -666,7 +668,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testNoteBlockSoundTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getNoteBlockSoundTooltip(UTILS, ResourceLocation.withDefaultNamespace("test")), List.of("Value: minecraft:test"));
+        assertTooltip(DataComponentTooltipUtils.getNoteBlockSoundTooltip(UTILS, ResourceLocation.withDefaultNamespace("test")).build(), List.of("Value: minecraft:test"));
     }
 
     @Test
@@ -674,7 +676,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getBannerPatternsTooltip(UTILS, new BannerPatternLayers(List.of(
                 new BannerPatternLayers.Layer(LOOKUP.lookupOrThrow(Registries.BANNER_PATTERN).getOrThrow(BannerPatterns.BASE), DyeColor.BLUE),
                 new BannerPatternLayers.Layer(LOOKUP.lookupOrThrow(Registries.BANNER_PATTERN).getOrThrow(BannerPatterns.BORDER), DyeColor.RED)
-        ))), List.of(
+        ))).build(), List.of(
                 "Banner Patterns:",
                 "  -> minecraft:base",
                 "    -> Color: BLUE",
@@ -685,7 +687,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testBaseColorTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBaseColorTooltip(UTILS, DyeColor.CYAN), List.of("Color: CYAN"));
+        assertTooltip(DataComponentTooltipUtils.getBaseColorTooltip(UTILS, DyeColor.CYAN).build(), List.of("Color: CYAN"));
     }
 
     @Test
@@ -695,7 +697,7 @@ public class DataComponentTooltipTest {
                 Items.SHEAF_POTTERY_SHERD,
                 Items.ARMS_UP_POTTERY_SHERD,
                 Items.BLADE_POTTERY_SHERD
-        )), List.of(
+        )).build(), List.of(
                 "Back: minecraft:shelter_pottery_sherd",
                 "Left: minecraft:sheaf_pottery_sherd",
                 "Right: minecraft:arms_up_pottery_sherd",
@@ -708,7 +710,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getContainerTooltip(UTILS, ItemContainerContents.fromItems(List.of(
                 new ItemStack(Holder.direct(Items.ANDESITE), 10),
                 new ItemStack(Holder.direct(Items.DIORITE), 1)
-        ))), List.of(
+        ))).build(), List.of(
                 "Items:",
                 "  -> Item:",
                 "    -> Item: minecraft:andesite",
@@ -748,7 +750,7 @@ public class DataComponentTooltipTest {
         map.put("lit", "true");
         map.put("level", "5");
 
-        assertTooltip(DataComponentTooltipUtils.getBlockStateTooltip(UTILS, new BlockItemStateProperties(map)), List.of(
+        assertTooltip(DataComponentTooltipUtils.getBlockStateTooltip(UTILS, new BlockItemStateProperties(map)).build(), List.of(
                 "Properties:",
                 "  -> lit: true",
                 "  -> level: 5"
@@ -760,7 +762,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getBeesTooltip(UTILS, List.of(
                 new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 100, 20),
                 new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 1000, 30)
-        )), List.of(
+        )).build(), List.of(
                 "Bees:",
                 "  -> Occupant:",
                 "    -> Entity Data: {}",
@@ -775,7 +777,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testLockTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getLockTooltip(UTILS, new LockCode("SECRET")), List.of("Value: SECRET"));
+        assertTooltip(DataComponentTooltipUtils.getLockTooltip(UTILS, new LockCode("SECRET")).build(), List.of("Value: SECRET"));
     }
 
     @Test
@@ -783,7 +785,7 @@ public class DataComponentTooltipTest {
         assertTooltip(DataComponentTooltipUtils.getContainerLootTooltip(UTILS, new SeededContainerLoot(
                 ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.withDefaultNamespace("loot")),
                 12345L
-        )), List.of(
+        )).build(), List.of(
                 "Loot Table: minecraft:loot",
                 "Seed: 12345"
         ));

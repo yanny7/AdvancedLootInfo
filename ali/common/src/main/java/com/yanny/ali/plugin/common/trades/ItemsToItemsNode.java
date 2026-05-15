@@ -71,7 +71,7 @@ public class ItemsToItemsNode extends ListNode {
         tooltip = TooltipBuilder.array((b) -> b
                 .add(condition)
                 .add(utils.getValueTooltip(utils, maxUses).build(Lang.Value.USES))
-                .add(utils.getValueTooltip(utils, xp).build(Lang.Value.VILLAGER_XP))
+                .add(utils.getValueTooltip(utils, xp).build(Lang.Value.XP))
                 .add(utils.getValueTooltip(utils, priceMultiplier).build(Lang.Value.PRICE_MULTIPLIER))
         ).build();
     }

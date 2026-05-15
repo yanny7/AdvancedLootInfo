@@ -48,13 +48,13 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient);
 
     @NotNull
-    <T extends ItemSubPredicate> TooltipNode getItemSubPredicateTooltip(IServerUtils utils, T predicate);
+    <T extends ItemSubPredicate> TooltipBuilder getItemSubPredicateTooltip(IServerUtils utils, T predicate);
 
     @NotNull
-    <T extends EntitySubPredicate> TooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
+    <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
 
     @NotNull
-    TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
+    TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
 

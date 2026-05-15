@@ -12,6 +12,8 @@ public class LanguageHolder {
     static {
         CoreLang.register(Lang.Conditions.class);
         CoreLang.register(Lang.Functions.class);
+        CoreLang.register(Lang.ItemSubPredicates.class);
+        CoreLang.register(Lang.EntitySubPredicates.class);
         CoreLang.register(Lang.Value.class);
         CoreLang.register(Lang.Branch.class);
         CoreLang.register(Lang.Description.class);

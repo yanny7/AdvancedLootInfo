@@ -16,7 +16,8 @@ public class IngredientTooltipTest {
     public void ingredientTest() {
         assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Items.ACACIA_FENCE, Items.ACACIA_DOOR)).build(), List.of(
                 "Items:",
-                "  -> Item: minecraft:acacia_fence",
+                "  -> Item:",
+                "    -> Item: minecraft:acacia_fence",
                 "    -> Count: 1",
                 "    -> Components:",
                 "      -> minecraft:max_stack_size",
@@ -29,7 +30,8 @@ public class IngredientTooltipTest {
                 "        -> Show In Tooltip: true",
                 "      -> minecraft:rarity",
                 "        -> Rarity: COMMON",
-                "  -> Item: minecraft:acacia_door",
+                "  -> Item:",
+                "    -> Item: minecraft:acacia_door",
                 "    -> Count: 1",
                 "    -> Components:",
                 "      -> minecraft:max_stack_size",

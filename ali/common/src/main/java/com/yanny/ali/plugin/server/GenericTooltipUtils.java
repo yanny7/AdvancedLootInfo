@@ -1,36 +1,25 @@
 package com.yanny.ali.plugin.server;
 
-import com.google.gson.JsonElement;
-import com.mojang.logging.LogUtils;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.MapCodec;
+import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.language.IMultiKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.MapDecorations;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
-import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.ListOperation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.ToggleTooltips;
@@ -78,58 +67,27 @@ public class GenericTooltipUtils {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <T> TooltipBuilder getStandaloneTooltip(IServerUtils utils, String value, Optional<ListOperation.StandAlone<T>> standalone) {
+    public static <T> TooltipBuilder getStandaloneTooltip(IServerUtils utils, Optional<ListOperation.StandAlone<T>> standalone) {
         return standalone.map((s) -> TooltipBuilder.array((b) -> {
-            b.add(getCollectionTooltip(utils, value, s.value()).build("aci.util.values"));
-            b.add(utils.getValueTooltip(utils, s.operation()).build("ali.property.value.list_operation"));
+            b.add(utils.getValueTooltip(utils, s.value()).build(Lang.Branch.VALUES));
+            b.add(utils.getValueTooltip(utils, s.operation()).build(Lang.Value.LIST_OPERATION));
         })).orElseGet(TooltipBuilder::empty);
 
     }
 
     @NotNull
-    public static <T> TooltipBuilder getFilterableTooltip(IServerUtils utils, String value, Collection<Filterable<T>> data) {
+    public static <T> TooltipBuilder getFilterableTooltip(IServerUtils utils, IMultiKey value, Collection<Filterable<T>> data) {
         return TooltipBuilder.array((b) -> {
             for (Filterable<T> d : data) {
                 b.add(TooltipBuilder.array((c) -> {
-                    c.add(utils.getValueTooltip(utils, d.raw()).build("ali.property.value.raw"));
-                    c.add(utils.getValueTooltip(utils, d.filtered()).build("ali.property.value.filtered"));
+                    c.add(utils.getValueTooltip(utils, d.raw()).build(Lang.Value.RAW));
+                    c.add(utils.getValueTooltip(utils, d.filtered()).build(Lang.Value.FILTERED));
                 }).key(value));
             }
         });
     }
 
     // MAP ENTRY
-
-    @NotNull
-    public static TooltipBuilder getStatsEntryTooltip(IServerUtils utils, Map.Entry<Stat<?>, MinMaxBounds.Ints> entry) {
-        Stat<?> stat = entry.getKey();
-        MinMaxBounds.Ints ints = entry.getValue();
-        Object value = stat.getValue();
-
-        if (value instanceof Item item) {
-            TooltipBuilder itemTooltip = utils.getValueTooltip(utils, item);
-
-            itemTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
-            return itemTooltip.key(Lang.Value.ITEM);
-        } else if (value instanceof Block block) {
-            TooltipBuilder blockTooltip = utils.getValueTooltip(utils, block);
-
-            blockTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
-            return blockTooltip.key(Lang.Value.BLOCK);
-        } else if (value instanceof EntityType<?> entityType) {
-            TooltipBuilder entityTooltip = utils.getValueTooltip(utils, entityType);
-
-            entityTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(stat.getType().getTranslationKey()), toString(ints)).build());
-            return entityTooltip.key(Lang.Value.ENTITY_TYPE);
-        } else if (value instanceof ResourceLocation resourceLocation) {
-            TooltipBuilder locationTooltip = utils.getValueTooltip(utils, resourceLocation);
-
-            locationTooltip.add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(resourceLocation)), toString(ints)).build());
-            return locationTooltip.key(Lang.Value.ID);
-        }
-
-        return TooltipBuilder.empty();
-    }
 
     @NotNull
     public static TooltipBuilder getRecipeEntryTooltip(IServerUtils ignoredUtils, Map.Entry<ResourceLocation, Boolean> entry) {
@@ -176,43 +134,43 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getMapDecorationEntryTooltip(IServerUtils utils, Map.Entry<String, MapDecorations.Entry> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("aci.util.null"))
-                .key("ali.property.value.decoration");
+                .add(utils.getValueTooltip(utils, entry.getValue()))
+                .key(Lang.Value.DECORATION);
     }
 
     @NotNull
     public static TooltipBuilder getBlockPropertyEntryTooltip(IServerUtils utils, Map.Entry<Holder<Block>, Property<?>> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.property"))
-                .key("ali.property.value.block");
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.PROPERTY))
+                .key(Lang.Value.BLOCK);
     }
 
     @NotNull
     public static TooltipBuilder getPropertiesEntryTooltip(IServerUtils utils, Map.Entry<String, Collection<com.mojang.authlib.properties.Property>> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.property", entry.getValue()).build("ali.property.branch.properties"));
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Branch.PROPERTIES));
     }
 
     @NotNull
     public static TooltipBuilder getEnchantmentLevelEntryTooltip(IServerUtils utils, Map.Entry<Holder<Enchantment>, Integer> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.level"));
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.LEVEL));
     }
 
     @NotNull
     public static TooltipBuilder getToggleEntryTooltip(IServerUtils utils, Map.Entry<ToggleTooltips.ComponentToggle<?>, Boolean> entry) {
-        return getDataComponentTypeTooltip(utils, entry.getKey().type())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.value"));
+        return utils.getValueTooltip(utils, entry.getKey().type())
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.VALUE));
     }
 
     @NotNull
     public static TooltipBuilder getDataComponentPatchEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Optional<?>> entry) {
-        TooltipBuilder builder = getDataComponentTypeTooltip(utils, entry.getKey());
+        TooltipBuilder builder = utils.getValueTooltip(utils, entry.getKey());
 
         entry.getValue().ifPresent((v) -> builder.add(utils.getDataComponentTypeTooltip(utils, entry.getKey(), v)));
 
         if (entry.getValue().isEmpty()) {
-            builder.add(TooltipBuilder.keyOnly("aci.util.removed"));
+            builder.add(TooltipBuilder.keyOnly(CoreLang.Utils.REMOVED));
         }
 
         return builder;
@@ -220,13 +178,13 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getItemSubPredicateEntryTooltip(IServerUtils utils, Map.Entry<ItemSubPredicate.Type<?>, ItemSubPredicate> entry) {
-        return TooltipBuilder.array((b) -> b.add(utils.getItemSubPredicateTooltip(utils, entry.getValue())));
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, entry.getValue())));
     }
 
     @NotNull
     public static TooltipBuilder getSlotRangePredicateEntryTooltip(IServerUtils utils, Map.Entry<SlotRange, ItemPredicate> entry) {
         return TooltipBuilder.keyValue(entry.getKey().toString(), entry.getKey().slots().toString())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.branch.predicate"));
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Branch.PREDICATE));
     }
 
     @NotNull
@@ -250,14 +208,14 @@ public class GenericTooltipUtils {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionPredicateTooltip(IServerUtils utils, String value, Optional<CollectionPredicate<A, B>> optional) {
+    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionPredicateTooltip(IServerUtils utils, Optional<CollectionPredicate<A, B>> optional) {
         if (optional.isPresent()) {
             CollectionPredicate<A, B> predicate = optional.get();
 
             return TooltipBuilder.array((b) -> b
-                    .add(getCollectionContentsPredicateTooltip(utils, value, predicate.contains()).build("ali.property.branch.contains"))
-                    .add(getCollectionCountsPredicateTooltip(utils, value, predicate.counts()).build("ali.property.branch.counts"))
-                    .add(utils.getValueTooltip(utils, predicate.size()).build("ali.property.value.size"))
+                    .add(getCollectionContentsPredicateTooltip(utils, predicate.contains()).build(Lang.Branch.CONTAINS))
+                    .add(getCollectionCountsPredicateTooltip(utils, predicate.counts()).build(Lang.Branch.COUNTS))
+                    .add(utils.getValueTooltip(utils, predicate.size()).build(Lang.Value.SIZE))
             );
         }
 
@@ -266,14 +224,14 @@ public class GenericTooltipUtils {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionContentsPredicateTooltip(IServerUtils utils, String value, Optional<CollectionContentsPredicate<A, B>> predicate) {
-        return predicate.map((p) -> getCollectionTooltip(utils, value, p.unpack())).orElse(TooltipBuilder.empty());
+    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionContentsPredicateTooltip(IServerUtils utils, Optional<CollectionContentsPredicate<A, B>> predicate) {
+        return predicate.map((p) -> utils.getValueTooltip(utils, p.unpack())).orElse(TooltipBuilder.empty());
     }
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionCountsPredicateTooltip(IServerUtils utils, String value, Optional<CollectionCountsPredicate<A, B>> predicate) {
-        return predicate.map((p) -> getCollectionTooltip(utils, value, p.unpack())).orElse(TooltipBuilder.empty());
+    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionCountsPredicateTooltip(IServerUtils utils, Optional<CollectionCountsPredicate<A, B>> predicate) {
+        return predicate.map((p) -> utils.getValueTooltip(utils, p.unpack())).orElse(TooltipBuilder.empty());
     }
 
     @NotNull
@@ -317,7 +275,7 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    private static String getTranslationKey(ResourceLocation location) {
+    public static String getStatTranslationKey(ResourceLocation location) {
         return "stat." + location.toString().replace(':', '.');
     }
 }

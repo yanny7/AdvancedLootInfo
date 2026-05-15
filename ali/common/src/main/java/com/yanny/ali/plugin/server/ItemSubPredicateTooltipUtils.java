@@ -1,8 +1,8 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,97 +10,89 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getCollectionPredi
 
 public class ItemSubPredicateTooltipUtils {
     @NotNull
-    public static TooltipNode getItemDamagePredicateTooltip(IServerUtils utils, ItemDamagePredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.damage()).build("ali.property.value.damage"))
-                .add(utils.getValueTooltip(utils, predicate.durability()).build("ali.property.value.durability"))
-        )
-        .build("ali.type.item_sub_predicate.item_damage");
+    public static TooltipBuilder getItemDamagePredicateTooltip(IServerUtils utils, ItemDamagePredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.damage()).build(Lang.Value.DAMAGE));
+            b.add(utils.getValueTooltip(utils, predicate.durability()).build(Lang.Value.DURABILITY));
+        }).key(Lang.ItemSubPredicates.DAMAGE);
     }
 
     @NotNull
-    public static TooltipNode getItemEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.Enchantments predicate) {
-        return GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.enchantments", predicate.enchantments).build("ali.type.item_sub_predicate.item_enchantments");
+    public static TooltipBuilder getItemEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.Enchantments predicate) {
+        return utils.getValueTooltip(utils, predicate.enchantments).key(Lang.ItemSubPredicates.ENCHANTMENTS);
     }
 
     @NotNull
-    public static TooltipNode getItemStoredEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
-        return GenericTooltipUtils.getCollectionTooltip(utils, "ali.property.branch.enchantments", predicate.enchantments).build("ali.type.item_sub_predicate.item_stored_enchantments");
+    public static TooltipBuilder getItemStoredEnchantmentsPredicateTooltip(IServerUtils utils, ItemEnchantmentsPredicate.StoredEnchantments predicate) {
+        return utils.getValueTooltip(utils, predicate.enchantments).key(Lang.ItemSubPredicates.STORED_ENCHANTMENTS);
     }
 
     @NotNull
-    public static TooltipNode getItemPotionsPredicateTooltip(IServerUtils utils, ItemPotionsPredicate predicate) {
-        return utils.getValueTooltip(utils, predicate.potions()).build("ali.type.item_sub_predicate.item_potions");
+    public static TooltipBuilder getItemPotionsPredicateTooltip(IServerUtils utils, ItemPotionsPredicate predicate) {
+        return utils.getValueTooltip(utils, predicate.potions()).key(Lang.ItemSubPredicates.POTIONS);
     }
 
     @NotNull
-    public static TooltipNode getItemCustomDataPredicateTooltip(IServerUtils utils, ItemCustomDataPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.value()).build("ali.property.value.nbt"))
-        )
-        .build("ali.type.item_sub_predicate.item_custom_data");
+    public static TooltipBuilder getItemCustomDataPredicateTooltip(IServerUtils utils, ItemCustomDataPredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.value()).build(Lang.Value.NBT)))
+                .key(Lang.ItemSubPredicates.CUSTOM_DATA);
     }
 
     @NotNull
-    public static TooltipNode getItemContainerPredicateTooltip(IServerUtils utils, ItemContainerPredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", predicate.items()).build("ali.type.item_sub_predicate.item_container");
+    public static TooltipBuilder getItemContainerPredicateTooltip(IServerUtils utils, ItemContainerPredicate predicate) {
+        return getCollectionPredicateTooltip(utils, predicate.items()).key(Lang.ItemSubPredicates.CONTAINER);
     }
 
     @NotNull
-    public static TooltipNode getItemBundlePredicateTooltip(IServerUtils utils, ItemBundlePredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", predicate.items()).build("ali.type.item_sub_predicate.item_bundle");
+    public static TooltipBuilder getItemBundlePredicateTooltip(IServerUtils utils, ItemBundlePredicate predicate) {
+        return getCollectionPredicateTooltip(utils, predicate.items()).key(Lang.ItemSubPredicates.BUNDLE);
     }
 
     @NotNull
-    public static TooltipNode getItemFireworkExplosionPredicateTooltip(IServerUtils utils, ItemFireworkExplosionPredicate predicate) {
-        return utils.getValueTooltip(utils, predicate.predicate()).build("ali.type.item_sub_predicate.item_firework_explosion");
+    public static TooltipBuilder getItemFireworkExplosionPredicateTooltip(IServerUtils utils, ItemFireworkExplosionPredicate predicate) {
+        return utils.getValueTooltip(utils, predicate.predicate()).key(Lang.ItemSubPredicates.FIREWORK_EXPLOSION);
     }
 
     @NotNull
-    public static TooltipNode getItemFireworksPredicateTooltip(IServerUtils utils, ItemFireworksPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(getCollectionPredicateTooltip(utils, "ali.property.branch.predicate", predicate.explosions()).build("ali.property.branch.explosions"))
-                .add(utils.getValueTooltip(utils, predicate.flightDuration()).build("ali.property.value.flight_duration"))
-        )
-        .build("ali.type.item_sub_predicate.item_fireworks");
+    public static TooltipBuilder getItemFireworksPredicateTooltip(IServerUtils utils, ItemFireworksPredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(getCollectionPredicateTooltip(utils, predicate.explosions()).build(Lang.Branch.EXPLOSIONS));
+            b.add(utils.getValueTooltip(utils, predicate.flightDuration()).build(Lang.Value.FLIGHT_DURATION));
+        }).key(Lang.ItemSubPredicates.FIREWORKS);
     }
 
     @NotNull
-    public static TooltipNode getItemWritableBookPredicateTooltip(IServerUtils utils, ItemWritableBookPredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.value.page", predicate.pages()).build("ali.type.item_sub_predicate.item_writable_book");
+    public static TooltipBuilder getItemWritableBookPredicateTooltip(IServerUtils utils, ItemWritableBookPredicate predicate) {
+        return getCollectionPredicateTooltip(utils, predicate.pages()).key(Lang.ItemSubPredicates.WRITABLE_BOOK);
     }
 
     @NotNull
-    public static TooltipNode getItemWrittenBookPredicateTooltip(IServerUtils utils, ItemWrittenBookPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(getCollectionPredicateTooltip(utils, "ali.property.value.page", predicate.pages()).build("ali.property.branch.pages"))
-                .add(utils.getValueTooltip(utils, predicate.author()).build("ali.property.value.author"))
-                .add(utils.getValueTooltip(utils, predicate.title()).build("ali.property.value.title"))
-                .add(utils.getValueTooltip(utils, predicate.generation()).build("ali.property.value.generation"))
-                .add(utils.getValueTooltip(utils, predicate.resolved()).build("ali.property.value.resolved"))
-        )
-        .build("ali.type.item_sub_predicate.item_written_book");
+    public static TooltipBuilder getItemWrittenBookPredicateTooltip(IServerUtils utils, ItemWrittenBookPredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(getCollectionPredicateTooltip(utils, predicate.pages()).build(Lang.Branch.PAGES));
+            b.add(utils.getValueTooltip(utils, predicate.author()).build(Lang.Value.AUTHOR));
+            b.add(utils.getValueTooltip(utils, predicate.title()).build(Lang.Value.TITLE));
+            b.add(utils.getValueTooltip(utils, predicate.generation()).build(Lang.Value.GENERATION));
+            b.add(utils.getValueTooltip(utils, predicate.resolved()).build(Lang.Value.RESOLVED));
+        }).key(Lang.ItemSubPredicates.WRITTEN_BOOK);
     }
 
     @NotNull
-    public static TooltipNode getItemAttributeModifiersPredicateTooltip(IServerUtils utils, ItemAttributeModifiersPredicate predicate) {
-        return getCollectionPredicateTooltip(utils, "ali.property.branch.modifier", predicate.modifiers()).build("ali.type.item_sub_predicate.item_attribute_modifiers");
+    public static TooltipBuilder getItemAttributeModifiersPredicateTooltip(IServerUtils utils, ItemAttributeModifiersPredicate predicate) {
+        return getCollectionPredicateTooltip(utils, predicate.modifiers()).key(Lang.ItemSubPredicates.ATTRIBUTE_MODIFIERS);
     }
 
     @NotNull
-    public static TooltipNode getItemTrimPredicateTooltip(IServerUtils utils, ItemTrimPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.material()).build("ali.property.branch.materials"))
-                .add(utils.getValueTooltip(utils, predicate.pattern()).build("ali.property.branch.patterns"))
-        )
-        .build("ali.type.item_sub_predicate.item_trim");
+    public static TooltipBuilder getItemTrimPredicateTooltip(IServerUtils utils, ItemTrimPredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.material()).build(Lang.Branch.MATERIALS));
+            b.add(utils.getValueTooltip(utils, predicate.pattern()).build(Lang.Branch.PATTERNS));
+        }).key(Lang.ItemSubPredicates.TRIM);
     }
 
     @NotNull
-    public static TooltipNode getItemJukeboxPlayableTooltip(IServerUtils utils, ItemJukeboxPlayablePredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.song()).build("ali.property.branch.songs"))
-        )
-        .build("ali.type.item_sub_predicate.item_jukebox_playable");
+    public static TooltipBuilder getItemJukeboxPlayableTooltip(IServerUtils utils, ItemJukeboxPlayablePredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.song()).build(Lang.Branch.SONGS)))
+                .key(Lang.ItemSubPredicates.JUKEBOX_PLAYABLE);
     }
 }
