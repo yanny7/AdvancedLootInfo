@@ -31,7 +31,7 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
-        ).build()), List.of(
+        ).build()).build(), List.of(
                 "All Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
@@ -46,8 +46,8 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getAnyOfTooltip(UTILS, (AnyOfCondition) AnyOfCondition.anyOf(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10),
                 WeatherCheck.weather().setRaining(true)
-        ).build()), List.of(
-                "Any of:",
+        ).build()).build(), List.of(
+                "Any Of:",
                 "  -> Time Check:",
                 "    -> Period: 10",
                 "    -> Value: 1 - 8",
@@ -58,12 +58,12 @@ public class ConditionTooltipTest {
 
     @Test
     public void testBlockStatePropertyTooltip() {
-        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.FURNACE).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.FURNACE).build()).build(), List.of(
                 "Block State Property:",
                 "  -> Block: minecraft:furnace"
         ));
         assertTooltip(ConditionTooltipUtils.getBlockStatePropertyTooltip(UTILS, (LootItemBlockStatePropertyCondition) LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.BAMBOO)
-                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()), List.of(
+                .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST)).build()).build(), List.of(
                 "Block State Property:",
                 "  -> Block: minecraft:bamboo",
                 "  -> Properties:",
@@ -80,14 +80,13 @@ public class ConditionTooltipTest {
                         .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
                         .source(EntityPredicate.Builder.entity().team("Blue"))
                         .isDirect(true)
-        ).build()), List.of(
+        ).build()).build(), List.of(
                 "Damage Source Properties:",
                 "  -> Tags:",
                 "    -> minecraft:bypasses_armor: true",
                 "    -> minecraft:is_explosion: false",
                 "  -> Direct Entity:",
-                "    -> Entity Types:",
-                "      -> minecraft:warden",
+                "    -> Entity Type: minecraft:warden",
                 "  -> Source Entity:",
                 "    -> Team: Blue",
                 "  -> Is Direct: true"
@@ -96,11 +95,11 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEnchantmentActiveCheck() {
-        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentActiveCheck().build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentActiveCheck().build()).build(), List.of(
                 "Enchantment Active Check:",
                 "  -> Active: true"
         ));
-        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentInactiveCheck().build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEnchantActiveCheckTooltip(UTILS, (EnchantmentActiveCheck) EnchantmentActiveCheck.enchantmentInactiveCheck().build()).build(), List.of(
                 "Enchantment Active Check:",
                 "  -> Active: false"
         ));
@@ -110,18 +109,25 @@ public class ConditionTooltipTest {
     public void testEntityPropertiesTooltip() {
         assertTooltip(ConditionTooltipUtils.getEntityPropertiesTooltip(UTILS, (LootItemEntityPropertyCondition) LootItemEntityPropertyCondition.hasProperties(
                 LootContext.EntityTarget.ATTACKER,
-                EntityPredicate.Builder.entity().team("blue")
-        ).build()), List.of(
+                EntityPredicate.Builder.entity()
+                        .team("blue")
+                        .equipment(EntityEquipmentPredicate.Builder.equipment()
+                                .mainhand(ItemPredicate.Builder.item().of(Items.TRIDENT))
+                                .build())
+        ).build()).build(), List.of(
             "Entity Properties:",
             "  -> Target: ATTACKER",
             "  -> Predicate:",
+            "    -> Entity Equipment:",
+            "      -> Main Hand:",
+            "        -> Item: minecraft:trident",
             "    -> Team: blue"
         ));
     }
 
     @Test
     public void testEntityScoresTooltip() {
-        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEntityScoresTooltip(UTILS, (EntityHasScoreCondition) EntityHasScoreCondition.hasScores(LootContext.EntityTarget.DIRECT_ATTACKER).build()).build(), List.of(
                 "Entity Scores:",
                 "  -> Target: DIRECT_ATTACKER"
         ));
@@ -129,7 +135,7 @@ public class ConditionTooltipTest {
                 .withScore("single", IntRange.range(2, 5))
                 .withScore("double", IntRange.range(1, 7))
                 .build()
-        ), List.of(
+        ).build(), List.of(
                 "Entity Scores:",
                 "  -> Target: DIRECT_ATTACKER",
                 "  -> Scores:",
@@ -144,7 +150,7 @@ public class ConditionTooltipTest {
     public void testInvertedTooltip() {
         assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
                 TimeCheck.time(IntRange.range(1, 8)).setPeriod(10)
-        ).build()), List.of(
+        ).build()).build(), List.of(
                 "Inverted:",
                 "  -> Time Check:",
                 "    -> Period: 10",
@@ -154,7 +160,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testKilledByPlayerTooltip() {
-        assertTooltip(ConditionTooltipUtils.getKilledByPlayerTooltip(UTILS, (LootItemKilledByPlayerCondition) LootItemKilledByPlayerCondition.killedByPlayer().build()), List.of("Killed by player"));
+        assertTooltip(ConditionTooltipUtils.getKilledByPlayerTooltip(UTILS, (LootItemKilledByPlayerCondition) LootItemKilledByPlayerCondition.killedByPlayer().build()).build(), List.of("Killed by player"));
     }
 
     @Test
@@ -162,7 +168,7 @@ public class ConditionTooltipTest {
         assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(UTILS, (LocationCheck) LocationCheck.checkLocation(
                 LocationPredicate.Builder.location().setSmokey(true),
                 new BlockPos(2, 4, 6)
-        ).build()), List.of(
+        ).build()).build(), List.of(
                 "Location Check:",
                 "  -> Location:",
                 "    -> Smokey: true",
@@ -170,7 +176,7 @@ public class ConditionTooltipTest {
         ));
         assertTooltip(ConditionTooltipUtils.getLocationCheckTooltip(UTILS, (LocationCheck) LocationCheck.checkLocation(
                 LocationPredicate.Builder.location().setSmokey(true)
-        ).build()), List.of(
+        ).build()).build(), List.of(
                 "Location Check:",
                 "  -> Location:",
                 "    -> Smokey: true"
@@ -179,17 +185,21 @@ public class ConditionTooltipTest {
 
     @Test
     public void testItemMatchTooltip() {
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)).build()).build(), List.of(
                 "Match Tool:",
                 "  -> Items:",
                 "    -> minecraft:andesite",
                 "    -> minecraft:diorite"
         ));
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE)).build()).build(), List.of(
+                "Match Tool:",
+                "  -> Item: minecraft:andesite"
+        ));
     }
 
     @Test
     public void testRandomChanceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceTooltip(UTILS, (LootItemRandomChanceCondition) LootItemRandomChanceCondition.randomChance(0.25F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getRandomChanceTooltip(UTILS, (LootItemRandomChanceCondition) LootItemRandomChanceCondition.randomChance(0.25F).build()).build(), List.of(
                 "Random Chance:",
                 "  -> Chance: 0.25"
         ));
@@ -197,7 +207,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testRandomChanceWithLootingTooltip() {
-        assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getRandomChanceWithEnchantedBonusTooltip(UTILS, (LootItemRandomChanceWithEnchantedBonusCondition) LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(LOOKUP, 0.25F, 5F).build()).build(), List.of(
                 "Random Chance With Enchanted Bonus:",
                 "  -> Unenchanted Chance: 0.25",
                 "  -> Enchanted Chance:",
@@ -210,17 +220,17 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()).build(), List.of("Reference: minecraft:test"));
     }
 
     @Test
     public void testSurvivesExplosionTooltip() {
-        assertTooltip(ConditionTooltipUtils.getSurvivesExplosionTooltip(UTILS, (ExplosionCondition) ExplosionCondition.survivesExplosion().build()), List.of("Survives Explosion"));
+        assertTooltip(ConditionTooltipUtils.getSurvivesExplosionTooltip(UTILS, (ExplosionCondition) ExplosionCondition.survivesExplosion().build()).build(), List.of("Survives Explosion"));
     }
 
     @Test
     public void testTableBonusTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow(), 0.25F, 0.5555F, 0.99F).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getTableBonusTooltip(UTILS, (BonusLevelTableCondition) BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(Enchantments.LOOTING).orElseThrow(), 0.25F, 0.5555F, 0.99F).build()).build(), List.of(
                 "Table Bonus:",
                 "  -> Enchantment: minecraft:looting",
                 "  -> Values: [0.25, 0.5555, 0.99]"
@@ -229,7 +239,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testTimeCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(IntRange.range(5, 10)).setPeriod(24000).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getTimeCheckTooltip(UTILS, TimeCheck.time(IntRange.range(5, 10)).setPeriod(24000).build()).build(), List.of(
                 "Time Check:",
                 "  -> Period: 24000",
                 "  -> Value: 5 - 10"
@@ -238,7 +248,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testValueCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getValueCheckTooltip(UTILS, (ValueCheckCondition) ValueCheckCondition.hasValue(UniformGenerator.between(1, 20), IntRange.range(1, 10)).build()).build(), List.of(
                 "Value Check:",
                 "  -> Provider: 1-20",
                 "  -> Range: 1 - 10"
@@ -247,19 +257,19 @@ public class ConditionTooltipTest {
 
     @Test
     public void testWeatherCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setRaining(true).setThundering(false).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setRaining(true).setThundering(false).build()).build(), List.of(
                 "Weather Check:",
                 "  -> Is Raining: true",
                 "  -> Is Thundering: false"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setRaining(true).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setRaining(true).build()).build(), List.of(
                 "Weather Check:",
                 "  -> Is Raining: true"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setThundering(false).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().setThundering(false).build()).build(), List.of(
                 "Weather Check:",
                 "  -> Is Thundering: false"
         ));
-        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().build()), List.of());
+        assertTooltip(ConditionTooltipUtils.getWeatherCheckTooltip(UTILS, WeatherCheck.weather().build()).build(), List.of());
     }
 }

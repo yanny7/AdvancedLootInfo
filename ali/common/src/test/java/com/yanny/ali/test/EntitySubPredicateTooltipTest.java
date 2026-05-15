@@ -23,12 +23,12 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class EntitySubPredicateTooltipTest {
     @Test
     public void testLightningBoltPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS, LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(5))).build(), List.of(
                 "Lightning Bolt:",
                 "  -> Blocks On Fire: ≤5"
         ));
         assertTooltip(EntitySubPredicateTooltipUtils.getLightningBoltPredicateTooltip(UTILS,
-                new LightningBoltPredicate(MinMaxBounds.Ints.between(1, 5), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))), List.of(
+                new LightningBoltPredicate(MinMaxBounds.Ints.between(1, 5), Optional.of(EntityPredicate.Builder.entity().team("blue").build()))).build(), List.of(
                 "Lightning Bolt:",
                 "  -> Blocks On Fire: 1-5",
                 "  -> Stuck Entity:",
@@ -38,10 +38,10 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testFishingHookPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.ANY), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.ANY).build(), List.of(
                 "Fishing Hook:"
         ));
-        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getFishingHookPredicateTooltip(UTILS, FishingHookPredicate.inOpenWater(true)).build(), List.of(
                 "Fishing Hook:",
                 "  -> Is In Open Water: true"
         ));
@@ -59,10 +59,9 @@ public class EntitySubPredicateTooltipTest {
                 .setLookingAt(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
                 .setGameType(GameTypePredicate.of(GameType.SURVIVAL))
                 .hasInput(new InputPredicate(Optional.of(true), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()))
-                .build()), List.of(
+                .build()).build(), List.of(
                 "Player:",
-                "  -> Game Types:",
-                "    -> SURVIVAL",
+                "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
                 "    -> Block: minecraft:cobblestone",
                 "      -> Times Mined: ≥100",
@@ -87,7 +86,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testSlimePredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSlimePredicateTooltip(UTILS, SlimePredicate.sized(MinMaxBounds.Ints.between(0, 2))).build(), List.of(
                 "Slime:",
                 "  -> Size: 0-2"
         ));
@@ -95,7 +94,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testRaiderPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, RaiderPredicate.CAPTAIN_WITHOUT_RAID), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getRaiderPredicateTooltip(UTILS, RaiderPredicate.CAPTAIN_WITHOUT_RAID).build(), List.of(
                 "Raider:",
                 "  -> Has Raid: false",
                 "  -> Is Captain: true"

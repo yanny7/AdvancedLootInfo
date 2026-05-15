@@ -114,6 +114,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     @NotNull
     private IWidgetUtils getUtils(List<Holder> widgets) {
         return new ClientUtils() {
+            @Nullable
+            @Override
+            public String getTranslationKey(int index) {
+                return null;
+            }
+
             @Override
             public void addSlotWidget(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
                 widgets.add(new Holder(item, entry, rect));

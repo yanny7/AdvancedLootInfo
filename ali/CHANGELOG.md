@@ -2,6 +2,7 @@
 
 - Fixed conditionally removed loot not displayed (LootJS)
 - Dropped support for most mods except LootJS (Support should be done by mod owners)
+- Networking optimization - sending translation keys as indexes (~40% less data)
 
 ## [1.10.0]
 
