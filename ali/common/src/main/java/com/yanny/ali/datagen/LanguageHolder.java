@@ -39,10 +39,6 @@ public class LanguageHolder {
         TRANSLATION_MAP.put("emi.category.ali.panda_sneeze", "Panda Sneeze");
         TRANSLATION_MAP.put("emi.category.ali.shearing", "Shearing");
 
-        //FIXME Move!!!!
-        TRANSLATION_MAP.put("ali.property.multi.offset", "Offset: [X: %s, Y: %s, Z: %s]");
-        TRANSLATION_MAP.put("ali.property.multi.position", "Position: [X: %s, Y: %s, Z: %s]");
-
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.functions", "----- Modifiers -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.delimiter.conditions", "----- Predicates -----");
         TRANSLATION_MAP.put("ali.util.advanced_loot_info.accepts", "Accepts:");

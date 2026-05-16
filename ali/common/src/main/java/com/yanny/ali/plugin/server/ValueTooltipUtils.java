@@ -566,7 +566,7 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getGlobalPosTooltip(IServerUtils utils, GlobalPos globalPos) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, globalPos.dimension()).build(Lang.Value.DIMENSION));
-            b.add(utils.getValueTooltip(utils, globalPos.pos()).build("ali.property.multi.position"));
+            b.add(utils.getValueTooltip(utils, globalPos.pos()).build(Lang.Multi.POSITON));
         });
     }
 

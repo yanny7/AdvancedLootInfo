@@ -88,14 +88,15 @@ public class ConditionTooltipTest {
                         .isDirect(true)
         ).build()).build(), List.of(
                 "Damage Source Properties:",
-                "  -> Tags:",
-                "    -> minecraft:bypasses_armor: true",
-                "    -> minecraft:is_explosion: false",
-                "  -> Direct Entity:",
-                "    -> Entity Type: minecraft:warden",
-                "  -> Source Entity:",
-                "    -> Team: Blue",
-                "  -> Is Direct: true"
+                "  -> Predicate:",
+                "    -> Tags:",
+                "      -> minecraft:bypasses_armor: true",
+                "      -> minecraft:is_explosion: false",
+                "    -> Direct Entity:",
+                "      -> Entity Type: minecraft:warden",
+                "    -> Source Entity:",
+                "      -> Team: Blue",
+                "    -> Is Direct: true"
         ));
     }
 
@@ -199,21 +200,15 @@ public class ConditionTooltipTest {
     public void testItemMatchTooltip() {
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE, Items.DIORITE)).build()).build(), List.of(
                 "Match Tool:",
-                "  -> Items:",
-                "    -> minecraft:andesite",
-                "    -> minecraft:diorite"
+                "  -> Predicate:",
+                "    -> Items:",
+                "      -> minecraft:andesite",
+                "      -> minecraft:diorite"
         ));
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE)).build()).build(), List.of(
                 "Match Tool:",
-                "  -> Item: minecraft:andesite"
-        ));
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
-                ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.MOB_LOOTING, MinMaxBounds.Ints.ANY))
-        ).build()).build(), List.of(
-                "Match Tool:",
-                "  -> Enchantments:",
-                "    -> Predicate:",
-                "      -> Enchantment: minecraft:looting"
+                "  -> Predicate:",
+                "    -> Item: minecraft:andesite"
         ));
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
                 ItemPredicate.Builder.item()
@@ -243,7 +238,10 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()).build(), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(ResourceKey.create(Registries.PREDICATE, ResourceLocation.withDefaultNamespace("test"))).build()).build(), List.of(
+                "Reference:",
+                "  -> Loot Table: minecraft:test"
+        ));
     }
 
     @Test

@@ -73,7 +73,6 @@ public final class Lang {
         ENCHANT_RANDOMLY("enchant_randomly", "Enchant Randomly:"),
         ENCHANT_WITH_LEVELS("enchant_with_levels", "Enchant With Levels:"),
         ENCHANTED_COUNT_INCREASE("enchanted_count_increase", "Enchanted Count Increase:"),
-        EXPLODE("explode", "Creates Explosion:"),
         EXPLORATION_MAP("exploration_map", "Exploration Map:"),
         EXPLOSION_DECAY("explosion_decay", "Explosion Decay"),
         FILL_PLAYER_HEAD("fill_player_head", "Fill Player Head:"),
@@ -549,6 +548,7 @@ public final class Lang {
 
     public enum Multi implements ITooltipKey {
         OFFSET("offset", "Offset: [X: %s, Y: %s, Z: %s]"),
+        POSITON("position", "Position: [X: %s, Y: %s, Z: %s]"),
         ;
 
         private final Translation translation;

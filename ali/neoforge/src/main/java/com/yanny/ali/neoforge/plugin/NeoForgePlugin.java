@@ -87,7 +87,7 @@ public class NeoForgePlugin implements IPlugin {
 
             return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
                 TooltipNode tooltip = TooltipBuilder.array((b) -> b
-                                .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
+                                .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
                                 .add(utils.getValueTooltip(utils, c))
                         )
                         .build();
