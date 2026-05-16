@@ -3,6 +3,7 @@ package com.yanny.ali.api;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.Holder;
@@ -39,24 +40,24 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     <T extends LootPoolEntryContainer> IServerRegistry.EntryFactory<T> getEntryFactory(IServerUtils utils, T type);
 
     @NotNull
-    <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function);
+    <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function);
 
     @NotNull
-    <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition);
+    <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition);
 
     @NotNull
-    <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient);
+    <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient);
 
     @NotNull
-    <T extends DataComponentPredicate> TooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate);
+    <T extends DataComponentPredicate> TooltipBuilder getDataComponentPredicateTooltip(IServerUtils utils, T predicate);
 
     @NotNull
-    <T extends EntitySubPredicate> TooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
+    <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate);
 
     @NotNull
-    TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
+    TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
 
-    <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect);
+    <T extends ConsumeEffect> TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, T effect);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
 
@@ -76,9 +77,6 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     @Nullable
     LootContext getLootContext();
-
-    @Nullable
-    ResourceLocation getCurrentLootTable();
 
     @Nullable
     LootTable getLootTable(Either<ResourceLocation, LootTable> either);

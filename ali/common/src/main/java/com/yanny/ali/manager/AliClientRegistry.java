@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtils, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
+public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRegistry, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final long RELOAD_COOLDOWN_MS = 2000L;
 
@@ -33,7 +33,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, ICommonUtil
 
     private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
 
-    public AliClientRegistry(ICommonUtils utils) {
+    public AliClientRegistry(AliCommonRegistry utils) {
         super(utils);
     }
 

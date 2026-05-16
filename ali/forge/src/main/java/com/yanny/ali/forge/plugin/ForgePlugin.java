@@ -4,10 +4,11 @@ import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
-import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
@@ -43,13 +44,13 @@ public class ForgePlugin implements IPlugin {
     }
 
     @NotNull
-    public static TooltipNode getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
-        return utils.getValueTooltip(utils, cond.action().name()).build("ali.type.condition.can_tool_perform_action");
+    public static TooltipBuilder getCanToolPerformActionTooltip(IServerUtils utils, CanToolPerformAction cond) {
+        return utils.getValueTooltip(utils, cond.action().name()).key(Lang.Conditions.CAN_TOOL_PERFORM_ACTION);
     }
 
     @NotNull
-    public static TooltipNode getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
-        return utils.getValueTooltip(utils, cond.id()).build("ali.type.condition.loot_table_id");
+    public static TooltipBuilder getLootTableIdTooltip(IServerUtils utils, LootTableIdCondition cond) {
+        return utils.getValueTooltip(utils, cond.id()).key(Lang.Conditions.LOOT_TABLE_ID);
     }
 
     @NotNull

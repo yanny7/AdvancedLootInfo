@@ -24,7 +24,7 @@ public class SubTradesNode<T> extends ListNode {
 
     public SubTradesNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     public List<IDataNode> getSubTrades(IServerUtils ignoredUtils, T ignoredListing) {
@@ -33,7 +33,7 @@ public class SubTradesNode<T> extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 
     @NotNull
