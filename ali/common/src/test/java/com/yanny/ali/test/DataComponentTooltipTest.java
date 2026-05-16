@@ -1016,7 +1016,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testTypedEntityDataTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getTypedEntityDataTooltip(UTILS, TypedEntityData.of(2, new CompoundTag())),
+        assertTooltip(DataComponentTooltipUtils.getTypedEntityDataTooltip(UTILS, TypedEntityData.of(2, new CompoundTag())).build(),
                 List.of("Tag: {}"));
     }
 }

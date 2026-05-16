@@ -457,7 +457,7 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static ITooltipNode getTypedEntityDataTooltip(IServerUtils utils, TypedEntityData<?> value) {
-        return utils.getValueTooltip(utils, value.copyTagWithoutId().toString()).build("ali.property.value.tag");
+    public static TooltipBuilder getTypedEntityDataTooltip(IServerUtils utils, TypedEntityData<?> value) {
+        return utils.getValueTooltip(utils, value.copyTagWithoutId().toString()).key(Lang.Value.TAG);
     }
 }
