@@ -119,7 +119,7 @@ public class ConditionTooltipTest {
                 EntityPredicate.Builder.entity()
                         .team("blue")
                         .equipment(EntityEquipmentPredicate.Builder.equipment()
-                                .mainhand(ItemPredicate.Builder.item().of(Items.TRIDENT))
+                                .mainhand(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.TRIDENT))
                                 .build())
         ).build()).build(), List.of(
             "Entity Properties:",
@@ -205,7 +205,7 @@ public class ConditionTooltipTest {
                 "      -> minecraft:andesite",
                 "      -> minecraft:diorite"
         ));
-        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.ANDESITE)).build()).build(), List.of(
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE)).build()).build(), List.of(
                 "Match Tool:",
                 "  -> Predicate:",
                 "    -> Item: minecraft:andesite"

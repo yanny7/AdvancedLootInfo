@@ -8,7 +8,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
@@ -90,7 +89,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getItemTooltip(IServerUtils utils, Item item) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return TooltipBuilder.value(TooltipBuilder.translate(item.getDescriptionId(item.getDefaultInstance())));
+                return TooltipBuilder.value(TooltipBuilder.translate(item.getDescriptionId()));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Item name: {}", BuiltInRegistries.ITEM.getKey(item), e);
             }

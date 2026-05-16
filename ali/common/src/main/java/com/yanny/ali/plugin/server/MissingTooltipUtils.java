@@ -10,11 +10,12 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IServerUtils;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
@@ -117,10 +118,10 @@ public class MissingTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getMissingItemSubPredicateTooltip(IServerUtils utils, ItemSubPredicate predicate) {
+    public static TooltipBuilder getMissingDataComponentPredicateTooltip(IServerUtils utils, DataComponentPredicate predicate) {
         TooltipBuilder tooltip = TooltipBuilder.value(predicate.getClass().getName());
 
-        TooltipUtils.addObjectFields(utils, tooltip, predicate, ItemSubPredicate.class);
+        TooltipUtils.addObjectFields(utils, tooltip, predicate, DataComponentPredicate.class);
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
@@ -166,6 +167,27 @@ public class MissingTooltipUtils {
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
     }
 
+    @NotNull
+    public static TooltipBuilder getMissingConsumableEffectTooltip(IServerUtils utils, ConsumeEffect effect) {
+        TooltipBuilder tooltip = getConsumeEffectTypeTooltip(utils, effect.getType());
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<ConsumeEffect> codec = ((MapCodec<ConsumeEffect>) effect.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, effect).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get consume effect info from serialized data for {} in {}", BuiltInRegistries.CONSUME_EFFECT_TYPE.getKey(effect.getType()), TooltipContext.get(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, effect, ConsumeEffect.class);
+        }
+
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
 
     @NotNull
     public static TooltipBuilder getMissingItemListingTooltip(IServerUtils utils, VillagerTrades.ItemListing itemListing) {

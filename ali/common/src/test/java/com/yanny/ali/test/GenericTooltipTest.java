@@ -299,8 +299,7 @@ public class GenericTooltipTest {
                 "  -> Slots:",
                 "    -> test: [1, 2]",
                 "      -> Predicate:",
-                "        -> Items:",
-                "          -> minecraft:granite",
+                "        -> Item: minecraft:granite",
                 "  -> Components:",
                 "    -> Expected Components:",
                 "      -> minecraft:damage",
@@ -313,11 +312,10 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT)).build("ali.property.branch.entity_types"), List.of(
-                "Entity Types:",
-                "  -> minecraft:cat"
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT)).build(Lang.Branch.ENTITY_TYPES), List.of(
+                "Entity Type: minecraft:cat"
         ));
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS)).build("ali.property.branch.entity_types"), List.of(
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS)).build(Lang.Branch.ENTITY_TYPES), List.of(
                 "Entity Types:",
                 "  -> Tag: minecraft:skeletons"
         ));
@@ -402,17 +400,17 @@ public class GenericTooltipTest {
 
         compoundTag.putFloat("test", 3F);
 
-        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.DIRT).build()).build("ali.property.branch.block_predicate"), List.of(
+        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.DIRT).build()).build(Lang.Branch.BLOCK_PREDICATE), List.of(
                 "Block Predicate:",
                 "  -> Block: minecraft:dirt"
         ));
-        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), BlockTags.BEDS).build()).build("ali.property.branch.block_predicate"), List.of(
+        assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block().of(LOOKUP.lookupOrThrow(Registries.BLOCK), BlockTags.BEDS).build()).build(Lang.Branch.BLOCK_PREDICATE), List.of(
                 "Block Predicate:",
                 "  -> Blocks:",
                 "    -> Tag: minecraft:beds"
         ));
         assertTooltip(ValueTooltipUtils.getBlockPredicateTooltip(UTILS, BlockPredicate.Builder.block()
-                .of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.STONE, Blocks.COBBLESTONE)
+                .of(LOOKUP.lookupOrThrow(Registries.BLOCK), Blocks.STONE)
                 .setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(BlockStateProperties.FACING, Direction.EAST))
                 .hasNbt(compoundTag)
                 .components(DataComponentMatchers.Builder.components()
@@ -715,8 +713,8 @@ public class GenericTooltipTest {
 
     @Test
     public void testPagePredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getPagePredicateTooltip(UTILS, new WritableBookPredicate.PagePredicate("asdf")).build("ali.property.value.page"), List.of("Page: asdf"));
-        assertTooltip(ValueTooltipUtils.getPagePredicateTooltip(UTILS, new WrittenBookPredicate.PagePredicate(Component.literal("asdf"))).build("ali.property.value.page"), List.of("Page: asdf"));
+        assertTooltip(ValueTooltipUtils.getPagePredicateTooltip(UTILS, new WritableBookPredicate.PagePredicate("asdf")).build(Lang.Value.PAGE), List.of("Page: asdf"));
+        assertTooltip(ValueTooltipUtils.getPagePredicateTooltip(UTILS, new WrittenBookPredicate.PagePredicate(Component.literal("asdf"))).build(Lang.Value.PAGE), List.of("Page: asdf"));
     }
 
     @Test
@@ -1085,7 +1083,7 @@ public class GenericTooltipTest {
                 Optional.of(false),
                 Optional.of(true),
                 Optional.of(true)
-        )).build("ali.property.branch.input"), List.of(
+        )).build(Lang.Branch.INPUT), List.of(
                 "Input:",
                 "  -> Forward: true",
                 "  -> Backward: true",
@@ -1102,7 +1100,7 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getStandaloneTooltip(UTILS, new ListOperation.StandAlone<>(
                 List.of("asdf", "jklo"),
                 new ListOperation.Insert(2)
-        )).build("ali.property.branch.strings"), List.of(
+        )).build(Lang.Branch.STRINGS), List.of(
                 "Strings:",
                 "  -> Values:",
                 "    -> asdf",
@@ -1122,7 +1120,7 @@ public class GenericTooltipTest {
                )),
                0.1f,
                3.2f
-        )).build("ali.property.branch.damage_reduction"), List.of(
+        )).build(Lang.Branch.DAMAGE_REDUCTION), List.of(
                 "Damage Reduction:",
                 "  -> Horizontal Blocking Angle: 2.5",
                 "  -> Damage Types:",
@@ -1137,7 +1135,7 @@ public class GenericTooltipTest {
     public void testItemDamageTooltip() {
         assertTooltip(ValueTooltipUtils.getItemDamageTooltip(UTILS, new BlocksAttacks.ItemDamageFunction(
                1.2f, 3.5f, 2.4f
-        )).build("ali.property.branch.item_damage"), List.of(
+        )).build(Lang.Branch.ITEM_DAMAGE), List.of(
                 "Item Damage:",
                 "  -> Threshold: 1.2",
                 "  -> Base: 3.5",

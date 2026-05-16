@@ -68,7 +68,7 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetValueTooltip() {
-        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build("ali.property.branch.item"), List.of(
+        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
                 "Item:",
                 "  -> Item: minecraft:emerald",
                 "  -> Count: 1",

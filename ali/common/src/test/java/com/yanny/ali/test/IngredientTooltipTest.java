@@ -19,7 +19,7 @@ public class IngredientTooltipTest {
                 "  -> Item: minecraft:acacia_fence",
                 "  -> Item: minecraft:acacia_door"
         ));
-        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Blocks.ACACIA_LOG)), List.of(
+        assertTooltip(IngredientTooltipUtils.getIngredientTooltip(UTILS, Ingredient.of(Blocks.ACACIA_LOG)).build(), List.of(
                 "Items:",
                 "  -> Item: minecraft:acacia_log"
         ));

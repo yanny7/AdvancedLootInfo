@@ -51,7 +51,7 @@ public class EntitySubPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSheepPredicateTooltip(IServerUtils utils, SheepPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.sheared()).build("ali.property.value.sheared")))
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.sheared()).build(Lang.Value.SHEARED)))
                 .key(Lang.EntitySubPredicates.SHEEP);
     }
 }

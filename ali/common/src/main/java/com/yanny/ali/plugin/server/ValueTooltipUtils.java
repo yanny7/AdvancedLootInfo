@@ -13,21 +13,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.TypedDataComponent;
-import net.minecraft.core.component.predicates.AttributeModifiersPredicate;
-import net.minecraft.core.component.predicates.FireworkExplosionPredicate;
-import net.minecraft.core.component.predicates.WritableBookPredicate;
-import net.minecraft.core.component.predicates.WrittenBookPredicate;
-import net.minecraft.network.chat.Component;
+import net.minecraft.core.component.predicates.*;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.block.Block;
@@ -45,7 +46,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getDataComponentExactPredicateTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStatTranslationKey;
 
@@ -71,8 +71,13 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getItemSubPredicateTooltip(IServerUtils utils, ItemSubPredicate itemSubPredicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getItemSubPredicateTooltip(utils, itemSubPredicate)));
+    public static TooltipBuilder getDataComponentPredicateTooltip(IServerUtils utils, DataComponentPredicate itemSubPredicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getDataComponentPredicateTooltip(utils, itemSubPredicate)));
+    }
+
+    @NotNull
+    public static TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, ConsumeEffect consumeEffect) {
+        return TooltipBuilder.array((b) -> b.add(utils.getConsumeEffectTooltip(utils, consumeEffect)));
     }
 
     @NotNull
@@ -409,12 +414,12 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getFireworkPredicateTooltip(IServerUtils utils, ItemFireworkExplosionPredicate.FireworkPredicate predicate) {
+    public static TooltipBuilder getFireworkPredicateTooltip(IServerUtils utils, FireworkExplosionPredicate.FireworkPredicate predicate) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, predicate.shape()).build(Lang.Value.SHAPE));
             b.add(utils.getValueTooltip(utils, predicate.trail()).build(Lang.Value.TRAIL));
             b.add(utils.getValueTooltip(utils, predicate.twinkle()).build(Lang.Value.TWINKLE));
-        });
+        }).key(Lang.Branch.PREDICATE);
     }
 
     @NotNull
@@ -451,7 +456,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, predicate.amount()).build(Lang.Value.AMOUNT));
             b.add(utils.getValueTooltip(utils, predicate.operation()).build(Lang.Value.OPERATION));
             b.add(utils.getValueTooltip(utils, predicate.slot()).build(Lang.Value.SLOT));
-        });
+        }).key(Lang.Branch.MODIFIER);
     }
 
     @NotNull
@@ -467,8 +472,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, data.fadeColors()).build(Lang.Value.FADE_COLORS));
             b.add(utils.getValueTooltip(utils, data.hasTrail()).build(Lang.Value.HAS_TRAIL));
             b.add(utils.getValueTooltip(utils, data.hasTwinkle()).build(Lang.Value.HAS_TWINKLE));
-            b.key(Lang.Branch.EXPLOSION);
-        });
+        }).key(Lang.Branch.EXPLOSION);
     }
 
     @NotNull
@@ -477,8 +481,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, entry.attribute()).build(Lang.Value.ATTRIBUTE));
             b.add(utils.getValueTooltip(utils, entry.modifier()).build(Lang.Branch.MODIFIER));
             b.add(utils.getValueTooltip(utils, entry.slot()).build(Lang.Value.SLOT));
-            b.key(Lang.Branch.MODIFIER);
-        });
+        }).key(Lang.Branch.MODIFIER);
     }
 
     @NotNull
@@ -559,7 +562,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, occupant.entityData().copyTag().toString()).build(Lang.Value.ENTITY_DATA));
             b.add(utils.getValueTooltip(utils, occupant.ticksInHive()).build(Lang.Value.TICKS_IN_HIVE));
             b.add(utils.getValueTooltip(utils, occupant.minTicksInHive()).build(Lang.Value.MIN_TICKS_IN_HIVE));
-        });
+        }).key(Lang.Branch.OCCUPANT);
     }
 
     @NotNull
@@ -698,40 +701,40 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getInputPredicateTooltip(IServerUtils utils, InputPredicate predicate) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.forward()).build("ali.property.value.forward"))
-                .add(utils.getValueTooltip(utils, predicate.backward()).build("ali.property.value.backward"))
-                .add(utils.getValueTooltip(utils, predicate.left()).build("ali.property.value.left"))
-                .add(utils.getValueTooltip(utils, predicate.right()).build("ali.property.value.right"))
-                .add(utils.getValueTooltip(utils, predicate.jump()).build("ali.property.value.jump"))
-                .add(utils.getValueTooltip(utils, predicate.sneak()).build("ali.property.value.sneak"))
-                .add(utils.getValueTooltip(utils, predicate.sprint()).build("ali.property.value.sprint"))
+                .add(utils.getValueTooltip(utils, predicate.forward()).build(Lang.Value.FORWARD))
+                .add(utils.getValueTooltip(utils, predicate.backward()).build(Lang.Value.BACKWARD))
+                .add(utils.getValueTooltip(utils, predicate.left()).build(Lang.Value.LEFT))
+                .add(utils.getValueTooltip(utils, predicate.right()).build(Lang.Value.RIGHT))
+                .add(utils.getValueTooltip(utils, predicate.jump()).build(Lang.Value.JUMP))
+                .add(utils.getValueTooltip(utils, predicate.sneak()).build(Lang.Value.SNEAK))
+                .add(utils.getValueTooltip(utils, predicate.sprint()).build(Lang.Value.SPRINT))
         );
     }
 
     @NotNull
     public static <T> TooltipBuilder getStandaloneTooltip(IServerUtils utils, ListOperation.StandAlone<T> predicate) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, predicate.value()).build("ali.property.branch.values"))
-                .add(utils.getValueTooltip(utils, predicate.operation()).build("ali.property.value.list_operation"))
+                .add(utils.getValueTooltip(utils, predicate.value()).build(Lang.Branch.VALUES))
+                .add(utils.getValueTooltip(utils, predicate.operation()).build(Lang.Value.LIST_OPERATION))
         );
     }
 
     @NotNull
     public static TooltipBuilder getDamageReductionTooltip(IServerUtils utils, BlocksAttacks.DamageReduction value) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.horizontalBlockingAngle()).build("ali.property.value.horizontal_blocking_angle"))
-                .add(utils.getValueTooltip(utils, value.type()).build("ali.property.branch.damage_types"))
-                .add(utils.getValueTooltip(utils, value.base()).build("ali.property.value.base"))
-                .add(utils.getValueTooltip(utils, value.factor()).build("ali.property.value.factor"))
-        );
+                .add(utils.getValueTooltip(utils, value.horizontalBlockingAngle()).build(Lang.Value.HORIZONTAL_BLOCKING_ANGLE))
+                .add(utils.getValueTooltip(utils, value.type()).build(Lang.Branch.DAMAGE_TYPES))
+                .add(utils.getValueTooltip(utils, value.base()).build(Lang.Value.BASE))
+                .add(utils.getValueTooltip(utils, value.factor()).build(Lang.Value.FACTOR))
+        ).key(Lang.Branch.DAMAGE_REDUCTION);
     }
 
     @NotNull
     public static TooltipBuilder getItemDamageTooltip(IServerUtils utils, BlocksAttacks.ItemDamageFunction value) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.threshold()).build("ali.property.value.threshold"))
-                .add(utils.getValueTooltip(utils, value.base()).build("ali.property.value.base"))
-                .add(utils.getValueTooltip(utils, value.factor()).build("ali.property.value.factor"))
+                .add(utils.getValueTooltip(utils, value.threshold()).build(Lang.Value.THRESHOLD))
+                .add(utils.getValueTooltip(utils, value.base()).build(Lang.Value.BASE))
+                .add(utils.getValueTooltip(utils, value.factor()).build(Lang.Value.FACTOR))
         );
     }
 
@@ -739,11 +742,16 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getDataComponentMatchersTooltip(IServerUtils utils, DataComponentMatchers dataComponentMatchers) {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
             return TooltipBuilder.array((b) -> b
-                    .add(getDataComponentExactPredicateTooltip(utils, dataComponentMatchers.exact()))
-                    .add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build("ali.property.branch.partial_matchers"))
+                    .add(utils.getValueTooltip(utils, dataComponentMatchers.exact()))
+                    .add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build(Lang.Branch.PARTIAL_MATCHERS))
             );
         }
 
         return TooltipBuilder.empty();
+    }
+
+    @NotNull
+    public static TooltipBuilder getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
+        return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents).key(Lang.Branch.EXPECTED_COMPONENTS);
     }
 }

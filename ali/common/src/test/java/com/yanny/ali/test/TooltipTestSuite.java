@@ -172,7 +172,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+            public <T extends ConsumeEffect> TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, T effect) {
                 return PluginManager.getInstance().serverRegistry.getConsumeEffectTooltip(utils, effect);
             }
 

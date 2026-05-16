@@ -27,28 +27,7 @@ public final class Lang {
         WEATHER_CHECK("weather_check", "Weather Check:"),
         // Forge
         CAN_ITEM_PERFORM_ABILITY("can_item_perform_ability", "Can Item Perform Ability: %s"),
-        CAN_TOOL_PERFORM_ACTION("can_tool_perform_action", "Can Tool Perform Action: %s"),
         LOOT_TABLE_ID("loot_table_id", "Loot Table Id: %s"),
-        // LootJS
-        BLOCK_ENTITY("block_entity", "Block Entity:"),
-        IS_LIGHT_LEVEL("is_light_level", "Is Light Level:"),
-        MATCH_ANY_INVENTORY_SLOT("match_any_inventory_slot", "Match Any Inventory Slot:"),
-        MATCH_ATTACKER_CUSTOM("match_attacker_custom", "Match Attacker Custom:"),
-        MATCH_BIOME("match_biome", "Match Biome:"),
-        MATCH_CHEST("match_chest", "Match Chest:"),
-        MATCH_DIMENSION("match_dimension", "Match Dimension:"),
-        MATCH_DIRECT_ATTACKER_CUSTOM("match_direct_attacker_custom", "Match Direct Attacker Custom:"),
-        MATCH_DISTANCE("match_distance", "Match Distance:"),
-        MATCH_ENTITY_CUSTOM("match_entity_custom", "Match Entity Custom:"),
-        MATCH_EQUIPMENT_SLOT("match_equipment_slot", "Match Equipment Slot:"),
-        MATCH_FEET("match_feet", "Match Feet:"),
-        MATCH_HEAD("match_head", "Match Head:"),
-        MATCH_LEGS("match_legs", "Match Legs:"),
-        MATCH_MAINHAND("match_mainhand", "Match Mainhand:"),
-        MATCH_OFFHAND("match_offhand", "Match Offhand:"),
-        MATCH_PLAYER("match_player", "Match Player:"),
-        MATCH_PLAYER_CUSTOM("match_player_custom", "Match Player Custom:"),
-        MATCH_STRUCTURE("match_structure", "Match Structure:"),
         ;
 
         private final Translation translation;
@@ -105,8 +84,6 @@ public final class Lang {
         SET_WRITABLE_BOOK_PAGES("set_writable_book_pages", "Set Writable Book Pages:"),
         SET_WRITTEN_BOOK_PAGES("set_written_book_pages", "Set Written Book Pages:"),
         TOGGLE_TOOLTIPS("toggle_tooltips", "Toggle Tooltips:"),
-        // LootJS
-        PLAYER_ACTION("player_action", "Player Action:"),
         // Farmer's delight
         COPY_SKILLET("copy_skillet", "Copy Skillet"),
         SMOKER_COOK("smoker_cook", "Smoker Cook"),
@@ -127,27 +104,19 @@ public final class Lang {
         }
     }
 
-    public enum ItemSubPredicates implements ITooltipKey {
-        ATTRIBUTE_MODIFIERS("item_attribute_modifiers", "Attribute Modifiers:"),
-        BUNDLE("item_bundle", "Bundle:"),
-        CONTAINER("item_container", "Container:"),
-        CUSTOM_DATA("item_custom_data", "Custom Data:"),
-        DAMAGE("item_damage", "Damage:"),
-        ENCHANTMENTS("item_enchantments", "Enchantments:"),
-        FIREWORKS("item_fireworks", "Fireworks:"),
-        FIREWORK_EXPLOSION("item_firework_explosion", "Firework Explosion:"),
-        JUKEBOX_PLAYABLE("item_jukebox_playable", "Jukebox Playable:"),
-        POTIONS("item_potions", "Potions:"),
-        STORED_ENCHANTMENTS("item_stored_enchantments", "Stored Enchantments:"),
-        TRIM("item_trim", "Trim:"),
-        WRITABLE_BOOK("item_writable_book", "Writable Book:"),
-        WRITTEN_BOOK("item_written_book", "Written Book:"),
+    public enum EntitySubPredicates implements ITooltipKey {
+        FISHING_HOOK("fishing_hook", "Fishing Hook:"),
+        LIGHTNING_BOLT("lightning_bolt", "Lightning Bolt:"),
+        PLAYER("player", "Player:"),
+        RAIDER("raider", "Raider:"),
+        SHEEP("sheep", "Sheep:"),
+        SLIME("slime", "Slime:"),
         ;
 
         private final Translation translation;
 
-        ItemSubPredicates(String k, String e) {
-            this.translation = new Translation("ali.type.item_sub_predicate." + k, e);
+        EntitySubPredicates(String k, String e) {
+            this.translation = new Translation("ali.type.entity_sub_predicate." + k, e);
         }
 
         @NotNull
@@ -157,18 +126,18 @@ public final class Lang {
         }
     }
 
-    public enum EntitySubPredicates implements ITooltipKey {
-        FISHING_HOOK("fishing_hook", "Fishing Hook:"),
-        LIGHTNING_BOLT("lightning_bolt", "Lightning Bolt:"),
-        PLAYER("player", "Player:"),
-        RAIDER("raider", "Raider:"),
-        SLIME("slime", "Slime:"),
+    public enum ConsumeEffects implements ITooltipKey {
+        APPLY_EFFECTS("apply_effects", "Apply Effects:"),
+        REMOVE_EFFECTS("remove_effects", "Remove Effects:"),
+        CLEAR_ALL_EFFECTS("clear_all_effects", "Clear All Effects"),
+        TELEPORT_RANDOMLY("teleport_randomly", "Teleport Randomly:"),
+        PLAY_SOUND("play_sound", "Play Sound:"),
         ;
 
         private final Translation translation;
 
-        EntitySubPredicates(String k, String e) {
-            this.translation = new Translation("ali.type.entity_sub_predicate." + k, e);
+        ConsumeEffects(String k, String e) {
+            this.translation = new Translation("ali.type.consume_effect." + k, e);
         }
 
         @NotNull
@@ -200,7 +169,6 @@ public final class Lang {
         CAN_ALWAYS_EAT("can_always_eat", "Can Always Eat: %s"),
         CAN_SEE_SKY("can_see_sky", "Can See Sky: %s"),
         CHANCE("chance", "Chance: %s"),
-        CHECK_COMPONENTS("check_components", "Check Components: %s"),
         COLOR("color", "Color: %s"),
         COLORS("colors", "Colors: %s"),
         COMPONENT("component", "Component: %s"),
@@ -214,19 +182,16 @@ public final class Lang {
         DAMAGE_PER_BLOCK("damage_per_block", "Damage Per Block: %s"),
         DECORATION("decoration", "Decoration: %s"),
         DEFAULT_MINING_SPEED("default_mining_speed", "Default Mining Speed: %s"),
-        DESCRIPTION("description", "Description: %s"),
         DESTINATION("destination", "Destination: %s"),
         DIMENSION("dimension", "Dimension: %s"),
         DONE("done", "Done: %s"),
         DURABILITY("durability", "Durability: %s"),
         DURATION("duration", "Duration: %s"),
-        EAT_SECONDS("eat_seconds", "Eat Seconds: %s"),
         EFFECT("effect", "Effect: %s"),
         ENCHANTMENT("enchantment", "Enchantment: %s"),
         ENTITY_DATA("entity_data", "Entity Data: %s"),
         ENTITY_TYPE("entity_type", "Entity Type: %s"),
         EQUIPMENT_SLOT("equipment_slot", "Equipment Slot: %s"),
-        EXACT("exact", "Exact: %s"),
         EXCLUDE("exclude", "Exclude: %s"),
         EXTRA_ROUNDS("extra_rounds", "Extra Rounds: %s"),
         FADE_COLORS("fade_colors", "Fade Colors: %s"),
@@ -244,7 +209,6 @@ public final class Lang {
         HAS_TWINKLE("has_twinkle", "Has Twinkle: %s"),
         HORIZONTAL("horizontal", "Horizontal: %s"),
         HORIZONTAL_SPEED("horizontal_speed", "Horizontal Speed: %s"),
-        HOTBAR("hotbar", "Hotbar: %s"),
         ID("id", "Id: %s"),
         INCLUDE("include", "Include: %s"),
         IN_OPEN_WATER("in_open_water", "Is In Open Water: %s"),
@@ -262,7 +226,6 @@ public final class Lang {
         IS_THUNDERING("is_thundering", "Is Thundering: %s"),
         IS_VISIBLE("is_visible", "Is Visible: %s"),
         ITEM("item", "Item: %s"),
-        ITEM_FILTER("item_filter", "Item Filter: %s"),
         ITEM_NAME("item_name", "Item Name: %s"),
         LEFT("left", "Left: %s"),
         LEVEL("level", "Level: %s"),
@@ -279,7 +242,6 @@ public final class Lang {
         MERGE_STRATEGY("merge_strategy", "Merge Strategy: %s"),
         MIN("min", "Min: %s"),
         MIN_TICKS_IN_HIVE("min_ticks_in_hive", "Min Ticks In Hive: %s"),
-        MOD("mod", "Mod: %s"),
         NAME("name", "Name: %s"),
         NBT("nbt", "Nbt: %s"),
         NUTRITION("nutrition", "Nutrition: %s"),
@@ -316,12 +278,10 @@ public final class Lang {
         SEED("seed", "Seed: %s"),
         SHAPE("shape", "Shape: %s"),
         SHOW_ICON("show_icon", "Show Icon: %s"),
-        SHOW_IN_TOOLTIP("show_in_tooltip", "Show In Tooltip: %s"),
         SIGNATURE("signature", "Signature: %s"),
         SIZE("size", "Size: %s"),
         SKIP_KNOWN_STRUCTURES("skip_known_structures", "Skip Known Structures: %s"),
         SLOT("slot", "Slot: %s"),
-        SLOT_GROUP("slot_group", "Slot Group: %s"),
         SMOKEY("smokey", "Smokey: %s"),
         SONG("song", "Song: %s"),
         SOURCE("source", "Source: %s"),
@@ -353,6 +313,41 @@ public final class Lang {
         Y("y", "Y: %s"),
         Z("z", "Z: %s"),
         ZOOM("zoom", "Zoom: %s"),
+        FLOATS("floats", "Floats: %s"),
+        FLAGS("flags", "Flags: %s"),
+        STRINGS("strings", "Strings: %s"),
+        HIDE_TOOLTIP("hide_tooltip", "Hide Tooltip: %s"),
+        CONSUME_SECONDS("consume_seconds", "Consume Seconds: %s"),
+        ANIMATION("animation", "Animation: %s"),
+        SOUND("sound", "Sound: %s"),
+        SECONDS("seconds", "Seconds: %s"),
+        COOLDOWN_GROUP("cooldown_group", "Cooldown Group: %s"),
+        HAS_CUSTOM_PARTICLES("has_custom_particles", "Has Custom Particles: %s"),
+        CAN_DESTROY_BLOCKS_IN_CREATIVE("can_destroy_blocks_in_creative", "Can Destroy Blocks In Creative: %s"),
+        ITEM_DAMAGE_PER_ATTACK("item_damage_per_attack", "Item Damage Per Attack: %s"),
+        DISABLE_BLOCKING_FOR_SECONDS("disable_blocking_for_seconds", "Disable Blocking For Seconds: %s"),
+        EQUIP_SOUND("equip_sound", "Equip Sound: %s"),
+        ASSET_ID("asset_id", "Asset ID: %s"),
+        CAMERA_OVERLAY("camera_overlay", "Camera Overlay: %s"),
+        DISPENSABLE("dispensable", "Dispensable: %s"),
+        SWAPPABLE("swappable", "Swappable: %s"),
+        DAMAGE_ON_HURT("damage_on_hurt", "Damage On Hurt: %s"),
+        EQUIP_ON_INTERACT("equip_on_interact", "Equip On Interact: %s"),
+        BLOCK_DELAY_SECONDS("block_delay_seconds", "Block Delay Seconds: %s"),
+        DISABLE_COOLDOWN_SCALE("disable_cooldown_scale", "Disable Cooldown Scale: %s"),
+        BYPASSED_BY("bypassed_by", "Bypassed By: %s"),
+        BLOCK_SOUND("block_sound", "Block Sound: %s"),
+        DISABLE_SOUND("disable_sound", "Disable Sound: %s"),
+        FORWARD("forward", "Forward: %s"),
+        BACKWARD("backward", "Backward: %s"),
+        JUMP("jump", "Jump: %s"),
+        SNEAK("sneak", "Sneak: %s"),
+        SPRINT("sprint", "Sprint: %s"),
+        FACTOR("factor", "Factor: %s"),
+        HORIZONTAL_BLOCKING_ANGLE("horizontal_blocking_angle", "Horizontal Blocking Angle: %s"),
+        THRESHOLD("threshold", "Threshold: %s"),
+        SHEARED("sheared",  "Sheared: %s"),
+        DIAMETER("diameter", "Diameter: %s"),
         ;
 
         private final Translation translation;
@@ -369,7 +364,22 @@ public final class Lang {
     }
 
     public enum Branch implements ITooltipKey {
-        ABILITIES("abilities", "Abilities:"),
+        ALLOWED_ENTITIES("allowed_entities", "Allowed Entities:"),
+        ENCHANTMENT_PREDICATE("enchantment_predicate", "Enchantment Predicate:"),
+        POTIONS("potions", "Potions:"),
+        DAMAGE_TYPES("damage_types", "Damage Types:"),
+        ITEM_DAMAGE("item_damage", "Item Damage:"),
+        INPUT("input", "Input:"),
+        FLOATS("floats", "Floats:"),
+        COLORS("colors", "Colors:"),
+        FLAGS("flags", "Flags:"),
+        STRINGS("strings", "Strings:"),
+        DAMAGE_REDUCTION("damage_reduction", "Damage Reduction:"),
+        DAMAGE_REDUCTIONS("damage_reductions", "Damage Reductions:"),
+        DEATH_EFFECTS("death_effects", "Death Effects:"),
+        ON_CONSUME_EFFECTS("on_consume_effects", "On Consume Effects:"),
+        CONVERT_INTO("convert_into", "Convert Into:"),
+        HIDDEN_COMPONENTS("hidden_components", "Hidden Components:"),
         ADVANCEMENTS("advancements", "Advancements:"),
         AFFECTS_MOVEMENT("affects_movement", "Affects Movement:"),
         ATTRIBUTE_MODIFIER("attribute_modifier", "Attribute Modifier:"),
@@ -382,7 +392,6 @@ public final class Lang {
         BODY("body", "Body:"),
         CHEST("chest", "Chest:"),
         CLAMPED("clamped", "Clamped:"),
-        COMPONENT_PREDICATES("component_predicates", "Component Predicates:"),
         COMPONENTS(Value.COMPONENT, "components", "Components:"),
         CONDITION("condition", "Predicate:"),
         CONDITIONS("conditions", "Predicates:"),
@@ -393,7 +402,6 @@ public final class Lang {
         CUSTOM_EFFECTS("custom_effects", "Custom Effects:"),
         DECORATIONS("decorations", "Decorations:"),
         DENOMINATOR("denominator", "Denominator:"),
-        DIMENSIONS("dimensions", "Dimensions:"),
         DIRECT_ENTITY("direct_entity", "Direct Entity:"),
         DISTANCE_TO_PLAYER("distance_to_player", "Distance to Player:"),
         EFFECT("effect", "Effect:"),
@@ -407,12 +415,12 @@ public final class Lang {
         ENTITY_TYPES(Value.ENTITY_TYPE, "entity_types", "Entity Types:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         EXCLUDE(Value.EXCLUDE, "exclude", "Exclude:"),
+        EXPECTED_COMPONENTS("expected_components", "Expected Components:"),
         EXPLOSION("explosion", "Explosion:"),
         EXPLOSIONS("explosions", "Explosions:"),
         FALLBACK("fallback", "Fallback:"),
         FEET("feet", "Feet:"),
         FILTER("filter", "Filter:"),
-        FILTERS("filters", "Filters:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
         FLUIDS(Value.FLUID, "fluids", "Fluids:"),
         FRACTION("fraction", "Fraction:"),
@@ -422,7 +430,6 @@ public final class Lang {
         HIDDEN_EFFECT("hidden_effect", "Hidden Effect:"),
         INCLUDE(Value.INCLUDE, "include", "Include:"),
         ITEM("item", "Item:"),
-        ITEM_PREDICATES("item_predicates", "Item Predicates:"),
         ITEMS(Value.ITEM, "items", "Items:"),
         LEGS("legs", "Legs:"),
         LEVEL_SQUARED("level_squared", "Squared Level:"),
@@ -444,13 +451,12 @@ public final class Lang {
         OFFHAND("offhand", "Offhand:"),
         OPERATION("operation", "Operation:"),
         OPTIONS(Value.OPTIONS, "options", "Options:"),
-        OR("or", "Or:"),
         PAGE("page", "Page:"),
         PAGES("pages", "Pages:"),
+        PARTIAL_MATCHERS("partial_matchers", "Partial Matchers:"),
         PASSENGER("passenger", "Passenger:"),
         PATTERNS(Value.PATTERN, "patterns", "Patterns:"),
         POSITION("position", "Position:"),
-        POSSIBLE_EFFECT("possible_effect", "Possible Effect:"),
         PREDICATE("predicate", "Predicate:"),
         PROPERTIES(Value.PROPERTY, "properties", "Properties:"),
         PROPERTY("property", "Property:"),
@@ -469,11 +475,8 @@ public final class Lang {
         TAGS("tags", "Tags:"),
         TARGETED_ENTITY("targeted_entity", "Targeted Entity:"),
         TITLE("title", "Title:"),
-        TOOLTIP(Value.TOOLTIP, "tooltip", "Tooltip:"),
-        USING_CONVERTS_TO("using_converts_to", "Using Converts To:"),
         VALUE("value", "Value:"),
         VALUES("values", "Values:"),
-        VARIANTS(Value.VARIANT, "variants", "Variants:"),
         VEHICLE("vehicle", "Vehicle:"),
         ;
 
@@ -547,24 +550,6 @@ public final class Lang {
 
         Multi(String k, String e) {
             this.translation = new Translation("ali.property.multi." + k, e);
-        }
-
-        @NotNull
-        @Override
-        public Translation getTranslation() {
-            return translation;
-        }
-    }
-
-    public enum Error implements ITooltipKey {
-        DETAIL_NOT_AVAILABLE("detail_not_available", "Detail Not Available"),
-        MODIFIED_ITEM("modified_item", "Modified dynamically!"),
-        ;
-
-        private final Translation translation;
-
-        Error(String k, String e) {
-            this.translation = new Translation("ali.error." + k, e);
         }
 
         @NotNull

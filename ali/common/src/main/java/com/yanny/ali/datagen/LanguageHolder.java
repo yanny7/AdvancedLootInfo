@@ -12,14 +12,13 @@ public class LanguageHolder {
     static {
         CoreLang.register(Lang.Conditions.class);
         CoreLang.register(Lang.Functions.class);
-        CoreLang.register(Lang.ItemSubPredicates.class);
         CoreLang.register(Lang.EntitySubPredicates.class);
+        CoreLang.register(Lang.ConsumeEffects.class);
         CoreLang.register(Lang.Value.class);
         CoreLang.register(Lang.Branch.class);
         CoreLang.register(Lang.Description.class);
         CoreLang.register(Lang.Group.class);
         CoreLang.register(Lang.Multi.class);
-        CoreLang.register(Lang.Error.class);
 
         TRANSLATION_MAP = new HashMap<>(CoreLang.TRANSLATION_MAP);
 

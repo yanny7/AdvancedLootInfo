@@ -57,7 +57,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
     @NotNull
     TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value);
 
-    <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect);
+    <T extends ConsumeEffect> TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, T effect);
 
     <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
 

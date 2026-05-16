@@ -77,8 +77,7 @@ public class EntitySubPredicateTooltipTest {
                 "        -> test2: false",
                 "        -> test: true",
                 "  -> Looking At:",
-                "    -> Entity Types:",
-                "      -> minecraft:warden",
+                "    -> Entity Type: minecraft:warden",
                 "  -> Input:",
                 "    -> Forward: true"
         ));
@@ -103,7 +102,7 @@ public class EntitySubPredicateTooltipTest {
 
     @Test
     public void testSheepPredicateTooltip() {
-        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, new SheepPredicate(Optional.of(false))), List.of(
+        assertTooltip(EntitySubPredicateTooltipUtils.getSheepPredicateTooltip(UTILS, new SheepPredicate(Optional.of(false))).build(), List.of(
                 "Sheep:",
                 "  -> Sheared: false"
         ));

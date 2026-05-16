@@ -169,7 +169,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends ConsumeEffect> void registerConsumeEffectTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         consumeEffectTooltips.put(type, (u, c) -> getter.apply(u, type.cast(c)));
     }
 
@@ -303,10 +303,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+    public <T extends ConsumeEffect> TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, T effect) {
         return consumeEffectTooltips.get(effect.getClass())
                 .map((i) -> i.apply(utils, effect))
-                .orElseGet(() -> GenericTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));
+                .orElseGet(() -> MissingTooltipUtils.getMissingConsumableEffectTooltip(utils, effect));
     }
 
     @Override

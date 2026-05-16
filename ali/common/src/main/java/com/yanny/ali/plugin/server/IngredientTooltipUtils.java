@@ -13,7 +13,7 @@ public class IngredientTooltipUtils {
     public static TooltipBuilder getIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
         return TooltipBuilder.array((b) -> {
             for (Holder<Item> value : ingredient.values) {
-                b.add(utils.getValueTooltip(utils, value).build(Lang.Branch.ITEM));
+                b.add(utils.getValueTooltip(utils, value).build(Lang.Value.ITEM));
             }
         }).key(Lang.Branch.ITEMS);
     }

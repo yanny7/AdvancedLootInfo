@@ -9,20 +9,14 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.component.MapDecorations;
-import net.minecraft.world.item.consume_effects.ConsumeEffect;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -83,11 +77,6 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
-        return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents).build("ali.property.branch.expected_components");
-    }
-
-    @NotNull
     public static <T> TooltipBuilder getFilterableTooltip(IServerUtils utils, IMultiKey value, Collection<Filterable<T>> data) {
         return TooltipBuilder.array((b) -> {
             for (Filterable<T> d : data) {
@@ -139,8 +128,8 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentEntryTooltip(IServerUtils utils, Map.Entry<DataComponentType<?>, Boolean> entry) {
-        return getDataComponentTypeTooltip(utils, entry.getKey())
-                .add(utils.getValueTooltip(utils, entry.getValue()).build("ali.property.value.value"));
+        return utils.getValueTooltip(utils, entry.getKey())
+                .add(utils.getValueTooltip(utils, entry.getValue()).build(Lang.Value.VALUE));
     }
 
     @NotNull
@@ -190,7 +179,8 @@ public class GenericTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentPredicateEntryTooltip(IServerUtils utils, Map.Entry<DataComponentPredicate.Type<?>, DataComponentPredicate> entry) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, entry.getValue())));
+        return utils.getValueTooltip(utils, entry.getKey())
+                .add(utils.getDataComponentPredicateTooltip(utils, entry.getValue()));
     }
 
     @NotNull

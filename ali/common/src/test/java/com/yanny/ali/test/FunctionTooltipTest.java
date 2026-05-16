@@ -16,7 +16,6 @@ import net.minecraft.server.network.Filterable;
 import net.minecraft.tags.InstrumentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.StructureTags;
-import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -458,13 +457,6 @@ public class FunctionTooltipTest {
                 "  -> Components:",
                 "    -> minecraft:damage",
                 "      -> Value: 5"
-        ));
-        assertTooltip(FunctionTooltipUtils.getSetComponentsTooltip(UTILS, (SetComponentsFunction) SetComponentsFunction
-                .setComponent(DataComponents.HIDE_TOOLTIP, Unit.INSTANCE)
-                .build()
-        ).build(), List.of(
-                "Set Components:",
-                "  -> Component: minecraft:hide_tooltip"
         ));
     }
 

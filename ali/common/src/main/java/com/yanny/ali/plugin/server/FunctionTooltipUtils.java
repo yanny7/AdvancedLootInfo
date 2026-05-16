@@ -361,10 +361,10 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetCustomModelDataTooltip(IServerUtils utils, SetCustomModelDataFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, fun.floats).build(Lang.BRANCH.FLOATS));
-            b.add(utils.getValueTooltip(utils, fun.colors).build(Lang.BRANCH.COLORS));
-            b.add(utils.getValueTooltip(utils, fun.flags).build(Lang.BRANCH.FLAGS));
-            b.add(utils.getValueTooltip(utils, fun.strings).build(Lang.BRANCH.STRINGS));
+            b.add(utils.getValueTooltip(utils, fun.floats).build(Lang.Branch.FLOATS));
+            b.add(utils.getValueTooltip(utils, fun.colors).build(Lang.Branch.COLORS));
+            b.add(utils.getValueTooltip(utils, fun.flags).build(Lang.Branch.FLAGS));
+            b.add(utils.getValueTooltip(utils, fun.strings).build(Lang.Branch.STRINGS));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }).key(Lang.Functions.SET_CUSTOM_MODEL_DATA);
     }

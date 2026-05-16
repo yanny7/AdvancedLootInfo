@@ -234,9 +234,9 @@ public class TradeUtils {
 
                 for (Map.Entry<ResourceKey<VillagerType>, VillagerTrades.ItemListing> entry : listing.trades().entrySet()) {
                     ResourceKey<VillagerType> type = entry.getKey();
-                    TooltipBuilder cond = utils.getValueTooltip(utils, type).build("ali.property.value.villager_type");
+                    TooltipBuilder cond = utils.getValueTooltip(utils, type).key(Lang.Value.VILLAGER_TYPE);
 
-                    nodes.add(utils.getItemListing(utils, entry.getValue(), cond));
+                    nodes.add(utils.getItemListing(utils, entry.getValue(), cond.build()));
                 }
 
                 return nodes;

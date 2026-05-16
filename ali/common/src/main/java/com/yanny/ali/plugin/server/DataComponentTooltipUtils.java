@@ -100,7 +100,7 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getTooltipDisplayTooltip(IServerUtils utils, TooltipDisplay value) {
+    public static TooltipBuilder getTooltipDisplayTooltip(IServerUtils utils, TooltipDisplay value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.hideTooltip()).build(Lang.Value.HIDE_TOOLTIP));
             b.add(utils.getValueTooltip(utils, value.hiddenComponents()).build(Lang.Branch.HIDDEN_COMPONENTS));
@@ -131,32 +131,31 @@ public class DataComponentTooltipUtils {
     @NotNull
     public static TooltipBuilder getConsumableTooltip(IServerUtils utils, Consumable consumable) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, food.consumeSeconds()).build(Lang.Value.CONSUME_SECONDS));
-            b.add(utils.getValueTooltip(utils, food.animation()).build(Lang.Value.ANIMATION));
-            b.add(utils.getValueTooltip(utils, food.sound()).build(Lang.Value.SOUND));
-            b.add(utils.getValueTooltip(utils, food.hasConsumeParticles()).build(Lang.Value.HAS_CUSTOM_PARTICLES));
-            b.add(GenericTooltipUtils.getCollectionTooltip(utils, consumable.onConsumeEffects(), (u, c) -> TooltipBuilder.array((x) -> x.add(utils.getConsumeEffectTooltip(u, c)))).build(Lang.Branch.ON_CONSUME_EFFECTS));
+            b.add(utils.getValueTooltip(utils, consumable.consumeSeconds()).build(Lang.Value.CONSUME_SECONDS));
+            b.add(utils.getValueTooltip(utils, consumable.animation()).build(Lang.Value.ANIMATION));
+            b.add(utils.getValueTooltip(utils, consumable.sound()).build(Lang.Value.SOUND));
+            b.add(utils.getValueTooltip(utils, consumable.hasConsumeParticles()).build(Lang.Value.HAS_CUSTOM_PARTICLES));
+            b.add(utils.getValueTooltip(utils, consumable.onConsumeEffects()).build(Lang.Branch.ON_CONSUME_EFFECTS));
         });
     }
 
     @NotNull
-    public static TooltipNode getUseRemainderTooltip(IServerUtils utils, UseRemainder remainder) {
-        return utils.getValueTooltip(utils, remainder.convertInto()).build("ali.property.branch.convert_into");
+    public static TooltipBuilder getUseRemainderTooltip(IServerUtils utils, UseRemainder remainder) {
+        return utils.getValueTooltip(utils, remainder.convertInto()).key(Lang.Branch.CONVERT_INTO);
     }
 
     @NotNull
-    public static TooltipNode getUseCooldownTooltip(IServerUtils utils, UseCooldown cooldown) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, cooldown.seconds()).build("ali.property.value.seconds"))
-                .add(utils.getValueTooltip(utils, cooldown.cooldownGroup()).build("ali.property.value.cooldown_group"))
-                )
-                .build();
+    public static TooltipBuilder getUseCooldownTooltip(IServerUtils utils, UseCooldown cooldown) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, cooldown.seconds()).build(Lang.Value.SECONDS));
+            b.add(utils.getValueTooltip(utils, cooldown.cooldownGroup()).build(Lang.Value.COOLDOWN_GROUP));
+        });
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getDamageResistantTooltip(IServerUtils utils, DamageResistant resistant) {
-        return utils.getValueTooltip(utils, resistant.types()).build("ali.property.value.type");
+    public static TooltipBuilder getDamageResistantTooltip(IServerUtils utils, DamageResistant resistant) {
+        return utils.getValueTooltip(utils, resistant.types()).key(Lang.Value.TYPE);
     }
 
     @NotNull
@@ -170,67 +169,64 @@ public class DataComponentTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getWeaponTooltip(IServerUtils utils, Weapon weapon) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, weapon.itemDamagePerAttack()).build("ali.property.value.item_damage_per_attack"))
-                .add(utils.getValueTooltip(utils, weapon.disableBlockingForSeconds()).build("ali.property.value.disable_blocking_for_seconds"))
-                )
-                .build();
+    public static TooltipBuilder getWeaponTooltip(IServerUtils utils, Weapon weapon) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, weapon.itemDamagePerAttack()).build(Lang.Value.ITEM_DAMAGE_PER_ATTACK));
+            b.add(utils.getValueTooltip(utils, weapon.disableBlockingForSeconds()).build(Lang.Value.DISABLE_BLOCKING_FOR_SECONDS));
+        });
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getEnchantableTooltip(IServerUtils utils, Enchantable enchantable) {
-        return utils.getValueTooltip(utils, enchantable.value()).build("ali.property.value.value");
+    public static TooltipBuilder getEnchantableTooltip(IServerUtils utils, Enchantable enchantable) {
+        return utils.getValueTooltip(utils, enchantable.value()).key(Lang.Value.VALUE);
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getEquipableTooltip(IServerUtils utils, Equippable equippable) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, equippable.slot()).build("ali.property.value.equipment_slot"))
-                .add(utils.getValueTooltip(utils, equippable.equipSound()).build("ali.property.value.equip_sound"))
-                .add(utils.getValueTooltip(utils, equippable.assetId()).build("ali.property.value.asset_id"))
-                .add(utils.getValueTooltip(utils, equippable.cameraOverlay()).build("ali.property.value.camera_overlay"))
-                .add(utils.getValueTooltip(utils, equippable.allowedEntities()).build("ali.property.branch.allowed_entities"))
-                .add(utils.getValueTooltip(utils, equippable.dispensable()).build("ali.property.value.dispensable"))
-                .add(utils.getValueTooltip(utils, equippable.swappable()).build("ali.property.value.swappable"))
-                .add(utils.getValueTooltip(utils, equippable.damageOnHurt()).build("ali.property.value.damage_on_hurt"))
-                .add(utils.getValueTooltip(utils, equippable.equipOnInteract()).build("ali.property.value.equip_on_interact"))
-                )
-                .build();
+    public static TooltipBuilder getEquipableTooltip(IServerUtils utils, Equippable equippable) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, equippable.slot()).build(Lang.Value.SLOT));
+            b.add(utils.getValueTooltip(utils, equippable.equipSound()).build(Lang.Value.EQUIP_SOUND));
+            b.add(utils.getValueTooltip(utils, equippable.assetId()).build(Lang.Value.ASSET_ID));
+            b.add(utils.getValueTooltip(utils, equippable.cameraOverlay()).build(Lang.Value.CAMERA_OVERLAY));
+            b.add(utils.getValueTooltip(utils, equippable.allowedEntities()).build(Lang.Branch.ALLOWED_ENTITIES));
+            b.add(utils.getValueTooltip(utils, equippable.dispensable()).build(Lang.Value.DISPENSABLE));
+            b.add(utils.getValueTooltip(utils, equippable.swappable()).build(Lang.Value.SWAPPABLE));
+            b.add(utils.getValueTooltip(utils, equippable.damageOnHurt()).build(Lang.Value.DAMAGE_ON_HURT));
+            b.add(utils.getValueTooltip(utils, equippable.equipOnInteract()).build(Lang.Value.EQUIP_ON_INTERACT));
+        });
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getRepairableTooltip(IServerUtils utils, Repairable repairable) {
-        return utils.getValueTooltip(utils, repairable.items()).build("ali.property.branch.items");
+    public static TooltipBuilder getRepairableTooltip(IServerUtils utils, Repairable repairable) {
+        return utils.getValueTooltip(utils, repairable.items()).key(Lang.Branch.ITEMS);
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getDeathProtectionTooltip(IServerUtils utils, DeathProtection protection) {
-        return GenericTooltipUtils.getCollectionTooltip(utils, protection.deathEffects(), (u, c) -> TooltipBuilder.array((x) -> x.add(utils.getConsumeEffectTooltip(u, c)))).build("ali.property.branch.death_effects");
+    public static TooltipBuilder getDeathProtectionTooltip(IServerUtils utils, DeathProtection protection) {
+        return utils.getValueTooltip(utils, protection.deathEffects()).key(Lang.Branch.DEATH_EFFECTS);
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getBlockAttacksTooltip(IServerUtils utils, BlocksAttacks value) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.blockDelaySeconds()).build("ali.property.value.block_delay_seconds"))
-                .add(utils.getValueTooltip(utils, value.disableCooldownScale()).build("ali.property.value.disable_cooldown_scale"))
-                .add(getCollectionTooltip(utils, "ali.property.branch.damage_reduction", value.damageReductions()).build("ali.property.branch.damage_reductions"))
-                .add(utils.getValueTooltip(utils, value.itemDamage()).build("ali.property.branch.item_damage"))
-                .add(utils.getValueTooltip(utils, value.bypassedBy()).build("ali.property.value.bypassed_by"))
-                .add(utils.getValueTooltip(utils, value.blockSound()).build("ali.property.value.block_sound"))
-                .add(utils.getValueTooltip(utils, value.disableSound()).build("ali.property.value.disable_sound"))
-                )
-                .build();
+    public static TooltipBuilder getBlockAttacksTooltip(IServerUtils utils, BlocksAttacks value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.blockDelaySeconds()).build(Lang.Value.BLOCK_DELAY_SECONDS));
+            b.add(utils.getValueTooltip(utils, value.disableCooldownScale()).build(Lang.Value.DISABLE_COOLDOWN_SCALE));
+            b.add(utils.getValueTooltip(utils, value.damageReductions()).build(Lang.Branch.DAMAGE_REDUCTIONS));
+            b.add(utils.getValueTooltip(utils, value.itemDamage()).build(Lang.Branch.ITEM_DAMAGE));
+            b.add(utils.getValueTooltip(utils, value.bypassedBy()).build(Lang.Value.BYPASSED_BY));
+            b.add(utils.getValueTooltip(utils, value.blockSound()).build(Lang.Value.BLOCK_SOUND));
+            b.add(utils.getValueTooltip(utils, value.disableSound()).build(Lang.Value.DISABLE_SOUND));
+        });
     }
 
     @NotNull
-    public static TooltipNode getDyedColorTooltip(IServerUtils utils, DyedItemColor value) {
-        return utils.getValueTooltip(utils, value.rgb()).build("ali.property.value.rgb");
+    public static TooltipBuilder getDyedColorTooltip(IServerUtils utils, DyedItemColor value) {
+        return utils.getValueTooltip(utils, value.rgb()).key(Lang.Value.RGB);
     }
 
     @Unmodifiable
@@ -275,14 +271,14 @@ public class DataComponentTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.potion()).build(Lang.Value.POTION));
             b.add(utils.getValueTooltip(utils, value.customColor()).build(Lang.Value.CUSTOM_COLOR));
             b.add(utils.getValueTooltip(utils, value.customEffects()).build(Lang.Branch.CUSTOM_EFFECTS));
-            b.add(utils.getValueTooltip(utils, value.customName()).build(Lang.Branch.CUSTOM_NAME));
+            b.add(utils.getValueTooltip(utils, value.customName()).build(Lang.Value.CUSTOM_NAME));
         });
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getFloatValueTooltip(IServerUtils utils, float value) {
-        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
+    public static TooltipBuilder getFloatValueTooltip(IServerUtils utils, float value) {
+        return utils.getValueTooltip(utils, value).key(Lang.Value.VALUE);
     }
 
     @NotNull
@@ -321,20 +317,20 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getInstrumentTooltip(IServerUtils utils, InstrumentComponent value) {
-        return utils.getValueTooltip(utils, value.instrument()).build("ali.property.value.value");
+    public static TooltipBuilder getInstrumentTooltip(IServerUtils utils, InstrumentComponent value) {
+        return utils.getValueTooltip(utils, value.instrument()).key(Lang.Value.VALUE);
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getProvidesTrimMaterialTooltip(IServerUtils utils, ProvidesTrimMaterial value) {
-        return utils.getValueTooltip(utils, value.material()).build("ali.property.value.material");
+    public static TooltipBuilder getProvidesTrimMaterialTooltip(IServerUtils utils, ProvidesTrimMaterial value) {
+        return utils.getValueTooltip(utils, value.material()).key(Lang.Value.MATERIAL);
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getOminousBottleAmplifierTooltip(IServerUtils utils, OminousBottleAmplifier value) {
-        return utils.getValueTooltip(utils, value.value()).build("ali.property.value.value");
+    public static TooltipBuilder getOminousBottleAmplifierTooltip(IServerUtils utils, OminousBottleAmplifier value) {
+        return utils.getValueTooltip(utils, value.value()).key(Lang.Value.VALUE);
     }
 
     @NotNull
@@ -344,8 +340,8 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getProvidesBannerPatternsTooltip(IServerUtils utils, TagKey<BannerPattern> value) {
-        return utils.getValueTooltip(utils, value).build("ali.property.value.banner_pattern");
+    public static TooltipBuilder getProvidesBannerPatternsTooltip(IServerUtils utils, TagKey<BannerPattern> value) {
+        return utils.getValueTooltip(utils, value).key(Lang.Value.BANNER_PATTERN);
     }
 
     @Unmodifiable
@@ -429,7 +425,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getBeesTooltip(IServerUtils utils, Bees bees) {
-        return utils.getValueTooltip(utils, bees.bees()).build(Lang.Branch.BEES);
+        return utils.getValueTooltip(utils, bees.bees()).key(Lang.Branch.BEES);
     }
 
     @Unmodifiable
@@ -448,18 +444,18 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getHolderTooltip(IServerUtils utils, Holder<?> value) {
-        return utils.getValueTooltip(utils, value).build("ali.property.value.value");
+    public static TooltipBuilder getHolderTooltip(IServerUtils utils, Holder<?> value) {
+        return utils.getValueTooltip(utils, value).key(Lang.Value.VALUE);
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getEnumTypeTooltip(IServerUtils utils, Enum<?> type) {
-        return utils.getValueTooltip(utils, type).build("ali.property.value.type");
+    public static TooltipBuilder getEnumTypeTooltip(IServerUtils utils, Enum<?> type) {
+        return utils.getValueTooltip(utils, type).key(Lang.Value.TYPE);
     }
 
     @NotNull
-    public static TooltipNode getChickenVariantTooltip(IServerUtils utils, EitherHolder<ChickenVariant> holder) {
-        return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
+    public static TooltipBuilder getChickenVariantTooltip(IServerUtils utils, EitherHolder<ChickenVariant> holder) {
+        return utils.getValueTooltip(utils, holder).key(Lang.Value.TYPE);
     }
 }

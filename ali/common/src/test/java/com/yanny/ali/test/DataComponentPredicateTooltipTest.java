@@ -1,5 +1,6 @@
 package com.yanny.ali.test;
 
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.DataComponentPredicateTooltipUtils;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.Holder;
@@ -33,15 +34,15 @@ import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 public class DataComponentPredicateTooltipTest {
     @Test
     public void testItemDamagePredicateTooltip() {
-        assertTooltip(DataComponentPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, ItemDamagePredicate.durability(MinMaxBounds.Ints.atMost(50))).build(), List.of(
-                "Damage:",
+        assertTooltip(DataComponentPredicateTooltipUtils.getDamagePredicateTooltip(UTILS, DamagePredicate.durability(MinMaxBounds.Ints.atMost(50))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Durability: ≤50"
         ));
-        assertTooltip(DataComponentPredicateTooltipUtils.getItemDamagePredicateTooltip(UTILS, new ItemDamagePredicate(
+        assertTooltip(DataComponentPredicateTooltipUtils.getDamagePredicateTooltip(UTILS, new DamagePredicate(
                 MinMaxBounds.Ints.atMost(50),
                 MinMaxBounds.Ints.atLeast(5)
-        )).build(), List.of(
-                "Damage:",
+        )).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Damage: ≥5",
                 "  -> Durability: ≤50"
         ));
@@ -52,8 +53,8 @@ public class DataComponentPredicateTooltipTest {
         assertTooltip(DataComponentPredicateTooltipUtils.getEnchantmentsPredicateTooltip(UTILS, EnchantmentsPredicate.enchantments(List.of(
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
-        ))).build(), List.of(
-                "Enchantments:",
+        ))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Predicate:",
                 "    -> Enchantment: minecraft:looting",
                 "  -> Predicate:",
@@ -67,8 +68,8 @@ public class DataComponentPredicateTooltipTest {
         assertTooltip(DataComponentPredicateTooltipUtils.getStoredEnchantmentsPredicateTooltip(UTILS, EnchantmentsPredicate.storedEnchantments(List.of(
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
-        ))).build(), List.of(
-                "Stored Enchantments:",
+        ))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Predicate:",
                 "    -> Enchantment: minecraft:looting",
                 "  -> Predicate:",
@@ -81,8 +82,8 @@ public class DataComponentPredicateTooltipTest {
     public void testPotionsPredicateTooltip() {
         assertTooltip(DataComponentPredicateTooltipUtils.getPotionsPredicateTooltip(UTILS, (PotionsPredicate) PotionsPredicate.potions(
                 HolderSet.direct(Potions.HEALING, Potions.INFESTED)
-        )).build(), List.of(
-                "Potions:",
+        )).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> minecraft:healing",
                 "  -> minecraft:infested"
         ));
@@ -94,8 +95,8 @@ public class DataComponentPredicateTooltipTest {
 
         compoundTag.putInt("tst", 5);
 
-        assertTooltip(DataComponentPredicateTooltipUtils.getItemCustomDataPredicateTooltip(UTILS, ItemCustomDataPredicate.customData(new NbtPredicate(compoundTag))).build(), List.of(
-                "Custom Data:",
+        assertTooltip(DataComponentPredicateTooltipUtils.getCustomDataPredicateTooltip(UTILS, CustomDataPredicate.customData(new NbtPredicate(compoundTag))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Nbt: {tst:5}"
         ));
     }
@@ -106,8 +107,8 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build())),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
-        )))).build(), List.of(
-                "Container:",
+        )))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Contains:",
                 "    -> Predicate:",
                 "      -> Item: minecraft:andesite",
@@ -126,8 +127,8 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(CollectionContentsPredicate.of(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE).build())),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), ItemTags.ARROWS).build(), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
-        )))).build(), List.of(
-                "Bundle:",
+        )))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Contains:",
                 "    -> Predicate:",
                 "      -> Item: minecraft:andesite",
@@ -146,8 +147,8 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(FireworkExplosion.Shape.LARGE_BALL),
                 Optional.of(true),
                 Optional.of(false)
-        ))).build(), List.of(
-                "Firework Explosion:",
+        ))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Shape: LARGE_BALL",
                 "  -> Trail: false",
                 "  -> Twinkle: true"
@@ -160,8 +161,8 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(CollectionContentsPredicate.of(new FireworkExplosionPredicate.FireworkPredicate(Optional.of(FireworkExplosion.Shape.BURST), Optional.empty(), Optional.empty()))),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new FireworkExplosionPredicate.FireworkPredicate(Optional.of(FireworkExplosion.Shape.CREEPER), Optional.empty(), Optional.empty()), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
-        )), MinMaxBounds.Ints.between(1, 4))).build(), List.of(
-                "Fireworks:",
+        )), MinMaxBounds.Ints.between(1, 4))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Explosions:",
                 "    -> Contains:",
                 "      -> Predicate:",
@@ -181,8 +182,8 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(CollectionContentsPredicate.of(new WritableBookPredicate.PagePredicate("Hello"))),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new WritableBookPredicate.PagePredicate("World"), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
-        )))).build(), List.of(
-                "Writable Book:",
+        )))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Contains:",
                 "    -> Page: Hello",
                 "  -> Counts:",
@@ -198,8 +199,8 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(CollectionContentsPredicate.of(new WrittenBookPredicate.PagePredicate(Component.literal("Hello")))),
                 Optional.of(CollectionCountsPredicate.of(new CollectionCountsPredicate.Entry<>(new WrittenBookPredicate.PagePredicate(Component.literal("World")), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
-        )), Optional.of("Yanny"), Optional.of("Testing"), MinMaxBounds.Ints.between(1, 8), Optional.of(false))).build(), List.of(
-                "Written Book:",
+        )), Optional.of("Yanny"), Optional.of("Testing"), MinMaxBounds.Ints.between(1, 8), Optional.of(false))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Pages:",
                 "    -> Contains:",
                 "      -> Page: Hello",
@@ -232,18 +233,18 @@ public class DataComponentPredicateTooltipTest {
                         Optional.empty()
                 ), MinMaxBounds.Ints.between(1, 5)))),
                 Optional.of(MinMaxBounds.Ints.atLeast(4))
-        )))).build(), List.of(
-                "Attribute Modifiers:",
+        )))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Contains:",
                 "    -> Modifier:",
-                "      -> Attribute: minecraft:generic.armor",
+                "      -> Attribute: minecraft:armor",
                 "      -> Id: minecraft:help",
                 "      -> Amount: 1.0-4.0",
                 "      -> Operation: ADD_VALUE",
                 "      -> Slot: ARMOR",
                 "  -> Counts:",
                 "    -> Modifier:",
-                "      -> Attribute: minecraft:generic.gravity",
+                "      -> Attribute: minecraft:gravity",
                 "      -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
@@ -254,8 +255,8 @@ public class DataComponentPredicateTooltipTest {
         assertTooltip(DataComponentPredicateTooltipUtils.getTrimPredicateTooltip(UTILS, new TrimPredicate(
                 Optional.of(HolderSet.direct(Holder.direct(TooltipTestSuite.LOOKUP.lookup(Registries.TRIM_MATERIAL).orElseThrow().get(TrimMaterials.GOLD).orElseThrow().value()))),
                 Optional.of(HolderSet.direct(Holder.direct(TooltipTestSuite.LOOKUP.lookup(Registries.TRIM_PATTERN).orElseThrow().get(TrimPatterns.EYE).orElseThrow().value()))
-        ))).build(), List.of(
-                "Trim:",
+        ))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Material: minecraft:gold",
                 "  -> Pattern: minecraft:eye"
         ));
@@ -265,8 +266,8 @@ public class DataComponentPredicateTooltipTest {
     public void testJukebox() {
         assertTooltip(DataComponentPredicateTooltipUtils.getJukeboxPlayableTooltip(UTILS, new JukeboxPlayablePredicate(
                 Optional.of(HolderSet.direct(LOOKUP.lookup(Registries.JUKEBOX_SONG).orElseThrow().get(JukeboxSongs.PIGSTEP).orElseThrow()))
-        )).build(), List.of(
-                "Jukebox Playable:",
+        )).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Song: minecraft:pigstep"
         ));
     }

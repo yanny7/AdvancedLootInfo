@@ -384,7 +384,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
         registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);
         registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
-        registry.registerValueTooltip(ItemSubPredicate.class, ValueTooltipUtils::getItemSubPredicateTooltip);
+        registry.registerValueTooltip(DataComponentPredicate.class, ValueTooltipUtils::getDataComponentPredicateTooltip);
+        registry.registerValueTooltip(ConsumeEffect.class, ValueTooltipUtils::getConsumeEffectTooltip);
 
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
@@ -453,6 +454,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlocksAttacks.DamageReduction.class, ValueTooltipUtils::getDamageReductionTooltip);
         registry.registerValueTooltip(BlocksAttacks.ItemDamageFunction.class, ValueTooltipUtils::getItemDamageTooltip);
         registry.registerValueTooltip(DataComponentMatchers.class, ValueTooltipUtils::getDataComponentMatchersTooltip);
+        registry.registerValueTooltip(DataComponentExactPredicate.class, ValueTooltipUtils::getDataComponentExactPredicateTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithEnchantedBonusCondition.class, TooltipUtils::applyRandomChanceWithLooting);

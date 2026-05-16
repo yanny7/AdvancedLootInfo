@@ -91,7 +91,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testAttributeTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getAttributeTooltip(UTILS, Attributes.JUMP_STRENGTH.value()).build("ali.property.value.attribute"), List.of("Attribute: minecraft:jump_strength"));
+        assertTooltip(RegistriesTooltipUtils.getAttributeTooltip(UTILS, Attributes.JUMP_STRENGTH.value()).build(Lang.Value.ATTRIBUTE), List.of("Attribute: minecraft:jump_strength"));
     }
 
     @Test
@@ -109,12 +109,12 @@ public class RegistriesTooltipTest {
         assertTooltip(RegistriesTooltipUtils.getEntitySubPredicateTooltip(UTILS, new LightningBoltPredicate(
                 MinMaxBounds.Ints.between(1, 2),
                 Optional.of(EntityPredicate.Builder.entity().team("white").build())
-        )).build("ali.property.value.variant"), List.of("Variant: minecraft:lightning"));
+        )).build(Lang.Value.VARIANT), List.of("Variant: minecraft:lightning"));
     }
 
     @Test
     public void testCatVariantTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getCatVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.CALICO).value()).build("ali.property.value.variant"), List.of("Variant: minecraft:calico"));
+        assertTooltip(RegistriesTooltipUtils.getCatVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.CAT_VARIANT).getOrThrow(CatVariants.CALICO).value()).build(Lang.Value.VARIANT), List.of("Variant: minecraft:calico"));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testFrogVariantTooltip() {
-    assertTooltip(RegistriesTooltipUtils.getFrogVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariants.TEMPERATE).value()).build("ali.property.value.variant"), List.of("Variant: minecraft:temperate"));
+    assertTooltip(RegistriesTooltipUtils.getFrogVariantTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.FROG_VARIANT).getOrThrow(FrogVariants.TEMPERATE).value()).build(Lang.Value.VARIANT), List.of("Variant: minecraft:temperate"));
     }
 
     @Test
