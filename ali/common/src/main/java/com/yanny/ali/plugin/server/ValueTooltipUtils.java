@@ -100,8 +100,8 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEntityPredicateTooltip(IServerUtils utils, EntityPredicate entityPredicate) {
         if (entityPredicate != EntityPredicate.ANY) {
-            return TooltipBuilder.branch((b) -> {
-                b.add(utils.getValueTooltip(utils, entityPredicate.entityType).build(Lang.Value.ENTITY_TYPE));
+            return TooltipBuilder.array((b) -> {
+                b.add(utils.getValueTooltip(utils, entityPredicate.entityType).build(Lang.Branch.ENTITY_TYPES));
                 b.add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer).build(Lang.Branch.DISTANCE_TO_PLAYER));
                 b.add(utils.getValueTooltip(utils, entityPredicate.location).build(Lang.Branch.LOCATION));
                 b.add(utils.getValueTooltip(utils, entityPredicate.steppingOnLocation).build(Lang.Branch.STEPPING_ON_LOCATION));
@@ -123,12 +123,14 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEntityTypePredicateTooltip(IServerUtils utils, EntityTypePredicate entityTypePredicate) {
         if (entityTypePredicate != EntityTypePredicate.ANY) {
-            if (entityTypePredicate instanceof EntityTypePredicate.TypePredicate typePredicate) {
-                return utils.getValueTooltip(utils, typePredicate.type);
-            }
-            if (entityTypePredicate instanceof EntityTypePredicate.TagPredicate tagPredicate) {
-                return utils.getValueTooltip(utils, tagPredicate.tag);
-            }
+            return TooltipBuilder.branch((b) -> {
+                if (entityTypePredicate instanceof EntityTypePredicate.TypePredicate typePredicate) {
+                    b.add(utils.getValueTooltip(utils, typePredicate.type));
+                }
+                if (entityTypePredicate instanceof EntityTypePredicate.TagPredicate tagPredicate) {
+                    b.add(utils.getValueTooltip(utils, tagPredicate.tag).key(Lang.Value.TAG));
+                }
+            });
         }
 
         return TooltipBuilder.empty();

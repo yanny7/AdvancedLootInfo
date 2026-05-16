@@ -18,12 +18,14 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
-        return utils.getValueTooltip(utils, cond.terms).key(Lang.Conditions.ALL_OF);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)))
+                .key(Lang.Conditions.ALL_OF);
     }
 
     @NotNull
     public static TooltipBuilder getAnyOfTooltip(IServerUtils utils, AnyOfCondition cond) {
-        return utils.getValueTooltip(utils, cond.terms).key(Lang.Conditions.ANY_OF);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)))
+                .key(Lang.Conditions.ANY_OF);
     }
 
     @NotNull
@@ -36,7 +38,8 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDamageSourcePropertiesTooltip(IServerUtils utils, DamageSourceCondition cond) {
-        return utils.getValueTooltip(utils, cond.predicate).key(Lang.Conditions.DAMAGE_SOURCE_PROPERTIES);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate)))
+                .key(Lang.Conditions.DAMAGE_SOURCE_PROPERTIES);
     }
 
     @NotNull
@@ -72,14 +75,15 @@ public class ConditionTooltipUtils {
             b.add(utils.getValueTooltip(utils, cond.predicate).build(Lang.Branch.LOCATION));
 
             if (!cond.offset.equals(BlockPos.ZERO)) {
-                b.add(utils.getValueTooltip(utils, cond.offset).build("ali.property.multi.offset"));
+                b.add(utils.getValueTooltip(utils, cond.offset).build(Lang.Multi.OFFSET));
             }
         }).key(Lang.Conditions.LOCATION_CHECK);
     }
 
     @NotNull
     public static TooltipBuilder getMatchToolTooltip(IServerUtils utils, MatchTool cond) {
-        return utils.getValueTooltip(utils, cond.predicate).key(Lang.Conditions.MATCH_TOOL);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate)))
+                .key(Lang.Conditions.MATCH_TOOL);
     }
 
     @NotNull
@@ -98,7 +102,8 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getReferenceTooltip(IServerUtils utils, ConditionReference cond) {
-        return utils.getValueTooltip(utils, cond.name).key(Lang.Conditions.REFERENCE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.name).build(Lang.Value.LOOT_TABLE)))
+                .key(Lang.Conditions.REFERENCE);
     }
 
     @NotNull

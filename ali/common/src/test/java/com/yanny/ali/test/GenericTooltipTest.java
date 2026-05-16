@@ -175,12 +175,13 @@ public class GenericTooltipTest {
                 new StatePropertiesPredicate.RangedPropertyMatcher("level", null, "5"),
                 new StatePropertiesPredicate.RangedPropertyMatcher("level", "1", null),
                 new StatePropertiesPredicate.RangedPropertyMatcher("level", null, null)
-        ))).build(), List.of(
-                "facing: east",
-                "level: 1-5",
-                "level: ≤5",
-                "level: ≥1",
-                "level: any"
+        ))).build(Lang.Branch.PROPERTIES), List.of(
+                "Properties:",
+                "  -> facing: east",
+                "  -> level: 1-5",
+                "  -> level: ≤5",
+                "  -> level: ≥1",
+                "  -> level: any"
         ));
     }
 
@@ -269,8 +270,11 @@ public class GenericTooltipTest {
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(EntityType.CAT)).build(Lang.Value.ENTITY_TYPE), List.of("Entity Type: minecraft:cat"));
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(EntityTypeTags.SKELETONS)).build(Lang.Value.ENTITY_TYPE), List.of("Entity Type: minecraft:skeletons"));
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(EntityType.CAT)).build(Lang.Branch.ENTITY_TYPES), List.of("Entity Type: minecraft:cat"));
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(EntityTypeTags.SKELETONS)).build(Lang.Branch.ENTITY_TYPES), List.of(
+                "Entity Types:",
+                "  -> Tag: minecraft:skeletons"
+        ));
     }
 
     @Test
@@ -587,7 +591,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBlockPosTooltip() {
-        assertTooltip(ValueTooltipUtils.getBlockPosTooltip(UTILS, new BlockPos(10, 12, 14)).build("ali.property.multi.offset"), List.of(
+        assertTooltip(ValueTooltipUtils.getBlockPosTooltip(UTILS, new BlockPos(10, 12, 14)).build(Lang.Multi.OFFSET), List.of(
                 "Offset: [X: 10, Y: 12, Z: 14]"
         ));
     }

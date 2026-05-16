@@ -7,6 +7,7 @@ import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.language.CoreLang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -280,7 +281,7 @@ public class TooltipNode {
 
                 if (key == null) {
                     LOGGER.warn("Unable to decode indexed key! Version mismatch!");
-                    key = "aci.util.missing";
+                    key = CoreLang.Utils.NOT_IMPLEMENTED.singular();
                 }
             } else {
                 key = buf.readUtf();

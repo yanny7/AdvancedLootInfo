@@ -18,7 +18,7 @@ public final class Lang {
         MATCH_TOOL("match_tool", "Match Tool:"),
         RANDOM_CHANCE("random_chance", "Random Chance:"),
         RANDOM_CHANCE_WITH_LOOTING("random_chance_with_looting", "Random Chance With Looting:"),
-        REFERENCE("reference", "Reference: %s"),
+        REFERENCE("reference", "Reference:"),
         SURVIVES_EXPLOSION("survives_explosion", "Survives Explosion"),
         TABLE_BONUS("table_bonus", "Table Bonus:"),
         TIME_CHECK("time_check", "Time Check:"),
@@ -244,6 +244,7 @@ public final class Lang {
         ENTITY_EQUIPMENT("entity_equipment", "Entity Equipment:"),
         ENTITY_FLAGS("entity_flags", "Entity Flags:"),
         ENTITY_SUB_PREDICATE("entity_sub_predicate", "Entity Sub Predicate:"),
+        ENTITY_TYPES(Value.ENTITY_TYPE, "entity_types",  "Entity Types:"),
         EQUIPMENT_SLOTS(Value.EQUIPMENT_SLOT, "equipment_slots", "Equipment Slots:"),
         FEET("feet", "Feet:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
@@ -329,6 +330,23 @@ public final class Lang {
 
         Group(String k, String e) {
             this.translation = new Translation("ali.enum.group_type." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Multi implements ITooltipKey {
+        OFFSET("offset", "Offset: [X: %s, Y: %s, Z: %s]"),
+        ;
+
+        private final Translation translation;
+
+        Multi(String k, String e) {
+            this.translation = new Translation("ali.property.multi." + k, e);
         }
 
         @NotNull

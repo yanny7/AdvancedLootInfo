@@ -36,6 +36,12 @@ public class ConditionTooltipTest {
                 "  -> Weather Check:",
                 "    -> Is Raining: true"
         ));
+        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
+                ExplosionCondition.survivesExplosion()
+        ).build()).build(), List.of(
+                "All Of:",
+                "  -> Survives Explosion"
+        ));
     }
 
     @Test
@@ -139,6 +145,12 @@ public class ConditionTooltipTest {
                 "    -> Period: 10",
                 "    -> Value: 1 - 8"
         ));
+        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
+                ExplosionCondition.survivesExplosion()
+        ).build()).build(), List.of(
+                "Inverted:",
+                "  -> Survives Explosion"
+        ));
     }
 
     @Test
@@ -186,6 +198,9 @@ public class ConditionTooltipTest {
                 "    -> Predicate:",
                 "      -> Enchantment: minecraft:looting"
         ));
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
+                ItemPredicate.Builder.item()
+        ).build()).build(), List.of());
     }
 
     @Test
@@ -207,7 +222,10 @@ public class ConditionTooltipTest {
 
     @Test
     public void testReferenceTooltip() {
-        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(new ResourceLocation("test")).build()).build(), List.of("Reference: minecraft:test"));
+        assertTooltip(ConditionTooltipUtils.getReferenceTooltip(UTILS, (ConditionReference) ConditionReference.conditionReference(new ResourceLocation("test")).build()).build(), List.of(
+                "Reference:",
+                "  -> Loot Table: minecraft:test"
+        ));
     }
 
     @Test
