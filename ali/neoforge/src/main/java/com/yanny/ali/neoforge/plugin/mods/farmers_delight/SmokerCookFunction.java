@@ -17,6 +17,6 @@ public class SmokerCookFunction extends ConditionalFunction implements IFunction
     @Override
     public TooltipBuilder getTooltip(IServerUtils utils) {
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicates).build(Lang.Branch.CONDITIONS)))
-                .key("ali.type.function.smoker_cook");
+                .key(Lang.Functions.SMOKER_COOK);
     }
 }

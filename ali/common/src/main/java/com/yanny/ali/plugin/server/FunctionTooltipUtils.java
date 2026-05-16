@@ -246,7 +246,7 @@ public class FunctionTooltipUtils {
             }
 
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }).showEmpty().key(Lang.Functions.SET_STEW_EFFECT);
+        }).key(Lang.Functions.SET_STEW_EFFECT);
     }
 
     @NotNull
