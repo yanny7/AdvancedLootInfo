@@ -124,8 +124,8 @@ public final class Lang {
         BANNER_PATTERN("banner_pattern", "Banner Pattern: %s"),
         BIOME("biome", "Biome: %s"),
         BLOCK("block", "Block: %s"),
-        BLOCK_ENTITY_TYPE("block_entity_type", "Block Entity Type: %s"),
         BLOCKS_ON_FIRE("blocks_on_fire", "Blocks On Fire: %s"),
+        BLOCK_ENTITY_TYPE("block_entity_type", "Block Entity Type: %s"),
         BONUS_MULTIPLIER("bonus_multiplier", "Bonus Multiplier: %s"),
         COLOR("color", "Color: %s"),
         COUNT("count", "Count: %s"),
@@ -318,12 +318,12 @@ public final class Lang {
 
     public enum Group implements ITooltipKey {
         ALL("all", "Selects all entries"),
-        RANDOM("random", "Selects random entry"),
         ALTERNATIVES("alternatives", "Selects only first successful entry"),
-        SEQUENCE("sequence", "Selects entries sequentially until first failed"),
         DYNAMIC("dynamic", "Dynamic block-specific drops"),
         EMPTY("empty", "Drops nothing"),
         MISSING("missing", "Not implemented"),
+        RANDOM("random", "Selects random entry"),
+        SEQUENCE("sequence", "Selects entries sequentially until first failed"),
         ;
 
         private final Translation translation;
