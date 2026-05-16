@@ -384,7 +384,7 @@ public class DataComponentTooltipTest {
                 true,
                 false,
                 SoundEvents.ARMOR_EQUIP_TURTLE
-        )), List.of(
+        )).build(), List.of(
                 "Slot: LEGS",
                 "Equip Sound: minecraft:block.anvil.fall",
                 "Asset ID: minecraft:anvil",
