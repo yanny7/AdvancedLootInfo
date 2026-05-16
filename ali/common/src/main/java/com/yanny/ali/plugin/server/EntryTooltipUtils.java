@@ -2,8 +2,8 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -21,66 +21,62 @@ import java.util.Map;
 
 public class EntryTooltipUtils {
     @NotNull
-    public static TooltipNode getLootTableTooltip() {
-        return TooltipBuilder.keyOnly("ali.enum.group_type.all").build();
+    public static TooltipBuilder getLootTableTooltip() {
+        return TooltipBuilder.keyOnly(Lang.Group.ALL);
     }
 
     @NotNull
-    public static TooltipNode getReferenceTooltip(NestedLootTable entry, float chance, int sumWeight) {
-        return TooltipBuilder.array((b) -> b
-                        .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
-                        .add(getQualityTooltip(entry.quality))
-                        .add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)))
-                )
-                .build();
+    public static TooltipBuilder getReferenceTooltip(NestedLootTable entry, float chance, int sumWeight) {
+        return TooltipBuilder.array((b) -> {
+            b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
+            b.add(getQualityTooltip(entry.quality));
+            b.add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)));
+        });
     }
 
     @NotNull
-    public static TooltipNode getLootPoolTooltip(RangeValue rolls, RangeValue bonusRolls) {
-        return TooltipBuilder.array((b) -> b
-                        .add(TooltipBuilder.keyOnly("ali.enum.group_type.random"))
-                        .add(getRolls(rolls, bonusRolls))
-                )
-                .build();
+    public static TooltipBuilder getLootPoolTooltip(RangeValue rolls, RangeValue bonusRolls) {
+        return TooltipBuilder.array((b) -> {
+            b.add(TooltipBuilder.keyOnly(Lang.Group.RANDOM));
+            b.add(getRolls(rolls, bonusRolls));
+        });
     }
 
     @NotNull
-    public static TooltipNode getAlternativesTooltip() {
-        return TooltipBuilder.keyOnly("ali.enum.group_type.alternatives").build();
+    public static TooltipBuilder getAlternativesTooltip() {
+        return TooltipBuilder.keyOnly(Lang.Group.ALTERNATIVES);
     }
 
     @NotNull
-    public static TooltipNode getDynamicTooltip(IServerUtils utils, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return TooltipBuilder.array((b) -> b
-                        .add(TooltipBuilder.keyOnly("ali.enum.group_type.dynamic"))
-                        .add(getQualityTooltip(quality))
-                        .add(getChanceTooltip(getBaseMap(chance * 100)))
-                        .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                        .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
-                )
-                .build();
+    public static TooltipBuilder getDynamicTooltip(IServerUtils utils, int quality, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return TooltipBuilder.array((b) -> {
+            b.add(TooltipBuilder.keyOnly(Lang.Group.DYNAMIC));
+            b.add(getQualityTooltip(quality));
+            b.add(getChanceTooltip(getBaseMap(chance * 100)));
+            b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
+            b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
+        });
     }
 
     @NotNull
-    public static TooltipNode getGroupTooltip() {
-        return TooltipBuilder.keyOnly("ali.enum.group_type.all").build();
+    public static TooltipBuilder getGroupTooltip() {
+        return TooltipBuilder.keyOnly(Lang.Group.ALL);
     }
 
     @NotNull
-    public static TooltipNode getSequentialTooltip() {
-        return TooltipBuilder.keyOnly("ali.enum.group_type.sequence").build();
+    public static TooltipBuilder getSequentialTooltip() {
+        return TooltipBuilder.keyOnly(Lang.Group.SEQUENCE);
     }
 
     @NotNull
-    public static TooltipNode getEmptyTooltip(IServerUtils utils, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return TooltipBuilder.array((b) -> b
-                        .add(TooltipBuilder.keyOnly("ali.enum.group_type.empty"))
-                        .add(getQualityTooltip(quality))
-                        .add(getChanceTooltip(chance))
-                        .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                        .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
-                )
-                .build();
+    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+        return TooltipBuilder.array((b) -> {
+            b.add(TooltipBuilder.keyOnly(Lang.Group.EMPTY));
+            b.add(getQualityTooltip(quality));
+            b.add(getChanceTooltip(chance));
+            b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
+            b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
+        });
     }
 
     @NotNull
@@ -97,33 +93,32 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getTooltip(IServerUtils utils, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count,
+    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count,
                                                List<LootItemFunction> functions, List<LootItemCondition> conditions) {
-        return TooltipBuilder.array((b) -> b
-                        .add(getQualityTooltip(quality))
-                        .add(getChanceTooltip(chance))
-                        .add(getCountTooltip(count))
-                        .add(GenericTooltipUtils.getConditionsTooltip(utils, conditions))
-                        .add(GenericTooltipUtils.getFunctionsTooltip(utils, functions))
-                )
-                .build();
+        return TooltipBuilder.array((b) -> {
+            b.add(getQualityTooltip(quality));
+            b.add(getChanceTooltip(chance));
+            b.add(getCountTooltip(count));
+            b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
+            b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
+        });
     }
 
     @NotNull
-    public static TooltipNode getQualityTooltip(int quality) {
+    public static TooltipBuilder getQualityTooltip(int quality) {
         if (quality != LootPoolSingletonContainer.DEFAULT_QUALITY) {
-            return TooltipBuilder.value(quality).build("ali.description.quality");
+            return TooltipBuilder.value(quality).key(Lang.Description.QUALITY);
         }
 
-        return TooltipNode.EMPTY_INSTANCE;
+        return TooltipBuilder.empty();
     }
 
     @NotNull
-    public static TooltipNode getChanceTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+    public static TooltipBuilder getChanceTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
         RangeValue defaultChance = chance.get(null).get(0);
 
         if (!defaultChance.isRange() && defaultChance.max() > 99.99999) {
-            return TooltipNode.EMPTY_INSTANCE;
+            return TooltipBuilder.empty();
         }
 
         TooltipBuilder builder = TooltipBuilder.value(defaultChance, "%");
@@ -143,16 +138,16 @@ public class EntryTooltipUtils {
                             value.toString() + "%",
                             TooltipBuilder.translate(key),
                             TooltipBuilder.translate("enchantment.level." + level)
-                    ).build("ali.description.chance_bonus"));
+                    ).build(Lang.Description.CHANCE_BONUS));
                 }
             }
         }
 
-        return builder.build("ali.description.chance");
+        return builder.key(Lang.Description.CHANCE);
     }
 
     @NotNull
-    public static TooltipNode getCountTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+    public static TooltipBuilder getCountTooltip(Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
         RangeValue defaultCount = count.get(null).get(0);
 
         TooltipBuilder builder = TooltipBuilder.value(defaultCount);
@@ -171,12 +166,12 @@ public class EntryTooltipUtils {
                             value,
                             TooltipBuilder.translate(key),
                             TooltipBuilder.translate("enchantment.level." + level)
-                    ).build("ali.description.count_bonus"));
+                    ).build(Lang.Description.COUNT_BONUS));
                 }
             }
         }
 
-        return builder.build("ali.description.count");
+        return builder.key(Lang.Description.COUNT);
     }
 
     @NotNull
@@ -196,8 +191,8 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getRolls(RangeValue rolls, RangeValue bonusRolls) {
-        return TooltipBuilder.value(getTotalRolls(rolls, bonusRolls).toIntString(), "x").build("ali.description.rolls");
+    public static TooltipBuilder getRolls(RangeValue rolls, RangeValue bonusRolls) {
+        return TooltipBuilder.value(getTotalRolls(rolls, bonusRolls).toIntString(), "x").key(Lang.Description.ROLLS);
     }
 
     private static RangeValue getTotalRolls(RangeValue rolls, RangeValue bonusRolls) {

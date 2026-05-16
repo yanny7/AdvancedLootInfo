@@ -1,12 +1,12 @@
 package com.yanny.awi.datagen;
 
-import com.yanny.aci.tooltip.CoreLanguageHolder;
+import com.yanny.aci.language.CoreLang;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LanguageHolder {
-    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>(CoreLanguageHolder.TRANSLATION_MAP);
+    public static final Map<String, String> TRANSLATION_MAP = new HashMap<>(CoreLang.TRANSLATION_MAP);
 
     static {
         TRANSLATION_MAP.put("awi.property.value.discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s");

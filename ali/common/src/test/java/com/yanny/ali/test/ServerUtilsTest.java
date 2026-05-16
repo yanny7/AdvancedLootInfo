@@ -1,5 +1,7 @@
 package com.yanny.ali.test;
 
+import com.yanny.aci.language.CoreLang;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -30,12 +32,12 @@ import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 public class ServerUtilsTest {
     @Test
     public void testGetFunctionTooltip() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 0-5",
                 "  -> Add: false"
         ));
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown",
                 "  -> item: minecraft:andesite",
                 "  -> value: 0-5"
@@ -44,7 +46,7 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetConditionTooltip() {
-        assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()), List.of(
+        assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()).build(), List.of(
                 "Random Chance:",
                 "  -> Chance: 0.50"
         ));
@@ -52,7 +54,7 @@ public class ServerUtilsTest {
                 true,
                 WeatherCheck.weather().setRaining(true).build(),
                 EnchantRandomlyFunction.randomEnchantment().build())
-        ), List.of(
+        ).build(), List.of(
                 "Auto-detected: minecraft:unknown",
                 "  -> valid: true",
                 "  -> condition:",
@@ -66,7 +68,7 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetValueTooltip() {
-        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build("ali.property.branch.item"), List.of(
+        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
                 "Item:",
                 "  -> Item: minecraft:emerald",
                 "  -> Count: 1",
@@ -100,7 +102,7 @@ public class ServerUtilsTest {
                         "      -> Duration: 6"
                 )
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("aci.util.missing"), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }
@@ -120,9 +122,10 @@ public class ServerUtilsTest {
                 false,
                 SetStewEffectFunction.stewEffect().withEffect(MobEffects.ABSORPTION, ConstantValue.exactly(2)).build(),
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
-        )), List.of(
+        )).build(), List.of(
             "Auto-detected: minecraft:unknown",
-                "  -> builder: [java.lang.StringBuilder]",
+                "  -> builder:",
+                "    -> Not implemented: [java.lang.StringBuilder]",
                 "  -> primitiveArray:",
                 "    -> true",
                 "    -> false",
@@ -136,11 +139,9 @@ public class ServerUtilsTest {
                 "    -> Set Damage:",
                 "      -> Damage: 0.50",
                 "      -> Add: false",
-                "  -> conditions: []",
                 "  -> builders:",
                 "    -> Not implemented: [java.lang.StringBuilder]",
                 "    -> Not implemented: [java.lang.StringBuilder]",
-                "  -> empty: []",
                 "  -> enumValue: attached",
                 "  -> primitive: true",
                 "  -> state: false",

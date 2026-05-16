@@ -6,6 +6,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.language.Lang;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
@@ -39,7 +40,7 @@ public class TradeLevelNode extends ListNode {
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return TooltipBuilder.value(level).build("ali.property.value.level");
+        return TooltipBuilder.value(level).build(Lang.Value.LEVEL);
     }
 
     @NotNull

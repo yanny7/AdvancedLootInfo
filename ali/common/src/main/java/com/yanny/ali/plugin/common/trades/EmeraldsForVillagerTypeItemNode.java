@@ -3,6 +3,7 @@ package com.yanny.ali.plugin.common.trades;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.entity.npc.villager.VillagerType;
@@ -28,7 +29,7 @@ public class EmeraldsForVillagerTypeItemNode extends SubTradesNode<VillagerTrade
         for (Map.Entry<ResourceKey<VillagerType>, Item> entry : listing.trades.entrySet()) {
             ResourceKey<VillagerType> type = entry.getKey();
             Item item = entry.getValue();
-            TooltipNode cond = utils.getValueTooltip(utils, type).build("ali.property.value.villager_type");
+            TooltipNode cond = utils.getValueTooltip(utils, type).build(Lang.Value.VILLAGER_TYPE);
 
             nodes.add(utils.getItemListing(utils, new VillagerTrades.ItemsForEmeralds(new ItemStack(item), listing.cost, 1, listing.maxUses, listing.villagerXp, 0.05F), cond));
         }
