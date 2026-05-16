@@ -19,7 +19,7 @@ public final class Lang {
         MATCH_TOOL("match_tool", "Match Tool:"),
         RANDOM_CHANCE("random_chance", "Random Chance:"),
         RANDOM_CHANCE_WITH_ENCHANTED_BONUS("random_chance_with_enchanted_bonus", "Random Chance With Enchanted Bonus:"),
-        REFERENCE("reference", "Reference: %s"),
+        REFERENCE("reference", "Reference:"),
         SURVIVES_EXPLOSION("survives_explosion", "Survives Explosion"),
         TABLE_BONUS("table_bonus", "Table Bonus:"),
         TIME_CHECK("time_check", "Time Check:"),
@@ -538,6 +538,23 @@ public final class Lang {
 
         Group(String k, String e) {
             this.translation = new Translation("ali.enum.group_type." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Multi implements ITooltipKey {
+        OFFSET("offset", "Offset: [X: %s, Y: %s, Z: %s]"),
+        ;
+
+        private final Translation translation;
+
+        Multi(String k, String e) {
+            this.translation = new Translation("ali.property.multi." + k, e);
         }
 
         @NotNull

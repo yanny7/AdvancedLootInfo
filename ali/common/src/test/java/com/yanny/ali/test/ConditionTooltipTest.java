@@ -39,6 +39,12 @@ public class ConditionTooltipTest {
                 "  -> Weather Check:",
                 "    -> Is Raining: true"
         ));
+        assertTooltip(ConditionTooltipUtils.getAllOfTooltip(UTILS, (AllOfCondition) AllOfCondition.allOf(
+                ExplosionCondition.survivesExplosion()
+        ).build()).build(), List.of(
+                "All Of:",
+                "  -> Survives Explosion"
+        ));
     }
 
     @Test
@@ -156,6 +162,12 @@ public class ConditionTooltipTest {
                 "    -> Period: 10",
                 "    -> Value: 1 - 8"
         ));
+        assertTooltip(ConditionTooltipUtils.getInvertedTooltip(UTILS, (InvertedLootItemCondition) InvertedLootItemCondition.invert(
+                ExplosionCondition.survivesExplosion()
+        ).build()).build(), List.of(
+                "Inverted:",
+                "  -> Survives Explosion"
+        ));
     }
 
     @Test
@@ -195,6 +207,17 @@ public class ConditionTooltipTest {
                 "Match Tool:",
                 "  -> Item: minecraft:andesite"
         ));
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
+                ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.MOB_LOOTING, MinMaxBounds.Ints.ANY))
+        ).build()).build(), List.of(
+                "Match Tool:",
+                "  -> Enchantments:",
+                "    -> Predicate:",
+                "      -> Enchantment: minecraft:looting"
+        ));
+        assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
+                ItemPredicate.Builder.item()
+        ).build()).build(), List.of());
     }
 
     @Test

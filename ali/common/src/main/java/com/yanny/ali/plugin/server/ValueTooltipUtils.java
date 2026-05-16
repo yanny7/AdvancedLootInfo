@@ -129,7 +129,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getEntityPredicateTooltip(IServerUtils utils, EntityPredicate entityPredicate) {
-        return TooltipBuilder.branch((b) -> {
+        return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, entityPredicate.entityType()).build(Lang.Branch.ENTITY_TYPES));
             b.add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer()).build(Lang.Branch.DISTANCE_TO_PLAYER));
             b.add(utils.getValueTooltip(utils, entityPredicate.location()).build(Lang.Branch.LOCATION));

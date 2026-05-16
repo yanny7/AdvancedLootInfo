@@ -191,12 +191,13 @@ public class GenericTooltipTest {
                 new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.empty(), Optional.of("5"))),
                 new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.of("1"), Optional.empty())),
                 new StatePropertiesPredicate.PropertyMatcher("level", new StatePropertiesPredicate.RangedMatcher(Optional.empty(), Optional.empty()))
-        ))).build(), List.of(
-                "facing: east",
-                "level: 1-5",
-                "level: ≤5",
-                "level: ≥1",
-                "level: any"
+        ))).build(Lang.Branch.PROPERTIES), List.of(
+                "Properties:",
+                "  -> facing: east",
+                "  -> level: 1-5",
+                "  -> level: ≤5",
+                "  -> level: ≥1",
+                "  -> level: any"
         ));
     }
 
@@ -641,7 +642,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testBlockPosTooltip() {
-        assertTooltip(ValueTooltipUtils.getBlockPosTooltip(UTILS, new BlockPos(10, 12, 14)).build("ali.property.multi.offset"), List.of(
+        assertTooltip(ValueTooltipUtils.getBlockPosTooltip(UTILS, new BlockPos(10, 12, 14)).build(Lang.Multi.OFFSET), List.of(
                 "Offset: [X: 10, Y: 12, Z: 14]"
         ));
     }
