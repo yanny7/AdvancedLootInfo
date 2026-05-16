@@ -19,7 +19,7 @@ public class GlobalLootModifierNode implements IDataNode {
     }
 
     public GlobalLootModifierNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @NotNull
@@ -36,6 +36,6 @@ public class GlobalLootModifierNode implements IDataNode {
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 }

@@ -6,6 +6,7 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.ILootModifier;
 import com.yanny.ali.api.IOperation;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.neoforge.plugin.GlobalLootModifier;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -38,8 +39,8 @@ public class FDAddTableLootModifier extends GlobalLootModifier implements IGloba
 
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             TooltipNode tooltip = TooltipBuilder.array((b) -> b
-                            .add(TooltipBuilder.keyOnly("ali.enum.group_type.all"))
-                            .add(GenericTooltipUtils.getConditionsTooltip(utils, c))
+                            .add(TooltipBuilder.keyOnly(Lang.Group.ALL))
+                            .add(GenericTooltipUtils.getConditionsSectionTooltip(utils, c))
                     )
                     .build();
             IDataNode node = NodeUtils.getReferenceNode(utils, lootTable.location(), c, tooltip);

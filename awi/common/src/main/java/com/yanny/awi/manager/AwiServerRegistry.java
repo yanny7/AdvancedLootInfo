@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
+public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Item>>> itemCollectors = registerClassKeyed("item collectors", false, HashMap::new, null);
     // tooltips
@@ -32,7 +32,7 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, ICommonUtils, 
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
 
-    public AwiServerRegistry(ICommonUtils registry) {
+    public AwiServerRegistry(AwiCommonRegistry registry) {
         super(registry);
     }
 

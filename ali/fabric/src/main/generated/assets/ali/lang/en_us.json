@@ -404,7 +404,7 @@
   "ali.type.condition.optional_property": "Optional Property",
   "ali.type.condition.random_chance": "Random Chance:",
   "ali.type.condition.random_chance_with_enchanted_bonus": "Random Chance With Enchanted Bonus:",
-  "ali.type.condition.reference": "Reference: %s",
+  "ali.type.condition.reference": "Reference:",
   "ali.type.condition.survives_explosion": "Survives Explosion",
   "ali.type.condition.table_bonus": "Table Bonus:",
   "ali.type.condition.time_check": "Time Check:",

@@ -15,4 +15,6 @@ public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
 
     @Nullable
     HolderLookup.Provider lookupProvider();
+
+    int getTranslationKeyIndex(String key);
 }

@@ -59,9 +59,9 @@ public class ItemTagNode implements IDataNode, IItemNode {
         }
     }
 
-    public ItemTagNode(IClientUtils ignoredUtils, RegistryFriendlyByteBuf buf) {
+    public ItemTagNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         tag = TagKey.create(Registries.ITEM, buf.readResourceLocation());
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -105,7 +105,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);
@@ -128,7 +128,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = NodeUtils.getEnchantedChance(utils, conditions, chance);
         Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = getCount(utils, 1, functions);
 
-        return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions);
+        return EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chanceMap, countMap, functions, conditions).build();
     }
 
     @NotNull

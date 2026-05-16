@@ -1,5 +1,6 @@
 package com.yanny.awi.plugin.server;
 
+import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMissingValueTooltip(IServerUtils ignoredUtils, Object value) {
-        return TooltipBuilder.error("[" + value.getClass().getTypeName() + "]").key("aci.util.missing");
+        return TooltipBuilder.error("[" + value.getClass().getTypeName() + "]").key(CoreLang.Utils.NOT_IMPLEMENTED);
     }
 
     @NotNull
