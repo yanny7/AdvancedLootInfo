@@ -49,6 +49,7 @@ public final class Lang {
         COPY_CUSTOM_DATA("copy_custom_data", "Copy Custom Data:"),
         COPY_NAME("copy_name", "Copy Name:"),
         COPY_STATE("copy_state", "Copy State:"),
+        DISCARD_ITEM("discard_item", "Discard Item:"),
         ENCHANTED_COUNT_INCREASE("enchanted_count_increase", "Enchanted Count Increase:"),
         ENCHANT_RANDOMLY("enchant_randomly", "Enchant Randomly:"),
         ENCHANT_WITH_LEVELS("enchant_with_levels", "Enchant With Levels:"),
@@ -138,6 +139,28 @@ public final class Lang {
 
         ConsumeEffects(String k, String e) {
             this.translation = new Translation("ali.type.consume_effect." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum SlotSource implements ITooltipKey {
+        EMPTY("empty", "Empty Slot"),
+        CONTENTS("contents", "Contents:"),
+        SLOT_RANGE("slot_range", "Slot Range:"),
+        LIMIT_SLOTS("limit_slots", "Limit Slots:"),
+        FILTERED("filtered", "Filtered:"),
+        GROUP("group", "Group:"),
+        ;
+
+        private final Translation translation;
+
+        SlotSource(String k, String e) {
+            this.translation = new Translation("ali.type.slot_source." + k, e);
         }
 
         @NotNull
@@ -348,6 +371,26 @@ public final class Lang {
         Y("y", "Y: %s"),
         Z("z", "Z: %s"),
         ZOOM("zoom", "Zoom: %s"),
+        CAN_SPRINT("can_sprint", "Can Sprint: %s"),
+        INTERACT_VIBRATIONS("interact_vibrations", "Interact Vibrations: %s"),
+        SPEED_MULTIPLIER("speed_multiplier", "Speed Multiplier: %s"),
+        MIN_RANGE("min_range", "Min Range: %s"),
+        MAX_RANGE("max_range", "Max Range: %s"),
+        MIN_CREATIVE_RANGE("min_creative_range", "Min Creative Range: %s"),
+        MAX_CREATIVE_RANGE("max_creative_range", "Max Creative Range: %s"),
+        HITBOX_MARGIN("hitbox_margin", "Hitbox Margin: %s"),
+        MOB_FACTOR("mob_factor", "Mob Factor: %s"),
+        DEALS_KNOCKBACK("deals_knockback", "Deals Knockback: %s"),
+        DISMOUNTS("dismounts", "Dismounts: %s"),
+        HIT_SOUND("hit_sound", "Hit Sound: %s"),
+        CONTACT_COOLDOWN_TICKS("contact_cooldown_ticks", "Contact Cooldown Ticks: %s"),
+        DELAY_TICKS("delay_ticks", "Delay Ticks: %s"),
+        FORWARD_MOVEMENT("forward_movement", "Forward Movement: %s"),
+        DAMAGE_MULTIPLIER("damage_multiplier", "Damage Multiplier: %s"),
+        SLOT_RANGE("slot_range", "Slot Range: %s"),
+        MAX_DURATION_TICKS("max_duration_ticks", "Max Duration Ticks: %s"),
+        MIN_SPEED("min_speed", "Min Speed: %s"),
+        MIN_RELATIVE_SPEED("min_relative_speed", "Min Relative Speed: %s"),
         ;
 
         private final Translation translation;
@@ -364,6 +407,12 @@ public final class Lang {
     }
 
     public enum Branch implements ITooltipKey {
+        DISMOUNT_CONDITION("dismount_condition", "Dismount Condition:"),
+        KNOCKBACK_CONDITION("knockback_condition", "Knockback Condition:"),
+        DAMAGE_CONDITION("damage_condition", "Damage Condition:"),
+        SLOT_SOURCE("slot_source", "Slot Source:"),
+        ON_PASS("on_pass", "On Pass:"),
+        ON_FAIL("on_fail", "On Fail:"),
         ADVANCEMENTS("advancements", "Advancements:"),
         AFFECTS_MOVEMENT("affects_movement", "Affects Movement:"),
         ALLOWED_ENTITIES("allowed_entities", "Allowed Entities:"),

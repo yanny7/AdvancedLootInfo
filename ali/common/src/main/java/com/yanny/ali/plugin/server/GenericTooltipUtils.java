@@ -1,28 +1,20 @@
 package com.yanny.ali.plugin.server;
 
-import com.google.gson.JsonElement;
-import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.MapCodec;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.component.MapDecorations;
 import net.minecraft.world.item.crafting.Recipe;
@@ -41,32 +33,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
-import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.getSlotSourceTooltip;
-
 public class GenericTooltipUtils {
-    //FIXME MOVE
-    @NotNull
-    public static TooltipNode getMissingSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
-        TooltipBuilder tooltip = getSlotSourceTooltip(utils, slotSource);
-
-        try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
-            //noinspection unchecked
-            MapCodec<SlotSource> codec = ((MapCodec<SlotSource>) slotSource.codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, slotSource).getPartialOrThrow();
-
-            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
-        } catch (Throwable e) {
-            if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get consume effect info from serialized data for {} in {}", BuiltInRegistries.SLOT_SOURCE_TYPE.getKey(slotSource.codec()), utils.getCurrentLootTable(), e);
-            }
-
-            TooltipUtils.addObjectFields(utils, tooltip, slotSource, SlotSource.class);
-        }
-
-        return tooltip.build("ali.util.advanced_loot_info.auto_detected");
-    }
-
     @NotNull
     public static TooltipBuilder getConditionsSectionTooltip(IServerUtils utils, List<LootItemCondition> conditions) {
         if (!conditions.isEmpty()) {

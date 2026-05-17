@@ -5,7 +5,6 @@ import com.yanny.ali.plugin.server.DataComponentPredicateTooltipUtils;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
@@ -278,7 +277,7 @@ public class DataComponentPredicateTooltipTest {
     public void testAnyValueTooltip() {
         assertTooltip(DataComponentPredicateTooltipUtils.getAnyValueTooltip(UTILS, new AnyValue(
                 DataComponents.DAMAGE_TYPE
-        )), List.of(
+        )).build(), List.of(
                 "Type: minecraft:damage_type"
         ));
     }

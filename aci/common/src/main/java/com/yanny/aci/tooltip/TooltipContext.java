@@ -1,15 +1,15 @@
 package com.yanny.aci.tooltip;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class TooltipContext {
-    private static final ThreadLocal<ResourceLocation> CURRENT_LOOT_TABLE = new ThreadLocal<>();
+    private static final ThreadLocal<Identifier> CURRENT_LOOT_TABLE = new ThreadLocal<>();
 
-    public static void set(ResourceLocation lootTable) {
+    public static void set(Identifier lootTable) {
         CURRENT_LOOT_TABLE.set(lootTable);
     }
 
-    public static ResourceLocation get() {
+    public static Identifier get() {
         return  CURRENT_LOOT_TABLE.get();
     }
 

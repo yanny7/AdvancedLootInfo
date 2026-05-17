@@ -177,7 +177,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipNode> getter) {
+    public <T extends SlotSource> void registerSlotSourceTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         slotSourceTooltips.put(type, (u, s) -> getter.apply(u, type.cast(s)));
     }
 
@@ -318,10 +318,10 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends SlotSource> TooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+    public <T extends SlotSource> TooltipBuilder getSlotSourceTooltip(IServerUtils utils, T slotSource) {
         return slotSourceTooltips.get(slotSource.getClass())
                 .map((i) -> i.apply(utils, slotSource))
-                .orElseGet(() -> GenericTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource));
+                .orElseGet(() -> MissingTooltipUtils.getMissingSlotSourceTooltip(utils, slotSource));
     }
 
     @Override

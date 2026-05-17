@@ -371,11 +371,9 @@ public class FunctionTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getDiscardItemTooltip(IServerUtils utils, DiscardItem fun) {
-        return TooltipBuilder.array((b) -> b
-                .add(getSubConditionsTooltip(utils, fun.predicates).build("ali.property.branch.conditions"))
-                )
+    public static TooltipBuilder getDiscardItemTooltip(IServerUtils utils, DiscardItem fun) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS)))
                 .showEmpty()
-                .build("ali.type.function.discard_item");
+                .key(Lang.Functions.DISCARD_ITEM);
     }
 }

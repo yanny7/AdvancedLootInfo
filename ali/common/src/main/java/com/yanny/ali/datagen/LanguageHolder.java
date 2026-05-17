@@ -14,6 +14,7 @@ public class LanguageHolder {
         CoreLang.register(Lang.Functions.class);
         CoreLang.register(Lang.EntitySubPredicates.class);
         CoreLang.register(Lang.ConsumeEffects.class);
+        CoreLang.register(Lang.SlotSource.class);
         CoreLang.register(Lang.Value.class);
         CoreLang.register(Lang.Branch.class);
         CoreLang.register(Lang.Description.class);

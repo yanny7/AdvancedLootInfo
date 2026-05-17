@@ -95,7 +95,7 @@ public class DataComponentPredicateTooltipUtils {
     }
 
     @NotNull
-    public static TooltipNode getAnyValueTooltip(IServerUtils utils, AnyValue predicate) {
-        return utils.getValueTooltip(utils, predicate.type()).build("ali.property.value.type");
+    public static TooltipBuilder getAnyValueTooltip(IServerUtils utils, AnyValue predicate) {
+        return utils.getValueTooltip(utils, predicate.type()).key(Lang.Value.TYPE);
     }
 }

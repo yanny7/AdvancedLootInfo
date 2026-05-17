@@ -465,72 +465,67 @@ public class DataComponentTooltipUtils {
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getSwingAnimationTooltip(IServerUtils utils, SwingAnimation value) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.type()).build("ali.property.value.type"))
-                .add(utils.getValueTooltip(utils, value.duration()).build("ali.property.value.duration"))
-                )
-                .build();
+    public static TooltipBuilder getSwingAnimationTooltip(IServerUtils utils, SwingAnimation value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.type()).build(Lang.Value.TYPE));
+            b.add(utils.getValueTooltip(utils, value.duration()).build(Lang.Value.DURATION));
+        });
     }
 
     @Unmodifiable
     @NotNull
-    public static TooltipNode getUseEffectsTooltip(IServerUtils utils, UseEffects value) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.canSprint()).build("ali.property.value.can_sprint"))
-                .add(utils.getValueTooltip(utils, value.interactVibrations()).build("ali.property.value.interact_vibrations"))
-                .add(utils.getValueTooltip(utils, value.speedMultiplier()).build("ali.property.value.speed_multiplier"))
-                )
-                .build();
+    public static TooltipBuilder getUseEffectsTooltip(IServerUtils utils, UseEffects value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.canSprint()).build(Lang.Value.CAN_SPRINT));
+            b.add(utils.getValueTooltip(utils, value.interactVibrations()).build(Lang.Value.INTERACT_VIBRATIONS));
+            b.add(utils.getValueTooltip(utils, value.speedMultiplier()).build(Lang.Value.SPEED_MULTIPLIER));
+        });
     }
 
     @NotNull
-    public static TooltipNode getDamageTypeTooltip(IServerUtils utils, EitherHolder<DamageType> holder) {
-        return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
+    public static TooltipBuilder getDamageTypeTooltip(IServerUtils utils, EitherHolder<DamageType> holder) {
+        return utils.getValueTooltip(utils, holder).key(Lang.Value.TYPE);
     }
 
     @NotNull
-    public static TooltipNode getAttackRangeTooltip(IServerUtils utils, AttackRange value) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.minRange()).build("ali.property.value.min_range"))
-                .add(utils.getValueTooltip(utils, value.maxRange()).build("ali.property.value.max_range"))
-                .add(utils.getValueTooltip(utils, value.minCreativeRange()).build("ali.property.value.min_creative_range"))
-                .add(utils.getValueTooltip(utils, value.maxCreativeRange()).build("ali.property.value.max_creative_range"))
-                .add(utils.getValueTooltip(utils, value.hitboxMargin()).build("ali.property.value.hitbox_margin"))
-                .add(utils.getValueTooltip(utils, value.mobFactor()).build("ali.property.value.mob_factor"))
-                )
-                .build();
+    public static TooltipBuilder getAttackRangeTooltip(IServerUtils utils, AttackRange value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.minRange()).build(Lang.Value.MIN_RANGE));
+            b.add(utils.getValueTooltip(utils, value.maxRange()).build(Lang.Value.MAX_RANGE));
+            b.add(utils.getValueTooltip(utils, value.minCreativeRange()).build(Lang.Value.MIN_CREATIVE_RANGE));
+            b.add(utils.getValueTooltip(utils, value.maxCreativeRange()).build(Lang.Value.MAX_CREATIVE_RANGE));
+            b.add(utils.getValueTooltip(utils, value.hitboxMargin()).build(Lang.Value.HITBOX_MARGIN));
+            b.add(utils.getValueTooltip(utils, value.mobFactor()).build(Lang.Value.MOB_FACTOR));
+        });
     }
 
     @NotNull
-    public static TooltipNode getPiercingWeaponTooltip(IServerUtils utils, PiercingWeapon value) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.dealsKnockback()).build("ali.property.value.deals_knockback"))
-                .add(utils.getValueTooltip(utils, value.dismounts()).build("ali.property.value.dismounts"))
-                .add(utils.getValueTooltip(utils, value.sound()).build("ali.property.value.sound"))
-                .add(utils.getValueTooltip(utils, value.hitSound()).build("ali.property.value.hit_sound"))
-                )
-                .build();
+    public static TooltipBuilder getPiercingWeaponTooltip(IServerUtils utils, PiercingWeapon value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.dealsKnockback()).build(Lang.Value.DEALS_KNOCKBACK));
+            b.add(utils.getValueTooltip(utils, value.dismounts()).build(Lang.Value.DISMOUNTS));
+            b.add(utils.getValueTooltip(utils, value.sound()).build(Lang.Value.SOUND));
+            b.add(utils.getValueTooltip(utils, value.hitSound()).build(Lang.Value.HIT_SOUND));
+        });
     }
 
     @NotNull
-    public static TooltipNode getKineticWeaponTooltip(IServerUtils utils, KineticWeapon value) {
-        return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, value.contactCooldownTicks()).build("ali.property.value.contact_cooldown_ticks"))
-                .add(utils.getValueTooltip(utils, value.delayTicks()).build("ali.property.value.delay_ticks"))
-                .add(utils.getValueTooltip(utils, value.dismountConditions()).build("ali.property.branch.dismount_condition"))
-                .add(utils.getValueTooltip(utils, value.knockbackConditions()).build("ali.property.branch.knockback_condition"))
-                .add(utils.getValueTooltip(utils, value.damageConditions()).build("ali.property.branch.damage_condition"))
-                .add(utils.getValueTooltip(utils, value.forwardMovement()).build("ali.property.value.forward_movement"))
-                .add(utils.getValueTooltip(utils, value.damageMultiplier()).build("ali.property.value.damage_multiplier"))
-                .add(utils.getValueTooltip(utils, value.sound()).build("ali.property.value.sound"))
-                .add(utils.getValueTooltip(utils, value.hitSound()).build("ali.property.value.hit_sound"))
-                )
-                .build();
+    public static TooltipBuilder getKineticWeaponTooltip(IServerUtils utils, KineticWeapon value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.contactCooldownTicks()).build(Lang.Value.CONTACT_COOLDOWN_TICKS));
+            b.add(utils.getValueTooltip(utils, value.delayTicks()).build(Lang.Value.DELAY_TICKS));
+            b.add(utils.getValueTooltip(utils, value.dismountConditions()).build(Lang.Branch.DISMOUNT_CONDITION));
+            b.add(utils.getValueTooltip(utils, value.knockbackConditions()).build(Lang.Branch.KNOCKBACK_CONDITION));
+            b.add(utils.getValueTooltip(utils, value.damageConditions()).build(Lang.Branch.DAMAGE_CONDITION));
+            b.add(utils.getValueTooltip(utils, value.forwardMovement()).build(Lang.Value.FORWARD_MOVEMENT));
+            b.add(utils.getValueTooltip(utils, value.damageMultiplier()).build(Lang.Value.DAMAGE_MULTIPLIER));
+            b.add(utils.getValueTooltip(utils, value.sound()).build(Lang.Value.SOUND));
+            b.add(utils.getValueTooltip(utils, value.hitSound()).build(Lang.Value.HIT_SOUND));
+        });
     }
 
     @NotNull
-    public static TooltipNode getZombieNautilusVariantTooltip(IServerUtils utils, EitherHolder<ZombieNautilusVariant> holder) {
-        return utils.getValueTooltip(utils, holder).build("ali.property.value.type");
+    public static TooltipBuilder getZombieNautilusVariantTooltip(IServerUtils utils, EitherHolder<ZombieNautilusVariant> holder) {
+        return utils.getValueTooltip(utils, holder).key(Lang.Value.TYPE);
     }
 }

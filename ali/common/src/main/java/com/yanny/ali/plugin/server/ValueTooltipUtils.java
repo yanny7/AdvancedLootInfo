@@ -6,21 +6,28 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.network.Filterable;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.inventory.SlotRange;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
@@ -31,6 +38,7 @@ import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulator;
 import net.minecraft.world.level.storage.loot.IntRange;
+import net.minecraft.world.level.storage.loot.LootContextArg;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -42,6 +50,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getTranslationKey;
 
 public class ValueTooltipUtils {
     @NotNull
@@ -377,9 +386,9 @@ public class ValueTooltipUtils {
                 b.add(utils.getValueTooltip(utils, entityType)
                         .add(TooltipBuilder.keyValue(key, GenericTooltipUtils.toString(stat.range())).build())
                         .build(Lang.Value.ENTITY_TYPE));
-            } else if (value.value() instanceof ResourceLocation resourceLocation) {
-                b.add(utils.getValueTooltip(utils, resourceLocation)
-                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getStatTranslationKey(resourceLocation)), GenericTooltipUtils.toString(stat.range())).build())
+            } else if (value.value() instanceof Identifier identifier) {
+                b.add(utils.getValueTooltip(utils, identifier)
+                        .add(TooltipBuilder.keyValue(TooltipBuilder.translate(getTranslationKey(identifier)), GenericTooltipUtils.toString(stat.range())).build())
                         .build(Lang.Value.ID));
             }
         });
@@ -767,9 +776,9 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getKineticWeaponConditionTooltip(IServerUtils utils, KineticWeapon.Condition condition) {
         return TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, condition.maxDurationTicks()).build("ali.property.value.max_duration_ticks"))
-                .add(utils.getValueTooltip(utils, condition.minSpeed()).build("ali.property.value.min_speed"))
-                .add(utils.getValueTooltip(utils, condition.minRelativeSpeed()).build("ali.property.value.min_relative_speed"))
+                .add(utils.getValueTooltip(utils, condition.maxDurationTicks()).build(Lang.Value.MAX_DURATION_TICKS))
+                .add(utils.getValueTooltip(utils, condition.minSpeed()).build(Lang.Value.MIN_SPEED))
+                .add(utils.getValueTooltip(utils, condition.minRelativeSpeed()).build(Lang.Value.MIN_RELATIVE_SPEED))
         );
     }
 }

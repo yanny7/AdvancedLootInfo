@@ -9,14 +9,15 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IServerUtils;
-import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerTrades;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.CompositeEntryBase;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -184,6 +185,28 @@ public class MissingTooltipUtils {
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, effect, ConsumeEffect.class);
+        }
+
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
+    @NotNull
+    public static TooltipBuilder getMissingSlotSourceTooltip(IServerUtils utils, SlotSource slotSource) {
+        TooltipBuilder tooltip = getSlotSourceTooltip(utils, slotSource);
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            //noinspection unchecked
+            MapCodec<SlotSource> codec = ((MapCodec<SlotSource>) slotSource.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, slotSource).getPartialOrThrow();
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get consume effect info from serialized data for {} in {}", BuiltInRegistries.SLOT_SOURCE_TYPE.getKey(slotSource.codec()), TooltipContext.get(), e);
+            }
+
+            TooltipUtils.addObjectFields(utils, tooltip, slotSource, SlotSource.class);
         }
 
         return tooltip.key(CoreLang.Utils.AUTO_DETECTED);

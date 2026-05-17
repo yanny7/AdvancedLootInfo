@@ -1073,7 +1073,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testSwingAnimationTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getSwingAnimationTooltip(UTILS, SwingAnimation.DEFAULT),
+        assertTooltip(DataComponentTooltipUtils.getSwingAnimationTooltip(UTILS, SwingAnimation.DEFAULT).build(),
                 List.of(
                         "Type: WHACK",
                         "Duration: 6"
@@ -1082,7 +1082,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testUseEffectsTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getUseEffectsTooltip(UTILS, UseEffects.DEFAULT),
+        assertTooltip(DataComponentTooltipUtils.getUseEffectsTooltip(UTILS, UseEffects.DEFAULT).build(),
                 List.of(
                         "Can Sprint: false",
                         "Interact Vibrations: true",
@@ -1092,13 +1092,13 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testDamageTypeTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getDamageTypeTooltip(UTILS, new EitherHolder<>(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CACTUS))),
+        assertTooltip(DataComponentTooltipUtils.getDamageTypeTooltip(UTILS, new EitherHolder<>(LOOKUP.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypes.CACTUS))).build(),
                 List.of("Type: minecraft:cactus"));
     }
 
     @Test
     public void testAttackRangeTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getAttackRangeTooltip(UTILS, new AttackRange(0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F)),
+        assertTooltip(DataComponentTooltipUtils.getAttackRangeTooltip(UTILS, new AttackRange(0.1F, 0.2F, 0.3F, 0.4F, 0.5F, 0.6F)).build(),
                 List.of(
                         "Min Range: 0.1",
                         "Max Range: 0.2",
@@ -1116,7 +1116,7 @@ public class DataComponentTooltipTest {
                 false,
                 Optional.of(SoundEvents.AMBIENT_CAVE),
                 Optional.of(Holder.direct(SoundEvents.ALLAY_HURT)))
-        ), List.of(
+        ).build(), List.of(
                 "Deals Knockback: true",
                 "Dismounts: false",
                 "Sound: minecraft:ambient.cave",
@@ -1136,7 +1136,7 @@ public class DataComponentTooltipTest {
                 0.5F,
                 Optional.of(SoundEvents.AMBIENT_CAVE),
                 Optional.of(Holder.direct(SoundEvents.ALLAY_HURT)))
-        ), List.of(
+        ).build(), List.of(
                 "Contact Cooldown Ticks: 1",
                 "Delay Ticks: 2",
                 "Dismount Condition:",
@@ -1160,7 +1160,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testZombieNautilusVariantTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getZombieNautilusVariantTooltip(UTILS, new EitherHolder<>(LOOKUP.lookupOrThrow(Registries.ZOMBIE_NAUTILUS_VARIANT).getOrThrow(ZombieNautilusVariants.WARM))),
+        assertTooltip(DataComponentTooltipUtils.getZombieNautilusVariantTooltip(UTILS, new EitherHolder<>(LOOKUP.lookupOrThrow(Registries.ZOMBIE_NAUTILUS_VARIANT).getOrThrow(ZombieNautilusVariants.WARM))).build(),
                 List.of("Type: minecraft:warm"));
     }
 }
