@@ -685,20 +685,16 @@ public class FunctionTooltipTest {
         )).build(), List.of(
                 "Set Custom Model Data:",
                 "  -> Floats:",
-                "    -> Values:",
-                "      -> 3.14",
+                "    -> Value: 3.14",
                 "    -> List Operation: REPLACE_ALL",
                 "  -> Colors:",
-                "    -> Values:",
-                "      -> 25",
+                "    -> Value: 25",
                 "    -> List Operation: REPLACE_ALL",
                 "  -> Flags:",
-                "    -> Values:",
-                "      -> true",
+                "    -> Value: true",
                 "    -> List Operation: REPLACE_ALL",
                 "  -> Strings:",
-                "    -> Values:",
-                "      -> test",
+                "    -> Value: test",
                 "    -> List Operation: REPLACE_ALL"
         ));
     }
