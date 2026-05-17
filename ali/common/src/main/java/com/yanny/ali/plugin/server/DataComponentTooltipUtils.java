@@ -220,7 +220,7 @@ public class DataComponentTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.disableCooldownScale()).build(Lang.Value.DISABLE_COOLDOWN_SCALE));
             b.add(utils.getValueTooltip(utils, value.damageReductions()).build(Lang.Branch.DAMAGE_REDUCTIONS));
             b.add(utils.getValueTooltip(utils, value.itemDamage()).build(Lang.Branch.ITEM_DAMAGE));
-            b.add(utils.getValueTooltip(utils, value.bypassedBy()).build(Lang.Value.BYPASSED_BY));
+            b.add(utils.getValueTooltip(utils, value.bypassedBy()).build(Lang.Branch.BYPASSED_BY));
             b.add(utils.getValueTooltip(utils, value.blockSound()).build(Lang.Value.BLOCK_SOUND));
             b.add(utils.getValueTooltip(utils, value.disableSound()).build(Lang.Value.DISABLE_SOUND));
         });

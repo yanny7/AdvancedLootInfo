@@ -715,7 +715,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testSetRandomDyesTooltip() {
-        assertTooltip(FunctionTooltipUtils.getSetRandomDyesTooltip(UTILS, (SetRandomDyesFunction) SetRandomDyesFunction.withCount(ConstantValue.exactly(5)).build()), List.of(
+        assertTooltip(FunctionTooltipUtils.getSetRandomDyesTooltip(UTILS, (SetRandomDyesFunction) SetRandomDyesFunction.withCount(ConstantValue.exactly(5)).build()).build(), List.of(
                 "Set Random Dyes:",
                 "  -> Number Of Dyes: 5"
         ));
@@ -728,9 +728,9 @@ public class FunctionTooltipTest {
                         Potions.TURTLE_MASTER,
                         Potions.HARMING
                 ))
-        ).build()), List.of(
+        ).build()).build(), List.of(
                 "Set Random Potions:",
-                "  -> Options:",
+                "  -> Potions:",
                 "    -> minecraft:turtle_master",
                 "    -> minecraft:harming"
         ));

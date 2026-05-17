@@ -302,7 +302,7 @@ public class ConditionTooltipTest {
 
     @Test
     public void testEnvironmentAttributeCheckTooltip() {
-        assertTooltip(ConditionTooltipUtils.getEnvironmentAttributeCheckTooltip(UTILS, (EnvironmentAttributeCheck<?>) EnvironmentAttributeCheck.environmentAttribute(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, 5).build()), List.of(
+        assertTooltip(ConditionTooltipUtils.getEnvironmentAttributeCheckTooltip(UTILS, (EnvironmentAttributeCheck<?>) EnvironmentAttributeCheck.environmentAttribute(EnvironmentAttributes.AMBIENT_LIGHT_COLOR, 5).build()).build(), List.of(
                 "Environment Attribute Check:",
                 "  -> Attribute: minecraft:visual/ambient_light_color",
                 "  -> Value: 5"

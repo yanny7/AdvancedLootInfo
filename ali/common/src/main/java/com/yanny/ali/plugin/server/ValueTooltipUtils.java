@@ -789,12 +789,7 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, itemStackTemplate.item()).build("ali.property.value.item"))
                 .add(utils.getValueTooltip(utils, itemStackTemplate.count()).build("ali.property.value.count"))
                 .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build("ali.property.branch.components"))
-        );
-    }
-
-    @NotNull
-    public static TooltipBuilder getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate predicate) {
-        return utils.getValueTooltip(utils, predicate.expectedComponents);
+        ).key(Lang.Branch.ITEM);
     }
 
     @NotNull

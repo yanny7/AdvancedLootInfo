@@ -21,21 +21,21 @@ public class TradeUtils {
                 utils,
                 Either.left(trade.wants.item().value().getDefaultInstance()),
                 new RangeValue(utils.convertNumber(utils, trade.wants.count())),
-                utils.getValueTooltip(utils, trade.wants.components()).build("ali.property.branch.expected_components"),
+                utils.getValueTooltip(utils, trade.wants.components()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
                 trade.additionalWants.map((t) -> utils.convertNumber(utils, t.count())).orElse(new RangeValue()),
-                trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build("ali.property.branch.expected_components"),
+                trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
                 new RangeValue(trade.gives.count()),
-                GenericTooltipUtils.getFunctionListTooltip(utils, trade.givenItemModifiers).build(),
+                utils.getValueTooltip(utils, trade.givenItemModifiers).build(),
                 utils.convertNumber(utils, trade.maxUses),
                 utils.convertNumber(utils, trade.xp),
-                utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build("ali.property.branch.double_trade_price_enchantments")
+                utils.getValueTooltip(utils, trade.doubleTradePriceEnchantments).build(Lang.Branch.DOUBLE_TRADE_PRICE_ENCHANTMENTS)
         );
     }
 
     @NotNull
-    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils utils, VillagerTrade trade) {
+    public static Pair<List<Item>, List<Item>> collectItems(IServerUtils ignoredUtils, VillagerTrade trade) {
         List<Item> inputs = new ArrayList<>();
         List<Item> outputs = new ArrayList<>();
 

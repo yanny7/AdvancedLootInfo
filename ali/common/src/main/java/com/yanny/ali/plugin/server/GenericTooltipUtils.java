@@ -15,13 +15,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.component.MapDecorations;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.slot.SlotSource;
-import net.minecraft.world.item.trading.VillagerTrade;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -36,14 +34,6 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class GenericTooltipUtils {
-    @NotNull // FIXME MOVE
-    public static TooltipNode getMissingVillagerTradeTooltip(IServerUtils utils, VillagerTrade villagerTrade) {
-        TooltipBuilder tooltip = TooltipBuilder.value(villagerTrade.getClass().getName());
-
-        TooltipUtils.addObjectFields(utils, tooltip, villagerTrade, VillagerTrade.class);
-        return tooltip.build("aci.util.auto_detected");
-    }
-
     @NotNull
     public static TooltipBuilder getConditionsSectionTooltip(IServerUtils utils, List<LootItemCondition> conditions) {
         if (!conditions.isEmpty()) {
