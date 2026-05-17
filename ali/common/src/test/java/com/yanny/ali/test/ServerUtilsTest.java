@@ -1,6 +1,8 @@
 package com.yanny.ali.test;
 
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.language.CoreLang;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -33,23 +35,23 @@ import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 public class ServerUtilsTest {
     @Test
     public void testGetFunctionTooltip() {
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, SetItemCountFunction.setCount(BinomialDistributionGenerator.binomial(5, 0.5f)).build()).build(), List.of(
                 "Set Count:",
                 "  -> Count: 0-5",
                 "  -> Add: false"
         ));
-        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))), List.of(
+        assertTooltip(UTILS.getFunctionTooltip(UTILS, new UnknownFunction(Items.ANDESITE, BinomialDistributionGenerator.binomial(5, 0.3f))).build(), List.of(
                 "Auto-detected: minecraft:unknown"
         ));
     }
 
     @Test
     public void testGetConditionTooltip() {
-        assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()), List.of(
+        assertTooltip(UTILS.getConditionTooltip(UTILS, LootItemRandomChanceCondition.randomChance(0.5f).build()).build(), List.of(
                 "Random Chance:",
                 "  -> Chance: 0.50"
         ));
-        assertTooltip(UTILS.getConditionTooltip(UTILS, new UnknownCondition(true)), List.of(
+        assertTooltip(UTILS.getConditionTooltip(UTILS, new UnknownCondition(true)).build(), List.of(
                 "Auto-detected: minecraft:unknown"
         ));
     }
@@ -57,7 +59,7 @@ public class ServerUtilsTest {
     @Disabled
     @Test
     public void testGetValueTooltip() {
-        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build("ali.property.branch.item"), List.of(
+        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
                 "Item:",
                 "  -> Item: minecraft:emerald",
                 "  -> Count: 1",
@@ -91,7 +93,7 @@ public class ServerUtilsTest {
                         "      -> Duration: 6"
                 )
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build("aci.util.missing"), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }
@@ -111,7 +113,7 @@ public class ServerUtilsTest {
                 false,
                 SetStewEffectFunction.stewEffect().withEffect(MobEffects.ABSORPTION, ConstantValue.exactly(2)).build(),
                 LootItemRandomChanceCondition.randomChance(0.3f).build()
-        )), List.of(
+        )).build(), List.of(
             "Auto-detected: minecraft:unknown"
         ));
     }

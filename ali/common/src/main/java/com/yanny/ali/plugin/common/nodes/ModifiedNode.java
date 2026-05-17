@@ -17,19 +17,19 @@ public class ModifiedNode extends ListNode {
     private final TooltipNode tooltip;
 
     public ModifiedNode(IServerUtils ignoredUtils, IDataNode original, IDataNode modified) {
-        tooltip = EntryTooltipUtils.getAlternativesTooltip();
+        tooltip = EntryTooltipUtils.getAlternativesTooltip().build();
         addChildren(modified);
         addChildren(original);
     }
 
     public ModifiedNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 
     @NotNull

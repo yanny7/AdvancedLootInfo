@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.ali.api.*;
+import com.yanny.ali.datagen.LanguageHolder;
 import com.yanny.ali.plugin.client.widget.*;
 import com.yanny.ali.plugin.client.widget.trades.ItemListingWidget;
 import com.yanny.ali.plugin.client.widget.trades.TradeLevelWidget;
@@ -17,6 +18,7 @@ import net.minecraft.advancements.criterion.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.*;
 import net.minecraft.core.component.predicates.*;
 import net.minecraft.core.component.predicates.DamagePredicate;
@@ -85,6 +87,7 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerCommon(ICommonRegistry registry) {
+        LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
         registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
     }
 
@@ -93,9 +96,9 @@ public class Plugin implements IPlugin {
         registry.registerWidget(LootTableNode.ID, LootTableWidget::new);
         registry.registerWidget(LootPoolNode.ID, LootPoolWidget::new);
         registry.registerWidget(ItemNode.ID, ItemWidget::new);
-        registry.registerWidget(EmptyNode.ID, (entry2, rect2, ignoredMaxWidth3, ignoredMaxWidth4) -> new EmptyWidget(rect2, ignoredMaxWidth3, ignoredMaxWidth4));
+        registry.registerWidget(EmptyNode.ID, EmptyWidget::new);
         registry.registerWidget(ReferenceNode.ID, ReferenceWidget::new);
-        registry.registerWidget(DynamicNode.ID, (entry1, rect1, ignoredMaxWidth1, ignoredMaxWidth2) -> new DynamicWidget(rect1, ignoredMaxWidth1, ignoredMaxWidth2));
+        registry.registerWidget(DynamicNode.ID, DynamicWidget::new);
         registry.registerWidget(AlternativesNode.ID, AlternativesWidget::new);
         registry.registerWidget(SequenceNode.ID, SequentialWidget::new);
         registry.registerWidget(GroupNode.ID, GroupWidget::new);
@@ -413,6 +416,13 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ChickenSoundVariant.class, RegistriesTooltipUtils::getChickenSoundVariantTooltip);
         registry.registerValueTooltip(CatSoundVariant.class, RegistriesTooltipUtils::getCatSoundVariantTooltip);
 
+        registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
+        registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
+        registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);
+        registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
+        registry.registerValueTooltip(DataComponentPredicate.class, ValueTooltipUtils::getDataComponentPredicateTooltip);
+        registry.registerValueTooltip(ConsumeEffect.class, ValueTooltipUtils::getConsumeEffectTooltip);
+
         registry.registerValueTooltip(Pair.class, ValueTooltipUtils::getPairTooltip);
         registry.registerValueTooltip(StatePropertiesPredicate.class, ValueTooltipUtils::getStatePropertiesPredicateTooltip);
         registry.registerValueTooltip(DamageSourcePredicate.class, ValueTooltipUtils::getDamageSourcePredicateTooltip);
@@ -430,7 +440,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntityEquipmentPredicate.class, ValueTooltipUtils::getEntityEquipmentPredicateTooltip);
         registry.registerValueTooltip(ItemPredicate.class, ValueTooltipUtils::getItemPredicateTooltip);
         registry.registerValueTooltip(EnchantmentPredicate.class, ValueTooltipUtils::getEnchantmentPredicateTooltip);
-        registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
         registry.registerValueTooltip(BlockPos.class, ValueTooltipUtils::getBlockPosTooltip);
         registry.registerValueTooltip(CopyCustomDataFunction.CopyOperation.class, ValueTooltipUtils::getCopyOperationTooltip);
         registry.registerValueTooltip(PlayerPredicate.AdvancementDonePredicate.class, ValueTooltipUtils::getAdvancementDonePredicateTooltip);
@@ -442,6 +451,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(SetAttributesFunction.Modifier.class, ValueTooltipUtils::getModifierTooltip);
         registry.registerValueTooltip(NumberProvider.class, ValueTooltipUtils::getNumberProviderTooltip);
         registry.registerValueTooltip(IntRange.class, ValueTooltipUtils::getIntRangeTooltip);
+        registry.registerValueTooltip(StatePropertiesPredicate.PropertyMatcher.class, ValueTooltipUtils::getPropertyMatcherTooltip);
+        registry.registerValueTooltip(PlayerPredicate.StatMatcher.class, ValueTooltipUtils::getStatMatcherTooltip);
         registry.registerValueTooltip(LocationPredicate.PositionPredicate.class, ValueTooltipUtils::getPositionPredicateTooltip);
         registry.registerValueTooltip(SetStewEffectFunction.EffectEntry.class, ValueTooltipUtils::getEffectEntryTooltip);
         registry.registerValueTooltip(ListOperation.class, ValueTooltipUtils::getListOperationTooltip);
@@ -473,11 +484,13 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntityPredicate.LocationWrapper.class, ValueTooltipUtils::getLocationWrapperTooltip);
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
+        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
         registry.registerValueTooltip(InputPredicate.class, ValueTooltipUtils::getInputPredicateTooltip);
         registry.registerValueTooltip(ListOperation.StandAlone.class, ValueTooltipUtils::getStandaloneTooltip);
         registry.registerValueTooltip(BlocksAttacks.DamageReduction.class, ValueTooltipUtils::getDamageReductionTooltip);
         registry.registerValueTooltip(BlocksAttacks.ItemDamageFunction.class, ValueTooltipUtils::getItemDamageTooltip);
         registry.registerValueTooltip(DataComponentMatchers.class, ValueTooltipUtils::getDataComponentMatchersTooltip);
+        registry.registerValueTooltip(DataComponentExactPredicate.class, ValueTooltipUtils::getDataComponentExactPredicateTooltip);
         registry.registerValueTooltip(LootContextArg.class, ValueTooltipUtils::getLootContextArgTooltip);
         registry.registerValueTooltip(ContextKey.class, ValueTooltipUtils::getContextKeyTooltip);
         registry.registerValueTooltip(SlotRange.class, ValueTooltipUtils::getSlotRangeTooltip);

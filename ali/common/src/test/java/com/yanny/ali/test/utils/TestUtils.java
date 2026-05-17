@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.function.Executable;
 import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
-import oshi.util.tuples.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -158,10 +157,9 @@ public class TestUtils {
     }
 
     @NotNull
-    public static Pair<Language, Set<String>> loadDefaultLanguage(ResourceManager resourceManager) {
+    public static Language loadDefaultLanguage(ResourceManager resourceManager) {
         ImmutableMap.Builder<String, String> stringBuilder = ImmutableMap.builder();
         LanguageHolder.TRANSLATION_MAP.forEach(stringBuilder::put);
-        Set<String> notUsed = new HashSet<>(LanguageHolder.TRANSLATION_MAP.keySet());
         String lang = String.format(Locale.ROOT, "lang/%s.json", "en_us");
 
         for(String namespace : resourceManager.getNamespaces()) {
@@ -176,16 +174,15 @@ public class TestUtils {
                     }
                 }
             } catch (Exception e) {
-                LOGGER.warn("Skipped language file: {}:{} ({})", namespace, lang, e);
+                LOGGER.warn("Skipped language file: {}:{}", namespace, lang, e);
             }
         }
 
         final Map<String, String> languageMap = stringBuilder.build();
 
-        Language language = new Language() {
+        return new Language() {
             @NotNull
             public String getOrDefault(String key, String value) {
-                notUsed.remove(key);
                 return Objects.requireNonNull(languageMap.getOrDefault(key, value));
             }
 
@@ -204,8 +201,6 @@ public class TestUtils {
                                 StringDecomposer.iterateFormatted(text, style, charSink) ? Optional.empty() : FormattedText.STOP_ITERATION, Style.EMPTY).isPresent();
             }
         };
-
-        return new Pair<>(language, notUsed);
     }
 
     @NotNull

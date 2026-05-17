@@ -4,6 +4,7 @@ import com.yanny.aci.api.*;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.function.BiFunction;
 
 public abstract class CoreClientRegistry<
         TConfig,
-        TCommonUtils extends ICoreCommonUtils<TConfig>,
+        TCommonUtils extends CoreCommonRegistry<TConfig>,
         TDataNode    extends ICoreDataNode<?>,
         TWidgetUtils extends ICoreWidgetUtils<?>,
         TClientUtils extends ICoreClientUtils<?, ?, ?>
@@ -129,5 +130,11 @@ public abstract class CoreClientRegistry<
     @Override
     public final TConfig getConfiguration() {
         return commonUtils.getConfiguration();
+    }
+
+    @Nullable
+    @Override
+    public String getTranslationKey(int index) {
+        return commonUtils.getDictionary().inverse().get(index);
     }
 }

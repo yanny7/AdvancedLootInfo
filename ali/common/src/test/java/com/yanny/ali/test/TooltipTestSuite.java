@@ -1,7 +1,6 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Either;
-import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
@@ -58,11 +57,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.junit.platform.suite.api.AfterSuite;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
-import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
 import java.io.File;
@@ -70,7 +67,6 @@ import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -94,9 +90,6 @@ public class TooltipTestSuite {
     public static IServerUtils UTILS;
     public static HolderLookup.Provider LOOKUP;
 
-    private static Set<String> UNUSED;
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     @BeforeSuite
     static void beforeAllTests() throws NoSuchFieldException, IllegalAccessException {
         SharedConstants.setVersion(DetectedVersion.BUILT_IN);
@@ -106,10 +99,7 @@ public class TooltipTestSuite {
         injectLootCondition();
 
         ResourceManager resourceManager = loadClientResources();
-        Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
-
-        Language.inject(pair.getA());
-        UNUSED = pair.getB();
+        Language.inject(TestUtils.loadDefaultLanguage(resourceManager));
         LOOKUP = VanillaRegistries.createLookup();
 
         PluginManager.getInstance().registerCommonEvent();
@@ -142,19 +132,19 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends LootItemFunction> TooltipNode getFunctionTooltip(IServerUtils utils, T function) {
+            public <T extends LootItemFunction> TooltipBuilder getFunctionTooltip(IServerUtils utils, T function) {
                 return PluginManager.getInstance().serverRegistry.getFunctionTooltip(utils, function);
             }
 
             @NotNull
             @Override
-            public <T extends LootItemCondition> TooltipNode getConditionTooltip(IServerUtils utils, T condition) {
+            public <T extends LootItemCondition> TooltipBuilder getConditionTooltip(IServerUtils utils, T condition) {
                 return PluginManager.getInstance().serverRegistry.getConditionTooltip(utils, condition);
             }
 
             @NotNull
             @Override
-            public <T extends Ingredient> TooltipNode getIngredientTooltip(IServerUtils utils, T ingredient) {
+            public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
                 return PluginManager.getInstance().serverRegistry.getIngredientTooltip(utils, ingredient);
             }
 
@@ -166,29 +156,29 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends DataComponentPredicate> TooltipNode getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
+            public <T extends DataComponentPredicate> TooltipBuilder getDataComponentPredicateTooltip(IServerUtils utils, T predicate) {
                 return PluginManager.getInstance().serverRegistry.getDataComponentPredicateTooltip(utils, predicate);
             }
 
             @NotNull
             @Override
-            public <T extends EntitySubPredicate> TooltipNode getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
+            public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
                 return PluginManager.getInstance().serverRegistry.getEntitySubPredicateTooltip(utils, predicate);
             }
 
             @NotNull
             @Override
-            public TooltipNode getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
+            public TooltipBuilder getDataComponentTypeTooltip(IServerUtils utils, DataComponentType<?> type, Object value) {
                 return PluginManager.getInstance().serverRegistry.getDataComponentTypeTooltip(utils, type, value);
             }
 
             @Override
-            public <T extends ConsumeEffect> TooltipNode getConsumeEffectTooltip(IServerUtils utils, T effect) {
+            public <T extends ConsumeEffect> TooltipBuilder getConsumeEffectTooltip(IServerUtils utils, T effect) {
                 return PluginManager.getInstance().serverRegistry.getConsumeEffectTooltip(utils, effect);
             }
 
             @Override
-            public <T extends SlotSource> TooltipNode getSlotSourceTooltip(IServerUtils utils, T slotSource) {
+            public <T extends SlotSource> TooltipBuilder getSlotSourceTooltip(IServerUtils utils, T slotSource) {
                 return PluginManager.getInstance().serverRegistry.getSlotSourceTooltip(utils, slotSource);
             }
 
@@ -220,16 +210,15 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
             }
 
-            @Nullable
             @Override
-            public LootContext getLootContext() {
-                return PluginManager.getInstance().serverRegistry.getLootContext();
+            public int getTranslationKeyIndex(String key) {
+                return PluginManager.getInstance().serverRegistry.getTranslationKeyIndex(key);
             }
 
             @Nullable
             @Override
-            public Identifier getCurrentLootTable() {
-                return null;
+            public LootContext getLootContext() {
+                return PluginManager.getInstance().serverRegistry.getLootContext();
             }
 
             @Nullable
@@ -253,14 +242,6 @@ public class TooltipTestSuite {
                 return LOOKUP;
             }
         };
-
-        LOGGER.info("----- Translation keys ({}) -----", UNUSED.size());
-    }
-
-    @AfterSuite
-    static void afterAllTests() {
-        LOGGER.info("----- Unused translation keys ({}) -----", UNUSED.size());
-        UNUSED.stream().sorted().forEach(LOGGER::info);
     }
 
     @NotNull

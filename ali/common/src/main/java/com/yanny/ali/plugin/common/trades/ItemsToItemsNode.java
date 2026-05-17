@@ -9,6 +9,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.api.ListNode;
+import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -41,15 +42,15 @@ public class ItemsToItemsNode extends ListNode {
         addChildren(getChildren(input2, input2Count, input2Condition));
         addChildren(getChildren(output, outputCount, outputModifier));
         this.tooltip = TooltipBuilder.array((b) -> b
-                .add(utils.getValueTooltip(utils, maxUses.toString()).build("ali.property.value.uses"))
-                .add(utils.getValueTooltip(utils, xp.toString()).build("ali.property.value.villager_xp"))
+                .add(utils.getValueTooltip(utils, maxUses.toString()).build(Lang.Value.USES))
+                .add(utils.getValueTooltip(utils, xp.toString()).build(Lang.Value.VILLAGER_XP))
                 .add(tooltip)
         ).build();
     }
 
     public ItemsToItemsNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(buf);
+        tooltip = TooltipNode.decode(utils, buf);
     }
 
     @NotNull
@@ -66,7 +67,7 @@ public class ItemsToItemsNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(buf);
+        tooltip.encode(utils, buf);
     }
 
     private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {

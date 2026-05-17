@@ -22,13 +22,11 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -296,54 +294,17 @@ public class TooltipUtils {
 
                 Object obj = f.get(object);
                 String key = f.getName();
+                TooltipBuilder builder = utils.getValueTooltip(utils, obj);
 
-                if (obj instanceof LootItemCondition condition) {
-                    tooltip.add(TooltipBuilder.array((b) -> b.add(utils.getConditionTooltip(utils, condition)).rawKey(key)));
-                } else if (obj instanceof LootItemFunction function) {
-                    tooltip.add(TooltipBuilder.array((b) -> b.add(utils.getFunctionTooltip(utils, function)).rawKey(key)));
+                if (builder.hasKey()) {
+                    tooltip.add(TooltipBuilder.array((b) -> b.add(builder).rawKey(key)));
                 } else {
-                    tooltip.add(utils.getValueTooltip(utils, obj).rawKey(key));
+                    tooltip.add(builder.rawKey(key));
                 }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         });
-    }
-
-    @NotNull
-    public static TooltipBuilder getArrayTooltip(IServerUtils utils, Object value) {
-        Class<?> componentType = value.getClass().getComponentType();
-        int length = Array.getLength(value);
-
-        if (componentType == LootItemCondition.class) {
-            return TooltipBuilder.array((b) -> {
-                List<LootItemCondition> values = new ArrayList<>();
-
-                for (int i = 0; i < length; i++) {
-                    values.add((LootItemCondition) Array.get(value, i));
-                }
-
-                b.add(GenericTooltipUtils.getSubConditionsTooltip(utils, values));
-            });
-        } else {
-            if (length > 0) {
-                return TooltipBuilder.array((b) -> {
-                    for (int i = 0; i < length; i++) {
-                        Object element = Array.get(value, i);
-
-                        if (element instanceof LootItemCondition condition) {
-                            b.add(GenericTooltipUtils.getConditionListTooltip(utils, Collections.singletonList(condition)));
-                        } else if (element instanceof LootItemFunction function) {
-                            b.add(GenericTooltipUtils.getFunctionListTooltip(utils, Collections.singletonList(function)));
-                        } else {
-                            b.add(utils.getValueTooltip(utils, element));
-                        }
-                    }
-                });
-            } else {
-                return TooltipBuilder.value("[]");
-            }
-        }
     }
 
     public static TooltipBuilder getJsonTooltip(IServerUtils utils, JsonElement element) {

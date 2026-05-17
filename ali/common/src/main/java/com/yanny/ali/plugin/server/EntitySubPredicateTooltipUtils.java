@@ -1,67 +1,58 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.criterion.*;
 import org.jetbrains.annotations.NotNull;
 
 public class EntitySubPredicateTooltipUtils {
     @NotNull
-    public static TooltipNode getLightningBoltPredicateTooltip(IServerUtils utils, LightningBoltPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, predicate.blocksSetOnFire()).build("ali.property.value.blocks_on_fire"))
-                        .add(utils.getValueTooltip(utils, predicate.entityStruck()).build("ali.property.branch.stuck_entity"))
-                )
-                .build("ali.type.entity_sub_predicate.lightning_bolt");
+    public static TooltipBuilder getLightningBoltPredicateTooltip(IServerUtils utils, LightningBoltPredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.blocksSetOnFire()).build(Lang.Value.BLOCKS_ON_FIRE));
+            b.add(utils.getValueTooltip(utils, predicate.entityStruck()).build(Lang.Branch.STUCK_ENTITY));
+        }).key(Lang.EntitySubPredicates.LIGHTNING_BOLT);
     }
 
     @NotNull
-    public static TooltipNode getFishingHookPredicateTooltip(IServerUtils utils, FishingHookPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, predicate.inOpenWater()).build("ali.property.value.in_open_water"))
-                )
+    public static TooltipBuilder getFishingHookPredicateTooltip(IServerUtils utils, FishingHookPredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.inOpenWater()).build(Lang.Value.IN_OPEN_WATER)))
                 .showEmpty()
-                .build("ali.type.entity_sub_predicate.fishing_hook");
+                .key(Lang.EntitySubPredicates.FISHING_HOOK);
     }
 
     @NotNull
-    public static TooltipNode getPlayerPredicateTooltip(IServerUtils utils, PlayerPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, predicate.level()).build("ali.property.value.level"))
-                        .add(utils.getValueTooltip(utils, predicate.food()).build("ali.property.branch.food"))
-                        .add(utils.getValueTooltip(utils, predicate.gameType()).build("ali.property.branch.game_types"))
-                        .add(GenericTooltipUtils.getCollectionTooltip(utils, predicate.stats(), GenericTooltipUtils::getStatMatcherTooltip).build("ali.property.branch.stats"))
-                        .add(GenericTooltipUtils.getMapTooltip(utils, predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip).build("ali.property.branch.recipes"))
-                        .add(GenericTooltipUtils.getMapTooltip(utils, predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip).build("ali.property.branch.advancements"))
-                        .add(utils.getValueTooltip(utils, predicate.lookingAt()).build("ali.property.branch.looking_at"))
-                        .add(utils.getValueTooltip(utils, predicate.input()).build("ali.property.branch.input"))
-                )
-                .build("ali.type.entity_sub_predicate.player");
+    public static TooltipBuilder getPlayerPredicateTooltip(IServerUtils utils, PlayerPredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.level()).build(Lang.Value.LEVEL));
+            b.add(utils.getValueTooltip(utils, predicate.food()).build(Lang.Branch.FOOD));
+            b.add(utils.getValueTooltip(utils, predicate.gameType()).build(Lang.Branch.GAME_TYPES));
+            b.add(utils.getValueTooltip(utils, predicate.stats()).build(Lang.Branch.STATS));
+            b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip).build(Lang.Branch.RECIPES));
+            b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip).build(Lang.Branch.ADVANCEMENTS));
+            b.add(utils.getValueTooltip(utils, predicate.lookingAt()).build(Lang.Branch.LOOKING_AT));
+            b.add(utils.getValueTooltip(utils, predicate.input()).build(Lang.Branch.INPUT));
+        }).key(Lang.EntitySubPredicates.PLAYER);
     }
 
     @NotNull
-    public static TooltipNode getSlimePredicateTooltip(IServerUtils utils, SlimePredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, predicate.size()).build("ali.property.value.size"))
-                )
-                .build("ali.type.entity_sub_predicate.slime");
+    public static TooltipBuilder getSlimePredicateTooltip(IServerUtils utils, SlimePredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.size()).build(Lang.Value.SIZE)))
+                .key(Lang.EntitySubPredicates.SLIME);
     }
 
     @NotNull
-    public static TooltipNode getRaiderPredicateTooltip(IServerUtils utils, RaiderPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, predicate.hasRaid()).build("ali.property.value.has_raid"))
-                        .add(utils.getValueTooltip(utils, predicate.isCaptain()).build("ali.property.value.is_captain"))
-                )
-                .build("ali.type.entity_sub_predicate.raider");
+    public static TooltipBuilder getRaiderPredicateTooltip(IServerUtils utils, RaiderPredicate predicate) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.hasRaid()).build(Lang.Value.HAS_RAID));
+            b.add(utils.getValueTooltip(utils, predicate.isCaptain()).build(Lang.Value.IS_CAPTAIN));
+        }).key(Lang.EntitySubPredicates.RAIDER);
     }
 
     @NotNull
-    public static TooltipNode getSheepPredicateTooltip(IServerUtils utils, SheepPredicate predicate) {
-        return TooltipBuilder.array((b) -> b
-                        .add(utils.getValueTooltip(utils, predicate.sheared()).build("ali.property.value.sheared"))
-                )
-                .build("ali.type.entity_sub_predicate.sheep");
+    public static TooltipBuilder getSheepPredicateTooltip(IServerUtils utils, SheepPredicate predicate) {
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.sheared()).build(Lang.Value.SHEARED)))
+                .key(Lang.EntitySubPredicates.SHEEP);
     }
 }

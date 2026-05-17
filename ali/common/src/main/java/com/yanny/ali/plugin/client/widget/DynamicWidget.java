@@ -4,6 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
@@ -15,7 +16,7 @@ public class DynamicWidget implements IWidget {
     private final RelativeRect bounds;
     private final IWidget widget;
 
-    public DynamicWidget(IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
+    public DynamicWidget(IWidgetUtils ignoredUtils, IDataNode entry, RelativeRect rect, int ignoredMaxWidth) {
         widget = WidgetUtils.getDynamicWidget(rect, entry);
         bounds = widget.getRect();
     }

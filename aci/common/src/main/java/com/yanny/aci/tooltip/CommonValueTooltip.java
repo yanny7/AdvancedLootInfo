@@ -1,11 +1,9 @@
 package com.yanny.aci.tooltip;
 
-import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -14,7 +12,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
 public class CommonValueTooltip<
         TServerUtils    extends ICoreServerUtils<TServerUtils>,
@@ -27,6 +28,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(Boolean.class, this::getBooleanTooltip);
         registry.registerValueTooltip(Integer.class, this::getIntegerTooltip);
         registry.registerValueTooltip(Long.class, this::getLongTooltip);
+        registry.registerValueTooltip(Short.class, this::getShortTooltip);
         registry.registerValueTooltip(Byte.class, this::getByteTooltip);
         registry.registerValueTooltip(String.class, this::getStringTooltip);
         registry.registerValueTooltip(Float.class, this::getFloatTooltip);
@@ -40,7 +42,6 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
         registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
-        registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
     }
 
     private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -48,7 +49,7 @@ public class CommonValueTooltip<
             return TooltipBuilder.empty();
         }
 
-        return TooltipBuilder.array((b) -> {
+        return TooltipBuilder.branch((b) -> {
             for (Object o : collection) {
                 b.add(utils.getValueTooltip(utils, o));
             }
@@ -82,6 +83,11 @@ public class CommonValueTooltip<
     }
 
     @NotNull
+    private TooltipBuilder getShortTooltip(TServerUtils utils, Short value) {
+        return TooltipBuilder.value(value);
+    }
+
+    @NotNull
     private TooltipBuilder getByteTooltip(TServerUtils utils, Byte value) {
         return TooltipBuilder.value(value);
     }
@@ -98,7 +104,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getDoubleTooltip(TServerUtils utils, Double value) {
-        return TooltipBuilder.value(value);
+        return TooltipBuilder.value((float) (double) value);
     }
 
     @NotNull
@@ -144,25 +150,5 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getPropertyTooltip(TServerUtils utils, Property<?> property) {
         return utils.getValueTooltip(utils, property.getName());
-    }
-
-    public TooltipBuilder getHolderSetTooltip(TServerUtils utils, HolderSet<?> holderSet) {
-        //noinspection unchecked
-        Either<TagKey<?>, List<Holder<?>>> either = (Either<TagKey<?>, List<Holder<?>>>)(Object) holderSet.unwrap();
-        Optional<TagKey<?>> left = either.left();
-        Optional<List<Holder<?>>> right = either.right();
-
-        if (left.isEmpty() && right.orElse(List.of()).isEmpty()) {
-            return TooltipBuilder.empty();
-        }
-
-        return TooltipBuilder.array((b) -> {
-            left.ifPresent((tagKey) -> b.add(utils.getValueTooltip(utils, tagKey).build("ali.property.value.tag")));
-            right.ifPresent((list) -> {
-                if (!list.isEmpty()) {
-                    list.forEach((holder) -> b.add(utils.getValueTooltip(utils, holder)));
-                }
-            });
-        });
     }
 }

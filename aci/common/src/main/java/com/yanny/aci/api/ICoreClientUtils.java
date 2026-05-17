@@ -3,6 +3,7 @@ package com.yanny.aci.api;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -17,4 +18,7 @@ public interface ICoreClientUtils<
 
     @NotNull
     BiFunction<SELF, RegistryFriendlyByteBuf, TDataNode> getDataNodeFactory(Identifier id);
+
+    @Nullable
+    String getTranslationKey(int index);
 }
