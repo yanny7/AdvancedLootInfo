@@ -54,6 +54,21 @@ public class TooltipBuilder {
     }
 
     @NotNull
+    public static TooltipBuilder array(Consumer<TooltipBuilder> logic, IMultiKey key) {
+        TooltipBuilder outer = new TooltipBuilder();
+        TooltipBuilder inner = new TooltipBuilder();
+
+        inner.isArray = true;
+        inner.key(key);
+
+        logic.accept(inner);
+
+        outer.isArray = true;
+        outer.add(inner);
+        return outer;
+    }
+
+    @NotNull
     public static TooltipBuilder branch(Consumer<TooltipBuilder> logic) {
         TooltipBuilder builder = new TooltipBuilder();
 
@@ -76,11 +91,7 @@ public class TooltipBuilder {
 
     @NotNull
     public static TooltipBuilder keyOnly(String key) {
-        TooltipBuilder builder = new TooltipBuilder();
-
-        builder.key(key);
-        builder.forceVisible = true;
-        return builder;
+        return keyOnly(new MultiKey(key, key));
     }
 
     @NotNull
@@ -171,9 +182,8 @@ public class TooltipBuilder {
         return this;
     }
 
-    public TooltipBuilder showEmpty() {
+    public void showEmpty() {
         this.forceVisible = true;
-        return this;
     }
 
     public boolean hasKey() {
