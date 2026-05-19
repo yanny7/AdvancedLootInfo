@@ -146,9 +146,10 @@ public class ItemSubPredicateTooltipTest {
                 Optional.of(false)
         ))).build(), List.of(
                 "Firework Explosion:",
-                "  -> Shape: LARGE_BALL",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+                "  -> Firework:",
+                "    -> Shape: LARGE_BALL",
+                "    -> Trail: false",
+                "    -> Twinkle: true"
         ));
     }
 
@@ -162,10 +163,10 @@ public class ItemSubPredicateTooltipTest {
                 "Fireworks:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Predicate:",
+                "      -> Firework:",
                 "        -> Shape: BURST",
                 "    -> Counts:",
-                "      -> Predicate:",
+                "      -> Firework:",
                 "        -> Shape: CREEPER",
                 "        -> Count: 1-5",
                 "    -> Size: ≥4",

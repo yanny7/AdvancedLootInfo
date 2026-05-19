@@ -401,6 +401,9 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
         registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
+        registry.registerValueTooltip(CollectionPredicate.class, ValueTooltipUtils::getCollectionPredicateTooltip);
+        registry.registerValueTooltip(CollectionContentsPredicate.class, ValueTooltipUtils::getCollectionContentsPredicateTooltip);
+        registry.registerValueTooltip(CollectionCountsPredicate.class, ValueTooltipUtils::getCollectionCountsPredicateTooltip);
 
         registry.registerChanceModifier(LootItemRandomChanceCondition.class, TooltipUtils::applyRandomChance);
         registry.registerChanceModifier(LootItemRandomChanceWithEnchantedBonusCondition.class, TooltipUtils::applyRandomChanceWithLooting);

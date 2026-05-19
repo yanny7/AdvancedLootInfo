@@ -260,7 +260,8 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.item).build(Lang.Value.ITEM));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }).showEmpty().key(Lang.Functions.SET_ITEM);
+            b.showEmpty();
+        }, Lang.Functions.SET_ITEM);
     }
 
     @NotNull
@@ -268,7 +269,8 @@ public class FunctionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.components).build(Lang.Branch.COMPONENTS));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }).showEmpty().key(Lang.Functions.SET_COMPONENTS);
+            b.showEmpty();
+        }, Lang.Functions.SET_COMPONENTS);
     }
 
     @NotNull

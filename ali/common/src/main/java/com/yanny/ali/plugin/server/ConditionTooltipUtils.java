@@ -88,7 +88,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.chance()).build(Lang.Value.PROBABILITY)), Lang.Conditions.RANDOM_CHANCE)
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.chance()).build(Lang.Value.CHANCE)), Lang.Conditions.RANDOM_CHANCE)
                 .isAdvancedTooltip();
     }
 
@@ -98,7 +98,7 @@ public class ConditionTooltipUtils {
             b.add(utils.getValueTooltip(utils, cond.unenchantedChance()).build(Lang.Value.UNENCHANTED_CHANCE));
             b.add(utils.getValueTooltip(utils, cond.enchantedChance()).build(Lang.Branch.ENCHANTED_CHANCE));
             b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTMENT));
-        }, Lang.Conditions.RANDOM_CHANCE_WITH_LOOTING).isAdvancedTooltip();
+        }, Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS).isAdvancedTooltip();
     }
 
     @NotNull

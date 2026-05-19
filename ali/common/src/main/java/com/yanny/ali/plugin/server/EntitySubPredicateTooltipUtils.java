@@ -12,14 +12,15 @@ public class EntitySubPredicateTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, predicate.blocksSetOnFire()).build(Lang.Value.BLOCKS_ON_FIRE));
             b.add(utils.getValueTooltip(utils, predicate.entityStruck()).build(Lang.Branch.STUCK_ENTITY));
-        }).key(Lang.EntitySubPredicates.LIGHTNING_BOLT);
+        }, Lang.EntitySubPredicates.LIGHTNING_BOLT);
     }
 
     @NotNull
     public static TooltipBuilder getFishingHookPredicateTooltip(IServerUtils utils, FishingHookPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.inOpenWater()).build(Lang.Value.IN_OPEN_WATER)))
-                .showEmpty()
-                .key(Lang.EntitySubPredicates.FISHING_HOOK);
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, predicate.inOpenWater()).build(Lang.Value.IN_OPEN_WATER));
+            b.showEmpty();
+        }, Lang.EntitySubPredicates.FISHING_HOOK);
     }
 
     @NotNull
@@ -31,13 +32,12 @@ public class EntitySubPredicateTooltipUtils {
             b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.recipes(), GenericTooltipUtils::getRecipeEntryTooltip).build(Lang.Branch.RECIPES));
             b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.advancements(), GenericTooltipUtils::getAdvancementEntryTooltip).build(Lang.Branch.ADVANCEMENTS));
             b.add(utils.getValueTooltip(utils, predicate.lookingAt()).build(Lang.Branch.LOOKING_AT));
-        }).key(Lang.EntitySubPredicates.PLAYER);
+        }, Lang.EntitySubPredicates.PLAYER);
     }
 
     @NotNull
     public static TooltipBuilder getSlimePredicateTooltip(IServerUtils utils, SlimePredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.size()).build(Lang.Value.SIZE)))
-                .key(Lang.EntitySubPredicates.SLIME);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.size()).build(Lang.Value.SIZE)), Lang.EntitySubPredicates.SLIME);
     }
 
     @NotNull
@@ -45,7 +45,7 @@ public class EntitySubPredicateTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, predicate.hasRaid()).build(Lang.Value.HAS_RAID));
             b.add(utils.getValueTooltip(utils, predicate.isCaptain()).build(Lang.Value.IS_CAPTAIN));
-        }).key(Lang.EntitySubPredicates.RAIDER);
+        }, Lang.EntitySubPredicates.RAIDER);
     }
 
     @NotNull

@@ -413,6 +413,7 @@ public final class Lang {
         FEET("feet", "Feet:"),
         FILTER("filter", "Filter:"),
         FILTERS("filters", "Filters:"),
+        FIREWORK("firework", "Firework:"),
         FLUID_PREDICATE("fluid_predicate", "Fluid Predicate:"),
         FLUIDS(Value.FLUID, "fluids", "Fluids:"),
         FRACTION("fraction", "Fraction:"),
