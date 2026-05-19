@@ -147,11 +147,12 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(FireworkExplosion.Shape.LARGE_BALL),
                 Optional.of(true),
                 Optional.of(false)
-        ))).build(Lang.Branch.PREDICATE), List.of(
-                "Predicate:",
-                "  -> Shape: LARGE_BALL",
-                "  -> Trail: false",
-                "  -> Twinkle: true"
+        ))).build(), List.of(
+                "Firework Explosion:",
+                "  -> Firework:",
+                "    -> Shape: LARGE_BALL",
+                "    -> Trail: false",
+                "    -> Twinkle: true"
         ));
     }
 
@@ -165,10 +166,10 @@ public class DataComponentPredicateTooltipTest {
                 "Predicate:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Predicate:",
+                "      -> Firework:",
                 "        -> Shape: BURST",
                 "    -> Counts:",
-                "      -> Predicate:",
+                "      -> Firework:",
                 "        -> Shape: CREEPER",
                 "        -> Count: 1-5",
                 "    -> Size: ≥4",

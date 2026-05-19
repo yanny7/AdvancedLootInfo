@@ -5,7 +5,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.*;
@@ -671,7 +670,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testCollectionPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getCollectionPredicateTooltip(UTILS, Optional.of(
+        assertTooltip(ValueTooltipUtils.getCollectionPredicateTooltip(UTILS,
                 new CollectionPredicate<>(
                         Optional.of(CollectionContentsPredicate.of(
                                 new WritableBookPredicate.PagePredicate("Hello"),
@@ -683,7 +682,7 @@ public class GenericTooltipTest {
                         )),
                         Optional.of(MinMaxBounds.Ints.atLeast(4))
                 )
-        )).build(Lang.Branch.PAGES), List.of(
+        ).build(Lang.Branch.PAGES), List.of(
                 "Pages:",
                 "  -> Contains:",
                 "    -> Page: Hello",

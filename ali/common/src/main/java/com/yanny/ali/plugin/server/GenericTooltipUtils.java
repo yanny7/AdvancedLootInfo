@@ -210,22 +210,6 @@ public class GenericTooltipUtils {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @NotNull
-    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionPredicateTooltip(IServerUtils utils, Optional<CollectionPredicate<A, B>> optional) {
-        if (optional.isPresent()) {
-            CollectionPredicate<A, B> predicate = optional.get();
-
-            return TooltipBuilder.array((b) -> b
-                    .add(getCollectionContentsPredicateTooltip(utils, predicate.contains()).build(Lang.Branch.CONTAINS))
-                    .add(getCollectionCountsPredicateTooltip(utils, predicate.counts()).build(Lang.Branch.COUNTS))
-                    .add(utils.getValueTooltip(utils, predicate.size()).build(Lang.Value.SIZE))
-            );
-        }
-
-        return TooltipBuilder.empty();
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    @NotNull
     public static <A, B extends Predicate<A>> TooltipBuilder getCollectionContentsPredicateTooltip(IServerUtils utils, Optional<CollectionContentsPredicate<A, B>> predicate) {
         return predicate.map((p) -> utils.getValueTooltip(utils, p.unpack())).orElse(TooltipBuilder.empty());
     }

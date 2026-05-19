@@ -419,7 +419,8 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, predicate.shape()).build(Lang.Value.SHAPE));
             b.add(utils.getValueTooltip(utils, predicate.trail()).build(Lang.Value.TRAIL));
             b.add(utils.getValueTooltip(utils, predicate.twinkle()).build(Lang.Value.TWINKLE));
-        }).key(Lang.Branch.PREDICATE);
+            b.key(Lang.Branch.FIREWORK);
+        });
     }
 
     @NotNull
@@ -676,6 +677,7 @@ public class ValueTooltipUtils {
         return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
     }
 
+    @NotNull
     public static TooltipBuilder getHolderSetTooltip(IServerUtils utils, HolderSet<?> holderSet) {
         //noinspection unchecked
         Either<TagKey<?>, List<Holder<?>>> either = (Either<TagKey<?>, List<Holder<?>>>)(Object) holderSet.unwrap();
@@ -696,6 +698,25 @@ public class ValueTooltipUtils {
                     }
                 }));
 
+    }
+
+    @NotNull
+    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionPredicateTooltip(IServerUtils utils, CollectionPredicate<A, B> predicate) {
+        return TooltipBuilder.array((b) -> b
+                .add(utils.getValueTooltip(utils, predicate.contains()).build(Lang.Branch.CONTAINS))
+                .add(utils.getValueTooltip(utils, predicate.counts()).build(Lang.Branch.COUNTS))
+                .add(utils.getValueTooltip(utils, predicate.size()).build(Lang.Value.SIZE))
+        );
+    }
+
+    @NotNull
+    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionContentsPredicateTooltip(IServerUtils utils, CollectionContentsPredicate<A, B> predicate) {
+        return utils.getValueTooltip(utils, predicate.unpack());
+    }
+
+    @NotNull
+    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionCountsPredicateTooltip(IServerUtils utils, CollectionCountsPredicate<A, B> predicate) {
+        return utils.getValueTooltip(utils, predicate.unpack());
     }
 
     @NotNull
