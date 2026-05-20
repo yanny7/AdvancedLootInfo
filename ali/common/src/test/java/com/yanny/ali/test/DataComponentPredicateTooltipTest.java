@@ -278,7 +278,8 @@ public class DataComponentPredicateTooltipTest {
         assertTooltip(DataComponentPredicateTooltipUtils.getAnyValueTooltip(UTILS, new AnyValue(
                 DataComponents.DAMAGE_TYPE
         )).build(), List.of(
-                "Type: minecraft:damage_type"
+                "Predicate:",
+                "  -> Type: minecraft:damage_type"
         ));
     }
 }

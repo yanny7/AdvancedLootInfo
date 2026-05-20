@@ -673,7 +673,7 @@ public class GenericTooltipTest {
                         .partial(DataComponentPredicates.ATTRIBUTE_MODIFIERS, new AttributeModifiersPredicate(Optional.of(new CollectionPredicate<>(
                                 Optional.of(CollectionContentsPredicate.of(new AttributeModifiersPredicate.EntryPredicate(
                                         Optional.of(HolderSet.direct(Attributes.ARMOR)),
-                                        Optional.of(ResourceLocation.withDefaultNamespace("test")),
+                                        Optional.of(Identifier.withDefaultNamespace("test")),
                                         MinMaxBounds.Doubles.exactly(3.2),
                                         Optional.of(AttributeModifier.Operation.ADD_VALUE),
                                         Optional.of(EquipmentSlotGroup.CHEST)

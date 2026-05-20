@@ -74,10 +74,9 @@ public class SlotSourceTooltipTest {
     @Test
     public void testGroupTooltip() {
         assertTooltip(SlotSourceTooltipUtils.getGroupTooltip(UTILS, new GroupSlotSource(List.of((SlotSource) new EmptySlotSource(), new EmptySlotSource()))).build(), List.of(
-                "Group:",
-                "  -> Slots:",
-                "    -> Empty Slot",
-                "    -> Empty Slot"
+                "Slots:",
+                "  -> Empty Slot",
+                "  -> Empty Slot"
         ));
     }
 }

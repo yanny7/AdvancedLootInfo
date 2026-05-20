@@ -94,6 +94,6 @@ public class DataComponentPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getAnyValueTooltip(IServerUtils utils, AnyValue predicate) {
-        return utils.getValueTooltip(utils, predicate.type()).key(Lang.Value.TYPE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.type()).build(Lang.Value.TYPE)), Lang.Branch.PREDICATE);
     }
 }
