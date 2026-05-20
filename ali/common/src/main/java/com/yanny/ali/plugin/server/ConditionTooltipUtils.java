@@ -17,14 +17,12 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getAllOfTooltip(IServerUtils utils, AllOfCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)))
-                .key(Lang.Conditions.ALL_OF);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)), Lang.Conditions.ALL_OF);
     }
 
     @NotNull
     public static TooltipBuilder getAnyOfTooltip(IServerUtils utils, AnyOfCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)))
-                .key(Lang.Conditions.ANY_OF);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.terms)), Lang.Conditions.ANY_OF);
     }
 
     @NotNull
@@ -32,19 +30,17 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.block()).build(Lang.Value.BLOCK));
             b.add(utils.getValueTooltip(utils, cond.properties()).build(Lang.Branch.PROPERTIES));
-        }).key(Lang.Conditions.BLOCK_STATE_PROPERTY);
+        }, Lang.Conditions.BLOCK_STATE_PROPERTY);
     }
 
     @NotNull
     public static TooltipBuilder getDamageSourcePropertiesTooltip(IServerUtils utils, DamageSourceCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())))
-                .key(Lang.Conditions.DAMAGE_SOURCE_PROPERTIES);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())), Lang.Conditions.DAMAGE_SOURCE_PROPERTIES);
     }
 
     @NotNull
     public static TooltipBuilder getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.active()).build(Lang.Value.ACTIVE)))
-                .key(Lang.Conditions.ENCHANTMENT_ACTIVE_CHECK);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.active()).build(Lang.Value.ACTIVE)), Lang.Conditions.ENCHANTMENT_ACTIVE_CHECK);
     }
 
     @NotNull
@@ -52,7 +48,7 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.entityTarget()).build(Lang.Value.TARGET));
             b.add(utils.getValueTooltip(utils, cond.predicate()).build(Lang.Branch.CONDITION));
-        }).key(Lang.Conditions.ENTITY_PROPERTIES);
+        }, Lang.Conditions.ENTITY_PROPERTIES);
     }
 
     @NotNull
@@ -60,18 +56,17 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.entityTarget()).build(Lang.Value.TARGET));
             b.add(getMapTooltip(utils, cond.scores(), GenericTooltipUtils::getIntRangeEntryTooltip).build(Lang.Branch.SCORES));
-        }).key(Lang.Conditions.ENTITY_SCORES);
+        }, Lang.Conditions.ENTITY_SCORES);
     }
 
     @NotNull
     public static TooltipBuilder getInvertedTooltip(IServerUtils utils, InvertedLootItemCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.term())))
-                .key(Lang.Conditions.INVERTED);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.term())), Lang.Conditions.INVERTED);
     }
 
     @NotNull
     public static TooltipBuilder getKilledByPlayerTooltip(IServerUtils ignoredUtils, LootItemKilledByPlayerCondition ignoredCond) {
-        return TooltipBuilder.keyOnly(Lang.Conditions.KILLED_BY_PLAYER);
+        return TooltipBuilder.array(TooltipBuilder::showEmpty, Lang.Conditions.KILLED_BY_PLAYER);
     }
 
     @NotNull
@@ -82,19 +77,18 @@ public class ConditionTooltipUtils {
             if (!cond.offset().equals(BlockPos.ZERO)) {
                 b.add(utils.getValueTooltip(utils, cond.offset()).build(Lang.Multi.OFFSET));
             }
-        }).key(Lang.Conditions.LOCATION_CHECK);
+        }, Lang.Conditions.LOCATION_CHECK);
     }
 
     @NotNull
     public static TooltipBuilder getMatchToolTooltip(IServerUtils utils, MatchTool cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())))
-                .key(Lang.Conditions.MATCH_TOOL);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.predicate())), Lang.Conditions.MATCH_TOOL);
     }
 
     @NotNull
     public static TooltipBuilder getRandomChanceTooltip(IServerUtils utils, LootItemRandomChanceCondition cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.chance()).build(Lang.Value.CHANCE)))
-                .isAdvancedTooltip().key(Lang.Conditions.RANDOM_CHANCE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.chance()).build(Lang.Value.CHANCE)), Lang.Conditions.RANDOM_CHANCE)
+                .isAdvancedTooltip();
     }
 
     @NotNull
@@ -103,18 +97,17 @@ public class ConditionTooltipUtils {
             b.add(utils.getValueTooltip(utils, cond.unenchantedChance()).build(Lang.Value.UNENCHANTED_CHANCE));
             b.add(utils.getValueTooltip(utils, cond.enchantedChance()).build(Lang.Branch.ENCHANTED_CHANCE));
             b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTMENT));
-        }).key(Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS);
+        }, Lang.Conditions.RANDOM_CHANCE_WITH_ENCHANTED_BONUS).isAdvancedTooltip();
     }
 
     @NotNull
     public static TooltipBuilder getReferenceTooltip(IServerUtils utils, ConditionReference cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.name()).build(Lang.Value.LOOT_TABLE)))
-                .key(Lang.Conditions.REFERENCE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.name()).build(Lang.Value.LOOT_TABLE)), Lang.Conditions.REFERENCE);
     }
 
     @NotNull
     public static TooltipBuilder getSurvivesExplosionTooltip(IServerUtils ignoredUtils, ExplosionCondition ignoredCond) {
-        return TooltipBuilder.keyOnly(Lang.Conditions.SURVIVES_EXPLOSION);
+        return TooltipBuilder.array(TooltipBuilder::showEmpty, Lang.Conditions.SURVIVES_EXPLOSION);
     }
 
     @NotNull
@@ -124,7 +117,7 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.enchantment()).build(Lang.Value.ENCHANTMENT));
             b.add(utils.getValueTooltip(utils, list.toString()).build(Lang.Value.VALUES));
-        }).isAdvancedTooltip().key(Lang.Conditions.TABLE_BONUS);
+        }, Lang.Conditions.TABLE_BONUS).isAdvancedTooltip();
     }
 
     @NotNull
@@ -133,7 +126,7 @@ public class ConditionTooltipUtils {
             b.add(utils.getValueTooltip(utils, cond.clock()).build(Lang.Value.CLOCK));
             b.add(utils.getValueTooltip(utils, cond.period()).build(Lang.Value.PERIOD));
             b.add(utils.getValueTooltip(utils, cond.value()).build(Lang.Value.VALUE));
-        }).key(Lang.Conditions.TIME_CHECK);
+        }, Lang.Conditions.TIME_CHECK);
     }
 
     @NotNull
@@ -141,7 +134,7 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.value()).build(Lang.Value.VALUE));
             b.add(utils.getValueTooltip(utils, cond.range()).build(Lang.Value.RANGE));
-        }).key(Lang.Conditions.VALUE_CHECK);
+        }, Lang.Conditions.VALUE_CHECK);
     }
 
     @NotNull
@@ -149,7 +142,7 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.isRaining()).build(Lang.Value.IS_RAINING));
             b.add(utils.getValueTooltip(utils, cond.isThundering()).build(Lang.Value.IS_THUNDERING));
-        }).key(Lang.Conditions.WEATHER_CHECK);
+        }, Lang.Conditions.WEATHER_CHECK);
     }
 
     @NotNull
