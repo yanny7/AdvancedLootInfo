@@ -5,11 +5,14 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforgespi.language.ModFileScanData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
@@ -21,23 +24,35 @@ import java.util.function.Supplier;
 public class NeoForgePlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    public static HolderLookup.Provider PROVIDER = null;
+
     private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
 
+    @NotNull
     @Override
     public List<IPlugin> getPlugins() {
         return pluginsSupplier.get();
     }
 
+    @NotNull
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
     }
 
+    @Nullable
+    @Override
+    public HolderLookup.Provider getLookupProvider() {
+        return PROVIDER;
+    }
+
+    @Nullable
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
     }
 
+    @NotNull
     private List<IPlugin> loadPlugins() {
         List<IPlugin> plugins = new LinkedList<>();
         Type type = Type.getType(AliEntrypoint.class);

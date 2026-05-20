@@ -5,6 +5,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.neoforge.datagen.DataGeneration;
 import com.yanny.ali.neoforge.network.NetworkUtils;
 import com.yanny.ali.neoforge.network.Server;
+import com.yanny.ali.neoforge.platform.NeoForgePlatformHelper;
 import com.yanny.ali.network.AbstractServer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -43,6 +44,7 @@ public class AliMod {
 
     @SubscribeEvent
     public void onAddReloadListener(AddReloadListenerEvent event) {
+        NeoForgePlatformHelper.PROVIDER = event.getRegistryAccess();
         event.addListener(SERVER.getFakeLootDataManager());
     }
 }
