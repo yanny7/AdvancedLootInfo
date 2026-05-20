@@ -268,7 +268,7 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, enchantmentPredicate.enchantments()).build(Lang.Branch.ENCHANTMENTS));
             b.add(utils.getValueTooltip(utils, enchantmentPredicate.level()).build(Lang.Value.LEVEL));
-        }, Lang.Branch.ENCHANTMENT);
+        }).key(Lang.Branch.ENCHANTMENT);
     }
 
     @NotNull

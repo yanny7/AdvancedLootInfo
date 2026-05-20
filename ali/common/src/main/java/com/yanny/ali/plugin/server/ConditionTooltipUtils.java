@@ -40,8 +40,7 @@ public class ConditionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getEnchantActiveCheckTooltip(IServerUtils utils, EnchantmentActiveCheck cond) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.active()).build(Lang.Value.ACTIVE)))
-                .key(Lang.Conditions.ENCHANTMENT_ACTIVE_CHECK);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, cond.active()).build(Lang.Value.ACTIVE)), Lang.Conditions.ENCHANTMENT_ACTIVE_CHECK);
     }
 
     @NotNull
