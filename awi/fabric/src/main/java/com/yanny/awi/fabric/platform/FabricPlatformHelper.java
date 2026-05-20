@@ -5,7 +5,6 @@ import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.core.HolderLookup;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -42,10 +41,5 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FabricLoader.getInstance().getConfigDir();
-    }
-
-    @Override
-    public HolderLookup.Provider getLookupProvider() {
-        return null; //FIXME
     }
 }

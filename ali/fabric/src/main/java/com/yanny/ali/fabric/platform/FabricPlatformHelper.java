@@ -5,7 +5,6 @@ import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +17,6 @@ import java.util.List;
 
 public class FabricPlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    public static HolderLookup.Provider PROVIDER = null;
 
     @NotNull
     @Override
@@ -47,12 +44,6 @@ public class FabricPlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FabricLoader.getInstance().getConfigDir();
-    }
-
-    @Nullable
-    @Override
-    public HolderLookup.Provider getLookupProvider() {
-        return PROVIDER;
     }
 
     @Nullable

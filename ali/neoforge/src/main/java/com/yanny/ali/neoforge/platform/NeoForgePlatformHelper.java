@@ -5,7 +5,6 @@ import com.mojang.logging.LogUtils;
 import com.yanny.ali.api.AliEntrypoint;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.platform.services.IPlatformHelper;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.fml.ModList;
@@ -24,8 +23,6 @@ import java.util.function.Supplier;
 public class NeoForgePlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static HolderLookup.Provider PROVIDER = null;
-
     private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
 
     @NotNull
@@ -38,12 +35,6 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
-    }
-
-    @Nullable
-    @Override
-    public HolderLookup.Provider getLookupProvider() {
-        return PROVIDER;
     }
 
     @Nullable

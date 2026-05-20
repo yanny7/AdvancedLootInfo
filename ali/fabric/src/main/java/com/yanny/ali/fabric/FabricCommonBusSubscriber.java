@@ -1,7 +1,6 @@
 package com.yanny.ali.fabric;
 
 import com.yanny.ali.Utils;
-import com.yanny.ali.fabric.platform.FabricPlatformHelper;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -37,7 +36,6 @@ public class FabricCommonBusSubscriber {
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
         if (!serverLoaded) { // to be safe, handle only once for world loading (should be called only once for overworld, but who knows?)
-            FabricPlatformHelper.PROVIDER = server.registryAccess();
             PluginManager.getInstance().registerServerEvent();
             CommonAliMod.SERVER.readLootTables(server.reloadableRegistries(), server.overworld());
             serverLoaded = true;
