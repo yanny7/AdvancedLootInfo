@@ -5,7 +5,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.advancements.critereon.*;
@@ -34,10 +33,14 @@ import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.JukeboxSongs;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
@@ -306,7 +309,8 @@ public class GenericTooltipTest {
                 "        -> Value: 3",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Durability: 1-8"
+                "        -> Predicate:",
+                "          -> Durability: 1-8"
         ));
     }
 
@@ -429,7 +433,8 @@ public class GenericTooltipTest {
                 "        -> Value: 3",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Durability: 1-8"
+                "        -> Predicate:",
+                "          -> Durability: 1-8"
         ));
     }
 
@@ -569,23 +574,257 @@ public class GenericTooltipTest {
                 "  -> Components:",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Durability: ≤5",
+                "        -> Predicate:",
+                "          -> Durability: ≤5",
                 "      -> minecraft:custom_data",
-                "        -> Nbt: {healing:1b}"
+                "        -> Predicate:",
+                "          -> Nbt: {healing:1b}"
         ));
+        assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
+                .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND)
+                .withComponents(DataComponentMatchers.Builder.components()
+                        .partial(DataComponentPredicates.DAMAGE, new DamagePredicate(MinMaxBounds.Ints.atMost(5), MinMaxBounds.Ints.exactly(6)))
+                        .partial(DataComponentPredicates.ENCHANTMENTS, EnchantmentsPredicate.enchantments(List.of(
+                                new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FLAME), MinMaxBounds.Ints.between(1, 2))
+                        )))
+                        .partial(DataComponentPredicates.STORED_ENCHANTMENTS, EnchantmentsPredicate.storedEnchantments(List.of(
+                                new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.BREACH), MinMaxBounds.Ints.between(1, 2))
+                        )))
+                        .partial(DataComponentPredicates.POTIONS, new PotionsPredicate(HolderSet.direct(Potions.HEALING)))
+                        .partial(DataComponentPredicates.CUSTOM_DATA, new CustomDataPredicate(new NbtPredicate(compoundTag)))
+                        .partial(DataComponentPredicates.CONTAINER, new ContainerPredicate(Optional.of(
+                                new CollectionPredicate<>(
+                                        Optional.of(CollectionContentsPredicate.of(
+                                                ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(2, 3)).build()
+                                        )),
+                                        Optional.of(CollectionCountsPredicate.of(
+                                                new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.exactly(5)).build(), MinMaxBounds.Ints.ANY)
+                                        )),
+                                        Optional.of(MinMaxBounds.Ints.atLeast(4))
+                                )
+                        )))
+                        .partial(DataComponentPredicates.BUNDLE_CONTENTS, new BundlePredicate(Optional.of(
+                                new CollectionPredicate<>(
+                                        Optional.of(CollectionContentsPredicate.of(
+                                                ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.between(1, 3)).build()
+                                        )),
+                                        Optional.of(CollectionCountsPredicate.of(
+                                                new CollectionCountsPredicate.Entry<>(ItemPredicate.Builder.item().withCount(MinMaxBounds.Ints.exactly(2)).build(), MinMaxBounds.Ints.ANY)
+                                        )),
+                                        Optional.of(MinMaxBounds.Ints.atLeast(1))
+                                )
+                        )))
+                        .partial(DataComponentPredicates.FIREWORK_EXPLOSION, new FireworkExplosionPredicate(new FireworkExplosionPredicate.FireworkPredicate(
+                                Optional.of(FireworkExplosion.Shape.CREEPER),
+                                Optional.of(true),
+                                Optional.of(false)
+                        )))
+                        .partial(DataComponentPredicates.FIREWORKS, new FireworksPredicate(
+                                Optional.of(new CollectionPredicate<>(
+                                        Optional.of(CollectionContentsPredicate.of(
+                                                new FireworkExplosionPredicate.FireworkPredicate(
+                                                        Optional.of(FireworkExplosion.Shape.STAR),
+                                                        Optional.empty(),
+                                                        Optional.empty()
+                                                )
+                                        )),
+                                        Optional.of(CollectionCountsPredicate.of(
+                                                new CollectionCountsPredicate.Entry<>(
+                                                        new FireworkExplosionPredicate.FireworkPredicate(
+                                                                Optional.of(FireworkExplosion.Shape.LARGE_BALL),
+                                                                Optional.empty(),
+                                                                Optional.empty()
+                                                        ),
+                                                        MinMaxBounds.Ints.atMost(6)
+                                                )
+                                        )),
+                                        Optional.of(MinMaxBounds.Ints.atLeast(1))
+                                )),
+                                MinMaxBounds.Ints.exactly(3)
+                        ))
+                        .partial(DataComponentPredicates.WRITABLE_BOOK, new WritableBookPredicate(Optional.of(
+                                new CollectionPredicate<>(
+                                        Optional.of(CollectionContentsPredicate.of(
+                                                new WritableBookPredicate.PagePredicate("Hello"),
+                                                new WritableBookPredicate.PagePredicate("World")
+                                        )),
+                                        Optional.of(CollectionCountsPredicate.of(
+                                                new CollectionCountsPredicate.Entry<>(new WritableBookPredicate.PagePredicate("Star"), MinMaxBounds.Ints.between(1, 5)),
+                                                new CollectionCountsPredicate.Entry<>(new WritableBookPredicate.PagePredicate("Wars"), MinMaxBounds.Ints.atLeast(3))
+                                        )),
+                                        Optional.of(MinMaxBounds.Ints.atLeast(4))
+                                )
+                        )))
+                        .partial(DataComponentPredicates.WRITTEN_BOOK, new WrittenBookPredicate(
+                                Optional.of(new CollectionPredicate<>(
+                                        Optional.of(CollectionContentsPredicate.of(
+                                                new WrittenBookPredicate.PagePredicate(Component.literal("Hello"))
+                                        )),
+                                        Optional.of(CollectionCountsPredicate.of(
+                                                new CollectionCountsPredicate.Entry<>(new WrittenBookPredicate.PagePredicate(Component.literal("World")), MinMaxBounds.Ints.atMost(3))
+                                        )),
+                                        Optional.of(MinMaxBounds.Ints.exactly(2))
+                                )),
+                                Optional.of("asdf"),
+                                Optional.of("jklo"),
+                                MinMaxBounds.Ints.exactly(3),
+                                Optional.of(false)
+                        ))
+                        .partial(DataComponentPredicates.ATTRIBUTE_MODIFIERS, new AttributeModifiersPredicate(Optional.of(new CollectionPredicate<>(
+                                Optional.of(CollectionContentsPredicate.of(new AttributeModifiersPredicate.EntryPredicate(
+                                        Optional.of(HolderSet.direct(Attributes.ARMOR)),
+                                        Optional.of(ResourceLocation.withDefaultNamespace("test")),
+                                        MinMaxBounds.Doubles.exactly(3.2),
+                                        Optional.of(AttributeModifier.Operation.ADD_VALUE),
+                                        Optional.of(EquipmentSlotGroup.CHEST)
+                                ))),
+                                Optional.of(CollectionCountsPredicate.of(
+                                        new CollectionCountsPredicate.Entry<>(
+                                                new AttributeModifiersPredicate.EntryPredicate(
+                                                        Optional.empty(),
+                                                        Optional.empty(),
+                                                        MinMaxBounds.Doubles.between(1, 3.5),
+                                                        Optional.empty(),
+                                                        Optional.of(EquipmentSlotGroup.BODY)
+
+                                                ),
+                                                MinMaxBounds.Ints.atMost(8)
+                                        )
+                                )),
+                                Optional.of(MinMaxBounds.Ints.exactly(2))
+                        ))))
+                        .partial(DataComponentPredicates.ARMOR_TRIM, new TrimPredicate(
+                                Optional.of(HolderSet.direct(LOOKUP.lookupOrThrow(Registries.TRIM_MATERIAL).getOrThrow(TrimMaterials.GOLD))),
+                                Optional.of(HolderSet.direct(LOOKUP.lookupOrThrow(Registries.TRIM_PATTERN).getOrThrow(TrimPatterns.DUNE)))
+                        ))
+                        .partial(DataComponentPredicates.JUKEBOX_PLAYABLE, new JukeboxPlayablePredicate(Optional.of(
+                                HolderSet.direct(LOOKUP.lookupOrThrow(Registries.JUKEBOX_SONG).getOrThrow(JukeboxSongs.PIGSTEP))
+                        )))
+                        .build()
+                )
+                .build()
+        ).build(Lang.Conditions.MATCH_TOOL), List.of(
+                "Match Tool:",
+                "  -> Item: minecraft:diamond",
+                "  -> Components:",
+                "    -> Partial Matchers:",
+                "      -> minecraft:damage",
+                "        -> Predicate:",
+                "          -> Damage: =6",
+                "          -> Durability: ≤5",
+                "      -> minecraft:enchantments",
+                "        -> Enchantments:",
+                "          -> Enchantment:",
+                "            -> Enchantment: minecraft:flame",
+                "            -> Level: 1-2",
+                "      -> minecraft:stored_enchantments",
+                "        -> Enchantments:",
+                "          -> Enchantment:",
+                "            -> Enchantment: minecraft:breach",
+                "            -> Level: 1-2",
+                "      -> minecraft:potion_contents",
+                "        -> Potions:",
+                "          -> minecraft:healing",
+                "      -> minecraft:custom_data",
+                "        -> Predicate:",
+                "          -> Nbt: {healing:1b}",
+                "      -> minecraft:container",
+                "        -> Items:",
+                "          -> Contains:",
+                "            -> Predicate:",
+                "              -> Count: 2-3",
+                "          -> Counts:",
+                "            -> Predicate:",
+                "              -> Count: =5",
+                "          -> Size: ≥4",
+                "      -> minecraft:bundle_contents",
+                "        -> Items:",
+                "          -> Contains:",
+                "            -> Predicate:",
+                "              -> Count: 1-3",
+                "          -> Counts:",
+                "            -> Predicate:",
+                "              -> Count: =2",
+                "          -> Size: ≥1",
+                "      -> minecraft:firework_explosion",
+                "        -> Predicate:",
+                "          -> Firework:",
+                "            -> Shape: CREEPER",
+                "            -> Trail: false",
+                "            -> Twinkle: true",
+                "      -> minecraft:fireworks",
+                "        -> Predicate:",
+                "          -> Explosions:",
+                "            -> Contains:",
+                "              -> Firework:",
+                "                -> Shape: STAR",
+                "            -> Counts:",
+                "              -> Firework:",
+                "                -> Shape: LARGE_BALL",
+                "                -> Count: ≤6",
+                "            -> Size: ≥1",
+                "          -> Flight Duration: =3",
+                "      -> minecraft:writable_book_content",
+                "        -> Pages:",
+                "          -> Contains:",
+                "            -> Page: Hello",
+                "            -> Page: World",
+                "          -> Counts:",
+                "            -> Page: Star",
+                "              -> Count: 1-5",
+                "            -> Page: Wars",
+                "              -> Count: ≥3",
+                "          -> Size: ≥4",
+                "      -> minecraft:written_book_content",
+                "        -> Predicate:",
+                "          -> Pages:",
+                "            -> Contains:",
+                "              -> Page: Hello",
+                "            -> Counts:",
+                "              -> Page: World",
+                "                -> Count: ≤3",
+                "            -> Size: =2",
+                "          -> Author: asdf",
+                "          -> Title: jklo",
+                "          -> Generation: =3",
+                "          -> Resolved: false",
+                "      -> minecraft:attribute_modifiers",
+                "        -> Modifiers:",
+                "          -> Contains:",
+                "            -> Modifier:",
+                "              -> Attribute: minecraft:armor",
+                "              -> Id: minecraft:test",
+                "              -> Amount: =3.2",
+                "              -> Operation: ADD_VALUE",
+                "              -> Slot: CHEST",
+                "          -> Counts:",
+                "            -> Modifier:",
+                "              -> Amount: 1.0-3.5",
+                "              -> Slot: BODY",
+                "              -> Count: ≤8",
+                "          -> Size: =2",
+                "      -> minecraft:trim",
+                "        -> Predicate:",
+                "          -> Material: minecraft:gold",
+                "          -> Pattern: minecraft:dune",
+                "      -> minecraft:jukebox_playable",
+                "        -> Songs:",
+                "          -> minecraft:pigstep"
+        ));
+
     }
 
     @Test
     public void testEnchantmentPredicateTooltip() {
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(), List.of(
-                "Predicate:",
+                "Enchantment:",
                 "  -> Level: ≥1"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING),
                 MinMaxBounds.Ints.atMost(2))
         ).build(), List.of(
-                "Predicate:",
+                "Enchantment:",
                 "  -> Enchantment: minecraft:feather_falling",
                 "  -> Level: ≤2"
         ));
@@ -593,13 +832,13 @@ public class GenericTooltipTest {
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.BOOTS_EXCLUSIVE).orElseThrow(),
                 MinMaxBounds.Ints.atMost(2))
         ).build(), List.of(
-                "Predicate:",
+                "Enchantment:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:exclusive_set/boots",
                 "  -> Level: ≤2"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(), List.of(
-                "Predicate:",
+                "Enchantment:",
                 "  -> Enchantment: minecraft:feather_falling"
         ));
     }
@@ -671,7 +910,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testCollectionPredicateTooltip() {
-        assertTooltip(GenericTooltipUtils.getCollectionPredicateTooltip(UTILS, Optional.of(
+        assertTooltip(ValueTooltipUtils.getCollectionPredicateTooltip(UTILS,
                 new CollectionPredicate<>(
                         Optional.of(CollectionContentsPredicate.of(
                                 new WritableBookPredicate.PagePredicate("Hello"),
@@ -683,7 +922,7 @@ public class GenericTooltipTest {
                         )),
                         Optional.of(MinMaxBounds.Ints.atLeast(4))
                 )
-        )).build(Lang.Branch.PAGES), List.of(
+        ).build(Lang.Branch.PAGES), List.of(
                 "Pages:",
                 "  -> Contains:",
                 "    -> Page: Hello",
