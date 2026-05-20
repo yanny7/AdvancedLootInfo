@@ -150,6 +150,6 @@ public class ConditionTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.attribute()).build(Lang.Value.ATTRIBUTE));
             b.add(utils.getValueTooltip(utils, cond.value()).build(Lang.Value.VALUE));
-        }).key(Lang.Conditions.ENVIRONMENT_ATTRIBUTE_CHECK);
+        }, Lang.Conditions.ENVIRONMENT_ATTRIBUTE_CHECK);
     }
 }
