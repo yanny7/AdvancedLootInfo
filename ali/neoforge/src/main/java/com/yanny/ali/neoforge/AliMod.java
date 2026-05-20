@@ -5,6 +5,7 @@ import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.neoforge.datagen.DataGeneration;
 import com.yanny.ali.neoforge.network.NetworkUtils;
 import com.yanny.ali.neoforge.network.Server;
+import com.yanny.ali.neoforge.platform.NeoForgePlatformHelper;
 import com.yanny.ali.network.AbstractServer;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
@@ -44,6 +45,7 @@ public class AliMod {
 
     @SubscribeEvent
     public void onAddReloadListener(AddServerReloadListenersEvent event) {
+        NeoForgePlatformHelper.PROVIDER = event.getRegistryAccess();
         event.addListener(ResourceLocation.fromNamespaceAndPath(Utils.MOD_ID, "fake_loot_manager"), SERVER.getFakeLootDataManager(event.getRegistryAccess()));
     }
 }
