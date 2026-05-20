@@ -5,6 +5,7 @@ import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.platform.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import java.util.List;
 public class FabricPlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @NotNull
     @Override
     public List<IPlugin> getPlugins() {
         List<IPlugin> plugins = new LinkedList<>();
@@ -35,6 +37,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return plugins;
     }
 
+    @NotNull
     @Override
     public Path getConfiguration() {
         return FabricLoader.getInstance().getConfigDir();
