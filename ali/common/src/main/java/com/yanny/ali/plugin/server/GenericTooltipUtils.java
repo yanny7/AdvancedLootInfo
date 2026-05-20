@@ -180,7 +180,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getDataComponentPredicateEntryTooltip(IServerUtils utils, Map.Entry<DataComponentPredicate.Type<?>, DataComponentPredicate> entry) {
         return utils.getValueTooltip(utils, entry.getKey())
-                .add(utils.getDataComponentPredicateTooltip(utils, entry.getValue()));
+                .add(utils.getValueTooltip(utils, entry.getValue()));
     }
 
     @NotNull
