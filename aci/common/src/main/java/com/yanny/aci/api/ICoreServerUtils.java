@@ -13,7 +13,7 @@ public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
     @NotNull
     ServerLevel getServerLevel();
 
-    @Nullable
+    @NotNull
     HolderLookup.Provider lookupProvider();
 
     int getTranslationKeyIndex(String key);

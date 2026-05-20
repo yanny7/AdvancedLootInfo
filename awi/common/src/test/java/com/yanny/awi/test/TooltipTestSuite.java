@@ -78,7 +78,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @Nullable HolderLookup.Provider lookupProvider() {
+            public @NotNull HolderLookup.Provider lookupProvider() {
                 return LOOKUP;
             }
 

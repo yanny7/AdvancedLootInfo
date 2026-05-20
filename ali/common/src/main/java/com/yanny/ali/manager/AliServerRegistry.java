@@ -88,12 +88,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public AliServerRegistry(AliCommonRegistry utils, ServerLevel level) {
         super(utils, level);
-        this.lootContext = new LootContext(new LootParams(level, Map.of(), Map.of(), 0F), RandomSource.create(), new LootDataResolver() {
-            @Override
-            public @Nullable <T> T getElement(LootDataId<T> lootDataId) {
-                return null;
-            }
-        });
+        this.lootContext = new LootContext(new LootParams(level, Map.of(), Map.of(), 0F), RandomSource.create(), null);
     }
 
     public void clearData() {

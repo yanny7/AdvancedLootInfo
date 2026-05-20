@@ -101,13 +101,13 @@ public abstract class AbstractServer {
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, lootTableItemStacks);
-        tradeNodes = new HashMap<>(processTrades(level, serverRegistry, config, tradeItems));
+        tradeNodes = new HashMap<>(processTrades(serverRegistry.getServerLevel(), serverRegistry, config, tradeItems));
 
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
 
         // storing and compressing data
         ByteBuf rawBuf = Unpooled.buffer();
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, level.registryAccess());
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, serverRegistry.getServerLevel().registryAccess());
 
         writeLootData(buf, lootTableItemStacks, lootNodes);
         writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);

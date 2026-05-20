@@ -30,10 +30,10 @@ public abstract class CoreServerRegistry<
         return serverLevel;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public HolderLookup.Provider lookupProvider() {
-        return serverLevel != null ? serverLevel.registryAccess() : null;
+        return serverLevel.registryAccess();
     }
 
     @NotNull
