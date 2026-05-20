@@ -6,22 +6,27 @@ import com.yanny.ali.plugin.Plugin;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
 public class TestPlatformHelper implements IPlatformHelper {
+    @NotNull
     @Override
     public List<IPlugin> getPlugins() {
         return List.of(new Plugin());
     }
 
+    @NotNull
     @Override
     public Path getConfiguration() {
         return null;
     }
 
+    @Nullable
     @Override
     public Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType) {
         return Optional.empty();

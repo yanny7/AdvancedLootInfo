@@ -9,6 +9,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SpawnEggItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class FabricPlatformHelper implements IPlatformHelper {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    @NotNull
     @Override
     public List<IPlugin> getPlugins() {
         List<IPlugin> plugins = new LinkedList<>();
@@ -40,11 +43,13 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return plugins;
     }
 
+    @NotNull
     @Override
     public Path getConfiguration() {
         return FabricLoader.getInstance().getConfigDir();
     }
 
+    @Nullable
     @Override
     public Optional<Holder<Item>> getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);

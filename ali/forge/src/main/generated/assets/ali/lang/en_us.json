@@ -68,6 +68,8 @@
   "ali.property.branch.fallback": "Fallback:",
   "ali.property.branch.feet": "Feet:",
   "ali.property.branch.filter": "Filter:",
+  "ali.property.branch.filters": "Filters:",
+  "ali.property.branch.firework": "Firework:",
   "ali.property.branch.flags": "Flags:",
   "ali.property.branch.floats": "Floats:",
   "ali.property.branch.fluid_predicate": "Fluid Predicate:",
