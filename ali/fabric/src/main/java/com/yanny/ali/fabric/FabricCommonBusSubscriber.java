@@ -36,8 +36,8 @@ public class FabricCommonBusSubscriber {
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
         if (!serverLoaded) { // to be safe, handle only once for world loading (should be called only once for overworld, but who knows?)
-            PluginManager.getInstance().registerServerEvent();
-            CommonAliMod.SERVER.readLootTables(server.getLootData(), server.overworld());
+            PluginManager.getInstance().registerServerEvent(world);
+            CommonAliMod.SERVER.readLootTables(server.getLootData());
             serverLoaded = true;
         }
     }
@@ -50,7 +50,7 @@ public class FabricCommonBusSubscriber {
     private static void onReload(MinecraftServer server, CloseableResourceManager resourceManager, boolean success) {
         if (success) {
             PluginManager.getInstance().reloadServer();
-            CommonAliMod.SERVER.readLootTables(server.getLootData(), server.overworld());
+            CommonAliMod.SERVER.readLootTables(server.getLootData());
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 CommonAliMod.SERVER.syncLootTables(player);

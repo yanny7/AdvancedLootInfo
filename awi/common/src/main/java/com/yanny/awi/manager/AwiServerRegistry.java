@@ -10,6 +10,7 @@ import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.*;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -32,8 +33,8 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
 
-    public AwiServerRegistry(AwiCommonRegistry registry) {
-        super(registry);
+    public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
+        super(registry, level);
     }
 
     @Override

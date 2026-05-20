@@ -4,7 +4,6 @@ import com.yanny.ali.api.IServerUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -94,17 +93,12 @@ public class ItemCollectorUtils {
         return result;
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction ignoredFunction) {
-        ServerLevel level = utils.getServerLevel();
-
-        if (level != null) {
-            return items.stream().map((i) -> level.getRecipeManager()
-                    .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.getResultItem(utils.getServerLevel().registryAccess()).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
-        }
-
-        return List.of();
+        return items.stream().map((i) -> utils.getServerLevel().getRecipeManager()
+                .getRecipeFor(RecipeType.SMELTING, new SimpleContainer(i.getDefaultInstance()), utils.getServerLevel())
+                .map((l) -> List.of(l.getResultItem(utils.getServerLevel().registryAccess()).getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
     }
 
     @NotNull
