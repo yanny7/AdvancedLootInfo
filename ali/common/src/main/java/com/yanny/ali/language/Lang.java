@@ -462,6 +462,8 @@ public final class Lang {
         FALLBACK("fallback", "Fallback:"),
         FEET("feet", "Feet:"),
         FILTER("filter", "Filter:"),
+        FILTERS("filters", "Filters:"),
+        FIREWORK("firework", "Firework:"),
         FLAGS("flags", "Flags:"),
         FLOATS("floats", "Floats:"),
         FLUIDS(Value.FLUID, "fluids", "Fluids:"),
