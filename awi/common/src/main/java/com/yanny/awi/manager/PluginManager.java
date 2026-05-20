@@ -6,6 +6,7 @@ import com.yanny.awi.api.ICommonRegistry;
 import com.yanny.awi.api.IPlugin;
 import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.platform.Services;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class PluginManager extends CorePluginManager<ICommonRegistry, IServerReg
 
     @NotNull
     @Override
-    protected AwiServerRegistry createServerRegistry(AwiCommonRegistry commonRegistry) {
-        return new AwiServerRegistry(commonRegistry);
+    protected AwiServerRegistry createServerRegistry(AwiCommonRegistry commonRegistry, ServerLevel level) {
+        return new AwiServerRegistry(commonRegistry, level);
     }
 }

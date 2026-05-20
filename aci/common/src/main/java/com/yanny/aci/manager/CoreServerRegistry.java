@@ -5,7 +5,6 @@ import com.yanny.aci.api.ICoreServerUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class CoreServerRegistry<
         TConfig,
@@ -17,18 +16,15 @@ public abstract class CoreServerRegistry<
         implements
         ICoreServerUtils<TServerUtils>,
         ICoreCommonUtils<TConfig> {
-    private ServerLevel serverLevel;
+    private final ServerLevel serverLevel;
     protected final TCommonUtils commonUtils;
 
-    public CoreServerRegistry(TCommonUtils registry) {
+    public CoreServerRegistry(TCommonUtils registry, ServerLevel level) {
         commonUtils = registry;
+        serverLevel = level;
     }
 
-    public void setServerLevel(ServerLevel serverLevel) {
-        this.serverLevel = serverLevel;
-    }
-
-    @Nullable
+    @NotNull
     @Override
     public ServerLevel getServerLevel() {
         return serverLevel;

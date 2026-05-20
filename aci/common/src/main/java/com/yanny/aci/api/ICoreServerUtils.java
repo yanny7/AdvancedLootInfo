@@ -10,7 +10,7 @@ public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
     @NotNull
     <T> TooltipBuilder getValueTooltip(SELF utils, @Nullable T value);
 
-    @Nullable
+    @NotNull
     ServerLevel getServerLevel();
 
     @Nullable
