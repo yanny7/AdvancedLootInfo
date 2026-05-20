@@ -4,6 +4,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.forge.datagen.DataGeneration;
 import com.yanny.ali.forge.network.NetworkUtils;
 import com.yanny.ali.forge.network.Server;
+import com.yanny.ali.forge.platform.ForgePlatformHelper;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.network.AbstractServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +56,7 @@ public class AliMod {
 
     @SubscribeEvent
     public void onAddReloadListener(AddReloadListenerEvent event) {
+        ForgePlatformHelper.PROVIDER = event.getRegistries();
         event.addListener(SERVER.getFakeLootDataManager());
     }
 }
