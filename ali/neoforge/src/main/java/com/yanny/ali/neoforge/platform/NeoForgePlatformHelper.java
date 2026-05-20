@@ -10,6 +10,8 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 import net.neoforged.neoforgespi.language.ModFileScanData;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 
@@ -23,21 +25,25 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
     private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
 
+    @NotNull
     @Override
     public List<IPlugin> getPlugins() {
         return pluginsSupplier.get();
     }
 
+    @NotNull
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();
     }
 
+    @Nullable
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
     }
 
+    @NotNull
     private List<IPlugin> loadPlugins() {
         List<IPlugin> plugins = new LinkedList<>();
         Type type = Type.getType(AliEntrypoint.class);
