@@ -84,7 +84,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
     private LootContext lootContext;
-    private Identifier currentLootTable;
 
     public AliServerRegistry(AliCommonRegistry utils) {
         super(utils);
