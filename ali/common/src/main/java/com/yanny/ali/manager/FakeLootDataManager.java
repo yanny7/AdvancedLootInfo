@@ -34,7 +34,7 @@ public class FakeLootDataManager extends SimpleJsonResourceReloadListener {
     protected void apply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
         Map<ResourceLocation, LootTable> map = new HashMap<>();
         HolderLookup.Provider provider = Services.getPlatform().getLookupProvider();
-        DynamicOps<JsonElement> dynamicOps = provider != null ? RegistryOps.create(JsonOps.INSTANCE, provider) : JsonOps.INSTANCE;
+        DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, provider);
 
         this.fakeTables.clear();
 

@@ -41,7 +41,7 @@ public class ForgePlatformHelper implements IPlatformHelper {
         return FMLPaths.CONFIGDIR.get();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public HolderLookup.Provider getLookupProvider() {
         return PROVIDER;

@@ -25,7 +25,7 @@ public class TestPlatformHelper implements IPlatformHelper {
         return null;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public HolderLookup.Provider getLookupProvider() {
         return null;

@@ -5,7 +5,6 @@ import com.yanny.awi.platform.services.IPlatformHelper;
 import com.yanny.awi.plugin.Plugin;
 import net.minecraft.core.HolderLookup;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -23,7 +22,7 @@ public class TestPlatformHelper implements IPlatformHelper {
         return null;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public HolderLookup.Provider getLookupProvider() {
         return null;

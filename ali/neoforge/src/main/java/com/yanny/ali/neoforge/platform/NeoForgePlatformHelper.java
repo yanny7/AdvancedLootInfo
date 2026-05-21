@@ -40,7 +40,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
         return FMLPaths.CONFIGDIR.get();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public HolderLookup.Provider getLookupProvider() {
         return PROVIDER;

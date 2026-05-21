@@ -49,7 +49,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return FabricLoader.getInstance().getConfigDir();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public HolderLookup.Provider getLookupProvider() {
         return PROVIDER;
