@@ -1,4 +1,4 @@
-## []
+## [1.11.0]
 
 - Fixed warning when loading fake loot tables
 - Fixed conditionally removed loot not displayed (LootJS)
