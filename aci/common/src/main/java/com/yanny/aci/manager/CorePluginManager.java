@@ -3,6 +3,7 @@ package com.yanny.aci.manager;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreClientRegistry;
 import com.yanny.aci.api.ICorePlugin;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -34,7 +35,7 @@ public abstract class CorePluginManager<
     protected abstract TCoreClientRegistry createClientRegistry(TCoreCommonRegistry commonRegistry);
 
     @NotNull
-    protected abstract TCoreServerRegistry createServerRegistry(TCoreCommonRegistry commonRegistry);
+    protected abstract TCoreServerRegistry createServerRegistry(TCoreCommonRegistry commonRegistry, ServerLevel level);
 
     public final void registerClientEvent() {
         registerClientData();
@@ -59,8 +60,8 @@ public abstract class CorePluginManager<
         LOGGER.info("Registering common plugin data finished");
     }
 
-    public final void registerServerEvent() {
-        registerServerData();
+    public final void registerServerEvent(ServerLevel level) {
+        registerServerData(level);
     }
 
     public final void reloadServer() {
@@ -104,9 +105,9 @@ public abstract class CorePluginManager<
         LOGGER.info("Registering client plugin data finished");
     }
 
-    private void registerServerData() {
+    private void registerServerData(ServerLevel level) {
         LOGGER.info("Registering server plugin data...");
-        serverRegistry = createServerRegistry(commonRegistry);
+        serverRegistry = createServerRegistry(commonRegistry, level);
 
         for (TPlugin plugin : plugins) {
             try {

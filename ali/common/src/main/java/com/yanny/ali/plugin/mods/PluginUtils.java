@@ -9,8 +9,6 @@ import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.predicates.DataComponentPredicate;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
@@ -23,11 +21,11 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -287,32 +285,23 @@ public class PluginUtils {
         }
     }
 
+    @NotNull
+    @Unmodifiable
     public static <T extends ItemLike> List<Item> getItems(IServerUtils utils, TagKey<T> tag) {
-        ServerLevel level = utils.getServerLevel();
+        Registry<T> registry = utils.getServerLevel().registryAccess().lookupOrThrow(tag.registry());
+        return StreamSupport.stream(registry.getTagOrEmpty(tag).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
 
-        if (level != null) {
-            Registry<T> registry = level.registryAccess().lookupOrThrow(tag.registry());
-
-            return StreamSupport.stream(registry.getTagOrEmpty(tag).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
-        }
-
-        return Collections.emptyList();
     }
 
     public static <T extends ItemLike> List<Item> getItems(IServerUtils utils, Either<ItemStack, TagKey<T>> either) {
-        ServerLevel level = utils.getServerLevel();
+        return either.map(
+                (i) -> List.of(i.getItem()),
+                (t) -> {
+                    Registry<T> registry = utils.getServerLevel().registryAccess().lookupOrThrow(t.registry());
+                    return StreamSupport.stream(registry.getTagOrEmpty(t).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
+                }
+        );
 
-        if (level != null) {
-            return either.map(
-                    (i) -> List.of(i.getItem()),
-                    (t) -> {
-                        Registry<T> registry = level.registryAccess().lookupOrThrow(t.registry());
-                        return StreamSupport.stream(registry.getTagOrEmpty(t).spliterator(), false).map(Holder::value).map(ItemLike::asItem).toList();
-                    }
-            );
-        }
-
-        return Collections.emptyList();
     }
 
     @NotNull

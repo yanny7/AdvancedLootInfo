@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 public class GenericTooltipUtils {
     @NotNull
@@ -192,32 +191,17 @@ public class GenericTooltipUtils {
     @NotNull
     public static <V, T extends Registry<V>> TooltipBuilder getRegistryTooltip(IServerUtils utils, ResourceKey<T> registry, V value) {
         HolderLookup.Provider provider = utils.lookupProvider();
+        Optional<? extends HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
 
-        if (provider != null) {
-            Optional<? extends HolderLookup.RegistryLookup<V>> lookup = provider.lookup(registry);
+        if (lookup.isPresent()) {
+            Optional<Holder.Reference<V>> first = lookup.get().listElements().filter((l) -> l.value() == value).findFirst();
 
-            if (lookup.isPresent()) {
-                Optional<Holder.Reference<V>> first = lookup.get().listElements().filter((l) -> l.value() == value).findFirst();
-
-                if (first.isPresent()) {
-                    return utils.getValueTooltip(utils, Objects.requireNonNull(first.get().key()));
-                }
+            if (first.isPresent()) {
+                return utils.getValueTooltip(utils, Objects.requireNonNull(first.get().key()));
             }
         }
 
         return TooltipBuilder.empty();
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    @NotNull
-    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionContentsPredicateTooltip(IServerUtils utils, Optional<CollectionContentsPredicate<A, B>> predicate) {
-        return predicate.map((p) -> utils.getValueTooltip(utils, p.unpack())).orElse(TooltipBuilder.empty());
-    }
-
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    @NotNull
-    public static <A, B extends Predicate<A>> TooltipBuilder getCollectionCountsPredicateTooltip(IServerUtils utils, Optional<CollectionCountsPredicate<A, B>> predicate) {
-        return predicate.map((p) -> utils.getValueTooltip(utils, p.unpack())).orElse(TooltipBuilder.empty());
     }
 
     @NotNull

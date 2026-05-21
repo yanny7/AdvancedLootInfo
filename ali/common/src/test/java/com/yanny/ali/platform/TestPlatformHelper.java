@@ -24,7 +24,7 @@ public class TestPlatformHelper implements IPlatformHelper {
         return null;
     }
 
-    @Nullable
+    @NotNull
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return null;

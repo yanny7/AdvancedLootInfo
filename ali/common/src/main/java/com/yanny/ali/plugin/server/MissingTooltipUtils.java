@@ -36,7 +36,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getEntryTypeTooltip(utils, entry.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             MapCodec<LootPoolEntryContainer> codec = ((MapCodec<LootPoolEntryContainer>) entry.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, entry).getPartialOrThrow();
@@ -58,7 +58,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getFunctionTypeTooltip(utils, function.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             MapCodec<LootItemFunction> codec = ((MapCodec<LootItemFunction>) function.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, function).getPartialOrThrow();
@@ -80,7 +80,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getConditionTypeTooltip(utils, condition.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             MapCodec<LootItemCondition> codec = ((MapCodec<LootItemCondition>) condition.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, condition).getPartialOrThrow();
@@ -102,7 +102,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = TooltipBuilder.value(ingredient.getClass().getName());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             JsonElement jsonElement = Ingredient.CODEC.encodeStart(registryOps, ingredient).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
@@ -130,7 +130,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             MapCodec<EntitySubPredicate> codec = ((MapCodec<EntitySubPredicate>) predicate.codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, predicate).getPartialOrThrow();
@@ -152,7 +152,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = RegistriesTooltipUtils.getDataComponentTypeTooltip(utils, type);
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<Object> codec = ((Codec<Object>) type.codec());
             JsonElement jsonElement = Objects.requireNonNull(codec).encodeStart(registryOps, value).getPartialOrThrow();

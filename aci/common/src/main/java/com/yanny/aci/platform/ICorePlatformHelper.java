@@ -1,6 +1,7 @@
 package com.yanny.aci.platform;
 
 import com.yanny.aci.api.ICorePlugin;
+import net.minecraft.core.HolderLookup;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
@@ -12,4 +13,7 @@ public interface ICorePlatformHelper<T extends ICorePlugin<?, ?, ?>> {
 
         @NotNull
         Path getConfiguration();
+
+        @NotNull
+        HolderLookup.Provider getLookupProvider();
 }

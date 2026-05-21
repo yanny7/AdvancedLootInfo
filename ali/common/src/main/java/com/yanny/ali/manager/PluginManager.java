@@ -6,6 +6,7 @@ import com.yanny.ali.api.ICommonRegistry;
 import com.yanny.ali.api.IPlugin;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.platform.Services;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class PluginManager extends CorePluginManager<ICommonRegistry, IServerReg
 
     @NotNull
     @Override
-    protected AliServerRegistry createServerRegistry(AliCommonRegistry commonRegistry) {
-        return new AliServerRegistry(commonRegistry);
+    protected AliServerRegistry createServerRegistry(AliCommonRegistry commonRegistry, ServerLevel level) {
+        return new AliServerRegistry(commonRegistry, level);
     }
 }

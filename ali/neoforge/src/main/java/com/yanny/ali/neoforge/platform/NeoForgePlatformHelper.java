@@ -37,7 +37,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
         return FMLPaths.CONFIGDIR.get();
     }
 
-    @Nullable
+    @NotNull
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
