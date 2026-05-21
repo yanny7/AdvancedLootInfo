@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -99,17 +98,12 @@ public class ItemCollectorUtils {
         return result;
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction ignoredFunction) {
-        ServerLevel level = utils.getServerLevel();
-
-        if (level != null) {
-            return items.stream().map((i) -> level.recipeAccess()
-                    .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.value().result().getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
-        }
-
-        return List.of();
+        return items.stream().map((i) -> utils.getServerLevel().recipeAccess()
+                .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), utils.getServerLevel())
+                .map((l) -> List.of(l.value().result().getItem())).orElse(List.of())).flatMap(Collection::stream).toList();
     }
 
     @Unmodifiable

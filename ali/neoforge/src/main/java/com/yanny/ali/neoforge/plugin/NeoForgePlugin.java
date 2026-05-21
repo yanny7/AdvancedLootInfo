@@ -171,7 +171,7 @@ public class NeoForgePlugin implements IPlugin {
 
             @Override
             public JsonElement serialize() {
-                RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+                RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
                 //noinspection unchecked
                 MapCodec<IGlobalLootModifier> codec = ((MapCodec<IGlobalLootModifier>) modifier.codec());
                 return codec.codec().encodeStart(registryOps, modifier).getPartialOrThrow();
