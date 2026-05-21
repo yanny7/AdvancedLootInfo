@@ -12,8 +12,8 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 public class NeoForgeCommonBusSubscriber {
     @SubscribeEvent
     public static void onServerStarting(ServerStartingEvent event) {
-        PluginManager.getInstance().registerServerEvent();
-        AliMod.SERVER.readLootTables(event.getServer().reloadableRegistries(), event.getServer().overworld());
+        PluginManager.getInstance().registerServerEvent(event.getServer().overworld());
+        AliMod.SERVER.readLootTables(event.getServer().reloadableRegistries());
     }
 
     @SubscribeEvent

@@ -45,7 +45,6 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -449,7 +448,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getPagePredicateTooltip(IServerUtils utils, WrittenBookPredicate.PagePredicate predicate) {
-        return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), predicate.contents()).key(Lang.Value.PAGE);
+        return TooltipBuilder.component(utils.lookupProvider(), predicate.contents()).key(Lang.Value.PAGE);
     }
 
     @NotNull

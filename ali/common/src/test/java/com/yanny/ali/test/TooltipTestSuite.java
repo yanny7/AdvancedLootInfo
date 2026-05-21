@@ -105,7 +105,7 @@ public class TooltipTestSuite {
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();
-        PluginManager.getInstance().registerServerEvent();
+        PluginManager.getInstance().registerServerEvent(null);
         UTILS = new IServerUtils() {
             @NotNull
             @Override
@@ -217,7 +217,7 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.convertNumber(utils, numberProvider);
             }
 
-            @Nullable
+            @NotNull
             @Override
             public ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
@@ -249,7 +249,7 @@ public class TooltipTestSuite {
                 return config;
             }
 
-            @Nullable
+            @NotNull
             @Override
             public HolderLookup.Provider lookupProvider() {
                 return LOOKUP;

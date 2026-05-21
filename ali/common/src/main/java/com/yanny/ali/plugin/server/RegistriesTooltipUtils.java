@@ -46,8 +46,6 @@ import net.minecraft.world.level.storage.loot.providers.nbt.LootNbtProviderType;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.Objects;
-
 import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getRegistryTooltip;
 
@@ -155,7 +153,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getEnchantmentTooltip(IServerUtils utils, Enchantment enchantment) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), enchantment.description());
+                return TooltipBuilder.component(utils.lookupProvider(), enchantment.description());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Enchantment name", e);
             }
@@ -236,7 +234,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getTrimMaterialTooltip(IServerUtils utils, TrimMaterial material) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), material.description());
+                return TooltipBuilder.component(utils.lookupProvider(), material.description());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized TrimMaterial name", e);
             }
@@ -249,7 +247,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getTrimPatternTooltip(IServerUtils utils, TrimPattern pattern) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), pattern.description());
+                return TooltipBuilder.component(utils.lookupProvider(), pattern.description());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized TrimPattern name", e);
             }
@@ -262,7 +260,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getJukeboxSongTooltip(IServerUtils utils, JukeboxSong song) {
         if (utils.getConfiguration().showInGameNames) {
             try {
-                return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), song.description());
+                return TooltipBuilder.component(utils.lookupProvider(), song.description());
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized JukeboxSong name", e);
             }

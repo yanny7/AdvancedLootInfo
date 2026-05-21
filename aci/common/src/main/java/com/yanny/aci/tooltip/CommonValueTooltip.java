@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -131,7 +130,7 @@ public class CommonValueTooltip<
 
     @NotNull
     private TooltipBuilder getComponentTooltip(TServerUtils utils, Component component) {
-        return TooltipBuilder.component(Objects.requireNonNull(utils.lookupProvider()), component);
+        return TooltipBuilder.component(utils.lookupProvider(), component);
     }
 
     @NotNull
