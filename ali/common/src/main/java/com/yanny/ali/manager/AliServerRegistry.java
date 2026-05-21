@@ -83,10 +83,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
-    private LootContext lootContext;
+    private final LootContext lootContext;
 
-    public AliServerRegistry(AliCommonRegistry utils) {
-        super(utils);
+    public AliServerRegistry(AliCommonRegistry utils, ServerLevel level) {
+        super(utils, level);
+        this.lootContext = new LootContext(new LootParams(level, null, Map.of(), 0F), RandomSource.create(), null); //FIXME
     }
 
     public void clearData() {
@@ -106,11 +107,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     public List<ILootModifier<?>> getLootModifiers() {
         return lootModifierMap;
-    }
-
-    public void setServerLevel(ServerLevel serverLevel) {
-        super.setServerLevel(serverLevel);
-        this.lootContext = new LootContext(new LootParams(serverLevel, null, Map.of(), 0F), RandomSource.create(), null); //FIXME
     }
 
     @Override

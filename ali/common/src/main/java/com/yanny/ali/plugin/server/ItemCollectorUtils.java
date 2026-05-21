@@ -100,17 +100,12 @@ public class ItemCollectorUtils {
         return result;
     }
 
+    @Unmodifiable
     @NotNull
     public static List<Item> collectFurnaceSmelt(IServerUtils utils, List<Item> items, SmeltItemFunction ignoredFunction) {
-        ServerLevel level = utils.getServerLevel();
-
-        if (level != null) {
-            return items.stream().map((i) -> level.recipeAccess()
-                    .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), level)
-                    .map((l) -> List.of(l.value().result().item().value())).orElse(List.of())).flatMap(Collection::stream).toList();
-        }
-
-        return List.of();
+        return items.stream().map((i) -> utils.getServerLevel().recipeAccess()
+                .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(i.getDefaultInstance()), utils.getServerLevel())
+                .map((l) -> List.of(l.value().result().item().value())).orElse(List.of())).flatMap(Collection::stream).toList();
     }
 
     @Unmodifiable

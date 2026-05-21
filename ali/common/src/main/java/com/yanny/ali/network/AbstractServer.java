@@ -75,7 +75,7 @@ public abstract class AbstractServer {
         return fakeLootDataManager;
     }
 
-    public final void readLootTables(ReloadableServerRegistries.Holder manager, ServerLevel level) {
+    public final void readLootTables(ReloadableServerRegistries.Holder manager) {
         LOGGER.info("Started reading loot info");
 
         long startTime = System.currentTimeMillis();
@@ -98,7 +98,6 @@ public abstract class AbstractServer {
         Pair<List<Item>, List<Item>> wanderingTraderItems = collectWanderingTraderItems(serverRegistry, manager);
         IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry, manager);
 
-        serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
 
@@ -106,7 +105,7 @@ public abstract class AbstractServer {
 
         // apply modifiers
         lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, fakeLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, config, level, unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, lootTableItems));
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
@@ -117,7 +116,7 @@ public abstract class AbstractServer {
 
         // storing and compressing data
         ByteBuf rawBuf = Unpooled.buffer();
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, level.registryAccess());
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, serverRegistry.getServerLevel().registryAccess());
 
         writeLootData(buf, lootTableItemStacks, lootNodes);
         writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);

@@ -23,7 +23,7 @@ public class FabricCommonBusSubscriber {
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
         if (!serverLoaded) { // to be safe, handle only once for world loading (should be called only once for overworld, but who knows?)
-            PluginManager.getInstance().registerServerEvent();
+            PluginManager.getInstance().registerServerEvent(world);
             CommonAliMod.SERVER.readWorldgenInfo(server.overworld());
             serverLoaded = true;
         }
