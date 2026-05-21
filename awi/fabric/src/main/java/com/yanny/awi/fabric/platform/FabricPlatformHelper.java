@@ -42,10 +42,4 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public Path getConfiguration() {
         return FabricLoader.getInstance().getConfigDir();
     }
-
-    @NotNull
-    @Override
-    public HolderLookup.Provider getLookupProvider() {
-        return null; //FIXME
-    }
 }

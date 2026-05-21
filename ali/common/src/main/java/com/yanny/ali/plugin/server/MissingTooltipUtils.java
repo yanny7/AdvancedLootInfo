@@ -172,7 +172,7 @@ public class MissingTooltipUtils {
         TooltipBuilder tooltip = getConsumeEffectTypeTooltip(utils, effect.getType());
 
         try {
-            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, Objects.requireNonNull(utils.lookupProvider()));
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             MapCodec<ConsumeEffect> codec = ((MapCodec<ConsumeEffect>) effect.getType().codec());
             JsonElement jsonElement = codec.codec().encodeStart(registryOps, effect).getPartialOrThrow();

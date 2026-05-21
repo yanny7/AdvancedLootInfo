@@ -46,7 +46,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
         return FabricLoader.getInstance().getConfigDir();
     }
 
-    @NotNull
+    @Nullable
     @Override
     public SpawnEggItem getSpawnEggItem(EntityType<?> entityType) {
         return SpawnEggItem.byId(entityType);
