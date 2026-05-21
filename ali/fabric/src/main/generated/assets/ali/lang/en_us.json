@@ -295,6 +295,7 @@
   "ali.property.value.operation": "Operation: %s",
   "ali.property.value.options": "Options: %s",
   "ali.property.value.page": "Page: %s",
+  "ali.property.value.partial_matcher": "Partial Matchers: %s",
   "ali.property.value.pattern": "Pattern: %s",
   "ali.property.value.per_level": "Per Level: %s",
   "ali.property.value.period": "Period: %s",
