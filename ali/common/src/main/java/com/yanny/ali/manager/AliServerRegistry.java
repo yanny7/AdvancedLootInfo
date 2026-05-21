@@ -15,7 +15,6 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
-import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;

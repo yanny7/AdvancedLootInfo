@@ -370,7 +370,7 @@ public abstract class AbstractServer {
     @NotNull
     private static Map<Identifier, IDataNode> processTrades(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems) {
         Map<Identifier, IDataNode> nodes = new HashMap<>();
-        HolderLookup.RegistryLookup<TradeSet> lookup = Objects.requireNonNull(serverRegistry.lookupProvider()).lookup(Registries.TRADE_SET).orElseThrow();
+        HolderLookup.RegistryLookup<TradeSet> lookup = serverRegistry.lookupProvider().lookup(Registries.TRADE_SET).orElseThrow();
 
         for (Map.Entry<ResourceKey<VillagerProfession>, VillagerProfession> entry : BuiltInRegistries.VILLAGER_PROFESSION.entrySet()) {
             Identifier location = entry.getKey().identifier();

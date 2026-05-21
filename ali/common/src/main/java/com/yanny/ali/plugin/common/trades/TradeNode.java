@@ -18,7 +18,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class TradeNode extends ListNode {
@@ -29,7 +28,7 @@ public class TradeNode extends ListNode {
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
                 .toList();
-        HolderLookup.RegistryLookup<TradeSet> lookup = Objects.requireNonNull(utils.lookupProvider()).lookup(Registries.TRADE_SET).orElseThrow();
+        HolderLookup.RegistryLookup<TradeSet> lookup = utils.lookupProvider().lookup(Registries.TRADE_SET).orElseThrow();
 
         for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entry : entries) {
             Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entry.getValue());

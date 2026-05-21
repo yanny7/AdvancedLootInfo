@@ -7,8 +7,7 @@
     "MixinCanItemPerformAbility",
     "MixinLootModifier",
     "MixinLootTableIdCondition",
-    "MixinMinecraftServer",
-    "MixinNeoForgeEventHandler"
+    "MixinMinecraftServer"
   ],
   "injectors": {
     "defaultRequire": 1

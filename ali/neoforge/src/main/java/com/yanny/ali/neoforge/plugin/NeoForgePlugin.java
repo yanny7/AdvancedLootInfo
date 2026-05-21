@@ -8,7 +8,10 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
-import com.yanny.ali.neoforge.mixin.*;
+import com.yanny.ali.neoforge.mixin.MixinAddTableLootModifier;
+import com.yanny.ali.neoforge.mixin.MixinCanItemPerformAbility;
+import com.yanny.ali.neoforge.mixin.MixinLootModifier;
+import com.yanny.ali.neoforge.mixin.MixinLootTableIdCondition;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
@@ -21,6 +24,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.loot.*;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.neoforged.neoforge.resource.NeoForgeReloadListeners;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
@@ -80,7 +84,11 @@ public class NeoForgePlugin implements IPlugin {
             }
         }
 
-        LootModifierManager lootModifierManager = MixinNeoForgeEventHandler.getLootModifierManager();
+        LootModifierManager lootModifierManager = utils.getServerLevel()
+                .getServer()
+                .getServerResources()
+                .managers()
+                .getListener(NeoForgeReloadListeners.LOOT_MODIFIERS_KEY);
 
         forgeRegistry.registerGlobalLootModifier(AddTableLootModifier.class, (u, m) -> {
             List<LootItemCondition> conditionList = Arrays.asList(((MixinLootModifier) m).getConditions());
