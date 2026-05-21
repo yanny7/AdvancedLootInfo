@@ -71,7 +71,7 @@ public abstract class AbstractServer {
         return fakeLootDataManager;
     }
 
-    public final void readLootTables(ReloadableServerRegistries.Holder manager, ServerLevel level) {
+    public final void readLootTables(ReloadableServerRegistries.Holder manager) {
         LOGGER.info("Started reading loot info");
 
         long startTime = System.currentTimeMillis();
@@ -92,9 +92,8 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> tradeNodes;
         Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
         Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
-        IDataNode wanderingTraderNode = processWanderingTrader(level, serverRegistry);
+        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry.getServerLevel(), serverRegistry);
 
-        serverRegistry.setServerLevel(level);
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
 
@@ -102,18 +101,18 @@ public abstract class AbstractServer {
 
         // apply modifiers
         lootNodes.putAll(processBlocks(serverRegistry, config, unprocessedLootTables, fakeLootTables, blockLootModifiers, lootTableLootModifiers, lootTableItems));
-        lootNodes.putAll(processEntities(serverRegistry, config, level, unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
+        lootNodes.putAll(processEntities(serverRegistry, config, serverRegistry.getServerLevel(), unprocessedLootTables, fakeLootTables, entityLootModifiers, lootTableLootModifiers, lootTableItems));
         lootNodes.putAll(processLootTables(serverRegistry, config, unprocessedLootTables, fakeLootTables, lootTableLootModifiers, lootTableItems));
 
         lootTableItemStacks = lootNodes.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, (e) -> collectItems(e.getValue())));
         lootNodes = removeEmptyLootTable(serverRegistry, lootNodes, lootTableItemStacks);
-        tradeNodes = new HashMap<>(processTrades(level, serverRegistry, config, tradeItems));
+        tradeNodes = new HashMap<>(processTrades(serverRegistry.getServerLevel(), serverRegistry, config, tradeItems));
 
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
 
         // storing and compressing data
         ByteBuf rawBuf = Unpooled.buffer();
-        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, level.registryAccess());
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, serverRegistry.getServerLevel().registryAccess());
 
         writeLootData(buf, lootTableItemStacks, lootNodes);
         writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
