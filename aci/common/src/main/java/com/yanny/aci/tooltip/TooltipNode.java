@@ -1,9 +1,5 @@
 package com.yanny.aci.tooltip;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.CacheStats;
-import com.google.common.cache.LoadingCache;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
@@ -18,12 +14,13 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class TooltipNode {
     public static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
     public static final ChatFormatting VALUE_STYLE = ChatFormatting.AQUA;
     public static final ChatFormatting ERROR_STYLE = ChatFormatting.RED;
+
+    public static final TooltipNodePalette CACHE = new TooltipNodePalette();
 
     public static final short FLAG_ARRAY     = 1;
     public static final short FLAG_ADVANCED  = 1 << 1;
@@ -36,9 +33,6 @@ public class TooltipNode {
     public static final short FLAG_INDEX_KEY = 1 << 8;
 
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final LoadingCache<CacheKey, TooltipNode> CACHE = CacheBuilder.newBuilder()
-            .recordStats()
-            .build(CacheLoader.from(TooltipNode::new));
 
     public static final TooltipNode EMPTY_INSTANCE = getOrCreate(null, null, null, FLAG_EMPTY, List.of());
 
@@ -48,7 +42,7 @@ public class TooltipNode {
     private final short flags;
     private final List<TooltipNode> children;
 
-    private TooltipNode(CacheKey cacheKey) {
+    TooltipNode(CacheKey cacheKey) {
         this.key = cacheKey.key();
         this.values = cacheKey.values() != null ? cacheKey.values().toArray(new String[0]) : null;
         this.component = cacheKey.componentValue();
@@ -261,18 +255,19 @@ public class TooltipNode {
         buf.writeVarInt(children.size());
 
         for (TooltipNode child : children) {
-            child.encode(utils, buf);
+            buf.writeVarInt(CACHE.getNodeId(child));
         }
     }
 
-    public static TooltipNode decode(ICoreClientUtils<?, ?, ?> utils, FriendlyByteBuf buf) {
+    @NotNull
+    public static RawTooltipNode decodeRaw(ICoreClientUtils<?, ?, ?> utils, FriendlyByteBuf buf) {
         short flags = buf.readShort();
         String key = null;
         String[] values = null;
         Component component = null;
 
         if ((flags & FLAG_EMPTY) != 0) {
-            return EMPTY_INSTANCE;
+            return new RawTooltipNode(null, null, null, flags, List.of());
         }
 
         if ((flags & FLAG_HAS_KEY) != 0) {
@@ -303,19 +298,19 @@ public class TooltipNode {
         }
 
         int childCount = buf.readVarInt();
-        List<TooltipNode> children = new ArrayList<>(childCount);
+        List<Integer> children = new ArrayList<>(childCount);
 
         for (int i = 0; i < childCount; i++) {
-            children.add(decode(utils, buf));
+            children.add(buf.readVarInt());
         }
 
-        return getOrCreate(key, values, component, flags, children);
+        return new RawTooltipNode(key, values, component, flags, children);
     }
 
     @NotNull
     public static TooltipNode getOrCreate(@Nullable String key, String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
         if ((flags & FLAG_EMPTY) != 0) {
-            return getFromCache(CACHE, new CacheKey(null, null, null, FLAG_EMPTY, List.of()));
+            CACHE.getOrCreate(new CacheKey(null, null, null, FLAG_EMPTY, List.of()));
         }
 
         List<String> valList = null;
@@ -329,35 +324,6 @@ public class TooltipNode {
             }
         }
 
-        CacheKey cacheKey = new CacheKey(
-                key != null ? key.intern() : null,
-                valList,
-                component,
-                flags,
-                List.copyOf(children)
-        );
-        return getFromCache(CACHE, cacheKey);
+        return CACHE.getOrCreate(new CacheKey(key != null ? key.intern() : null, valList, component, flags, List.copyOf(children)));
     }
-
-    public static void logCacheStatistics() {
-        CacheStats stats = CACHE.stats();
-
-        LOGGER.info("Node Statistics:");
-        LOGGER.info("Total Requests: {}", stats.requestCount());
-        LOGGER.info("Hits (Reused):  {} ({})", stats.hitCount(), String.format("%.2f%%", stats.hitRate() * 100));
-        LOGGER.info("Misses (New):   {} ({})", stats.missCount(), String.format("%.2f%%", stats.missRate() * 100));
-        LOGGER.info("Load Penalty:   {}ms (avg)", stats.averageLoadPenalty() / 1_000_000.0);
-        LOGGER.info("Evictions:      {}", stats.evictionCount());
-    }
-
-    @NotNull
-    public static <K, V> V getFromCache(LoadingCache<K, V> cache, K key) {
-        try {
-            return cache.get(key);
-        } catch (ExecutionException e) {
-            throw new RuntimeException("Failed to retrieve node from cache", e);
-        }
-    }
-
-    record CacheKey(@Nullable String key, @Nullable List<String> values, @Nullable Component componentValue, short flags, List<TooltipNode> children) {}
 }

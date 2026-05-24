@@ -53,7 +53,7 @@ public class AddLootNode extends ListNode {
 
     public AddLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(utils, buf);
+        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
         addType = buf.readEnum(AddLootAction.AddType.class);
     }
 
@@ -63,7 +63,7 @@ public class AddLootNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        tooltip.encode(utils, buf);
+        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
         buf.writeEnum(addType);
     }
 

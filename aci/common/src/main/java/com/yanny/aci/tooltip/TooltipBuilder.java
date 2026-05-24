@@ -4,7 +4,6 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.language.IMultiKey;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -244,7 +243,7 @@ public class TooltipBuilder {
             }
         }
 
-        return createNode(finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
+        return TooltipNode.getOrCreate(finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
     }
 
     private short getFlags() {
@@ -259,11 +258,6 @@ public class TooltipBuilder {
         if (componentValue != null) flags |= TooltipNode.FLAG_COMPONENT;
 
         return flags;
-    }
-
-    @NotNull
-    private TooltipNode createNode(@Nullable String key, @Nullable String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
-        return TooltipNode.getOrCreate(key, values, component, flags, children);
     }
 
     public record MultiKey(String singular, String plural) implements IMultiKey {}

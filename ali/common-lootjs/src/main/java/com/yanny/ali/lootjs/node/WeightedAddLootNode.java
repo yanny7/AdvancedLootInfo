@@ -43,12 +43,12 @@ public class WeightedAddLootNode extends ListNode {
 
     public WeightedAddLootNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.decode(utils, buf);
+        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        tooltip.encode(utils, buf);
+        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
     }
 
     @NotNull
