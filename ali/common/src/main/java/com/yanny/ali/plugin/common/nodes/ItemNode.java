@@ -94,7 +94,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         item = EITHER_CODEC.decode(buf);
-        tooltip = TooltipNode.decode(utils, buf);
+        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         chance = buf.readFloat();
 
@@ -143,7 +143,7 @@ public class ItemNode implements IDataNode, IItemNode {
             LOGGER.warn("Failed to encode {}/{}", BuiltInRegistries.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
         }
 
-        tooltip.encode(utils, buf);
+        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
         count.encode(buf);
         buf.writeFloat(chance);
     }
