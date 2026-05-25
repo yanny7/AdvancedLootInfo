@@ -21,13 +21,13 @@ public class EmptyNode implements IDataNode {
     }
 
     public EmptyNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip = TooltipNode.decode(utils, buf);
+        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
         chance = buf.readFloat();
     }
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip.encode(utils, buf);
+        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
         buf.writeFloat(chance);
     }
 

@@ -1,3 +1,7 @@
+## []
+
+- Network optimization on larger packs (~25% less data transferred)
+
 ## [1.11.0]
 
 - Fixed warning when loading fake loot tables
