@@ -3,7 +3,7 @@ package com.yanny.aci.tooltip;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class TooltipNodePalette {
         return idToNode.get(id);
     }
 
-    public void encode(ICoreServerUtils<?> utils, FriendlyByteBuf buf) {
+    public void encode(ICoreServerUtils<?> utils, RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(idToNode.size());
 
         for (TooltipNode node : idToNode) {
@@ -50,7 +50,7 @@ public class TooltipNodePalette {
         }
     }
 
-    public void decode(ICoreClientUtils<?, ?, ?> utils, FriendlyByteBuf buf) {
+    public void decode(ICoreClientUtils<?, ?, ?> utils, RegistryFriendlyByteBuf buf) {
         int size = buf.readVarInt();
         List<RawTooltipNode> rawTooltipNodes = new ArrayList<>(size);
 

@@ -317,7 +317,7 @@ public class GenericUtils {
             List<ResourceKey<PoiType>> poi = (List<ResourceKey<PoiType>>) (Object) PluginUtils.getCapturedInstances(profession.acquirableJobSite(), ResourceKey.class);
             PoiType poiType;
 
-            if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.get(0))) != null) {
+            if (poi.size() == 1 && (poiType = BuiltInRegistries.POINT_OF_INTEREST_TYPE.get(poi.getFirst())) != null) {
                 return poiType.matchingStates().stream().map(BlockBehaviour.BlockStateBase::getBlock).collect(Collectors.toSet());
             }
         }
@@ -367,19 +367,19 @@ public class GenericUtils {
                 .collect(Collectors.joining(" "));
     }
 
-    private static void readLootData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LootData> lootData) {
+    private static void readLootData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<ResourceLocation, LootData> lootData) {
         int lootDataCount = readerBuf.readInt();
 
         for (int i = 0; i < lootDataCount; i++) {
             ResourceLocation location = readerBuf.readResourceLocation();
             IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf);
-            List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) readerBuf);
+            List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(readerBuf);
 
             lootData.put(location, new LootData(dataNode, items));
         }
     }
 
-    private static void readTradeData(IClientUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, TradeData> tradeData) {
+    private static void readTradeData(IClientUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, TradeData> tradeData) {
         int tradeDataCount = buf.readInt();
 
         for (int i = 0; i < tradeDataCount; i++) {
@@ -395,7 +395,7 @@ public class GenericUtils {
         List<Item> inputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
         List<Item> outputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
 
-        tradeData.put(new ResourceLocation("empty"), new TradeData(dataNode, inputs, outputs));
+        tradeData.put(ResourceLocation.withDefaultNamespace("empty"), new TradeData(dataNode, inputs, outputs));
     }
 
     public record LootData(IDataNode node, List<ItemStack> items) {}
