@@ -105,17 +105,20 @@ public abstract class AbstractServer {
 
         LOGGER.info("Processing {} loot tables, {} fake loot tables and {} trades took {}ms", lootNodes.size(), fakeLootTables.size(), tradeNodes.size() + 1, System.currentTimeMillis() - startTime);
 
-        // storing and compressing data
         ByteBuf rawBuf = Unpooled.buffer();
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, serverRegistry.getServerLevel().registryAccess());
 
+        // storing and compressing data
+        TooltipNode.CACHE.encode(serverRegistry, buf);
         writeLootData(buf, lootTableItemStacks, lootNodes);
         writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
         compressAndStoreData(rawBuf);
 
+        serverRegistry.printRuntimeInfo();
+
         fakeLootDataManager.clearLootTables();
         serverRegistry.clearLootTables(); // not needed anymore
-        serverRegistry.printRuntimeInfo();
+        TooltipNode.CACHE.clear();
     }
 
     public final void syncLootTables(Player player) {

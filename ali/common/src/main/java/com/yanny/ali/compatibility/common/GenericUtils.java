@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.Rect;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.configuration.AliConfig;
@@ -158,38 +159,16 @@ public class GenericUtils {
             throw new RuntimeException(e);
         }
 
-        RegistryFriendlyByteBuf readerBuf = new RegistryFriendlyByteBuf(decompressedBuf, registryAccess);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(decompressedBuf, registryAccess);
 
         try {
             IClientUtils utils = PluginManager.getInstance().clientRegistry;
-            int lootDataCount = readerBuf.readInt();
 
-            for (int i = 0; i < lootDataCount; i++) {
-                ResourceLocation location = readerBuf.readResourceLocation();
-                IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf);
-                List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) readerBuf);
-
-                lootData.put(location, new LootData(dataNode, items));
-            }
-
-            int tradeDataCount = readerBuf.readInt();
-
-            for (int i = 0; i < tradeDataCount; i++) {
-                ResourceLocation location = readerBuf.readResourceLocation();
-                IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, readerBuf);
-                List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-                List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-                tradeData.put(location, new TradeData(dataNode, inputs, outputs));
-            }
-
-            // wandering trader
-            IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, readerBuf);
-            List<Item> inputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-            List<Item> outputs = readerBuf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
-
-            tradeData.put(ResourceLocation.withDefaultNamespace("empty"), new TradeData(dataNode, inputs, outputs));
+            TooltipNode.CACHE.decode(utils, buf);
+            readLootData(utils, buf, lootData);
+            readTradeData(utils, buf, tradeData);
         } finally {
-            readerBuf.release();
+            buf.release();
         }
 
         return new Pair<>(lootData, tradeData);
@@ -386,6 +365,37 @@ public class GenericUtils {
                 .filter(s -> !s.isEmpty())
                 .map(word -> Character.toUpperCase(word.charAt(0)) + word.substring(1))
                 .collect(Collectors.joining(" "));
+    }
+
+    private static void readLootData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LootData> lootData) {
+        int lootDataCount = readerBuf.readInt();
+
+        for (int i = 0; i < lootDataCount; i++) {
+            ResourceLocation location = readerBuf.readResourceLocation();
+            IDataNode dataNode = utils.getDataNodeFactory(LootTableNode.ID).apply(utils, readerBuf);
+            List<ItemStack> items = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode((RegistryFriendlyByteBuf) readerBuf);
+
+            lootData.put(location, new LootData(dataNode, items));
+        }
+    }
+
+    private static void readTradeData(IClientUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, TradeData> tradeData) {
+        int tradeDataCount = buf.readInt();
+
+        for (int i = 0; i < tradeDataCount; i++) {
+            ResourceLocation location = buf.readResourceLocation();
+            IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf);
+            List<Item> inputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+            List<Item> outputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+            tradeData.put(location, new TradeData(dataNode, inputs, outputs));
+        }
+
+        // wandering trader
+        IDataNode dataNode = utils.getDataNodeFactory(TradeNode.ID).apply(utils, buf);
+        List<Item> inputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+        List<Item> outputs = buf.readCollection(ArrayList::new, FriendlyByteBuf::readResourceLocation).stream().map(BuiltInRegistries.ITEM::get).toList();
+
+        tradeData.put(new ResourceLocation("empty"), new TradeData(dataNode, inputs, outputs));
     }
 
     public record LootData(IDataNode node, List<ItemStack> items) {}

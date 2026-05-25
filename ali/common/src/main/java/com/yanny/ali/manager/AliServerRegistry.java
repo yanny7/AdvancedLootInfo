@@ -418,7 +418,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         super.printRuntimeInfo();
 
         if (this.getConfiguration().logMoreStatistics) {
-            TooltipNode.logCacheStatistics();
+            TooltipNode.CACHE.logStatistics();
         }
     }
 
