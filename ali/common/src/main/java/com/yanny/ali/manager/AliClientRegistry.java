@@ -20,17 +20,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRegistry, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final long RELOAD_COOLDOWN_MS = 2000L;
 
     private final AtomicInteger receivedChunks = new AtomicInteger(0);
     private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
     private ScheduledExecutorService loggerScheduler;
-    private final AtomicInteger syncedTagCount = new AtomicInteger(0);
     private final AtomicBoolean loggedIn = new AtomicBoolean(false);
-    private long lastSyncStartTime = 0;
 
     private volatile DataReceiver currentDataReceiver = null;
-
     private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
 
     public AliClientRegistry(AliCommonRegistry utils) {
@@ -54,18 +50,24 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
     }
 
     public synchronized void startLootData(int totalMessages) {
-        clearLootData(true);
+        if (currentDataReceiver != null) {
+            currentDataReceiver.cancelOperation();
+        }
 
-        lastSyncStartTime = System.currentTimeMillis();
         currentDataReceiver = new DataReceiver(totalMessages);
-
         CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
 
+        if (currentPromise.isDone()) {
+            currentPromise = new CompletableFuture<>();
+            activeDataPromise.set(currentPromise);
+        }
+
+        final CompletableFuture<byte[]> promiseToComplete = currentPromise;
         currentDataReceiver.getFuture().whenComplete((data, throwable) -> {
             if (throwable != null) {
-                currentPromise.completeExceptionally(throwable);
+                promiseToComplete.completeExceptionally(throwable);
             } else {
-                currentPromise.complete(data);
+                promiseToComplete.complete(data);
             }
         });
 
@@ -73,34 +75,22 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         LOGGER.info("Started receiving loot data");
     }
 
-    public synchronized void clearLootData(boolean force) {
-        long timeSinceStart = System.currentTimeMillis() - lastSyncStartTime;
-
-        if (timeSinceStart < RELOAD_COOLDOWN_MS && !force) {
-            LOGGER.info("Ignoring redundant reload request (triggered only {}ms after sync start)", timeSinceStart);
-            return;
-        }
-
+    public synchronized void clearLootData() {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
             stopLogging(true);
         }
 
-        CompletableFuture<byte[]> oldPromise = activeDataPromise.getAndSet(new CompletableFuture<>());
-
-        if (!oldPromise.isDone()) {
-            oldPromise.cancel(true);
-        }
-
+        activeDataPromise.set(new CompletableFuture<>());
         LOGGER.info("Cleared Loot data");
     }
 
     public synchronized void reloadLootData() {
         // reload is called on login, causing clearing already received data
-        if (loggedIn.get() && syncedTagCount.getAndIncrement() > 0) {
+        if (loggedIn.get()) {
             LOGGER.info("Reloading loot data");
-            clearLootData(false);
+            clearLootData();
         }
     }
 
@@ -115,21 +105,20 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
             if (!currentPromise.isDone()) {
                 currentPromise.complete(new byte[0]);
             }
-
-            if (currentDataReceiver != null) {
-                currentDataReceiver.cancelOperation();
-                currentDataReceiver = null;
-                stopLogging(true);
-            }
         }
     }
 
     public synchronized void loggingOut() {
         LOGGER.info("Player logout received");
-        clearLootData(true);
+
+        CompletableFuture<byte[]> oldPromise = activeDataPromise.get();
+
+        if (oldPromise != null && !oldPromise.isDone()) {
+            oldPromise.cancel(true);
+        }
+
+        clearLootData();
         loggedIn.set(false);
-        syncedTagCount.set(0);
-        lastSyncStartTime = 0;
     }
 
     public synchronized void doneLootData() {

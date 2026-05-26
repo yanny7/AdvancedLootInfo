@@ -3,7 +3,6 @@ package com.yanny.ali.forge.mixin;
 import com.yanny.ali.forge.AliMod;
 import com.yanny.ali.manager.PluginManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,10 +22,6 @@ public class MixinMinecraftServer {
                 if (server != null) {
                     PluginManager.getInstance().reloadServer();
                     AliMod.SERVER.readLootTables(server.getLootData());
-
-                    for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                        AliMod.SERVER.syncLootTables(player);
-                    }
                 }
             }
 

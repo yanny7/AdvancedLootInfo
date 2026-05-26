@@ -5,7 +5,6 @@ import com.yanny.ali.forge.datagen.DataGeneration;
 import com.yanny.ali.forge.network.NetworkUtils;
 import com.yanny.ali.forge.network.Server;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.AbstractServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,7 +18,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 @Mod(Utils.MOD_ID)
 public class AliMod {
-    public static final AbstractServer SERVER;
+    public static final Server SERVER;
     public static final SimpleChannel CHANNEL;
 
     private static final String PROTOCOL_VERSION = "2";
@@ -31,8 +30,9 @@ public class AliMod {
                 .serverAcceptedVersions(NetworkRegistry.acceptMissingOr(PROTOCOL_VERSION))
                 .simpleChannel();
 
-        NetworkUtils.registerClient(CHANNEL);
         SERVER = new Server(CHANNEL);
+        NetworkUtils.registerClient(CHANNEL);
+        NetworkUtils.registerCommon(CHANNEL, SERVER);
     }
 
     public AliMod() {
