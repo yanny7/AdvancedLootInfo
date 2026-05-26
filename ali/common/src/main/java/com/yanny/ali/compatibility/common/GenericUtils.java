@@ -11,6 +11,8 @@ import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.network.AbstractClient;
+import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.plugin.common.nodes.LootTableNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.mods.PluginUtils;
@@ -48,9 +50,7 @@ import oshi.util.tuples.Triplet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -269,46 +269,51 @@ public class GenericUtils {
         tradeData.clear();
     }
 
-    private static CompletableFuture<byte[]> lastProcessedFuture = null;
-
     public static <T> void register(T emiRegistry, BiConsumer<T, byte[]> registerData) {
         LOGGER.info("Starting data registration...");
+        int maxRetries = 3;
+        int currentTry = 0;
 
-        while (true) {
+        while (currentTry < maxRetries) {
+            currentTry++;
             CompletableFuture<byte[]> futureData = PluginManager.getInstance().clientRegistry.getCurrentDataFuture();
 
-            if (futureData == lastProcessedFuture && futureData.isDone()) {
-                LOGGER.info("Data checks out: Already received. Reusing cached data for registration.");
-            }
-
-            if (futureData.isDone()) {
-                LOGGER.info("Data already received, processing instantly.");
+            if (!futureData.isDone()) {
+                LOGGER.info("Data not ready. Requesting data from server (Attempt {}/{})", currentTry, maxRetries);
+                AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestLootDataMessage());
+                //TODO send message to server
             } else {
-                LOGGER.info("Blocking this thread until all data are received!");
+                LOGGER.info("Data already received, processing instantly.");
             }
 
             try {
-                byte[] fullCompressedData = futureData.get();
+                byte[] fullCompressedData = futureData.get(30, TimeUnit.SECONDS);
 
                 registerData.accept(emiRegistry, fullCompressedData);
-                lastProcessedFuture = futureData;
                 LOGGER.info("Data registration finished successfully.");
-                break;
-
+                return;
+            } catch (TimeoutException e) {
+                LOGGER.warn("Timeout while waiting for server data! The server didn't respond in time or packets were lost.", e);
+                PluginManager.getInstance().clientRegistry.clearLootData();
             } catch (CancellationException e) {
-                LOGGER.warn("Data reception was cancelled. Retrying with new data stream...");
+                LOGGER.warn("Data reception was cancelled. Retrying with new data stream...", e);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ignored) {}
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                LOGGER.error("Registration thread interrupted!");
-                break;
+                LOGGER.error("Registration thread interrupted!", e);
+                return;
             } catch (ExecutionException e) {
-                LOGGER.error("Failed to finish registering data with error {}", e.getCause().getMessage(), e);
-                break;
+                LOGGER.error("Failed to finish registering data with error", e);
+                return;
             } catch (Throwable e) {
-                LOGGER.error("Failed to finish registering data with unexpected error {}", e.getMessage(), e);
-                break;
+                LOGGER.error("Failed to finish registering data with unexpected error", e);
+                return;
             }
         }
+
+        LOGGER.error("CRITICAL: Could not fetch loot data from server after {} attempts. Recipe viewer integration will be empty or incomplete.", maxRetries);
     }
 
     public static Set<Block> getJobSites(@Nullable VillagerProfession profession) {

@@ -2,6 +2,7 @@ package com.yanny.ali.forge.network;
 
 import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
+import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.network.StartMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,7 +15,7 @@ public class NetworkUtils {
     private static int messageId = 0;
 
     public static void registerClient(SimpleChannel channel) {
-        Client client = new Client();
+        Client client = new Client(channel);
 
         //noinspection unchecked
         channel.messageBuilder(LootDataChunkMessage.class, getMessageId())
@@ -31,6 +32,10 @@ public class NetworkUtils {
                 .codec((StreamCodec<FriendlyByteBuf, DoneMessage>)(Object) DoneMessage.CODEC)
                 .consumerNetworkThread((BiConsumer<DoneMessage, CustomPayloadEvent.Context>) client::onDone)
                 .add();
+    }
+
+    public static void registerCommon(SimpleChannel channel, Server server) {
+        channel.registerMessage(getMessageId(), RequestLootDataMessage.class, RequestLootDataMessage::encode, RequestLootDataMessage::new, server::onStartSendingLootData);
     }
 
     private static int getMessageId() {

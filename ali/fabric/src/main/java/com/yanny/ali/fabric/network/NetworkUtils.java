@@ -8,17 +8,15 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class NetworkUtils {
-    public static void registerClient() {
-        Client client = new Client();
-
+    public static void registerClient(Client client) {
         ClientPlayNetworking.registerGlobalReceiver(LootDataChunkMessage.TYPE, client::onLootDataChunk);
         ClientPlayNetworking.registerGlobalReceiver(StartMessage.TYPE, client::onStart);
         ClientPlayNetworking.registerGlobalReceiver(DoneMessage.TYPE, client::onDone);
     }
 
-    public static void registerCommon() {
-        PayloadTypeRegistry.playC2S().register(StartMessage.TYPE, StartMessage.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(StartMessage.TYPE, (s, c) -> {});
+    public static void registerCommon(Server server) {
+        PayloadTypeRegistry.playC2S().register(RequestLootDataMessage.TYPE, RequestLootDataMessage.CODEC);
+        ServerPlayNetworking.registerGlobalReceiver(RequestLootDataMessage.TYPE, server::onStartSendingLootData);
 
         PayloadTypeRegistry.playS2C().register(LootDataChunkMessage.TYPE, LootDataChunkMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(StartMessage.TYPE, StartMessage.CODEC);

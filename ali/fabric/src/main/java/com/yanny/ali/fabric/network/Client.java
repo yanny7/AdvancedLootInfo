@@ -5,6 +5,8 @@ import com.yanny.ali.network.DoneMessage;
 import com.yanny.ali.network.LootDataChunkMessage;
 import com.yanny.ali.network.StartMessage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class Client extends AbstractClient {
     public void onLootDataChunk(LootDataChunkMessage message, ClientPlayNetworking.Context context) {
@@ -17,5 +19,15 @@ public class Client extends AbstractClient {
 
     public void onDone(DoneMessage message, ClientPlayNetworking.Context context) {
         super.onDone(message);
+    }
+
+    @Override
+    public void sendLootDataToPlayer(RequestLootDataMessage message) {
+        if (ClientPlayNetworking.canSend(NetworkUtils.REQUEST_LOOT_DATA_ID)) {
+            FriendlyByteBuf buf = PacketByteBufs.create();
+
+            message.encode(buf);
+            ClientPlayNetworking.send(NetworkUtils.REQUEST_LOOT_DATA_ID, buf);
+        }
     }
 }
