@@ -1,6 +1,7 @@
 package com.yanny.ali.fabric;
 
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.network.RequestLootDataMessage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;

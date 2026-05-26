@@ -35,7 +35,11 @@ public class NetworkUtils {
     }
 
     public static void registerCommon(SimpleChannel channel, Server server) {
-        channel.registerMessage(getMessageId(), RequestLootDataMessage.class, RequestLootDataMessage::encode, RequestLootDataMessage::new, server::onStartSendingLootData);
+        //noinspection unchecked
+        channel.messageBuilder(RequestLootDataMessage.class, getMessageId())
+                .codec((StreamCodec<FriendlyByteBuf, RequestLootDataMessage>) (Object) RequestLootDataMessage.CODEC)
+                .consumerNetworkThread((BiConsumer<RequestLootDataMessage, CustomPayloadEvent.Context>) server::onStartSendingLootData)
+                .add();
     }
 
     private static int getMessageId() {

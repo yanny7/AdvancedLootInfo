@@ -1,12 +1,10 @@
 package com.yanny.ali.forge.network;
 
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.network.DoneMessage;
-import com.yanny.ali.network.LootDataChunkMessage;
-import com.yanny.ali.network.StartMessage;
+import com.yanny.ali.network.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
 
 public class Client extends AbstractClient {
@@ -45,7 +43,7 @@ public class Client extends AbstractClient {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
         if (listener != null && channel.isRemotePresent(listener.getConnection())) {
-            channel.sendToServer(message);
+            channel.send(message, PacketDistributor.SERVER.noArg());
         }
     }
 }

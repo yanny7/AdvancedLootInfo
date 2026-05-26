@@ -2,11 +2,9 @@ package com.yanny.ali.forge.network;
 
 import com.yanny.ali.network.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.SimpleChannel;
-
-import java.util.function.Supplier;
 
 public class Server extends AbstractServer {
     private final SimpleChannel channel;
@@ -15,14 +13,12 @@ public class Server extends AbstractServer {
         this.channel = channel;
     }
 
-    public void onStartSendingLootData(RequestLootDataMessage ignoredMessage, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-
-        if (context.getDirection().getReceptionSide().isServer() && context.getSender() != null) {
-            syncLootTables(context.getSender());
+    public void onStartSendingLootData(RequestLootDataMessage ignoredMessage, CustomPayloadEvent.Context contextSupplier) {
+        if (contextSupplier.isServerSide() && contextSupplier.getSender() != null) {
+            syncLootTables(contextSupplier.getSender());
         }
 
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 
     @Override
