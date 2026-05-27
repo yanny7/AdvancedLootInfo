@@ -7,7 +7,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class Server extends AbstractServer {
     public void onStartSendingLootData(RequestLootDataMessage ignoredMessage, IPayloadContext contextSupplier) {
-        syncLootTables(contextSupplier.player());
+        contextSupplier.enqueueWork(() -> syncLootTables(contextSupplier.player()));
     }
 
     @Override

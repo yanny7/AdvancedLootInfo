@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class Server extends AbstractServer {
     protected void onStartSendingLootData(RequestLootDataMessage message, ServerPlayNetworking.Context context) {
-        syncLootTables(context.player());
+        context.server().execute(() -> syncLootTables(context.player()));
     }
 
     @Override

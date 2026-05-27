@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreClientUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.manager.CorePluginManager;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -14,14 +15,13 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TooltipNode {
     public static final ChatFormatting TEXT_STYLE = ChatFormatting.GOLD;
     public static final ChatFormatting VALUE_STYLE = ChatFormatting.AQUA;
     public static final ChatFormatting ERROR_STYLE = ChatFormatting.RED;
-
-    public static final TooltipNodePalette CACHE = new TooltipNodePalette();
 
     public static final short FLAG_ARRAY     = 1;
     public static final short FLAG_ADVANCED  = 1 << 1;
@@ -34,8 +34,6 @@ public class TooltipNode {
     public static final short FLAG_INDEX_KEY = 1 << 8;
 
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    public static final TooltipNode EMPTY_INSTANCE = getOrCreate(null, null, null, FLAG_EMPTY, List.of());
 
     private @Nullable final String key;
     private final String @Nullable[] values;
@@ -256,7 +254,7 @@ public class TooltipNode {
         buf.writeVarInt(children.size());
 
         for (TooltipNode child : children) {
-            buf.writeVarInt(CACHE.getNodeId(child));
+            buf.writeVarInt(utils.getTooltipCache().getNodeId(child));
         }
     }
 
@@ -309,9 +307,14 @@ public class TooltipNode {
     }
 
     @NotNull
-    public static TooltipNode getOrCreate(@Nullable String key, String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
+    public static TooltipNode empty() {
+        return getOrCreate(CorePluginManager.INSTANCE.serverRegistry.getTooltipCache(), null, null, null, FLAG_EMPTY, Collections.emptyList());
+    }
+
+    @NotNull
+    public static TooltipNode getOrCreate(TooltipNodePalette cache, @Nullable String key, String @Nullable[] values, @Nullable Component component, short flags, List<TooltipNode> children) {
         if ((flags & FLAG_EMPTY) != 0) {
-            CACHE.getOrCreate(new CacheKey(null, null, null, FLAG_EMPTY, List.of()));
+            cache.getOrCreate(new CacheKey(null, null, null, FLAG_EMPTY, Collections.emptyList()));
         }
 
         List<String> valList = null;
@@ -325,6 +328,6 @@ public class TooltipNode {
             }
         }
 
-        return CACHE.getOrCreate(new CacheKey(key != null ? key.intern() : null, valList, component, flags, List.copyOf(children)));
+        return cache.getOrCreate(new CacheKey(key != null ? key.intern() : null, valList, component, flags, List.copyOf(children)));
     }
 }

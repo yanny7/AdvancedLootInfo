@@ -15,7 +15,7 @@ public class Server extends AbstractServer {
 
     public void onStartSendingLootData(RequestLootDataMessage ignoredMessage, CustomPayloadEvent.Context contextSupplier) {
         if (contextSupplier.isServerSide() && contextSupplier.getSender() != null) {
-            syncLootTables(contextSupplier.getSender());
+            contextSupplier.enqueueWork(() -> syncLootTables(contextSupplier.getSender()));
         }
 
         contextSupplier.setPacketHandled(true);
