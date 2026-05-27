@@ -55,7 +55,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     public ItemNode(IClientUtils utils, FriendlyByteBuf buf) {
         item = buf.readEither(FriendlyByteBuf::readItem, (b) -> TagKey.create(Registries.ITEM, b.readResourceLocation()));
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         chance = buf.readFloat();
 
@@ -104,7 +104,7 @@ public class ItemNode implements IDataNode, IItemNode {
             LOGGER.warn("Failed to encode {}/{}", BuiltInRegistries.ITEM.getKey(item.left().map(ItemStack::getItem).orElse(Items.AIR)), item.right().orElse(null), e);
         }
 
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         count.encode(buf);
         buf.writeFloat(chance);
     }

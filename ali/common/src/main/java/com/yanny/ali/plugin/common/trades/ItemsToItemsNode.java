@@ -48,7 +48,7 @@ public class ItemsToItemsNode extends ListNode {
                             int xp,
                             float priceMultiplier,
                             TooltipNode condition) {
-        this(utils, input1, input1Count, TooltipNode.EMPTY_INSTANCE, input2, input2Count, TooltipNode.EMPTY_INSTANCE, output, outputCount, TooltipNode.EMPTY_INSTANCE, maxUses, xp, priceMultiplier, condition);
+        this(utils, input1, input1Count, TooltipNode.empty(), input2, input2Count, TooltipNode.empty(), output, outputCount, TooltipNode.empty(), maxUses, xp, priceMultiplier, condition);
     }
 
     public ItemsToItemsNode(IServerUtils utils,
@@ -78,7 +78,7 @@ public class ItemsToItemsNode extends ListNode {
 
     public ItemsToItemsNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @NotNull
@@ -95,7 +95,7 @@ public class ItemsToItemsNode extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     private static IDataNode getChildren(Either<ItemStack, TagKey<? extends ItemLike>> item, RangeValue count, TooltipNode condition) {

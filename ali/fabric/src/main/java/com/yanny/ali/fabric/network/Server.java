@@ -13,9 +13,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public class Server extends AbstractServer {
-    protected void onStartSendingLootData(MinecraftServer ignoredServer, ServerPlayer player, ServerGamePacketListenerImpl ignoredHandler,
+    protected void onStartSendingLootData(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl ignoredHandler,
                                           FriendlyByteBuf ignoredBuf, PacketSender ignoredResponseSender) {
-        syncLootTables(player);
+        server.execute(() -> syncLootTables(player));
     }
 
     @Override

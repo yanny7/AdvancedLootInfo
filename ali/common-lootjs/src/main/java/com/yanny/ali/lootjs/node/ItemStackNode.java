@@ -60,7 +60,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     public ItemStackNode(IClientUtils utils, FriendlyByteBuf buf) {
         itemStack = buf.readItem();
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -105,7 +105,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeItem(itemStack);
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);

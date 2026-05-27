@@ -19,10 +19,10 @@ public class Server extends AbstractServer {
         NetworkEvent.Context context = contextSupplier.get();
 
         if (context.getDirection().getReceptionSide().isServer() && context.getSender() != null) {
-            syncLootTables(context.getSender());
+            context.enqueueWork(() -> syncLootTables(context.getSender()));
         }
 
-        contextSupplier.get().setPacketHandled(true);
+        context.setPacketHandled(true);
     }
 
     @Override

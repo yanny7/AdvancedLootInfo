@@ -26,13 +26,13 @@ public class ReferenceNode extends ListNode {
 
     public ReferenceNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         chance = buf.readFloat();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeFloat(chance);
     }
 

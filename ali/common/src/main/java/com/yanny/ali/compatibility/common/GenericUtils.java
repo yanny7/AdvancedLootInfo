@@ -5,7 +5,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.Rect;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.configuration.AliConfig;
@@ -136,7 +135,7 @@ public class GenericUtils {
     }
 
     @NotNull
-    public static Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> decompressLootData(byte[] fullCompressedData) {
+    public static Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> decompressLootData(IClientUtils utils, byte[] fullCompressedData) {
         Map<ResourceLocation, LootData> lootData = new HashMap<>();
         Map<ResourceLocation, TradeData> tradeData = new HashMap<>();
 
@@ -156,9 +155,7 @@ public class GenericUtils {
         FriendlyByteBuf buf = new FriendlyByteBuf(decompressedBuf);
 
         try {
-            IClientUtils utils = PluginManager.getInstance().clientRegistry;
-
-            TooltipNode.CACHE.decode(utils, buf);
+            utils.getTooltipCache().decode(utils, buf);
             readLootData(utils, buf, lootData);
             readTradeData(utils, buf, tradeData);
         } finally {
@@ -174,7 +171,7 @@ public class GenericUtils {
                                    TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
                                    QuintConsumer<IDataNode, ResourceLocation, VillagerProfession, List<ItemStack>, List<ItemStack>> traderConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, List<ItemStack>, List<ItemStack>> wanderingTraderConsumer) {
-        Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(fullCompressedData);
+        Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData);
         Map<ResourceLocation, LootData> lootData = pair.getA();
         Map<ResourceLocation, TradeData> tradeData = pair.getB();
 

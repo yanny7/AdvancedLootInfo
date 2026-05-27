@@ -19,7 +19,7 @@ public class MissingNode implements IDataNode {
     }
 
     public MissingNode(IClientUtils utils, FriendlyByteBuf buf) {
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @NotNull
@@ -36,6 +36,6 @@ public class MissingNode implements IDataNode {
 
     @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 }

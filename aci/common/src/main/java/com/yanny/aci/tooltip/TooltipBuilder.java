@@ -2,6 +2,7 @@ package com.yanny.aci.tooltip;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.language.IMultiKey;
+import com.yanny.aci.manager.CorePluginManager;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -142,7 +143,7 @@ public class TooltipBuilder {
     public TooltipBuilder add(TooltipBuilder builder) {
         TooltipNode node = builder.build();
 
-        if (node != TooltipNode.EMPTY_INSTANCE) {
+        if (node != TooltipNode.empty()) {
             this.children.add(node);
         }
 
@@ -150,7 +151,7 @@ public class TooltipBuilder {
     }
 
     public TooltipBuilder add(TooltipNode node) {
-        if (node != TooltipNode.EMPTY_INSTANCE) {
+        if (node != TooltipNode.empty()) {
             this.children.add(node);
         }
 
@@ -190,11 +191,11 @@ public class TooltipBuilder {
 
     public TooltipNode build() {
         if (isEmptyForced) {
-            return TooltipNode.EMPTY_INSTANCE;
+            return TooltipNode.empty();
         }
 
         if (!forceVisible && values == null && componentValue == null && children.isEmpty()) {
-            return TooltipNode.EMPTY_INSTANCE;
+            return TooltipNode.empty();
         }
 
         String finalKeyStr = rawKey;
@@ -243,7 +244,7 @@ public class TooltipBuilder {
             }
         }
 
-        return TooltipNode.getOrCreate(finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
+        return TooltipNode.getOrCreate(CorePluginManager.INSTANCE.serverRegistry.getTooltipCache(), finalKeyStr, finalValues, finalComponent, finalFlags, finalChildren);
     }
 
     private short getFlags() {

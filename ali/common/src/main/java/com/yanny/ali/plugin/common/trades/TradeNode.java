@@ -42,7 +42,7 @@ public class TradeNode extends ListNode {
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return TooltipNode.EMPTY_INSTANCE;
+        return TooltipNode.empty();
     }
 
     @NotNull

@@ -23,12 +23,12 @@ public class SequenceNode extends CompositeNode {
 
     public SequenceNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull

@@ -3,6 +3,7 @@ package com.yanny.awi.test;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.test.utils.TestUtils;
@@ -70,6 +71,11 @@ public class TooltipTestSuite {
             @Override
             public @NotNull ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
+            }
+
+            @Override
+            public @NotNull TooltipNodePalette getTooltipCache() {
+                return PluginManager.getInstance().serverRegistry.getTooltipCache();
             }
 
             @Override

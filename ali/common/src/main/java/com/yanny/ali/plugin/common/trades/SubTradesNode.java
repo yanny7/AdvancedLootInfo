@@ -27,7 +27,7 @@ public class SubTradesNode<T> extends ListNode {
 
     public SubTradesNode(IClientUtils utils, FriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     public List<IDataNode> getSubTrades(IServerUtils ignoredUtils, T ignoredListing) {
@@ -36,7 +36,7 @@ public class SubTradesNode<T> extends ListNode {
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull
