@@ -1,6 +1,7 @@
 package com.yanny.aci.api;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,9 @@ public interface ICoreServerUtils<SELF extends ICoreServerUtils<?>> {
 
     @NotNull
     ServerLevel getServerLevel();
+
+    @NotNull
+    TooltipNodePalette getTooltipCache();
 
     @NotNull
     HolderLookup.Provider lookupProvider();

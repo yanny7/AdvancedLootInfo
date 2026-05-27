@@ -61,7 +61,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
 
     public ItemStackNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         itemStack = ItemStack.STREAM_CODEC.decode(buf);
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
@@ -106,7 +106,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         ItemStack.STREAM_CODEC.encode(buf, itemStack);
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);

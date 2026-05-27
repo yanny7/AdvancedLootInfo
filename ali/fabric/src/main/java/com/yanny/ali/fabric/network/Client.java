@@ -1,9 +1,6 @@
 package com.yanny.ali.fabric.network;
 
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.network.DoneMessage;
-import com.yanny.ali.network.LootDataChunkMessage;
-import com.yanny.ali.network.StartMessage;
+import com.yanny.ali.network.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class Client extends AbstractClient {
@@ -17,5 +14,12 @@ public class Client extends AbstractClient {
 
     public void onDone(DoneMessage message, ClientPlayNetworking.Context context) {
         super.onDone(message);
+    }
+
+    @Override
+    public void sendLootDataToPlayer(RequestLootDataMessage message) {
+        if (ClientPlayNetworking.canSend(RequestLootDataMessage.TYPE)) {
+            ClientPlayNetworking.send(message);
+        }
     }
 }
