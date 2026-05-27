@@ -22,7 +22,7 @@ public class TradeLevelNode extends ListNode {
 
         for (VillagerTrades.ItemListing itemListing : itemListings) {
             if (itemListing != null) {
-                addChildren(utils.getItemListing(utils, itemListing, TooltipNode.EMPTY_INSTANCE));
+                addChildren(utils.getItemListing(utils, itemListing, TooltipNode.empty()));
             }
         }
     }
