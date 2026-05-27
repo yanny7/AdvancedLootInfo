@@ -9,6 +9,6 @@ public class PlacementModifierTooltipUtils {
     @NotNull
     public static TooltipNode getMissingPlacementModifierTooltip(IServerUtils utils, PlacementModifier configuration) {
         //TODO auto detected placed feature
-        return TooltipNode.EMPTY_INSTANCE;
+        return TooltipNode.empty();
     }
 }

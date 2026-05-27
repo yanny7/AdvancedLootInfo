@@ -342,7 +342,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
                     try {
                         return new MissingNode(MissingTooltipUtils.getMissingItemListingTooltip(utils, entry).build());
                     } catch (Throwable e) {
-                        return new MissingNode(TooltipNode.EMPTY_INSTANCE);
+                        return new MissingNode(TooltipNode.empty());
                     }
                 });
     }
@@ -436,7 +436,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         super.printRuntimeInfo();
 
         if (this.getConfiguration().logMoreStatistics) {
-            TooltipNode.CACHE.logStatistics();
+            getTooltipCache().logStatistics();
         }
     }
 

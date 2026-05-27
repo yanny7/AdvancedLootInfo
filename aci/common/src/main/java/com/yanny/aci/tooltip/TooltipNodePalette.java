@@ -69,7 +69,7 @@ public class TooltipNodePalette {
                 nodeChildren.add(idToNode.get(id));
             }
 
-            TooltipNode.getOrCreate(raw.key(), raw.values(), raw.componentValue(), raw.flags(), nodeChildren);
+            TooltipNode.getOrCreate(utils.getTooltipCache(), raw.key(), raw.values(), raw.componentValue(), raw.flags(), nodeChildren);
         }
     }
 
@@ -84,7 +84,7 @@ public class TooltipNodePalette {
         double total = hits + misses;
 
         LOGGER.info("Node Statistics:");
-        LOGGER.info("Total Requests: {}", total);
+        LOGGER.info("Total Requests: {}", (int) total);
         LOGGER.info("Hits (Reused):  {} ({})", hits, String.format("%.2f%%", (hits / total) * 100));
         LOGGER.info("Misses (New):   {} ({})", misses, String.format("%.2f%%", (misses / total) * 100));
     }
