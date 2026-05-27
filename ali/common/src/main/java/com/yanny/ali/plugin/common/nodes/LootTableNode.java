@@ -21,12 +21,12 @@ public class LootTableNode extends ListNode {
 
     public LootTableNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull

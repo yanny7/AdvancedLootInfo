@@ -21,13 +21,13 @@ public class DynamicNode implements IDataNode {
     }
 
     public DynamicNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
-        tooltip = TooltipNode.CACHE.getNodeById(buf.readVarInt());
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         chance = buf.readFloat();
     }
 
     @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
-        buf.writeVarInt(TooltipNode.CACHE.getNodeId(tooltip));
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeFloat(chance);
     }
 

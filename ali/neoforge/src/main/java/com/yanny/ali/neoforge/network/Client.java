@@ -1,10 +1,9 @@
 package com.yanny.ali.neoforge.network;
 
-
-import com.yanny.ali.network.AbstractClient;
-import com.yanny.ali.network.DoneMessage;
-import com.yanny.ali.network.LootDataChunkMessage;
-import com.yanny.ali.network.StartMessage;
+import com.yanny.ali.network.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class Client extends AbstractClient {
@@ -18,5 +17,14 @@ public class Client extends AbstractClient {
 
     public void onDone(DoneMessage msg, IPayloadContext contextSupplier) {
         super.onDone(msg);
+    }
+
+    @Override
+    public void sendLootDataToPlayer(RequestLootDataMessage message) {
+        ClientPacketListener listener = Minecraft.getInstance().getConnection();
+
+        if (listener != null && listener.hasChannel(StartMessage.TYPE)) {
+            ClientPacketDistributor.sendToServer(message);
+        }
     }
 }

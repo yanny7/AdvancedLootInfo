@@ -22,6 +22,10 @@ public class PluginManager extends CorePluginManager<ICommonRegistry, IServerReg
         return pluginManager;
     }
 
+    PluginManager() {
+        super();
+    }
+
     @NotNull
     @Override
     protected List<IPlugin> getPlugins() {

@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
@@ -221,6 +222,12 @@ public class TooltipTestSuite {
             @Override
             public ServerLevel getServerLevel() {
                 return PluginManager.getInstance().serverRegistry.getServerLevel();
+            }
+
+            @NotNull
+            @Override
+            public TooltipNodePalette getTooltipCache() {
+                return PluginManager.getInstance().serverRegistry.getTooltipCache();
             }
 
             @Override

@@ -4,10 +4,12 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -85,6 +87,12 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             @Override
             public String getTranslationKey(int index) {
                 return null;
+            }
+
+            @NotNull
+            @Override
+            public TooltipNodePalette getTooltipCache() {
+                return PluginManager.getInstance().clientRegistry.getTooltipCache();
             }
 
             @Override

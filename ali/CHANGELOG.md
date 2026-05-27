@@ -1,6 +1,7 @@
 ## []
 
 - Network optimization on larger packs (~25% less data transferred)
+- Client now requests for data from server instead of waiting for server, fixing occasional freeze when connecting to server
 
 ## [1.11.0]
 
