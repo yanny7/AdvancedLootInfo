@@ -6,12 +6,9 @@ import com.yanny.ali.network.AbstractServer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLevelEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
@@ -27,7 +24,6 @@ public class FabricCommonBusSubscriber {
         ServerLevelEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
-        ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
         ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(Utils.modLoc("fake_loot_loader"), getReloadListener(server));
     }
 
@@ -48,15 +44,7 @@ public class FabricCommonBusSubscriber {
         if (success) {
             PluginManager.getInstance().reloadServer();
             CommonAliMod.SERVER.readLootTables(server.reloadableRegistries());
-
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                CommonAliMod.SERVER.syncLootTables(player);
-            }
         }
-    }
-
-    private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
-        CommonAliMod.SERVER.syncLootTables(event.player);
     }
 
     @NotNull

@@ -3,9 +3,9 @@ package com.yanny.ali.neoforge;
 import com.yanny.ali.Utils;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.neoforge.datagen.DataGeneration;
+import com.yanny.ali.neoforge.network.Client;
 import com.yanny.ali.neoforge.network.NetworkUtils;
 import com.yanny.ali.neoforge.network.Server;
-import com.yanny.ali.network.AbstractServer;
 import com.yanny.ali.pip.BlockPictureInPictureRenderer;
 import com.yanny.ali.pip.BlockRenderState;
 import net.minecraft.resources.Identifier;
@@ -21,7 +21,8 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
 public class AliMod {
-    public static final AbstractServer SERVER = new Server();
+    public static final Server SERVER = new Server();
+    public static final Client CLIENT = new Client();
     private static final String PROTOCOL_VERSION = "2";
 
     public AliMod(IEventBus modEventBus) {
@@ -43,7 +44,8 @@ public class AliMod {
     }
 
     public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
-        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION));
+        NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION), CLIENT);
+        NetworkUtils.registerCommon(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION), SERVER);
     }
 
     public static void registerPipRenderer(final RegisterPictureInPictureRenderersEvent event) {

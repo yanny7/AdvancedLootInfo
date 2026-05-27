@@ -1,7 +1,7 @@
 package com.yanny.ali.fabric;
 
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.StartMessage;
+import com.yanny.ali.network.RequestLootDataMessage;
 import com.yanny.ali.pip.BlockPictureInPictureRenderer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -18,7 +18,7 @@ public class FabricClientBusSubscriber {
     }
 
     private static void onConnect(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
-        PluginManager.getInstance().clientRegistry.loggingIn(ClientPlayNetworking.canSend(StartMessage.TYPE));
+        PluginManager.getInstance().clientRegistry.loggingIn(ClientPlayNetworking.canSend(RequestLootDataMessage.TYPE));
     }
 
     private static void onDisconnect(ClientPacketListener clientPacketListener, Minecraft minecraft) {

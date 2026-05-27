@@ -5,11 +5,13 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.configuration.LootCategory;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -184,6 +186,12 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             @Override
             public String getTranslationKey(int index) {
                 return null;
+            }
+
+            @NotNull
+            @Override
+            public TooltipNodePalette getTooltipCache() {
+                return PluginManager.getInstance().clientRegistry.getTooltipCache();
             }
 
             @Override

@@ -4,11 +4,13 @@ import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IWidgetUtils;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.configuration.LootCategory;
+import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import me.shedaniel.math.Point;
@@ -118,6 +120,12 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
             @Override
             public String getTranslationKey(int index) {
                 return null;
+            }
+
+            @NotNull
+            @Override
+            public TooltipNodePalette getTooltipCache() {
+                return PluginManager.getInstance().clientRegistry.getTooltipCache();
             }
 
             @Override

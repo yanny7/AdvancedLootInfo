@@ -3,7 +3,7 @@ package com.yanny.ali.neoforge;
 import com.yanny.ali.Utils;
 import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.manager.PluginManager;
-import com.yanny.ali.network.StartMessage;
+import com.yanny.ali.network.RequestLootDataMessage;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,7 +25,7 @@ public class NeoForgeClientBusSubscriber {
 
     @SubscribeEvent
     public static void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
-        PluginManager.getInstance().clientRegistry.loggingIn(NetworkRegistry.hasChannel(event.getConnection(), ConnectionProtocol.PLAY, StartMessage.TYPE.id()));
+        PluginManager.getInstance().clientRegistry.loggingIn(NetworkRegistry.hasChannel(event.getConnection(), ConnectionProtocol.PLAY, RequestLootDataMessage.TYPE.id()));
     }
 
     @SubscribeEvent

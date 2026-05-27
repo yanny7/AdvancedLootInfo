@@ -118,7 +118,7 @@ public abstract class AbstractServer {
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, serverRegistry.getServerLevel().registryAccess());
 
         // storing and compressing data
-        TooltipNode.CACHE.encode(serverRegistry, buf);
+        serverRegistry.getTooltipCache().encode(serverRegistry, buf);
         writeLootData(buf, lootTableItemStacks, lootNodes);
         writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
         compressAndStoreData(rawBuf);
@@ -127,7 +127,7 @@ public abstract class AbstractServer {
 
         fakeLootDataManager.clearLootTables();
         serverRegistry.clearTemporaryMaps(); // not needed anymore
-        TooltipNode.CACHE.clear();
+        serverRegistry.getTooltipCache().clear();
     }
 
     public final void syncLootTables(Player player) {
@@ -431,7 +431,7 @@ public abstract class AbstractServer {
             return serverRegistry.parseTrade(trades);
         } catch (Throwable e) {
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
-            return new MissingNode(TooltipNode.EMPTY_INSTANCE);
+            return new MissingNode(TooltipNode.empty());
         }
     }
 

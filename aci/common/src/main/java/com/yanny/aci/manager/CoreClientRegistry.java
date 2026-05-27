@@ -1,6 +1,7 @@
 package com.yanny.aci.manager;
 
 import com.yanny.aci.api.*;
+import com.yanny.aci.tooltip.TooltipNodePalette;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,8 @@ public abstract class CoreClientRegistry<
     private final ManagedRegistry<Identifier, BiFunction<TClientUtils, RegistryFriendlyByteBuf, TDataNode>> dataNodeFactoryMap = register("data node factories", false, HashMap::new, Identifier::toString, null);
 
     protected final TCommonUtils commonUtils;
+
+    private final TooltipNodePalette tooltipNodeCache = new TooltipNodePalette();
 
     public CoreClientRegistry(TCommonUtils registry) {
         commonUtils = registry;
@@ -130,6 +133,12 @@ public abstract class CoreClientRegistry<
     @Override
     public final TConfig getConfiguration() {
         return commonUtils.getConfiguration();
+    }
+
+    @NotNull
+    @Override
+    public TooltipNodePalette getTooltipCache() {
+        return tooltipNodeCache;
     }
 
     @Nullable

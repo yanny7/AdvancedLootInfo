@@ -12,6 +12,6 @@ public class PlacedFeatureUtils {
     @NotNull
     public static FeatureHolder getMissingPlacedFeature(IServerUtils utils, PlacedFeature placedFeature) {
         //TODO auto detected placed feature
-        return new FeatureHolder(Collections.emptyList(), TooltipNode.EMPTY_INSTANCE);
+        return new FeatureHolder(Collections.emptyList(), TooltipNode.empty());
     }
 }
