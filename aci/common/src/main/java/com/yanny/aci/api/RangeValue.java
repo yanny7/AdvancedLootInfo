@@ -133,10 +133,10 @@ public final class RangeValue {
         if (this.isUnknown) {
             return this;
         }
-        if (this.min < min) {
+        if (this.min > min) {
             min = this.min;
         }
-        if (this.max > max) {
+        if (this.max < max) {
             max = this.max;
         }
 
