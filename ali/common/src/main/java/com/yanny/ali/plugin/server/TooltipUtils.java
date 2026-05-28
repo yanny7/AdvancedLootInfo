@@ -126,7 +126,7 @@ public class TooltipUtils {
     }
 
     public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        if (function.predicates.isEmpty()) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 
@@ -149,7 +149,7 @@ public class TooltipUtils {
     }
 
     public static void applyLimitCount(IServerUtils utils, LimitCount function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount) {
-        if (function.predicates.isEmpty()) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 
@@ -166,7 +166,7 @@ public class TooltipUtils {
     }
 
     public static void applyLootingEnchant(IServerUtils utils, EnchantedCountIncreaseFunction function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        if (function.predicates.isEmpty()) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 
