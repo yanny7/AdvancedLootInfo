@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "com.yanny.ali.fabric.mixin",
   "client": [
-    "MixinClientPlayNetworkAddon",
+    "MixinAbstractChannelNetworkAddon",
     "MixinMinecraft"
   ],
   "injectors": {

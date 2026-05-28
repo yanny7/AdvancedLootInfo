@@ -49,7 +49,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         receiver.messageReceived(index, data);
     }
 
-    public synchronized void startLootData(int totalMessages) {
+    public void startLootData(int totalMessages) {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
         }
@@ -75,7 +75,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         LOGGER.info("Started receiving loot data");
     }
 
-    public synchronized void clearLootData() {
+    public void clearLootData() {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
@@ -86,7 +86,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         LOGGER.info("Cleared Loot data");
     }
 
-    public synchronized void reloadLootData() {
+    public void reloadLootData() {
         // reload is called on login, causing clearing already received data
         if (loggedIn.get()) {
             LOGGER.info("Reloading loot data");
@@ -94,7 +94,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         }
     }
 
-    public synchronized void loggingIn(boolean modAvailableOnServer) {
+    public void loggingIn(boolean modAvailableOnServer) {
         LOGGER.info("Player login received");
         loggedIn.set(true);
 
@@ -108,7 +108,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         }
     }
 
-    public synchronized void loggingOut() {
+    public void loggingOut() {
         LOGGER.info("Player logout received");
 
         CompletableFuture<byte[]> oldPromise = activeDataPromise.get();
@@ -121,7 +121,7 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
         loggedIn.set(false);
     }
 
-    public synchronized void doneLootData() {
+    public void doneLootData() {
         DataReceiver receiver = currentDataReceiver;
 
         if (receiver == null) {
