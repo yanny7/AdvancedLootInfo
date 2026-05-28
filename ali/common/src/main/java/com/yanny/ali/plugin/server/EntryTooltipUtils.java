@@ -132,7 +132,7 @@ public class EntryTooltipUtils {
     @NotNull
     public static TooltipBuilder getCountTooltip(Map<Enchantment, Map<Integer, RangeValue>> count) {
         RangeValue defaultCount = count.get(null).get(0);
-        TooltipBuilder builder = TooltipBuilder.value(defaultCount.clamp(new RangeValue(0), new RangeValue(9999)));
+        TooltipBuilder builder = TooltipBuilder.value(defaultCount.clamp(0, 9999));
 
         for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceEntry : count.entrySet()) {
             Enchantment enchantment = chanceEntry.getKey();
@@ -141,7 +141,7 @@ public class EntryTooltipUtils {
             if (enchantment != null) {
                 for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
                     int level = levelEntry.getKey();
-                    RangeValue value = levelEntry.getValue().clamp(new RangeValue(0), new RangeValue(9999));
+                    RangeValue value = levelEntry.getValue().clamp(0, 9999);
 
                     builder.add(TooltipBuilder.value(
                             value,

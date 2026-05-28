@@ -46,7 +46,7 @@ public class ItemNode implements IDataNode, IItemNode {
 
     public ItemNode(float chance, RangeValue count, Either<ItemStack, TagKey<? extends ItemLike>> item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this.chance = chance;
-        this.count = count.clamp(new RangeValue(0), new RangeValue(9999));
+        this.count = count.clamp(0, 9999);
         this.item = item;
         this.tooltip = tooltip;
         this.functions = functions;

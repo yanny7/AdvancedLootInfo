@@ -54,8 +54,6 @@ public class TooltipUtils {
         defaultMap.put(0, baseChance.multiply(condition.percent));
 
         if (!levelMap.isEmpty()) {
-            chance.get(null).get(0).multiply(condition.percent);
-
             for (Map.Entry<Integer, RangeValue> entry : levelMap.entrySet()) {
                 int level = entry.getKey();
                 float multiplier = condition.percent + (level * condition.lootingMultiplier);

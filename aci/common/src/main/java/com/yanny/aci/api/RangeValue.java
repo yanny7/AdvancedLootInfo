@@ -128,6 +128,21 @@ public final class RangeValue {
         return new RangeValue(newMin, newMax, this.hasScore, false);
     }
 
+    @NotNull
+    public RangeValue clamp(float min, float max) {
+        if (this.isUnknown) {
+            return this;
+        }
+        if (this.min < min) {
+            min = this.min;
+        }
+        if (this.max > max) {
+            max = this.max;
+        }
+
+        return new RangeValue(min, max, this.hasScore, false);
+    }
+
     public float min() {
         return this.min;
     }
