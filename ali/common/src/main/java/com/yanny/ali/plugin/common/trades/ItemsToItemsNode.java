@@ -34,7 +34,7 @@ public class ItemsToItemsNode extends ListNode {
                             int xp,
                             float priceMultiplier,
                             TooltipNode condition) {
-        this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), new RangeValue(), output, outputCount, maxUses, xp, priceMultiplier, condition);
+        this(utils, input1, input1Count, Either.left(ItemStack.EMPTY), new RangeValue(1), output, outputCount, maxUses, xp, priceMultiplier, condition);
     }
 
     public ItemsToItemsNode(IServerUtils utils,
