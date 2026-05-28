@@ -411,8 +411,8 @@ public class TooltipUtils {
             }
             case LevelBasedValue.LevelsSquared(float added) -> v.multiply(added + Mth.square(level));
             case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
-                if (level < values.size()) {
-                    yield v.multiply(values.get(level));
+                if (level <= values.size()) {
+                    yield v.multiply(values.get(level - 1));
                 } else {
                     yield calculateCount(fallback, v, level);
                 }
