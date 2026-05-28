@@ -22,6 +22,6 @@ public class NetworkUtils {
 
         PayloadTypeRegistry.serverboundPlay().register(RequestLootDataMessage.TYPE, RequestLootDataMessage.CODEC);
 
-        ServerPlayNetworking.registerGlobalReceiver(RequestLootDataMessage.TYPE, server.onStartSendingLootData);
+        ServerPlayNetworking.registerGlobalReceiver(RequestLootDataMessage.TYPE, server::onStartSendingLootData);
     }
 }
