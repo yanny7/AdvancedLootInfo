@@ -39,8 +39,10 @@ public class PastrySlicingModifier extends BaseAccessor<Object> implements IGlob
         return GlobalLootModifierUtils.getLootModifier(conditionList, (c) -> {
             Map<Enchantment, Map<Integer, RangeValue>> chance = NodeUtils.getEnchantedChance(utils, c, 1);
             Map<Enchantment, Map<Integer, RangeValue>> count = new HashMap<>();
+            Map<Integer, RangeValue> defaultCountMap = new LinkedHashMap<>();
 
-            count.put(null, Map.of(0, new RangeValue(1, 7)));
+            defaultCountMap.put(0, new RangeValue(1, 7));
+            count.put(null, defaultCountMap);
 
             TooltipBuilder tooltip = EntryTooltipUtils.getTooltip(utils, LootPoolSingletonContainer.DEFAULT_QUALITY, chance, count, Collections.emptyList(), c);
             IDataNode node = new ItemNode(1, new RangeValue(1, 7), pastrySlice.getDefaultInstance(), tooltip.build(), Collections.emptyList(), c);

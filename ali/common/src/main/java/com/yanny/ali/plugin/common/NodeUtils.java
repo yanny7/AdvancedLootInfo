@@ -200,8 +200,10 @@ public class NodeUtils {
     @NotNull
     public static Map<Enchantment, Map<Integer, RangeValue>> getEnchantedChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
         Map<Enchantment, Map<Integer, RangeValue>> chance = new LinkedHashMap<>();
+        Map<Integer, RangeValue> defaultMap = new LinkedHashMap<>();
 
-        chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
+        defaultMap.put(0, new RangeValue(rawChance * 100));
+        chance.put(null, defaultMap);
 
         for (LootItemCondition condition : conditions) {
             utils.applyChanceModifier(utils, condition, chance);
@@ -213,8 +215,10 @@ public class NodeUtils {
     @NotNull
     public static Map<Enchantment, Map<Integer, RangeValue>> getEnchantedCount(IServerUtils utils, List<LootItemFunction> functions) {
         Map<Enchantment, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
+        Map<Integer, RangeValue> defaultMap = new LinkedHashMap<>();
 
-        count.put(null, Map.of(0, new RangeValue()));
+        defaultMap.put(0, new RangeValue(1));
+        count.put(null, defaultMap);
 
         for (LootItemFunction function : functions) {
             utils.applyCountModifier(utils, function, count);
