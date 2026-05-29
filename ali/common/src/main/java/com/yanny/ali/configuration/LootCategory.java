@@ -3,7 +3,6 @@ package com.yanny.ali.configuration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;

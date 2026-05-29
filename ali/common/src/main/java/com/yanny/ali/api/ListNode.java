@@ -3,7 +3,6 @@ package com.yanny.ali.api;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.CoreListNode;
 import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.ali.manager.PluginManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import org.slf4j.Logger;
 

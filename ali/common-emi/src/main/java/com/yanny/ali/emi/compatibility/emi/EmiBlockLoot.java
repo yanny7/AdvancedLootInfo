@@ -40,7 +40,7 @@ public class EmiBlockLoot extends EmiBaseLoot {
         if (isSpecial) {
             return List.of(new EmiBlockSlotWidget(block, CATEGORY_WIDTH / 2 - 13, 0));
         } else {
-            return List.of(new SlotWidget(inputs.get(0), CATEGORY_WIDTH / 2 - 9, 0));
+            return List.of(new SlotWidget(inputs.getFirst(), CATEGORY_WIDTH / 2 - 9, 0));
         }
     }
 

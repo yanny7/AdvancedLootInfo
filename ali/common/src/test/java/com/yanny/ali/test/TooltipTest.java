@@ -2,6 +2,7 @@ package com.yanny.ali.test;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
@@ -44,6 +45,16 @@ public class TooltipTest {
                 "  -> 15% (Looting I)",
                 "  -> 25% (Looting II)",
                 "  -> 35% (Looting III)"
+        ));
+        assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(new LootItemRandomChanceWithEnchantedBonusCondition(
+                    0.1f,
+                    LevelBasedValue.lookup(List.of(0.2f, 0.3f, 0.4f), LevelBasedValue.constant(0)),
+                    LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING)
+                )), 1)).build(), List.of(
+                "Chance: 10%",
+                "  -> 20% (Looting I)",
+                "  -> 30% (Looting II)",
+                "  -> 40% (Looting III)"
         ));
 
         assertTooltip(getChanceTooltip(getEnchantedChance(UTILS, List.of(BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 0.1f, 0.2f, 0.3f, 0.4f).build()), 1)).build(), List.of(
