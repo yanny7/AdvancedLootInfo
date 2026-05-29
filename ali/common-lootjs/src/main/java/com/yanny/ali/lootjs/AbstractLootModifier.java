@@ -6,7 +6,6 @@ import com.almostreliable.lootjs.loot.modifier.LootModifier;
 import com.almostreliable.lootjs.loot.modifier.handler.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
@@ -15,11 +14,10 @@ import com.yanny.ali.lootjs.node.ItemTagNode;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
@@ -33,7 +31,6 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -69,8 +66,8 @@ public abstract class AbstractLootModifier<T> implements ILootModifier<T> {
                         }
 
                         if (c instanceof ItemNode i) {
-                            Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
-                            Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedCount = getEnchantedCount(utils, i.getFunctions());
+                            EnchantedRanges enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
+                            EnchantedRanges enchantedCount = getEnchantedCount(utils, i.getFunctions());
                             List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
 
                             allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions)));

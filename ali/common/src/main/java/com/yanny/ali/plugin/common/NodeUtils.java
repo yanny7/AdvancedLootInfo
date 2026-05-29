@@ -6,6 +6,7 @@ import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.common.nodes.*;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.core.Holder;
@@ -15,7 +16,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -25,7 +25,10 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -46,16 +49,15 @@ public class NodeUtils {
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         float chance = getChance(entry, rawChance, sumWeight);
-        RangeValue count = getEnchantedCount(utils, allFunctions).get(null).get(0);
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedCount = getEnchantedCount(utils, allFunctions);
+        EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
+        EnchantedRanges enchantedCount = getEnchantedCount(utils, allFunctions);
         TooltipNode tooltip = EntryTooltipUtils.getTooltip(utils, entry.quality, enchantedChance, enchantedCount, allFunctions, allConditions).build();
         Either<ItemStack, TagKey<? extends ItemLike>> either = itemGetter.apply(allFunctions);
 
         if (either.left().isPresent() && either.left().get().isEmpty()) {
             return new EmptyNode(chance, tooltip);
         } else {
-            return new ItemNode(chance, count, either, tooltip, allFunctions, allConditions);
+            return new ItemNode(chance, enchantedCount.getUnenchantedValue(), either, tooltip, allFunctions, allConditions);
         }
     }
 
@@ -83,7 +85,7 @@ public class NodeUtils {
         List<LootItemFunction> allFunctions = getAllFunctions(entry, functions);
         List<LootItemCondition> allConditions = getAllConditions(entry, conditions);
         float chance = getChance(entry, rawChance, sumWeight);
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, allConditions, chance);
+        EnchantedRanges enchantedChance = getEnchantedChance(utils, allConditions, chance);
         TooltipNode tooltip = EntryTooltipUtils.getEmptyTooltip(utils, entry.quality, enchantedChance, allFunctions, allConditions).build();
 
         return new EmptyNode(chance, tooltip);
@@ -200,28 +202,26 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getEnchantedChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance = new LinkedHashMap<>();
-
-        chance.put(null, Map.of(0, new RangeValue(rawChance * 100)));
+    public static EnchantedRanges getEnchantedChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
+        EnchantedRanges chance = new EnchantedRanges(1);
 
         for (LootItemCondition condition : conditions) {
             utils.applyChanceModifier(utils, condition, chance);
         }
 
+        chance.modifyAllEntries((value) -> value.multiply(rawChance * 100));
         return chance;
     }
 
     @NotNull
-    public static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getEnchantedCount(IServerUtils utils, List<LootItemFunction> functions) {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> count = new LinkedHashMap<>();
-
-        count.put(null, Map.of(0, new RangeValue()));
+    public static EnchantedRanges getEnchantedCount(IServerUtils utils, List<LootItemFunction> functions) {
+        EnchantedRanges count = new EnchantedRanges(new RangeValue(1));
 
         for (LootItemFunction function : functions) {
             utils.applyCountModifier(utils, function, count);
         }
 
+        count.modifyAllEntries((value) -> value.clamp(0, 9999));
         return count;
     }
 
