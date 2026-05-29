@@ -33,7 +33,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class TooltipUtils {
     public static ItemStack getItemStack(IServerUtils utils, ItemStack itemStack, List<LootItemFunction> functions) {
@@ -51,15 +52,15 @@ public class TooltipUtils {
     public static void applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithEnchantedBonusCondition condition, EnchantedRanges chance) {
         chance.computeAllLevels(condition.enchantment(), (level, value) -> {
             if (level > 0) {
-                return value.multiply(calculateCount(condition.enchantedChance()));
+                return value.multiply(calculateCount(condition.enchantedChance(), value, level));
             } else {
-                return value.multiply(calculateCount(condition.unenchantedChance()));
+                return value.multiply(condition.unenchantedChance());
             }
         });
     }
 
     public static void applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, EnchantedRanges chance) {
-        if (condition.values.length == 0) {
+        if (condition.values().isEmpty()) {
             return;
         }
 
@@ -73,7 +74,7 @@ public class TooltipUtils {
     }
 
     public static void applySetCount(IServerUtils utils, SetItemCountFunction function, EnchantedRanges count) {
-        if (function.predicates.length != 0) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 
@@ -89,7 +90,7 @@ public class TooltipUtils {
     }
 
     public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, EnchantedRanges count) {
-        if (function.predicates.length != 0) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 
@@ -97,7 +98,7 @@ public class TooltipUtils {
     }
 
     public static void applyLimitCount(IServerUtils utils, LimitCount function, EnchantedRanges bonusCount) {
-        if (function.predicates.length != 0) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 
@@ -108,7 +109,7 @@ public class TooltipUtils {
     }
 
     public static void applyLootingEnchant(IServerUtils utils, EnchantedCountIncreaseFunction function, EnchantedRanges count) {
-        if (function.predicates.length != 0) {
+        if (!function.predicates.isEmpty()) {
             return;
         }
 

@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.compatibility.common.TriConsumer;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 
 public class EnchantedRanges {
-    private final Map<Enchantment, Map<Integer, RangeValue>> map;
+    private final Map<Holder<Enchantment>, Map<Integer, RangeValue>> map;
 
     public EnchantedRanges(float unenchantedValue) {
         this(new RangeValue(unenchantedValue));
@@ -41,7 +42,7 @@ public class EnchantedRanges {
     }
 
     public void modifyAllEntries(UnaryOperator<RangeValue> modifier) {
-        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> entry : map.entrySet()) {
+        for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> entry : map.entrySet()) {
             Map<Integer, RangeValue> levelMap = entry.getValue();
 
             for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
@@ -50,7 +51,7 @@ public class EnchantedRanges {
         }
     }
 
-    public void computeLevels(Enchantment enchantment, BiFunction<Integer, RangeValue, RangeValue> modifier) {
+    public void computeLevels(Holder<Enchantment> enchantment, BiFunction<Integer, RangeValue, RangeValue> modifier) {
         Map<Integer, RangeValue> levelMap = map.computeIfAbsent(enchantment, (k) -> new LinkedHashMap<>());
 
         if (!levelMap.isEmpty()) {
@@ -61,7 +62,7 @@ public class EnchantedRanges {
             }
         } else {
             RangeValue fallbackBase = getUnenchantedValue();
-            int maxLevel = enchantment.getMaxLevel();
+            int maxLevel = enchantment.value().getMaxLevel();
 
             for (int level = 1; level <= maxLevel; level++) {
                 levelMap.put(level, modifier.apply(level, fallbackBase));
@@ -69,7 +70,7 @@ public class EnchantedRanges {
         }
     }
 
-    public void computeAllLevels(Enchantment enchantment, BiFunction<Integer, RangeValue, RangeValue> modifier) {
+    public void computeAllLevels(Holder<Enchantment> enchantment, BiFunction<Integer, RangeValue, RangeValue> modifier) {
         Map<Integer, RangeValue> levelMap = map.computeIfAbsent(enchantment, (k) -> new LinkedHashMap<>());
 
         if (!levelMap.isEmpty()) {
@@ -80,7 +81,7 @@ public class EnchantedRanges {
             }
         } else {
             RangeValue fallbackBase = getUnenchantedValue();
-            int maxLevel = enchantment.getMaxLevel();
+            int maxLevel = enchantment.value().getMaxLevel();
 
             for (int level = 1; level <= maxLevel; level++) {
                 levelMap.put(level, modifier.apply(level, fallbackBase));
@@ -96,13 +97,13 @@ public class EnchantedRanges {
                 return;
             }
 
-            levelMap.forEach((level, value) -> action.accept(enchantment, level, value));
+            levelMap.forEach((level, value) -> action.accept(enchantment.value(), level, value));
         });
     }
 
     @NotNull
-    private static Map<Enchantment, Map<Integer, RangeValue>> getBaseMap(RangeValue value) {
-        Map<Enchantment, Map<Integer, RangeValue>> map = new LinkedHashMap<>();
+    private static Map<Holder<Enchantment>, Map<Integer, RangeValue>> getBaseMap(RangeValue value) {
+        Map<Holder<Enchantment>, Map<Integer, RangeValue>> map = new LinkedHashMap<>();
         Map<Integer, RangeValue> defaultMap = new LinkedHashMap<>();
 
         defaultMap.put(0, value);

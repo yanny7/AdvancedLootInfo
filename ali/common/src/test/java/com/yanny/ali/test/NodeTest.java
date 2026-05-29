@@ -2,10 +2,11 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.plugin.common.NodeUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
@@ -26,7 +28,7 @@ public class NodeTest {
                 UTILS,
                 (LootItem) LootItem.lootTableItem(Items.STRING)
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
-                        .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
+                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 1)))
                         .build(),
                 1,
                 1,
@@ -43,7 +45,8 @@ public class NodeTest {
                 "Set Count:",
                 "  -> Count: 0-2",
                 "  -> Add: false",
-                "Looting Enchant:",
+                "Enchanted Count Increase:",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Value: 0-1"
         ));
     }
@@ -55,7 +58,7 @@ public class NodeTest {
                 (LootItem) LootItem.lootTableItem(Items.SPIDER_EYE)
                         .when(LootItemKilledByPlayerCondition.killedByPlayer())
                         .apply(SetItemCountFunction.setCount(UniformGenerator.between(-1, 1)))
-                        .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, 1)))
+                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(LOOKUP, UniformGenerator.between(0, 1)))
                         .build(),
                 1,
                 1,
@@ -74,7 +77,8 @@ public class NodeTest {
                 "Set Count:",
                 "  -> Count: -1-1",
                 "  -> Add: false",
-                "Looting Enchant:",
+                "Enchanted Count Increase:",
+                "  -> Enchantment: minecraft:looting",
                 "  -> Value: 0-1"
         ));
     }
@@ -85,7 +89,7 @@ public class NodeTest {
                 UTILS,
                 (LootItem) LootItem.lootTableItem(Items.SPRUCE_SAPLING)
                         .when(ExplosionCondition.survivesExplosion())
-                        .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.05f, 0.0625f, 0.083333336f, 0.1f))
+                        .when(BonusLevelTableCondition.bonusLevelFlatChance(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 0.05f, 0.0625f, 0.083333336f, 0.1f))
                         .build(),
                 1,
                 1,
