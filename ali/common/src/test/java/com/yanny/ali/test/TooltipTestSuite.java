@@ -3,9 +3,7 @@ package com.yanny.ali.test;
 import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
-import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
@@ -60,7 +58,6 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.BeforeSuite;
 import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
-import oshi.util.tuples.Pair;
 
 import java.io.File;
 import java.lang.reflect.Field;

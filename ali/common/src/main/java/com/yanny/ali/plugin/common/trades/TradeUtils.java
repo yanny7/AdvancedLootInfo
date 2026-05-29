@@ -23,7 +23,7 @@ public class TradeUtils {
                 new RangeValue(utils.convertNumber(utils, trade.wants.count())),
                 utils.getValueTooltip(utils, trade.wants.components()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.additionalWants.map((t) -> t.item().value().getDefaultInstance()).orElse(ItemStack.EMPTY)),
-                trade.additionalWants.map((t) -> utils.convertNumber(utils, t.count())).orElse(new RangeValue()),
+                trade.additionalWants.map((t) -> utils.convertNumber(utils, t.count())).orElse(new RangeValue(1)),
                 trade.additionalWants.map((t) -> utils.getValueTooltip(utils, t.components())).orElse(TooltipBuilder.empty()).build(Lang.Branch.EXPECTED_COMPONENTS),
                 Either.left(trade.gives.create()),
                 new RangeValue(trade.gives.count()),
