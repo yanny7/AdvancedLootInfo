@@ -5,7 +5,6 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
@@ -77,7 +76,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getSlotTooltip(IServerUtils utils, SlotSource slotSource, int quality, EnchantedRanges chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly("ali.enum.group_type.slot"));
             b.add(utils.getSlotSourceTooltip(utils, slotSource));
