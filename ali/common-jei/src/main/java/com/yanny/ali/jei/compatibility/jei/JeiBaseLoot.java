@@ -102,6 +102,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
             left.ifPresent(slotBuilder::addItemStack);
+            //noinspection unchecked
             right.ifPresent((t) -> slotBuilder.addIngredients(Ingredient.of((TagKey<Item>) t)));
         }
     }
