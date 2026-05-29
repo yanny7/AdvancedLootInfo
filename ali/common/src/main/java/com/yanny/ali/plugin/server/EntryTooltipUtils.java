@@ -4,16 +4,13 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class EntryTooltipUtils {
@@ -27,7 +24,7 @@ public class EntryTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.ALL));
             b.add(getQualityTooltip(entry.quality));
-            b.add(getChanceTooltip(getBaseMap((chance * entry.weight / sumWeight) * 100)));
+            b.add(getChanceTooltip(new EnchantedRanges((chance * entry.weight / sumWeight) * 100)));
         });
     }
 
@@ -49,7 +46,7 @@ public class EntryTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.DYNAMIC));
             b.add(getQualityTooltip(quality));
-            b.add(getChanceTooltip(getBaseMap(chance * 100)));
+            b.add(getChanceTooltip(new EnchantedRanges(chance * 100)));
             b.add(GenericTooltipUtils.getConditionsSectionTooltip(utils, conditions));
             b.add(GenericTooltipUtils.getFunctionsSectionTooltip(utils, functions));
         });
@@ -66,7 +63,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, Map<Enchantment, Map<Integer, RangeValue>> chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
+    public static TooltipBuilder getEmptyTooltip(IServerUtils utils, int quality, EnchantedRanges chance, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(TooltipBuilder.keyOnly(Lang.Group.EMPTY));
             b.add(getQualityTooltip(quality));
@@ -77,7 +74,7 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, Map<Enchantment, Map<Integer, RangeValue>> chance, Map<Enchantment, Map<Integer, RangeValue>> count,
+    public static TooltipBuilder getTooltip(IServerUtils utils, int quality, EnchantedRanges chance, EnchantedRanges count,
                                                List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         return TooltipBuilder.array((b) -> {
             b.add(getQualityTooltip(quality));
@@ -98,8 +95,8 @@ public class EntryTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getChanceTooltip(Map<Enchantment, Map<Integer, RangeValue>> chance) {
-        RangeValue defaultChance = chance.get(null).get(0);
+    public static TooltipBuilder getChanceTooltip(EnchantedRanges chance) {
+        RangeValue defaultChance = chance.getUnenchantedValue();
 
         if (!defaultChance.isRange() && defaultChance.max() > 99.99999) {
             return TooltipBuilder.empty();
@@ -107,68 +104,26 @@ public class EntryTooltipUtils {
 
         TooltipBuilder builder = TooltipBuilder.value(defaultChance, "%");
 
-        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceEntry : chance.entrySet()) {
-            Enchantment enchantment = chanceEntry.getKey();
-
-            if (enchantment != null) {
-                Map<Integer, RangeValue> levelMap = chanceEntry.getValue();
-
-                for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
-                    int level = levelEntry.getKey();
-                    RangeValue value = levelEntry.getValue();
-
-                    builder.add(TooltipBuilder.value(
-                            value.toString() + "%",
-                            TooltipBuilder.translate(enchantment.getDescriptionId()),
-                            TooltipBuilder.translate("enchantment.level." + level)
-                    ).build(Lang.Description.CHANCE_BONUS));
-                }
-            }
-        }
+        chance.forEachEnchantment((enchantment, level, value) -> builder.add(TooltipBuilder.value(
+                value + "%",
+                TooltipBuilder.translate(enchantment.getDescriptionId()),
+                TooltipBuilder.translate("enchantment.level." + level)
+        ).build(Lang.Description.CHANCE_BONUS)));
 
         return builder.key(Lang.Description.CHANCE);
     }
 
     @NotNull
-    public static TooltipBuilder getCountTooltip(Map<Enchantment, Map<Integer, RangeValue>> count) {
-        RangeValue defaultCount = count.get(null).get(0);
-        TooltipBuilder builder = TooltipBuilder.value(defaultCount.clamp(0, 9999));
+    public static TooltipBuilder getCountTooltip(EnchantedRanges count) {
+        TooltipBuilder builder = TooltipBuilder.value(count.getUnenchantedValue());
 
-        for (Map.Entry<Enchantment, Map<Integer, RangeValue>> chanceEntry : count.entrySet()) {
-            Enchantment enchantment = chanceEntry.getKey();
-            Map<Integer, RangeValue> levelMap = chanceEntry.getValue();
-
-            if (enchantment != null) {
-                for (Map.Entry<Integer, RangeValue> levelEntry : levelMap.entrySet()) {
-                    int level = levelEntry.getKey();
-                    RangeValue value = levelEntry.getValue().clamp(0, 9999);
-
-                    builder.add(TooltipBuilder.value(
-                            value,
-                            TooltipBuilder.translate(enchantment.getDescriptionId()),
-                            TooltipBuilder.translate("enchantment.level." + level)
-                    ).build(Lang.Description.COUNT_BONUS));
-                }
-            }
-        }
+        count.forEachEnchantment((enchantment, level, value) -> builder.add(TooltipBuilder.value(
+                value,
+                TooltipBuilder.translate(enchantment.getDescriptionId()),
+                TooltipBuilder.translate("enchantment.level." + level)
+        ).build(Lang.Description.COUNT_BONUS)));
 
         return builder.key(Lang.Description.COUNT);
-    }
-
-    @NotNull
-    public static Map<Enchantment, Map<Integer, RangeValue>> getBaseMap(float value) {
-        Map<Enchantment, Map<Integer, RangeValue>> map = new LinkedHashMap<>();
-
-        map.put(null, Map.of(0, new RangeValue(value)));
-        return map;
-    }
-
-    @NotNull
-    public static Map<Enchantment, Map<Integer, RangeValue>> getBaseMap(float min, float max) {
-        Map<Enchantment, Map<Integer, RangeValue>> map = new LinkedHashMap<>();
-
-        map.put(null, Map.of(0, new RangeValue(min, max)));
-        return map;
     }
 
     @NotNull

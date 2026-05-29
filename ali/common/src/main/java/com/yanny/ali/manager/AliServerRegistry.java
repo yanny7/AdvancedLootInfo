@@ -14,6 +14,7 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.common.trades.TradeUtils;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,7 +27,6 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.*;
@@ -65,8 +65,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     // modifiers
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, Map<Enchantment, Map<Integer, RangeValue>>>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
-    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, Map<Enchantment, Map<Integer, RangeValue>>>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemCondition, EnchantedRanges>> chanceModifiers = registerClassKeyed("chance modifiers", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, TriConsumer<IServerUtils, LootItemFunction, EnchantedRanges>> countModifiers = registerClassKeyed("count modifiers", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, TriFunction<IServerUtils, LootItemFunction, ItemStack, ItemStack>> itemStackModifiers = registerClassKeyed("item stack modifiers", false, HashMap::new, null);
 
     private final Map<ResourceLocation, LootTable> lootTableMap = new HashMap<>();
@@ -146,12 +146,12 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer) {
+    public <T extends LootItemFunction> void registerCountModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer) {
         countModifiers.put(type, (u, f, v) -> consumer.accept(u, type.cast(f), v));
     }
 
     @Override
-    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, Map<Enchantment, Map<Integer, RangeValue>>> consumer) {
+    public <T extends LootItemCondition> void registerChanceModifier(Class<T> type, TriConsumer<IServerUtils, T, EnchantedRanges> consumer) {
         chanceModifiers.put(type, (u, c, v) -> consumer.accept(u, type.cast(c), v));
     }
 
@@ -246,12 +246,12 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Enchantment, Map<Integer, RangeValue>> count) {
+    public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count) {
         countModifiers.get(function.getClass()).ifPresent((m) -> m.accept(utils, function, count));
     }
 
     @Override
-    public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Enchantment, Map<Integer, RangeValue>> chance) {
+    public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance) {
         chanceModifiers.get(condition.getClass()).ifPresent((m) -> m.accept(utils, condition, chance));
     }
 

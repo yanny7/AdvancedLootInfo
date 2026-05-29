@@ -7,7 +7,6 @@ import com.almostreliable.lootjs.core.LootEntry;
 import com.almostreliable.lootjs.loot.action.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.*;
 import com.yanny.ali.lootjs.mixin.MixinCompositeLootAction;
@@ -19,10 +18,10 @@ import com.yanny.ali.lootjs.modifier.ModifiedItemFunction;
 import com.yanny.ali.lootjs.node.*;
 import com.yanny.ali.plugin.common.nodes.ItemNode;
 import com.yanny.ali.plugin.common.nodes.ModifiedNode;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
@@ -87,8 +86,8 @@ public abstract class LootModifier<T> implements ILootModifier<T> {
                 }
 
                 if (c instanceof ItemNode i) {
-                    Map<Enchantment, Map<Integer, RangeValue>> enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
-                    Map<Enchantment, Map<Integer, RangeValue>> enchantedCount = getEnchantedCount(utils, i.getFunctions());
+                    EnchantedRanges enchantedChance = getEnchantedChance(utils, i.getConditions(), i.getChance());
+                    EnchantedRanges enchantedCount = getEnchantedCount(utils, i.getFunctions());
                     List<LootItemCondition> allConditions = new LinkedList<>(i.getConditions());
 
                     allConditions.add(new InvertedLootItemCondition(new AllOfCondition(conditions.toArray(LootItemCondition[]::new))));

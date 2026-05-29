@@ -2,6 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.ali.language.Lang;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import net.minecraft.advancements.critereon.*;
@@ -22,7 +23,6 @@ import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.animal.FrogVariant;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -40,7 +40,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerC
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -65,25 +64,27 @@ public class GenericTooltipTest {
 
     @Test
     public void testTooltip() {
-        Map<Enchantment, Map<Integer, RangeValue>> chanceMap = EntryTooltipUtils.getBaseMap(2.5F);
-        Map<Enchantment, Map<Integer, RangeValue>> countMap = EntryTooltipUtils.getBaseMap(2, 10);
-        Map<Integer, RangeValue> bonusChanceMap = new LinkedHashMap<>();
-        Map<Integer, RangeValue> bonusCountMap = new LinkedHashMap<>();
+        EnchantedRanges chanceMap = new EnchantedRanges(2.5F);
+        EnchantedRanges countMap = new EnchantedRanges(2, 10);
 
-        bonusChanceMap.put(1, new RangeValue(1.5F));
-        bonusChanceMap.put(2, new RangeValue(3F));
-        bonusChanceMap.put(3, new RangeValue(4.5F));
-        bonusCountMap.put(1, new RangeValue(1, 2));
-        bonusCountMap.put(2, new RangeValue(2, 4));
-        bonusCountMap.put(3, new RangeValue(4, 8));
-        chanceMap.put(Enchantments.MOB_LOOTING, bonusChanceMap);
-        countMap.put(Enchantments.BLOCK_FORTUNE, bonusCountMap);
+        chanceMap.computeLevels(Enchantments.MOB_LOOTING, (level, value) -> switch (level) {
+            case 1 ->  new RangeValue(1.5f);
+            case 2 -> new RangeValue(3F);
+            case 3 -> new RangeValue(4.5F);
+            default -> throw new IllegalStateException("Unexpected value: " + level);
+        });
+        countMap.computeLevels(Enchantments.BLOCK_FORTUNE, (level, value) -> switch (level) {
+            case 1 -> new RangeValue(1, 2);
+            case 2 -> new RangeValue(2, 4);
+            case 3 -> new RangeValue(4, 8);
+            default -> throw new IllegalStateException("Unexpected value: " + level);
+        });
 
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
                 0,
-                EntryTooltipUtils.getBaseMap(2.5F),
-                EntryTooltipUtils.getBaseMap(2, 10),
+                new EnchantedRanges(2.5F),
+                new EnchantedRanges(2, 10),
                 List.of(),
                 List.of()
         ).build(), List.of(
