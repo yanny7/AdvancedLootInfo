@@ -10,6 +10,7 @@ import com.yanny.ali.api.IServerRegistry;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.test.utils.TestUtils;
@@ -46,7 +47,6 @@ import net.minecraft.world.entity.npc.VillagerTrades;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -66,7 +66,6 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -82,6 +81,7 @@ import java.util.concurrent.ExecutionException;
         DataComponentTooltipTest.class,
         IngredientTooltipTest.class,
         TooltipTest.class,
+        NodeTest.class,
         ServerUtilsTest.class
 })
 public class TooltipTestSuite {
@@ -170,13 +170,14 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.getDataComponentTypeTooltip(utils, type, value);
             }
 
+            @NotNull
             @Override
-            public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
+            public <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count) {
                 PluginManager.getInstance().serverRegistry.applyCountModifier(utils, function, count);
             }
 
             @Override
-            public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
+            public <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance) {
                 PluginManager.getInstance().serverRegistry.applyChanceModifier(utils, condition, chance);
             }
 
