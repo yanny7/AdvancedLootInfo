@@ -7,7 +7,6 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.ResourceLocation;

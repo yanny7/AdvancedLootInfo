@@ -11,11 +11,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class BlockLootCategory extends LootCategory<Block> {
     private static final Codec<TagKey<Block>> BLOCK_TAG_CODEC = TagKey.hashedCodec(Registries.BLOCK);
