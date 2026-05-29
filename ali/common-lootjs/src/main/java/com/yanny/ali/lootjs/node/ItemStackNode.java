@@ -12,7 +12,6 @@ import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;

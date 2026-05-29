@@ -619,41 +619,36 @@ public class ValueTooltipUtils {
             switch (levelBasedValue) {
                 case LevelBasedValue.Constant(float value) ->
                         b.add(utils.getValueTooltip(utils, value).build(Lang.Value.CONSTANT));
-                case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
-                    b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, value).build(Lang.Branch.VALUE))
-                            .add(utils.getValueTooltip(utils, min).build(Lang.Value.MIN))
-                            .add(utils.getValueTooltip(utils, max).build(Lang.Value.MAX))
-                            .build(Lang.Branch.CLAMPED)
-                    ));
-                }
-                case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
-                    b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, numerator).build(Lang.Branch.NUMERATOR))
-                            .add(utils.getValueTooltip(utils, denominator).build(Lang.Branch.DENOMINATOR))
-                            .build(Lang.Branch.FRACTION)
-                    ));
-                }
-                case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
-                    b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, base).build(Lang.Value.BASE))
-                            .add(utils.getValueTooltip(utils, perLevelAboveFirst).build(Lang.Value.PER_LEVEL))
-                            .build(Lang.Branch.LINEAR)
-                    ));
-                }
-                case LevelBasedValue.LevelsSquared(float added) -> {
-                    b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, added).build(Lang.Value.ADDED))
-                            .build(Lang.Branch.LEVEL_SQUARED)
-                    ));
-                }
-                case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
-                    b.add(TooltipBuilder.array((c) -> c
-                            .add(utils.getValueTooltip(utils, values.toString()).build(Lang.Value.VALUES))
-                            .add(utils.getValueTooltip(utils, fallback).build(Lang.Branch.FALLBACK))
-                            .build(Lang.Branch.LOOKUP)
-                    ));
-                }
+                case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) ->
+                        b.add(TooltipBuilder.array((c) -> c
+                                .add(utils.getValueTooltip(utils, value).build(Lang.Branch.VALUE))
+                                .add(utils.getValueTooltip(utils, min).build(Lang.Value.MIN))
+                                .add(utils.getValueTooltip(utils, max).build(Lang.Value.MAX))
+                                .build(Lang.Branch.CLAMPED)
+                        ));
+                case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) ->
+                        b.add(TooltipBuilder.array((c) -> c
+                                .add(utils.getValueTooltip(utils, numerator).build(Lang.Branch.NUMERATOR))
+                                .add(utils.getValueTooltip(utils, denominator).build(Lang.Branch.DENOMINATOR))
+                                .build(Lang.Branch.FRACTION)
+                        ));
+                case LevelBasedValue.Linear(float base, float perLevelAboveFirst) ->
+                        b.add(TooltipBuilder.array((c) -> c
+                                .add(utils.getValueTooltip(utils, base).build(Lang.Value.BASE))
+                                .add(utils.getValueTooltip(utils, perLevelAboveFirst).build(Lang.Value.PER_LEVEL))
+                                .build(Lang.Branch.LINEAR)
+                ));
+                case LevelBasedValue.LevelsSquared(float added) ->
+                        b.add(TooltipBuilder.array((c) -> c
+                                .add(utils.getValueTooltip(utils, added).build(Lang.Value.ADDED))
+                                .build(Lang.Branch.LEVEL_SQUARED)
+                ));
+                case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) ->
+                        b.add(TooltipBuilder.array((c) -> c
+                                .add(utils.getValueTooltip(utils, values.toString()).build(Lang.Value.VALUES))
+                                .add(utils.getValueTooltip(utils, fallback).build(Lang.Branch.FALLBACK))
+                                .build(Lang.Branch.LOOKUP)
+                        ));
                 default -> {}
             }
         });

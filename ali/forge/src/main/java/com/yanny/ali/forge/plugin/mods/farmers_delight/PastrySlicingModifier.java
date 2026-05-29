@@ -16,7 +16,6 @@ import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.FieldAccessor;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;

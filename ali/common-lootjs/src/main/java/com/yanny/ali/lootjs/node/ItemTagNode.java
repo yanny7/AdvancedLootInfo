@@ -11,7 +11,6 @@ import com.yanny.ali.lootjs.LootJsPlugin;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
