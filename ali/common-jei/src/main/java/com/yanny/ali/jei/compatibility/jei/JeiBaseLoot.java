@@ -105,6 +105,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             Optional<TagKey<? extends ItemLike>> right = h.item.right();
 
             left.ifPresent(slotBuilder::add);
+            //noinspection unchecked
             right.ifPresent((t) -> slotBuilder.add(Ingredient.of(BuiltInRegistries.ITEM.get((TagKey<Item>) t).map((f) -> f.stream().map(net.minecraft.core.Holder::value)).orElse(Stream.of()))));
         }
     }

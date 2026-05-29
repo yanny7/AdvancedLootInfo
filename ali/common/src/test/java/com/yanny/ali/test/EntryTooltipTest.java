@@ -1,18 +1,15 @@
 package com.yanny.ali.test;
 
 import com.yanny.aci.api.RangeValue;
+import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import org.junit.jupiter.api.Test;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -66,17 +63,21 @@ public class EntryTooltipTest {
 
     @Test
     public void testTooltip() {
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap = EntryTooltipUtils.getBaseMap(1.25F);
-        Map<Holder<Enchantment>, Map<Integer, RangeValue>> countMap = EntryTooltipUtils.getBaseMap(1, 5);
-        Map<Integer, RangeValue> e1 = new LinkedHashMap<>();
-        Map<Integer, RangeValue> e2 = new LinkedHashMap<>();
+        EnchantedRanges chanceMap = new EnchantedRanges(1.25F);
+        EnchantedRanges countMap = new EnchantedRanges(1, 5);
 
-        e1.put(1, new RangeValue(0.1F));
-        e1.put(2, new RangeValue(0.3F));
-        e2.put(1, new RangeValue(1, 5));
-        e2.put(2, new RangeValue(1, 10));
-        chanceMap.put(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), e1);
-        countMap.put(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), e2);
+        chanceMap.computeLevels(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), (level, value) -> switch (level) {
+            case 1 ->  new RangeValue(0.1F);
+            case 2 -> new RangeValue(0.3F);
+            case 3 -> new RangeValue(0.5F);
+            default -> throw new IllegalStateException("Unexpected value: " + level);
+        });
+        countMap.computeLevels(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), (level, value) -> switch (level) {
+            case 1 -> new RangeValue(1, 5);
+            case 2 -> new RangeValue(1, 10);
+            case 3 -> new RangeValue(1, 15);
+            default -> throw new IllegalStateException("Unexpected value: " + level);
+        });
 
         assertTooltip(EntryTooltipUtils.getTooltip(
                 UTILS,
@@ -90,9 +91,11 @@ public class EntryTooltipTest {
                 "Chance: 1.25%",
                 "  -> 0.10% (Looting I)",
                 "  -> 0.30% (Looting II)",
+                "  -> 0.50% (Looting III)",
                 "Count: 1-5",
                 "  -> 1-5 (Fortune I)",
                 "  -> 1-10 (Fortune II)",
+                "  -> 1-15 (Fortune III)",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "----- Modifiers -----",
@@ -110,9 +113,11 @@ public class EntryTooltipTest {
                 "Chance: 1.25%",
                 "  -> 0.10% (Looting I)",
                 "  -> 0.30% (Looting II)",
+                "  -> 0.50% (Looting III)",
                 "Count: 1-5",
                 "  -> 1-5 (Fortune I)",
                 "  -> 1-10 (Fortune II)",
+                "  -> 1-15 (Fortune III)",
                 "----- Predicates -----",
                 "Survives Explosion",
                 "----- Modifiers -----",
