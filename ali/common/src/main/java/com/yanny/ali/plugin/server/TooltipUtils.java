@@ -30,7 +30,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class TooltipUtils {
@@ -42,155 +45,87 @@ public class TooltipUtils {
         return itemStack;
     }
 
-    public static void applyRandomChance(IServerUtils utils, LootItemRandomChanceCondition condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
-        for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap : chance.entrySet()) {
-            for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
-                levelEntry.getValue().multiply(utils.convertNumber(utils, condition.chance()));
-            }
-        }
+    public static void applyRandomChance(IServerUtils utils, LootItemRandomChanceCondition condition, EnchantedRanges chance) {
+        chance.modifyAllEntries((range) -> range.multiply(utils.convertNumber(utils, condition.chance())));
     }
 
-    public static void applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithEnchantedBonusCondition condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
-        Holder<Enchantment> enchantment = condition.enchantment();
-
-        if (chance.containsKey(enchantment)) {
-            chance.get(null).get(0).multiply(condition.unenchantedChance());
-
-            for (Map.Entry<Integer, RangeValue> entry : chance.get(enchantment).entrySet()) {
-                RangeValue value = new RangeValue();
-
-                calculateCount(condition.enchantedChance(), value, entry.getKey());
-                entry.getValue().multiply(value);
-            }
-        } else {
-            RangeValue baseChance = new RangeValue(chance.get(null).get(0));
-            Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
-
-            chance.get(null).get(0).multiply(condition.unenchantedChance());
-            chance.put(enchantment, levelMap);
-
-            for (int level = 1; level <= enchantment.value().getMaxLevel(); level++) {
-                RangeValue value = new RangeValue();
-
-                calculateCount(condition.enchantedChance(), value, level);
-                levelMap.put(level, new RangeValue(baseChance).multiply(value));
-            }
-        }
-    }
-
-    public static void applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance) {
-        Holder<Enchantment> enchantment = condition.enchantment();
-
-        if (!condition.values().isEmpty()) {
-            if (chance.containsKey(enchantment)) {
-                chance.get(null).get(0).multiply(condition.values().getFirst());
-
-                if (condition.values().size() > 1) {
-                    for (Map.Entry<Integer, RangeValue> entry : chance.get(enchantment).entrySet()) {
-                        Integer level = entry.getKey();
-
-                        if (level < condition.values().size()) {
-                            entry.getValue().multiply(condition.values().get(level));
-                        }
-                    }
-                }
+    public static void applyRandomChanceWithLooting(IServerUtils ignoredUtils, LootItemRandomChanceWithEnchantedBonusCondition condition, EnchantedRanges chance) {
+        chance.computeAllLevels(condition.enchantment(), (level, value) -> {
+            if (level > 0) {
+                return value.multiply(calculateCount(condition.enchantedChance(), value, level));
             } else {
-                RangeValue baseChance = new RangeValue(chance.get(null).get(0));
-                Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
-
-                chance.get(null).get(0).multiply(condition.values().getFirst());
-                chance.put(enchantment, levelMap);
-
-                for (int level = 1; level <= enchantment.value().getMaxLevel() && level < condition.values().size(); level++) {
-                    levelMap.put(level, new RangeValue(baseChance).multiply(condition.values().get(level)));
-                }
+                return value.multiply(condition.unenchantedChance());
             }
-        }
+        });
     }
 
-    public static void applySetCount(IServerUtils utils, SetItemCountFunction function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        if (function.predicates.isEmpty()) {
-            for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> chanceMap : count.entrySet()) {
-                for (Map.Entry<Integer, RangeValue> levelEntry : chanceMap.getValue().entrySet()) {
-                    if (function.add) {
-                        levelEntry.getValue().add(utils.convertNumber(utils, function.value));
-                    } else {
-                        levelEntry.getValue().set(utils.convertNumber(utils, function.value));
-                    }
-                }
-            }
+    public static void applyTableBonus(IServerUtils ignoredUtils, BonusLevelTableCondition condition, EnchantedRanges chance) {
+        if (condition.values().isEmpty()) {
+            return;
         }
+
+        chance.computeAllLevels(condition.enchantment(), (level, value) -> {
+            if (level < condition.values().size()) {
+                return value.multiply(condition.values().get(level));
+            }
+
+            return value;
+        });
     }
 
-    public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        if (function.predicates.isEmpty()) {
-            Holder<Enchantment> enchantment = function.enchantment;
+    public static void applySetCount(IServerUtils utils, SetItemCountFunction function, EnchantedRanges count) {
+        if (!function.predicates.isEmpty()) {
+            return;
+        }
 
-            if (count.containsKey(enchantment)) {
-                calculateCount(function, count.get(null).get(0), 0);
+        RangeValue modifierValue = utils.convertNumber(utils, function.value);
 
-                for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
-                    calculateCount(function, entry.getValue(), entry.getKey());
-                }
+        count.modifyAllEntries((value) -> {
+            if (function.add) {
+                return value.add(modifierValue);
             } else {
-                RangeValue baseCount = new RangeValue(count.get(null).get(0));
-                Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
-
-                calculateCount(function, count.get(null).get(0), 0);
-                count.put(enchantment, levelMap);
-
-                for (int level = 1; level <= enchantment.value().getMaxLevel(); level++) {
-                    RangeValue value = new RangeValue(baseCount);
-
-                    calculateCount(function, value, level);
-                    levelMap.put(level, value);
-                }
+                return modifierValue;
             }
-        }
+        });
     }
 
-    public static void applyLimitCount(IServerUtils utils, LimitCount function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> bonusCount) {
-        if (function.predicates.isEmpty()) {
-            for (Map.Entry<Holder<Enchantment>, Map<Integer, RangeValue>> entry : bonusCount.entrySet()) {
-                for (Map.Entry<Integer, RangeValue> mapEntry : entry.getValue().entrySet()) {
-                    RangeValue value = mapEntry.getValue();
-                    value.clamp(utils.convertNumber(utils, function.limiter.min), utils.convertNumber(utils, function.limiter.max));
-                }
-            }
+    public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, EnchantedRanges count) {
+        if (!function.predicates.isEmpty()) {
+            return;
         }
+
+        count.computeAllLevels(function.enchantment, (level, value) -> calculateCount(function, value, level));
     }
 
-    public static void applyLootingEnchant(IServerUtils utils, EnchantedCountIncreaseFunction function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count) {
-        if (function.predicates.isEmpty()) {
-            Holder<Enchantment> enchantment = function.enchantment;
-
-            if (count.containsKey(enchantment)) {
-                for (Map.Entry<Integer, RangeValue> entry : count.get(enchantment).entrySet()) {
-                    RangeValue value = entry.getValue();
-
-                    value.add(utils.convertNumber(utils, function.value).multiply(entry.getKey()));
-
-                    if (function.limit > 0) {
-                        value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
-                    }
-                }
-            } else {
-                RangeValue baseCount = new RangeValue(count.get(null).get(0));
-                Map<Integer, RangeValue> levelMap = new LinkedHashMap<>();
-
-                count.put(enchantment, levelMap);
-
-                for (int level = 1; level <= enchantment.value().getMaxLevel(); level++) {
-                    RangeValue value = new RangeValue(baseCount).add(utils.convertNumber(utils, function.value).multiply(level));
-
-                    if (function.limit > 0) {
-                        value.clamp(new RangeValue(false, true), new RangeValue(function.limit));
-                    }
-
-                    levelMap.put(level, value);
-                }
-            }
+    public static void applyLimitCount(IServerUtils utils, LimitCount function, EnchantedRanges bonusCount) {
+        if (!function.predicates.isEmpty()) {
+            return;
         }
+
+        RangeValue limitMin = utils.convertNumber(utils, function.limiter.min);
+        RangeValue limitMax = utils.convertNumber(utils, function.limiter.max);
+
+        bonusCount.modifyAllEntries((value) -> value.clamp(limitMin, limitMax));
+    }
+
+    public static void applyLootingEnchant(IServerUtils utils, EnchantedCountIncreaseFunction function, EnchantedRanges count) {
+        if (!function.predicates.isEmpty()) {
+            return;
+        }
+
+        RangeValue modifierBonus = utils.convertNumber(utils, function.value);
+        RangeValue floorLimit = new RangeValue(false, true);
+        RangeValue ceilLimit = function.limit > 0 ? new RangeValue(function.limit) : null;
+
+        count.computeLevels(function.enchantment, (level, value) -> {
+            RangeValue updatedValue = value.add(modifierBonus.multiply(level));
+
+            if (ceilLimit != null) {
+                updatedValue = updatedValue.clamp(floorLimit, ceilLimit);
+            }
+
+            return updatedValue;
+        });
     }
 
     @NotNull
@@ -336,23 +271,27 @@ public class TooltipUtils {
         return TooltipBuilder.empty();
     }
 
-    private static void calculateCount(ApplyBonusCount function, RangeValue value, int level) {
+    private static RangeValue calculateCount(ApplyBonusCount function, RangeValue value, int level) {
         switch (function.formula) {
             case ApplyBonusCount.OreDrops ignored -> {
                 if (level > 0) {
-                    value.multiplyMax(level + 1);
+                    return value.multiplyMax(level + 1);
                 }
             }
-            case ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount ->
-                    value.addMax(binomialWithBonusCount.extraRounds() + level);
+            case ApplyBonusCount.BinomialWithBonusCount binomialWithBonusCount -> {
+                return value.addMax(binomialWithBonusCount.extraRounds() + level);
+            }
             case ApplyBonusCount.UniformBonusCount(int bonusMultiplier) -> {
                 if (level > 0) {
-                    value.addMax(bonusMultiplier * level);
+                    return value.addMax(bonusMultiplier * level);
                 }
             }
             default -> {
+                return value;
             }
         }
+
+        return value;
     }
 
     @NotNull
@@ -370,30 +309,33 @@ public class TooltipUtils {
         return fields;
     }
 
-    public static void calculateCount(LevelBasedValue levelBasedValue, RangeValue v, int level) {
-        switch (levelBasedValue) {
+    public static RangeValue calculateCount(LevelBasedValue levelBasedValue, RangeValue v, int level) {
+        return switch (levelBasedValue) {
             case LevelBasedValue.Constant(float value) -> v.multiply(value);
             case LevelBasedValue.Clamped(LevelBasedValue value, float min, float max) -> {
-                calculateCount(value, v, level);
-                v.clamp(min, max);
+                RangeValue processedInner = calculateCount(value, v, level);
+                yield processedInner.clamp(min, max);
             }
             case LevelBasedValue.Fraction(LevelBasedValue numerator, LevelBasedValue denominator) -> {
-                RangeValue n = new RangeValue();
-                RangeValue d = new RangeValue();
-                calculateCount(numerator, n, level);
-                calculateCount(denominator, d, level);
-                v.multiply(new RangeValue(n.min() / d.max(), n.max() / d.min()));
+                RangeValue initial = new RangeValue(1);
+                RangeValue n = calculateCount(numerator, initial, level);
+                RangeValue d = calculateCount(denominator, initial, level);
+                RangeValue fractionResult = new RangeValue(n.min() / d.max(), n.max() / d.min());
+                yield v.multiply(fractionResult);
             }
-            case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> v.multiply(new RangeValue(base).add(perLevelAboveFirst * (level - 1)));
+            case LevelBasedValue.Linear(float base, float perLevelAboveFirst) -> {
+                RangeValue linearModifier = new RangeValue(base).add(perLevelAboveFirst * (level - 1));
+                yield v.multiply(linearModifier);
+            }
             case LevelBasedValue.LevelsSquared(float added) -> v.multiply(added + Mth.square(level));
             case LevelBasedValue.Lookup(List<Float> values, LevelBasedValue fallback) -> {
-                if (level < values.size()) {
-                    v.multiply(values.get(level));
+                if (level <= values.size()) {
+                    yield v.multiply(values.get(level - 1));
                 } else {
-                    calculateCount(fallback, v, level);
+                    yield calculateCount(fallback, v, level);
                 }
             }
-            default -> v.set(new RangeValue(false, true));
+            default -> new RangeValue(false, true);
         };
     }
 

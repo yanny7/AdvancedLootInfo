@@ -11,11 +11,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class EntityLootCategory extends LootCategory<EntityType<?>> {
     private static final Codec<TagKey<EntityType<?>>> ENTITY_TYPE_TAG_CODEC = TagKey.hashedCodec(Registries.ENTITY_TYPE);

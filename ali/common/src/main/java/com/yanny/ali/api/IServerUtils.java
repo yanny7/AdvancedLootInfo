@@ -6,7 +6,6 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.advancements.criterion.EntitySubPredicate;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.Identifier;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -28,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
@@ -62,9 +59,9 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUti
 
     <T extends SlotSource> TooltipBuilder getSlotSourceTooltip(IServerUtils utils, T slotSource);
 
-    <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, Map<Holder<Enchantment>, Map<Integer, RangeValue>> count);
+    <T extends LootItemFunction> void applyCountModifier(IServerUtils utils, T function, EnchantedRanges count);
 
-    <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, Map<Holder<Enchantment>, Map<Integer, RangeValue>> chance);
+    <T extends LootItemCondition> void applyChanceModifier(IServerUtils utils, T condition, EnchantedRanges chance);
 
     @NotNull
     <T extends LootItemFunction> ItemStack applyItemStackModifier(IServerUtils utils, T function, ItemStack itemStack);

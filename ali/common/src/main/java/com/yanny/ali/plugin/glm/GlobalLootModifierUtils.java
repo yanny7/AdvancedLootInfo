@@ -10,7 +10,6 @@ import com.yanny.ali.plugin.common.nodes.GlobalLootModifierNode;
 import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
-import com.yanny.ali.plugin.server.GenericTooltipUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
