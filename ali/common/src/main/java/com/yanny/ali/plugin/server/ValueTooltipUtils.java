@@ -13,11 +13,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponentExactPredicate;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.component.*;
 import net.minecraft.core.component.predicates.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.network.Filterable;
@@ -45,7 +43,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -533,14 +533,16 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getDataComponentMapTooltip(IServerUtils utils, DataComponentMap map) {
         if (!map.isEmpty()) {
-            return TooltipBuilder.array((b) -> {
-                map.forEach((action) -> {
-                    TooltipBuilder t = utils.getValueTooltip(utils, action.type());
+            return TooltipBuilder.array((b) -> map.stream()
+                    .filter((typedDataComponent) -> !Objects.equals(DataComponents.COMMON_ITEM_COMPONENTS.get(typedDataComponent.type()), typedDataComponent.value()))
+                    .sorted(Comparator.comparing((v) -> Objects.requireNonNull(BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(v.type())).toString()))
+                    .forEach((action) -> {
+                        TooltipBuilder t = utils.getValueTooltip(utils, action.type());
 
-                    t.add(utils.getDataComponentTypeTooltip(utils, action.type(), action.value()));
-                    b.add(t);
-                });
-            });
+                        t.add(utils.getDataComponentTypeTooltip(utils, action.type(), action.value()));
+                        b.add(t);
+                    })
+            );
         }
 
         return TooltipBuilder.empty();
