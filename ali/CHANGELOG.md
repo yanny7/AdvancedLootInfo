@@ -4,6 +4,7 @@
 - Client now requests for data from server instead of waiting for server, fixing occasional freeze when connecting to server
 - Clamped negative count values
 - Fixed calculating chance for Random Chance With Enchanted Bonus predicate
+- Removed displaying of common item components (max_item_stack: 64 etc.)
 
 ## [1.11.0]
 
