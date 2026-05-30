@@ -27,7 +27,6 @@ import java.util.List;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
-import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class ServerUtilsTest {
     @Test
@@ -68,39 +67,17 @@ public class ServerUtilsTest {
 
     @Test
     public void testGetValueTooltip() {
-        assertUnorderedTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
                 "Item:",
                 "  -> Item: minecraft:emerald",
                 "  -> Count: 1",
                 "  -> Components:",
-                List.of(
-                        "    -> minecraft:max_stack_size",
-                        "      -> Value: 64",
-                        "    -> minecraft:lore",
-                        "    -> minecraft:enchantments",
-                        "    -> minecraft:repair_cost",
-                        "      -> Value: 0",
-                        "    -> minecraft:attribute_modifiers",
-                        "    -> minecraft:rarity",
-                        "      -> Rarity: COMMON",
-                        "    -> minecraft:item_name",
-                        "      -> Item Name: Emerald",
-                        "    -> minecraft:item_model",
-                        "      -> Value: minecraft:emerald",
-                        "    -> minecraft:provides_trim_material",
-                        "      -> Material: minecraft:emerald",
-                        "    -> minecraft:break_sound",
-                        "      -> Value: minecraft:entity.item.break",
-                        "    -> minecraft:tooltip_display",
-                        "      -> Hide Tooltip: false",
-                        "    -> minecraft:use_effects",
-                        "      -> Can Sprint: false",
-                        "      -> Interact Vibrations: true",
-                        "      -> Speed Multiplier: 0.2",
-                        "    -> minecraft:swing_animation",
-                        "      -> Type: WHACK",
-                        "      -> Duration: 6"
-                )
+                "    -> minecraft:item_model",
+                "      -> Value: minecraft:emerald",
+                "    -> minecraft:item_name",
+                "      -> Item Name: Emerald",
+                "    -> minecraft:provides_trim_material",
+                "      -> Material: minecraft:emerald"
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
