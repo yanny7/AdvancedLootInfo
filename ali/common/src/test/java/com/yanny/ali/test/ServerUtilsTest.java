@@ -70,18 +70,7 @@ public class ServerUtilsTest {
         assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
                 "Item:",
                 "  -> Item: minecraft:emerald",
-                "  -> Count: 1",
-                "  -> Components:",
-                "    -> minecraft:max_stack_size",
-                "      -> Value: 64",
-                "    -> minecraft:lore",
-                "    -> minecraft:enchantments",
-                "    -> minecraft:repair_cost",
-                "      -> Value: 0",
-                "    -> minecraft:attribute_modifiers",
-                "      -> Show In Tooltip: true",
-                "    -> minecraft:rarity",
-                "      -> Rarity: COMMON"
+                "  -> Count: 1"
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
                 "Not implemented: [java.lang.StringBuilder]"

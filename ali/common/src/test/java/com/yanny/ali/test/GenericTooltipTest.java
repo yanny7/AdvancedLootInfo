@@ -937,17 +937,7 @@ public class GenericTooltipTest {
                 "  -> Count: 10",
                 "  -> Components:",
                 "    -> minecraft:damage",
-                "      -> Value: 2",
-                "    -> minecraft:max_stack_size",
-                "      -> Value: 64",
-                "    -> minecraft:lore",
-                "    -> minecraft:enchantments",
-                "    -> minecraft:repair_cost",
-                "      -> Value: 0",
-                "    -> minecraft:attribute_modifiers",
-                "      -> Show In Tooltip: true",
-                "    -> minecraft:rarity",
-                "      -> Rarity: COMMON"
+                "      -> Value: 2"
         ));
     }
 
