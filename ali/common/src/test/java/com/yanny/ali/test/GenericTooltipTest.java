@@ -66,7 +66,6 @@ import java.util.Optional;
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
-import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class GenericTooltipTest {
     @Test
@@ -1123,7 +1122,7 @@ public class GenericTooltipTest {
 
     @Test
     public void testItemStackTooltip() {
-        assertUnorderedTooltip(ValueTooltipUtils.getItemStackTooltip(UTILS, new ItemStack(
+        assertTooltip(ValueTooltipUtils.getItemStackTooltip(UTILS, new ItemStack(
                 Holder.direct(Items.ANDESITE),
                 10
         )).build(Lang.Branch.ITEM), List.of(
@@ -1131,25 +1130,10 @@ public class GenericTooltipTest {
                 "  -> Item: minecraft:andesite",
                 "  -> Count: 10",
                 "  -> Components:",
-                List.of(
-                        "    -> minecraft:attribute_modifiers",
-                        "    -> minecraft:repair_cost",
-                        "      -> Value: 0",
-                        "    -> minecraft:item_name",
-                        "      -> Item Name: Andesite",
-                        "    -> minecraft:rarity",
-                        "      -> Rarity: COMMON",
-                        "    -> minecraft:lore",
-                        "    -> minecraft:max_stack_size",
-                        "      -> Value: 64",
-                        "    -> minecraft:enchantments",
-                        "    -> minecraft:item_model",
-                        "      -> Value: minecraft:andesite",
-                        "    -> minecraft:tooltip_display",
-                        "      -> Hide Tooltip: false",
-                        "    -> minecraft:break_sound",
-                        "      -> Value: minecraft:entity.item.break"
-                )
+                "    -> minecraft:item_model",
+                "      -> Value: minecraft:andesite",
+                "    -> minecraft:item_name",
+                "      -> Item Name: Andesite"
         ));
     }
 
