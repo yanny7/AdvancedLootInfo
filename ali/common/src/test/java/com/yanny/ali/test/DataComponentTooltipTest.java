@@ -274,32 +274,17 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testUseRemainderTooltip() {
-        assertUnorderedTooltip(DataComponentTooltipUtils.getUseRemainderTooltip(UTILS, new UseRemainder(
+        assertTooltip(DataComponentTooltipUtils.getUseRemainderTooltip(UTILS, new UseRemainder(
                 new ItemStack(Holder.direct(Items.ANDESITE), 10)
         )).build(), List.of(
                 "Convert Into:",
                 "  -> Item: minecraft:andesite",
                 "  -> Count: 10",
                 "  -> Components:",
-                List.of(
-                        "    -> minecraft:attribute_modifiers",
-                        "    -> minecraft:repair_cost",
-                        "      -> Value: 0",
-                        "    -> minecraft:item_name",
-                        "      -> Item Name: Andesite",
-                        "    -> minecraft:rarity",
-                        "      -> Rarity: COMMON",
-                        "    -> minecraft:lore",
-                        "    -> minecraft:max_stack_size",
-                        "      -> Value: 64",
-                        "    -> minecraft:enchantments",
-                        "    -> minecraft:item_model",
-                        "      -> Value: minecraft:andesite",
-                        "    -> minecraft:break_sound",
-                        "      -> Value: minecraft:entity.item.break",
-                        "    -> minecraft:tooltip_display",
-                        "      -> Hide Tooltip: false"
-                )
+                "    -> minecraft:item_model",
+                "      -> Value: minecraft:andesite",
+                "    -> minecraft:item_name",
+                "      -> Item Name: Andesite"
         ));
     }
 
@@ -500,7 +485,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testChargedProjectilesTooltip() {
-        assertUnorderedTooltip(DataComponentTooltipUtils.getChargedProjectilesTooltip(UTILS, ChargedProjectiles.of(List.of(
+        assertTooltip(DataComponentTooltipUtils.getChargedProjectilesTooltip(UTILS, ChargedProjectiles.of(List.of(
                 new ItemStack(Holder.direct(Items.ARROW), 25),
                 new ItemStack(Holder.direct(Items.SNOWBALL), 2)
         ))).build(), List.of(
@@ -509,54 +494,26 @@ public class DataComponentTooltipTest {
                 "    -> Item: minecraft:arrow",
                 "    -> Count: 25",
                 "    -> Components:",
-                List.of(
-                        "      -> minecraft:attribute_modifiers",
-                        "      -> minecraft:repair_cost",
-                        "        -> Value: 0",
-                        "      -> minecraft:item_name",
-                        "        -> Item Name: Arrow",
-                        "      -> minecraft:rarity",
-                        "        -> Rarity: COMMON",
-                        "      -> minecraft:lore",
-                        "      -> minecraft:max_stack_size",
-                        "        -> Value: 64",
-                        "      -> minecraft:enchantments",
-                        "      -> minecraft:item_model",
-                        "        -> Value: minecraft:arrow",
-                        "      -> minecraft:break_sound",
-                        "        -> Value: minecraft:entity.item.break",
-                        "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
-                ),
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:arrow",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Arrow",
                 "  -> Item:",
                 "    -> Item: minecraft:snowball",
                 "    -> Count: 2",
                 "    -> Components:",
-                List.of(
-                        "      -> minecraft:attribute_modifiers",
-                        "      -> minecraft:repair_cost",
-                        "        -> Value: 0",
-                        "      -> minecraft:item_name",
-                        "        -> Item Name: Snowball",
-                        "      -> minecraft:rarity",
-                        "        -> Rarity: COMMON",
-                        "      -> minecraft:lore",
-                        "      -> minecraft:max_stack_size",
-                        "        -> Value: 16",
-                        "      -> minecraft:enchantments",
-                        "      -> minecraft:item_model",
-                        "        -> Value: minecraft:snowball",
-                        "      -> minecraft:break_sound",
-                        "        -> Value: minecraft:entity.item.break",
-                        "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
-                )
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:snowball",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Snowball",
+                "      -> minecraft:max_stack_size",
+                "        -> Value: 16"
         ));
     }
 
     @Test
     public void testBundleContentsTooltip() {
-        assertUnorderedTooltip(DataComponentTooltipUtils.getBundleContentsTooltip(UTILS, new BundleContents(List.of(
+        assertTooltip(DataComponentTooltipUtils.getBundleContentsTooltip(UTILS, new BundleContents(List.of(
                 new ItemStack(Holder.direct(Items.COAL_BLOCK)),
                 new ItemStack(Holder.direct(Items.DIORITE))
         ))).build(), List.of(
@@ -565,48 +522,18 @@ public class DataComponentTooltipTest {
                 "    -> Item: minecraft:coal_block",
                 "    -> Count: 1",
                 "    -> Components:",
-                List.of(
-                        "      -> minecraft:attribute_modifiers",
-                        "      -> minecraft:repair_cost",
-                        "        -> Value: 0",
-                        "      -> minecraft:item_name",
-                        "        -> Item Name: Block of Coal",
-                        "      -> minecraft:rarity",
-                        "        -> Rarity: COMMON",
-                        "      -> minecraft:lore",
-                        "      -> minecraft:max_stack_size",
-                        "        -> Value: 64",
-                        "      -> minecraft:enchantments",
-                        "      -> minecraft:item_model",
-                        "        -> Value: minecraft:coal_block",
-                        "      -> minecraft:break_sound",
-                        "        -> Value: minecraft:entity.item.break",
-                        "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
-                ),
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:coal_block",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Block of Coal",
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
                 "    -> Count: 1",
                 "    -> Components:",
-                List.of(
-                        "      -> minecraft:attribute_modifiers",
-                        "      -> minecraft:repair_cost",
-                        "        -> Value: 0",
-                        "      -> minecraft:item_name",
-                        "        -> Item Name: Diorite",
-                        "      -> minecraft:rarity",
-                        "        -> Rarity: COMMON",
-                        "      -> minecraft:lore",
-                        "      -> minecraft:max_stack_size",
-                        "        -> Value: 64",
-                        "      -> minecraft:enchantments",
-                        "      -> minecraft:item_model",
-                        "        -> Value: minecraft:diorite",
-                        "      -> minecraft:break_sound",
-                        "        -> Value: minecraft:entity.item.break",
-                        "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
-                ),
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:diorite",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Diorite",
                 "Fraction: 1/32"
         ));
     }
@@ -905,7 +832,7 @@ public class DataComponentTooltipTest {
 
     @Test
     public void testContainerTooltip() {
-        assertUnorderedTooltip(DataComponentTooltipUtils.getContainerTooltip(UTILS, ItemContainerContents.fromItems(List.of(
+        assertTooltip(DataComponentTooltipUtils.getContainerTooltip(UTILS, ItemContainerContents.fromItems(List.of(
                 new ItemStack(Holder.direct(Items.ANDESITE), 10),
                 new ItemStack(Holder.direct(Items.DIORITE), 1)
         ))).build(), List.of(
@@ -914,48 +841,18 @@ public class DataComponentTooltipTest {
                 "    -> Item: minecraft:andesite",
                 "    -> Count: 10",
                 "    -> Components:",
-                List.of(
-                        "      -> minecraft:attribute_modifiers",
-                        "      -> minecraft:repair_cost",
-                        "        -> Value: 0",
-                        "      -> minecraft:item_name",
-                        "        -> Item Name: Andesite",
-                        "      -> minecraft:rarity",
-                        "        -> Rarity: COMMON",
-                        "      -> minecraft:lore",
-                        "      -> minecraft:max_stack_size",
-                        "        -> Value: 64",
-                        "      -> minecraft:enchantments",
-                        "      -> minecraft:item_model",
-                        "        -> Value: minecraft:andesite",
-                        "      -> minecraft:break_sound",
-                        "        -> Value: minecraft:entity.item.break",
-                        "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
-                ),
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:andesite",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Andesite",
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
                 "    -> Count: 1",
                 "    -> Components:",
-                List.of(
-                        "      -> minecraft:attribute_modifiers",
-                        "      -> minecraft:repair_cost",
-                        "        -> Value: 0",
-                        "      -> minecraft:item_name",
-                        "        -> Item Name: Diorite",
-                        "      -> minecraft:rarity",
-                        "        -> Rarity: COMMON",
-                        "      -> minecraft:lore",
-                        "      -> minecraft:max_stack_size",
-                        "        -> Value: 64",
-                        "      -> minecraft:enchantments",
-                        "      -> minecraft:item_model",
-                        "        -> Value: minecraft:diorite",
-                        "      -> minecraft:break_sound",
-                        "        -> Value: minecraft:entity.item.break",
-                        "      -> minecraft:tooltip_display",
-                        "        -> Hide Tooltip: false"
-                )
+                "      -> minecraft:item_model",
+                "        -> Value: minecraft:diorite",
+                "      -> minecraft:item_name",
+                "        -> Item Name: Diorite"
         ));
     }
 
