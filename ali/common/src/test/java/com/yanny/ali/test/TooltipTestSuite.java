@@ -20,6 +20,7 @@ import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -98,6 +99,8 @@ public class TooltipTestSuite {
         ResourceManager resourceManager = loadClientResources();
         Language.inject(TestUtils.loadDefaultLanguage(resourceManager));
         LOOKUP = VanillaRegistries.createLookup();
+
+        BuiltInRegistries.DATA_COMPONENT_INITIALIZERS.build(LOOKUP).forEach(DataComponentInitializers.PendingComponents::apply);
 
         PluginManager.getInstance().registerCommonEvent();
         PluginManager.getInstance().registerClientEvent();

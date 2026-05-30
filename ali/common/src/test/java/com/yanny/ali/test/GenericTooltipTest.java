@@ -1129,12 +1129,7 @@ public class GenericTooltipTest {
         )).build(Lang.Branch.ITEM), List.of(
                 "Item:",
                 "  -> Item: minecraft:andesite",
-                "  -> Count: 10",
-                "  -> Components:",
-                "    -> minecraft:item_model",
-                "      -> Value: minecraft:andesite",
-                "    -> minecraft:item_name",
-                "      -> Item Name: Andesite"
+                "  -> Count: 10"
         ));
     }
 

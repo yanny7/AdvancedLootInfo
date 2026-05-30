@@ -23,7 +23,6 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -55,7 +54,6 @@ public class ServerUtilsTest {
         ));
     }
 
-    @Disabled
     @Test
     public void testGetValueTooltip() {
         assertTooltip(UTILS.getValueTooltip(UTILS, Items.EMERALD.getDefaultInstance()).build(Lang.Branch.ITEM), List.of(
@@ -68,7 +66,7 @@ public class ServerUtilsTest {
                 "    -> minecraft:item_name",
                 "      -> Item Name: Emerald",
                 "    -> minecraft:provides_trim_material",
-                "      -> Material: minecraft:emerald"
+                "      -> Value: minecraft:emerald"
         ));
         assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
                 "Not implemented: [java.lang.StringBuilder]"

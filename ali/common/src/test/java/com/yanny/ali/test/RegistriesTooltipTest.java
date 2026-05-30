@@ -28,7 +28,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
-import org.junit.jupiter.api.Disabled;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -74,10 +75,9 @@ public class RegistriesTooltipTest {
         assertTooltip(RegistriesTooltipUtils.getMobEffectTooltip(UTILS, MobEffects.BLINDNESS.value()).build(Lang.Value.EFFECT), List.of("Effect: minecraft:blindness"));
     }
 
-    @Disabled
     @Test
     public void testLootNbtProviderTypeTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getNbtProviderTooltip(UTILS, /*ContextNbtProvider.MAP_CODEC*/ null).build(Lang.Value.NBT), List.of("Nbt: minecraft:context"));
+        assertTooltip(RegistriesTooltipUtils.getNbtProviderTooltip(UTILS, ContextNbtProvider.forContextEntity(LootContext.EntityTarget.ATTACKING_PLAYER)).build(Lang.Value.NBT), List.of("Nbt: minecraft:context"));
     }
 
     @Test

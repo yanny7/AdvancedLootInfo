@@ -56,7 +56,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.saveddata.maps.MapId;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
@@ -501,48 +500,25 @@ public class DataComponentTooltipTest {
                 "  -> Item:",
                 "    -> Item: minecraft:arrow",
                 "    -> Count: 25",
-                "    -> Components:",
-                "      -> minecraft:item_model",
-                "        -> Value: minecraft:arrow",
-                "      -> minecraft:item_name",
-                "        -> Item Name: Arrow",
                 "  -> Item:",
                 "    -> Item: minecraft:snowball",
-                "    -> Count: 2",
-                "    -> Components:",
-                "      -> minecraft:item_model",
-                "        -> Value: minecraft:snowball",
-                "      -> minecraft:item_name",
-                "        -> Item Name: Snowball",
-                "      -> minecraft:max_stack_size",
-                "        -> Value: 16"
+                "    -> Count: 2"
         ));
     }
 
-    @Disabled
     @Test
     public void testBundleContentsTooltip() {
-        assertTooltip(DataComponentTooltipUtils.getBundleContentsTooltip(UTILS, new BundleContents(List.of(
-                (ItemStackTemplate) (ItemInstance) new ItemStackTemplate(Items.COAL_BLOCK).create(),
-                (ItemStackTemplate) (ItemInstance) new ItemStackTemplate(Items.DIORITE).create()
+        assertTooltip(DataComponentTooltipUtils.getBundleContentsTooltip(UTILS, new BundleContents(List.<ItemStackTemplate>of(
+                new ItemStackTemplate(Items.COAL_BLOCK),
+                new ItemStackTemplate(Items.DIORITE)
         ))).build(), List.of(
                 "Items:",
                 "  -> Item:",
                 "    -> Item: minecraft:coal_block",
                 "    -> Count: 1",
-                "    -> Components:",
-                "      -> minecraft:item_model",
-                "        -> Value: minecraft:coal_block",
-                "      -> minecraft:item_name",
-                "        -> Item Name: Block of Coal",
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
                 "    -> Count: 1",
-                "    -> Components:",
-                "      -> minecraft:item_model",
-                "        -> Value: minecraft:diorite",
-                "      -> minecraft:item_name",
-                "        -> Item Name: Diorite",
                 "Fraction: 1/32"
         ));
     }
@@ -815,19 +791,9 @@ public class DataComponentTooltipTest {
                 "  -> Item:",
                 "    -> Item: minecraft:andesite",
                 "    -> Count: 10",
-                "    -> Components:",
-                "      -> minecraft:item_model",
-                "        -> Value: minecraft:andesite",
-                "      -> minecraft:item_name",
-                "        -> Item Name: Andesite",
                 "  -> Item:",
                 "    -> Item: minecraft:diorite",
-                "    -> Count: 1",
-                "    -> Components:",
-                "      -> minecraft:item_model",
-                "        -> Value: minecraft:diorite",
-                "      -> minecraft:item_name",
-                "        -> Item Name: Diorite"
+                "    -> Count: 1"
         ));
     }
 

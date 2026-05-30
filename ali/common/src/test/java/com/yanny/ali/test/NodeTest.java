@@ -12,7 +12,6 @@ import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableConditio
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemKilledByPlayerCondition;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -23,7 +22,6 @@ import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
 
 public class NodeTest {
-    @Disabled
     @Test
     public void testSpiderStringDrop() {
         IDataNode node = NodeUtils.getItemNode(
@@ -49,11 +47,10 @@ public class NodeTest {
                 "  -> Add: false",
                 "Enchanted Count Increase:",
                 "  -> Enchantment: minecraft:looting",
-                "  -> Value: 0-1"
+                "  -> Count: 0-1"
         ));
     }
 
-    @Disabled
     @Test
     public void testSpiderEyeDrop() {
         IDataNode node = NodeUtils.getItemNode(
@@ -82,11 +79,10 @@ public class NodeTest {
                 "  -> Add: false",
                 "Enchanted Count Increase:",
                 "  -> Enchantment: minecraft:looting",
-                "  -> Value: 0-1"
+                "  -> Count: 0-1"
         ));
     }
 
-    @Disabled
     @Test
     public void testSaplingDrop() {
         IDataNode node = NodeUtils.getItemNode(

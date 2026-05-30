@@ -263,7 +263,7 @@ public class DataComponentTooltipUtils {
     public static TooltipBuilder getBundleContentsTooltip(IServerUtils utils, BundleContents value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.items).build(Lang.Branch.ITEMS));
-            b.add(utils.getValueTooltip(utils, value.weight().toString()).build(Lang.Value.FRACTION));
+            b.add(utils.getValueTooltip(utils, value.weight().getOrThrow().toString()).build(Lang.Value.FRACTION));
         });
     }
 
