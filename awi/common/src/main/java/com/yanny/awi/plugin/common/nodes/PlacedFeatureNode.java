@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.BlockPos;
@@ -20,6 +21,8 @@ import java.util.Set;
 
 public class PlacedFeatureNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("placed_feature");
+
+    private final TooltipNode tooltip;
 
     public PlacedFeatureNode(IServerUtils utils, PlacedFeature placedFeature) {
         // -> PlacedFeatureNode
@@ -42,39 +45,50 @@ public class PlacedFeatureNode extends ListNode {
         Iterator<BlockPos> posIterable = BlockPos.randomInCube(utils.getServerLevel().getRandom(), 128, BlockPos.ZERO, 128).iterator();
 
         try {
-            for (int i = 0; i < 5; i++) {
-                configuredFeature.place(
-                        new FakeWorldGenLevel(utils.getServerLevel(), blocks),
-                        new FakeChunkGenerator(utils.getServerLevel()),
-                        utils.getServerLevel().getRandom(),
-                        posIterable.next()
-                );
-            }
+//            for (int i = 0; i < 5; i++) {
+//                configuredFeature.place(
+//                        new FakeWorldGenLevel(utils.getServerLevel(), blocks),
+//                        new FakeChunkGenerator(utils.getServerLevel()),
+//                        utils.getServerLevel().getRandom(),
+//                        posIterable.next()
+//                );
+//            }
         } catch (Throwable e) {
             e.printStackTrace();
             System.out.println("Failed to place");
         } finally {
-            blocks.addAll(utils.getItemCollector(utils, configuredFeature));
+            blocks.addAll(utils.collectBlocks(utils, featureConfiguration));
+        }
+
+        if (!blocks.isEmpty()) {
+            System.out.println("Blocks:");
         }
 
         for (Block block : blocks) {
             addChildren(new BlockNode(utils, block));
+            System.out.println(block.getDescriptionId());
         }
 
         for (PlacementModifier placementModifier : placedFeature.placement()) {
             // conditions
         }
+
+        tooltip = TooltipNode.empty();
+    }
+
+    public PlacedFeatureNode(IClientUtils utils, FriendlyByteBuf buf) {
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return null;
+        return tooltip;
     }
 
     @NotNull

@@ -4,9 +4,12 @@ import com.mojang.logging.LogUtils;
 import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.dimension.LevelStem;
 import org.slf4j.Logger;
@@ -24,5 +27,10 @@ public abstract class AbstractServer {
             new LevelStemNode(serverRegistry, levelStem);
             LOGGER.info("Level: {}", levelStemRegistry.getKey(levelStem));
         }
+
+        ByteBuf rawBuf = Unpooled.buffer();
+        FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);
+
+        serverRegistry.getTooltipCache().encode(serverRegistry, buf);
     }
 }

@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.HolderSet;
@@ -18,6 +19,8 @@ import java.util.List;
 public class BiomeNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("biome");
 
+    private final TooltipNode tooltip;
+
     public BiomeNode(IServerUtils utils, Biome biome) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
@@ -30,17 +33,23 @@ public class BiomeNode extends ListNode {
 
             addChildren(new GenerationStepNode(utils, step, feature));
         }
+
+        tooltip = TooltipNode.empty();
+    }
+
+    public BiomeNode(IClientUtils utils, FriendlyByteBuf buf) {
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return null;
+        return tooltip;
     }
 
     @NotNull

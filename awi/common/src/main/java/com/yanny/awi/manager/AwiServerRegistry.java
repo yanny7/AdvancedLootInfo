@@ -13,8 +13,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,8 @@ import java.util.function.BiFunction;
 
 public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConfiguredFeature<?, ?>, List<Block>>> itemCollectors = registerClassKeyed("item collectors", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Block>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
@@ -40,9 +41,15 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     }
 
     @Override
-    public <T extends ConfiguredFeature<?, ?>> void registerItemCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
+    public <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
         //noinspection unchecked
-        itemCollectors.put(type, (u, t) -> getter.apply(u, (T) t));
+        featureBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends BlockStateProvider> void registerStateProviderBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
+        //noinspection unchecked
+        stateProviderBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -76,10 +83,18 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
 
     @NotNull
     @Override
-    public <T extends ConfiguredFeature<?, ?>> List<Block> getItemCollector(IServerUtils utils, T entry) {
-        return itemCollectors.get(entry.getClass())
+    public <T extends FeatureConfiguration> List<Block> collectBlocks(IServerUtils utils, T entry) {
+        return featureBlockCollector.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(List::of);
+                .orElseGet(List::of); //TODO log missing collector ?
+    }
+
+    @NotNull
+    @Override
+    public <T extends BlockStateProvider> List<Block> collectBlocks(IServerUtils utils, T entry) {
+        return stateProviderBlockCollector.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(List::of); //TODO log missing collector ?
     }
 
     @Override

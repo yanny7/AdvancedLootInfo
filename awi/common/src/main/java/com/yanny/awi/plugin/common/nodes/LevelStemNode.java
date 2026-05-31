@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
+import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.Holder;
@@ -18,11 +19,12 @@ import org.jetbrains.annotations.NotNull;
 public class LevelStemNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("level_stem");
 
-    private final int seaLevel;
-    private final Block defaultBlock;
+    private final TooltipNode tooltip;
 
     public LevelStemNode(IServerUtils utils, LevelStem levelStem) {
         ChunkGenerator generator = levelStem.generator();
+        int seaLevel;
+        Block defaultBlock;
 
         if (generator instanceof NoiseBasedChunkGenerator g) {
             defaultBlock = g.generatorSettings().value().defaultBlock().getBlock();
@@ -31,21 +33,26 @@ public class LevelStemNode extends ListNode {
         }
 
         seaLevel = generator.getSeaLevel();
+        tooltip = TooltipNode.empty();
 
         for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
             addChildren(new BiomeNode(utils, biomeHolder.value()));
         }
     }
 
+    public LevelStemNode(IClientUtils utils, FriendlyByteBuf buf) {
+        tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
+    }
+
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
-
+        buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return null;
+        return tooltip;
     }
 
     @NotNull

@@ -1,18 +1,18 @@
 package com.yanny.awi.plugin;
 
 import com.yanny.aci.tooltip.CommonValueTooltip;
-import com.yanny.awi.api.AwiEntrypoint;
-import com.yanny.awi.api.IPlugin;
-import com.yanny.awi.api.IServerRegistry;
-import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.api.*;
+import com.yanny.awi.datagen.LanguageHolder;
+import com.yanny.awi.plugin.common.nodes.*;
 import com.yanny.awi.plugin.server.*;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.configurations.CountConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.LakeFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.*;
+import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +23,22 @@ public class Plugin implements IPlugin {
     @Override
     public String getModId() {
         return "awi";
+    }
+
+    @Override
+    public void registerCommon(ICommonRegistry registry) {
+        LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
+    }
+
+    @Override
+    public void registerClient(IClientRegistry registry) {
+
+
+        registry.registerDataNode(BiomeNode.ID, BiomeNode::new);
+        registry.registerDataNode(BlockNode.ID, BlockNode::new);
+        registry.registerDataNode(GenerationStepNode.ID, GenerationStepNode::new);
+        registry.registerDataNode(LevelStemNode.ID, LevelStemNode::new);
+        registry.registerDataNode(PlacedFeatureNode.ID, PlacedFeatureNode::new);
     }
 
     @Override
@@ -43,5 +59,34 @@ public class Plugin implements IPlugin {
         registry.registerIntProviderTooltip(UniformInt.class, IntProviderTooltipUtils::getUniformIntTooltip);
 
         registry.registerRuleTestTooltip(AlwaysTrueTest.class, RuleTestTooltipUtils::getAlwaysTrueTooltip);
+
+        registry.registerFeatureBlockCollector(BlockColumnConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockColumnConfigurationBlocks);
+        registry.registerFeatureBlockCollector(BlockPileConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockPileConfigurationBlocks);
+        registry.registerFeatureBlockCollector(BlockStateConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockStateConfigurationBlocks);
+        registry.registerFeatureBlockCollector(DeltaFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectDeltaFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(DiskConfiguration.class, FeatureConfigurationCollectorUtils::collectDiskConfigurationBlocks);
+        registry.registerFeatureBlockCollector(HugeMushroomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectHugeMushroomFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(LakeFeature.Configuration.class, FeatureConfigurationCollectorUtils::collectLakeFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(LayerConfiguration.class, FeatureConfigurationCollectorUtils::collectLayeredConfigurationBlocks);
+        registry.registerFeatureBlockCollector(MultifaceGrowthConfiguration.class, FeatureConfigurationCollectorUtils::collectMultifaceGrowthConfigurationBlocks);
+        registry.registerFeatureBlockCollector(OreConfiguration.class, FeatureConfigurationCollectorUtils::collectOreConfigurationBlocks);
+        registry.registerFeatureBlockCollector(RandomBooleanFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomBooleanFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(RandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(RandomPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomPatchConfigurationBlocks);
+        registry.registerFeatureBlockCollector(ReplaceBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectReplaceBlockConfigurationBlocks);
+        registry.registerFeatureBlockCollector(ReplaceSphereConfiguration.class, FeatureConfigurationCollectorUtils::collectReplaceSphereConfigurationBlocks);
+        registry.registerFeatureBlockCollector(RootSystemConfiguration.class, FeatureConfigurationCollectorUtils::collectRootSystemConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SimpleBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleBlockConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SimpleRandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleRandomFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SpringConfiguration.class, FeatureConfigurationCollectorUtils::collectSpringConfigurationBlocks);
+        registry.registerFeatureBlockCollector(TreeConfiguration.class, FeatureConfigurationCollectorUtils::collectTreeConfigurationBlocks);
+        registry.registerFeatureBlockCollector(VegetationPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectVegetationPatchConfigurationBlocks);
+
+        registry.registerStateProviderBlockCollector(SimpleStateProvider.class, BlockStateProviderCollectorUtils::collectSimple);
+        registry.registerStateProviderBlockCollector(NoiseProvider.class, BlockStateProviderCollectorUtils::collectNoise);
+        registry.registerStateProviderBlockCollector(NoiseThresholdProvider.class, BlockStateProviderCollectorUtils::collectNoiseThreshold);
+        registry.registerStateProviderBlockCollector(RandomizedIntStateProvider.class, BlockStateProviderCollectorUtils::collectRandomized);
+        registry.registerStateProviderBlockCollector(RotatedBlockProvider.class, BlockStateProviderCollectorUtils::collectRotated);
+        registry.registerStateProviderBlockCollector(WeightedStateProvider.class, BlockStateProviderCollectorUtils::collectWeighted);
     }
 }

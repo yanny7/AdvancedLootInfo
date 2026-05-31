@@ -1,2 +1,13 @@
 accessWidener v2 named
 
+# state providers
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/SimpleStateProvider state Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseProvider states Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider defaultState Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider lowStates Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider highStates Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RandomizedIntStateProvider source Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RotatedBlockProvider block Lnet/minecraft/world/level/block/Block;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/WeightedStateProvider weightedList Lnet/minecraft/util/random/SimpleWeightedRandomList;
+accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer rootProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer aboveRootPlacement Ljava/util/Optional;
