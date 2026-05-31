@@ -17,7 +17,7 @@ public class RegistriesTooltipUtils {
     public static TooltipBuilder getBlockTooltip(IServerUtils utils, Block block) {
 //        if (utils.getConfiguration().showInGameNames) { FIXME
             try {
-                return TooltipBuilder.value(block.getName());
+                return TooltipBuilder.value(TooltipBuilder.translate(block.getDescriptionId()));
             } catch (Throwable e) {
                 LOGGER.warn("Failed to get localized Block name: {}", BuiltInRegistries.BLOCK.getKey(block), e);
             }

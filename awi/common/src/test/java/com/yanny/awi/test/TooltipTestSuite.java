@@ -2,7 +2,6 @@ package com.yanny.awi.test;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
-import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.manager.PluginManager;
@@ -23,7 +22,8 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -84,17 +84,17 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends FeatureConfiguration> List<Item> getItemCollector(IServerUtils utils, T entry) {
+            public @NotNull <T extends ConfiguredFeature<?, ?>> List<Block> getItemCollector(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getItemCollector(utils, entry);
             }
 
             @Override
-            public @NotNull <T extends FeatureConfiguration> TooltipNode getFeatureTooltip(IServerUtils utils, T entry) {
+            public @NotNull <T extends FeatureConfiguration> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getFeatureTooltip(utils, entry);
             }
 
             @Override
-            public @NotNull <T extends PlacementModifier> TooltipNode getPlacementModifierTooltip(IServerUtils utils, T entry) {
+            public @NotNull <T extends PlacementModifier> TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getPlacementModifierTooltip(utils, entry);
             }
 
