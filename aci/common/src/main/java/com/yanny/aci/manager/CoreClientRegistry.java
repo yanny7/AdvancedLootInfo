@@ -17,7 +17,7 @@ public abstract class CoreClientRegistry<
         TConfig,
         TCommonUtils extends CoreCommonRegistry<TConfig>,
         TDataNode    extends ICoreDataNode<?>,
-        TWidgetUtils extends ICoreWidgetUtils<?>,
+        TWidgetUtils extends ICoreWidgetUtils<?, ?, ?>,
         TClientUtils extends ICoreClientUtils<?, ?, ?>
         >
         extends

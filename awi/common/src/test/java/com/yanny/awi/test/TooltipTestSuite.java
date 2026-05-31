@@ -23,7 +23,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
@@ -85,7 +84,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends ConfiguredFeature<?, ?>> List<Block> collectBlocks(IServerUtils utils, T entry) {
+            public @NotNull <T extends FeatureConfiguration> List<Block> collectBlocks(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.collectBlocks(utils, entry);
             }
 
