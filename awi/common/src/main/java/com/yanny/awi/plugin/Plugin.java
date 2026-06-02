@@ -3,6 +3,7 @@ package com.yanny.awi.plugin;
 import com.yanny.aci.tooltip.CommonValueTooltip;
 import com.yanny.awi.api.*;
 import com.yanny.awi.datagen.LanguageHolder;
+import com.yanny.awi.plugin.client.widget.*;
 import com.yanny.awi.plugin.common.nodes.*;
 import com.yanny.awi.plugin.server.*;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -32,13 +33,17 @@ public class Plugin implements IPlugin {
 
     @Override
     public void registerClient(IClientRegistry registry) {
+        registry.registerWidget(LevelStemNode.ID, LevelStemWidget::new);
+        registry.registerWidget(BiomeNode.ID, BiomeWidget::new);
+        registry.registerWidget(GenerationStepNode.ID, GenerationStepWidget::new);
+        registry.registerWidget(PlacedFeatureNode.ID, PlacedFeatureWidget::new);
+        registry.registerWidget(BlockNode.ID, BlockWidget::new);
 
-
-        registry.registerDataNode(BiomeNode.ID, BiomeNode::new);
-        registry.registerDataNode(BlockNode.ID, BlockNode::new);
-        registry.registerDataNode(GenerationStepNode.ID, GenerationStepNode::new);
         registry.registerDataNode(LevelStemNode.ID, LevelStemNode::new);
+        registry.registerDataNode(BiomeNode.ID, BiomeNode::new);
+        registry.registerDataNode(GenerationStepNode.ID, GenerationStepNode::new);
         registry.registerDataNode(PlacedFeatureNode.ID, PlacedFeatureNode::new);
+        registry.registerDataNode(BlockNode.ID, BlockNode::new);
     }
 
     @Override

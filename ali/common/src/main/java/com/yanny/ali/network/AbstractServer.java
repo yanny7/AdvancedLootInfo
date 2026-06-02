@@ -3,10 +3,7 @@ package com.yanny.ali.network;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.ali.api.IDataNode;
-import com.yanny.ali.api.IItemNode;
-import com.yanny.ali.api.ILootModifier;
-import com.yanny.ali.api.ListNode;
+import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
 import com.yanny.ali.manager.FakeLootDataManager;
@@ -109,8 +106,8 @@ public abstract class AbstractServer {
 
         // storing and compressing data
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
-        writeLootData(buf, lootTableItemStacks, lootNodes);
-        writeTradeData(buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
+        writeLootData(serverRegistry, buf, lootTableItemStacks, lootNodes);
+        writeTradeData(serverRegistry, buf, tradeNodes, tradeItems, wanderingTraderNode, wanderingTraderItems);
         compressAndStoreData(rawBuf);
 
         serverRegistry.printRuntimeInfo();
@@ -428,8 +425,7 @@ public abstract class AbstractServer {
         return itemStacks;
     }
 
-    private void writeLootData(FriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
-        AliServerRegistry utils = PluginManager.getInstance().serverRegistry;
+    private void writeLootData(IServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, List<ItemStack>> lootTableItemStacks, Map<ResourceLocation, IDataNode> lootNodes) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
@@ -464,8 +460,7 @@ public abstract class AbstractServer {
         lootTableItemStacks.clear();
     }
 
-    private void writeTradeData(FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
-        AliServerRegistry utils = PluginManager.getInstance().serverRegistry;
+    private void writeTradeData(IServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> trades, Map<ResourceLocation, Pair<List<Item>, List<Item>>> items, IDataNode wanderingTraderNode, Pair<List<Item>, List<Item>> wanderingTraderItems) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 

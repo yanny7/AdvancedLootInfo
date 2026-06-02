@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
 
 public interface ICoreClientUtils<
         TDataNode    extends ICoreDataNode<?>,
-        TWidgetUtils extends ICoreWidgetUtils<?, ?, ?>,
+        TWidgetUtils extends ICoreWidgetUtils<?, ?, ?, ?>,
         SELF         extends ICoreClientUtils<?, ?, ?>
         > {
     @NotNull

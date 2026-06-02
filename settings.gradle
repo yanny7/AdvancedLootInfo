@@ -38,6 +38,7 @@ include("awi:common")
 
 if (settings.emi_enabled == "true") {
     include("ali:common-emi")
+    include("awi:common-emi")
 }
 
 if (settings.jei_enabled == "true") {

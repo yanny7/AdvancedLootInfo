@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 public interface ICoreClientRegistry<
         TDataNode    extends ICoreDataNode<?>,
-        TWidgetUtils extends ICoreWidgetUtils<?, ?, ?>,
+        TWidgetUtils extends ICoreWidgetUtils<?, ?, ?, ?>,
         TClientUtils extends ICoreClientUtils<?, ?, ?>
         > {
     void registerWidget(ResourceLocation id, IWidgetFactory<TDataNode, TWidgetUtils> factory);
@@ -18,7 +18,7 @@ public interface ICoreClientRegistry<
     @FunctionalInterface
     interface IWidgetFactory<
             TDataNode    extends ICoreDataNode<?>,
-            TWidgetUtils extends ICoreWidgetUtils<?, ?, ?>
+            TWidgetUtils extends ICoreWidgetUtils<?, ?, ?, ?>
             > {
         @NotNull
         IWidget create(TWidgetUtils registry, TDataNode entry, RelativeRect rect, int maxWidth);

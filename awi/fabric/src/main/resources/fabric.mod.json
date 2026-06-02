@@ -21,6 +21,9 @@
         ],
         "awi": [
             "com.yanny.awi.plugin.Plugin"
+        ],
+        "emi": [
+            "com.yanny.awi.emi.compatibility.EmiCompatibility"
         ]
     },
     "mixins": [

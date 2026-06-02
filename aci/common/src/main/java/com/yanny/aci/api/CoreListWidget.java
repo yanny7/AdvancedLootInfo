@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class CoreListWidget<
         TDataNode    extends ICoreDataNode<?>,
-        TWidgetUtils extends ICoreWidgetUtils<TDataNode, TWidgetUtils, TClientUtils>,
+        TWidgetUtils extends ICoreWidgetUtils<?, TDataNode, TWidgetUtils, TClientUtils>,
         TClientUtils extends ICoreClientUtils<?, ?, ?>
         > implements IWidget {
     public static final int GROUP_WIDGET_WIDTH = 7;
