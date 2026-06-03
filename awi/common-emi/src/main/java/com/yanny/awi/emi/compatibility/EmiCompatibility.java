@@ -1,10 +1,26 @@
 package com.yanny.awi.emi.compatibility;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.compatibility.GenericUtils;
+import com.yanny.awi.emi.compatibility.emi.EmiBiomeLoot;
+import com.yanny.awi.manager.AwiClientRegistry;
+import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.plugin.common.nodes.BiomeNode;
+import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
+import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.stack.EmiStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import org.slf4j.Logger;
+
+import java.util.List;
+import java.util.Map;
 
 @EmiEntrypoint
 public class EmiCompatibility implements EmiPlugin {
@@ -12,10 +28,27 @@ public class EmiCompatibility implements EmiPlugin {
 
     @Override
     public void register(EmiRegistry emiRegistry) {
-        System.out.println("EMI REGISTERED");
-//        GenericUtils.register(emiRegistry, this::registerData);
+        GenericUtils.register(emiRegistry, this::registerData);
     }
 
     private void registerData(EmiRegistry registry, byte[] fullCompressedData) {
+        AwiClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
+        ClientLevel level = Minecraft.getInstance().level;
+
+        LOGGER.info("Adding worldgen information to EMI");
+
+        if (level != null) {
+            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData);
+
+            worldgenData.forEach((key, levelNode) -> {
+                EmiRecipeCategory category = new EmiRecipeCategory(key, EmiStack.of(Items.GLOBE_BANNER_PATTERN));
+
+                registry.addCategory(category);
+
+                for (IDataNode biomeNode : levelNode.nodes()) {
+                    registry.addRecipe(new EmiBiomeLoot(category, ((BiomeNode) biomeNode).getBiomeId(), biomeNode, List.of()));
+                }
+            });
+        }
     }
 }

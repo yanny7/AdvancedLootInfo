@@ -41,6 +41,7 @@ public class LevelStemNode extends ListNode {
     }
 
     public LevelStemNode(IClientUtils utils, FriendlyByteBuf buf) {
+        super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 

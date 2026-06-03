@@ -60,13 +60,8 @@ public class PlacedFeatureNode extends ListNode {
             blocks.addAll(utils.collectBlocks(utils, featureConfiguration));
         }
 
-        if (!blocks.isEmpty()) {
-            System.out.println("Blocks:");
-        }
-
         for (Block block : blocks) {
             addChildren(new BlockNode(utils, block));
-            System.out.println(block.getDescriptionId());
         }
 
         for (PlacementModifier placementModifier : placedFeature.placement()) {
@@ -77,6 +72,7 @@ public class PlacedFeatureNode extends ListNode {
     }
 
     public PlacedFeatureNode(IClientUtils utils, FriendlyByteBuf buf) {
+        super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 

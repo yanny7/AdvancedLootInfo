@@ -5,6 +5,8 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.api.ListWidget;
+import com.yanny.awi.plugin.client.WidgetUtils;
+import com.yanny.awi.plugin.common.nodes.GenerationStepNode;
 import org.jetbrains.annotations.Nullable;
 
 public class GenerationStepWidget extends ListWidget {
@@ -15,6 +17,6 @@ public class GenerationStepWidget extends ListWidget {
     @Nullable
     @Override
     public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
-        return null;
+        return WidgetUtils.getGenerationStepWidget(rect, entry, ((GenerationStepNode) entry).getGenerationStep());
     }
 }

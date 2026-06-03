@@ -6,6 +6,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
@@ -20,12 +21,11 @@ public class BiomeNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("biome");
 
     private final TooltipNode tooltip;
+    private final ResourceLocation biomeId;
 
     public BiomeNode(IServerUtils utils, Biome biome) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
-
-        System.out.println(biome.toString());
 
         for (int i = 0; i < features.size(); i++) {
             HolderSet<PlacedFeature> feature = features.get(i);
@@ -35,15 +35,19 @@ public class BiomeNode extends ListNode {
         }
 
         tooltip = TooltipNode.empty();
+        biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
     }
 
     public BiomeNode(IClientUtils utils, FriendlyByteBuf buf) {
+        super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
+        biomeId = buf.readResourceLocation();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
+        buf.writeResourceLocation(biomeId);
     }
 
     @NotNull
@@ -56,5 +60,9 @@ public class BiomeNode extends ListNode {
     @Override
     public ResourceLocation getId() {
         return ID;
+    }
+
+    public ResourceLocation getBiomeId() {
+        return biomeId;
     }
 }

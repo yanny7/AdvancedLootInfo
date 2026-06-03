@@ -1,6 +1,6 @@
-package com.yanny.ali.mixin;
+package com.yanny.awi.mixin;
 
-import com.yanny.ali.manager.PluginManager;
+import com.yanny.awi.manager.PluginManager;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundUpdateTagsPacket;
 import org.spongepowered.asm.mixin.Mixin;

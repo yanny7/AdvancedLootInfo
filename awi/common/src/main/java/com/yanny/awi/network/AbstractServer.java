@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
@@ -17,16 +18,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.dimension.LevelStem;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractServer {
@@ -53,7 +53,9 @@ public abstract class AbstractServer {
             worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
         }
 
-        LOGGER.info("Processing worldgen took {}ms", System.currentTimeMillis() - startTime);
+        removeEmptyNodes(worldgenNodes, Collections.emptyMap());
+
+        LOGGER.info("Processing worldgen info took {}ms", System.currentTimeMillis() - startTime);
 
         ByteBuf rawBuf = Unpooled.buffer();
         FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);
@@ -106,6 +108,7 @@ public abstract class AbstractServer {
                 buf.writeResourceLocation(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
                 //TODO write blocks
+                successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
                 LOGGER.warn("Failed to write worldgen data in {}", nodeEntry.getKey(), e);
@@ -153,5 +156,32 @@ public abstract class AbstractServer {
                 DOUBLE_FORMAT.format(rawSize / 1024.0 / 1024.0),
                 DOUBLE_FORMAT.format(compressedData.length / 1024.0 / 1024.0),
                 totalChunks);
+    }
+
+    @NotNull
+    private static Map<ResourceLocation, IDataNode> removeEmptyNodes(Map<ResourceLocation, IDataNode> nodes, Map<ResourceLocation, List<ItemStack>> items) {
+        Map<ResourceLocation, IDataNode> result = new HashMap<>();
+        int emptyNodes = 0;
+
+        for (Map.Entry<ResourceLocation, IDataNode> entry : nodes.entrySet()) {
+            IDataNode node = entry.getValue();
+
+            if (node instanceof ListNode listNode) {
+                listNode.optimizeList();
+
+                if (!listNode.nodes().isEmpty()) {
+                    result.put(entry.getKey(), listNode);
+                }
+            }
+
+//            if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
+//                result.put(entry.getKey(), node);
+//            } else {
+//                emptyNodes++;
+//            }
+        }
+
+        LOGGER.info("Skipped {} empty or hidden nodes", emptyNodes);
+        return result;
     }
 }

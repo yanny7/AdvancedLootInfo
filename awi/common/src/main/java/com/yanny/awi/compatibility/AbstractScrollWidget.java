@@ -3,6 +3,7 @@ package com.yanny.awi.compatibility;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
+import com.yanny.awi.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
@@ -31,10 +32,10 @@ public abstract class AbstractScrollWidget {
     public abstract void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY);
 
     public void render(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-//        guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 16, 16, 2, 2);
+        guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 16, 16, 2, 2);
 
         Rect markerArea = calculateScrollbarMarkerArea();
-//        guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
+        guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
 
         drawContents(guiGraphics, mouseX, mouseY);
     }
