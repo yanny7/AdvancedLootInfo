@@ -45,6 +45,7 @@ public final class Lang {
         DEFAULT_BLOCK("default_block", "Default Block: %s"),
         DEFAULT_FLUID("default_fluid", "Default Fluid: %s"),
         DISCARD_CHANCE_ON_AIR_EXPOSURE("discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s"),
+        GENERATION_STEP("generation_step", "Generation Step: %s"),
         SEA_LEVEL("sea_level", "Sea Level: %s"),
         SIZE("size", "Size: %s"),
         ;
@@ -77,6 +78,33 @@ public final class Lang {
 
         Branch(String k, String e) {
             this.translation = new Translation("awi.property.branch." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum GenerationStep implements ITooltipKey {
+        RAW_GENERATION("raw_generation", "Raw Generation"),
+        LAKES("lakes", "Lakes"),
+        LOCAL_MODIFICATIONS("local_modifications", "Local Modifications"),
+        UNDERGROUND_STRUCTURES("underground_structures", "Underground Structures"),
+        SURFACE_STRUCTURES("surface_structures", "Surface Structures"),
+        STRONGHOLDS("strongholds", "Strongholds"),
+        UNDERGROUND_ORES("underground_ores", "Underground Ores"),
+        UNDERGROUND_DECORATION("underground_decoration", "Underground Decoration"),
+        FLUID_SPRINGS("fluid_springs", "Fluid Springs"),
+        VEGETAL_DECORATION("vegetal_decoration", "Vegetation Decoration"),
+        TOP_LAYER_MODIFICATION("top_layer_modification", "Top Layer Modifications"),
+        ;
+
+        private final Translation translation;
+
+        GenerationStep(String k, String e) {
+            this.translation = new Translation("awi.enum.decoration_step." + k, e);
         }
 
         @NotNull

@@ -22,83 +22,106 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class NodeUtils {
-    @NotNull
-    public static Set<Block> mineSurfaceBlocksForBiome(RegistryAccess registryAccess, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState, Holder<Biome> targetBiome) {
-        Set<Block> discoveredBlocks = new HashSet<>();
-        Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
-        SurfaceRules.RuleSource masterSurfaceRule = noiseGenerator.generatorSettings().value().surfaceRule();
-        NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
-        LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
-            @Override
-            public int getHeight() {
-                return settings.noiseSettings().height();
-            }
+    public static class DimensionContext {
+        private final SurfaceRules.SurfaceRule compiledRule;
+        private final SurfaceRules.Context context;
+        private final int minBuildHeight;
+        private final int maxBuildHeight;
+        private final int seaLevel;
+        private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
-            @Override
-            public int getMinBuildHeight() {
-                return settings.noiseSettings().minY();
-            }
-        };
-        int minBuildHeight = heightAccessor.getMinBuildHeight();
-        int maxBuildHeight = heightAccessor.getMaxBuildHeight();
-        ChunkPos samplePos = new ChunkPos(0, 0);
-        ProtoChunk mockChunk = new ProtoChunk(samplePos, UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);
-        Function<BlockPos, Holder<Biome>> mockedBiomeGetter = (blockPos) -> targetBiome;
-        WorldGenerationContext genContext = new WorldGenerationContext(noiseGenerator, heightAccessor);
-        NoiseChunk dummyNoiseChunk = NoiseChunk.forChunk(
-                mockChunk,
-                randomState,
-                DensityFunctions.BeardifierMarker.INSTANCE,
-                noiseGenerator.generatorSettings().value(),
-                (i, j, k) -> new Aquifer.FluidStatus(0, Fluids.EMPTY.defaultFluidState().createLegacyBlock()),
-                Blender.empty()
-        );
+        public DimensionContext(RegistryAccess registryAccess, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
+            Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+            NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
+            SurfaceRules.RuleSource masterSurfaceRule = settings.surfaceRule();
 
-        try {
-            SurfaceRules.Context context = new SurfaceRules.Context(
+            LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
+                @Override public int getHeight() { return settings.noiseSettings().height(); }
+                @Override public int getMinBuildHeight() { return settings.noiseSettings().minY(); }
+            };
+
+            this.minBuildHeight = heightAccessor.getMinBuildHeight();
+            this.maxBuildHeight = heightAccessor.getMaxBuildHeight();
+            this.seaLevel = noiseGenerator.getSeaLevel();
+
+            ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);
+            WorldGenerationContext genContext = new WorldGenerationContext(noiseGenerator, heightAccessor);
+
+            NoiseChunk dummyNoiseChunk = NoiseChunk.forChunk(
+                    mockChunk,
+                    randomState,
+                    DensityFunctions.BeardifierMarker.INSTANCE,
+                    settings,
+                    (i, j, k) -> new Aquifer.FluidStatus(0, Fluids.EMPTY.defaultFluidState().createLegacyBlock()),
+                    Blender.empty()
+            );
+
+            this.context = new SurfaceRules.Context(
                     randomState.surfaceSystem(),
                     randomState,
                     mockChunk,
                     dummyNoiseChunk,
-                    mockedBiomeGetter,
+                    biomeWrapper,
                     biomeRegistry,
                     genContext
             );
+            this.compiledRule = masterSurfaceRule.apply(this.context);
+        }
+
+        private static class BiomeHolderWrapper implements Function<BlockPos, Holder<Biome>> {
+            public Holder<Biome> currentBiome;
+
+            @Override
+            public Holder<Biome> apply(BlockPos blockPos) {
+                return currentBiome;
+            }
+        }
+    }
+
+    @NotNull
+    public static Set<Block> getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
+        Set<Block> discoveredBlocks = new HashSet<>();
+
+        if (dimCtx.compiledRule == null) {
+            return discoveredBlocks;
+        }
+
+        try {
+            dimCtx.biomeWrapper.currentBiome = targetBiome;
+
+            SurfaceRules.Context context = dimCtx.context;
+            SurfaceRules.SurfaceRule compiledRule = dimCtx.compiledRule;
 
             int blockX = 8;
             int blockZ = 8;
+            int seaLevel = dimCtx.seaLevel;
 
             context.updateXZ(blockX, blockZ);
 
-            SurfaceRules.SurfaceRule compiledRule = masterSurfaceRule.apply(context);
+            int minH = dimCtx.minBuildHeight;
+            int maxH = dimCtx.maxBuildHeight;
 
-            if (compiledRule != null) {
-                int seaLevel = noiseGenerator.getSeaLevel();
+            for (int y = maxH; y >= minH; y--) {
+                context.updateY(0, 0, seaLevel, blockX, y, blockZ);
+                context.stoneDepthAbove = 0;
+                context.stoneDepthBelow = 5;
 
-                for (int y = maxBuildHeight; y >= minBuildHeight; y--) {
-                    context.updateY(0, 0,seaLevel, blockX, y, blockZ);
-                    context.stoneDepthAbove = 0;
-                    context.stoneDepthBelow = 5;
+                BlockState evaluatedState = compiledRule.tryApply(blockX, y, blockZ);
 
-                    BlockState evaluatedState = compiledRule.tryApply(blockX, y, blockZ);
+                if (evaluatedState != null && !evaluatedState.isAir()) {
+                    discoveredBlocks.add(evaluatedState.getBlock());
+                }
 
-                    if (evaluatedState != null && !evaluatedState.isAir()) {
-                        discoveredBlocks.add(evaluatedState.getBlock());
-                    }
+                context.updateY(3, 0, seaLevel, blockX, y, blockZ);
+                context.stoneDepthAbove = 3;
+                context.stoneDepthBelow = 2;
+                evaluatedState = compiledRule.tryApply(blockX, y, blockZ);
 
-                    context.updateY(3, 0, seaLevel, blockX, y , blockZ);
-                    context.stoneDepthAbove = 3;
-                    context.stoneDepthBelow = 2;
-                    evaluatedState = compiledRule.tryApply(blockX, y, blockZ);
-
-                    if (evaluatedState != null && !evaluatedState.isAir()) {
-                        discoveredBlocks.add(evaluatedState.getBlock());
-                    }
+                if (evaluatedState != null && !evaluatedState.isAir()) {
+                    discoveredBlocks.add(evaluatedState.getBlock());
                 }
             }
-
-        } catch (Throwable ignored) {
-        }
+        } catch (Throwable ignored) {}
 
         return discoveredBlocks;
     }

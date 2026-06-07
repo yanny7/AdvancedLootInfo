@@ -25,7 +25,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 public class LevelStemNode extends ListNode {
@@ -48,28 +48,38 @@ public class LevelStemNode extends ListNode {
 
         seaLevel = generator.getSeaLevel();
 
-        for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
-            TooltipNode tooltip = TooltipBuilder.array((b) -> {
-                b.add(utils.getValueTooltip(utils, defaultBlock).build(Lang.Value.DEFAULT_BLOCK));
-
-                if (!defaultFluid.isSame(Fluids.EMPTY)) {
-                    b.add(utils.getValueTooltip(utils, defaultFluid).build(Lang.Value.DEFAULT_FLUID));
-                    b.add(utils.getValueTooltip(utils, seaLevel).build(Lang.Value.SEA_LEVEL));
-                }
-            }).build();
-
+        if (levelStem.generator() instanceof NoiseBasedChunkGenerator noiseGenerator) {
             ServerLevel serverLevel = utils.getServerLevel();
-            Set<Block> blocks;
+            RegistryAccess registryAccess = serverLevel.registryAccess();
+            RandomState randomState = RandomState.create(noiseGenerator.generatorSettings().value(), registryAccess.lookupOrThrow(Registries.NOISE), serverLevel.getSeed());
+            NodeUtils.DimensionContext dimensionContext = new NodeUtils.DimensionContext(registryAccess, noiseGenerator, randomState);
 
-            if (levelStem.generator() instanceof NoiseBasedChunkGenerator noiseGenerator) {
-                RegistryAccess registryAccess = serverLevel.registryAccess();
-                RandomState randomState = RandomState.create(noiseGenerator.generatorSettings().value(), registryAccess.lookupOrThrow(Registries.NOISE), serverLevel.getSeed());
-                blocks = NodeUtils.mineSurfaceBlocksForBiome(registryAccess, noiseGenerator, randomState, biomeHolder);
-            } else {
-                blocks = new HashSet<>();
+            for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
+                Set<Block> blocks = NodeUtils.getBaseBlocksForBiome(dimensionContext, biomeHolder);
+                TooltipNode tooltip = TooltipBuilder.array((b) -> {
+                    b.add(utils.getValueTooltip(utils, defaultBlock).build(Lang.Value.DEFAULT_BLOCK));
+
+                    if (!defaultFluid.isSame(Fluids.EMPTY)) {
+                        b.add(utils.getValueTooltip(utils, defaultFluid).build(Lang.Value.DEFAULT_FLUID));
+                        b.add(utils.getValueTooltip(utils, seaLevel).build(Lang.Value.SEA_LEVEL));
+                    }
+                }).build();
+
+                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, blocks));
             }
+        } else {
+            for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
+                TooltipNode tooltip = TooltipBuilder.array((b) -> {
+                    b.add(utils.getValueTooltip(utils, defaultBlock).build(Lang.Value.DEFAULT_BLOCK));
 
-            addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, blocks));
+                    if (!defaultFluid.isSame(Fluids.EMPTY)) {
+                        b.add(utils.getValueTooltip(utils, defaultFluid).build(Lang.Value.DEFAULT_FLUID));
+                        b.add(utils.getValueTooltip(utils, seaLevel).build(Lang.Value.SEA_LEVEL));
+                    }
+                }).build();
+
+                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, Collections.emptySet()));
+            }
         }
     }
 
