@@ -42,7 +42,10 @@ public final class Lang {
     public enum Value implements ITooltipKey {
         BLOCK("block", "Block: %s"),
         COUNT("count", "Count: %s"),
+        DEFAULT_BLOCK("default_block", "Default Block: %s"),
+        DEFAULT_FLUID("default_fluid", "Default Fluid: %s"),
         DISCARD_CHANCE_ON_AIR_EXPOSURE("discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s"),
+        SEA_LEVEL("sea_level", "Sea Level: %s"),
         SIZE("size", "Size: %s"),
         ;
 

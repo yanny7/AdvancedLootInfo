@@ -11,11 +11,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 
 public class BiomeNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("biome");
@@ -23,9 +25,13 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome) {
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<Block> blocks) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
+
+        for (Block block : blocks) {
+            addChildren(new BlockNode(utils, block));
+        }
 
         for (int i = 0; i < features.size(); i++) {
             HolderSet<PlacedFeature> feature = features.get(i);
@@ -34,7 +40,7 @@ public class BiomeNode extends ListNode {
             addChildren(new GenerationStepNode(utils, step, feature));
         }
 
-        tooltip = TooltipNode.empty();
+        this.tooltip = tooltip;
         biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
     }
 

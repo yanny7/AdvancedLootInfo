@@ -18,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.dimension.LevelStem;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -26,7 +25,10 @@ import org.slf4j.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 
 public abstract class AbstractServer {
@@ -53,7 +55,7 @@ public abstract class AbstractServer {
             worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
         }
 
-        removeEmptyNodes(worldgenNodes, Collections.emptyMap());
+        worldgenNodes = removeEmptyNodes(worldgenNodes);
 
         LOGGER.info("Processing worldgen info took {}ms", System.currentTimeMillis() - startTime);
 
@@ -159,7 +161,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> removeEmptyNodes(Map<ResourceLocation, IDataNode> nodes, Map<ResourceLocation, List<ItemStack>> items) {
+    private static Map<ResourceLocation, IDataNode> removeEmptyNodes(Map<ResourceLocation, IDataNode> nodes) {
         Map<ResourceLocation, IDataNode> result = new HashMap<>();
         int emptyNodes = 0;
 
@@ -173,12 +175,6 @@ public abstract class AbstractServer {
                     result.put(entry.getKey(), listNode);
                 }
             }
-
-//            if (!items.getOrDefault(entry.getKey(), Collections.emptyList()).isEmpty()) {
-//                result.put(entry.getKey(), node);
-//            } else {
-//                emptyNodes++;
-//            }
         }
 
         LOGGER.info("Skipped {} empty or hidden nodes", emptyNodes);

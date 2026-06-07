@@ -2,20 +2,26 @@ package com.yanny.awi.compatibility;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.awi.api.IClientUtils;
+import com.yanny.awi.api.IDataNode;
+import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
+import com.yanny.awi.plugin.common.nodes.BlockNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
@@ -99,6 +105,21 @@ public class GenericUtils {
         }
 
         LOGGER.error("CRITICAL: Could not fetch loot data from server after {} attempts. Recipe viewer integration will be empty or incomplete.", maxRetries);
+    }
+
+    @NotNull
+    public static List<Block> collectBlocks(IDataNode node) {
+        List<Block> blocks = new ArrayList<>();
+
+        if (node instanceof ListNode listNode) {
+            for (IDataNode iDataNode : listNode.nodes()) {
+                blocks.addAll(collectBlocks(iDataNode));
+            }
+        } else if (node instanceof BlockNode blockNode) {
+            blocks.add(blockNode.getBlock());
+        }
+
+        return blocks;
     }
 
     private static void readWorldgenData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {

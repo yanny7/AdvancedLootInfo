@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 
 import java.util.List;
@@ -46,7 +47,8 @@ public class EmiCompatibility implements EmiPlugin {
                 registry.addCategory(category);
 
                 for (IDataNode biomeNode : levelNode.nodes()) {
-                    registry.addRecipe(new EmiBiomeLoot(category, ((BiomeNode) biomeNode).getBiomeId(), biomeNode, List.of()));
+                    List<Block> blocks = GenericUtils.collectBlocks(biomeNode);
+                    registry.addRecipe(new EmiBiomeLoot(category, ((BiomeNode) biomeNode).getBiomeId(), biomeNode, blocks));
                 }
             });
         }

@@ -22,6 +22,9 @@
         "client": [
             "com.yanny.awi.fabric.ClientAliMod"
         ],
+        "fabric-datagen": [
+            "com.yanny.awi.fabric.datagen.DataGeneration"
+        ],
         "awi": [
             "com.yanny.awi.plugin.Plugin"
         ],

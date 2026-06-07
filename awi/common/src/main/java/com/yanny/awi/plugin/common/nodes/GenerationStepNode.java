@@ -22,8 +22,6 @@ public class GenerationStepNode extends ListNode {
     public GenerationStepNode(IServerUtils utils, GenerationStep.Decoration step, HolderSet<PlacedFeature> features) {
         for (Holder<PlacedFeature> placedFeatureHolder : features) {
             addChildren(new PlacedFeatureNode(utils, placedFeatureHolder.value()));
-
-            //todo step
         }
 
         tooltip = TooltipNode.empty();

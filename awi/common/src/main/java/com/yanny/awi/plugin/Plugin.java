@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
 @AwiEntrypoint
@@ -56,6 +57,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
+        registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
 
         registry.registerFeatureTooltip(CountConfiguration.class, FeatureConfigurationTooltipUtils::getCountConfigurationTooltip);
         registry.registerFeatureTooltip(OreConfiguration.class, FeatureConfigurationTooltipUtils::getOreConfigurationTooltip);

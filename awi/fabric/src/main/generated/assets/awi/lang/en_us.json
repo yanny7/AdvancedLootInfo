@@ -1,0 +1,18 @@
+{
+  "aci.util.auto_detected": "Auto-detected: %s",
+  "aci.util.missing": "Not implemented: %s",
+  "awi.property.branch.properties": "Properties:",
+  "awi.property.branch.state": "State:",
+  "awi.property.branch.target": "Target:",
+  "awi.property.branch.target_states": "Target States:",
+  "awi.property.value.block": "Block: %s",
+  "awi.property.value.count": "Count: %s",
+  "awi.property.value.default_block": "Default Block: %s",
+  "awi.property.value.default_fluid": "Default Fluid: %s",
+  "awi.property.value.discard_chance_on_air_exposure": "Discard Chance On Air Exposure: %s",
+  "awi.property.value.sea_level": "Sea Level: %s",
+  "awi.property.value.size": "Size: %s",
+  "awi.type.feature_configuration.count": "Count:",
+  "awi.type.feature_configuration.ore": "Ore:",
+  "awi.type.rule_test.always_true": "Always True"
+}

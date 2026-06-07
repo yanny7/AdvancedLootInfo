@@ -6,8 +6,11 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -44,11 +47,13 @@ public class PlacedFeatureNode extends ListNode {
         Set<Block> blocks = new HashSet<>();
         Iterator<BlockPos> posIterable = BlockPos.randomInCube(utils.getServerLevel().getRandom(), 128, BlockPos.ZERO, 128).iterator();
 
+        Biome biome = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).get(Biomes.BADLANDS);
+
         try {
 //            for (int i = 0; i < 5; i++) {
 //                configuredFeature.place(
 //                        new FakeWorldGenLevel(utils.getServerLevel(), blocks),
-//                        new FakeChunkGenerator(utils.getServerLevel()),
+//                        new FakeChunkGenerator(utils.getServerLevel(), Holder.direct(biome)),
 //                        utils.getServerLevel().getRandom(),
 //                        posIterable.next()
 //                );
