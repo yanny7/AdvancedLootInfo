@@ -29,9 +29,7 @@ public class BiomeNode extends ListNode {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
-        for (Block block : blocks) {
-            addChildren(new BlockNode(utils, block));
-        }
+        addChildren(new BaseTerrainNode(utils, blocks));
 
         for (int i = 0; i < features.size(); i++) {
             HolderSet<PlacedFeature> feature = features.get(i);

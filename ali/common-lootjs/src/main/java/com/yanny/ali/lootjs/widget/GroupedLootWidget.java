@@ -13,7 +13,7 @@ public class GroupedLootWidget extends ListWidget {
     }
 
     @Override
-    public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
+    public IWidget getGroupWidget(RelativeRect rect, IDataNode entry) {
         return WidgetUtils.getRandomWidget(rect, entry);
     }
 }

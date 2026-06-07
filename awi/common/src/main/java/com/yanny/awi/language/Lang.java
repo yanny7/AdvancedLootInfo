@@ -88,6 +88,7 @@ public final class Lang {
     }
 
     public enum GenerationStep implements ITooltipKey {
+        BASE_TERRAIN("base_terrain", "Base Terrain"),
         RAW_GENERATION("raw_generation", "Raw Generation"),
         LAKES("lakes", "Lakes"),
         LOCAL_MODIFICATIONS("local_modifications", "Local Modifications"),

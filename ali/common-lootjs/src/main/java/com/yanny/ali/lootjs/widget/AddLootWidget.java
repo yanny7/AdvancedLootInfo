@@ -14,7 +14,7 @@ public class AddLootWidget extends ListWidget {
     }
 
     @Override
-    public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
+    public IWidget getGroupWidget(RelativeRect rect, IDataNode entry) {
         return switch (((AddLootNode) entry).getAddType()) {
             case DEFAULT -> WidgetUtils.getAllWidget(rect, entry);
             case SEQUENCE -> WidgetUtils.getSequentialWidget(rect, entry);

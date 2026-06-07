@@ -39,12 +39,14 @@ public class Plugin implements IPlugin {
         registry.registerWidget(GenerationStepNode.ID, GenerationStepWidget::new);
         registry.registerWidget(PlacedFeatureNode.ID, PlacedFeatureWidget::new);
         registry.registerWidget(BlockNode.ID, BlockWidget::new);
+        registry.registerWidget(BaseTerrainNode.ID, BaseTerrainWidget::new);
 
         registry.registerDataNode(LevelStemNode.ID, LevelStemNode::new);
         registry.registerDataNode(BiomeNode.ID, BiomeNode::new);
         registry.registerDataNode(GenerationStepNode.ID, GenerationStepNode::new);
         registry.registerDataNode(PlacedFeatureNode.ID, PlacedFeatureNode::new);
         registry.registerDataNode(BlockNode.ID, BlockNode::new);
+        registry.registerDataNode(BaseTerrainNode.ID, BaseTerrainNode::new);
     }
 
     @Override

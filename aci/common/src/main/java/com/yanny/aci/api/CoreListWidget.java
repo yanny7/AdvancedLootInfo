@@ -24,7 +24,7 @@ public abstract class CoreListWidget<
     private final int groupWidgetWidth;
 
     public CoreListWidget(TWidgetUtils utils, TDataNode entry, RelativeRect rect, int maxWidth, TDataNode tooltipNode) {
-        IWidget groupWidget = getLootGroupWidget(rect, tooltipNode);
+        IWidget groupWidget = getGroupWidget(rect, tooltipNode);
         boolean hasGroupWidget = groupWidget != null;
         List<IWidget> children = null;
 
@@ -62,7 +62,7 @@ public abstract class CoreListWidget<
     }
 
     @Nullable
-    public abstract IWidget getLootGroupWidget(RelativeRect rect, TDataNode entry);
+    public abstract IWidget getGroupWidget(RelativeRect rect, TDataNode entry);
 
     @NotNull
     public abstract ResourceLocation getTexture();

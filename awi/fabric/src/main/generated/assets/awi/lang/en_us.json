@@ -1,6 +1,7 @@
 {
   "aci.util.auto_detected": "Auto-detected: %s",
   "aci.util.missing": "Not implemented: %s",
+  "awi.enum.decoration_step.base_terrain": "Base Terrain",
   "awi.enum.decoration_step.fluid_springs": "Fluid Springs",
   "awi.enum.decoration_step.lakes": "Lakes",
   "awi.enum.decoration_step.local_modifications": "Local Modifications",

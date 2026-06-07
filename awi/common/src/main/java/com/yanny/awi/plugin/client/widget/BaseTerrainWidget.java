@@ -6,17 +6,16 @@ import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.api.ListWidget;
 import com.yanny.awi.plugin.client.WidgetUtils;
-import com.yanny.awi.plugin.common.nodes.GenerationStepNode;
 import org.jetbrains.annotations.Nullable;
 
-public class GenerationStepWidget extends ListWidget {
-    public GenerationStepWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
+public class BaseTerrainWidget extends ListWidget {
+    public BaseTerrainWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(utils, entry, rect, maxWidth);
     }
 
     @Nullable
     @Override
     public IWidget getGroupWidget(RelativeRect rect, IDataNode entry) {
-        return WidgetUtils.getGenerationStepWidget(rect, entry, ((GenerationStepNode) entry).getGenerationStep());
+        return WidgetUtils.getBaseTerrainWidget(rect, entry);
     }
 }

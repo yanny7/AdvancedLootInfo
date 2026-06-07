@@ -31,4 +31,12 @@ public class WidgetUtils {
         widget.tooltipText(node.getTooltip());
         return widget;
     }
+
+    @NotNull
+    public static IWidget getBaseTerrainWidget(RelativeRect rect, IDataNode node) {
+        TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, WIDGET_WIDTH, WIDGET_HEIGHT, rect), 7, 18);
+
+        widget.tooltipText(node.getTooltip());
+        return widget;
+    }
 }
