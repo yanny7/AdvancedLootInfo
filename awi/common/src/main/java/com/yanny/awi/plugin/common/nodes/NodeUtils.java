@@ -14,7 +14,6 @@ import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
-import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -27,6 +26,7 @@ public class NodeUtils {
         private final SurfaceRules.Context context;
         private final int minBuildHeight;
         private final int maxBuildHeight;
+        private final int totalHeight;
         private final int seaLevel;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
@@ -42,17 +42,19 @@ public class NodeUtils {
 
             this.minBuildHeight = heightAccessor.getMinBuildHeight();
             this.maxBuildHeight = heightAccessor.getMaxBuildHeight();
+            this.totalHeight = heightAccessor.getHeight();
             this.seaLevel = noiseGenerator.getSeaLevel();
 
             ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);
             WorldGenerationContext genContext = new WorldGenerationContext(noiseGenerator, heightAccessor);
+            BlockState defaultFluid = settings.defaultFluid();
 
             NoiseChunk dummyNoiseChunk = NoiseChunk.forChunk(
                     mockChunk,
                     randomState,
                     DensityFunctions.BeardifierMarker.INSTANCE,
                     settings,
-                    (i, j, k) -> new Aquifer.FluidStatus(0, Fluids.EMPTY.defaultFluidState().createLegacyBlock()),
+                    (i, j, k) -> new Aquifer.FluidStatus(seaLevel, defaultFluid),
                     Blender.empty()
             );
 
@@ -88,37 +90,85 @@ public class NodeUtils {
 
         try {
             dimCtx.biomeWrapper.currentBiome = targetBiome;
-
             SurfaceRules.Context context = dimCtx.context;
             SurfaceRules.SurfaceRule compiledRule = dimCtx.compiledRule;
 
-            int blockX = 8;
-            int blockZ = 8;
             int seaLevel = dimCtx.seaLevel;
-
-            context.updateXZ(blockX, blockZ);
-
             int minH = dimCtx.minBuildHeight;
             int maxH = dimCtx.maxBuildHeight;
+            int totalH = dimCtx.totalHeight;
+            int initialScanRadius = Math.max(4, totalH / 64);
+            int baseMaxStep = Math.max(2, totalH / 64);
+            int totalChunksScanned = 0;
+            int lastDiscoveryChunkCount = 0;
 
-            for (int y = maxH; y >= minH; y--) {
-                context.updateY(0, 0, seaLevel, blockX, y, blockZ);
-                context.stoneDepthAbove = 0;
-                context.stoneDepthBelow = 5;
+            for (int cx = -initialScanRadius; cx < initialScanRadius; cx++) {
+                for (int cz = -initialScanRadius; cz < initialScanRadius; cz++) {
+                    totalChunksScanned++;
 
-                BlockState evaluatedState = compiledRule.tryApply(blockX, y, blockZ);
+                    if (totalChunksScanned > 32 && (totalChunksScanned - lastDiscoveryChunkCount) > (totalChunksScanned / 2)) {
+                        if ((cx + cz) % 2 != 0) continue;
+                    }
 
-                if (evaluatedState != null && !evaluatedState.isAir()) {
-                    discoveredBlocks.add(evaluatedState.getBlock());
-                }
+                    int xOffset = 2 + (Math.abs(cx * 881) % 12);
+                    int zOffset = 2 + (Math.abs(cz * 919) % 12);
+                    int blockX = (cx << 4) + xOffset;
+                    int blockZ = (cz << 4) + zOffset;
 
-                context.updateY(3, 0, seaLevel, blockX, y, blockZ);
-                context.stoneDepthAbove = 3;
-                context.stoneDepthBelow = 2;
-                evaluatedState = compiledRule.tryApply(blockX, y, blockZ);
+                    context.updateXZ(blockX, blockZ);
 
-                if (evaluatedState != null && !evaluatedState.isAir()) {
-                    discoveredBlocks.add(evaluatedState.getBlock());
+                    int heightVarianceRange = totalH / 5;
+                    int waveFactor = ((cx ^ cz) * 31) % (heightVarianceRange | 1);
+                    int simulatedSurfaceY = seaLevel + (heightVarianceRange / 2) - Math.abs(waveFactor);
+
+                    simulatedSurfaceY = Math.min(Math.max(simulatedSurfaceY, minH + 16), maxH - 16);
+
+                    boolean isCoreZone = (Math.abs(cx) <= 1 && Math.abs(cz) <= 1);
+                    int maxVerticalStep = isCoreZone ? 1 : baseMaxStep;
+                    int previousDiscoveredSize = discoveredBlocks.size();
+                    int currentStep = 1;
+                    int y = maxH;
+
+                    while (y >= minH) {
+                        int depthBelow = Math.max(0, simulatedSurfaceY - y);
+                        int depthAbove = Math.max(0, y - simulatedSurfaceY);
+                        context.updateY(depthAbove, depthBelow, seaLevel, blockX, y, blockZ);
+                        context.stoneDepthAbove = depthAbove;
+                        context.stoneDepthBelow = depthBelow;
+                        BlockState stateCurrent = compiledRule.tryApply(blockX, y, blockZ);
+                        Block blockCurrent = (stateCurrent != null && !stateCurrent.isAir()) ? stateCurrent.getBlock() : null;
+
+                        if (blockCurrent != null) {
+                            discoveredBlocks.add(blockCurrent);
+                        }
+
+                        if (y == minH) {
+                            break;
+                        }
+
+                        int nextY = Math.max(minH, y - currentStep);
+                        int nextDepthBelow = Math.max(0, simulatedSurfaceY - nextY);
+                        int nextDepthAbove = Math.max(0, nextY - simulatedSurfaceY);
+
+                        context.updateY(nextDepthAbove, nextDepthBelow, seaLevel, blockX, nextY, blockZ);
+                        context.stoneDepthAbove = nextDepthAbove;
+                        context.stoneDepthBelow = nextDepthBelow;
+
+                        BlockState stateNext = compiledRule.tryApply(blockX, nextY, blockZ);
+                        Block blockNext = (stateNext != null && !stateNext.isAir()) ? stateNext.getBlock() : null;
+
+                        if (blockCurrent != blockNext || y == nextY) {
+                            y--;
+                            currentStep = 1;
+                        } else {
+                            y = nextY;
+                            currentStep = Math.min(maxVerticalStep, currentStep + 1);
+                        }
+                    }
+
+                    if (discoveredBlocks.size() > previousDiscoveredSize) {
+                        lastDiscoveryChunkCount = totalChunksScanned;
+                    }
                 }
             }
         } catch (Throwable ignored) {}
