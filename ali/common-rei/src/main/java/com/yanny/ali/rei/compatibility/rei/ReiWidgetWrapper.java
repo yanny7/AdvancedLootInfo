@@ -4,11 +4,12 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RelativeRect;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.client.gui.compat.GuiGraphics;
 import me.shedaniel.rei.api.client.gui.widgets.Tooltip;
 import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +27,7 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
     }
 
     @Override
-    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         guiGraphics.pose().pushMatrix();
         guiGraphics.pose().translate(bounds.getX(), bounds.getY());
         widget.render(guiGraphics, mouseX, mouseY);
@@ -36,7 +37,8 @@ public class ReiWidgetWrapper extends WidgetWithBounds {
     @Nullable
     public Tooltip getTooltip(Point point) {
         if (point.x >= bounds.getMinX() && point.x <= bounds.getMaxX() && point.y >= bounds.getMinY()) {
-            return Tooltip.create(widget.getTooltipComponents(point.getX() - bounds.getX(), point.getY() - bounds.getY()));
+            List<Component> components = widget.getTooltipComponents(point.getX() - bounds.getX(), point.getY() - bounds.getY());
+            return !components.isEmpty() ? Tooltip.create(components) : null;
         } else {
             return null;
         }

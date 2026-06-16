@@ -5,13 +5,15 @@ import com.yanny.ali.platform.Services;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ReiEntityDisplay extends ReiBaseDisplay {
     private final EntityType<?> entityType;
@@ -41,12 +43,8 @@ public class ReiEntityDisplay extends ReiBaseDisplay {
     @Unmodifiable
     @NotNull
     private static List<EntryIngredient> getSpawnEgg(EntityLootType entry) {
-        SpawnEggItem item = Services.getPlatform().getSpawnEggItem(entry.entityType());
+        Optional<Holder<Item>> item = Services.getPlatform().getSpawnEggItem(entry.entityType());
 
-        if (item != null) {
-            return List.of(EntryIngredients.of(item));
-        } else {
-            return List.of();
-        }
+        return item.map(itemHolder -> List.of(EntryIngredients.of(itemHolder.value()))).orElseGet(List::of);
     }
 }

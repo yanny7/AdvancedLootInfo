@@ -2,6 +2,7 @@ package com.yanny.ali.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
 import com.yanny.ali.compatibility.common.AbstractScrollWidget;
+import me.shedaniel.rei.api.client.gui.compat.GuiGraphics;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -22,14 +23,14 @@ public class ReiScrollWidget extends Widget {
             @Override
             public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {
-                    widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
+                    widget.render((GuiGraphics) guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
             }
         };
     }
 
     @Override
-    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         scrollWidget.render(guiGraphics, mouseX, mouseY);
     }
 

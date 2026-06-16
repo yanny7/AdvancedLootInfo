@@ -16,6 +16,7 @@ import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.compat.GuiGraphics;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
@@ -25,7 +26,6 @@ import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -150,7 +150,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         }
 
         @Override
-        public void render(GuiGraphicsExtractor guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
             if (count != null) {
                 Font font = Minecraft.getInstance().font;
                 Matrix3x2fStack stack = guiGraphics.pose();

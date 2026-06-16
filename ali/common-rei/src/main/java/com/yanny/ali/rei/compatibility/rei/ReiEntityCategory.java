@@ -5,6 +5,7 @@ import com.yanny.ali.compatibility.common.EntityStorage;
 import com.yanny.ali.compatibility.common.GenericUtils;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
+import com.yanny.ali.platform.Services;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -13,16 +14,18 @@ import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityType<?>> {
     private static final int WIDGET_SIZE = 36;
@@ -43,15 +46,13 @@ public class ReiEntityCategory extends ReiBaseCategory<ReiEntityDisplay, EntityT
     public List<Widget> setupDisplay(ReiEntityDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
         Rect rect = new Rect(0, 0, WIDGET_SIZE, WIDGET_SIZE);
-        SpawnEggItem spawnEgg = SpawnEggItem.byId(display.getEntityType());
+        Optional<Holder<Item>> spawnEgg = Services.getPlatform().getSpawnEggItem(display.getEntityType());
         Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, TEXT_OFFSET + WIDGET_SIZE + PADDING);
         Rectangle innerBounds = prepared.getA();
         Rectangle fullBounds = prepared.getB();
         List<Widget> innerWidgets = new LinkedList<>(prepared.getC());
 
-        if (spawnEgg != null) {
-            innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getX() + 1, innerBounds.getY() + TEXT_OFFSET + 1)).entry(EntryStacks.of(spawnEgg)).markInput());
-        }
+        spawnEgg.ifPresent(itemHolder -> innerWidgets.add(Widgets.createSlot(new Point(innerBounds.getX() + 1, innerBounds.getY() + TEXT_OFFSET + 1)).entry(EntryStacks.of(itemHolder.value())).markInput()));
 
         innerWidgets.add(Widgets.wrapRenderer(new Rectangle(innerBounds.getCenterX() - WIDGET_SIZE / 2, TEXT_OFFSET, WIDGET_SIZE, WIDGET_SIZE), (graphics, bounds1, mouseX, mouseY, delta) -> {
             Level level = Minecraft.getInstance().level;
