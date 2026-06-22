@@ -21,12 +21,13 @@ import org.slf4j.Logger;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class NodeUtils {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final int[] TEST_SURFACE_DEPTHS = {6, 0, -1000};
+    private static final int[] TEST_SURFACE_DEPTHS = {4, 0, -4};
     private static final int[] TEST_ABOVE_LEVELS   = {1, 2};
 
     public static class DimensionContext {
@@ -95,10 +96,6 @@ public class NodeUtils {
     public static class Range {
         int min, max;
 
-        public Range(int value) {
-            this(value, value);
-        }
-
         public Range(int min, int max) {
             this.min = min;
             this.max = max;
@@ -111,60 +108,38 @@ public class NodeUtils {
     }
 
     public static class RangeHolder {
-        private final List<Range> ranges = new ArrayList<>();
+        private final Set<Integer> yLevels = new HashSet<>();
 
         public boolean add(int position) {
-            for (Range r : ranges) {
-                if (position >= r.min && position <= r.max) {
-                    return false;
-                }
-            }
-
-            for (Range r : ranges) {
-                if (position == r.min - 1) {
-                    r.min = position;
-                    ranges.sort(Comparator.comparingInt(x -> x.min));
-                    mergeOverlappingRanges();
-                    return true;
-                }
-                if (position == r.max + 1) {
-                    r.max = position;
-                    mergeOverlappingRanges();
-                    return true;
-                }
-            }
-
-            ranges.add(new Range(position));
-            ranges.sort(Comparator.comparingInt(r -> r.min));
-            return true;
+            return yLevels.add(position);
         }
 
-        private void mergeOverlappingRanges() {
-            if (ranges.size() < 2) {
-                return;
+        public List<Range> buildRanges() {
+            if (yLevels.isEmpty()) {
+                return Collections.emptyList();
             }
 
-            List<Range> merged = new ArrayList<>();
-            Range current = ranges.get(0);
+            List<Integer> sortedPositions = new ArrayList<>(yLevels);
 
-            for (int i = 1; i < ranges.size(); i++) {
-                Range next = ranges.get(i);
+            Collections.sort(sortedPositions);
 
-                if (current.max >= next.min - 1) {
-                    current.max = Math.max(current.max, next.max);
-                } else {
-                    merged.add(current);
-                    current = next;
+            List<Range> compiledRanges = new ArrayList<>();
+            int start = sortedPositions.get(0);
+            int end = start;
+
+            for (int i = 1; i < sortedPositions.size(); i++) {
+                int current = sortedPositions.get(i);
+
+                if (current != end + 1) {
+                    compiledRanges.add(new Range(start, end));
+                    start = current;
                 }
+
+                end = current;
             }
 
-            merged.add(current);
-            ranges.clear();
-            ranges.addAll(merged);
-        }
-
-        public List<Range> getRanges() {
-            return ranges;
+            compiledRanges.add(new Range(start, end));
+            return compiledRanges;
         }
     }
 
@@ -186,19 +161,12 @@ public class NodeUtils {
 
             for (Block block : sortedBlocks) {
                 String blockId = BuiltInRegistries.BLOCK.getKey(block).toString();
-                List<Range> rangesList = blocks.get(block).getRanges();
-                StringBuilder sb = new StringBuilder("[");
+                List<Range> rangesList = blocks.get(block).buildRanges();
+                String rangesString = rangesList.stream()
+                        .map(Range::toString)
+                        .collect(Collectors.joining(", ", "[", "]"));
 
-                for (int i = 0; i < rangesList.size(); i++) {
-                    sb.append(rangesList.get(i));
-
-                    if (i < rangesList.size() - 1) {
-                        sb.append(", ");
-                    }
-                }
-
-                sb.append("]");
-                LOGGER.info(" * {} -> Y levels: {}", blockId, sb);
+                LOGGER.info(" * {} -> Y levels: {}", blockId, rangesString);
             }
         }
     }
@@ -249,9 +217,8 @@ public class NodeUtils {
 
         for (Map.Entry<Block, RangeHolder> entry : blocks.blocks.entrySet()) {
             Block expectedBlock = entry.getKey();
-            List<Range> rangesCopy = new ArrayList<>(entry.getValue().getRanges());
 
-            for (Range range : rangesCopy) {
+            for (Range range : entry.getValue().buildRanges()) {
                 for (int y = range.min; y >= minH; y--) {
                     Block found = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
 
@@ -306,12 +273,20 @@ public class NodeUtils {
                                     int posX, int posZ, int seaLevel, int minH, int maxH) {
         boolean anyChange = false;
         BlockState lastState = null;
-        int[] fluidLevel = {Integer.MIN_VALUE, seaLevel};
+        int[] fluidLevel;
+
 
         context.updateXZ(posX, posZ);
         context.lastMinSurfaceLevelUpdate = context.lastUpdateXZ;
 
         for (int y = maxH; y >= minH; y--) {
+
+            if (y <= seaLevel) {
+                fluidLevel = new int[]{Integer.MIN_VALUE, seaLevel};
+            } else {
+                fluidLevel = new int[]{seaLevel};
+            }
+
             for (int above : TEST_ABOVE_LEVELS) {
                 for (int level : fluidLevel) {
                     for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
@@ -365,7 +340,13 @@ public class NodeUtils {
         context.updateXZ(posX, posZ);
         context.lastMinSurfaceLevelUpdate = context.lastUpdateXZ;
 
-        int[] fluidLevel = {Integer.MIN_VALUE, seaLevel};
+        int[] fluidLevel;
+
+        if (y <= seaLevel) {
+            fluidLevel = new int[]{Integer.MIN_VALUE, seaLevel};
+        } else {
+            fluidLevel = new int[]{seaLevel};
+        }
 
         for (int level : fluidLevel) {
             for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
