@@ -214,54 +214,91 @@ public class NodeUtils {
 
         SurfaceRules.Context context  = dimCtx.context;
         SurfaceRules.SurfaceRule compiledRule = dimCtx.compiledRule;
+        Map<Block, List<Integer>> pendingChanges = new HashMap<>();
+        Map<Integer, Set<Block>> mins = new HashMap<>();
+        Map<Integer, Set<Block>> maxs = new HashMap<>();
+
 
         for (Map.Entry<Block, RangeHolder> entry : blocks.blocks.entrySet()) {
             Block expectedBlock = entry.getKey();
 
             for (Range range : entry.getValue().buildRanges()) {
-                for (int y = range.min; y >= minH; y--) {
-                    Block found = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
+                mins.computeIfAbsent(range.min, k -> new HashSet<>()).add(expectedBlock);
+                maxs.computeIfAbsent(range.max, k -> new HashSet<>()).add(expectedBlock);
+            }
+        }
 
-                    if (found == null) {
-                        break;
+
+        for (Map.Entry<Integer, Set<Block>> entry : mins.entrySet()) {
+            int min = entry.getKey();
+            Set<Block> expectedBlocks = entry.getValue();
+
+            // Scan downwards from the minimum range bound
+            for (int y = min; y >= minH; y--) {
+                Set<Block> foundBlocks = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
+
+                if (foundBlocks.isEmpty()) {
+                    break;
+                }
+
+                boolean foundNewBlock = false;
+
+                for (Block found : foundBlocks) {
+                    if (!blocks.blocks.containsKey(found)) {
+                        foundNewBlock = true;
                     }
-
-                    if (found == expectedBlock) {
-                        if (y < range.min && blocks.add(found, y)) {
-                            anyChange = true;
-                        }
-                    } else {
-                        if (!blocks.blocks.containsKey(found)) {
-                            return fullScan(context, compiledRule, blocks, posX, posZ, seaLevel, minH, maxH);
-                        } else {
-                            if (blocks.add(found, y)) {
-                                anyChange = true;
-                            }
-                        }
-                        break;
+                    if (y < min || !expectedBlocks.contains(found)) {
+                        pendingChanges.computeIfAbsent(found, k -> new ArrayList<>()).add(y);
                     }
                 }
-                for (int y = range.max; y <= maxH; y++) {
-                    Block found = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
 
-                    if (found == null) {
-                        break;
-                    }
+                if (foundNewBlock) {
+                    return fullScan(context, compiledRule, blocks, posX, posZ, seaLevel, minH, maxH);
+                }
 
-                    if (found == expectedBlock) {
-                        if (y > range.max && blocks.add(found, y)) {
-                            anyChange = true;
-                        }
-                    } else {
-                        if (!blocks.blocks.containsKey(found)) {
-                            return fullScan(context, compiledRule, blocks, posX, posZ, seaLevel, minH, maxH);
-                        } else {
-                            if (blocks.add(found, y)) {
-                                anyChange = true;
-                            }
-                        }
-                        break;
+                if (Collections.disjoint(foundBlocks, expectedBlocks)) {
+                    break; // Stop going down if the expected block is no longer generated here
+                }
+            }
+        }
+
+        for (Map.Entry<Integer, Set<Block>> entry : maxs.entrySet()) {
+            int max = entry.getKey();
+            Set<Block> expectedBlocks = entry.getValue();
+
+            // Scan upwards from the maximum range bound
+            for (int y = max; y <= maxH; y++) {
+                Set<Block> foundBlocks = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
+
+                if (foundBlocks.isEmpty()) {
+                    break;
+                }
+
+                boolean foundNewBlock = false;
+
+                for (Block found : foundBlocks) {
+                    if (!blocks.blocks.containsKey(found)) {
+                        foundNewBlock = true;
                     }
+                    if (y > max || !expectedBlocks.contains(found)) {
+                        pendingChanges.computeIfAbsent(found, k -> new ArrayList<>()).add(y);
+                    }
+                }
+
+                if (foundNewBlock) {
+                    return fullScan(context, compiledRule, blocks, posX, posZ, seaLevel, minH, maxH);
+                }
+
+                if (Collections.disjoint(foundBlocks, expectedBlocks)) {
+                    break;
+                }
+            }
+        }
+
+        for (Map.Entry<Block, List<Integer>> change : pendingChanges.entrySet()) {
+            for (int y : change.getValue()) {
+                if (blocks.add(change.getKey(), y)) {
+                    anyChange = true;
                 }
             }
         }
@@ -275,11 +312,10 @@ public class NodeUtils {
         BlockState lastState = null;
         int[] fluidLevel;
 
-
         context.updateXZ(posX, posZ);
-        context.lastMinSurfaceLevelUpdate = context.lastUpdateXZ;
 
         for (int y = maxH; y >= minH; y--) {
+            int[] minSurfaceLevels = new int[]{y - 1, y + 1};
 
             if (y <= seaLevel) {
                 fluidLevel = new int[]{Integer.MIN_VALUE, seaLevel};
@@ -292,40 +328,46 @@ public class NodeUtils {
                     for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
                         int consecutiveSame = 0;
 
-                        for (int depth = 0; depth <= maxTestDepth; depth++) {
-                            context.surfaceDepth    = surfaceDepth;
-                            context.minSurfaceLevel = surfaceDepth;
-                            context.updateY(depth, above, level, posX, y, posZ);
+                        for (int minSurfaceLevel : minSurfaceLevels) {
+                            for (int depth = 0; depth <= maxTestDepth; depth++) {
+                                context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
+                                context.surfaceDepth = surfaceDepth;
+                                context.minSurfaceLevel = minSurfaceLevel;
+                                context.updateY(depth, above, level, posX, y, posZ);
 
-                            BlockState cur = compiledRule.tryApply(posX, y, posZ);
+                                BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
-                            if (Objects.equals(cur, lastState)) {
-                                if (++consecutiveSame >= maxSameReject) break;
-                            } else {
-                                consecutiveSame = 0;
-                                lastState = cur;
+                                if (Objects.equals(cur, lastState)) {
+                                    if (++consecutiveSame >= maxSameReject) break;
+                                } else {
+                                    consecutiveSame = 0;
+                                    lastState = cur;
 
-                                if (cur != null && blocks.add(cur.getBlock(), y)) {
-                                    anyChange = true;
+                                    if (cur != null && blocks.add(cur.getBlock(), y)) {
+                                        anyChange = true;
+                                    }
                                 }
                             }
-                        }
-                        consecutiveSame = 0;
-                        for (int depth = 0; depth <= maxTestDepth; depth++) {
-                            context.surfaceDepth    = surfaceDepth;
-                            context.minSurfaceLevel = surfaceDepth;
-                            context.updateY(above, depth, level, posX, y, posZ);
 
-                            BlockState cur = compiledRule.tryApply(posX, y, posZ);
+                            consecutiveSame = 0;
 
-                            if (Objects.equals(cur, lastState)) {
-                                if (++consecutiveSame >= maxSameReject) break;
-                            } else {
-                                consecutiveSame = 0;
-                                lastState = cur;
+                            for (int depth = 0; depth <= maxTestDepth; depth++) {
+                                context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
+                                context.surfaceDepth = surfaceDepth;
+                                context.minSurfaceLevel = minSurfaceLevel;
+                                context.updateY(above, depth, level, posX, y, posZ);
 
-                                if (cur != null && blocks.add(cur.getBlock(), y)) {
-                                    anyChange = true;
+                                BlockState cur = compiledRule.tryApply(posX, y, posZ);
+
+                                if (Objects.equals(cur, lastState)) {
+                                    if (++consecutiveSame >= maxSameReject) break;
+                                } else {
+                                    consecutiveSame = 0;
+                                    lastState = cur;
+
+                                    if (cur != null && blocks.add(cur.getBlock(), y)) {
+                                        anyChange = true;
+                                    }
                                 }
                             }
                         }
@@ -336,11 +378,12 @@ public class NodeUtils {
         return anyChange;
     }
 
-    private static Block queryBlock(SurfaceRules.Context context, SurfaceRules.SurfaceRule compiledRule, int posX, int posZ, int y, int seaLevel) {
+    private static Set<Block> queryBlock(SurfaceRules.Context context, SurfaceRules.SurfaceRule compiledRule, int posX, int posZ, int y, int seaLevel) {
         context.updateXZ(posX, posZ);
-        context.lastMinSurfaceLevelUpdate = context.lastUpdateXZ;
 
+        Set<Block> foundBlocks = new HashSet<>();
         int[] fluidLevel;
+        int[] minSurfaceLevels = new int[]{y - 1, y + 1};
 
         if (y <= seaLevel) {
             fluidLevel = new int[]{Integer.MIN_VALUE, seaLevel};
@@ -348,36 +391,40 @@ public class NodeUtils {
             fluidLevel = new int[]{seaLevel};
         }
 
-        for (int level : fluidLevel) {
-            for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
-                for (int above : TEST_ABOVE_LEVELS) {
-                    for (int depth = 0; depth <= maxTestDepth; depth++) {
-                        context.surfaceDepth    = surfaceDepth;
-                        context.minSurfaceLevel = surfaceDepth;
-                        context.updateY(depth, above, level, posX, y, posZ);
+        for (int above : TEST_ABOVE_LEVELS) {
+            for (int level : fluidLevel) {
+                for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
+                    for (int minSurfaceLevel : minSurfaceLevels) {
+                        for (int depth = 0; depth <= maxTestDepth; depth++) {
+                            context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
+                            context.surfaceDepth = surfaceDepth;
+                            context.minSurfaceLevel = minSurfaceLevel;
+                            context.updateY(depth, above, level, posX, y, posZ);
 
-                        BlockState cur = compiledRule.tryApply(posX, y, posZ);
+                            BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
-                        if (cur != null) {
-                            return cur.getBlock();
+                            if (cur != null) {
+                                foundBlocks.add(cur.getBlock());
+                            }
                         }
-                    }
 
-                    for (int depth = 0; depth <= maxTestDepth; depth++) {
-                        context.surfaceDepth    = surfaceDepth;
-                        context.minSurfaceLevel = surfaceDepth;
-                        context.updateY(above, depth, level, posX, y, posZ);
+                        for (int depth = 0; depth <= maxTestDepth; depth++) {
+                            context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
+                            context.surfaceDepth = surfaceDepth;
+                            context.minSurfaceLevel = minSurfaceLevel;
+                            context.updateY(above, depth, level, posX, y, posZ);
 
-                        BlockState cur = compiledRule.tryApply(posX, y, posZ);
+                            BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
-                        if (cur != null) {
-                            return cur.getBlock();
+                            if (cur != null) {
+                                foundBlocks.add(cur.getBlock());
+                            }
                         }
                     }
                 }
             }
         }
-        return null;
+        return foundBlocks;
     }
 
     public static void getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
