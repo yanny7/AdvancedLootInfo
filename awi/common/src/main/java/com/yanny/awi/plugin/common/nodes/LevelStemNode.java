@@ -27,7 +27,13 @@ import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
 public class LevelStemNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("level_stem");
@@ -51,26 +57,63 @@ public class LevelStemNode extends ListNode {
 
         seaLevel = generator.getSeaLevel();
 
-        if (levelStem.generator() instanceof NoiseBasedChunkGenerator noiseGenerator) {
+        if (generator instanceof NoiseBasedChunkGenerator noiseGenerator) {
             ServerLevel serverLevel = utils.getServerLevel();
             RegistryAccess registryAccess = serverLevel.registryAccess();
-            RandomState randomState = RandomState.create(noiseGenerator.generatorSettings().value(), registryAccess.lookupOrThrow(Registries.NOISE), serverLevel.getSeed());
-            NodeUtils.DimensionContext dimensionContext = new NodeUtils.DimensionContext(registryAccess, noiseGenerator, randomState);
 
-            for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
-                LOGGER.info("Analyzing biome {}", biomeHolder.unwrapKey().get().location());
-                NodeUtils.getBaseBlocksForBiome(dimensionContext, biomeHolder);
+            // Each worker thread gets its own DimensionContext + RandomState (both are mutable)
+            Supplier<NodeUtils.DimensionContext> contextFactory = () -> {
+                RandomState localRandomState = RandomState.create(
+                        noiseGenerator.generatorSettings().value(),
+                        registryAccess.lookupOrThrow(Registries.NOISE),
+                        serverLevel.getSeed()
+                );
+                return new NodeUtils.DimensionContext(registryAccess, noiseGenerator, localRandomState);
+            };
 
-                TooltipNode tooltip = TooltipBuilder.array((b) -> {
-                    b.add(utils.getValueTooltip(utils, defaultBlock).build(Lang.Value.DEFAULT_BLOCK));
+            ThreadLocal<NodeUtils.DimensionContext> threadLocalCtx = ThreadLocal.withInitial(contextFactory);
+            List<Holder<Biome>> biomes = new ArrayList<>(generator.getBiomeSource().possibleBiomes());
+            int threadCount = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
+            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
 
-                    if (!defaultFluid.isSame(Fluids.EMPTY)) {
-                        b.add(utils.getValueTooltip(utils, defaultFluid).build(Lang.Value.DEFAULT_FLUID));
-                        b.add(utils.getValueTooltip(utils, seaLevel).build(Lang.Value.SEA_LEVEL));
-                    }
-                }).build();
+            List<Future<BiomeResult>> futures = biomes.stream()
+                    .map(biomeHolder -> executor.submit(() -> {
+                        NodeUtils.DimensionContext ctx = threadLocalCtx.get();
+                        NodeUtils.LayerHolder result = NodeUtils.getBaseBlocksForBiome(ctx, biomeHolder);
+                        return new BiomeResult(biomeHolder, result);
+                    }))
+                    .toList();
 
-                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, Collections.emptySet()));
+            executor.shutdown();
+
+            final Block finalDefaultBlock = defaultBlock;
+            final Fluid finalDefaultFluid = defaultFluid;
+            final int finalSeaLevel = seaLevel;
+
+            for (Future<BiomeResult> future : futures) {
+                try {
+                    BiomeResult res = future.get();
+
+                    LOGGER.info("Analyzing biome {}", res.biomeHolder.unwrapKey().get().location());
+                    res.layers().log();
+
+                    TooltipNode tooltip = TooltipBuilder.array((b) -> {
+                        b.add(utils.getValueTooltip(utils, finalDefaultBlock).build(Lang.Value.DEFAULT_BLOCK));
+
+                        if (!finalDefaultFluid.isSame(Fluids.EMPTY)) {
+                            b.add(utils.getValueTooltip(utils, finalDefaultFluid).build(Lang.Value.DEFAULT_FLUID));
+                            b.add(utils.getValueTooltip(utils, finalSeaLevel).build(Lang.Value.SEA_LEVEL));
+                        }
+                    }).build();
+
+                    addChildren(new BiomeNode(utils, res.biomeHolder().value(), tooltip, Collections.emptySet()));
+
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    LOGGER.error("Biome analysis interrupted", e);
+                } catch (Exception e) {
+                    LOGGER.error("Failed to analyze biome", e);
+                }
             }
         } else {
             for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
@@ -107,4 +150,6 @@ public class LevelStemNode extends ListNode {
     public ResourceLocation getId() {
         return ID;
     }
+
+    record BiomeResult(Holder<Biome> biomeHolder, NodeUtils.LayerHolder layers) {}
 }

@@ -16,6 +16,7 @@ import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -24,7 +25,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class NodeUtils {
-
     private static final Logger LOGGER = LogUtils.getLogger();
 
     private static final int[] TEST_SURFACE_DEPTHS = {4, 0, -4};
@@ -90,8 +90,6 @@ public class NodeUtils {
 
     static final int maxTestDepth  = 16;
     static final int maxSameReject = 8;
-
-    // -------------------------------------------------------------------------
 
     public static class Range {
         int min, max;
@@ -233,7 +231,6 @@ public class NodeUtils {
             int min = entry.getKey();
             Set<Block> expectedBlocks = entry.getValue();
 
-            // Scan downwards from the minimum range bound
             for (int y = min; y >= minH; y--) {
                 Set<Block> foundBlocks = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
 
@@ -257,7 +254,7 @@ public class NodeUtils {
                 }
 
                 if (Collections.disjoint(foundBlocks, expectedBlocks)) {
-                    break; // Stop going down if the expected block is no longer generated here
+                    break;
                 }
             }
         }
@@ -266,7 +263,6 @@ public class NodeUtils {
             int max = entry.getKey();
             Set<Block> expectedBlocks = entry.getValue();
 
-            // Scan upwards from the maximum range bound
             for (int y = max; y <= maxH; y++) {
                 Set<Block> foundBlocks = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
 
@@ -375,9 +371,11 @@ public class NodeUtils {
                 }
             }
         }
+
         return anyChange;
     }
 
+    @NotNull
     private static Set<Block> queryBlock(SurfaceRules.Context context, SurfaceRules.SurfaceRule compiledRule, int posX, int posZ, int y, int seaLevel) {
         context.updateXZ(posX, posZ);
 
@@ -427,7 +425,8 @@ public class NodeUtils {
         return foundBlocks;
     }
 
-    public static void getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
+    @NotNull
+    public static LayerHolder getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
         LayerHolder discoveredBlocks = new LayerHolder();
 
         try {
@@ -448,6 +447,6 @@ public class NodeUtils {
 
         } catch (Throwable ignored) {}
 
-        discoveredBlocks.log();
+        return discoveredBlocks;
     }
 }
