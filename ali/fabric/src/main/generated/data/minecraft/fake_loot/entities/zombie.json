@@ -1,7 +1,6 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:alternatives",
@@ -13,8 +12,8 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "attacker",
                   "predicate": {
-                    "type": "minecraft:creeper",
-                    "nbt": "{powered:1b}"
+                    "minecraft:entity_type": "minecraft:creeper",
+                    "minecraft:nbt": "{powered:1b}"
                   }
                 }
               ],
@@ -37,7 +36,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:iron_shovel"
                       }
@@ -56,7 +55,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -84,7 +82,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:iron_sword"
                       }
@@ -103,7 +101,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -131,7 +128,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "head": {
                         "items": "minecraft:leather_helmet"
                       }
@@ -150,7 +147,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -178,7 +174,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "chest": {
                         "items": "minecraft:leather_chestplate"
                       }
@@ -197,7 +193,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -225,7 +220,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "legs": {
                         "items": "minecraft:leather_leggings"
                       }
@@ -244,7 +239,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -272,7 +266,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "feet": {
                         "items": "minecraft:leather_boots"
                       }
@@ -291,7 +285,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -319,7 +312,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "head": {
                         "items": "minecraft:golden_helmet"
                       }
@@ -338,7 +331,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -366,7 +358,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "chest": {
                         "items": "minecraft:golden_chestplate"
                       }
@@ -385,7 +377,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -413,7 +404,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "legs": {
                         "items": "minecraft:golden_leggings"
                       }
@@ -432,7 +423,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -460,7 +450,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "feet": {
                         "items": "minecraft:golden_boots"
                       }
@@ -479,7 +469,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -507,7 +496,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "head": {
                         "items": "minecraft:chainmail_helmet"
                       }
@@ -526,7 +515,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -554,7 +542,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "chest": {
                         "items": "minecraft:chainmail_chestplate"
                       }
@@ -573,7 +561,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -601,7 +588,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "legs": {
                         "items": "minecraft:chainmail_leggings"
                       }
@@ -620,7 +607,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -648,7 +634,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "feet": {
                         "items": "minecraft:chainmail_boots"
                       }
@@ -667,7 +653,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -695,7 +680,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "head": {
                         "items": "minecraft:iron_helmet"
                       }
@@ -714,7 +699,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -742,7 +726,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "chest": {
                         "items": "minecraft:iron_chestplate"
                       }
@@ -761,7 +745,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -789,7 +772,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "legs": {
                         "items": "minecraft:iron_leggings"
                       }
@@ -808,7 +791,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -836,7 +818,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "feet": {
                         "items": "minecraft:iron_boots"
                       }
@@ -855,7 +837,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -883,7 +864,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "head": {
                         "items": "minecraft:diamond_helmet"
                       }
@@ -902,7 +883,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -930,7 +910,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "chest": {
                         "items": "minecraft:diamond_chestplate"
                       }
@@ -949,7 +929,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -977,7 +956,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "legs": {
                         "items": "minecraft:diamond_leggings"
                       }
@@ -996,7 +975,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -1024,7 +1002,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "feet": {
                         "items": "minecraft:diamond_boots"
                       }
@@ -1043,7 +1021,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,

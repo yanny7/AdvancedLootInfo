@@ -1,7 +1,6 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:alternatives",
@@ -23,7 +22,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:trident"
                       }
@@ -42,7 +41,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -70,7 +68,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:fishing_rod"
                       }
@@ -89,7 +87,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -107,7 +104,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:nautilus_shell"
                       }

@@ -8,7 +8,8 @@ import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import com.yanny.ali.plugin.server.ValueTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.*;
 import net.minecraft.core.component.*;
@@ -25,11 +26,10 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.feline.CatVariants;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -211,8 +211,8 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getDamageSourcePredicateTooltip(UTILS, DamageSourcePredicate.Builder.damageType()
                 .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                 .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
-                .source(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.BAT))
-                .direct(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.ARROW))
+                .source(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.BAT))
+                .direct(EntityPredicate.Builder.entity().of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.ARROW))
                 .isDirect(false)
                 .build()).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
@@ -239,7 +239,7 @@ public class GenericTooltipTest {
 
         compoundTag.putInt("range", 5);
         assertTooltip(ValueTooltipUtils.getEntityPredicateTooltip(UTILS, EntityPredicate.Builder.entity()
-                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT))
+                .entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.CAT))
                 .distance(new DistancePredicate(MinMaxBounds.Doubles.exactly(10), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .located(LocationPredicate.Builder.location().setX(MinMaxBounds.Doubles.atLeast(20)))
                 .steppingOn(LocationPredicate.Builder.location().setX(MinMaxBounds.Doubles.atMost(30)))
@@ -250,8 +250,7 @@ public class GenericTooltipTest {
                 .nbt(new NbtPredicate(compoundTag))
                 .flags(EntityFlagsPredicate.Builder.flags().setIsBaby(true))
                 .equipment(EntityEquipmentPredicate.Builder.equipment().head(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)))
-                .subPredicate(LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(10)))
-                .components(DataComponentMatchers.Builder.components().exact(DataComponentExactPredicate.expect(DataComponents.CAT_VARIANT, LOOKUP.lookup(Registries.CAT_VARIANT).orElseThrow().getOrThrow(CatVariants.PERSIAN))).build())
+                .lightingBolt(LightningBoltPredicate.blockSetOnFire(MinMaxBounds.Ints.atMost(10)))
                 .vehicle(EntityPredicate.Builder.entity().team("blue"))
                 .passenger(EntityPredicate.Builder.entity().team("white"))
                 .targetedEntity(EntityPredicate.Builder.entity().team("red"))
@@ -259,66 +258,62 @@ public class GenericTooltipTest {
                 .moving(new MovementPredicate(MinMaxBounds.Doubles.between(1, 5), MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY, MinMaxBounds.Doubles.ANY))
                 .team("orange")
                 .slots(new SlotsPredicate(Map.of(SlotRange.of("test", IntList.of(1, 2)), ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.GRANITE).build())))
-                .components(DataComponentMatchers.Builder.components()
-                        .exact(DataComponentExactPredicate.builder().expect(DataComponents.DAMAGE, 3).build())
-                        .partial(DataComponentPredicates.DAMAGE, DamagePredicate.durability(MinMaxBounds.Ints.between(1, 8))).build())
+                .components(DataComponentExactPredicate.builder().expect(DataComponents.DAMAGE, 3).build())
+                .components(Map.of(DataComponentPredicates.DAMAGE, DamagePredicate.durability(MinMaxBounds.Ints.between(1, 8))))
                 .build()
         ).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Entity Type: minecraft:cat",
-                "  -> Distance to Player:",
+                "  -> Distance To Player:",
                 "    -> X: =10.0",
                 "  -> Location:",
-                "    -> Located:",
-                "      -> Position:",
-                "        -> X: ≥20.0",
-                "    -> Stepping on Location:",
-                "      -> Position:",
-                "        -> X: ≤30.0",
-                "  -> Movement:",
-                "    -> X: 1.0-5.0",
-                "  -> Periodic Tick: 1000",
-                "  -> Mob Effects:",
+                "    -> Position:",
+                "      -> X: ≥20.0",
+                "  -> Stepping On:",
+                "    -> Position:",
+                "      -> X: ≤30.0",
+                "  -> Effects:",
                 "    -> minecraft:absorption",
                 "      -> Is Ambient: true",
                 "    -> minecraft:blindness",
                 "      -> Is Visible: false",
                 "  -> Nbt: {range:5}",
-                "  -> Entity Flags:",
+                "  -> Flags:",
                 "    -> Is Baby: true",
-                "  -> Entity Equipment:",
+                "  -> Equipment:",
                 "    -> Head:",
                 "      -> Items:",
                 "        -> minecraft:andesite",
                 "        -> minecraft:diorite",
-                "  -> Entity Sub Predicate:",
-                "    -> Lightning Bolt:",
-                "      -> Blocks On Fire: ≤10",
+                "  -> Lightning Bolt:",
+                "    -> Blocks On Fire: ≤10",
                 "  -> Vehicle:",
                 "    -> Team: blue",
                 "  -> Passenger:",
                 "    -> Team: white",
                 "  -> Targeted Entity:",
                 "    -> Team: red",
+                "  -> Periodic Tick: 1000",
+                "  -> Movement:",
+                "    -> X: 1.0-5.0",
                 "  -> Team: orange",
                 "  -> Slots:",
                 "    -> test: [1, 2]",
                 "      -> Predicate:",
                 "        -> Item: minecraft:granite",
                 "  -> Components:",
-                "    -> Expected Components:",
-                "      -> minecraft:damage",
-                "        -> Value: 3",
-                "    -> Partial Matchers:",
-                "      -> minecraft:damage",
-                "        -> Predicate:",
-                "          -> Durability: 1-8"
+                "    -> minecraft:damage",
+                "      -> Value: 3",
+                "  -> Predicate:",
+                "    -> minecraft:damage",
+                "      -> Predicate:",
+                "        -> Durability: 1-8"
         ));
     }
 
     @Test
     public void testEntityTypePredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CAT)).build(Lang.Branch.ENTITY_TYPES), List.of(
+        assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.CAT)).build(Lang.Branch.ENTITY_TYPES), List.of(
                 "Entity Type: minecraft:cat"
         ));
         assertTooltip(ValueTooltipUtils.getEntityTypePredicateTooltip(UTILS, EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypeTags.SKELETONS)).build(Lang.Branch.ENTITY_TYPES), List.of(
@@ -335,8 +330,8 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.atMost(30),
                 MinMaxBounds.Doubles.atLeast(15),
                 MinMaxBounds.Doubles.between(2, 5.5)
-        )).build(Lang.Branch.DISTANCE_TO_PLAYER), List.of(
-                "Distance to Player:",
+        )).build(Lang.EntitySubPredicates.DISTANCE_TO_PLAYER), List.of(
+                "Distance To Player:",
                 "  -> X: =10.0",
                 "  -> Y: ≥20.0",
                 "  -> Z: ≤30.0",
@@ -472,7 +467,7 @@ public class GenericTooltipTest {
     public void testMobEffectPredicateTooltip() {
         assertTooltip(ValueTooltipUtils.getMobEffectPredicateTooltip(UTILS, MobEffectsPredicate.Builder.effects()
                 .and(MobEffects.ABSORPTION, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.between(10, 15), MinMaxBounds.Ints.atMost(5), Optional.of(true), Optional.of(false)))
-                .and(MobEffects.BLINDNESS, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.atLeast(5), MinMaxBounds.Ints.between(1, 2), Optional.empty(), Optional.empty())).build().orElseThrow()
+                .and(MobEffects.BLINDNESS, new MobEffectsPredicate.MobEffectInstancePredicate(MinMaxBounds.Ints.atLeast(5), MinMaxBounds.Ints.between(1, 2), Optional.empty(), Optional.empty())).build()
         ).build(Lang.Branch.MOB_EFFECTS), List.of(
                 "Mob Effects:",
                 "  -> minecraft:absorption",
@@ -1178,7 +1173,7 @@ public class GenericTooltipTest {
         tag.putInt("test", 5);
 
         assertTooltip(ValueTooltipUtils.getBeehiveBlockEntityOccupantTooltip(UTILS, new BeehiveBlockEntity.Occupant(
-                TypedEntityData.of(EntityType.BEE, tag),
+                TypedEntityData.of(EntityTypes.BEE, tag),
                 2,
                 3
         )).build(Lang.Branch.OCCUPANT), List.of(
@@ -1262,7 +1257,7 @@ public class GenericTooltipTest {
                 MinMaxBounds.Doubles.atLeast(1.5F),
                 MinMaxBounds.Doubles.atLeast(0.5F),
                 MinMaxBounds.Doubles.atLeast(10)
-        )).build(Lang.Branch.MOVEMENT), List.of(
+        )).build(Lang.EntitySubPredicates.MOVEMENT), List.of(
                 "Movement:",
                 "  -> X: ≤3.0",
                 "  -> Y: 1.0-2.0",

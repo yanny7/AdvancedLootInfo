@@ -4,7 +4,7 @@ import com.yanny.ali.plugin.server.DataComponentTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -25,7 +25,7 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.LockCode;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -366,7 +366,7 @@ public class DataComponentTooltipTest {
                 Holder.direct(SoundEvents.ANVIL_FALL),
                 Optional.of(ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.withDefaultNamespace("anvil"))),
                 Optional.of(Identifier.withDefaultNamespace("camera")),
-                Optional.of(HolderSet.direct(Holder.direct(EntityType.ALLAY), Holder.direct(EntityType.ARMADILLO))),
+                Optional.of(HolderSet.direct(Holder.direct(EntityTypes.ALLAY), Holder.direct(EntityTypes.ARMADILLO))),
                 true,
                 true,
                 false,
@@ -814,8 +814,8 @@ public class DataComponentTooltipTest {
     @Test
     public void testBeesTooltip() {
         assertTooltip(DataComponentTooltipUtils.getBeesTooltip(UTILS, new Bees(List.of(
-                new BeehiveBlockEntity.Occupant(TypedEntityData.of(EntityType.BEE, new CompoundTag()), 100, 20),
-                new BeehiveBlockEntity.Occupant(TypedEntityData.of(EntityType.BEE, new CompoundTag()), 1000, 30)
+                new BeehiveBlockEntity.Occupant(TypedEntityData.of(EntityTypes.BEE, new CompoundTag()), 100, 20),
+                new BeehiveBlockEntity.Occupant(TypedEntityData.of(EntityTypes.BEE, new CompoundTag()), 1000, 30)
         ))).build(), List.of(
                 "Bees:",
                 "  -> Occupant:",

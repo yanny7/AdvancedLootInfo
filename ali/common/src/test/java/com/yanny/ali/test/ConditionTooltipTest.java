@@ -1,7 +1,10 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.ConditionTooltipUtils;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -10,7 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.clock.WorldClocks;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
@@ -87,7 +90,7 @@ public class ConditionTooltipTest {
                 DamageSourcePredicate.Builder.damageType()
                         .tag(TagPredicate.is(DamageTypeTags.BYPASSES_ARMOR))
                         .tag(TagPredicate.isNot(DamageTypeTags.IS_EXPLOSION))
-                        .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.WARDEN)))
+                        .direct(EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(LOOKUP.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.WARDEN)))
                         .source(EntityPredicate.Builder.entity().team("Blue"))
                         .isDirect(true)
         ).build()).build(), List.of(
@@ -129,10 +132,10 @@ public class ConditionTooltipTest {
             "Entity Properties:",
             "  -> Target: ATTACKER",
             "  -> Predicate:",
-            "    -> Entity Equipment:",
+                "    -> Team: blue",
+            "    -> Equipment:",
             "      -> Main Hand:",
-            "        -> Item: minecraft:trident",
-            "    -> Team: blue"
+            "        -> Item: minecraft:trident"
         ));
     }
 

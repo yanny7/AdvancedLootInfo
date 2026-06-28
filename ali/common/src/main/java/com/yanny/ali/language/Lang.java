@@ -107,18 +107,41 @@ public final class Lang {
     }
 
     public enum EntitySubPredicates implements ITooltipKey {
+        COMPONENTS(Branch.COMPONENTS.translation),
+        CUBE_MOB("cube_mob", "Cube Mob:"),
+        DISTANCE_TO_PLAYER("distance_to_player", "Distance To Player:"),
+        EFFECTS(Branch.EFFECTS.translation),
+        ENTITY_TAGS("entity_tags", "Entity Tags:"),
+        ENTITY_TYPE(Branch.ENTITY_TYPES.translation),
+        EQUIPMENT("equipment", "Equipment:"),
         FISHING_HOOK("fishing_hook", "Fishing Hook:"),
+        FLAGS(Branch.FLAGS.translation),
         LIGHTNING_BOLT("lightning_bolt", "Lightning Bolt:"),
+        LOCATION(Branch.LOCATION.translation),
+        MOVEMENT("movement", "Movement:"),
+        MOVEMENT_AFFECTED_BY("movement_affected_by", "Movement Affected By:"),
+        NBT("nbt", "Nbt: %s"),
+        PASSENGER("passenger", "Passenger:"),
+        PERIODIC_TICK("periodic_tick", "Periodic Tick: %s"),
         PLAYER("player", "Player:"),
+        PREDICATES(Branch.PREDICATE.translation),
         RAIDER("raider", "Raider:"),
         SHEEP("sheep", "Sheep:"),
-        SLIME("slime", "Slime:"),
+        SLOTS(Branch.SLOTS.translation),
+        STEPPING_ON("stepping_on", "Stepping On:"),
+        TARGETED_ENTITY("targeted_entity", "Targeted Entity:"),
+        TEAM("team", "Team: %s"),
+        VEHICLE("vehicle", "Vehicle:"),
         ;
 
         private final Translation translation;
 
         EntitySubPredicates(String k, String e) {
             this.translation = new Translation("ali.type.entity_sub_predicate." + k, e);
+        }
+
+        EntitySubPredicates(Translation translation) {
+            this.translation = translation;
         }
 
         @NotNull
@@ -326,7 +349,6 @@ public final class Lang {
         PAGE("page", "Page: %s"),
         PATTERN("pattern", "Pattern: %s"),
         PERIOD("period", "Period: %s"),
-        PERIODIC_TICK("periodic_tick", "Periodic Tick: %s"),
         PARTIAL_MATCHER("partial_matcher", "Partial Matchers: %s"),
         PER_LEVEL("per_level", "Per Level: %s"),
         POTION("potion", "Potion: %s"),
@@ -374,7 +396,6 @@ public final class Lang {
         TAG("tag", "Tag: %s"),
         TARGET("target", "Target: %s"),
         TARGET_PATH("target_path", "Target Path: %s"),
-        TEAM("team", "Team: %s"),
         THRESHOLD("threshold", "Threshold: %s"),
         TICKS_IN_HIVE("ticks_in_hive", "Ticks In Hive: %s"),
         TITLE("title", "Title: %s"),
@@ -411,8 +432,9 @@ public final class Lang {
 
     public enum Branch implements ITooltipKey {
         ADVANCEMENTS("advancements", "Advancements:"),
-        AFFECTS_MOVEMENT("affects_movement", "Affects Movement:"),
         ALLOWED_ENTITIES(Value.ALLOWED_ENTITY, "allowed_entities", "Allowed Entities:"),
+        ALL_OF("all_of", "All Of:"),
+        ANY_OF("any_of", "Any Of:"),
         ATTRIBUTES(Value.ATTRIBUTE, "attributes", "Attributes:"),
         ATTRIBUTE_MODIFIER("attribute_modifier", "Attribute Modifier:"),
         BANNER_PATTERNS("banner_patterns", "Banner Patterns:"),
@@ -443,7 +465,6 @@ public final class Lang {
         DENOMINATOR("denominator", "Denominator:"),
         DIRECT_ENTITY("direct_entity", "Direct Entity:"),
         DISMOUNT_CONDITION("dismount_condition", "Dismount Condition:"),
-        DISTANCE_TO_PLAYER("distance_to_player", "Distance to Player:"),
         DOUBLE_TRADE_PRICE_ENCHANTMENTS("double_trade_price_enchantments", "Double Trade Price:"),
         EFFECT("effect", "Effect:"),
         EFFECTS("effects", "Effects:"),
@@ -496,7 +517,7 @@ public final class Lang {
         MOB_EFFECTS("mob_effects", "Mob Effects:"),
         MODIFIER("modifier", "Modifier:"),
         MODIFIERS("modifiers", "Modifiers:"),
-        MOVEMENT("movement", "Movement:"),
+        NONE_OF("none_of", "None Of:"),
         NUMERATOR("numerator", "Numerator:"),
         OCCUPANT("occupant", "Occupant:"),
         OFFHAND("offhand", "Offhand:"),
@@ -508,7 +529,6 @@ public final class Lang {
         PAGE("page", "Page:"),
         PAGES("pages", "Pages:"),
         PARTIAL_MATCHERS(Value.PARTIAL_MATCHER, "partial_matchers", "Partial Matchers:"),
-        PASSENGER("passenger", "Passenger:"),
         PATTERNS(Value.PATTERN, "patterns", "Patterns:"),
         POSITION("position", "Position:"),
         POTIONS(Value.POTION, "potions", "Potions:"),
@@ -524,18 +544,15 @@ public final class Lang {
         SONGS(Value.SONG, "songs", "Songs:"),
         SOURCE_ENTITY("source_entity", "Source Entity:"),
         STATS("stats", "Stats:"),
-        STEPPING_ON_LOCATION("stepping_on_location", "Stepping on Location:"),
         STRINGS("strings", "Strings:"),
         STRUCTURES(Value.STRUCTURE, "structures", "Structures:"),
         STUCK_ENTITY("stuck_entity", "Stuck Entity:"),
         STYLED_LINES(Value.LINE, "styled_lines", "Styled Lines:"),
         TAGS("tags", "Tags:"),
-        TARGETED_ENTITY("targeted_entity", "Targeted Entity:"),
         TITLE("title", "Title:"),
         TYPES("types", "Types:"),
         VALUE("value", "Value:"),
         VALUES(Value.VALUE, "values", "Values:"),
-        VEHICLE("vehicle", "Vehicle:"),
         ;
 
         private final Translation translation;

@@ -11,6 +11,8 @@ import com.yanny.ali.plugin.mods.BaseAccessor;
 import com.yanny.ali.plugin.mods.ClassAccessor;
 import com.yanny.ali.plugin.mods.ReflectionUtils;
 import com.yanny.ali.plugin.server.TooltipUtils;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
@@ -94,10 +96,10 @@ public class GlobalLootModifierUtils {
     }
 
     public static boolean entityPredicate(LootItemCondition c) {
-        if (c instanceof LootItemEntityPropertyCondition condition
-                && condition.entityTarget() == LootContext.EntityTarget.THIS
-                && condition.predicate().isPresent()
-                && condition.predicate().get().entityType().isPresent()) {
+        if (c instanceof LootItemEntityPropertyCondition(Optional<EntityPredicate> predicate, LootContext.EntityTarget entityTarget)
+                && entityTarget == LootContext.EntityTarget.THIS
+                && predicate.isPresent()
+                && predicate.get().parts.containsKey(EntityTypePredicate.CODEC)) {
             return true;
         } else {
             return c instanceof AnyOfCondition condition && entityPredicate(condition.terms);
@@ -110,11 +112,11 @@ public class GlobalLootModifierUtils {
 
     public static boolean entityPredicate(List<LootItemCondition> conditions, Entity entity) {
         return conditions.stream().anyMatch((c) -> {
-            if (c instanceof LootItemEntityPropertyCondition condition
-                    && condition.entityTarget() == LootContext.EntityTarget.THIS
-                    && condition.predicate().isPresent()
-                    && condition.predicate().get().entityType().isPresent()
-                    && condition.predicate().get().entityType().get().matches(Holder.direct(entity.getType()))) {
+            if (c instanceof LootItemEntityPropertyCondition(Optional<EntityPredicate> predicate, LootContext.EntityTarget entityTarget)
+                    && entityTarget == LootContext.EntityTarget.THIS
+                    && predicate.isPresent()
+                    && predicate.get().parts.containsKey(EntityTypePredicate.CODEC)
+                    && ((EntityTypePredicate) predicate.get().parts.get(EntityTypePredicate.CODEC)).matches(Holder.direct(entity.getType()))) {
                 return true;
             } else {
                 return c instanceof AnyOfCondition condition && entityPredicate(condition.terms, entity);

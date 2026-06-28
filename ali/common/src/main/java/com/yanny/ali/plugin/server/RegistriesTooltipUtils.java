@@ -3,7 +3,6 @@ package com.yanny.ali.plugin.server;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
-import net.minecraft.advancements.criterion.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -189,11 +188,6 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getInstrumentTooltip(IServerUtils utils, Instrument value) {
         return getRegistryTooltip(utils, Registries.INSTRUMENT, value);
-    }
-
-    @NotNull
-    public static TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, predicate.codec());
     }
 
     @NotNull

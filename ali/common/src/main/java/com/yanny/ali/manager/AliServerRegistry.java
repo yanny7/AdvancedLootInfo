@@ -2,7 +2,7 @@ package com.yanny.ali.manager;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
@@ -15,7 +15,7 @@ import com.yanny.ali.plugin.common.nodes.MissingNode;
 import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.EnchantedRanges;
 import com.yanny.ali.plugin.server.MissingTooltipUtils;
-import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -66,7 +66,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Ingredient, TooltipBuilder>> ingredientTooltips = registerClassKeyed("ingredient tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, DataComponentPredicate, TooltipBuilder>> dataComponentPredicateTooltips = registerClassKeyed("data component predicate tooltips", true, HashMap::new, BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE);
-    private final ManagedRegistry<MapCodec<?>, BiFunction<IServerUtils, EntitySubPredicate, TooltipBuilder>> entitySubPredicateTooltips = register("entity sub predicate tooltips", true, HashMap::new, AliServerRegistry::mapCodecNameGetter, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, EntitySubPredicate, TooltipBuilder>> entitySubPredicateTooltips = registerClassKeyed("entity sub predicate tooltips", true, HashMap::new, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE);
     private final ManagedRegistry<DataComponentType<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> dataComponentTypeTooltips = register("data component type tooltips", true, HashMap::new, AliServerRegistry::dataComponentTypeNameGetter, BuiltInRegistries.DATA_COMPONENT_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, ConsumeEffect, TooltipBuilder>> consumeEffectTooltips = registerClassKeyed("consume effect tooltips", true, HashMap::new, BuiltInRegistries.CONSUME_EFFECT_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, SlotSource, TooltipBuilder>> slotSourceTooltips = registerClassKeyed("slot source tooltips", true, HashMap::new, BuiltInRegistries.SLOT_SOURCE_TYPE);
@@ -147,7 +147,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
-    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+    public <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         entitySubPredicateTooltips.put(type, (u, c) -> getter.apply(u, (T) c));
     }
@@ -273,10 +273,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
 
     @NotNull
     @Override
-    public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
-        return entitySubPredicateTooltips.get(predicate.codec())
+    public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, Codec<T> codec, T predicate) {
+        //noinspection unchecked
+        return entitySubPredicateTooltips.get(predicate.getClass())
                 .map((i) -> i.apply(utils, predicate))
-                .orElseGet(() -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, predicate));
+                .orElseGet(() -> MissingTooltipUtils.getMissingEntitySubPredicateTooltip(utils, (Codec<EntitySubPredicate>) codec, predicate));
     }
 
     @NotNull
@@ -395,17 +396,6 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private void prepareLootModifiers() {
         for (Function<IServerUtils, List<ILootModifier<?>>> lootModifierGetter : lootModifierGetters) {
             lootModifierMap.addAll(lootModifierGetter.apply(this));
-        }
-    }
-
-    private static String mapCodecNameGetter(MapCodec<?> codec) {
-        //noinspection unchecked
-        Identifier key = BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey((MapCodec<? extends EntitySubPredicate>) codec);
-
-        if (key != null) {
-            return key.toString();
-        } else {
-            return codec.getClass().getTypeName();
         }
     }
 

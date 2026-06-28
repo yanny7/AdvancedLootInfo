@@ -2,16 +2,20 @@ package com.yanny.ali.datagen;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.NbtPredicate;
+import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
@@ -418,7 +422,7 @@ public class FakeLootProvider implements DataProvider {
                 LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.ATTACKER,
                         EntityPredicate.Builder.entity()
-                                .entityType(EntityTypePredicate.of(provider.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))
+                                .entityType(EntityTypePredicate.of(provider.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.CREEPER))
                                 .nbt(new NbtPredicate(powered))
                 )
         );

@@ -9,7 +9,6 @@ import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.ConfigUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +39,8 @@ public class AliCommonRegistry extends CoreCommonRegistry<AliConfig> implements 
 
         if (factory.isEmpty()) {
             factory = Optional.of((l) -> {
-                Entity entity = type.create(l, EntitySpawnReason.LOAD);
+                //noinspection unchecked,rawtypes
+                Entity entity = type.factory.create((EntityType) type, l);
 
                 if (entity != null) {
                     return Collections.singletonList(entity);

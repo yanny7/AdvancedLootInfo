@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.render.pip.PictureInPictureRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.SubmitNodeStorage;
 import net.minecraft.client.renderer.block.BlockModelRenderState;
 import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.feature.FeatureRenderDispatcher;
@@ -25,21 +25,20 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
     private static final Quaternionfc LIGHT_FIX_ROT = Axis.YP.rotationDegrees(285);
 
     private FeatureRenderDispatcher featureRenderDispatcher = null;
-    private SubmitNodeCollector collector = null;
 
-    public BlockPictureInPictureRenderer(MultiBufferSource.BufferSource bufferSource) {
-        super(bufferSource);
+    public BlockPictureInPictureRenderer() {
+        super();
     }
 
     @Override
-    protected void renderToTexture(BlockRenderState renderState, PoseStack poseStack) {
+    protected void renderToTexture(BlockRenderState renderState, PoseStack poseStack, SubmitNodeCollector submitNodeCollector) {
         if (featureRenderDispatcher == null) {
-            featureRenderDispatcher = Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher();
-            collector = featureRenderDispatcher.getSubmitNodeStorage();
+            featureRenderDispatcher = Minecraft.getInstance().gameRenderer.featureRenderDispatcher();
         }
 
         float scale = renderState.scale();
         BlockState state = renderState.state();
+        SubmitNodeStorage collector = new SubmitNodeStorage();
 
         poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, -RENDER_SIZE * scale);
         DEFAULT_TRANSFORM.apply(false, poseStack.last());
@@ -49,9 +48,9 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
 
         BlockDisplayContext context = BlockDisplayContext.create();
         BlockModelRenderState s = new BlockModelRenderState();
-        Minecraft.getInstance().blockModelResolver.update(s, state, context);
+        Minecraft.getInstance().getEntityRenderDispatcher().blockModelResolver.update(s, state, context);
         s.submit(poseStack, collector, LightCoordsUtil.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
-        featureRenderDispatcher.renderAllFeatures();
+        featureRenderDispatcher.renderAllFeatures(collector);
     }
 
     @Override

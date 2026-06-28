@@ -168,6 +168,7 @@ public class GenericUtils {
         entity.setXRot(-yRotation * 20.0F);
         entity.yHeadRot = entity.getYRot();
         entity.yHeadRotO = entity.getYRot();
+        entity.setId(1);
 
         float entityScale = entity.getScale();
         float $$22 = scale * entityScale;
@@ -213,7 +214,7 @@ public class GenericUtils {
                 continue;
             }
 
-            if (entityType == EntityType.PLAYER) {
+            if (entityType == EntityTypes.PLAYER) {
                 continue;
             }
 

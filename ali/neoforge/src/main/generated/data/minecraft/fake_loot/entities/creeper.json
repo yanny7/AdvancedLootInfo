@@ -1,7 +1,6 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -10,8 +9,8 @@
               "condition": "minecraft:entity_properties",
               "entity": "attacker",
               "predicate": {
-                "type": "minecraft:creeper",
-                "nbt": "{powered:1b}"
+                "minecraft:entity_type": "minecraft:creeper",
+                "minecraft:nbt": "{powered:1b}"
               }
             }
           ],

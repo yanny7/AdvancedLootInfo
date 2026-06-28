@@ -31,7 +31,7 @@ accessible field net/minecraft/world/item/slot/ContentsSlotSource component Lnet
 accessible field net/minecraft/world/item/slot/RangeSlotSource source Lnet/minecraft/world/level/storage/loot/LootContextArg;
 accessible field net/minecraft/world/item/slot/RangeSlotSource slotRange Lnet/minecraft/world/inventory/SlotRange;
 accessible field net/minecraft/world/item/slot/LimitSlotSource limit I
-accessible field net/minecraft/world/item/slot/FilteredSlotSource filter Lnet/minecraft/advancements/criterion/ItemPredicate;
+accessible field net/minecraft/world/item/slot/FilteredSlotSource filter Lnet/minecraft/advancements/predicates/ItemPredicate;
 accessible field net/minecraft/world/item/slot/CompositeSlotSource terms Ljava/util/List;
 accessible field net/minecraft/world/item/slot/TransformedSlotSource slotSource Lnet/minecraft/world/item/slot/SlotSource;
 
@@ -92,7 +92,7 @@ accessible field net/minecraft/world/level/storage/loot/functions/SetItemFunctio
 accessible field net/minecraft/world/level/storage/loot/functions/SetComponentsFunction components Lnet/minecraft/core/component/DataComponentPatch;
 accessible field net/minecraft/world/level/storage/loot/functions/ModifyContainerContents component Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;
 accessible field net/minecraft/world/level/storage/loot/functions/ModifyContainerContents modifier Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;
-accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction filter Lnet/minecraft/advancements/criterion/ItemPredicate;
+accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction filter Lnet/minecraft/advancements/predicates/ItemPredicate;
 accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction onPass Ljava/util/Optional;
 accessible field net/minecraft/world/level/storage/loot/functions/FilteredFunction onFail Ljava/util/Optional;
 accessible field net/minecraft/world/level/storage/loot/functions/CopyComponentsFunction source Lnet/minecraft/world/level/storage/loot/LootContextArg;
@@ -123,13 +123,14 @@ accessible field net/minecraft/world/level/storage/loot/functions/SetRandomDyesF
 accessible field net/minecraft/world/level/storage/loot/functions/SetRandomPotionFunction options Ljava/util/Optional;
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantWithLevelsFunction includeAdditionalCostComponent Z
 accessible field net/minecraft/world/level/storage/loot/functions/EnchantRandomlyFunction includeAdditionalCostComponent Z
+accessible field net/minecraft/advancements/predicates/entity/EntityPredicate parts Ljava/util/Map;
 
 accessible field net/minecraft/world/item/crafting/Ingredient values Lnet/minecraft/core/HolderSet;
 
 accessible method net/minecraft/world/level/storage/loot/LootContext <init> (Lnet/minecraft/world/level/storage/loot/LootParams;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/HolderGetter$Provider;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetItemFunction <init> (Ljava/util/List;Lnet/minecraft/core/Holder;)V
 accessible method net/minecraft/world/level/storage/loot/functions/ModifyContainerContents <init> (Ljava/util/List;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;Lnet/minecraft/world/level/storage/loot/functions/LootItemFunction;)V
-accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/criterion/ItemPredicate;Ljava/util/Optional;Ljava/util/Optional;)V
+accessible method net/minecraft/world/level/storage/loot/functions/FilteredFunction <init> (Ljava/util/List;Lnet/minecraft/advancements/predicates/ItemPredicate;Ljava/util/Optional;Ljava/util/Optional;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetFireworksFunction <init> (Ljava/util/List;Ljava/util/Optional;Ljava/util/Optional;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetWrittenBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetWritableBookPagesFunction <init> (Ljava/util/List;Ljava/util/List;Lnet/minecraft/world/level/storage/loot/functions/ListOperation;)V
@@ -140,7 +141,7 @@ accessible method net/minecraft/world/item/crafting/SingleItemRecipe result ()Ln
 accessible method net/minecraft/world/item/slot/ContentsSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;Lnet/minecraft/world/level/storage/loot/ContainerComponentManipulator;)V
 accessible method net/minecraft/world/item/slot/RangeSlotSource <init> (Lnet/minecraft/world/level/storage/loot/LootContextArg;Lnet/minecraft/world/inventory/SlotRange;)V
 accessible method net/minecraft/world/item/slot/LimitSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;I)V
-accessible method net/minecraft/world/item/slot/FilteredSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;Lnet/minecraft/advancements/criterion/ItemPredicate;)V
+accessible method net/minecraft/world/item/slot/FilteredSlotSource <init> (Lnet/minecraft/world/item/slot/SlotSource;Lnet/minecraft/advancements/predicates/ItemPredicate;)V
 accessible method net/minecraft/world/item/slot/GroupSlotSource <init> (Ljava/util/List;)V
 accessible method net/minecraft/world/level/storage/loot/predicates/InvertedLootItemCondition <init> (Lnet/minecraft/world/level/storage/loot/predicates/LootItemCondition;)V
 accessible method net/minecraft/world/level/storage/loot/predicates/AllOfCondition <init> (Ljava/util/List;)V
@@ -153,14 +154,14 @@ accessible class net/minecraft/world/level/storage/loot/functions/ApplyBonusCoun
 accessible class net/minecraft/world/level/storage/loot/functions/CopyCustomDataFunction$CopyOperation
 accessible class net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry
 accessible class net/minecraft/world/level/storage/loot/functions/SetAttributesFunction$Modifier
-accessible class net/minecraft/advancements/criterion/StatePropertiesPredicate$PropertyMatcher
-accessible class net/minecraft/advancements/criterion/StatePropertiesPredicate$ExactMatcher
-accessible class net/minecraft/advancements/criterion/StatePropertiesPredicate$RangedMatcher
-accessible class net/minecraft/advancements/criterion/PlayerPredicate$AdvancementPredicate
-accessible class net/minecraft/advancements/criterion/PlayerPredicate$AdvancementCriterionsPredicate
-accessible class net/minecraft/advancements/criterion/PlayerPredicate$AdvancementDonePredicate
-accessible class net/minecraft/advancements/criterion/PlayerPredicate$StatMatcher
-accessible class net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate
+accessible class net/minecraft/advancements/predicates/StatePropertiesPredicate$PropertyMatcher
+accessible class net/minecraft/advancements/predicates/StatePropertiesPredicate$ExactMatcher
+accessible class net/minecraft/advancements/predicates/StatePropertiesPredicate$RangedMatcher
+accessible class net/minecraft/advancements/predicates/entity/PlayerPredicate$AdvancementPredicate
+accessible class net/minecraft/advancements/predicates/entity/PlayerPredicate$AdvancementCriterionsPredicate
+accessible class net/minecraft/advancements/predicates/entity/PlayerPredicate$AdvancementDonePredicate
+accessible class net/minecraft/advancements/predicates/entity/PlayerPredicate$StatMatcher
+accessible class net/minecraft/advancements/predicates/LocationPredicate$PositionPredicate
 
 accessible field net/minecraft/world/item/trading/VillagerTrade wants Lnet/minecraft/world/item/trading/TradeCost;
 accessible field net/minecraft/world/item/trading/VillagerTrade additionalWants Ljava/util/Optional;
@@ -172,7 +173,8 @@ accessible field net/minecraft/world/item/trading/VillagerTrade reputationDiscou
 accessible field net/minecraft/world/item/trading/VillagerTrade xp Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;
 accessible field net/minecraft/world/item/trading/VillagerTrade doubleTradePriceEnchantments Ljava/util/Optional;
 
-accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;
+accessible field net/minecraft/world/entity/EntityType factory Lnet/minecraft/world/entity/EntityType$EntityFactory;
+accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;
 
 #########
 # TESTS #
@@ -181,8 +183,7 @@ accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraf
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$OreDrops <init> ()V
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$UniformBonusCount <init> (I)V
 accessible method net/minecraft/world/level/storage/loot/functions/ApplyBonusCount$BinomialWithBonusCount <init> (IF)V
-accessible method net/minecraft/advancements/criterion/StatePropertiesPredicate <init> (Ljava/util/List;)V
-accessible method net/minecraft/advancements/criterion/PlayerPredicate$AdvancementDonePredicate <init> (Z)V
-accessible method net/minecraft/advancements/criterion/PlayerPredicate$AdvancementCriterionsPredicate <init> (Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;)V
-accessible method net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate <init> (Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;)V
+accessible method net/minecraft/advancements/predicates/StatePropertiesPredicate <init> (Ljava/util/List;)V
+accessible method net/minecraft/advancements/predicates/entity/PlayerPredicate$AdvancementDonePredicate <init> (Z)V
+accessible method net/minecraft/advancements/predicates/entity/PlayerPredicate$AdvancementCriterionsPredicate <init> (Lit/unimi/dsi/fastutil/objects/Object2BooleanMap;)V
 accessible method net/minecraft/world/level/storage/loot/functions/SetStewEffectFunction$EffectEntry <init> (Lnet/minecraft/core/Holder;Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;)V

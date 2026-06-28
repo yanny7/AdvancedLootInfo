@@ -1,7 +1,6 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:alternatives",
@@ -23,7 +22,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:milk_bucket"
                       }
@@ -50,7 +49,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:potion"
                       }

@@ -14,7 +14,7 @@ public class FabricClientBusSubscriber {
     public static void registerEvents() {
         ClientPlayConnectionEvents.JOIN.register(FabricClientBusSubscriber::onConnect);
         ClientPlayConnectionEvents.DISCONNECT.register(FabricClientBusSubscriber::onDisconnect);
-        PictureInPictureRendererRegistry.register((context) -> new BlockPictureInPictureRenderer(context.bufferSource()));
+        PictureInPictureRendererRegistry.register((context) -> new BlockPictureInPictureRenderer());
     }
 
     private static void onConnect(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {

@@ -1,7 +1,7 @@
 package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.DataComponentPredicateTooltipUtils;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;

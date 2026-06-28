@@ -1,7 +1,6 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:alternatives",
@@ -23,7 +22,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:golden_sword"
                       }
@@ -42,7 +41,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -70,7 +68,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:golden_axe"
                       }
@@ -89,7 +87,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -117,7 +114,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:crossbow"
                       }
@@ -136,7 +133,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -164,7 +160,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "mainhand": {
                         "items": "minecraft:warped_fungus_on_a_stick"
                       }
@@ -183,7 +179,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -211,7 +206,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "head": {
                         "items": "minecraft:golden_helmet"
                       }
@@ -230,7 +225,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -258,7 +252,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "chest": {
                         "items": "minecraft:golden_chestplate"
                       }
@@ -277,7 +271,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -305,7 +298,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "legs": {
                         "items": "minecraft:golden_leggings"
                       }
@@ -324,7 +317,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,
@@ -352,7 +344,7 @@
                   "condition": "minecraft:entity_properties",
                   "entity": "this",
                   "predicate": {
-                    "equipment": {
+                    "minecraft:equipment": {
                       "feet": {
                         "items": "minecraft:golden_boots"
                       }
@@ -371,7 +363,6 @@
                   "function": "minecraft:enchant_randomly"
                 },
                 {
-                  "add": false,
                   "damage": {
                     "type": "minecraft:uniform",
                     "max": 1.0,

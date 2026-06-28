@@ -2,8 +2,8 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.SlotSourceTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.inventory.SlotRange;

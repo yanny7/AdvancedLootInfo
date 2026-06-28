@@ -2,13 +2,10 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.RegistriesTooltipUtils;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.LightningBoltPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.feline.CatVariants;
 import net.minecraft.world.entity.animal.frog.FrogVariants;
@@ -24,7 +21,7 @@ import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
@@ -33,7 +30,6 @@ import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.yanny.ali.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
@@ -52,7 +48,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testEntityTypeTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getEntityTypeTooltip(UTILS, EntityType.ALLAY).build(Lang.Value.ENTITY_TYPE), List.of("Entity Type: minecraft:allay"));
+        assertTooltip(RegistriesTooltipUtils.getEntityTypeTooltip(UTILS, EntityTypes.ALLAY).build(Lang.Value.ENTITY_TYPE), List.of("Entity Type: minecraft:allay"));
     }
 
     @Test
@@ -62,7 +58,7 @@ public class RegistriesTooltipTest {
 
     @Test
     public void testBlockEntityTypeTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getBlockEntityTypeTooltip(UTILS, BlockEntityType.BEACON).build(Lang.Value.BLOCK_ENTITY_TYPE), List.of("Block Entity Type: minecraft:beacon"));
+        assertTooltip(RegistriesTooltipUtils.getBlockEntityTypeTooltip(UTILS, BlockEntityTypes.BEACON).build(Lang.Value.BLOCK_ENTITY_TYPE), List.of("Block Entity Type: minecraft:beacon"));
     }
 
     @Test
@@ -103,14 +99,6 @@ public class RegistriesTooltipTest {
     @Test
     public void testInstrumentTooltip() {
         assertTooltip(RegistriesTooltipUtils.getInstrumentTooltip(UTILS, LOOKUP.lookupOrThrow(Registries.INSTRUMENT).getOrThrow(Instruments.ADMIRE_GOAT_HORN).value()).build(Lang.Value.TYPE), List.of("Type: minecraft:admire_goat_horn"));
-    }
-
-    @Test
-    public void testEntitySubPredicateTooltip() {
-        assertTooltip(RegistriesTooltipUtils.getEntitySubPredicateTooltip(UTILS, new LightningBoltPredicate(
-                MinMaxBounds.Ints.between(1, 2),
-                Optional.of(EntityPredicate.Builder.entity().team("white").build())
-        )).build(Lang.Value.VARIANT), List.of("Variant: minecraft:lightning"));
     }
 
     @Test

@@ -3,11 +3,13 @@ package com.yanny.ali.plugin.server;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -43,10 +45,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
@@ -66,11 +65,6 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getIngredientTooltip(IServerUtils utils, Ingredient ingredient) {
         return utils.getIngredientTooltip(utils, ingredient);
-    }
-
-    @NotNull
-    public static TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate entitySubPredicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getEntitySubPredicateTooltip(utils, entitySubPredicate)));
     }
 
     @NotNull
@@ -139,22 +133,10 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getEntityPredicateTooltip(IServerUtils utils, EntityPredicate entityPredicate) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, entityPredicate.entityType()).build(Lang.Branch.ENTITY_TYPES));
-            b.add(utils.getValueTooltip(utils, entityPredicate.distanceToPlayer()).build(Lang.Branch.DISTANCE_TO_PLAYER));
-            b.add(utils.getValueTooltip(utils, entityPredicate.location()).build(Lang.Branch.LOCATION));
-            b.add(utils.getValueTooltip(utils, entityPredicate.movement()).build(Lang.Branch.MOVEMENT));
-            b.add(utils.getValueTooltip(utils, entityPredicate.periodicTick()).build(Lang.Value.PERIODIC_TICK));
-            b.add(utils.getValueTooltip(utils, entityPredicate.effects()).build(Lang.Branch.MOB_EFFECTS));
-            b.add(utils.getValueTooltip(utils, entityPredicate.nbt()).build(Lang.Value.NBT));
-            b.add(utils.getValueTooltip(utils, entityPredicate.flags()).build(Lang.Branch.ENTITY_FLAGS));
-            b.add(utils.getValueTooltip(utils, entityPredicate.equipment()).build(Lang.Branch.ENTITY_EQUIPMENT));
-            b.add(utils.getValueTooltip(utils, entityPredicate.subPredicate()).build(Lang.Branch.ENTITY_SUB_PREDICATE));
-            b.add(utils.getValueTooltip(utils, entityPredicate.vehicle()).build(Lang.Branch.VEHICLE));
-            b.add(utils.getValueTooltip(utils, entityPredicate.passenger()).build(Lang.Branch.PASSENGER));
-            b.add(utils.getValueTooltip(utils, entityPredicate.targetedEntity()).build(Lang.Branch.TARGETED_ENTITY));
-            b.add(utils.getValueTooltip(utils, entityPredicate.team()).build(Lang.Value.TEAM));
-            b.add(utils.getValueTooltip(utils, entityPredicate.slots()).build(Lang.Branch.SLOTS));
-            b.add(utils.getValueTooltip(utils, entityPredicate.components()).build(Lang.Branch.COMPONENTS));
+            for (Map.Entry<Codec<? extends EntitySubPredicate>, EntitySubPredicate> entry : entityPredicate.parts.entrySet()) {
+                //noinspection unchecked
+                b.add(utils.getEntitySubPredicateTooltip(utils, (Codec<EntitySubPredicate>) entry.getKey(), entry.getValue()));
+            }
         }).key(Lang.Branch.PREDICATE);
     }
 
@@ -644,19 +626,6 @@ public class ValueTooltipUtils {
                 default -> {}
             }
         });
-    }
-
-    @NotNull
-    public static TooltipBuilder getLocationWrapperTooltip(IServerUtils utils, EntityPredicate.LocationWrapper locationWrapper) {
-        if (locationWrapper.located().isPresent() || locationWrapper.affectsMovement().isPresent() || locationWrapper.steppingOn().isPresent()) {
-            return TooltipBuilder.array((b) -> {
-                b.add(utils.getValueTooltip(utils, locationWrapper.located()).build(Lang.Branch.LOCATED));
-                b.add(utils.getValueTooltip(utils, locationWrapper.steppingOn()).build(Lang.Branch.STEPPING_ON_LOCATION));
-                b.add(utils.getValueTooltip(utils, locationWrapper.affectsMovement()).build(Lang.Branch.AFFECTS_MOVEMENT));
-            });
-        }
-
-        return TooltipBuilder.empty();
     }
 
     @NotNull

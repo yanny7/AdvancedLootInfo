@@ -1,7 +1,6 @@
 {
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -20,7 +19,7 @@
               "condition": "minecraft:entity_properties",
               "entity": "this",
               "predicate": {
-                "equipment": {
+                "minecraft:equipment": {
                   "mainhand": {
                     "items": "minecraft:iron_axe"
                   }
@@ -39,7 +38,6 @@
               "function": "minecraft:enchant_randomly"
             },
             {
-              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
                 "max": 1.0,

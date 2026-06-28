@@ -9,7 +9,7 @@ import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.ali.api.IServerUtils;
-import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 
 import java.util.Objects;
 
+import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
 import static com.yanny.ali.plugin.server.RegistriesTooltipUtils.*;
 
 public class MissingTooltipUtils {
@@ -127,19 +128,19 @@ public class MissingTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getMissingEntitySubPredicateTooltip(IServerUtils utils, EntitySubPredicate predicate) {
-        TooltipBuilder tooltip = RegistriesTooltipUtils.getEntitySubPredicateTooltip(utils, predicate);
+    public static TooltipBuilder getMissingEntitySubPredicateTooltip(IServerUtils utils, Codec<EntitySubPredicate> codec, EntitySubPredicate predicate) {
+        TooltipBuilder tooltip = getBuiltInRegistryTooltip(utils, BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, codec);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            MapCodec<EntitySubPredicate> codec = ((MapCodec<EntitySubPredicate>) predicate.codec());
-            JsonElement jsonElement = codec.codec().encodeStart(registryOps, predicate).getPartialOrThrow();
+            MapCodec<EntitySubPredicate> mapCodec = ((MapCodec<EntitySubPredicate>) codec);
+            JsonElement jsonElement = mapCodec.codec().encodeStart(registryOps, predicate).getPartialOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
             if (utils.getConfiguration().logMoreStatistics) {
-                LOGGER.warn("Failed to get entity sub predicate info from serialized data for {} in {}", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(predicate.codec()), TooltipContext.get(), e);
+                LOGGER.warn("Failed to get entity sub predicate info from serialized data for {} in {}", BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE.getKey(codec), TooltipContext.get(), e);
             }
 
             TooltipUtils.addObjectFields(utils, tooltip, predicate, EntitySubPredicate.class);

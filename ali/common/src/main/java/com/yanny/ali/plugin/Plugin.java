@@ -12,9 +12,12 @@ import com.yanny.ali.plugin.client.widget.trades.TradeWidget;
 import com.yanny.ali.plugin.common.EntityUtils;
 import com.yanny.ali.plugin.common.NodeUtils;
 import com.yanny.ali.plugin.common.nodes.*;
-import com.yanny.ali.plugin.common.trades.*;
+import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
+import com.yanny.ali.plugin.common.trades.TradeLevelNode;
+import com.yanny.ali.plugin.common.trades.TradeNode;
 import com.yanny.ali.plugin.server.*;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.*;
+import net.minecraft.advancements.predicates.entity.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -31,6 +34,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.chicken.ChickenSoundVariant;
@@ -88,7 +92,7 @@ public class Plugin implements IPlugin {
     @Override
     public void registerCommon(ICommonRegistry registry) {
         LanguageHolder.TRANSLATION_MAP.keySet().forEach(registry::registerTranslationKey);
-        registry.registerEntityVariants(EntityType.SHEEP, EntityUtils::getSheepVariants);
+        registry.registerEntityVariants(EntityTypes.SHEEP, EntityUtils::getSheepVariants);
     }
 
     @Override
@@ -247,12 +251,31 @@ public class Plugin implements IPlugin {
         registry.registerDataComponentPredicateTooltip(JukeboxPlayablePredicate.class, DataComponentPredicateTooltipUtils::getJukeboxPlayableTooltip);
         registry.registerDataComponentPredicateTooltip(AnyValue.class, DataComponentPredicateTooltipUtils::getAnyValueTooltip);
 
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.LIGHTNING, EntitySubPredicateTooltipUtils::getLightningBoltPredicateTooltip);
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.FISHING_HOOK, EntitySubPredicateTooltipUtils::getFishingHookPredicateTooltip);
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.PLAYER, EntitySubPredicateTooltipUtils::getPlayerPredicateTooltip);
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.SLIME, EntitySubPredicateTooltipUtils::getSlimePredicateTooltip);
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.RAIDER, EntitySubPredicateTooltipUtils::getRaiderPredicateTooltip);
-        registry.registerEntitySubPredicateTooltip(EntitySubPredicates.SHEEP, EntitySubPredicateTooltipUtils::getSheepPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(LightningBoltPredicate.class, EntitySubPredicateTooltipUtils::getLightningBoltPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(FishingHookPredicate.class, EntitySubPredicateTooltipUtils::getFishingHookPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(PlayerPredicate.class, EntitySubPredicateTooltipUtils::getPlayerPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(CubeMobPredicate.class, EntitySubPredicateTooltipUtils::getCubeMobTooltip);
+        registry.registerEntitySubPredicateTooltip(RaiderPredicate.class, EntitySubPredicateTooltipUtils::getRaiderPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(SheepPredicate.class, EntitySubPredicateTooltipUtils::getSheepPredicateTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityTypePredicate.class, EntitySubPredicateTooltipUtils::getEntityTypeTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityLocationPredicate.class, EntitySubPredicateTooltipUtils::getEntityLocationTooltip);
+        registry.registerEntitySubPredicateTooltip(SteppingOnPredicate.class, EntitySubPredicateTooltipUtils::getSteppingOnTooltip);
+        registry.registerEntitySubPredicateTooltip(MovementAffectedByPredicate.class, EntitySubPredicateTooltipUtils::getMovementAffectedByTooltip);
+        registry.registerEntitySubPredicateTooltip(DistanceToPlayerPredicate.class, EntitySubPredicateTooltipUtils::getDistanceToPlayerTooltip);
+        registry.registerEntitySubPredicateTooltip(MovementPredicate.class, EntitySubPredicateTooltipUtils::getMovementTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityEffectsPredicate.class, EntitySubPredicateTooltipUtils::getEntityEffectsTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityNbtPredicate.class, EntitySubPredicateTooltipUtils::getNbtTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityFlagsPredicate.class, EntitySubPredicateTooltipUtils::getFlagsTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityEquipmentPredicate.class, EntitySubPredicateTooltipUtils::getEquipmentTooltip);
+        registry.registerEntitySubPredicateTooltip(PeriodicEntityTickPredicate.class, EntitySubPredicateTooltipUtils::getPeriodicTickTooltip);
+        registry.registerEntitySubPredicateTooltip(VehiclePredicate.class, EntitySubPredicateTooltipUtils::getVehicleTooltip);
+        registry.registerEntitySubPredicateTooltip(PassengerPredicate.class, EntitySubPredicateTooltipUtils::getPassengerTooltip);
+        registry.registerEntitySubPredicateTooltip(TargetedEntityPredicate.class, EntitySubPredicateTooltipUtils::getTargetedEntityTooltip);
+        registry.registerEntitySubPredicateTooltip(TeamPredicate.class, EntitySubPredicateTooltipUtils::getTeamTooltip);
+        registry.registerEntitySubPredicateTooltip(EntitySlotsPredicate.class, EntitySubPredicateTooltipUtils::getSlotsTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityExactDataComponentsPredicate.class, EntitySubPredicateTooltipUtils::getComponentsTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityPartialComponentsPredicate.class, EntitySubPredicateTooltipUtils::getPredicatesTooltip);
+        registry.registerEntitySubPredicateTooltip(EntityTagPredicate.class, EntitySubPredicateTooltipUtils::getEntityTagsTooltip);
 
         registry.registerDataComponentTypeTooltip(DataComponents.CUSTOM_DATA, DataComponentTooltipUtils::getCustomDataTooltip);
         registry.registerDataComponentTypeTooltip(DataComponents.MAX_STACK_SIZE, DataComponentTooltipUtils::getIntTooltip);
@@ -389,7 +412,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Attribute.class, RegistriesTooltipUtils::getAttributeTooltip);
         registry.registerValueTooltip(DataComponentType.class, RegistriesTooltipUtils::getDataComponentTypeTooltip);
         registry.registerValueTooltip(Instrument.class, RegistriesTooltipUtils::getInstrumentTooltip);
-        registry.registerValueTooltip(EntitySubPredicate.class, RegistriesTooltipUtils::getEntitySubPredicateTooltip);
         registry.registerValueTooltip(CatVariant.class, RegistriesTooltipUtils::getCatVariantTooltip);
         registry.registerValueTooltip(PaintingVariant.class, RegistriesTooltipUtils::getPaintingVariantTooltip);
         registry.registerValueTooltip(FrogVariant.class, RegistriesTooltipUtils::getFrogVariantTooltip);
@@ -419,7 +441,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(LootItemCondition.class, ValueTooltipUtils::getConditionTooltip);
         registry.registerValueTooltip(LootItemFunction.class, ValueTooltipUtils::getFunctionTooltip);
         registry.registerValueTooltip(Ingredient.class, ValueTooltipUtils::getIngredientTooltip);
-        registry.registerValueTooltip(EntitySubPredicate.class, ValueTooltipUtils::getEntitySubPredicateTooltip);
         registry.registerValueTooltip(DataComponentPredicate.class, ValueTooltipUtils::getDataComponentPredicateTooltip);
         registry.registerValueTooltip(ConsumeEffect.class, ValueTooltipUtils::getConsumeEffectTooltip);
 
@@ -481,7 +502,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BannerPatternLayers.Layer.class, ValueTooltipUtils::getBannerPatternLayerTooltip);
         registry.registerValueTooltip(GameTypePredicate.class, ValueTooltipUtils::getGameTypePredicateTooltip);
         registry.registerValueTooltip(LevelBasedValue.class, ValueTooltipUtils::getLevelBasedValueTooltip);
-        registry.registerValueTooltip(EntityPredicate.LocationWrapper.class, ValueTooltipUtils::getLocationWrapperTooltip);
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
         registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);

@@ -2,7 +2,7 @@ package com.yanny.ali.test;
 
 import com.yanny.ali.plugin.server.FunctionTooltipUtils;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
@@ -28,7 +28,7 @@ import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BannerPatterns;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.ContainerComponentManipulators;
@@ -361,7 +361,7 @@ public class FunctionTooltipTest {
     @Test
     public void testSetLootTableTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetLootTableTooltip(UTILS, (SetContainerLootTable) SetContainerLootTable.withLootTable(
-                BlockEntityType.BELL,
+                BlockEntityTypes.BELL,
                 ResourceKey.create(Registries.LOOT_TABLE, Identifier.withDefaultNamespace("gameplay/mesh")),
                 42L
         ).build()).build(), List.of(
@@ -722,10 +722,10 @@ public class FunctionTooltipTest {
     @Test
     public void testSetRandomPotionsTooltip() {
         assertTooltip(FunctionTooltipUtils.getSetRandomPotionsTooltip(UTILS, (SetRandomPotionFunction) SetRandomPotionFunction.fromTagKey(
-                Optional.of(HolderSet.direct(
+                HolderSet.direct(
                         Potions.TURTLE_MASTER,
                         Potions.HARMING
-                ))
+                )
         ).build()).build(), List.of(
                 "Set Random Potions:",
                 "  -> Potions:",

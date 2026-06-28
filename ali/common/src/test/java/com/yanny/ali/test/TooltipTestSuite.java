@@ -1,6 +1,7 @@
 package com.yanny.ali.test;
 
 import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNodePalette;
@@ -14,7 +15,7 @@ import com.yanny.ali.plugin.server.LootFunctionTypes;
 import com.yanny.ali.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
-import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.HolderLookup;
@@ -162,8 +163,8 @@ public class TooltipTestSuite {
 
             @NotNull
             @Override
-            public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, T predicate) {
-                return PluginManager.getInstance().serverRegistry.getEntitySubPredicateTooltip(utils, predicate);
+            public <T extends EntitySubPredicate> TooltipBuilder getEntitySubPredicateTooltip(IServerUtils utils, Codec<T> codec, T predicate) {
+                return PluginManager.getInstance().serverRegistry.getEntitySubPredicateTooltip(utils, codec, predicate);
             }
 
             @NotNull
