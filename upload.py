@@ -226,7 +226,7 @@ def upload_to_curseforge(api_token: str, api_key: str, project_id: str, version_
     # get minecraft version
     type_mapping = get_curseforge_game_version_types_mapping(api_key)
     mc_group = re.search(r'\d+\.\d+', game_versions[0]).group()
-    tv_id = type_mapping[f"Minecraft {mc_group}"]
+    tv_id = type_mapping[f"{mc_group}"]
     if tv_id:
         gv_id = list(filter(lambda x: x["name"] == game_versions[0] and x["gameVersionTypeID"] == tv_id, mapping))
 
