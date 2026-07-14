@@ -38,10 +38,11 @@ rootProject.name = 'MultiLoader-AdvancedLootInfo'
 
 include("aci:common")
 include("ali:common")
-include("awi:common")
+//include("awi:common")
 
 if (settings.emi_enabled == "true") {
     include("ali:common-emi")
+//    include("awi:common-emi")
 }
 
 if (settings.jei_enabled == "true") {
@@ -58,7 +59,7 @@ if (settings.lootjs_enabled == "true") {
 
 if (settings.fabric_enabled == "true") {
     include("ali:fabric")
-    include("awi:fabric")
+//    include("awi:fabric")
 }
 
 if (settings.forge_enabled == "true") {

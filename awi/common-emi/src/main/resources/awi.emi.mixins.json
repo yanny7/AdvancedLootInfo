@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.yanny.awi.emi.mixin",
+  "mixins": [
+    "MixinRecipeScreen"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

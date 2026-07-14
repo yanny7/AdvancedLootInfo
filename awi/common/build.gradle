@@ -5,9 +5,9 @@ architectury {
 loom {
     accessWidenerPath = file("src/main/resources/awi.accesswidener")
 
-//    mixin {
-//        defaultRefmapName = "awi.refmap.json"
-//    }
+    mixin {
+        defaultRefmapName = "awi.refmap.json"
+    }
 }
 
 dependencies {

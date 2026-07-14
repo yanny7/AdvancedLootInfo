@@ -140,6 +140,8 @@ public class GenericUtils {
             utils.getTooltipCache().decode(utils, buf);
             readLootData(utils, buf, lootData);
             readTradeData(utils, buf, tradeData);
+        } catch (Throwable e) {
+            LOGGER.warn("Failed to decode loot data!", e);
         } finally {
             buf.release();
         }
@@ -286,7 +288,6 @@ public class GenericUtils {
             if (!futureData.isDone()) {
                 LOGGER.info("Data not ready. Requesting data from server (Attempt {}/{})", currentTry, maxRetries);
                 AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestLootDataMessage());
-                //TODO send message to server
             } else {
                 LOGGER.info("Data already received, processing instantly.");
             }
