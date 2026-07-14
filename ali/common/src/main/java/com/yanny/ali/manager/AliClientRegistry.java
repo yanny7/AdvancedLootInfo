@@ -1,6 +1,5 @@
 package com.yanny.ali.manager;
 
-import com.mojang.logging.LogUtils;
 import com.yanny.aci.manager.CoreClientRegistry;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
@@ -9,128 +8,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRegistry, IDataNode, IWidgetUtils, IClientUtils> implements IClientRegistry, IClientUtils, ICommonUtils {
-    private static final Logger LOGGER = LogUtils.getLogger();
-
-    private final AtomicInteger receivedChunks = new AtomicInteger(0);
-    private final AtomicInteger receivedChunksPerSecond = new AtomicInteger(0);
-    private ScheduledExecutorService loggerScheduler;
-    private final AtomicBoolean loggedIn = new AtomicBoolean(false);
-
-    private volatile DataReceiver currentDataReceiver = null;
-    private final AtomicReference<CompletableFuture<byte[]>> activeDataPromise = new AtomicReference<>(new CompletableFuture<>());
-
     public AliClientRegistry(AliCommonRegistry utils) {
         super(utils);
-    }
-
-    public CompletableFuture<byte[]> getCurrentDataFuture() {
-        return activeDataPromise.get();
-    }
-
-    public void addChunkData(int index, byte[] data) {
-        DataReceiver receiver = currentDataReceiver;
-
-        if (receiver == null) {
-            return;
-        }
-
-        receivedChunks.incrementAndGet();
-        receivedChunksPerSecond.incrementAndGet();
-        receiver.messageReceived(index, data);
-    }
-
-    public void startLootData(int totalMessages) {
-        if (currentDataReceiver != null) {
-            currentDataReceiver.cancelOperation();
-        }
-
-        currentDataReceiver = new DataReceiver(totalMessages);
-        CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
-
-        if (currentPromise.isDone()) {
-            currentPromise = new CompletableFuture<>();
-            activeDataPromise.set(currentPromise);
-        }
-
-        final CompletableFuture<byte[]> promiseToComplete = currentPromise;
-        currentDataReceiver.getFuture().whenComplete((data, throwable) -> {
-            if (throwable != null) {
-                promiseToComplete.completeExceptionally(throwable);
-            } else {
-                promiseToComplete.complete(data);
-            }
-        });
-
-        startLogging();
-        LOGGER.info("Started receiving loot data");
-    }
-
-    public void clearLootData() {
-        if (currentDataReceiver != null) {
-            currentDataReceiver.cancelOperation();
-            currentDataReceiver = null;
-            stopLogging(true);
-        }
-
-        activeDataPromise.set(new CompletableFuture<>());
-        LOGGER.info("Cleared Loot data");
-    }
-
-    public void reloadLootData() {
-        // reload is called on login, causing clearing already received data
-        if (loggedIn.get()) {
-            LOGGER.info("Reloading loot data");
-            clearLootData();
-        }
-    }
-
-    public void loggingIn(boolean modAvailableOnServer) {
-        LOGGER.info("Player login received");
-        loggedIn.set(true);
-
-        if (!modAvailableOnServer) {
-            LOGGER.info("ALI is not present on the server. Completing sync with empty data.");
-            CompletableFuture<byte[]> currentPromise = activeDataPromise.get();
-
-            if (!currentPromise.isDone()) {
-                currentPromise.complete(new byte[0]);
-            }
-        }
-    }
-
-    public void loggingOut() {
-        LOGGER.info("Player logout received");
-
-        CompletableFuture<byte[]> oldPromise = activeDataPromise.get();
-
-        if (oldPromise != null && !oldPromise.isDone()) {
-            oldPromise.cancel(true);
-        }
-
-        clearLootData();
-        loggedIn.set(false);
-    }
-
-    public void doneLootData() {
-        DataReceiver receiver = currentDataReceiver;
-
-        if (receiver == null) {
-            return;
-        }
-
-        receiver.forceDone();
-        stopLogging(false);
-        LOGGER.info("Finished receiving loot data");
     }
 
     @NotNull
@@ -143,102 +26,5 @@ public class AliClientRegistry extends CoreClientRegistry<AliConfig, AliCommonRe
     @Override
     public IWidgetFactory<IDataNode, IWidgetUtils> getMissingWidgetFactory() {
         return MissingWidget::new;
-    }
-
-    private void startLogging() {
-        Runnable logTask = () -> {
-            long count = receivedChunksPerSecond.getAndSet(0);
-
-            LOGGER.info("Received {} chunk(s) per second", count);
-        };
-
-        receivedChunks.set(0);
-        receivedChunksPerSecond.set(0);
-        loggerScheduler = Executors.newSingleThreadScheduledExecutor();
-        loggerScheduler.scheduleAtFixedRate(logTask, 1, 1, TimeUnit.SECONDS);
-    }
-
-    private void stopLogging(boolean forcedStop) {
-        if (loggerScheduler != null) {
-            long count = receivedChunksPerSecond.getAndSet(0);
-
-            if (!forcedStop) {
-                LOGGER.info("Received last {} chunk(s). Done receiving data.", count);
-            }
-
-            loggerScheduler.shutdownNow();
-
-            try {
-                if (!loggerScheduler.awaitTermination(5, TimeUnit.SECONDS)) {
-                    LOGGER.warn("Logging scheduler didn't stop in time!");
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    private static class DataReceiver {
-        private final CompletableFuture<byte[]> dataFuture = new CompletableFuture<>();
-        private final Map<Integer, byte[]> chunkMap = new ConcurrentHashMap<>();
-        private final int totalChunks;
-        private final AtomicInteger receivedChunksCount = new AtomicInteger(0);
-
-        public DataReceiver(int expectedMessageCount) {
-            totalChunks = expectedMessageCount;
-        }
-
-        public void messageReceived(int index, byte[] data) {
-            if (dataFuture.isDone()) {
-                return;
-            }
-
-            chunkMap.put(index, data);
-
-            if (receivedChunksCount.incrementAndGet() == totalChunks) {
-                completeFuture();
-            }
-        }
-
-        public void forceDone() {
-            if (!dataFuture.isDone()) {
-                String errorMsg = String.format("Incomplete loot data! Expected %d chunks, but received only %d. Data is unusable.", totalChunks, receivedChunksCount.get());
-
-                LOGGER.error(errorMsg);
-                dataFuture.completeExceptionally(new IllegalStateException(errorMsg));
-            }
-        }
-
-        private void completeFuture() {
-            if (dataFuture.isDone()) {
-                return;
-            }
-
-            int totalCompressedSize = chunkMap.values().stream().mapToInt(a -> a.length).sum();
-            byte[] fullCompressedData = new byte[totalCompressedSize];
-            int offset = 0;
-
-            for (int i = 0; i < totalChunks; i++) {
-                byte[] chunk = chunkMap.get(i);
-
-                System.arraycopy(chunk, 0, fullCompressedData, offset, chunk.length);
-                offset += chunk.length;
-            }
-
-            chunkMap.clear();
-            dataFuture.complete(fullCompressedData);
-        }
-
-        public void cancelOperation() {
-            if (!dataFuture.isDone()) {
-                dataFuture.cancel(true);
-            }
-
-            chunkMap.clear();
-        }
-
-        public CompletableFuture<byte[]> getFuture() {
-            return dataFuture;
-        }
     }
 }

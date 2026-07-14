@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.yanny.awi.mixin",
+  "client": [
+    "MixinClientPlayNetworkHandler"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

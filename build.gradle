@@ -103,6 +103,8 @@ subprojects {
             }
         } else if (project.parent.name == "awi") {
             project.ext.commonProjects << ":awi:common"
+
+            if (emi_available) project.ext.commonProjects << ":awi:common-emi"
         }
 
         // register tasks that allow running specific combination of recipe viewer and launcher
