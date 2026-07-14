@@ -1,0 +1,159 @@
+package com.yanny.aci.api;
+
+import com.mojang.math.Divisor;
+import it.unimi.dsi.fastutil.ints.IntIterator;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+public abstract class CoreListWidget<
+        TDataNode    extends ICoreDataNode<?>,
+        TWidgetUtils extends ICoreWidgetUtils<?, TDataNode, TWidgetUtils, TClientUtils>,
+        TClientUtils extends ICoreClientUtils<?, ?, ?>
+        > implements IWidget {
+    public static final int GROUP_WIDGET_WIDTH = 7;
+    public static final int GROUP_WIDGET_HEIGHT = 18;
+
+    private final List<IWidget> widgets;
+    private final RelativeRect bounds;
+    private final int groupWidgetWidth;
+
+    public CoreListWidget(TWidgetUtils utils, TDataNode entry, RelativeRect rect, int maxWidth, TDataNode tooltipNode) {
+        IWidget groupWidget = getGroupWidget(rect, tooltipNode);
+        boolean hasGroupWidget = groupWidget != null;
+        List<IWidget> children = null;
+
+        groupWidgetWidth = hasGroupWidget ? groupWidget.getRect().getWidth() : 0;
+        bounds = rect;
+
+        if (hasGroupWidget) {
+            children = new ArrayList<>();
+            children.add(groupWidget);
+        }
+
+        if (entry instanceof CoreListNode<?, ?, ?> listNode) {
+            RelativeRect subRect = new RelativeRect(groupWidgetWidth, 0, rect.getWidth() - groupWidgetWidth, 0, rect);
+            //noinspection unchecked
+            List<TDataNode> nodes = (List<TDataNode>) listNode.nodes();
+
+            if (!nodes.isEmpty()) {
+                List<IWidget> widgetList = utils.createWidgets(utils, nodes, subRect, maxWidth);
+
+                if (children != null) {
+                    children.addAll(widgetList);
+                } else {
+                    children = new ArrayList<>(widgetList);
+                }
+
+                bounds.setDimensions(subRect.getWidth() + groupWidgetWidth, subRect.getHeight());
+            } else {
+                bounds.setDimensions(subRect.getWidth() + groupWidgetWidth, GROUP_WIDGET_HEIGHT);
+            }
+        } else {
+            bounds.setDimensions(GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT);
+        }
+
+        widgets = children != null ? children : Collections.emptyList();
+    }
+
+    @Nullable
+    public abstract IWidget getGroupWidget(RelativeRect rect, TDataNode entry);
+
+    @NotNull
+    public abstract ResourceLocation getTexture();
+
+    @NotNull
+    @Override
+    public RelativeRect getRect() {
+        return bounds;
+    }
+
+    @NotNull
+    @Override
+    public WidgetDirection getDirection() {
+        return WidgetDirection.VERTICAL;
+    }
+
+    @Override
+    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        int lastY = 0;
+        WidgetDirection lastDirection = null;
+
+        for (IWidget widget : widgets) {
+            widget.render(guiGraphics, mouseX, mouseY);
+
+            WidgetDirection direction = widget.getDirection();
+
+            if (direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) {
+                lastY = Math.max(lastY, widget.getRect().getY());
+            }
+
+            lastDirection = direction;
+        }
+
+        int top = bounds.getY() + 18;
+        int height = lastY - bounds.getY() - 9;
+
+        blitRepeating(guiGraphics, getTexture(), bounds.getX() + groupWidgetWidth / 2, top, 2, height, 0, 0, 2, 18);
+        lastDirection = null;
+
+        for (IWidget widget : widgets) {
+            WidgetDirection direction = widget.getDirection();
+
+            if ((direction == WidgetDirection.VERTICAL || (lastDirection != null && direction != lastDirection)) && widget.getRect().getOffsetY() > 0) {
+                blitRepeating(guiGraphics, getTexture(), (int) (bounds.getX() + Math.floor((double) groupWidgetWidth / 2) + 1), widget.getRect().getY() + 8, (int) (Math.ceil((double) groupWidgetWidth / 2) - 1), 2, 2, 0, 18, 2);
+            }
+
+            lastDirection = direction;
+        }
+    }
+
+    @NotNull
+    @Override
+    public List<Component> getTooltipComponents(int mouseX, int mouseY) {
+        List<Component> components = new LinkedList<>();
+
+        for (IWidget widget : widgets) {
+            RelativeRect b = widget.getRect();
+
+            if (b.contains(mouseX, mouseY)) {
+                components.addAll(widget.getTooltipComponents(mouseX, mouseY));
+            }
+        }
+
+        return components;
+    }
+
+    private static void blitRepeating(GuiGraphics guiGraphics, ResourceLocation texture, int pTargetX, int pTargetY, int pTargetWidth, int pTargetHeight, int pSourceX, int pSourceY, int pSourceWidth, int pSourceHeight) {
+        int i = pTargetX;
+        int j;
+
+        for(IntIterator intiterator = slices(pTargetWidth, pSourceWidth); intiterator.hasNext(); i += j) {
+            j = intiterator.nextInt();
+
+            int k = (pSourceWidth - j) / 2;
+            int l = pTargetY;
+            int i1;
+
+            for(IntIterator iterator = slices(pTargetHeight, pSourceHeight); iterator.hasNext(); l += i1) {
+                i1 = iterator.nextInt();
+                int j1 = (pSourceHeight - i1) / 2;
+                guiGraphics.blit(texture, i, l, pSourceX + k, pSourceY + j1, j, i1);
+            }
+        }
+    }
+
+    @NotNull
+    private static IntIterator slices(int p_282197_, int p_282161_) {
+        int i = Mth.positiveCeilDiv(p_282197_, p_282161_);
+        return new Divisor(p_282197_, i);
+    }
+}

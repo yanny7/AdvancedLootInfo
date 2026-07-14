@@ -13,6 +13,6 @@ public class MixinClientPlayNetworkHandler {
     // This is called on reload
     @Inject(method = "handleUpdateTags", at = @At("TAIL"))
     public void handleInvokeTags(ClientboundUpdateTagsPacket clientboundUpdateTagsPacket, CallbackInfo ci) {
-        PluginManager.getInstance().clientRegistry.reloadLootData();
+        PluginManager.getInstance().clientRegistry.reloadData();
     }
 }
