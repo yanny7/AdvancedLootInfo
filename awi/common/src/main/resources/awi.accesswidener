@@ -1,2 +1,36 @@
 accessWidener v2 official
 
+# state providers
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/SimpleStateProvider state Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseProvider states Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider defaultState Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider lowStates Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider highStates Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RandomizedIntStateProvider source Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RotatedBlockProvider block Lnet/minecraft/world/level/block/Block;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/WeightedStateProvider weightedList Lnet/minecraft/util/random/SimpleWeightedRandomList;
+accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer rootProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer aboveRootPlacement Ljava/util/Optional;
+
+# worldgen
+accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context <init> (Lnet/minecraft/world/level/levelgen/SurfaceSystem;Lnet/minecraft/world/level/levelgen/RandomState;Lnet/minecraft/world/level/chunk/ChunkAccess;Lnet/minecraft/world/level/levelgen/NoiseChunk;Ljava/util/function/Function;Lnet/minecraft/core/Registry;Lnet/minecraft/world/level/levelgen/WorldGenerationContext;)V
+accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context updateXZ (II)V
+accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context updateY (IIIIII)V
+accessible method net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule tryApply (III)Lnet/minecraft/world/level/block/state/BlockState;
+accessible method net/minecraft/world/level/biome/MultiNoiseBiomeSource parameters ()Lnet/minecraft/world/level/biome/Climate$ParameterList;
+
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context surfaceDepth I
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthAbove I
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthBelow I
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockX I
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context blockZ I
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context context Lnet/minecraft/world/level/levelgen/WorldGenerationContext;
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context randomState Lnet/minecraft/world/level/levelgen/RandomState;
+accessible field net/minecraft/world/level/levelgen/SurfaceSystem defaultBlock Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastMinSurfaceLevelUpdate J
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastUpdateXZ J
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context minSurfaceLevel I
+accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastUpdateY J
+
+accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
+accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker

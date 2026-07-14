@@ -12,6 +12,6 @@ public class AwiClientRegistry extends CoreClientRegistry<Object, AwiCommonRegis
     @NotNull
     @Override
     public IWidgetFactory<IDataNode, IWidgetUtils> getMissingWidgetFactory() {
-        return null;
+        return null; //TODO
     }
 }

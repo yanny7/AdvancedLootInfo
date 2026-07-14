@@ -1,0 +1,8 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.yanny.awi.fabric.mixin",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

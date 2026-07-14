@@ -1,4 +1,4 @@
 @ParametersAreNonnullByDefault
-package com.yanny.awi.plugin.common.tooltip;
+package com.yanny.awi.fabric.datagen;
 
 import javax.annotation.ParametersAreNonnullByDefault;

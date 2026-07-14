@@ -19,11 +19,23 @@
         "main": [
           "com.yanny.awi.fabric.CommonAliMod"
         ],
+        "client": [
+            "com.yanny.awi.fabric.ClientAliMod"
+        ],
+        "fabric-datagen": [
+            "com.yanny.awi.fabric.datagen.DataGeneration"
+        ],
         "awi": [
             "com.yanny.awi.plugin.Plugin"
+        ],
+        "emi": [
+            "com.yanny.awi.emi.compatibility.EmiCompatibility"
         ]
     },
     "mixins": [
+        "awi.mixins.json",
+        "awi.emi.mixins.json",
+        "awi.fabric.mixins.json"
     ],
     "depends": {
         "fabricloader": "*",

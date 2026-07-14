@@ -1,4 +1,6 @@
 package com.yanny.awi.api;
 
-public interface ICommonRegistry {
+import com.yanny.aci.api.ICoreCommonRegistry;
+
+public interface ICommonRegistry extends ICoreCommonRegistry {
 }
