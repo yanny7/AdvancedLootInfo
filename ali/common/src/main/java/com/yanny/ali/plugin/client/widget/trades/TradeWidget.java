@@ -15,7 +15,7 @@ public class TradeWidget extends ListWidget {
 
     @Nullable
     @Override
-    public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
+    public IWidget getGroupWidget(RelativeRect rect, IDataNode entry) {
         return WidgetUtils.getAllWidget(rect, entry);
     }
 }

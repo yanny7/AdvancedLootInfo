@@ -16,7 +16,7 @@ public class TradeLevelWidget extends ListWidget {
 
     @Nullable
     @Override
-    public IWidget getLootGroupWidget(RelativeRect rect, IDataNode entry) {
+    public IWidget getGroupWidget(RelativeRect rect, IDataNode entry) {
         return WidgetUtils.getLevelWidget(rect, entry, ((TradeLevelNode) entry).level);
     }
 }

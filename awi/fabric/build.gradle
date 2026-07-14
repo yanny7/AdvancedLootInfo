@@ -11,7 +11,7 @@ loom {
     accessWidenerPath = project(":awi:common").loom.accessWidenerPath
 
     mixin {
-//        defaultRefmapName = "awi.fabric.refmap.json"
+        defaultRefmapName = "awi.fabric.refmap.json"
     }
 
     runs {
