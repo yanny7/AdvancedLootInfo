@@ -3,12 +3,8 @@ package com.yanny.awi.fabric;
 import com.yanny.awi.manager.PluginManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.server.packs.resources.CloseableResourceManager;
 
 public class FabricCommonBusSubscriber {
@@ -18,7 +14,6 @@ public class FabricCommonBusSubscriber {
         ServerWorldEvents.LOAD.register(FabricCommonBusSubscriber::onServerStarting);
         ServerLifecycleEvents.SERVER_STOPPING.register(FabricCommonBusSubscriber::onServerStopping);
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register(FabricCommonBusSubscriber::onReload);
-        ServerPlayConnectionEvents.JOIN.register(FabricCommonBusSubscriber::onPlayerLogIn);
     }
 
     private static void onServerStarting(MinecraftServer server, ServerLevel world) {
@@ -38,14 +33,6 @@ public class FabricCommonBusSubscriber {
         if (success) {
             PluginManager.getInstance().reloadServer();
             CommonAliMod.SERVER.readWorldgenInfo(server.overworld());
-
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-//                CommonAliMod.SERVER.syncLootTables(player);
-            }
         }
-    }
-
-    private static void onPlayerLogIn(ServerGamePacketListenerImpl event, PacketSender sender, MinecraftServer server) {
-//        CommonAliMod.SERVER.syncLootTables(event.player);
     }
 }
