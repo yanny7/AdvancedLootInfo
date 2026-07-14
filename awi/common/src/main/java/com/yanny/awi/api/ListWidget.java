@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ListWidget extends CoreListWidget<IDataNode, IWidgetUtils, IClientUtils> {
-    public static final ResourceLocation TEXTURE_LOC = new ResourceLocation("awi", "textures/gui/gui.png");
+    public static final ResourceLocation TEXTURE_LOC = ResourceLocation.fromNamespaceAndPath("awi", "textures/gui/gui.png");
 
     public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(utils, entry, rect, maxWidth, entry);

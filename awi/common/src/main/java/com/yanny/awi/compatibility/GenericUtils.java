@@ -11,7 +11,8 @@ import com.yanny.awi.plugin.common.nodes.BlockNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ public class GenericUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static Map<ResourceLocation, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData) {
+    public static Map<ResourceLocation, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData, RegistryAccess registryAccess) {
         Map<ResourceLocation, LevelStemNode> worldgenData = new HashMap<>();
 
         if (fullCompressedData.length == 0) {
@@ -47,7 +48,7 @@ public class GenericUtils {
             throw new RuntimeException(e);
         }
 
-        FriendlyByteBuf buf = new FriendlyByteBuf(decompressedBuf);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(decompressedBuf, registryAccess);
 
         try {
             utils.getTooltipCache().decode(utils, buf);
@@ -122,7 +123,7 @@ public class GenericUtils {
         return blocks;
     }
 
-    private static void readWorldgenData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {
+    private static void readWorldgenData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {
         int lootDataCount = readerBuf.readInt();
 
         for (int i = 0; i < lootDataCount; i++) {

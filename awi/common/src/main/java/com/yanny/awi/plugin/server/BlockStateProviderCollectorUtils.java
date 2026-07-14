@@ -48,6 +48,6 @@ public class BlockStateProviderCollectorUtils {
     @Unmodifiable
     @NotNull
     public static List<Block> collectWeighted(IServerUtils ignoredUtils, WeightedStateProvider provider) {
-        return provider.weightedList.unwrap().stream().map((entry) -> entry.getData().getBlock()).toList();
+        return provider.weightedList.unwrap().stream().map((entry) -> entry.data().getBlock()).toList();
     }
 }
