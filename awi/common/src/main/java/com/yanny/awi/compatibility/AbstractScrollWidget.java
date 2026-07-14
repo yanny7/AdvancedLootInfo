@@ -32,10 +32,10 @@ public abstract class AbstractScrollWidget {
     public abstract void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY);
 
     public void render(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 16, 16, 2, 2);
+        WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, scrollRect.x(), scrollRect.y(), scrollRect.width(), scrollRect.height(), 2, 2, 2, 2, 16, 16, 2, 2);
 
         Rect markerArea = calculateScrollbarMarkerArea();
-        guiGraphics.blitNineSliced(WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
+        WidgetUtils.blitNineSliced(guiGraphics, WidgetUtils.TEXTURE_LOC, markerArea.x(), markerArea.y(), markerArea.width(), markerArea.height(), 2, 2, 2, 1, 12, 17, 18, 0);
 
         drawContents(guiGraphics, mouseX, mouseY);
     }

@@ -1,6 +1,6 @@
 package com.yanny.awi.plugin.common.nodes;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.stream.Stream;
 
 public class FakeChunkGenerator extends ChunkGenerator {
@@ -34,7 +33,7 @@ public class FakeChunkGenerator extends ChunkGenerator {
         super(new BiomeSource() {
             @NotNull
             @Override
-            protected Codec<? extends BiomeSource> codec() {
+            protected MapCodec<? extends BiomeSource> codec() {
                 throw new UnsupportedOperationException();
             }
 
@@ -55,7 +54,7 @@ public class FakeChunkGenerator extends ChunkGenerator {
 
     @NotNull
     @Override
-    protected Codec<? extends ChunkGenerator> codec() {
+    protected MapCodec<? extends ChunkGenerator> codec() {
         throw new UnsupportedOperationException();
     }
 
@@ -83,7 +82,7 @@ public class FakeChunkGenerator extends ChunkGenerator {
 
     @NotNull
     @Override
-    public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunkAccess) {
+    public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunkAccess) {
         BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 
         for (int x = 0; x < 16; x++) {

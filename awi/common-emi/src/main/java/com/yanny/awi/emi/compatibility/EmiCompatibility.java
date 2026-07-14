@@ -39,7 +39,7 @@ public class EmiCompatibility implements EmiPlugin {
         LOGGER.info("Adding worldgen information to EMI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData);
+            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
                 EmiRecipeCategory category = new EmiRecipeCategory(key, EmiStack.of(Items.GLOBE_BANNER_PATTERN));

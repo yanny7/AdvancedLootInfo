@@ -6,7 +6,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.manager.PluginManager;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
 
     @NotNull
     @Override
-    public BiFunction<IClientUtils, FriendlyByteBuf, IDataNode> getDataNodeFactory(ResourceLocation id) {
+    public BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> getDataNodeFactory(ResourceLocation id) {
         return PluginManager.getInstance().clientRegistry.getDataNodeFactory(id);
     }
 }

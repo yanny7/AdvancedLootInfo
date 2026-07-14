@@ -8,7 +8,7 @@ import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -46,14 +46,14 @@ public class GenerationStepNode extends ListNode {
         generationStep = step.ordinal();
     }
 
-    public GenerationStepNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public GenerationStepNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         generationStep = buf.readVarInt();
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeVarInt(generationStep);
     }
