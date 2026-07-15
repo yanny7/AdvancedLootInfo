@@ -55,7 +55,7 @@ public class ReiCompatibility implements REIClientPlugin {
         LOGGER.info("Adding loot information to REI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData);
+            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
                 WorldCategory category = new WorldCategory(key);

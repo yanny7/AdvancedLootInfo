@@ -21,5 +21,6 @@ public class NetworkUtils {
 
         PayloadTypeRegistry.playS2C().register(WorldgenDataChunkMessage.TYPE, WorldgenDataChunkMessage.CODEC);
         PayloadTypeRegistry.playS2C().register(StartMessage.TYPE, StartMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);    }
+        PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
+    }
 }

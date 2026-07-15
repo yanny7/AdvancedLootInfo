@@ -60,7 +60,7 @@ public class JeiCompatibility implements IModPlugin {
         LOGGER.info("Adding worldgen information to JEI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData);
+            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
                 RecipeType<RecipeHolder> type = new RecipeType<>(key, RecipeHolder.class);

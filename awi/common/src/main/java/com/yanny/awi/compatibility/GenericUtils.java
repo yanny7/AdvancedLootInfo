@@ -11,6 +11,7 @@ import com.yanny.awi.plugin.common.nodes.BlockNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

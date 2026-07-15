@@ -77,7 +77,7 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     }
 
     @Override
-    public final boolean handleMouseScrolled(double mouseX, double mouseY, double scrollDeltaY) {
+    public boolean handleMouseScrolled(double mouseX, double mouseY, double scrollDeltaX, double scrollDeltaY) {
         return onMouseScrolled(mouseX, mouseY, scrollDeltaY);
     }
 

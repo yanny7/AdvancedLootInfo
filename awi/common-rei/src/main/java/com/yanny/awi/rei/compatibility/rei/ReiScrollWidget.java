@@ -61,12 +61,12 @@ public class ReiScrollWidget extends Widget {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollDeltaY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollDeltaX, double scrollDeltaY) {
         if (scrollWidget.onMouseScrolled(mouseX, mouseY, scrollDeltaY)) {
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY + scrollWidget.getScrollAmount(), scrollDeltaY);
+        return super.mouseScrolled(mouseX, mouseY + scrollWidget.getScrollAmount(), scrollDeltaX, scrollDeltaY);
     }
 
     @Override
