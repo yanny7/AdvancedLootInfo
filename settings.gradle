@@ -48,6 +48,7 @@ if (settings.jei_enabled == "true") {
 
 if (settings.rei_enabled == "true") {
     include("ali:common-rei")
+    include("awi:common-rei")
 }
 
 if (settings.lootjs_enabled == "true") {

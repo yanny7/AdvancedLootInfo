@@ -33,6 +33,9 @@
         ],
         "jei_mod_plugin": [
             "com.yanny.awi.jei.compatibility.JeiCompatibility"
+        ],
+        "rei_client": [
+            "com.yanny.awi.rei.compatibility.ReiCompatibility"
         ]
     },
     "mixins": [

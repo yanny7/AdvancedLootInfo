@@ -102,6 +102,7 @@ subprojects {
 
             if (emi_available) project.ext.commonProjects << ":awi:common-emi"
             if (jei_available) project.ext.commonProjects << ":awi:common-jei"
+            if (rei_available) project.ext.commonProjects << ":awi:common-rei"
         }
 
         // register tasks that allow running specific combination of recipe viewer and launcher
