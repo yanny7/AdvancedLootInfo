@@ -30,6 +30,9 @@
         ],
         "emi": [
             "com.yanny.awi.emi.compatibility.EmiCompatibility"
+        ],
+        "jei_mod_plugin": [
+            "com.yanny.awi.jei.compatibility.JeiCompatibility"
         ]
     },
     "mixins": [

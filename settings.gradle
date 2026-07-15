@@ -43,6 +43,7 @@ if (settings.emi_enabled == "true") {
 
 if (settings.jei_enabled == "true") {
     include("ali:common-jei")
+    include("awi:common-jei")
 }
 
 if (settings.rei_enabled == "true") {
