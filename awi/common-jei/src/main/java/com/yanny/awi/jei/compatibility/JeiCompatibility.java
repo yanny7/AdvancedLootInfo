@@ -57,7 +57,7 @@ public class JeiCompatibility implements IModPlugin {
         ClientLevel level = Minecraft.getInstance().level;
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
 
-        LOGGER.info("Adding worldgen information to EMI");
+        LOGGER.info("Adding worldgen information to JEI");
 
         if (level != null) {
             Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData);
