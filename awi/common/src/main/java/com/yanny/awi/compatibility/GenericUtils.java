@@ -12,8 +12,10 @@ import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -120,6 +122,28 @@ public class GenericUtils {
         }
 
         return blocks;
+    }
+
+    public static Component getFormattedCategoryTitle(ResourceLocation location) {
+        String translationKey = "dimension." + location.getNamespace() + "." + location.getPath();
+        return Component.translatableWithFallback(translationKey, categoryTitle(location));
+    }
+
+    private static String categoryTitle(ResourceLocation location) {
+        String namespace = location.getNamespace();
+        String path = location.getPath();
+        String cleanPath = WordUtils.capitalizeFully(path.replace('_', ' '));
+        String cleanNamespace = WordUtils.capitalizeFully(namespace.replace('_', ' '));
+
+//        if ("minecraft".equals(namespace)) {
+//            return cleanPath;
+//        }
+
+        if (cleanNamespace.equalsIgnoreCase(cleanPath) || namespace.replace("_", "").equalsIgnoreCase(path.replace("_", ""))) {
+            return cleanPath;
+        }
+
+        return cleanNamespace + " › " + cleanPath;
     }
 
     private static void readWorldgenData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {

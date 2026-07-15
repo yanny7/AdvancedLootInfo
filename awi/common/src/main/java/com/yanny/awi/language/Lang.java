@@ -22,6 +22,7 @@ public final class Lang {
             return translation;
         }
     }
+
     public enum RuleTest implements ITooltipKey {
         ALWAYS_TRUE("always_true", "Always True"),
         ;

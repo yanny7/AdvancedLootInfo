@@ -64,7 +64,8 @@ public class JeiCompatibility implements IModPlugin {
 
             worldgenData.forEach((key, levelNode) -> {
                 RecipeType<RecipeHolder> type = new RecipeType<>(key, RecipeHolder.class);
-                IRecipeCategory<RecipeHolder> category = new JeiBiomeLoot(guiHelper, type, Component.literal("asdf"), guiHelper.createDrawableItemLike(Items.GLOBE_BANNER_PATTERN));
+                Component title = GenericUtils.getFormattedCategoryTitle(key);
+                IRecipeCategory<RecipeHolder> category = new JeiBiomeLoot(guiHelper, type, title, guiHelper.createDrawableItemLike(Items.GLOBE_BANNER_PATTERN));
                 List<RecipeHolder> recipes = new ArrayList<>();
 
                 registration.addRecipeCategories(category);

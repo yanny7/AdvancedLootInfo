@@ -7,7 +7,10 @@ import com.yanny.awi.manager.AwiClientRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
-import com.yanny.awi.rei.compatibility.rei.*;
+import com.yanny.awi.rei.compatibility.rei.RecipeHolder;
+import com.yanny.awi.rei.compatibility.rei.ReiBaseCategory;
+import com.yanny.awi.rei.compatibility.rei.ReiBiomeCategory;
+import com.yanny.awi.rei.compatibility.rei.ReiBiomeDisplay;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
@@ -31,18 +34,18 @@ import java.util.function.Predicate;
 public class ReiCompatibility implements REIClientPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<Holder<ReiGameplayDisplay, RecipeHolder>, List<RecipeHolder>> gameplayCategories = new LinkedHashMap<>();
+    private final Map<Holder, List<RecipeHolder>> dimensions = new LinkedHashMap<>();
 
     @Override
     public void registerCategories(CategoryRegistry registry) {
-        gameplayCategories.clear();
+        dimensions.clear();
 
         GenericUtils.register(registry, this::registerData);
     }
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        registerFiller(registry, gameplayCategories, ReiCompatibility::gameplayPredicate);
+        registerFiller(registry, dimensions, ReiCompatibility::biomePredicate);
     }
 
     private void registerData(CategoryRegistry registry, byte[] fullCompressedData) {
@@ -56,7 +59,7 @@ public class ReiCompatibility implements REIClientPlugin {
 
             worldgenData.forEach((key, levelNode) -> {
                 WorldCategory category = new WorldCategory(key);
-                Holder<ReiGameplayDisplay, RecipeHolder> holder = createCategory(category, ReiGameplayDisplay::new, ReiGameplayCategory::new);
+                Holder holder = createCategory(category, ReiBiomeDisplay::new, ReiBiomeCategory::new);
                 List<RecipeHolder> recipes = new ArrayList<>();
 
                 for (IDataNode biomeNode : levelNode.nodes()) {
@@ -64,7 +67,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     recipes.add(new RecipeHolder(biomeNode, ((BiomeNode) biomeNode).getBiomeId(), blocks));
                 }
 
-                gameplayCategories.put(holder, recipes);
+                dimensions.put(holder, recipes);
                 registry.add(holder.category);
             });
         } else {
@@ -73,17 +76,17 @@ public class ReiCompatibility implements REIClientPlugin {
     }
 
     @NotNull
-    private static <D extends ReiBaseDisplay, T> Holder<D, T> createCategory(WorldCategory lootCategory,
-                                                                             BiFunction<T, CategoryIdentifier<D>, D> displayFactory,
-                                                                             BiFunction<CategoryIdentifier<D>, Component, ReiBaseCategory<D>> categoryFactory) {
-        CategoryIdentifier<D> identifier = CategoryIdentifier.of(lootCategory.id);
-        Component title = Component.translatable("emi.category." + lootCategory.id.getNamespace() + "." + lootCategory.id.getPath().replace('/', '.'));
-        Function<T, D> filler = (type) -> displayFactory.apply(type, identifier);
-        return new Holder<>(identifier, categoryFactory.apply(identifier, title), filler);
+    private static Holder createCategory(WorldCategory lootCategory,
+                                         BiFunction<RecipeHolder, CategoryIdentifier<ReiBiomeDisplay>, ReiBiomeDisplay> displayFactory,
+                                         BiFunction<CategoryIdentifier<ReiBiomeDisplay>, Component, ReiBaseCategory<ReiBiomeDisplay>> categoryFactory) {
+        CategoryIdentifier<ReiBiomeDisplay> identifier = CategoryIdentifier.of(lootCategory.id);
+        Component title = GenericUtils.getFormattedCategoryTitle(lootCategory.id);
+        Function<RecipeHolder, ReiBiomeDisplay> filler = (type) -> displayFactory.apply(type, identifier);
+        return new Holder(identifier, categoryFactory.apply(identifier, title), filler);
     }
 
     @NotNull
-    private static Predicate<Object> gameplayPredicate(List<RecipeHolder> lootTypes) {
+    private static Predicate<Object> biomePredicate(List<RecipeHolder> lootTypes) {
         return (o) -> {
             if (o != null) {
                 if (o instanceof RecipeHolder type) {
@@ -95,14 +98,14 @@ public class ReiCompatibility implements REIClientPlugin {
         };
     }
 
-    private static <D extends ReiBaseDisplay, T> void registerFiller(DisplayRegistry registry, Map<Holder<D, T>, List<T>> categories, Function<List<T>, Predicate<Object>> predicate) {
-        for (Map.Entry<Holder<D, T>, List<T>> entry : categories.entrySet()) {
+    private static void registerFiller(DisplayRegistry registry, Map<Holder, List<RecipeHolder>> categories, Function<List<RecipeHolder>, Predicate<Object>> predicate) {
+        for (Map.Entry<Holder, List<RecipeHolder>> entry : categories.entrySet()) {
             registry.registerFiller(predicate.apply(entry.getValue()), entry.getKey().filler());
             entry.getValue().forEach(registry::add);
         }
     }
 
-    private record Holder<D extends ReiBaseDisplay, T>(CategoryIdentifier<D> identifier, ReiBaseCategory<D> category, Function<T, D> filler) {}
+    private record Holder(CategoryIdentifier<ReiBiomeDisplay> identifier, ReiBaseCategory<ReiBiomeDisplay> category, Function<RecipeHolder, ReiBiomeDisplay> filler) {}
 
     private record WorldCategory(ResourceLocation id) {}
 }

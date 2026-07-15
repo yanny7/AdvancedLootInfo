@@ -16,19 +16,19 @@ import oshi.util.tuples.Triplet;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay> {
-    private final CategoryIdentifier<ReiGameplayDisplay> identifier;
+public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
+    private final CategoryIdentifier<ReiBiomeDisplay> identifier;
     private final Component title;
     private final ItemStack icon;
 
-    public ReiGameplayCategory(CategoryIdentifier<ReiGameplayDisplay> identifier, Component title) {
+    public ReiBiomeCategory(CategoryIdentifier<ReiBiomeDisplay> identifier, Component title) {
         this.identifier = identifier;
         this.title = title;
         this.icon = Items.GLOBE_BANNER_PATTERN.getDefaultInstance();
     }
 
     @Override
-    public List<Widget> setupDisplay(ReiGameplayDisplay display, Rectangle bounds) {
+    public List<Widget> setupDisplay(ReiBiomeDisplay display, Rectangle bounds) {
         List<Widget> widgets = new LinkedList<>();
         Triplet<Rectangle, Rectangle, List<Widget>> prepared = prepareWidgets(display, bounds, 10);
         Rectangle innerBounds = prepared.getA();
@@ -49,7 +49,7 @@ public class ReiGameplayCategory extends ReiBaseCategory<ReiGameplayDisplay> {
     }
 
     @Override
-    public CategoryIdentifier<ReiGameplayDisplay> getCategoryIdentifier() {
+    public CategoryIdentifier<ReiBiomeDisplay> getCategoryIdentifier() {
         return identifier;
     }
 

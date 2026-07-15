@@ -4,11 +4,11 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 
 import java.util.List;
 
-public class ReiGameplayDisplay extends ReiBaseDisplay {
+public class ReiBiomeDisplay extends ReiBaseDisplay {
     private final RecipeHolder entry;
-    private final CategoryIdentifier<ReiGameplayDisplay> identifier;
+    private final CategoryIdentifier<ReiBiomeDisplay> identifier;
 
-    public ReiGameplayDisplay(RecipeHolder entry, CategoryIdentifier<ReiGameplayDisplay> identifier) {
+    public ReiBiomeDisplay(RecipeHolder entry, CategoryIdentifier<ReiBiomeDisplay> identifier) {
         super(List.of(), entry);
         this.entry = entry;
         this.identifier = identifier;
