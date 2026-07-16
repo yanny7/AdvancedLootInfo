@@ -27,7 +27,7 @@ public class BlockNode implements IDataNode, IBlockNode {
     }
 
     public BlockNode(IClientUtils utils, FriendlyByteBuf buf) {
-        block = BuiltInRegistries.BLOCK.get(buf.readResourceLocation());
+        block = BuiltInRegistries.BLOCK.getValue(buf.readResourceLocation());
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         chance = buf.readFloat();
     }

@@ -39,7 +39,7 @@ public class NodeUtils {
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
         public DimensionContext(RegistryAccess registryAccess, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
-            Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+            Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
             SurfaceRules.RuleSource masterSurfaceRule = settings.surfaceRule();
 
@@ -50,13 +50,13 @@ public class NodeUtils {
                 }
 
                 @Override
-                public int getMinBuildHeight() {
+                public int getMinY() {
                     return settings.noiseSettings().minY();
                 }
             };
 
-            this.minBuildHeight = heightAccessor.getMinBuildHeight();
-            this.maxBuildHeight = heightAccessor.getMaxBuildHeight();
+            this.minBuildHeight = heightAccessor.getMinY();
+            this.maxBuildHeight = heightAccessor.getMaxY();
             this.seaLevel = noiseGenerator.getSeaLevel();
 
             ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);

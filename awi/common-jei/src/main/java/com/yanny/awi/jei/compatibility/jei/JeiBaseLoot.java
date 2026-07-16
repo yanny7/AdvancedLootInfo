@@ -19,10 +19,11 @@ import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -37,11 +38,11 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
     static final int CATEGORY_HEIGHT = 7 * 18;
 
     protected final IGuiHelper guiHelper;
-    private final RecipeType<RecipeHolder> recipeType;
+    private final IRecipeType<RecipeHolder> recipeType;
     private final Component title;
     private final IDrawable icon;
 
-    public JeiBaseLoot(IGuiHelper guiHelper, RecipeType<RecipeHolder> recipeType, Component title, IDrawable icon) {
+    public JeiBaseLoot(IGuiHelper guiHelper, IRecipeType<RecipeHolder> recipeType, Component title, IDrawable icon) {
         this.guiHelper = guiHelper;
         this.recipeType = recipeType;
         this.title = title;
@@ -50,7 +51,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
 
     @NotNull
     @Override
-    public final RecipeType<RecipeHolder> getRecipeType() {
+    public final IRecipeType<RecipeHolder> getRecipeType() {
         return recipeType;
     }
 
@@ -73,8 +74,8 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
 
         recipe.setWidgetWrapper(new JeiWidgetWrapper(getRootWidget(utils, recipe.getEntry(), rect, CATEGORY_WIDTH)));
         recipe.setHolders(slotParams);
-//        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStack(i));
-        recipe.getBlocks().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemLike(i));
+//        recipe.type().inputs().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).add(i));
+        recipe.getBlocks().forEach((i) -> builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(i));
 
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
@@ -84,7 +85,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
-            slotBuilder.addItemLike(h.block);
+            slotBuilder.add(h.block);
         }
     }
 
@@ -137,19 +138,17 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
 
     @NotNull
     protected IRecipeWidget createTextWidget(Component component, int x, int y, boolean centered) {
-        return guiHelper.createWidgetFromDrawable(new IDrawable() {
+        return new IRecipeWidget() {
+            private final ScreenPosition position = new ScreenPosition(x, y);
+
+            @NotNull
             @Override
-            public int getWidth() {
-                return CATEGORY_WIDTH;
+            public ScreenPosition getPosition() {
+                return position;
             }
 
             @Override
-            public int getHeight() {
-                return 8;
-            }
-
-            @Override
-            public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+            public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
                 if (centered) {
                     int width = Minecraft.getInstance().font.width(component);
                     guiGraphics.drawString(Minecraft.getInstance().font, component, x - width / 2, y, 0, false);
@@ -157,7 +156,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                     guiGraphics.drawString(Minecraft.getInstance().font, component, x, y, 0, false);
                 }
             }
-        }, x, 0);
+        };
     }
 
     @NotNull

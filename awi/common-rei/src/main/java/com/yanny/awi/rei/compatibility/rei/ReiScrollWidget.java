@@ -11,9 +11,11 @@ import java.util.List;
 
 public class ReiScrollWidget extends Widget {
     private final AbstractScrollWidget scrollWidget;
+    private final Rect rect;
     private final List<Widget> widgets;
 
     public ReiScrollWidget(Rect rect, int contentHeight, List<Widget> widgets) {
+        this.rect = rect;
         this.widgets = widgets;
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
             @Override
@@ -38,7 +40,13 @@ public class ReiScrollWidget extends Widget {
 
     @Override
     public boolean mouseReleased(double d, double e, int i) {
-        return super.mouseReleased(d, e + scrollWidget.getScrollAmount(), i);
+        double f = e + scrollWidget.getScrollAmount();
+
+        if (!super.mouseReleased(d, f, i)) {
+            return this.getChildAt(d, f).filter((guiEventListener) -> guiEventListener.mouseReleased(d, f, i)).isPresent();
+        }
+
+        return false;
     }
 
     @Override
@@ -48,7 +56,7 @@ public class ReiScrollWidget extends Widget {
 
     @Override
     public boolean containsMouse(double mouseX, double mouseY) {
-        return super.containsMouse(mouseX, mouseY + scrollWidget.getScrollAmount());
+        return rect.contains((int) mouseX, (int) mouseY);
     }
 
     @Override

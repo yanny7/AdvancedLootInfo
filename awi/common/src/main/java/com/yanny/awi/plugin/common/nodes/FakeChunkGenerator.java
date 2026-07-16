@@ -15,7 +15,6 @@ import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.RandomState;
@@ -59,7 +58,7 @@ public class FakeChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void applyCarvers(WorldGenRegion worldGenRegion, long l, RandomState randomState, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunkAccess, GenerationStep.Carving carving) {
+    public void applyCarvers(WorldGenRegion worldGenRegion, long l, RandomState randomState, BiomeManager biomeManager, StructureManager structureManager, ChunkAccess chunkAccess) {
 
     }
 
@@ -91,9 +90,9 @@ public class FakeChunkGenerator extends ChunkGenerator {
                     mutablePos.set(x, y, z);
 
                     if (realGenerator instanceof NoiseBasedChunkGenerator generator) {
-                        chunkAccess.setBlockState(mutablePos, generator.generatorSettings().value().defaultBlock(), false);
+                        chunkAccess.setBlockState(mutablePos, generator.generatorSettings().value().defaultBlock(), 3);
                     } else {
-                        chunkAccess.setBlockState(mutablePos, Blocks.STONE.defaultBlockState(), false);
+                        chunkAccess.setBlockState(mutablePos, Blocks.STONE.defaultBlockState(), 3);
                     }
                 }
             }

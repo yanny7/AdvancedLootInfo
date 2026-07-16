@@ -39,7 +39,7 @@ public class BiomeNode extends ListNode {
         }
 
         this.tooltip = tooltip;
-        biomeId = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).getKey(biome);
+        biomeId = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome);
     }
 
     public BiomeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

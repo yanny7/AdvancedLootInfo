@@ -14,6 +14,7 @@ import com.yanny.awi.rei.compatibility.rei.ReiBiomeDisplay;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
+import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReasons;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -28,9 +29,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ReiCompatibility implements REIClientPlugin {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -81,13 +83,13 @@ public class ReiCompatibility implements REIClientPlugin {
                                          BiFunction<CategoryIdentifier<ReiBiomeDisplay>, Component, ReiBaseCategory<ReiBiomeDisplay>> categoryFactory) {
         CategoryIdentifier<ReiBiomeDisplay> identifier = CategoryIdentifier.of(lootCategory.id);
         Component title = GenericUtils.getFormattedCategoryTitle(lootCategory.id);
-        Function<RecipeHolder, ReiBiomeDisplay> filler = (type) -> displayFactory.apply(type, identifier);
+        BiFunction<RecipeHolder, DisplayAdditionReasons, ReiBiomeDisplay> filler = (type, r) -> displayFactory.apply(type, identifier);
         return new Holder(identifier, categoryFactory.apply(identifier, title), filler);
     }
 
     @NotNull
-    private static Predicate<Object> biomePredicate(List<RecipeHolder> lootTypes) {
-        return (o) -> {
+    private static BiPredicate<Object, DisplayAdditionReasons> biomePredicate(List<RecipeHolder> lootTypes) {
+        return (o, r) -> {
             if (o != null) {
                 if (o instanceof RecipeHolder type) {
                     return lootTypes.contains(type);
@@ -98,14 +100,14 @@ public class ReiCompatibility implements REIClientPlugin {
         };
     }
 
-    private static void registerFiller(DisplayRegistry registry, Map<Holder, List<RecipeHolder>> categories, Function<List<RecipeHolder>, Predicate<Object>> predicate) {
+    private static void registerFiller(DisplayRegistry registry, Map<Holder, List<RecipeHolder>> categories, Function<List<RecipeHolder>, BiPredicate<Object, DisplayAdditionReasons>> predicate) {
         for (Map.Entry<Holder, List<RecipeHolder>> entry : categories.entrySet()) {
-            registry.registerFiller(predicate.apply(entry.getValue()), entry.getKey().filler());
+            registry.registerFillerWithReason(predicate.apply(entry.getValue()), entry.getKey().filler());
             entry.getValue().forEach(registry::add);
         }
     }
 
-    private record Holder(CategoryIdentifier<ReiBiomeDisplay> identifier, ReiBaseCategory<ReiBiomeDisplay> category, Function<RecipeHolder, ReiBiomeDisplay> filler) {}
+    private record Holder(CategoryIdentifier<ReiBiomeDisplay> identifier, ReiBaseCategory<ReiBiomeDisplay> category, BiFunction<RecipeHolder, DisplayAdditionReasons, ReiBiomeDisplay> filler) {}
 
     private record WorldCategory(ResourceLocation id) {}
 }

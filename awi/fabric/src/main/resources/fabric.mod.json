@@ -40,7 +40,6 @@
     },
     "mixins": [
         "awi.mixins.json",
-        "awi.emi.mixins.json",
         "awi.fabric.mixins.json"
     ],
     "depends": {
