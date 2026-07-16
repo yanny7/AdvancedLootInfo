@@ -47,7 +47,7 @@ public class PlacedFeatureNode extends ListNode {
         Set<Block> blocks = new HashSet<>();
         Iterator<BlockPos> posIterable = BlockPos.randomInCube(utils.getServerLevel().getRandom(), 128, BlockPos.ZERO, 128).iterator();
 
-        Biome biome = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BIOME).get(Biomes.BADLANDS);
+        Biome biome = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.BIOME).getValue(Biomes.BADLANDS);
 
         try {
 //            for (int i = 0; i < 5; i++) {

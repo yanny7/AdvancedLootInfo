@@ -30,11 +30,16 @@
         ],
         "emi": [
             "com.yanny.awi.emi.compatibility.EmiCompatibility"
+        ],
+        "jei_mod_plugin": [
+            "com.yanny.awi.jei.compatibility.JeiCompatibility"
+        ],
+        "rei_client": [
+            "com.yanny.awi.rei.compatibility.ReiCompatibility"
         ]
     },
     "mixins": [
         "awi.mixins.json",
-        "awi.emi.mixins.json",
         "awi.fabric.mixins.json"
     ],
     "depends": {
