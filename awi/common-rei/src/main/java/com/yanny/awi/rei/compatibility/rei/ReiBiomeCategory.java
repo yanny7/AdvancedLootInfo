@@ -42,8 +42,7 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
         widgets.add(Widgets.withTranslate(
                 new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),
                 fullBounds.x + PADDING,
-                fullBounds.y + PADDING,
-                0
+                fullBounds.y + PADDING
         ));
         return widgets;
     }

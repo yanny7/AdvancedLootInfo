@@ -1,13 +1,13 @@
 package com.yanny.awi.compatibility;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.Rect;
 import com.yanny.awi.plugin.client.WidgetUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix3x2fStack;
 
 public abstract class AbstractScrollWidget {
     protected static final int SCROLLBAR_PADDING = 2;
@@ -132,18 +132,18 @@ public abstract class AbstractScrollWidget {
     }
 
     private void drawContents(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        PoseStack poseStack = guiGraphics.pose();
+        Matrix3x2fStack poseStack = guiGraphics.pose();
         ScreenRectangle scissorArea = new ScreenRectangle(rect.x(), rect.y(), rect.width(), rect.height());
         float scrollAmount = getScrollAmount();
 
         guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
-        poseStack.pushPose();
-        poseStack.translate(0.0, -scrollAmount, 0.0);
+        poseStack.pushMatrix();
+        poseStack.translateLocal(0.0F, -scrollAmount);
 
         try {
             renderWidgets(guiGraphics, mouseX, mouseY + scrollAmount);
         } finally {
-            poseStack.popPose();
+            poseStack.popMatrix();
             guiGraphics.disableScissor();
         }
     }

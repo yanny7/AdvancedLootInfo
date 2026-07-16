@@ -5,10 +5,9 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.awi.plugin.client.WidgetUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +66,6 @@ public class TextureWidget implements IWidget {
 
     @Override
     public void render(GuiGraphics draw, int mouseX, int mouseY) {
-        draw.drawSpecial((source) -> WidgetUtils.innerBlit(source.getBuffer(RenderType.guiTextured(texture)), draw.pose().last().pose(), rect.getX(), rect.getX() + rect.getWidth(), rect.getY(), rect.getY() + rect.getHeight(), 0, rect.getWidth(), rect.getHeight(), u, v, textureWidth, textureHeight));
+        draw.blit(RenderPipelines.GUI_TEXTURED, texture, rect.getX(), rect.getY(), u, v, rect.getWidth(), rect.getHeight(), textureWidth, textureHeight);
     }
 }

@@ -1,6 +1,5 @@
 package com.yanny.awi.rei.compatibility.rei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -27,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix3x2fStack;
 import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
@@ -121,24 +121,25 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
             if (count != null) {
                 Font font = Minecraft.getInstance().font;
-                PoseStack stack = guiGraphics.pose();
+                Matrix3x2fStack stack = guiGraphics.pose();
 
-                stack.pushPose();
-                stack.translate(bounds.getX(), bounds.getY(), 0);
+
+                stack.pushMatrix();
+                stack.translate(bounds.getX(), bounds.getY());
 
                 if (isRange) {
-                    stack.translate(17, 13, 200);
-                    stack.pushPose();
-                    stack.scale(0.5f, 0.5f, 0.5f);
+                    stack.translate(17, 13);
+                    stack.pushMatrix();
+                    stack.scale(0.5f);
                     //draw.fill(-font.width(count) - 2, -2, 2, 10, 255<<24 | 0);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, false);
-                    stack.popPose();
+                    guiGraphics.drawString(font, count, -font.width(count), 0, -1, false);
+                    stack.popMatrix();
                 } else {
-                    stack.translate(18, 10, 200);
-                    guiGraphics.drawString(font, count, -font.width(count), 0, 16777215, true);
+                    stack.translate(18, 10);
+                    guiGraphics.drawString(font, count, -font.width(count), 0, -1, true);
                 }
 
-                stack.popPose();
+                stack.popMatrix();
             }
         }
     }
