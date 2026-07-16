@@ -7,7 +7,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ import java.util.Set;
 import static com.yanny.aci.tooltip.TooltipBuilder.*;
 
 public class BaseTerrainNode extends ListNode {
-    public static final ResourceLocation ID = Utils.modLoc("base_layout");
+    public static final Identifier ID = Utils.modLoc("base_layout");
 
     private final TooltipNode tooltip;
 
@@ -46,7 +46,7 @@ public class BaseTerrainNode extends ListNode {
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 }

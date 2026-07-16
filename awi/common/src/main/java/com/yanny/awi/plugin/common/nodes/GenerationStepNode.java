@@ -9,7 +9,7 @@ import com.yanny.awi.language.Lang;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.yanny.aci.tooltip.TooltipBuilder.*;
 
 public class GenerationStepNode extends ListNode {
-    public static final ResourceLocation ID = Utils.modLoc("generation_step");
+    public static final Identifier ID = Utils.modLoc("generation_step");
 
     private final TooltipNode tooltip;
     private final int generationStep;
@@ -66,7 +66,7 @@ public class GenerationStepNode extends ListNode {
 
     @NotNull
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return ID;
     }
 

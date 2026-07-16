@@ -11,16 +11,16 @@ import dev.emi.emi.api.widget.TextWidget;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.Collections;
 import java.util.List;
 
 public class EmiBiomeLoot extends EmiBaseLoot {
-    private final ResourceLocation biome;
+    private final Identifier biome;
 
-    public EmiBiomeLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode biomeNode, List<Block> outputs) {
+    public EmiBiomeLoot(EmiRecipeCategory category, Identifier id, IDataNode biomeNode, List<Block> outputs) {
         super(category, id, biomeNode, 0, 10, Collections.emptyList(), outputs);
         biome = ((BiomeNode) biomeNode).getBiomeId();
     }

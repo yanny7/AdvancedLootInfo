@@ -1,19 +1,19 @@
 package com.yanny.awi.jei.compatibility.jei;
 
 import com.yanny.awi.api.IDataNode;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 
 public final class RecipeHolder {
     private final IDataNode entry;
-    private final ResourceLocation id;
+    private final Identifier id;
     private final List<Block> blocks;
     private JeiWidgetWrapper widgetWrapper;
     private List<JeiBaseLoot.Holder> holders;
 
-    public RecipeHolder(IDataNode entry, ResourceLocation id, List<Block> blocks) {
+    public RecipeHolder(IDataNode entry, Identifier id, List<Block> blocks) {
         this.entry = entry;
         this.id = id;
         this.blocks = blocks;
@@ -41,7 +41,7 @@ public final class RecipeHolder {
         return entry;
     }
 
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return id;
     }
 

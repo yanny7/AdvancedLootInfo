@@ -14,7 +14,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -46,10 +46,10 @@ public abstract class AbstractServer {
         AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
-        Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();
+        Map<Identifier, IDataNode> worldgenNodes = new HashMap<>();
 
         for (LevelStem levelStem : levelStemRegistry) {
-            ResourceLocation location = levelStemRegistry.getKey(levelStem);
+            Identifier location = levelStemRegistry.getKey(levelStem);
 
             LOGGER.info("Processing dimension: {}", location);
             worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
@@ -96,18 +96,18 @@ public abstract class AbstractServer {
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
-    private void writeWorldgenData(IServerUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> worldgenNodes) {
+    private void writeWorldgenData(IServerUtils utils, RegistryFriendlyByteBuf buf, Map<Identifier, IDataNode> worldgenNodes) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 
         buf.writeInt(worldgenNodes.size());
 
-        for (Map.Entry<ResourceLocation, IDataNode> nodeEntry : worldgenNodes.entrySet()) {
+        for (Map.Entry<Identifier, IDataNode> nodeEntry : worldgenNodes.entrySet()) {
             int startOfNode = buf.writerIndex();
 
             try {
                 TooltipContext.set(nodeEntry.getKey());
-                buf.writeResourceLocation(nodeEntry.getKey());
+                buf.writeIdentifier(nodeEntry.getKey());
                 nodeEntry.getValue().encode(utils, buf);
                 //TODO write blocks
                 successfulNodes++;
@@ -161,11 +161,11 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static Map<ResourceLocation, IDataNode> removeEmptyNodes(Map<ResourceLocation, IDataNode> nodes) {
-        Map<ResourceLocation, IDataNode> result = new HashMap<>();
+    private static Map<Identifier, IDataNode> removeEmptyNodes(Map<Identifier, IDataNode> nodes) {
+        Map<Identifier, IDataNode> result = new HashMap<>();
         int emptyNodes = 0;
 
-        for (Map.Entry<ResourceLocation, IDataNode> entry : nodes.entrySet()) {
+        for (Map.Entry<Identifier, IDataNode> entry : nodes.entrySet()) {
             IDataNode node = entry.getValue();
 
             if (node instanceof ListNode listNode) {

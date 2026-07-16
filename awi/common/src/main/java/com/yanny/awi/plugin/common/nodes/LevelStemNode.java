@@ -94,7 +94,7 @@ public class LevelStemNode extends ListNode {
                 try {
                     BiomeResult res = future.get();
 
-                    LOGGER.info("Analyzing biome {}", res.biomeHolder.unwrapKey().get().location());
+                    LOGGER.info("Analyzing biome {}", res.biomeHolder.unwrapKey().get().identifier());
                     res.layers().log();
 
                     TooltipNode tooltip = TooltipBuilder.array((b) -> {

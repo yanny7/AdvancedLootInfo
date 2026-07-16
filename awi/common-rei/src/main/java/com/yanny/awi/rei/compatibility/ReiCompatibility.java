@@ -19,7 +19,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -57,7 +57,7 @@ public class ReiCompatibility implements REIClientPlugin {
         LOGGER.info("Adding loot information to REI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
+            Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
                 WorldCategory category = new WorldCategory(key);
@@ -109,5 +109,5 @@ public class ReiCompatibility implements REIClientPlugin {
 
     private record Holder(CategoryIdentifier<ReiBiomeDisplay> identifier, ReiBaseCategory<ReiBiomeDisplay> category, BiFunction<RecipeHolder, DisplayAdditionReasons, ReiBiomeDisplay> filler) {}
 
-    private record WorldCategory(ResourceLocation id) {}
+    private record WorldCategory(Identifier id) {}
 }

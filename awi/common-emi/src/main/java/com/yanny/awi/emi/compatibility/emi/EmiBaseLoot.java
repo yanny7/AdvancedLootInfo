@@ -17,7 +17,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
@@ -33,8 +33,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private final Widget widget;
     private final List<Holder> slotWidgets = new LinkedList<>();
 
-    public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<Block> outputs) {
-        super(category, ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), 1024);
+    public EmiBaseLoot(EmiRecipeCategory category, Identifier id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<Block> outputs) {
+        super(category, Identifier.fromNamespaceAndPath(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), 1024);
         RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
         widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
         this.inputs.addAll(inputs.stream().map(EmiStack::of).toList());

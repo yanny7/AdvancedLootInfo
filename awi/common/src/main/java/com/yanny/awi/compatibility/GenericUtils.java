@@ -14,7 +14,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -34,8 +34,8 @@ public class GenericUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
-    public static Map<ResourceLocation, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData, RegistryAccess registryAccess) {
-        Map<ResourceLocation, LevelStemNode> worldgenData = new HashMap<>();
+    public static Map<Identifier, LevelStemNode> decompressWorldgenData(IClientUtils utils, byte[] fullCompressedData, RegistryAccess registryAccess) {
+        Map<Identifier, LevelStemNode> worldgenData = new HashMap<>();
 
         if (fullCompressedData.length == 0) {
             return worldgenData;
@@ -125,12 +125,12 @@ public class GenericUtils {
         return blocks;
     }
 
-    public static Component getFormattedCategoryTitle(ResourceLocation location) {
+    public static Component getFormattedCategoryTitle(Identifier location) {
         String translationKey = "dimension." + location.getNamespace() + "." + location.getPath();
         return Component.translatableWithFallback(translationKey, categoryTitle(location));
     }
 
-    private static String categoryTitle(ResourceLocation location) {
+    private static String categoryTitle(Identifier location) {
         String namespace = location.getNamespace();
         String path = location.getPath();
         String cleanPath = WordUtils.capitalizeFully(path.replace('_', ' '));
@@ -147,11 +147,11 @@ public class GenericUtils {
         return cleanNamespace + " › " + cleanPath;
     }
 
-    private static void readWorldgenData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {
+    private static void readWorldgenData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<Identifier, LevelStemNode> lootData) {
         int lootDataCount = readerBuf.readInt();
 
         for (int i = 0; i < lootDataCount; i++) {
-            ResourceLocation location = readerBuf.readResourceLocation();
+            Identifier location = readerBuf.readIdentifier();
             LevelStemNode dataNode = (LevelStemNode) utils.getDataNodeFactory(LevelStemNode.ID).apply(utils, readerBuf);
 
             lootData.put(location, dataNode);

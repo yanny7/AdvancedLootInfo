@@ -16,7 +16,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class EmiCompatibility implements EmiPlugin {
         LOGGER.info("Adding worldgen information to EMI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
+            Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
                 EmiRecipeCategory category = new RecipeCategory(key);
@@ -58,7 +58,7 @@ public class EmiCompatibility implements EmiPlugin {
     private static class RecipeCategory extends EmiRecipeCategory {
         private final Component title;
 
-        public RecipeCategory(ResourceLocation id) {
+        public RecipeCategory(Identifier id) {
             super(id, EmiStack.of(Items.GLOBE_BANNER_PATTERN));
             title = GenericUtils.getFormattedCategoryTitle(id);
         }

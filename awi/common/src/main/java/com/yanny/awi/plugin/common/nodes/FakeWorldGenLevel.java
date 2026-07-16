@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.attribute.EnvironmentAttributeReader;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -263,6 +264,12 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     @Override
     public FeatureFlagSet enabledFeatures() {
         return serverLevel.enabledFeatures();
+    }
+
+    @NotNull
+    @Override
+    public EnvironmentAttributeReader environmentAttributes() {
+        return serverLevel.environmentAttributes();
     }
 
     @Override

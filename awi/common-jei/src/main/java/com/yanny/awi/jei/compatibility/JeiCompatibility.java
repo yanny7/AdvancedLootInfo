@@ -20,7 +20,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public class JeiCompatibility implements IModPlugin {
         LOGGER.info("Adding worldgen information to JEI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
+            Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
                 RecipeType<RecipeHolder> type = new RecipeType<>(key, RecipeHolder.class);
@@ -82,7 +82,7 @@ public class JeiCompatibility implements IModPlugin {
 
     @NotNull
     @Override
-    public ResourceLocation getPluginUid() {
+    public Identifier getPluginUid() {
         return Utils.modLoc("jei_plugin");
     }
 }

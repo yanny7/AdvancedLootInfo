@@ -23,7 +23,7 @@ public class BiomeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("biome");
 
     private final TooltipNode tooltip;
-    private final ResourceLocation biomeId;
+    private final Identifier biomeId;
 
     public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<Block> blocks) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
@@ -45,13 +45,13 @@ public class BiomeNode extends ListNode {
     public BiomeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
-        biomeId = buf.readResourceLocation();
+        biomeId = buf.readIdentifier();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
-        buf.writeResourceLocation(biomeId);
+        buf.writeIdentifier(biomeId);
     }
 
     @NotNull
@@ -66,7 +66,7 @@ public class BiomeNode extends ListNode {
         return ID;
     }
 
-    public ResourceLocation getBiomeId() {
+    public Identifier getBiomeId() {
         return biomeId;
     }
 }

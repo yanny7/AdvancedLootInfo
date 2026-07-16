@@ -80,7 +80,7 @@
 
 ## [1.6.3]
 
-- Used localized names for Items/Blocks/Effects..., added config option to display them as ResourceLocations 
+- Used localized names for Items/Blocks/Effects..., added config option to display them as Identifiers 
 - Fixed unable to connect to Fabric server
 
 ## [1.6.2]
