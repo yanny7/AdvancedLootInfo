@@ -8,7 +8,7 @@ accessible field net/minecraft/world/level/levelgen/feature/stateproviders/Noise
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/NoiseThresholdProvider highStates Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RandomizedIntStateProvider source Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
 accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RotatedBlockProvider block Lnet/minecraft/world/level/block/Block;
-accessible field net/minecraft/world/level/levelgen/feature/stateproviders/WeightedStateProvider weightedList Lnet/minecraft/util/random/SimpleWeightedRandomList;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/WeightedStateProvider weightedList Lnet/minecraft/util/random/WeightedList;
 accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer rootProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
 accessible field net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer aboveRootPlacement Ljava/util/Optional;
 

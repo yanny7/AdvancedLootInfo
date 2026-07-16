@@ -1,8 +1,27 @@
 package com.yanny.awi.network;
 
+import com.yanny.awi.Utils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import org.jetbrains.annotations.NotNull;
 
-public class StartMessage {
+public class StartMessage implements CustomPacketPayload {
+    public static final Type<StartMessage> TYPE = new Type<>(Utils.modLoc("start_worldgen_info"));
+    public static final StreamCodec<RegistryFriendlyByteBuf, StartMessage> CODEC = new StreamCodec<>() {
+        @NotNull
+        @Override
+        public StartMessage decode(RegistryFriendlyByteBuf buf) {
+            return new StartMessage(buf);
+        }
+
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, StartMessage message) {
+            message.write(buf);
+        }
+    };
+
     public final int totalMessages;
 
     public StartMessage(int totalMessages) {
@@ -13,7 +32,13 @@ public class StartMessage {
         totalMessages = buf.readInt();
     }
 
-    public void encode(FriendlyByteBuf buf) {
+    public void write(FriendlyByteBuf buf) {
         buf.writeInt(totalMessages);
+    }
+
+    @NotNull
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 }

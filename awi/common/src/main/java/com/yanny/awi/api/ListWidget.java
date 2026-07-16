@@ -2,11 +2,11 @@ package com.yanny.awi.api;
 
 import com.yanny.aci.api.CoreListWidget;
 import com.yanny.aci.api.RelativeRect;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ListWidget extends CoreListWidget<IDataNode, IWidgetUtils, IClientUtils> {
-    public static final ResourceLocation TEXTURE_LOC = new ResourceLocation("awi", "textures/gui/gui.png");
+    public static final Identifier TEXTURE_LOC = Identifier.fromNamespaceAndPath("awi", "textures/gui/gui.png");
 
     public ListWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth) {
         super(utils, entry, rect, maxWidth, entry);
@@ -18,7 +18,7 @@ public abstract class ListWidget extends CoreListWidget<IDataNode, IWidgetUtils,
 
     @NotNull
     @Override
-    public ResourceLocation getTexture() {
+    public Identifier getTexture() {
         return TEXTURE_LOC;
     }
 }

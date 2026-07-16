@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.attribute.EnvironmentAttributeReader;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -115,7 +116,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void playSound(@Nullable Player player, BlockPos blockPos, SoundEvent soundEvent, SoundSource soundSource, float f, float g) {
+    public void playSound(@Nullable Entity entity, BlockPos blockPos, SoundEvent soundEvent, SoundSource soundSource, float f, float g) {
 
     }
 
@@ -125,7 +126,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void levelEvent(@Nullable Player player, int i, BlockPos blockPos, int j) {
+    public void levelEvent(@Nullable Entity entity, int i, BlockPos blockPos, int j) {
 
     }
 
@@ -265,6 +266,12 @@ public class FakeWorldGenLevel implements WorldGenLevel {
         return serverLevel.enabledFeatures();
     }
 
+    @NotNull
+    @Override
+    public EnvironmentAttributeReader environmentAttributes() {
+        return serverLevel.environmentAttributes();
+    }
+
     @Override
     public boolean isStateAtPosition(BlockPos blockPos, Predicate<BlockState> predicate) {
         //TODO random pool?
@@ -318,7 +325,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void neighborShapeChanged(Direction direction, BlockState blockState, BlockPos blockPos, BlockPos blockPos2, int i, int j) {
+    public void neighborShapeChanged(Direction direction, BlockPos blockPos, BlockPos blockPos2, BlockState blockState, int i, int j) {
 
     }
 }

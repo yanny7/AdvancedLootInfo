@@ -8,6 +8,6 @@ public class DataGeneration implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         FabricDataGenerator.Pack pack = generator.createPack();
 
-        pack.addProvider((FabricDataGenerator.Pack.Factory<LanguageProvider>) (p) -> new LanguageProvider(p, "en_us"));
+        pack.addProvider((p, l) -> new LanguageProvider(p, l, "en_us"));
     }
 }
