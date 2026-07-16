@@ -115,7 +115,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void playSound(@Nullable Player player, BlockPos blockPos, SoundEvent soundEvent, SoundSource soundSource, float f, float g) {
+    public void playSound(@Nullable Entity entity, BlockPos blockPos, SoundEvent soundEvent, SoundSource soundSource, float f, float g) {
 
     }
 
@@ -125,7 +125,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void levelEvent(@Nullable Player player, int i, BlockPos blockPos, int j) {
+    public void levelEvent(@Nullable Entity entity, int i, BlockPos blockPos, int j) {
 
     }
 
@@ -318,7 +318,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void neighborShapeChanged(Direction direction, BlockState blockState, BlockPos blockPos, BlockPos blockPos2, int i, int j) {
+    public void neighborShapeChanged(Direction direction, BlockPos blockPos, BlockPos blockPos2, BlockState blockState, int i, int j) {
 
     }
 }

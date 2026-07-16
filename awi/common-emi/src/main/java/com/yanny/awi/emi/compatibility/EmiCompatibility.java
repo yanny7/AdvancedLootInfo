@@ -15,6 +15,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -39,10 +40,10 @@ public class EmiCompatibility implements EmiPlugin {
         LOGGER.info("Adding worldgen information to EMI");
 
         if (level != null) {
-            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData);
+            Map<ResourceLocation, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
             worldgenData.forEach((key, levelNode) -> {
-                EmiRecipeCategory category = new EmiRecipeCategory(key, EmiStack.of(Items.GLOBE_BANNER_PATTERN));
+                EmiRecipeCategory category = new RecipeCategory(key);
 
                 registry.addCategory(category);
 
@@ -51,6 +52,20 @@ public class EmiCompatibility implements EmiPlugin {
                     registry.addRecipe(new EmiBiomeLoot(category, ((BiomeNode) biomeNode).getBiomeId(), biomeNode, blocks));
                 }
             });
+        }
+    }
+
+    private static class RecipeCategory extends EmiRecipeCategory {
+        private final Component title;
+
+        public RecipeCategory(ResourceLocation id) {
+            super(id, EmiStack.of(Items.GLOBE_BANNER_PATTERN));
+            title = GenericUtils.getFormattedCategoryTitle(id);
+        }
+
+        @Override
+        public Component getName() {
+            return title;
         }
     }
 }

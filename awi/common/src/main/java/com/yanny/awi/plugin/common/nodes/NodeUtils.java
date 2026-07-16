@@ -12,6 +12,7 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.*;
@@ -38,8 +39,8 @@ public class NodeUtils {
         private final int seaLevel;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
-        public DimensionContext(RegistryAccess registryAccess, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
-            Registry<Biome> biomeRegistry = registryAccess.registryOrThrow(Registries.BIOME);
+        public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
+            Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
             SurfaceRules.RuleSource masterSurfaceRule = settings.surfaceRule();
 
@@ -50,16 +51,16 @@ public class NodeUtils {
                 }
 
                 @Override
-                public int getMinBuildHeight() {
+                public int getMinY() {
                     return settings.noiseSettings().minY();
                 }
             };
 
-            this.minBuildHeight = heightAccessor.getMinBuildHeight();
-            this.maxBuildHeight = heightAccessor.getMaxBuildHeight();
+            this.minBuildHeight = heightAccessor.getMinY();
+            this.maxBuildHeight = heightAccessor.getMaxY();
             this.seaLevel = noiseGenerator.getSeaLevel();
 
-            ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);
+            ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, palettedContainerFactory, null);
             WorldGenerationContext genContext = new WorldGenerationContext(noiseGenerator, heightAccessor);
             BlockState defaultFluid = settings.defaultFluid();
 
