@@ -1,7 +1,7 @@
 package com.yanny.awi.fabric;
 
-import com.yanny.awi.fabric.network.NetworkUtils;
 import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.network.RequestWorldgenDataMessage;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -15,7 +15,7 @@ public class FabricClientBusSubscriber {
     }
 
     private static void onConnect(ClientPacketListener clientPacketListener, PacketSender packetSender, Minecraft minecraft) {
-        PluginManager.getInstance().clientRegistry.loggingIn(ClientPlayNetworking.canSend(NetworkUtils.REQUEST_WORLDGEN_DATA_ID));
+        PluginManager.getInstance().clientRegistry.loggingIn(ClientPlayNetworking.canSend(RequestWorldgenDataMessage.TYPE));
     }
 
     private static void onDisconnect(ClientPacketListener clientPacketListener, Minecraft minecraft) {

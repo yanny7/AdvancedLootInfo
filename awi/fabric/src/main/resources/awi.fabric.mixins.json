@@ -4,5 +4,8 @@
   "package": "com.yanny.awi.fabric.mixin",
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "MixinClientPlayNetworkAddon"
+  ]
 }

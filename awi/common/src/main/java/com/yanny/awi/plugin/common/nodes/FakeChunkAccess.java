@@ -27,8 +27,8 @@ public class FakeChunkAccess extends ChunkAccess {
     private final Set<Block> blocks;
 
     public FakeChunkAccess(FakeWorldGenLevel level, ServerLevel serverLevel, Set<Block> blocks) {
-        super(null, null, level, serverLevel.registryAccess().registryOrThrow(Registries.BIOME), 0, null, null);
-        fakeChunkSection = new LevelChunkSection(serverLevel.registryAccess().registryOrThrow(Registries.BIOME)) {
+        super(null, null, level, serverLevel.registryAccess().lookupOrThrow(Registries.BIOME), 0, null, null);
+        fakeChunkSection = new LevelChunkSection(serverLevel.registryAccess().lookupOrThrow(Registries.BIOME)) {
             @NotNull
             @Override
             public BlockState getBlockState(int i, int j, int k) {
@@ -70,7 +70,7 @@ public class FakeChunkAccess extends ChunkAccess {
 
     @Nullable
     @Override
-    public BlockState setBlockState(BlockPos blockPos, BlockState blockState, boolean bl) {
+    public BlockState setBlockState(BlockPos blockPos, BlockState blockState, int i) {
         blocks.add(blockState.getBlock());
         return blockState;
     }
@@ -116,7 +116,7 @@ public class FakeChunkAccess extends ChunkAccess {
 
     @NotNull
     @Override
-    public TicksToSave getTicksForSerialization() {
+    public PackedTicks getTicksForSerialization(long l) {
         throw new IllegalStateException();
     }
 

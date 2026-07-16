@@ -13,7 +13,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -60,7 +60,7 @@ public abstract class AbstractServer {
         LOGGER.info("Processing worldgen info took {}ms", System.currentTimeMillis() - startTime);
 
         ByteBuf rawBuf = Unpooled.buffer();
-        FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, registryAccess);
 
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
         writeWorldgenData(serverRegistry, buf, worldgenNodes);
@@ -96,7 +96,7 @@ public abstract class AbstractServer {
 
     protected abstract void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message);
 
-    private void writeWorldgenData(IServerUtils utils, FriendlyByteBuf buf, Map<ResourceLocation, IDataNode> worldgenNodes) {
+    private void writeWorldgenData(IServerUtils utils, RegistryFriendlyByteBuf buf, Map<ResourceLocation, IDataNode> worldgenNodes) {
         int countIndex = buf.writerIndex();
         int successfulNodes = 0;
 

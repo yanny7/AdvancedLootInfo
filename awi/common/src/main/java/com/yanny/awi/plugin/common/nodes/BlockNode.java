@@ -8,6 +8,7 @@ import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class BlockNode implements IDataNode, IBlockNode {
     }
 
     public BlockNode(IClientUtils utils, FriendlyByteBuf buf) {
-        block = BuiltInRegistries.BLOCK.get(buf.readResourceLocation());
+        block = BuiltInRegistries.BLOCK.getValue(buf.readResourceLocation());
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         chance = buf.readFloat();
     }
@@ -44,7 +45,7 @@ public class BlockNode implements IDataNode, IBlockNode {
     }
 
     @Override
-    public void encode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeResourceLocation(BuiltInRegistries.BLOCK.getKey(block));
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         buf.writeFloat(chance);

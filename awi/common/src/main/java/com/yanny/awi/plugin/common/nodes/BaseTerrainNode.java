@@ -6,7 +6,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -28,13 +28,13 @@ public class BaseTerrainNode extends ListNode {
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();
     }
 
-    public BaseTerrainNode(IClientUtils utils, FriendlyByteBuf buf) {
+    public BaseTerrainNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
     @Override
-    public void encodeNode(IServerUtils utils, FriendlyByteBuf buf) {
+    public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
     }
 
