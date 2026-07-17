@@ -92,8 +92,8 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectRandomFeatureConfigurationBlocks(IServerUtils utils, RandomFeatureConfiguration configuration) {
         List<Block> blocks = new ArrayList<>();
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.defaultFeature.value().feature().value().config()));
-        blocks.addAll(configuration.features.stream().map((feature) -> utils.collectBlocks(utils, feature.feature.value().feature().value().config())).flatMap(Collection::stream).toList());
+        blocks.addAll(utils.collectBlocks(utils, configuration.defaultFeature().value().feature().value().config()));
+        blocks.addAll(configuration.features().stream().map((feature) -> utils.collectBlocks(utils, feature.feature().value().feature().value().config())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
@@ -113,9 +113,9 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectRootSystemConfigurationBlocks(IServerUtils utils, RootSystemConfiguration configuration) {
         List<Block> blocks = new ArrayList<>();
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.rootStateProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.hangingRootStateProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.treeFeature.value().feature().value().config()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.rootStateProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.hangingRootStateProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.treeFeature().value().feature().value().config()));
         return blocks;
     }
 
@@ -149,8 +149,8 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectVegetationPatchConfigurationBlocks(IServerUtils utils, VegetationPatchConfiguration configuration) {
         List<Block> blocks = new ArrayList<>();
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.groundState));
-        blocks.addAll(utils.collectBlocks(utils, configuration.vegetationFeature.value().feature().value().config()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.groundState()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.vegetationFeature().value().feature().value().config()));
         return blocks;
     }
 }

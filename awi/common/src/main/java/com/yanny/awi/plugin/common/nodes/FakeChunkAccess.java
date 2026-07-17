@@ -161,7 +161,7 @@ public class FakeChunkAccess extends ChunkAccess {
      */
 
     @Override
-    public void markPosForPostprocessing(BlockPos blockPos) {
+    public void markPosForPostProcessing(BlockPos blockPos) {
 
     }
 

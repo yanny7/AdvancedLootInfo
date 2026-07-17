@@ -74,7 +74,7 @@ public class NodeUtils {
 
             this.context = new SurfaceRules.Context(
                     randomState.surfaceSystem(), randomState, mockChunk,
-                    dummyNoiseChunk, biomeWrapper, biomeRegistry, genContext
+                    dummyNoiseChunk, biomeWrapper, genContext, null
             );
             this.compiledRule = masterSurfaceRule.apply(this.context);
         }
@@ -330,7 +330,7 @@ public class NodeUtils {
                                 context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
                                 context.surfaceDepth = surfaceDepth;
                                 context.minSurfaceLevel = minSurfaceLevel;
-                                context.updateY(depth, above, level, posX, y, posZ);
+                                context.updateY(depth, above, level, y);
 
                                 BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
@@ -352,7 +352,7 @@ public class NodeUtils {
                                 context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
                                 context.surfaceDepth = surfaceDepth;
                                 context.minSurfaceLevel = minSurfaceLevel;
-                                context.updateY(above, depth, level, posX, y, posZ);
+                                context.updateY(above, depth, level, y);
 
                                 BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
@@ -398,7 +398,7 @@ public class NodeUtils {
                             context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
                             context.surfaceDepth = surfaceDepth;
                             context.minSurfaceLevel = minSurfaceLevel;
-                            context.updateY(depth, above, level, posX, y, posZ);
+                            context.updateY(depth, above, level, y);
 
                             BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
@@ -411,7 +411,7 @@ public class NodeUtils {
                             context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
                             context.surfaceDepth = surfaceDepth;
                             context.minSurfaceLevel = minSurfaceLevel;
-                            context.updateY(above, depth, level, posX, y, posZ);
+                            context.updateY(above, depth, level, y);
 
                             BlockState cur = compiledRule.tryApply(posX, y, posZ);
 
