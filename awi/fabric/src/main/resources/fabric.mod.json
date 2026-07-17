@@ -30,18 +30,23 @@
         ],
         "emi": [
             "com.yanny.awi.emi.compatibility.EmiCompatibility"
+        ],
+        "jei_mod_plugin": [
+            "com.yanny.awi.jei.compatibility.JeiCompatibility"
+        ],
+        "rei_client": [
+            "com.yanny.awi.rei.compatibility.ReiCompatibility"
         ]
     },
     "mixins": [
         "awi.mixins.json",
-        "awi.emi.mixins.json",
         "awi.fabric.mixins.json"
     ],
     "depends": {
         "fabricloader": "*",
-        "fabric": "*",
+        "fabric-api": "*",
         "minecraft": "${minecraft_version}",
-        "java": ">=17"
+        "java": ">=${java_version}"
     },
     "suggests": {
         "emi": "${emi_version_range_fabric}",

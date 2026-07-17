@@ -6,16 +6,17 @@ import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class TextureWidget implements IWidget {
-    protected final ResourceLocation texture;
+    protected final Identifier texture;
     protected final RelativeRect rect;
     protected final int u;
     protected final int v;
@@ -25,7 +26,7 @@ public class TextureWidget implements IWidget {
     protected final int textureHeight;
     private final List<Component> components = new LinkedList<>();
 
-    public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
+    public TextureWidget(Identifier texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
         this.texture = texture;
         this.rect = rect;
         this.u = u;
@@ -37,7 +38,7 @@ public class TextureWidget implements IWidget {
         rect.setDimensions(rect.getWidth(), rect.getHeight());
     }
 
-    public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v) {
+    public TextureWidget(Identifier texture, RelativeRect rect, int u, int v) {
         this(texture, rect, u, v, rect.getWidth(), rect.getHeight(), 256, 256);
     }
 
@@ -64,7 +65,7 @@ public class TextureWidget implements IWidget {
     }
 
     @Override
-    public void render(GuiGraphics draw, int mouseX, int mouseY) {
-        draw.blit(texture, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight(), u, v, regionWidth, regionHeight, textureWidth, textureHeight);
+    public void render(GuiGraphicsExtractor draw, int mouseX, int mouseY) {
+        draw.blit(RenderPipelines.GUI_TEXTURED, texture, rect.getX(), rect.getY(), u, v, rect.getWidth(), rect.getHeight(), textureWidth, textureHeight);
     }
 }

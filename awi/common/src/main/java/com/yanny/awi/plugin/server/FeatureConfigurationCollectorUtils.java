@@ -2,7 +2,6 @@ package com.yanny.awi.plugin.server;
 
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import org.jetbrains.annotations.NotNull;
@@ -41,15 +40,15 @@ public class FeatureConfigurationCollectorUtils {
 
     @NotNull
     public static List<Block> collectDiskConfigurationBlocks(IServerUtils utils, DiskConfiguration configuration) {
-        return CollectorUtils.collectRule(utils, configuration.stateProvider());
+        return utils.collectBlocks(utils, configuration.stateProvider());
     }
 
     @NotNull
     public static List<Block> collectHugeMushroomFeatureConfigurationBlocks(IServerUtils utils, HugeMushroomFeatureConfiguration configuration) {
         List<Block> blocks = new ArrayList<>();
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.capProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.stemProvider));
+        blocks.addAll(utils.collectBlocks(utils, configuration.capProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.stemProvider()));
         return blocks;
     }
 
@@ -98,11 +97,6 @@ public class FeatureConfigurationCollectorUtils {
         return blocks;
     }
 
-    @NotNull
-    public static List<Block> collectRandomPatchConfigurationBlocks(IServerUtils utils, RandomPatchConfiguration configuration) {
-        return utils.collectBlocks(utils, configuration.feature().value().feature().value().config());
-    }
-
     @Unmodifiable
     @NotNull
     public static List<Block> collectReplaceBlockConfigurationBlocks(IServerUtils ignoredUtils, ReplaceBlockConfiguration configuration) {
@@ -132,12 +126,6 @@ public class FeatureConfigurationCollectorUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectSimpleRandomFeatureConfigurationBlocks(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
-        return configuration.getFeatures().map(ConfiguredFeature::config).map((config) -> utils.collectBlocks(utils, config)).flatMap(Collection::stream).toList();
-    }
-
-    @Unmodifiable
-    @NotNull
     public static List<Block> collectSpringConfigurationBlocks(IServerUtils ignoredUtils, SpringConfiguration configuration) {
         return Collections.singletonList(configuration.state.createLegacyBlock().getBlock());
     }
@@ -147,7 +135,7 @@ public class FeatureConfigurationCollectorUtils {
         List<Block> blocks = new ArrayList<>();
 
         blocks.addAll(utils.collectBlocks(utils, configuration.trunkProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.dirtProvider));
+        blocks.addAll(utils.collectBlocks(utils, configuration.belowTrunkProvider));
         blocks.addAll(utils.collectBlocks(utils, configuration.foliageProvider));
         configuration.rootPlacer.ifPresent((rootPlacer) -> {
             blocks.addAll(utils.collectBlocks(utils, rootPlacer.rootProvider));

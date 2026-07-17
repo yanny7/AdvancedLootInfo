@@ -34,7 +34,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.getBlock()).build(Lang.Value.BLOCK));
 
             TooltipBuilder array = TooltipBuilder.array((c) -> {
-                value.getValues().forEach((p) -> c.add(TooltipBuilder.keyValue(p.valueName(), p.value().toString())));
+                value.getValues().forEach((p) -> c.add(TooltipBuilder.keyValue(p.property().getName(), p.value().toString())));
             });
 
             b.add(array.build(Lang.Branch.PROPERTIES));

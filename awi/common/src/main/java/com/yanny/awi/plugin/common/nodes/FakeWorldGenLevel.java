@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.attribute.EnvironmentAttributeReader;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -115,7 +116,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void playSound(@Nullable Player player, BlockPos blockPos, SoundEvent soundEvent, SoundSource soundSource, float f, float g) {
+    public void playSound(@Nullable Entity entity, BlockPos blockPos, SoundEvent soundEvent, SoundSource soundSource, float f, float g) {
 
     }
 
@@ -125,18 +126,13 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void levelEvent(@Nullable Player player, int i, BlockPos blockPos, int j) {
+    public void levelEvent(@Nullable Entity entity, int i, BlockPos blockPos, int j) {
 
     }
 
     @Override
     public void gameEvent(Holder<GameEvent> holder, Vec3 vec3, GameEvent.Context context) {
 
-    }
-
-    @Override
-    public float getShade(Direction direction, boolean bl) {
-        return serverLevel.getShade(direction, bl);
     }
 
     @NotNull
@@ -215,7 +211,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
 
     @Override
     public int getHeight(Heightmap.Types types, int i, int j) {
-        return serverLevel.random.nextInt(-128, 128); // TODO
+        return serverLevel.getRandom().nextInt(-128, 128); // TODO
     }
 
     @Override
@@ -263,6 +259,12 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     @Override
     public FeatureFlagSet enabledFeatures() {
         return serverLevel.enabledFeatures();
+    }
+
+    @NotNull
+    @Override
+    public EnvironmentAttributeReader environmentAttributes() {
+        return serverLevel.environmentAttributes();
     }
 
     @Override
@@ -318,7 +320,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
     }
 
     @Override
-    public void neighborShapeChanged(Direction direction, BlockState blockState, BlockPos blockPos, BlockPos blockPos2, int i, int j) {
+    public void neighborShapeChanged(Direction direction, BlockPos blockPos, BlockPos blockPos2, BlockState blockState, int i, int j) {
 
     }
 }

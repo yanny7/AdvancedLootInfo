@@ -68,7 +68,7 @@ public class LevelStemNode extends ListNode {
                         registryAccess.lookupOrThrow(Registries.NOISE),
                         serverLevel.getSeed()
                 );
-                return new NodeUtils.DimensionContext(registryAccess, noiseGenerator, localRandomState);
+                return new NodeUtils.DimensionContext(registryAccess, serverLevel.palettedContainerFactory(), noiseGenerator, localRandomState);
             };
 
             ThreadLocal<NodeUtils.DimensionContext> threadLocalCtx = ThreadLocal.withInitial(contextFactory);
@@ -94,7 +94,7 @@ public class LevelStemNode extends ListNode {
                 try {
                     BiomeResult res = future.get();
 
-                    LOGGER.info("Analyzing biome {}", res.biomeHolder.unwrapKey().get().location());
+                    LOGGER.info("Analyzing biome {}", res.biomeHolder.unwrapKey().get().identifier());
                     res.layers().log();
 
                     TooltipNode tooltip = TooltipBuilder.array((b) -> {
