@@ -81,12 +81,10 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(OreConfiguration.class, FeatureConfigurationCollectorUtils::collectOreConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomBooleanFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomBooleanFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomFeatureConfigurationBlocks);
-        registry.registerFeatureBlockCollector(RandomPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomPatchConfigurationBlocks);
         registry.registerFeatureBlockCollector(ReplaceBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectReplaceBlockConfigurationBlocks);
         registry.registerFeatureBlockCollector(ReplaceSphereConfiguration.class, FeatureConfigurationCollectorUtils::collectReplaceSphereConfigurationBlocks);
         registry.registerFeatureBlockCollector(RootSystemConfiguration.class, FeatureConfigurationCollectorUtils::collectRootSystemConfigurationBlocks);
         registry.registerFeatureBlockCollector(SimpleBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleBlockConfigurationBlocks);
-        registry.registerFeatureBlockCollector(SimpleRandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleRandomFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(SpringConfiguration.class, FeatureConfigurationCollectorUtils::collectSpringConfigurationBlocks);
         registry.registerFeatureBlockCollector(TreeConfiguration.class, FeatureConfigurationCollectorUtils::collectTreeConfigurationBlocks);
         registry.registerFeatureBlockCollector(VegetationPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectVegetationPatchConfigurationBlocks);

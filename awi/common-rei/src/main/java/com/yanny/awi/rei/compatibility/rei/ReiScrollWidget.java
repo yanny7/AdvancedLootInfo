@@ -2,8 +2,9 @@ package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
+import me.shedaniel.rei.api.client.gui.compat.GuiGraphics;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
 import org.jetbrains.annotations.NotNull;
@@ -20,9 +21,9 @@ public class ReiScrollWidget extends Widget {
         this.widgets = widgets;
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
             @Override
-            public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+            public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {
-                    widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
+                    widget.render((GuiGraphics) guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
             }
         };

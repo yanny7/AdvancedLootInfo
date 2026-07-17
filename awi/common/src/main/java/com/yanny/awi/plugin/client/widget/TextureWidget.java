@@ -6,7 +6,7 @@ import com.yanny.aci.api.WidgetDirection;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -65,7 +65,7 @@ public class TextureWidget implements IWidget {
     }
 
     @Override
-    public void render(GuiGraphics draw, int mouseX, int mouseY) {
+    public void render(GuiGraphicsExtractor draw, int mouseX, int mouseY) {
         draw.blit(RenderPipelines.GUI_TEXTURED, texture, rect.getX(), rect.getY(), u, v, rect.getWidth(), rect.getHeight(), textureWidth, textureHeight);
     }
 }

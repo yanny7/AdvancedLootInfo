@@ -9,7 +9,7 @@ import mezz.jei.api.gui.inputs.IJeiUserInput;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
 import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import org.jetbrains.annotations.NotNull;
@@ -56,12 +56,12 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     }
 
     @Override
-    public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void drawWidget(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         render(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         for (IRecipeWidget widget : widgets) {
             widget.drawWidget(guiGraphics, mouseX, mouseY);
         }

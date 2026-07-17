@@ -4,7 +4,7 @@ import com.yanny.aci.api.Rect;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
 import dev.emi.emi.api.widget.Bounds;
 import dev.emi.emi.api.widget.Widget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 
 import java.util.LinkedList;
@@ -20,7 +20,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
         bounds = new Bounds(rect.x(), rect.y(), rect.width(), rect.height());
         scrollWidget = new AbstractScrollWidget(rect, contentHeight) {
             @Override
-            public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+            public void renderWidgets(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {
                     widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
@@ -67,7 +67,7 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
     }
 
     @Override
-    public void render(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphicsExtractor draw, int mouseX, int mouseY, float delta) {
         scrollWidget.render(draw, mouseX, mouseY);
     }
 

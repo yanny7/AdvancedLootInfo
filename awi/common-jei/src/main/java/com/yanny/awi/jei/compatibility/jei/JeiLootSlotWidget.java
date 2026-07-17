@@ -8,7 +8,7 @@ import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
 import mezz.jei.api.gui.widgets.ISlottedRecipeWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -47,7 +47,7 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
     }
 
     @Override
-    public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void drawWidget(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         Matrix3x2fStack stack = guiGraphics.pose();
 
         stack.translate(1, 1);
@@ -64,11 +64,11 @@ public class JeiLootSlotWidget implements ISlottedRecipeWidget {
                 stack.translate(17, 13);
                 stack.pushMatrix();
                 stack.scale(0.5f);
-                guiGraphics.drawString(font, count, -font.width(count), 0, -1, false);
+                guiGraphics.text(font, count, -font.width(count), 0, -1, false);
                 stack.popMatrix();
             } else {
                 stack.translate(18, 10);
-                guiGraphics.drawString(font, count, -font.width(count), 0, -1, true);
+                guiGraphics.text(font, count, -font.width(count), 0, -1, true);
             }
 
             stack.popMatrix();

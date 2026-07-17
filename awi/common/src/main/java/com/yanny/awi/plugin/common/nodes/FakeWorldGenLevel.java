@@ -135,11 +135,6 @@ public class FakeWorldGenLevel implements WorldGenLevel {
 
     }
 
-    @Override
-    public float getShade(Direction direction, boolean bl) {
-        return serverLevel.getShade(direction, bl);
-    }
-
     @NotNull
     @Override
     public LevelLightEngine getLightEngine() {
@@ -216,7 +211,7 @@ public class FakeWorldGenLevel implements WorldGenLevel {
 
     @Override
     public int getHeight(Heightmap.Types types, int i, int j) {
-        return serverLevel.random.nextInt(-128, 128); // TODO
+        return serverLevel.getRandom().nextInt(-128, 128); // TODO
     }
 
     @Override

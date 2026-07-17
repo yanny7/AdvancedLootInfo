@@ -16,11 +16,12 @@ public class NetworkUtils {
     }
 
     public static void registerCommon(Server server) {
-        PayloadTypeRegistry.playC2S().register(RequestWorldgenDataMessage.TYPE, RequestWorldgenDataMessage.CODEC);
-        ServerPlayNetworking.registerGlobalReceiver(RequestWorldgenDataMessage.TYPE, server::onStartSendingWorldgenData);
+        PayloadTypeRegistry.clientboundPlay().register(WorldgenDataChunkMessage.TYPE, WorldgenDataChunkMessage.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(StartMessage.TYPE, StartMessage.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(DoneMessage.TYPE, DoneMessage.CODEC);
 
-        PayloadTypeRegistry.playS2C().register(WorldgenDataChunkMessage.TYPE, WorldgenDataChunkMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(StartMessage.TYPE, StartMessage.CODEC);
-        PayloadTypeRegistry.playS2C().register(DoneMessage.TYPE, DoneMessage.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(RequestWorldgenDataMessage.TYPE, RequestWorldgenDataMessage.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(RequestWorldgenDataMessage.TYPE, server::onStartSendingWorldgenData);
     }
 }
