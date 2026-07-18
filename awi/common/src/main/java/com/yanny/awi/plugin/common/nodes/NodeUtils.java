@@ -70,7 +70,6 @@ public class NodeUtils {
         private final int minBuildHeight;
         private final int maxBuildHeight;
         private final int seaLevel;
-        private final BlockState defaultBlock;
         private final BlockState defaultFluid;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
@@ -94,7 +93,6 @@ public class NodeUtils {
             this.minBuildHeight = heightAccessor.getMinBuildHeight();
             this.maxBuildHeight = heightAccessor.getMaxBuildHeight();
             this.seaLevel = noiseGenerator.getSeaLevel();
-            this.defaultBlock = settings.defaultBlock();
             this.defaultFluid = settings.defaultFluid();
 
             ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);
@@ -151,6 +149,11 @@ public class NodeUtils {
             return positions.size();
         }
 
+        /** Number of disjoint contiguous ranges the recorded positions collapse into (1 == a single solid band). */
+        public int clusterCount() {
+            return buildRanges().size();
+        }
+
         /** Span between the lowest and highest recorded position (0 when empty or single-valued). */
         public int spread() {
             if (positions.isEmpty()) {
@@ -205,6 +208,13 @@ public class NodeUtils {
 
     /** Per-block observations: every rule hit is recorded both by depth-below-surface and by absolute Y. */
     private static class BlockObservation {
+        // A surface-relative block whose absolute Y fragments into at least this many disjoint bands is reported as
+        // "layered" rather than "depth below surface": its identity is a periodic function of absolute Y (e.g. the
+        // badlands banded-terracotta strata, clay bands mod 192) so a single depth range would be actively misleading.
+        // This is a reporting/classification threshold, not rule logic — observed banded blocks fragment into 5..28
+        // bands while plain surface layers stay at a single contiguous band, so the boundary is wide.
+        private static final int LAYERED_MIN_BANDS = 3;
+
         final RangeHolder depths = new RangeHolder();
         final RangeHolder absolute = new RangeHolder();
 
@@ -213,16 +223,30 @@ public class NodeUtils {
             absolute.add(absoluteY);
         }
 
-        /**
-         * A block is surface-relative when its depth-below-surface stays tighter than its absolute Y as the assumed
-         * surface height is swept: surface layers (grass, sand, badlands bands) keep a small depth span while their
-         * absolute Y tracks the surface, whereas absolute features (deepslate, bedrock) and volumetric fills
-         * (netherrack) keep a smaller — or no smaller — absolute span.
-         */
-        boolean isSurfaceRelative() {
-            return depths.spread() < absolute.spread();
+        Kind classify() {
+            // Surface-relative: depth-below-surface stays tighter than absolute Y as the assumed surface height is
+            // swept (grass/sand track the surface), whereas absolute features (deepslate, bedrock) and volumetric
+            // fills (netherrack) keep a smaller — or no smaller — absolute span.
+            boolean surfaceRelative = depths.spread() < absolute.spread();
+
+            if (!surfaceRelative) {
+                return Kind.ABSOLUTE;
+            }
+            // Layered strata recur at many separated absolute-Y bands AND span a depth window at least as thick as the
+            // surface-height sampling step. The thickness guard is essential and non-arbitrary: a block thinner than
+            // the height step is only ever recorded once per swept surface height, so its absolute Y fragments into a
+            // regular grid (spacing == the step) that mimics banding — a sampling artifact, not strata (a one-block
+            // ice skin on frozen peaks, a lava-sea top). Only when the depth window bridges the step do consecutive
+            // surface heights overlap, making the absolute-Y clustering a real property of the rule rather than the grid.
+            if (depths.spread() >= SURFACE_HEIGHT_STEP && absolute.clusterCount() >= LAYERED_MIN_BANDS) {
+                return Kind.LAYERED;
+            }
+
+            return Kind.SURFACE;
         }
     }
+
+    private enum Kind { SURFACE, ABSOLUTE, LAYERED }
 
     public static class LayerHolder {
         private final Map<Block, BlockObservation> blocks = new HashMap<>();
@@ -233,6 +257,10 @@ public class NodeUtils {
 
         void record(Block block, int assumedSurface, int y) {
             blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y);
+        }
+
+        public Set<Block> getBlocks() {
+            return blocks.keySet();
         }
 
         /** Total number of distinct (block, depth) and (block, absoluteY) observations collected so far. */
@@ -261,10 +289,10 @@ public class NodeUtils {
             forEachSorted((block, obs) -> {
                 String blockId = BuiltInRegistries.BLOCK.getKey(block).toString();
 
-                if (obs.isSurfaceRelative()) {
-                    LOGGER.info(" * {} -> depth below surface: {}", blockId, obs.depths.toRangeString());
-                } else {
-                    LOGGER.info(" * {} -> absolute Y: {}", blockId, obs.absolute.toRangeString());
+                switch (obs.classify()) {
+                    case SURFACE -> LOGGER.info(" * {} -> depth below surface: {}", blockId, obs.depths.toRangeString());
+                    case ABSOLUTE -> LOGGER.info(" * {} -> absolute Y: {}", blockId, obs.absolute.toRangeString());
+                    case LAYERED -> LOGGER.info(" * {} -> layers at Y: {}", blockId, obs.absolute.toRangeString());
                 }
             });
         }
@@ -344,7 +372,7 @@ public class NodeUtils {
                 // Fresh horizontal points every round (new 2D noise values) and a shifted surface-height phase so that,
                 // over a full cycle, every possible surface height is retried (fills absolute-Y gaps in volumetric dims).
                 int heightPhase = round % SURFACE_HEIGHT_STEP;
-                List<long[]> samples = sampleColumns(round * COLUMNS_PER_ROUND, COLUMNS_PER_ROUND);
+                List<long[]> samples = sampleColumns(round * COLUMNS_PER_ROUND);
 
                 for (long[] xz : samples) {
                     int posX = (int) xz[0];
@@ -355,7 +383,9 @@ public class NodeUtils {
                         walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, dimCtx.minBuildHeight, true);
                         walks++;
 
-                        // Overhang surfaces: thin floating slabs so ceiling-gated rules (e.g. badlands red_sandstone) fire.
+                        // Overhang surfaces: thin floating slabs so ceiling-gated rules fire. Dry slabs cover land
+                        // overhangs (badlands red_sandstone); below sea level a water-covered slab is also probed so
+                        // underwater ceiling rules fire (lukewarm-ocean sandstone), which a dry column never reaches.
                         for (int thickness = 1; thickness <= MAX_CEILING_THICKNESS; thickness++) {
                             int stoneBottom = h - thickness + 1;
 
@@ -365,6 +395,11 @@ public class NodeUtils {
 
                             walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, false);
                             walks++;
+
+                            if (h < dimCtx.seaLevel) {
+                                walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, true);
+                                walks++;
+                            }
                         }
                     }
                 }
@@ -392,8 +427,8 @@ public class NodeUtils {
      * Returns {@code count} chunk-center block positions along an outward spiral around the origin, skipping the first
      * {@code start} points. Consecutive batches therefore cover distinct, ever-widening horizontal samples.
      */
-    private static List<long[]> sampleColumns(int start, int count) {
-        int total = start + count;
+    private static List<long[]> sampleColumns(int start) {
+        int total = start + NodeUtils.COLUMNS_PER_ROUND;
         List<long[]> spiral = new ArrayList<>(total);
         int cx = 0, cz = 0, dx = 0, dz = -1;
         int step = 1, stepCount = 0, turnCount = 0;
