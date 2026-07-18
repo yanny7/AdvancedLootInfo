@@ -217,10 +217,30 @@ public class NodeUtils {
 
         final RangeHolder depths = new RangeHolder();
         final RangeHolder absolute = new RangeHolder();
+        // Which flooding contexts the rule placed this block in. Set from whether the walk had water above the surface:
+        // ocean-floor blocks (sandstone, gravel) only fire when the underwater rule branches see a water column,
+        // dry-land blocks only fire without one, and depth blocks (deepslate, bedrock) appear either way.
+        private boolean seenUnderwater;
+        private boolean seenDry;
 
-        void record(int depthBelowSurface, int absoluteY) {
+        void record(int depthBelowSurface, int absoluteY, boolean underwater) {
             depths.add(depthBelowSurface);
             absolute.add(absoluteY);
+
+            if (underwater) {
+                seenUnderwater = true;
+            } else {
+                seenDry = true;
+            }
+        }
+
+        /** Whether this block requires water above it, dry land above it, or occurs regardless of the water level. */
+        WaterConstraint waterConstraint() {
+            if (seenUnderwater && seenDry) {
+                return WaterConstraint.ANY;
+            }
+
+            return seenUnderwater ? WaterConstraint.UNDERWATER : WaterConstraint.DRY;
         }
 
         Kind classify() {
@@ -248,6 +268,9 @@ public class NodeUtils {
 
     private enum Kind { SURFACE, ABSOLUTE, LAYERED }
 
+    /** Whether a placed block needs water above it, dry land above it, or is indifferent to the water level. */
+    private enum WaterConstraint { UNDERWATER, DRY, ANY }
+
     public static class LayerHolder {
         private final Map<Block, BlockObservation> blocks = new HashMap<>();
 
@@ -255,8 +278,8 @@ public class NodeUtils {
             return blocks.isEmpty();
         }
 
-        void record(Block block, int assumedSurface, int y) {
-            blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y);
+        void record(Block block, int assumedSurface, int y, boolean underwater) {
+            blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y, underwater);
         }
 
         public Set<Block> getBlocks() {
@@ -288,11 +311,16 @@ public class NodeUtils {
 
             forEachSorted((block, obs) -> {
                 String blockId = BuiltInRegistries.BLOCK.getKey(block).toString();
+                String water = switch (obs.waterConstraint()) {
+                    case UNDERWATER -> "  (underwater)";
+                    case DRY -> "  (on land)";
+                    case ANY -> "";
+                };
 
                 switch (obs.classify()) {
-                    case SURFACE -> LOGGER.info(" * {} -> depth below surface: {}", blockId, obs.depths.toRangeString());
-                    case ABSOLUTE -> LOGGER.info(" * {} -> absolute Y: {}", blockId, obs.absolute.toRangeString());
-                    case LAYERED -> LOGGER.info(" * {} -> layers at Y: {}", blockId, obs.absolute.toRangeString());
+                    case SURFACE -> LOGGER.info(" * {} -> depth below surface: {}{}", blockId, obs.depths.toRangeString(), water);
+                    case ABSOLUTE -> LOGGER.info(" * {} -> absolute Y: {}{}", blockId, obs.absolute.toRangeString(), water);
+                    case LAYERED -> LOGGER.info(" * {} -> layers at Y: {}{}", blockId, obs.absolute.toRangeString(), water);
                 }
             });
         }
@@ -350,7 +378,7 @@ public class NodeUtils {
             BlockState result = rule.tryApply(posX, y, posZ);
 
             if (result != null) {
-                holder.record(result.getBlock(), surfaceTop, y);
+                holder.record(result.getBlock(), surfaceTop, y, water);
             }
         }
     }
