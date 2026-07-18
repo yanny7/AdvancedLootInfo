@@ -48,8 +48,6 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             RangeValue fistValue = info.ranges().get(0);
 
-            b.add(utils.getValueTooltip(utils, info.block()).build(Lang.Value.BLOCK));
-
             switch (info.storageType()) {
                 case RELATIVE -> b.add(utils.getValueTooltip(utils, fistValue).build(Lang.Value.DEPTH_BELOW_SURFACE));
                 case ABSOLUTE -> b.add(utils.getValueTooltip(utils, info.ranges()).build(Lang.Branch.ABSOLUTE_Y));

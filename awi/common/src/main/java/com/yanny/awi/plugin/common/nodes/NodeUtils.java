@@ -135,6 +135,11 @@ public class NodeUtils {
             return positions.size();
         }
 
+        /** Whether two holders recorded exactly the same set of positions (used to detect floor==ceiling depths). */
+        public boolean sameValuesAs(RangeHolder other) {
+            return positions.equals(other.positions);
+        }
+
         /** Number of disjoint contiguous ranges the recorded positions collapse into (1 == a single solid band). */
         public int clusterCount() {
             return buildRanges().size();
@@ -245,13 +250,6 @@ public class NodeUtils {
             return ceiling ? Placement.CEILING : Placement.FLOOR;
         }
 
-        /** Depths to report for a surface-relative block: the floor placement, since merging in the overhang exposure
-         *  (always at depth 0) would wrongly claim a normally-buried block reaches the surface. Ceiling-only blocks
-         *  have no floor placement, so their ceiling depth is used instead. */
-        RangeHolder reportedDepths() {
-            return floorDepths.size() > 0 ? floorDepths : ceilingDepths;
-        }
-
         Kind classify() {
             // Surface-relative: depth-below-surface stays tighter than absolute Y as the assumed surface height is
             // swept (grass/sand track the surface), whereas absolute features (deepslate, bedrock) and volumetric
@@ -323,35 +321,44 @@ public class NodeUtils {
         }
 
         /**
-         * Snapshots every discovered block as a {@link BlockInfo}: its storage type (surface-relative depth vs.
-         * absolute Y vs. layered strata), the corresponding value ranges, and whether it needs water above it.
-         * Replaces the old per-block logging — the analysis states now flow to the client as structured data.
+         * Snapshots every discovered block as one or more {@link BlockInfo}s: its storage type (surface-relative depth
+         * vs. absolute Y vs. layered strata), the value ranges, its water constraint, and its placement.
+         * <p>
+         * Surface-relative (depth) blocks are split by placement when their floor and ceiling depths genuinely differ,
+         * so a block that is both a normal below-surface layer <i>and</i> an exposed overhang (e.g. warm-ocean
+         * sandstone) keeps both modes instead of collapsing to one. Absolute/layered blocks are keyed by absolute Y,
+         * which placement does not change, so they stay a single entry (splitting them would also mis-read a thin
+         * ceiling slab of an absolute block, whose few depth samples look surface-relative).
          */
         public Set<BlockInfo> getBlockInfos() {
             Set<BlockInfo> infos = new HashSet<>();
 
             for (Map.Entry<Block, BlockObservation> entry : blocks.entrySet()) {
+                Block block = entry.getKey();
                 BlockObservation obs = entry.getValue();
-                StorageType type;
-                List<RangeValue> ranges;
+                WaterConstraint water = obs.waterConstraint();
 
                 switch (obs.classify()) {
                     case SURFACE -> {
-                        type = StorageType.RELATIVE;
-                        ranges = obs.reportedDepths().buildRanges();
-                    }
-                    case ABSOLUTE -> {
-                        type = StorageType.ABSOLUTE;
-                        ranges = obs.absolute.buildRanges();
-                    }
-                    case LAYERED -> {
-                        type = StorageType.LAYERED;
-                        ranges = obs.absolute.buildRanges();
-                    }
-                    default -> throw new IllegalStateException("Unknown kind for block " + entry.getKey());
-                }
+                        boolean hasFloor = obs.floorDepths.size() > 0;
+                        boolean hasCeiling = obs.ceilingDepths.size() > 0;
 
-                infos.add(new BlockInfo(entry.getKey(), type, ranges, obs.waterConstraint(), obs.placement()));
+                        if (hasFloor && hasCeiling && !obs.floorDepths.sameValuesAs(obs.ceilingDepths)) {
+                            // Genuinely two placement modes with different depths — keep both.
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.floorDepths.buildRanges(), water, Placement.FLOOR));
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), water, Placement.CEILING));
+                        } else if (hasCeiling && !hasFloor) {
+                            // Overhang-only block (badlands red_sandstone).
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), water, Placement.CEILING));
+                        } else {
+                            // Floor-only, or floor and ceiling identical: one entry (ANY == no overhang annotation).
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.floorDepths.buildRanges(), water, obs.placement()));
+                        }
+                    }
+                    case ABSOLUTE -> infos.add(new BlockInfo(block, StorageType.ABSOLUTE, obs.absolute.buildRanges(), water, obs.placement()));
+                    case LAYERED -> infos.add(new BlockInfo(block, StorageType.LAYERED, obs.absolute.buildRanges(), water, obs.placement()));
+                    default -> throw new IllegalStateException("Unknown kind for block " + block);
+                }
             }
 
             return infos;
