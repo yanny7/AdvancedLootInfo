@@ -1,11 +1,11 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -20,9 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Determines, per biome, which blocks the dimension's surface rules place and at what vertical position.
@@ -70,6 +68,7 @@ public class NodeUtils {
         private final int minBuildHeight;
         private final int maxBuildHeight;
         private final int seaLevel;
+        private final BlockState defaultBlock;
         private final BlockState defaultFluid;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
@@ -93,6 +92,7 @@ public class NodeUtils {
             this.minBuildHeight = heightAccessor.getMinBuildHeight();
             this.maxBuildHeight = heightAccessor.getMaxBuildHeight();
             this.seaLevel = noiseGenerator.getSeaLevel();
+            this.defaultBlock = settings.defaultBlock();
             this.defaultFluid = settings.defaultFluid();
 
             ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, biomeRegistry, null);
@@ -120,20 +120,6 @@ public class NodeUtils {
             public Holder<Biome> apply(BlockPos blockPos) {
                 return currentBiome;
             }
-        }
-    }
-
-    public static class Range {
-        final int min, max;
-
-        public Range(int min, int max) {
-            this.min = min;
-            this.max = max;
-        }
-
-        @Override
-        public String toString() {
-            return (min == max) ? String.valueOf(min) : min + ".." + max;
         }
     }
 
@@ -171,7 +157,7 @@ public class NodeUtils {
             return max - min;
         }
 
-        public List<Range> buildRanges() {
+        public List<RangeValue> buildRanges() {
             if (positions.isEmpty()) {
                 return Collections.emptyList();
             }
@@ -180,7 +166,7 @@ public class NodeUtils {
 
             Collections.sort(sorted);
 
-            List<Range> ranges = new ArrayList<>();
+            List<RangeValue> ranges = new ArrayList<>();
             int start = sorted.get(0);
             int end = start;
 
@@ -188,21 +174,15 @@ public class NodeUtils {
                 int current = sorted.get(i);
 
                 if (current != end + 1) {
-                    ranges.add(new Range(start, end));
+                    ranges.add(new RangeValue(start, end));
                     start = current;
                 }
 
                 end = current;
             }
 
-            ranges.add(new Range(start, end));
+            ranges.add(new RangeValue(start, end));
             return ranges;
-        }
-
-        public String toRangeString() {
-            return buildRanges().stream()
-                    .map(Range::toString)
-                    .collect(Collectors.joining(", ", "[", "]"));
         }
     }
 
@@ -217,15 +197,21 @@ public class NodeUtils {
 
         final RangeHolder depths = new RangeHolder();
         final RangeHolder absolute = new RangeHolder();
+        // Depths split by placement context: floor = normal below-surface placement (sandstone under the sand),
+        // ceiling = ON_CEILING overhang placement (red_sandstone). Kept apart because merging them pollutes the
+        // reported "depth below surface" — an overhang exposes a block at depth 0 that is really several blocks down.
+        final RangeHolder floorDepths = new RangeHolder();
+        final RangeHolder ceilingDepths = new RangeHolder();
         // Which flooding contexts the rule placed this block in. Set from whether the walk had water above the surface:
         // ocean-floor blocks (sandstone, gravel) only fire when the underwater rule branches see a water column,
         // dry-land blocks only fire without one, and depth blocks (deepslate, bedrock) appear either way.
         private boolean seenUnderwater;
         private boolean seenDry;
 
-        void record(int depthBelowSurface, int absoluteY, boolean underwater) {
+        void record(int depthBelowSurface, int absoluteY, boolean underwater, boolean ceiling) {
             depths.add(depthBelowSurface);
             absolute.add(absoluteY);
+            (ceiling ? ceilingDepths : floorDepths).add(depthBelowSurface);
 
             if (underwater) {
                 seenUnderwater = true;
@@ -241,6 +227,29 @@ public class NodeUtils {
             }
 
             return seenUnderwater ? WaterConstraint.UNDERWATER : WaterConstraint.DRY;
+        }
+
+        /**
+         * Whether this block is a normal below-surface (floor) placement, an overhang-only (ceiling) placement such as
+         * badlands red_sandstone, or occurs both ways. Ceiling-only blocks are the ones the "depth below surface"
+         * framing does not fit — they only exist on the underside of an overhang.
+         */
+        Placement placement() {
+            boolean floor = floorDepths.size() > 0;
+            boolean ceiling = ceilingDepths.size() > 0;
+
+            if (floor && ceiling) {
+                return Placement.ANY;
+            }
+
+            return ceiling ? Placement.CEILING : Placement.FLOOR;
+        }
+
+        /** Depths to report for a surface-relative block: the floor placement, since merging in the overhang exposure
+         *  (always at depth 0) would wrongly claim a normally-buried block reaches the surface. Ceiling-only blocks
+         *  have no floor placement, so their ceiling depth is used instead. */
+        RangeHolder reportedDepths() {
+            return floorDepths.size() > 0 ? floorDepths : ceilingDepths;
         }
 
         Kind classify() {
@@ -268,8 +277,28 @@ public class NodeUtils {
 
     private enum Kind { SURFACE, ABSOLUTE, LAYERED }
 
+    /**
+     * How a block's vertical positions are stored/reported.
+     * <ul>
+     *     <li>{@link #RELATIVE} — depth below the surface (grass, dirt, sand); {@link BlockInfo#ranges} are depths.</li>
+     *     <li>{@link #ABSOLUTE} — a stable absolute Y band (deepslate, bedrock); {@link BlockInfo#ranges} are absolute Ys.</li>
+     *     <li>{@link #LAYERED} — recurring absolute-Y strata (badlands bands); {@link BlockInfo#ranges} are absolute Ys.</li>
+     * </ul>
+     */
+    public enum StorageType { RELATIVE, ABSOLUTE, LAYERED }
+
     /** Whether a placed block needs water above it, dry land above it, or is indifferent to the water level. */
-    private enum WaterConstraint { UNDERWATER, DRY, ANY }
+    public enum WaterConstraint { UNDERWATER, DRY, ANY }
+
+    /** Whether a block is a normal below-surface placement, an overhang/ceiling-only placement, or occurs both ways. */
+    public enum Placement { FLOOR, CEILING, ANY }
+
+    /**
+     * Structured result for a single surface block: the block itself, how its positions are stored
+     * ({@link StorageType}), the value {@link RangeValue}s in that storage's units, its {@link WaterConstraint}, and
+     * its {@link Placement} (floor vs. ceiling/overhang).
+     */
+    public record BlockInfo(Block block, StorageType storageType, List<RangeValue> ranges, WaterConstraint water, Placement placement) {}
 
     public static class LayerHolder {
         private final Map<Block, BlockObservation> blocks = new HashMap<>();
@@ -278,12 +307,8 @@ public class NodeUtils {
             return blocks.isEmpty();
         }
 
-        void record(Block block, int assumedSurface, int y, boolean underwater) {
-            blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y, underwater);
-        }
-
-        public Set<Block> getBlocks() {
-            return blocks.keySet();
+        void record(Block block, int assumedSurface, int y, boolean underwater, boolean ceiling) {
+            blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y, underwater, ceiling);
         }
 
         /** Total number of distinct (block, depth) and (block, absoluteY) observations collected so far. */
@@ -297,32 +322,39 @@ public class NodeUtils {
             return total;
         }
 
-        private void forEachSorted(BiConsumer<Block, BlockObservation> consumer) {
-            blocks.keySet().stream()
-                    .sorted(Comparator.comparing(b -> BuiltInRegistries.BLOCK.getKey(b).toString()))
-                    .forEach(b -> consumer.accept(b, blocks.get(b)));
-        }
+        /**
+         * Snapshots every discovered block as a {@link BlockInfo}: its storage type (surface-relative depth vs.
+         * absolute Y vs. layered strata), the corresponding value ranges, and whether it needs water above it.
+         * Replaces the old per-block logging — the analysis states now flow to the client as structured data.
+         */
+        public Set<BlockInfo> getBlockInfos() {
+            Set<BlockInfo> infos = new HashSet<>();
 
-        public void log() {
-            if (blocks.isEmpty()) {
-                LOGGER.info("   -> No surface blocks discovered for this biome.");
-                return;
-            }
-
-            forEachSorted((block, obs) -> {
-                String blockId = BuiltInRegistries.BLOCK.getKey(block).toString();
-                String water = switch (obs.waterConstraint()) {
-                    case UNDERWATER -> "  (underwater)";
-                    case DRY -> "  (on land)";
-                    case ANY -> "";
-                };
+            for (Map.Entry<Block, BlockObservation> entry : blocks.entrySet()) {
+                BlockObservation obs = entry.getValue();
+                StorageType type;
+                List<RangeValue> ranges;
 
                 switch (obs.classify()) {
-                    case SURFACE -> LOGGER.info(" * {} -> depth below surface: {}{}", blockId, obs.depths.toRangeString(), water);
-                    case ABSOLUTE -> LOGGER.info(" * {} -> absolute Y: {}{}", blockId, obs.absolute.toRangeString(), water);
-                    case LAYERED -> LOGGER.info(" * {} -> layers at Y: {}{}", blockId, obs.absolute.toRangeString(), water);
+                    case SURFACE -> {
+                        type = StorageType.RELATIVE;
+                        ranges = obs.reportedDepths().buildRanges();
+                    }
+                    case ABSOLUTE -> {
+                        type = StorageType.ABSOLUTE;
+                        ranges = obs.absolute.buildRanges();
+                    }
+                    case LAYERED -> {
+                        type = StorageType.LAYERED;
+                        ranges = obs.absolute.buildRanges();
+                    }
+                    default -> throw new IllegalStateException("Unknown kind for block " + entry.getKey());
                 }
-            });
+
+                infos.add(new BlockInfo(entry.getKey(), type, ranges, obs.waterConstraint(), obs.placement()));
+            }
+
+            return infos;
         }
     }
 
@@ -377,8 +409,11 @@ public class NodeUtils {
 
             BlockState result = rule.tryApply(posX, y, posZ);
 
-            if (result != null) {
-                holder.record(result.getBlock(), surfaceTop, y, water);
+            if (result != null && !result.isAir() && dimCtx.defaultFluid != result && dimCtx.defaultBlock != result) {
+                // A block placed at the underside of the stone run (stoneDepthBelow<=1, ON_CEILING) is an overhang/
+                // ceiling placement (badlands red_sandstone), distinct from a normal below-surface floor placement.
+                boolean ceiling = stoneDepthBelow <= 1;
+                holder.record(result.getBlock(), surfaceTop, y, water, ceiling);
             }
         }
     }

@@ -11,7 +11,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +24,7 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<Block> blocks) {
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 

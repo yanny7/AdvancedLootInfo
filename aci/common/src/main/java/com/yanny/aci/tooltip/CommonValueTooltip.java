@@ -2,6 +2,7 @@ package com.yanny.aci.tooltip;
 
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -39,6 +40,7 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(UUID.class, this::getUUIDTooltip);
         registry.registerValueTooltip(CompoundTag.class, this::getCompoundTagTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
+        registry.registerValueTooltip(RangeValue.class, this::getRangeValueTooltip);
     }
 
     private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -142,5 +144,10 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getPropertyTooltip(TServerUtils utils, Property<?> property) {
         return utils.getValueTooltip(utils, property.getName());
+    }
+
+    @NotNull
+    private TooltipBuilder getRangeValueTooltip(TServerUtils utils, RangeValue value) {
+        return utils.getValueTooltip(utils, value.toIntString());
     }
 }

@@ -19,9 +19,13 @@ public class BlockNode implements IDataNode, IBlockNode {
     private final TooltipNode tooltip;
     private final float chance;
 
-    public BlockNode(IServerUtils ignoredUtils, Block block) {
+    public BlockNode(IServerUtils utils, Block block) {
+        this(utils, block, TooltipNode.empty());
+    }
+
+    public BlockNode(IServerUtils ignoredUtils, Block block, TooltipNode tooltip) {
         this.block = block;
-        tooltip = TooltipNode.empty();
+        this.tooltip = tooltip;
         chance = 1f;
     }
 

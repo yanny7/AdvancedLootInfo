@@ -41,12 +41,16 @@ public final class Lang {
     }
 
     public enum Value implements ITooltipKey {
+        ABSOLUTE_Y("absolute_y", "Absolute Y: %s"),
         BLOCK("block", "Block: %s"),
         COUNT("count", "Count: %s"),
         DEFAULT_BLOCK("default_block", "Default Block: %s"),
         DEFAULT_FLUID("default_fluid", "Default Fluid: %s"),
+        DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface: %s"),
         DISCARD_CHANCE_ON_AIR_EXPOSURE("discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s"),
         GENERATION_STEP("generation_step", "Generation Step: %s"),
+        LAYER_AT_Y("layer_at_y", "Layer At Y: %s"),
+        PLACEMENT("placement", "Placement: %s"),
         SEA_LEVEL("sea_level", "Sea Level: %s"),
         SIZE("size", "Size: %s"),
         ;
@@ -65,7 +69,9 @@ public final class Lang {
     }
 
     public enum Branch implements ITooltipKey {
+        ABSOLUTE_Y(Value.ABSOLUTE_Y, "absolute_y", "Absolute Y:"),
         PROPERTIES("properties", "Properties:"),
+        LAYERS_AT_Y(Value.LAYER_AT_Y, "layers_at_y", "Layers At Y:"),
         STATE("state", "State:"),
         TARGET("target", "Target:"),
         TARGET_STATES("target_states", "Target States:"),
@@ -79,6 +85,25 @@ public final class Lang {
 
         Branch(String k, String e) {
             this.translation = new Translation("awi.property.branch." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Placement implements ITooltipKey {
+        UNDERWATER("underwater", "Underwater"),
+        ON_LAND("on_land", "On Land"),
+        ON_CEILING("on_ceiling", "On Ceiling"),
+        ;
+
+        private final Translation translation;
+
+        Placement(String k, String e) {
+            this.translation = new Translation("awi.enum.placement." + k, e);
         }
 
         @NotNull

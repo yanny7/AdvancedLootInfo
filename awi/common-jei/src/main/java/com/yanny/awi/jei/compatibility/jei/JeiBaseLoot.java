@@ -24,6 +24,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -84,7 +85,11 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
-            slotBuilder.addItemLike(h.block);
+            if (h.block.defaultBlockState().getFluidState().isEmpty()) {
+                slotBuilder.addItemLike(h.block.asItem() != Items.AIR ? h.block : Items.NETHER_STAR);
+            } else {
+                slotBuilder.addFluidStack(h.block.defaultBlockState().getFluidState().getType());
+            }
         }
     }
 

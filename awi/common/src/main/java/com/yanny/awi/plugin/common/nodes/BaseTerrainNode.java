@@ -8,7 +8,6 @@ import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -20,9 +19,9 @@ public class BaseTerrainNode extends ListNode {
 
     private final TooltipNode tooltip;
 
-    public BaseTerrainNode(IServerUtils utils, Set<Block> baseBlocks) {
-        for (Block block : baseBlocks) {
-            addChildren(new BlockNode(utils, block));
+    public BaseTerrainNode(IServerUtils utils, Set<NodeUtils.BlockInfo> baseBlocks) {
+        for (NodeUtils.BlockInfo info : baseBlocks) {
+            addChildren(new BlockNode(utils, info.block(), utils.getValueTooltip(utils, info).build()));
         }
 
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();

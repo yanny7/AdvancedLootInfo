@@ -94,9 +94,6 @@ public class LevelStemNode extends ListNode {
                 try {
                     BiomeResult res = future.get();
 
-                    LOGGER.info("Analyzing biome {}", res.biomeHolder.unwrapKey().get().location());
-                    res.layers().log();
-
                     TooltipNode tooltip = TooltipBuilder.array((b) -> {
                         b.add(utils.getValueTooltip(utils, finalDefaultBlock).build(Lang.Value.DEFAULT_BLOCK));
 
@@ -106,7 +103,7 @@ public class LevelStemNode extends ListNode {
                         }
                     }).build();
 
-                    addChildren(new BiomeNode(utils, res.biomeHolder().value(), tooltip, Collections.emptySet()));
+                    addChildren(new BiomeNode(utils, res.biomeHolder().value(), tooltip, res.layers.getBlockInfos()));
 
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
