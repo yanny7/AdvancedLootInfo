@@ -8,13 +8,14 @@ import com.yanny.awi.api.ICommonUtils;
 import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.MissingTooltipUtils;
-import com.yanny.awi.plugin.server.PlacementModifierTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,8 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, TooltipBuilder>> intProviderTooltips = registerClassKeyed("int provider tooltips", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, HeightProvider, TooltipBuilder>> heightProviderTooltips = registerClassKeyed("height provider tooltips", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockPredicate, TooltipBuilder>> blockPredicateTooltips = registerClassKeyed("block predicate tooltips", true, HashMap::new, BuiltInRegistries.BLOCK_PREDICATE_TYPE);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -77,6 +80,18 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     }
 
     @Override
+    public <T extends HeightProvider> void registerHeightProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        heightProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends BlockPredicate> void registerBlockPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        blockPredicateTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
     public <T> void registerValueTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         valueTooltips.put(type, (u, v) -> getter.apply(u, type.cast(v)));
     }
@@ -108,7 +123,7 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     public @NotNull <T extends PlacementModifier> TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, T entry) {
         return placementModifierTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
-                .orElseGet(() -> PlacementModifierTooltipUtils.getMissingPlacementModifierTooltip(utils, entry));
+                .orElseGet(() -> MissingTooltipUtils.getMissingPlacementModifierTooltip(utils, entry));
     }
 
     @NotNull
@@ -125,6 +140,20 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
         return ruleTestTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> MissingTooltipUtils.getMissingRuleTestTooltip(utils, entry));
+    }
+
+    @Override
+    public @NotNull <T extends HeightProvider> TooltipBuilder getHeightProviderTooltip(IServerUtils utils, T entry) {
+        return heightProviderTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingHeightProviderTooltip(utils, entry));
+    }
+
+    @Override
+    public @NotNull <T extends BlockPredicate> TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, T entry) {
+        return blockPredicateTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingBlockPredicateTooltip(utils, entry));
     }
 
     @NotNull

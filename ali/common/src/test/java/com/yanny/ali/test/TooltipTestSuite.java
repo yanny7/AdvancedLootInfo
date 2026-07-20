@@ -18,6 +18,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -190,6 +191,12 @@ public class TooltipTestSuite {
             @Override
             public TooltipNodePalette getTooltipCache() {
                 return PluginManager.getInstance().serverRegistry.getTooltipCache();
+            }
+
+            @NotNull
+            @Override
+            public HolderLookup.Provider lookupProvider() {
+                return PluginManager.getInstance().serverRegistry.lookupProvider();
             }
 
             @Override

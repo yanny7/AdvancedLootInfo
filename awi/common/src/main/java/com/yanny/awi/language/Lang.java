@@ -49,10 +49,29 @@ public final class Lang {
         DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface: %s"),
         DISCARD_CHANCE_ON_AIR_EXPOSURE("discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s"),
         GENERATION_STEP("generation_step", "Generation Step: %s"),
+        HEIGHTMAP("heightmap", "Heightmap: %s"),
         LAYER_AT_Y("layer_at_y", "Layer At Y: %s"),
+        MAX_WATER_DEPTH("max_water_depth", "Max Water Depth: %s"),
         PLACEMENT("placement", "Placement: %s"),
+        CHANCE("chance", "Chance: %s"),
+        RANGE("range", "Range: %s"),
         SEA_LEVEL("sea_level", "Sea Level: %s"),
         SIZE("size", "Size: %s"),
+        NOISE_TO_COUNT_RATIO("noise_to_count_ratio", "Noise To Count Ratio: %s"),
+        NOISE_FACTOR("noise_factor", "Noise Factor: %s"),
+        NOISE_OFFSET("noise_offset", "Noise Offset: %s"),
+        NOISE_LEVEL("noise_level", "Noise Level: %s"),
+        BELOW_NOISE("below_noise", "Below Noise: %s"),
+        ABOVE_NOISE("above_noise", "Above Noise: %s"),
+        DIRECTION_OF_SEARCH("direction_of_search", "Direction Of Search: %s"),
+        MAX_STEPS("max_steps", "Max Steps: %s"),
+        STEP("step",  "Step: %s"),
+        ABOVE_BOTTOM("above_bottom", "Above Bottom: %s"),
+        BELOW_TOP("below_top", "Below Top: %s"),
+        INNER("inner", "Inner: %s"),
+        PLATEAU("plateau", "Plateau: %s"),
+        TOTAL_WEIGHT("total_weight", "Total Weight: %s"),
+        ITEM("item", "Item: %s"),
         ;
 
         private final Translation translation;
@@ -71,10 +90,18 @@ public final class Lang {
     public enum Branch implements ITooltipKey {
         ABSOLUTE_Y(Value.ABSOLUTE_Y, "absolute_y", "Absolute Y:"),
         PROPERTIES("properties", "Properties:"),
+        PREDICATE("predicate", "Predicate:"),
+        HEIGHT("height", "Height:"),
+        MIN("min", "Min:"),
+        MAX("max", "Max:"),
         LAYERS_AT_Y(Value.LAYER_AT_Y, "layers_at_y", "Layers At Y:"),
+        PLACEMENT("placement", "Placement:"),
         STATE("state", "State:"),
         TARGET("target", "Target:"),
         TARGET_STATES("target_states", "Target States:"),
+        TARGET_CONDITION("target_condition", "Target Condition:"),
+        ALLOWED_SEARCH_CONDITION("allowed_search_condition", "Allowed Search Condition:"),
+        ITEMS(Value.ITEM, "items", "Items:"),
         ;
 
         private final Translation translation;
@@ -104,6 +131,55 @@ public final class Lang {
 
         Placement(String k, String e) {
             this.translation = new Translation("awi.enum.placement." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum PlacementModifier implements ITooltipKey {
+        BLOCK_PREDICATE("block_predicate", "Block predicate:"),
+        COUNT_PLACEMENT("count_placement", "Count Placement:"),
+        HEIGHTMAP_PLACEMENT("heightmap_placement", "Heightmap Placement:"),
+        HEIGHT_RANGE_PLACEMENT("height_range_placement", "Height Range Placement:"),
+        RARITY_FILTER("rarity_filter", "Rarity Filter:"),
+        SURFACE_RELATIVE_THRESHOLD_FILTER("surface_relative_threshold_filter", "Surface Relative Threshold Filter:"),
+        SURFACE_WATER_DEPTH_FILTER("surface_water_depth_filter", "Surface Water Depth Filter:"),
+        NOISE_BASED_COUNT_PLACEMENT("noise_based_count_placement", "Noise Based Count Placement:"),
+        COUNT_ON_EVERY_LAYER("count_on_every_layer", "Count On Every Layer:"),
+        NOISE_THRESHOLD_COUNT_PLACEMENT("noise_threshold_count_placement", "Noise Threshold Count Placement:"),
+        ENVIRONMENT_SCAN_PLACEMENT("environment_scan_placement", "Environment Scan Placement:"),
+        CARVING_MASK_PLACEMENT("carving_mask_placement", "Carving Mask Placement:"),
+        ;
+
+        private final Translation translation;
+
+        PlacementModifier(String k, String e) {
+            this.translation = new Translation("awi.property.placement_modifier." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum HeightProvider implements ITooltipKey {
+        CONSTANT("constant", "Constant:"),
+        UNIFORM("uniform", "Uniform:"),
+        BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom:"),
+        VERY_BIASED_TO_BOTTOM("very_biased_to_bottom", "Very Biased To Bottom:"),
+        WEIGHTED_LIST("weighted_list", "Weighted List:"),
+        ;
+
+        private final Translation translation;
+
+        HeightProvider(String k, String e) {
+            this.translation = new Translation("awi.property.height_provider." + k, e);
         }
 
         @NotNull

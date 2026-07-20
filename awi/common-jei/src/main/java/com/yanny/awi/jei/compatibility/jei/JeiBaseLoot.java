@@ -85,6 +85,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
                             -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+
             if (h.block.defaultBlockState().getFluidState().isEmpty()) {
                 slotBuilder.addItemLike(h.block.asItem() != Items.AIR ? h.block : Items.NETHER_STAR);
             } else {

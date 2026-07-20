@@ -47,7 +47,14 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Widget> widgets = new ArrayList<>();
 
         widgets.addAll(slotWidgets.stream().map((h) -> {
-            EmiIngredient ingredient = EmiStack.of(h.block);
+            EmiIngredient ingredient;
+
+            if (h.block.defaultBlockState().getFluidState().isEmpty()) {
+                ingredient = EmiStack.of(h.block);
+            } else {
+                ingredient = EmiStack.of(h.block.defaultBlockState().getFluidState().getType());
+            }
+
             EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), new RangeValue(1));
 
             widget.recipeContext(h.recipe);

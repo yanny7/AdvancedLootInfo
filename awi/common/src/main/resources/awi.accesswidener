@@ -18,6 +18,7 @@ accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context update
 accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context updateY (IIIIII)V
 accessible method net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule tryApply (III)Lnet/minecraft/world/level/block/state/BlockState;
 accessible method net/minecraft/world/level/biome/MultiNoiseBiomeSource parameters ()Lnet/minecraft/world/level/biome/Climate$ParameterList;
+accessible method net/minecraft/world/level/levelgen/structure/templatesystem/RuleTest getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/RuleTestType;
 
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context surfaceDepth I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthAbove I
@@ -31,6 +32,46 @@ accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastMin
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastUpdateXZ J
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context minSurfaceLevel I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context lastUpdateY J
+
+accessible field net/minecraft/world/level/levelgen/placement/HeightmapPlacement heightmap Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+accessible field net/minecraft/world/level/levelgen/placement/CountPlacement count Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/placement/RarityFilter chance I
+accessible field net/minecraft/world/level/levelgen/placement/SurfaceRelativeThresholdFilter heightmap Lnet/minecraft/world/level/levelgen/Heightmap$Types;
+accessible field net/minecraft/world/level/levelgen/placement/SurfaceRelativeThresholdFilter minInclusive I
+accessible field net/minecraft/world/level/levelgen/placement/SurfaceRelativeThresholdFilter maxInclusive I
+accessible field net/minecraft/world/level/levelgen/placement/SurfaceWaterDepthFilter maxWaterDepth I
+accessible field net/minecraft/world/level/levelgen/placement/HeightRangePlacement height Lnet/minecraft/world/level/levelgen/heightproviders/HeightProvider;
+accessible field net/minecraft/world/level/levelgen/placement/BlockPredicateFilter predicate Lnet/minecraft/world/level/levelgen/blockpredicates/BlockPredicate;
+accessible field net/minecraft/world/level/levelgen/placement/NoiseBasedCountPlacement noiseToCountRatio I
+accessible field net/minecraft/world/level/levelgen/placement/NoiseBasedCountPlacement noiseFactor D
+accessible field net/minecraft/world/level/levelgen/placement/NoiseBasedCountPlacement noiseOffset D
+accessible field net/minecraft/world/level/levelgen/placement/NoiseThresholdCountPlacement noiseLevel D
+accessible field net/minecraft/world/level/levelgen/placement/NoiseThresholdCountPlacement belowNoise I
+accessible field net/minecraft/world/level/levelgen/placement/NoiseThresholdCountPlacement aboveNoise I
+accessible field net/minecraft/world/level/levelgen/placement/CountOnEveryLayerPlacement count Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/placement/EnvironmentScanPlacement directionOfSearch Lnet/minecraft/core/Direction;
+accessible field net/minecraft/world/level/levelgen/placement/EnvironmentScanPlacement targetCondition Lnet/minecraft/world/level/levelgen/blockpredicates/BlockPredicate;
+accessible field net/minecraft/world/level/levelgen/placement/EnvironmentScanPlacement allowedSearchCondition Lnet/minecraft/world/level/levelgen/blockpredicates/BlockPredicate;
+accessible field net/minecraft/world/level/levelgen/placement/EnvironmentScanPlacement maxSteps I
+accessible field net/minecraft/world/level/levelgen/placement/CarvingMaskPlacement step Lnet/minecraft/world/level/levelgen/GenerationStep$Carving;
+accessible field net/minecraft/util/valueproviders/ClampedInt source Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/util/valueproviders/ClampedInt minInclusive I
+accessible field net/minecraft/util/valueproviders/ClampedInt maxInclusive I
+accessible field net/minecraft/util/valueproviders/ClampedNormalInt mean F
+accessible field net/minecraft/util/valueproviders/ClampedNormalInt deviation F
+accessible field net/minecraft/world/level/levelgen/heightproviders/UniformHeight minInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/UniformHeight maxInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight minInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight maxInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/BiasedToBottomHeight inner I
+accessible field net/minecraft/world/level/levelgen/heightproviders/VeryBiasedToBottomHeight minInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/VeryBiasedToBottomHeight maxInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/VeryBiasedToBottomHeight inner I
+accessible field net/minecraft/world/level/levelgen/heightproviders/TrapezoidHeight minInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/TrapezoidHeight maxInclusive Lnet/minecraft/world/level/levelgen/VerticalAnchor;
+accessible field net/minecraft/world/level/levelgen/heightproviders/TrapezoidHeight plateau I
+accessible field net/minecraft/world/level/levelgen/heightproviders/WeightedListHeight distribution Lnet/minecraft/util/random/SimpleWeightedRandomList;
+accessible field net/minecraft/util/random/WeightedRandomList totalWeight I
 
 accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
 accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker

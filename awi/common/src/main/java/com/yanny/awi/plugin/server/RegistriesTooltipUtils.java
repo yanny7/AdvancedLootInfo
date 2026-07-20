@@ -4,7 +4,12 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.valueproviders.IntProviderType;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -30,5 +35,30 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getFluidTooltip(IServerUtils utils, Fluid fluid) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLUID, fluid);
+    }
+
+    @NotNull
+    public static TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, PlacementModifierType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProviderType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.INT_PROVIDER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRuleTestTypeTooltip(IServerUtils utils, RuleTestType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.RULE_TEST, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getHeightProviderTooltip(IServerUtils utils, HeightProviderType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.HEIGHT_PROVIDER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, BlockPredicateType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_PREDICATE_TYPE, type);
     }
 }

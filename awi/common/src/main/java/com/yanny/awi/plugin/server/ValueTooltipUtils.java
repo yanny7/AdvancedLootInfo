@@ -7,7 +7,9 @@ import com.yanny.awi.language.Lang;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,6 +22,16 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getRuleTestTooltip(IServerUtils utils, RuleTest value) {
         return utils.getRuleTestTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getHeightProviderTooltip(IServerUtils utils, HeightProvider value) {
+        return utils.getHeightProviderTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, BlockPredicate value) {
+        return utils.getBlockPredicateTooltip(utils, value);
     }
 
     @NotNull

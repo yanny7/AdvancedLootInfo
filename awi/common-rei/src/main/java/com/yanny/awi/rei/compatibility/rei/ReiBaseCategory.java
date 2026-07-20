@@ -23,7 +23,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,7 +71,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
         widgets.add(widgetWrapper);
         slotWidgets.forEach((h) -> {
-            EntryStack<ItemStack> stack = EntryStacks.of(h.block);
+            EntryStack<?> stack;
+
+            if (h.block.defaultBlockState().getFluidState().isEmpty()) {
+                stack = EntryStacks.of(h.block);
+            } else {
+                stack = EntryStacks.of(h.block.defaultBlockState().getFluidState().getType());
+            }
 
             stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
             widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());

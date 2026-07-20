@@ -3,6 +3,7 @@ package com.yanny.aci.manager;
 import com.yanny.aci.api.ICoreCommonUtils;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +30,12 @@ public abstract class CoreServerRegistry<
     @Override
     public ServerLevel getServerLevel() {
         return serverLevel;
+    }
+
+    @NotNull
+    @Override
+    public HolderLookup.Provider lookupProvider() {
+        return serverLevel.registryAccess();
     }
 
     @NotNull

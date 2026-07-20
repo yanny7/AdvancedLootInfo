@@ -11,6 +11,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
@@ -23,8 +24,10 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
@@ -79,6 +82,11 @@ public class TooltipTestSuite {
             }
 
             @Override
+            public @NotNull HolderLookup.Provider lookupProvider() {
+                return PluginManager.getInstance().serverRegistry.lookupProvider();
+            }
+
+            @Override
             public int getTranslationKeyIndex(String key) {
                 return PluginManager.getInstance().serverRegistry.getTranslationKeyIndex(key);
             }
@@ -112,6 +120,16 @@ public class TooltipTestSuite {
             @Override
             public @NotNull <T extends RuleTest> TooltipBuilder getRuleTestTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getRuleTestTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends HeightProvider> TooltipBuilder getHeightProviderTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getHeightProviderTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends BlockPredicate> TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getBlockPredicateTooltip(utils, entry);
             }
 
             @Override
