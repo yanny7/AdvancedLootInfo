@@ -6,6 +6,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
+import com.yanny.awi.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +25,7 @@ public class BaseTerrainNode extends ListNode {
     public BaseTerrainNode(IServerUtils utils, Set<NodeUtils.BlockInfo> baseBlocks) {
         baseBlocks.stream()
                 .sorted(Comparator.comparing((info) -> BuiltInRegistries.BLOCK.getKey(info.block()).getPath()))
-                .forEach((info) -> addChildren(new BlockNode(utils, info.block(), utils.getValueTooltip(utils, info).build())));
+                .forEach((info) -> addChildren(new BlockNode(utils, info.block(), TooltipUtils.getBlockInfoTooltip(utils, info).build())));
 
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();
     }

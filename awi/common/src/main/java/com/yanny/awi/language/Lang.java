@@ -181,6 +181,7 @@ public final class Lang {
         BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom:"),
         VERY_BIASED_TO_BOTTOM("very_biased_to_bottom", "Very Biased To Bottom:"),
         WEIGHTED_LIST("weighted_list", "Weighted List:"),
+        TRAPEZOID("trapezoid", "Trapezoid:"),
         ;
 
         private final Translation translation;

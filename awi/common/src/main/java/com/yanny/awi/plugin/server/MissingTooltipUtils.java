@@ -7,8 +7,6 @@ import com.mojang.serialization.JsonOps;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
-import com.yanny.aci.tooltip.TooltipNode;
-import com.yanny.awi.api.FeatureHolder;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.RegistryOps;
@@ -16,13 +14,10 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-
-import java.util.Collections;
 
 public class MissingTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -31,12 +26,6 @@ public class MissingTooltipUtils {
     public static TooltipBuilder getMissingFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration configuration) {
         //TODO auto detected placed feature
         return TooltipBuilder.error("Not implemented");
-    }
-
-    @NotNull
-    public static FeatureHolder getMissingPlacedFeature(IServerUtils utils, PlacedFeature placedFeature) {
-        //TODO auto detected placed feature
-        return new FeatureHolder(Collections.emptyList(), TooltipNode.empty());
     }
 
     @NotNull

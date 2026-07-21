@@ -1,10 +1,8 @@
 package com.yanny.awi.plugin.server;
 
-import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
-import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.state.BlockState;
@@ -59,29 +57,5 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getVec3iTooltip(IServerUtils utils, Vec3i value) {
         return utils.getValueTooltip(utils, "[" + value.getX() + "," + value.getY() + "," + value.getZ() + "]");
-    }
-
-    @NotNull
-    public static TooltipBuilder getBlockInfoTooltip(IServerUtils utils, NodeUtils.BlockInfo info) {
-        return TooltipBuilder.array((b) -> {
-            RangeValue fistValue = info.ranges().get(0);
-
-            switch (info.storageType()) {
-                case RELATIVE -> b.add(utils.getValueTooltip(utils, fistValue).build(Lang.Value.DEPTH_BELOW_SURFACE));
-                case ABSOLUTE -> b.add(utils.getValueTooltip(utils, info.ranges()).build(Lang.Branch.ABSOLUTE_Y));
-                case LAYERED -> b.add(utils.getValueTooltip(utils, info.ranges()).build(Lang.Branch.LAYERS_AT_Y));
-            }
-
-            switch (info.water()) {
-                case UNDERWATER -> b.add(utils.getValueTooltip(utils, TooltipBuilder.translate(Lang.Placement.UNDERWATER.singular())).build(Lang.Value.PLACEMENT));
-                case DRY -> b.add(utils.getValueTooltip(utils, TooltipBuilder.translate(Lang.Placement.ON_LAND.singular())).build(Lang.Value.PLACEMENT));
-                case ANY -> {} // indifferent to the water level — no placement line
-            }
-
-            switch (info.placement()) {
-                case CEILING -> b.add(utils.getValueTooltip(utils, TooltipBuilder.translate(Lang.Placement.ON_CEILING.singular())).build(Lang.Value.PLACEMENT));
-                case FLOOR, ANY -> {} // normal below-surface placement — no overhang line
-            }
-        });
     }
 }

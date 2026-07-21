@@ -23,12 +23,12 @@ public class PlacementModifierTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getCarvingMaskPlacementTooltip(IServerUtils utils, CarvingMaskPlacement placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.step).build(Lang.Value.COUNT)), Lang.PlacementModifier.CARVING_MASK_PLACEMENT);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.step).build(Lang.Value.STEP)), Lang.PlacementModifier.CARVING_MASK_PLACEMENT);
     }
 
     @NotNull
     public static TooltipBuilder getCountOnEveryLayerPlacementTooltip(IServerUtils utils, CountOnEveryLayerPlacement placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.count).build(Lang.Value.STEP)), Lang.PlacementModifier.COUNT_ON_EVERY_LAYER);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.count).build(Lang.Value.COUNT)), Lang.PlacementModifier.COUNT_ON_EVERY_LAYER);
     }
 
     @NotNull

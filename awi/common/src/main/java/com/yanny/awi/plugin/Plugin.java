@@ -63,7 +63,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(OreConfiguration.TargetBlockState.class, ValueTooltipUtils::getTargetBlockStateTooltip);
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
         registry.registerValueTooltip(Vec3i.class, ValueTooltipUtils::getVec3iTooltip);
-        registry.registerValueTooltip(NodeUtils.BlockInfo.class, ValueTooltipUtils::getBlockInfoTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);

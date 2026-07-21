@@ -47,7 +47,7 @@ public class HeightProviderTooltipUtils {
             b.add(getVerticalAnchorTooltip(utils, provider.minInclusive).build(Lang.Branch.MIN));
             b.add(getVerticalAnchorTooltip(utils, provider.maxInclusive).build(Lang.Branch.MAX));
             b.add(utils.getValueTooltip(utils, provider.plateau).build(Lang.Value.PLATEAU));
-        }, Lang.HeightProvider.VERY_BIASED_TO_BOTTOM);
+        }, Lang.HeightProvider.TRAPEZOID);
     }
 
     @NotNull
