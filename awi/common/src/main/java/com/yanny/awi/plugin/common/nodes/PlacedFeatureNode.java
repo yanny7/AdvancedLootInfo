@@ -35,11 +35,18 @@ public class PlacedFeatureNode extends ListNode {
         FeatureConfiguration featureConfiguration = configuredFeature.config(); // values
         Set<Block> blocks = new HashSet<>(utils.collectBlocks(utils, featureConfiguration));
 
-        tooltip = TooltipBuilder.array((b) -> {
-            for (PlacementModifier placementModifier : placedFeature.placement()) {
-                b.add(utils.getPlacementModifierTooltip(utils, placementModifier));
-            }
-        }, Lang.Branch.PLACEMENT).build();
+        tooltip = TooltipBuilder.branch((b) -> {
+            b.add(TooltipBuilder.array((c) -> {
+                c.add(utils.getValueTooltip(utils, configuredFeature.feature()).build(Lang.Value.FEATURE));
+                c.add(utils.getFeatureTooltip(utils, featureConfiguration));
+            }, Lang.Branch.CONFIGURED_FEATURE));
+
+            b.add(TooltipBuilder.array((c) -> {
+                for (PlacementModifier placementModifier : placedFeature.placement()) {
+                    c.add(utils.getPlacementModifierTooltip(utils, placementModifier));
+                }
+            }, Lang.Branch.PLACEMENT));
+        }).build();
 
         for (Block block : blocks) {
             addChildren(new BlockNode(utils, block));

@@ -76,6 +76,7 @@ public final class Lang {
         TAG("tag", "Tag: %s"),
         FLUID("fluid",  "Fluid: %s"),
         DIRECTION("direction", "Direction: %s"),
+        FEATURE("feature", "Feature: %s"),
         ;
 
         private final Translation translation;
@@ -109,6 +110,7 @@ public final class Lang {
         BLOCKS(Value.BLOCK, "blocks", "Blocks:"),
         FLUIDS(Value.FLUID, "fluids", "Fluids:"),
         PREDICATES("predicates", "Predicates:"),
+        CONFIGURED_FEATURE("configured_feature", "Configured Feature:"),
         ;
 
         private final Translation translation;

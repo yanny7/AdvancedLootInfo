@@ -7,6 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.valueproviders.IntProviderType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
@@ -60,5 +61,10 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, BlockPredicateType<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCK_PREDICATE_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFeatureTypeTooltip(IServerUtils utils, Feature<?> feature) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE, feature);
     }
 }
