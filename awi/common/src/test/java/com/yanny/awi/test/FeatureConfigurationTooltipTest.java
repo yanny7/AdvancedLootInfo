@@ -23,7 +23,7 @@ public class FeatureConfigurationTooltipTest {
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getCountConfigurationTooltip(UTILS, new CountConfiguration(UniformInt.of(1, 2))).build(), List.of(
                 "Count:",
-                "  -> Count: [1-2]"
+                "  -> Count: 1-2 (Uniform)"
         ));
     }
 

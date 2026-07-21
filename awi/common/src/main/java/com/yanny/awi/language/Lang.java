@@ -72,6 +72,10 @@ public final class Lang {
         PLATEAU("plateau", "Plateau: %s"),
         TOTAL_WEIGHT("total_weight", "Total Weight: %s"),
         ITEM("item", "Item: %s"),
+        OFFSET("offset", "Offset: %s"),
+        TAG("tag", "Tag: %s"),
+        FLUID("fluid",  "Fluid: %s"),
+        DIRECTION("direction", "Direction: %s"),
         ;
 
         private final Translation translation;
@@ -102,6 +106,9 @@ public final class Lang {
         TARGET_CONDITION("target_condition", "Target Condition:"),
         ALLOWED_SEARCH_CONDITION("allowed_search_condition", "Allowed Search Condition:"),
         ITEMS(Value.ITEM, "items", "Items:"),
+        BLOCKS(Value.BLOCK, "blocks", "Blocks:"),
+        FLUIDS(Value.FLUID, "fluids", "Fluids:"),
+        PREDICATES("predicates", "Predicates:"),
         ;
 
         private final Translation translation;
@@ -180,6 +187,34 @@ public final class Lang {
 
         HeightProvider(String k, String e) {
             this.translation = new Translation("awi.property.height_provider." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum BlockPredicate implements ITooltipKey {
+        MATCHING_BLOCKS("matching_blocks", "Matching Blocks:"),
+        MATCHING_BLOCK_TAG("matching_block_tag", "Matching Block Tag:"),
+        MATCHING_FLUIDS("matching_fluids", "Matching Fluids:"),
+        HAS_STURDY_FACE("has_sturdy_face", "Has Sturdy Face:"),
+        SOLID("solid", "Solid:"),
+        REPLACEABLE("replaceable", "Replaceable:"),
+        WOULD_SURVIVE("would_survive", "Would Survive:"),
+        INSIDE_WORLD_BOUNDS("inside_world_bounds", "Inside World Bounds:"),
+        ANY_OF("any_of", "Any Of:"),
+        ALL_OF("all_of", "All Of:"),
+        NOT("not", "Not:"),
+        TRUE_BLOCK("true_block", "True Block:"),
+        ;
+
+        private final Translation translation;
+
+        BlockPredicate(String k, String e) {
+            this.translation = new Translation("awi.property.block_predicate." + k, e);
         }
 
         @NotNull

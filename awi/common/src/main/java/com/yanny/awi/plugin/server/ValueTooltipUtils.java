@@ -5,6 +5,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -53,6 +54,11 @@ public class ValueTooltipUtils {
 
             b.add(array.build(Lang.Branch.PROPERTIES));
         });
+    }
+
+    @NotNull
+    public static TooltipBuilder getVec3iTooltip(IServerUtils utils, Vec3i value) {
+        return utils.getValueTooltip(utils, "[" + value.getX() + "," + value.getY() + "," + value.getZ() + "]");
     }
 
     @NotNull

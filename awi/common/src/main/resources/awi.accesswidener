@@ -72,6 +72,25 @@ accessible field net/minecraft/world/level/levelgen/heightproviders/TrapezoidHei
 accessible field net/minecraft/world/level/levelgen/heightproviders/TrapezoidHeight plateau I
 accessible field net/minecraft/world/level/levelgen/heightproviders/WeightedListHeight distribution Lnet/minecraft/util/random/SimpleWeightedRandomList;
 accessible field net/minecraft/util/random/WeightedRandomList totalWeight I
+accessible field net/minecraft/world/level/levelgen/blockpredicates/StateTestingPredicate offset Lnet/minecraft/core/Vec3i;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/MatchingBlocksPredicate blocks Lnet/minecraft/core/HolderSet;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/MatchingBlockTagPredicate tag Lnet/minecraft/tags/TagKey;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/MatchingFluidsPredicate fluids Lnet/minecraft/core/HolderSet;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/HasSturdyFacePredicate offset Lnet/minecraft/core/Vec3i;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/HasSturdyFacePredicate direction Lnet/minecraft/core/Direction;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/WouldSurvivePredicate offset Lnet/minecraft/core/Vec3i;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/WouldSurvivePredicate state Lnet/minecraft/world/level/block/state/BlockState;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/InsideWorldBoundsPredicate offset Lnet/minecraft/core/Vec3i;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/CombiningPredicate predicates Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/NotPredicate predicate Lnet/minecraft/world/level/levelgen/blockpredicates/BlockPredicate;
 
 accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
 accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker
+accessible class net/minecraft/world/level/levelgen/blockpredicates/MatchingBlocksPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/MatchingFluidsPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/CombiningPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/AnyOfPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/AllOfPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/NotPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/TrueBlockPredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/ReplaceablePredicate

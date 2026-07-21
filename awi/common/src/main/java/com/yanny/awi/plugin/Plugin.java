@@ -6,11 +6,11 @@ import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.plugin.client.widget.*;
 import com.yanny.awi.plugin.common.nodes.*;
 import com.yanny.awi.plugin.server.*;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
+import net.minecraft.world.level.levelgen.blockpredicates.*;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.*;
@@ -62,6 +62,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlockPredicate.class, ValueTooltipUtils::getBlockPredicateTooltip);
         registry.registerValueTooltip(OreConfiguration.TargetBlockState.class, ValueTooltipUtils::getTargetBlockStateTooltip);
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
+        registry.registerValueTooltip(Vec3i.class, ValueTooltipUtils::getVec3iTooltip);
         registry.registerValueTooltip(NodeUtils.BlockInfo.class, ValueTooltipUtils::getBlockInfoTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
@@ -90,6 +91,19 @@ public class Plugin implements IPlugin {
         registry.registerHeightProviderTooltip(WeightedListHeight.class, HeightProviderTooltipUtils::getWeightedListHeightTooltip);
 
         registry.registerRuleTestTooltip(AlwaysTrueTest.class, RuleTestTooltipUtils::getAlwaysTrueTooltip);
+
+        registry.registerBlockPredicateTooltip(MatchingBlocksPredicate.class, BlockPredicateTooltipUtils::getMatchingBlocksPredicateTooltip);
+        registry.registerBlockPredicateTooltip(MatchingBlockTagPredicate.class, BlockPredicateTooltipUtils::getMatchingBlockTagPredicateTooltip);
+        registry.registerBlockPredicateTooltip(MatchingFluidsPredicate.class, BlockPredicateTooltipUtils::getMatchingFluidsPredicateTooltip);
+        registry.registerBlockPredicateTooltip(HasSturdyFacePredicate.class, BlockPredicateTooltipUtils::getHasSturdyFacePredicateTooltip);
+        registry.registerBlockPredicateTooltip(SolidPredicate.class, BlockPredicateTooltipUtils::getSolidPredicateTooltip);
+        registry.registerBlockPredicateTooltip(ReplaceablePredicate.class, BlockPredicateTooltipUtils::getReplaceablePredicateTooltip);
+        registry.registerBlockPredicateTooltip(WouldSurvivePredicate.class, BlockPredicateTooltipUtils::getWouldSurvivePredicateTooltip);
+        registry.registerBlockPredicateTooltip(InsideWorldBoundsPredicate.class, BlockPredicateTooltipUtils::getInsideWorldBoundsPredicateTooltip);
+        registry.registerBlockPredicateTooltip(AnyOfPredicate.class, BlockPredicateTooltipUtils::getAnyOfPredicateTooltip);
+        registry.registerBlockPredicateTooltip(AllOfPredicate.class, BlockPredicateTooltipUtils::getAllOfPredicateTooltip);
+        registry.registerBlockPredicateTooltip(NotPredicate.class, BlockPredicateTooltipUtils::getNotPredicateTooltip);
+        registry.registerBlockPredicateTooltip(TrueBlockPredicate.class, BlockPredicateTooltipUtils::getTrueBlockPredicateTooltip);
 
         registry.registerPlacementModifierTooltip(BiomeFilter.class, PlacementModifierTooltipUtils::getBiomeFilterTooltip);
         registry.registerPlacementModifierTooltip(BlockPredicateFilter.class, PlacementModifierTooltipUtils::getBlockPredicateFilterTooltip);
