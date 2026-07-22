@@ -7,6 +7,8 @@ import com.yanny.awi.plugin.client.widget.*;
 import com.yanny.awi.plugin.common.nodes.*;
 import com.yanny.awi.plugin.server.*;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.random.Weight;
+import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -64,6 +66,8 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(OreConfiguration.TargetBlockState.class, ValueTooltipUtils::getTargetBlockStateTooltip);
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
         registry.registerValueTooltip(Vec3i.class, ValueTooltipUtils::getVec3iTooltip);
+        registry.registerValueTooltip(WeightedEntry.Wrapper.class, ValueTooltipUtils::getWeightedEntryWrapperTooltip);
+        registry.registerValueTooltip(Weight.class, ValueTooltipUtils::getWeightTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);

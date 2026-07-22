@@ -32,6 +32,8 @@
   "awi.property.branch.allowed_search_condition": "Allowed Search Condition:",
   "awi.property.branch.blocks": "Blocks:",
   "awi.property.branch.configured_feature": "Configured Feature:",
+  "awi.property.branch.data": "Data:",
+  "awi.property.branch.entry": "Entry:",
   "awi.property.branch.fluids": "Fluids:",
   "awi.property.branch.height": "Height:",
   "awi.property.branch.items": "Items:",
@@ -100,6 +102,7 @@
   "awi.property.value.step": "Step: %s",
   "awi.property.value.tag": "Tag: %s",
   "awi.property.value.total_weight": "Total Weight: %s",
+  "awi.property.value.weight": "Weight: %s",
   "awi.type.feature_configuration.count": "Count:",
   "awi.type.feature_configuration.ore": "Ore:",
   "awi.type.rule_test.always_true": "Always True"

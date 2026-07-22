@@ -48,7 +48,10 @@ import java.util.concurrent.ExecutionException;
 
 @Suite
 @SelectClasses({
-        FeatureConfigurationTooltipTest.class
+        FeatureConfigurationTooltipTest.class,
+        PlacementModifierTooltipTest.class,
+        HeightProviderTooltipTest.class,
+        BlockPredicateTooltipTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;

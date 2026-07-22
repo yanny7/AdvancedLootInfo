@@ -81,6 +81,6 @@ public class BlockPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getTrueBlockPredicateTooltip(IServerUtils ignoredUtils, TrueBlockPredicate ignoredPredicate) {
-        return array((b) -> {}, Lang.BlockPredicate.TRUE_BLOCK);
+        return array(TooltipBuilder::showEmpty, Lang.BlockPredicate.TRUE_BLOCK);
     }
 }

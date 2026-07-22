@@ -77,6 +77,7 @@ public final class Lang {
         FLUID("fluid",  "Fluid: %s"),
         DIRECTION("direction", "Direction: %s"),
         FEATURE("feature", "Feature: %s"),
+        WEIGHT("weight", "Weight: %s"),
         ;
 
         private final Translation translation;
@@ -111,6 +112,8 @@ public final class Lang {
         FLUIDS(Value.FLUID, "fluids", "Fluids:"),
         PREDICATES("predicates", "Predicates:"),
         CONFIGURED_FEATURE("configured_feature", "Configured Feature:"),
+        DATA("data", "Data:"),
+        ENTRY("entry", "Entry:"),
         ;
 
         private final Translation translation;
@@ -211,7 +214,7 @@ public final class Lang {
         ANY_OF("any_of", "Any Of:"),
         ALL_OF("all_of", "All Of:"),
         NOT("not", "Not:"),
-        TRUE_BLOCK("true_block", "True Block:"),
+        TRUE_BLOCK("true_block", "True Block"),
         ;
 
         private final Translation translation;
