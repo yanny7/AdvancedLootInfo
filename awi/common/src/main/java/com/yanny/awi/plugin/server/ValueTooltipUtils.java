@@ -6,6 +6,7 @@ import com.yanny.awi.language.Lang;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GeodeBlockSettings;
@@ -16,6 +17,12 @@ import net.minecraft.world.level.levelgen.feature.SpikeFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +46,41 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, BlockPredicate value) {
         return utils.getBlockPredicateTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getBlockStateProviderTooltip(IServerUtils utils, BlockStateProvider value) {
+        return utils.getBlockStateProviderTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getTreeDecoratorTooltip(IServerUtils utils, TreeDecorator value) {
+        return utils.getTreeDecoratorTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFeatureSizeTooltip(IServerUtils utils, FeatureSize value) {
+        return utils.getFeatureSizeTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRootPlacerTooltip(IServerUtils utils, RootPlacer value) {
+        return utils.getRootPlacerTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFoliagePlacerTooltip(IServerUtils utils, FoliagePlacer value) {
+        return utils.getFoliagePlacerTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, TrunkPlacer value) {
+        return utils.getTrunkPlacerTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProvider value) {
+        return utils.getFloatProviderTooltip(utils, value);
     }
 
     @NotNull

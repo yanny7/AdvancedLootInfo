@@ -19,6 +19,12 @@ accessible method net/minecraft/world/level/levelgen/SurfaceRules$Context update
 accessible method net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule tryApply (III)Lnet/minecraft/world/level/block/state/BlockState;
 accessible method net/minecraft/world/level/biome/MultiNoiseBiomeSource parameters ()Lnet/minecraft/world/level/biome/Climate$ParameterList;
 accessible method net/minecraft/world/level/levelgen/structure/templatesystem/RuleTest getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/RuleTestType;
+accessible method net/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider type ()Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProviderType;
+accessible method net/minecraft/world/level/levelgen/feature/treedecorators/TreeDecorator type ()Lnet/minecraft/world/level/levelgen/feature/treedecorators/TreeDecoratorType;
+accessible method net/minecraft/world/level/levelgen/feature/featuresize/FeatureSize type ()Lnet/minecraft/world/level/levelgen/feature/featuresize/FeatureSizeType;
+accessible method net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer type ()Lnet/minecraft/world/level/levelgen/feature/rootplacers/RootPlacerType;
+accessible method net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacer type ()Lnet/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacerType;
+accessible method net/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacer type ()Lnet/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacerType;
 
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context surfaceDepth I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthAbove I

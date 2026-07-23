@@ -293,7 +293,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getTreeConfigurationTooltip(IServerUtils utils, TreeConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.trunkPlacer).build(Lang.Branch.TRUNK_PROVIDER));
+            b.add(utils.getValueTooltip(utils, configuration.trunkProvider).build(Lang.Branch.TRUNK_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.dirtProvider).build(Lang.Branch.DIRT_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.trunkPlacer).build(Lang.Branch.TRUNK_PLACER)); //TODO REGISTRY!!!
             b.add(utils.getValueTooltip(utils, configuration.foliageProvider).build(Lang.Branch.FOLIAGE_PROVIDER));
@@ -328,7 +328,7 @@ public class FeatureConfigurationTooltipUtils {
     public static TooltipBuilder getVegetationPatchConfigurationTooltip(IServerUtils utils, VegetationPatchConfiguration configuration) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.replaceable).build(Lang.Value.REPLACEABLE));
-            b.add(utils.getValueTooltip(utils, configuration.groundState).build(Lang.Branch.GROUND_STATE));
+            b.add(utils.getValueTooltip(utils, configuration.groundState).build(Lang.Branch.GROUND_STATE)); //TODO Registry
             b.add(utils.getValueTooltip(utils, configuration.vegetationFeature).build(Lang.Branch.VEGETATION_FEATURE));
             b.add(utils.getValueTooltip(utils, configuration.surface).build(Lang.Value.SURFACE));
             b.add(utils.getValueTooltip(utils, configuration.depth).build(Lang.Value.DEPTH));

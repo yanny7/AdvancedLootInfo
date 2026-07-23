@@ -89,6 +89,9 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Entry:",
                 "      -> Height: 3",
                 "      -> State:",
+                "        -> Auto-detected: minecraft:simple_state_provider",
+                "          -> state:",
+                "            -> minecraft:stone",
                 "  -> Direction: UP",
                 "  -> Allowed Placement:",
                 "    -> Matching Blocks:",
@@ -102,7 +105,10 @@ public class FeatureConfigurationTooltipTest {
     public void testBlockPileConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getBlockPileConfigurationTooltip(UTILS, new BlockPileConfiguration(BlockStateProvider.simple(Blocks.SAND))).build(), List.of(
                 "Block Pile:",
-                "  -> StateProvider:"
+                "  -> StateProvider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:sand"
         ));
     }
 
@@ -152,6 +158,7 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Disk:",
                 "  -> StateProvider:",
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider]",
                 "  -> Target:",
                 "    -> Solid:",
                 "      -> Offset: [0,0,0]",
@@ -182,8 +189,12 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Max Height Diff: 1",
                 "  -> Height Deviation: 2",
                 "  -> Layer Thickness: 4",
-                "  -> Density: [net.minecraft.util.valueproviders.ConstantFloat]",
-                "  -> Wetness: [net.minecraft.util.valueproviders.ConstantFloat]",
+                "  -> Density: %s",
+                "    -> Auto-detected: minecraft:constant",
+                "      -> 0.7",
+                "  -> Wetness: %s",
+                "    -> Auto-detected: minecraft:constant",
+                "      -> 0.5",
                 "  -> Edge Chance: 0.2",
                 "  -> Chance Radius: 3",
                 "  -> Height Bias Radius: 4"
@@ -232,10 +243,25 @@ public class FeatureConfigurationTooltipTest {
                 "Geode:",
                 "  -> Geode Block Settings:",
                 "    -> Filling Provider:",
+                "      -> Auto-detected: minecraft:simple_state_provider",
+                "        -> state:",
+                "          -> minecraft:air",
                 "    -> Inner Layer Provider:",
+                "      -> Auto-detected: minecraft:simple_state_provider",
+                "        -> state:",
+                "          -> minecraft:amethyst_block",
                 "    -> Alternate Inner Layer Provider:",
+                "      -> Auto-detected: minecraft:simple_state_provider",
+                "        -> state:",
+                "          -> minecraft:budding_amethyst",
                 "    -> Middle Layer Provider:",
+                "      -> Auto-detected: minecraft:simple_state_provider",
+                "        -> state:",
+                "          -> minecraft:calcite",
                 "    -> Outer Layer Provider:",
+                "      -> Auto-detected: minecraft:simple_state_provider",
+                "        -> state:",
+                "          -> minecraft:smooth_basalt",
                 "    -> Inner Placements:",
                 "      -> Block: Amethyst Cluster",
                 "      -> Properties:",
@@ -274,7 +300,27 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Huge Mushroom Feature:",
                 "  -> Cap Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> down:",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "        -> minecraft:red_mushroom_block",
                 "  -> Stem Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> down:",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "          -> true",
+                "        -> minecraft:mushroom_stem",
                 "  -> Foliage Radius: 2"
         ));
     }
@@ -295,11 +341,19 @@ public class FeatureConfigurationTooltipTest {
                 "Large Dripstone:",
                 "  -> Search Range: 30",
                 "  -> Column Radius: 6",
-                "  -> Height Scale: [net.minecraft.util.valueproviders.ConstantFloat]",
+                "  -> Height Scale: %s",
+                "    -> Auto-detected: minecraft:constant",
+                "      -> 4.0",
                 "  -> Radius To Height Ratio: 0.4",
-                "  -> Stalactite Bluntness: [net.minecraft.util.valueproviders.ConstantFloat]",
-                "  -> Stalagmite Bluntness: [net.minecraft.util.valueproviders.ConstantFloat]",
-                "  -> Wind Speed: [net.minecraft.util.valueproviders.ConstantFloat]",
+                "  -> Stalactite Bluntness: %s",
+                "    -> Auto-detected: minecraft:constant",
+                "      -> 1.0",
+                "  -> Stalagmite Bluntness: %s",
+                "    -> Auto-detected: minecraft:constant",
+                "      -> 1.0",
+                "  -> Wind Speed: %s",
+                "    -> Auto-detected: minecraft:constant",
+                "      -> 0.6",
                 "  -> Min Radius For Wind: 8",
                 "  -> Min Bluntness For Wind: 1.0"
         ));
@@ -382,7 +436,9 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getRandomBooleanFeatureConfigurationTooltip(UTILS, new RandomBooleanFeatureConfiguration(PLACED_FEATURE, PLACED_FEATURE)).build(), List.of(
                 "Random Boolean Feature:",
                 "  -> Feature True:",
-                "  -> Feature False:"
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
+                "  -> Feature False:",
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
         ));
     }
 
@@ -395,8 +451,10 @@ public class FeatureConfigurationTooltipTest {
                 "Random Feature:",
                 "  -> Features:",
                 "    -> Feature:",
+                "      -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
                 "    -> Chance: 0.5",
-                "  -> Default Feature:"
+                "  -> Default Feature:",
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
         ));
     }
 
@@ -407,7 +465,8 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Tries: 64",
                 "  -> XZ Spread: 5",
                 "  -> Y Spread: 2",
-                "  -> Feature:"
+                "  -> Feature:",
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
         ));
     }
 
@@ -418,7 +477,10 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Target States:",
                 "    -> State:",
                 "      -> Block: Dirt",
-                "    -> Target:"
+                "    -> Target:",
+                "      -> Auto-detected: minecraft:blockstate_match",
+                "        -> block_state:",
+                "          -> minecraft:stone"
         ));
     }
 
@@ -457,15 +519,22 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Root System:",
                 "  -> Tree Feature:",
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
                 "  -> Required Vertical Space For Tree: 3",
                 "  -> Root Radius: 2",
                 "  -> Root Replaceable: minecraft:wool",
                 "  -> Root State Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:dirt",
                 "  -> Root Placement Attempts: 20",
                 "  -> Root Column Max Height: 32",
                 "  -> Hanging Root Radius: 2",
                 "  -> Hanging Root Vertical Span: 4",
                 "  -> Hanging Root State Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:dirt",
                 "  -> Hanging Root Placement Attempts: 20",
                 "  -> Allowed Vertical Water For Tree: 2",
                 "  -> Allowed Tree Position:",
@@ -494,7 +563,10 @@ public class FeatureConfigurationTooltipTest {
     public void testSimpleBlockConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getSimpleBlockConfigurationTooltip(UTILS, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.STONE))).build(), List.of(
                 "Simple Block:",
-                "  -> To Place:"
+                "  -> To Place:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:stone"
         ));
     }
 
@@ -537,6 +609,7 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Spring:",
                 "  -> State:",
+                "    -> Not implemented: [net.minecraft.world.level.material.FluidState]",
                 "  -> Requires Block Below: true",
                 "  -> Rock Count: 4",
                 "  -> Hole Count: 1",
@@ -556,11 +629,38 @@ public class FeatureConfigurationTooltipTest {
         ).build()).build(), List.of(
                 "Tree:",
                 "  -> Trunk Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> axis:",
+                "          -> y",
+                "        -> minecraft:oak_log",
                 "  -> Dirt Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:dirt",
                 "  -> Trunk Placer:",
+                "    -> Auto-detected: minecraft:straight_trunk_placer",
+                "      -> base_height: 5",
+                "      -> height_rand_a: 2",
+                "      -> height_rand_b: 0",
                 "  -> Foliage Provider:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> distance:",
+                "          -> false",
+                "          -> false",
+                "          -> 7",
+                "        -> minecraft:oak_leaves",
                 "  -> Foliage Placer:",
+                "    -> Auto-detected: minecraft:blob_foliage_placer",
+                "      -> radius: 2",
+                "      -> offset: 0",
+                "      -> height: 3",
                 "  -> Minimum Size:",
+                "    -> Auto-detected: minecraft:two_layers_feature_size",
+                "      -> limit: 1",
+                "      -> lower_size: 0",
+                "      -> upper_size: 1",
                 "  -> Ignore Vines: false",
                 "  -> Force Dirt: false"
         ));
@@ -603,7 +703,13 @@ public class FeatureConfigurationTooltipTest {
                 "Vegetation Patch:",
                 "  -> Replaceable: minecraft:wool",
                 "  -> Ground State:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> snowy:",
+                "          -> false",
+                "        -> minecraft:podzol",
                 "  -> Vegetation Feature:",
+                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
                 "  -> Surface: FLOOR",
                 "  -> Depth: 3",
                 "  -> Extra Bottom Block Chance: 0.5",

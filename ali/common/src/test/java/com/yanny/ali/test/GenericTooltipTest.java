@@ -145,7 +145,7 @@ public class GenericTooltipTest {
                 .forSlot(EquipmentSlot.CHEST)
                 .forSlot(EquipmentSlot.LEGS)
                 .forSlot(EquipmentSlot.FEET)
-                .build()).build(Lang.Branch.MODIFIER), List.of(
+                .build()).build(), List.of(
                 "Modifier:",
                 "  -> Name: armor",
                 "  -> Attribute: minecraft:generic.armor",

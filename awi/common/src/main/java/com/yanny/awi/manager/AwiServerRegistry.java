@@ -10,11 +10,17 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.MissingTooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -38,6 +44,13 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, Object, TooltipBuilder>> valueTooltips = registerClassKeyed("value tooltips", true, ClassKeyedMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, HeightProvider, TooltipBuilder>> heightProviderTooltips = registerClassKeyed("height provider tooltips", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockPredicate, TooltipBuilder>> blockPredicateTooltips = registerClassKeyed("block predicate tooltips", true, HashMap::new, BuiltInRegistries.BLOCK_PREDICATE_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, TooltipBuilder>> blockStateProviderTooltips = registerClassKeyed("block state provider tooltips", true, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, TooltipBuilder>> treeDecoratorTooltips = registerClassKeyed("tree decorator tooltips", true, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureSize, TooltipBuilder>> featureSizeTooltips = registerClassKeyed("feature size tooltips", true, HashMap::new, BuiltInRegistries.FEATURE_SIZE_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, TooltipBuilder>> rootPlacerTooltips = registerClassKeyed("root placer tooltips", true, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FoliagePlacer, TooltipBuilder>> foliagePlacerTooltips = registerClassKeyed("foliage placer tooltips", true, HashMap::new, BuiltInRegistries.FOLIAGE_PLACER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, BuiltInRegistries.TRUNK_PLACER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FloatProvider, TooltipBuilder>> floatProviderTooltips = registerClassKeyed("float provider tooltips", true, HashMap::new, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -89,6 +102,48 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     public <T extends BlockPredicate> void registerBlockPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         blockPredicateTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends BlockStateProvider> void registerBlockStateProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        blockStateProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends TreeDecorator> void registerTreeDecoratorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        treeDecoratorTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends FeatureSize> void registerFeatureSizeTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        featureSizeTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends RootPlacer> void registerRootPlacerTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        rootPlacerTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends FoliagePlacer> void registerFoliagePlacerTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        foliagePlacerTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends TrunkPlacer> void registerTrunkPlacerTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        trunkPlacerTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends FloatProvider> void registerFloatProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        floatProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -154,6 +209,62 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
         return blockPredicateTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> MissingTooltipUtils.getMissingBlockPredicateTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends BlockStateProvider> TooltipBuilder getBlockStateProviderTooltip(IServerUtils utils, T entry) {
+        return blockStateProviderTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingBlockStateProviderTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends TreeDecorator> TooltipBuilder getTreeDecoratorTooltip(IServerUtils utils, T entry) {
+        return treeDecoratorTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingTreeDecoratorTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends FeatureSize> TooltipBuilder getFeatureSizeTooltip(IServerUtils utils, T entry) {
+        return featureSizeTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingFeatureSizeTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends RootPlacer> TooltipBuilder getRootPlacerTooltip(IServerUtils utils, T entry) {
+        return rootPlacerTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingRootPlacerTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends FoliagePlacer> TooltipBuilder getFoliagePlacerTooltip(IServerUtils utils, T entry) {
+        return foliagePlacerTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingFoliagePlacerTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends TrunkPlacer> TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, T entry) {
+        return trunkPlacerTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingTrunkPlacerTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry) {
+        return floatProviderTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingFloatProviderTooltip(utils, entry));
     }
 
     @NotNull

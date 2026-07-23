@@ -1,6 +1,5 @@
 package com.yanny.ali.test;
 
-import com.yanny.aci.language.CoreLang;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.plugin.server.LootConditionTypes;
 import com.yanny.ali.plugin.server.LootFunctionTypes;
@@ -71,7 +70,7 @@ public class ServerUtilsTest {
                 "  -> Item: minecraft:emerald",
                 "  -> Count: 1"
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }

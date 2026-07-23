@@ -4,10 +4,17 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.valueproviders.FloatProviderType;
 import net.minecraft.util.valueproviders.IntProviderType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSizeType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
@@ -66,5 +73,40 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getFeatureTypeTooltip(IServerUtils utils, Feature<?> feature) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE, feature);
+    }
+
+    @NotNull
+    public static TooltipBuilder getBlockStateProviderTooltip(IServerUtils utils, BlockStateProviderType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getTreeDecoratorTooltip(IServerUtils utils, TreeDecoratorType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.TREE_DECORATOR_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFeatureSizeTooltip(IServerUtils utils, FeatureSizeType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FEATURE_SIZE_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRootPlacerTooltip(IServerUtils utils, RootPlacerType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.ROOT_PLACER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFoliagePlacerTooltip(IServerUtils utils, FoliagePlacerType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FOLIAGE_PLACER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, TrunkPlacerType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.TRUNK_PLACER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProviderType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLOAT_PROVIDER_TYPE, type);
     }
 }

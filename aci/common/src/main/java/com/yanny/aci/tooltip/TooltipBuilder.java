@@ -163,6 +163,10 @@ public class TooltipBuilder {
     }
 
     public TooltipNode build(IMultiKey mk) {
+        if (this.hasKey()) {
+            return TooltipBuilder.branch((b) -> b.add(this)).key(mk).build();
+        }
+
         return this.key(mk).build();
     }
 

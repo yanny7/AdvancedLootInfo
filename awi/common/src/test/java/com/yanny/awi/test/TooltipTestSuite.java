@@ -12,6 +12,7 @@ import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.server.level.ServerLevel;
@@ -22,11 +23,17 @@ import net.minecraft.server.packs.resources.ReloadInstance;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Unit;
+import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
@@ -55,6 +62,7 @@ import java.util.concurrent.ExecutionException;
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
+    public static HolderLookup.Provider LOOKUP;
 
     private static Set<String> UNUSED;
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -68,6 +76,7 @@ public class TooltipTestSuite {
         Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
 
         Language.inject(pair.getA());
+        LOOKUP = VanillaRegistries.createLookup();
         UNUSED = pair.getB();
 
         PluginManager.getInstance().registerCommonEvent();
@@ -86,7 +95,7 @@ public class TooltipTestSuite {
 
             @Override
             public @NotNull HolderLookup.Provider lookupProvider() {
-                return PluginManager.getInstance().serverRegistry.lookupProvider();
+                return LOOKUP;
             }
 
             @Override
@@ -133,6 +142,41 @@ public class TooltipTestSuite {
             @Override
             public @NotNull <T extends BlockPredicate> TooltipBuilder getBlockPredicateTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getBlockPredicateTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends BlockStateProvider> TooltipBuilder getBlockStateProviderTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getBlockStateProviderTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends TreeDecorator> TooltipBuilder getTreeDecoratorTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getTreeDecoratorTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends FeatureSize> TooltipBuilder getFeatureSizeTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getFeatureSizeTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends RootPlacer> TooltipBuilder getRootPlacerTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getRootPlacerTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends FoliagePlacer> TooltipBuilder getFoliagePlacerTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getFoliagePlacerTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends TrunkPlacer> TooltipBuilder getTrunkPlacerTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getTrunkPlacerTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getFloatProviderTooltip(utils, entry);
             }
 
             @Override
