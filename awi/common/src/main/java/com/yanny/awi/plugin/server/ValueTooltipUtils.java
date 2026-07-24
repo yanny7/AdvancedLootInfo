@@ -13,18 +13,25 @@ import net.minecraft.world.level.levelgen.GeodeBlockSettings;
 import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.SpikeFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
 public class ValueTooltipUtils {
@@ -84,6 +91,16 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, PlacementModifier value) {
+        return utils.getPlacementModifierTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration value) {
+        return utils.getFeatureTooltip(utils, value);
+    }
+
+    @NotNull
     public static TooltipBuilder getTargetBlockStateTooltip(IServerUtils utils, OreConfiguration.TargetBlockState value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.state).build(Lang.Branch.STATE));
@@ -95,6 +112,19 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getBlockStateTooltip(IServerUtils utils, BlockState value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.getBlock()).build(Lang.Value.BLOCK));
+
+            TooltipBuilder array = TooltipBuilder.array((c) -> {
+                value.getValues().forEach((p, v) -> c.add(TooltipBuilder.keyValue(p.getName(), v.toString())));
+            });
+
+            b.add(array.build(Lang.Branch.PROPERTIES));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getFluidStateTooltip(IServerUtils utils, FluidState value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.getType()).build(Lang.Value.FLUID));
 
             TooltipBuilder array = TooltipBuilder.array((c) -> {
                 value.getValues().forEach((p, v) -> c.add(TooltipBuilder.keyValue(p.getName(), v.toString())));
@@ -180,5 +210,42 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.getHeight()).build(Lang.Value.HEIGHT));
             b.add(utils.getValueTooltip(utils, value.isGuarded()).build(Lang.Value.IS_GUARDED));
         });
+    }
+
+    @NotNull
+    public static TooltipBuilder getRuleBasedBlockStateProviderTooltip(IServerUtils utils, RuleBasedBlockStateProvider value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.fallback()).build(Lang.Branch.FALLBACK));
+            b.add(utils.getValueTooltip(utils, value.rules()).build(Lang.Branch.RULES));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getPlacedFeatureTooltip(IServerUtils utils, PlacedFeature value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.feature()).build(Lang.Branch.FEATURE));
+            b.add(utils.getValueTooltip(utils, value.placement()).build(Lang.Branch.PLACEMENT));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getConfiguredFeatureTooltip(IServerUtils utils, ConfiguredFeature<?, ?> value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.feature()).build(Lang.Value.FEATURE));
+            b.add(utils.getValueTooltip(utils, value.config()).build(Lang.Branch.CONFIG));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getRuleBasedBlockStateProviderRuleTooltip(IServerUtils utils, RuleBasedBlockStateProvider.Rule value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.ifTrue()).build(Lang.Branch.IF_TRUE));
+            b.add(utils.getValueTooltip(utils, value.then()).build(Lang.Branch.THEN));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getStructureProcessorListTooltip(IServerUtils utils, StructureProcessorList value) {
+        return utils.getValueTooltip(utils, value.list());
     }
 }

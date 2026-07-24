@@ -428,9 +428,7 @@ public class NodeUtils {
     @NotNull
     public static LayerHolder getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
         LayerHolder discoveredBlocks = new LayerHolder();
-        long start = System.currentTimeMillis();
         int round = 0;
-        int walks = 0;
         int stableRounds = 0;
 
         try {
@@ -451,7 +449,6 @@ public class NodeUtils {
                     for (int h = dimCtx.maxBuildHeight - 1 - heightPhase; h >= dimCtx.minBuildHeight; h -= SURFACE_HEIGHT_STEP) {
                         // Normal surface: solid stone from the world bottom up to h.
                         walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, dimCtx.minBuildHeight, true);
-                        walks++;
 
                         // Overhang surfaces: thin floating slabs so ceiling-gated rules fire. Dry slabs cover land
                         // overhangs (badlands red_sandstone); below sea level a water-covered slab is also probed so
@@ -464,11 +461,9 @@ public class NodeUtils {
                             }
 
                             walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, false);
-                            walks++;
 
                             if (h < dimCtx.seaLevel) {
                                 walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, true);
-                                walks++;
                             }
                         }
                     }
@@ -485,10 +480,6 @@ public class NodeUtils {
             LOGGER.warn("Surface scan for biome {} hit the {}-round cap; coverage may be incomplete",
                     targetBiome.unwrapKey().map(Object::toString).orElse("?"), MAX_ROUNDS);
         }
-
-        LOGGER.info("   scan {}: {} rounds, {} walks, {} blocks in {}ms",
-                targetBiome.unwrapKey().map(k -> k.location().toString()).orElse("?"),
-                round, walks, discoveredBlocks.blocks.size(), System.currentTimeMillis() - start);
 
         return discoveredBlocks;
     }

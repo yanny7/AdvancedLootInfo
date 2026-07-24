@@ -3,6 +3,9 @@ package com.yanny.awi.plugin.server;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
+import net.minecraft.world.level.levelgen.feature.FossilFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
+import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -295,12 +298,12 @@ public class FeatureConfigurationTooltipUtils {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.trunkProvider).build(Lang.Branch.TRUNK_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.dirtProvider).build(Lang.Branch.DIRT_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.trunkPlacer).build(Lang.Branch.TRUNK_PLACER)); //TODO REGISTRY!!!
+            b.add(utils.getValueTooltip(utils, configuration.trunkPlacer).build(Lang.Branch.TRUNK_PLACER));
             b.add(utils.getValueTooltip(utils, configuration.foliageProvider).build(Lang.Branch.FOLIAGE_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.foliagePlacer).build(Lang.Branch.FOLIAGE_PLACER)); //TODO REGISTRY!!!
-            b.add(utils.getValueTooltip(utils, configuration.rootPlacer).build(Lang.Branch.ROOT_PLACER)); //TODO REGISTRY!!!
-            b.add(utils.getValueTooltip(utils, configuration.minimumSize).build(Lang.Branch.MINIMUM_SIZE)); //TODO REGISTRY!!!
-            b.add(utils.getValueTooltip(utils, configuration.decorators).build(Lang.Branch.DECORATORS)); //TODO REGISTRY!!!
+            b.add(utils.getValueTooltip(utils, configuration.foliagePlacer).build(Lang.Branch.FOLIAGE_PLACER));
+            b.add(utils.getValueTooltip(utils, configuration.rootPlacer).build(Lang.Branch.ROOT_PLACER));
+            b.add(utils.getValueTooltip(utils, configuration.minimumSize).build(Lang.Branch.MINIMUM_SIZE));
+            b.add(utils.getValueTooltip(utils, configuration.decorators).build(Lang.Branch.DECORATORS));
             b.add(utils.getValueTooltip(utils, configuration.ignoreVines).build(Lang.Value.IGNORE_VINES));
             b.add(utils.getValueTooltip(utils, configuration.forceDirt).build(Lang.Value.FORCE_DIRT));
         }, Lang.FeatureConfiguration.TREE);
@@ -328,7 +331,7 @@ public class FeatureConfigurationTooltipUtils {
     public static TooltipBuilder getVegetationPatchConfigurationTooltip(IServerUtils utils, VegetationPatchConfiguration configuration) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.replaceable).build(Lang.Value.REPLACEABLE));
-            b.add(utils.getValueTooltip(utils, configuration.groundState).build(Lang.Branch.GROUND_STATE)); //TODO Registry
+            b.add(utils.getValueTooltip(utils, configuration.groundState).build(Lang.Branch.GROUND_STATE));
             b.add(utils.getValueTooltip(utils, configuration.vegetationFeature).build(Lang.Branch.VEGETATION_FEATURE));
             b.add(utils.getValueTooltip(utils, configuration.surface).build(Lang.Value.SURFACE));
             b.add(utils.getValueTooltip(utils, configuration.depth).build(Lang.Value.DEPTH));
@@ -338,5 +341,36 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.xzRadius).build(Lang.Value.XZ_RADIUS));
             b.add(utils.getValueTooltip(utils, configuration.extraEdgeColumnChance).build(Lang.Value.EXTRA_EDGE_COLUMN_CHANCE));
         }, Lang.FeatureConfiguration.VEGETATION_PATCH);
+    }
+
+    @NotNull
+    public static TooltipBuilder getLakeConfigurationTooltip(IServerUtils utils, LakeFeature.Configuration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.fluid()).build(Lang.Branch.FLUID));
+            b.add(utils.getValueTooltip(utils, configuration.barrier()).build(Lang.Branch.BARRIER));
+        }, Lang.FeatureConfiguration.LAKE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getFossilFeatureConfigurationTooltip(IServerUtils utils, FossilFeatureConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.fossilStructures).build(Lang.Branch.FOSSIL_STRUCTURES));
+            b.add(utils.getValueTooltip(utils, configuration.overlayStructures).build(Lang.Branch.OVERLAY_STRUCTURES));
+            b.add(utils.getValueTooltip(utils, configuration.fossilProcessors).build(Lang.Branch.FOSSIL_PROCESSORS));
+            b.add(utils.getValueTooltip(utils, configuration.overlayProcessors).build(Lang.Branch.OVERLAY_PROCESSORS));
+            b.add(utils.getValueTooltip(utils, configuration.maxEmptyCornersAllowed).build(Lang.Value.MAX_EMPTY_CORNERS_ALLOWED));
+        }, Lang.FeatureConfiguration.FOSSIL_FEATURE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getHugeFungusConfigurationTooltip(IServerUtils utils, HugeFungusConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.validBaseState).build(Lang.Branch.VALID_BASE_STATE));
+            b.add(utils.getValueTooltip(utils, configuration.stemState).build(Lang.Branch.STEM_STATE));
+            b.add(utils.getValueTooltip(utils, configuration.hatState).build(Lang.Branch.HAT_STATE));
+            b.add(utils.getValueTooltip(utils, configuration.decorState).build(Lang.Branch.DECOR_STATE));
+            b.add(utils.getValueTooltip(utils, configuration.replaceableBlocks).build(Lang.Branch.REPLACEABLE_BLOCKS));
+            b.add(utils.getValueTooltip(utils, configuration.planted).build(Lang.Value.PLANTED));
+        }, Lang.FeatureConfiguration.HUGE_FUNGUS);
     }
 }

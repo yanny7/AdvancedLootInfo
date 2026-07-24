@@ -16,10 +16,7 @@ import net.minecraft.world.level.levelgen.GeodeBlockSettings;
 import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.blockpredicates.*;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.LakeFeature;
-import net.minecraft.world.level.levelgen.feature.SpikeFeature;
-import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.*;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSizeType;
@@ -37,7 +34,9 @@ import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
 @AwiEntrypoint
@@ -85,8 +84,11 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(FoliagePlacer.class, ValueTooltipUtils::getFoliagePlacerTooltip);
         registry.registerValueTooltip(TrunkPlacer.class, ValueTooltipUtils::getTrunkPlacerTooltip);
         registry.registerValueTooltip(FloatProvider.class, ValueTooltipUtils::getFloatProviderTooltip);
+        registry.registerValueTooltip(PlacementModifier.class, ValueTooltipUtils::getPlacementModifierTooltip);
+        registry.registerValueTooltip(FeatureConfiguration.class, ValueTooltipUtils::getFeatureConfigurationTooltip);
         registry.registerValueTooltip(OreConfiguration.TargetBlockState.class, ValueTooltipUtils::getTargetBlockStateTooltip);
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
+        registry.registerValueTooltip(FluidState.class, ValueTooltipUtils::getFluidStateTooltip);
         registry.registerValueTooltip(Vec3i.class, ValueTooltipUtils::getVec3iTooltip);
         registry.registerValueTooltip(WeightedEntry.Wrapper.class, ValueTooltipUtils::getWeightedEntryWrapperTooltip);
         registry.registerValueTooltip(Weight.class, ValueTooltipUtils::getWeightTooltip);
@@ -96,6 +98,11 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(GeodeCrackSettings.class, ValueTooltipUtils::getGeodeCrackSettingsTooltip);
         registry.registerValueTooltip(WeightedPlacedFeature.class, ValueTooltipUtils::getWeightedPlacedFeatureTooltip);
         registry.registerValueTooltip(SpikeFeature.EndSpike.class, ValueTooltipUtils::getEndSpikeTooltip);
+        registry.registerValueTooltip(RuleBasedBlockStateProvider.class, ValueTooltipUtils::getRuleBasedBlockStateProviderTooltip);
+        registry.registerValueTooltip(PlacedFeature.class, ValueTooltipUtils::getPlacedFeatureTooltip);
+        registry.registerValueTooltip(ConfiguredFeature.class, ValueTooltipUtils::getConfiguredFeatureTooltip);
+        registry.registerValueTooltip(RuleBasedBlockStateProvider.Rule.class, ValueTooltipUtils::getRuleBasedBlockStateProviderRuleTooltip);
+        registry.registerValueTooltip(StructureProcessorList.class, ValueTooltipUtils::getStructureProcessorListTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
@@ -147,6 +154,9 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(TwistingVinesConfig.class, FeatureConfigurationTooltipUtils::getTwistingVinesConfigurationTooltip);
         registry.registerFeatureTooltip(UnderwaterMagmaConfiguration.class, FeatureConfigurationTooltipUtils::getUnderwaterMagmaConfigurationTooltip);
         registry.registerFeatureTooltip(VegetationPatchConfiguration.class, FeatureConfigurationTooltipUtils::getVegetationPatchConfigurationTooltip);
+        registry.registerFeatureTooltip(LakeFeature.Configuration.class, FeatureConfigurationTooltipUtils::getLakeConfigurationTooltip);
+        registry.registerFeatureTooltip(FossilFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getFossilFeatureConfigurationTooltip);
+        registry.registerFeatureTooltip(HugeFungusConfiguration.class, FeatureConfigurationTooltipUtils::getHugeFungusConfigurationTooltip);
 
         registry.registerIntProviderTooltip(ConstantInt.class, IntProviderTooltipUtils::getConstantIntTooltip);
         registry.registerIntProviderTooltip(UniformInt.class, IntProviderTooltipUtils::getUniformIntTooltip);

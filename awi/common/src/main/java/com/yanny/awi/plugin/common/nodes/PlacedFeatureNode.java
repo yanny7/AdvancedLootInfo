@@ -38,7 +38,7 @@ public class PlacedFeatureNode extends ListNode {
         tooltip = TooltipBuilder.branch((b) -> {
             b.add(TooltipBuilder.array((c) -> {
                 c.add(utils.getValueTooltip(utils, configuredFeature.feature()).build(Lang.Value.FEATURE));
-                c.add(utils.getFeatureTooltip(utils, featureConfiguration));
+                c.add(utils.getValueTooltip(utils, featureConfiguration));
             }, Lang.Branch.CONFIGURED_FEATURE));
 
             b.add(TooltipBuilder.array((c) -> {

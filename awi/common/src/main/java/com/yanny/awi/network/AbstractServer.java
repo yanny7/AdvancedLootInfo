@@ -41,8 +41,6 @@ public abstract class AbstractServer {
     public void readWorldgenInfo(ServerLevel level) {
         LOGGER.info("Started reading worldgen info");
 
-        long startTime = System.currentTimeMillis();
-
         AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
@@ -51,13 +49,10 @@ public abstract class AbstractServer {
         for (LevelStem levelStem : levelStemRegistry) {
             ResourceLocation location = levelStemRegistry.getKey(levelStem);
 
-            LOGGER.info("Processing dimension: {}", location);
             worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
         }
 
         worldgenNodes = removeEmptyNodes(worldgenNodes);
-
-        LOGGER.info("Processing worldgen info took {}ms", System.currentTimeMillis() - startTime);
 
         ByteBuf rawBuf = Unpooled.buffer();
         FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);

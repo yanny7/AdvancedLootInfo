@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -15,10 +16,7 @@ import net.minecraft.world.level.levelgen.GeodeBlockSettings;
 import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.SpikeFeature;
-import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
+import net.minecraft.world.level.levelgen.feature.*;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
@@ -28,6 +26,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.material.Fluids;
 import org.junit.jupiter.api.Test;
 
@@ -158,7 +157,10 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Disk:",
                 "  -> StateProvider:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider]",
+                "    -> Fallback:",
+                "      -> Auto-detected: minecraft:simple_state_provider",
+                "        -> state:",
+                "          -> minecraft:sand",
                 "  -> Target:",
                 "    -> Solid:",
                 "      -> Offset: [0,0,0]",
@@ -387,8 +389,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Can Place On Ceiling: false",
                 "  -> Can Place On Wall: true",
                 "  -> Chance Of Spreading: 0.3",
-                "  -> Can Be Placed On:",
-                "    -> Stone"
+                "  -> Can be Placed On: Stone"
         ));
     }
 
@@ -436,9 +437,15 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getRandomBooleanFeatureConfigurationTooltip(UTILS, new RandomBooleanFeatureConfiguration(PLACED_FEATURE, PLACED_FEATURE)).build(), List.of(
                 "Random Boolean Feature:",
                 "  -> Feature True:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:",
                 "  -> Feature False:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:"
         ));
     }
 
@@ -451,10 +458,16 @@ public class FeatureConfigurationTooltipTest {
                 "Random Feature:",
                 "  -> Features:",
                 "    -> Feature:",
-                "      -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
+                "      -> Feature:",
+                "        -> Feature: minecraft:no_op",
+                "        -> Config:",
+                "          -> None Feature:",
                 "    -> Chance: 0.5",
                 "  -> Default Feature:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:"
         ));
     }
 
@@ -466,7 +479,10 @@ public class FeatureConfigurationTooltipTest {
                 "  -> XZ Spread: 5",
                 "  -> Y Spread: 2",
                 "  -> Feature:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:"
         ));
     }
 
@@ -519,7 +535,10 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Root System:",
                 "  -> Tree Feature:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:",
                 "  -> Required Vertical Space For Tree: 3",
                 "  -> Root Radius: 2",
                 "  -> Root Replaceable: minecraft:wool",
@@ -575,7 +594,10 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getSimpleRandomFeatureConfigurationTooltip(UTILS, new SimpleRandomFeatureConfiguration(HolderSet.direct(PLACED_FEATURE))).build(), List.of(
                 "Simple Random Features:",
                 "  -> Features:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]"
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:"
         ));
     }
 
@@ -609,12 +631,13 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Spring:",
                 "  -> State:",
-                "    -> Not implemented: [net.minecraft.world.level.material.FluidState]",
+                "    -> Fluid: minecraft:water",
+                "    -> Properties:",
+                "      -> falling: true",
                 "  -> Requires Block Below: true",
                 "  -> Rock Count: 4",
                 "  -> Hole Count: 1",
-                "  -> Valid Blocks:",
-                "    -> Stone"
+                "  -> Valid Block: Stone"
         ));
     }
 
@@ -709,7 +732,10 @@ public class FeatureConfigurationTooltipTest {
                 "          -> false",
                 "        -> minecraft:podzol",
                 "  -> Vegetation Feature:",
-                "    -> Not implemented: [net.minecraft.world.level.levelgen.placement.PlacedFeature]",
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:",
                 "  -> Surface: FLOOR",
                 "  -> Depth: 3",
                 "  -> Extra Bottom Block Chance: 0.5",
@@ -717,6 +743,66 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Vegetation Chance: 0.3",
                 "  -> XZ Radius: 2",
                 "  -> Extra Edge Column Chance: 0.1"
+        ));
+    }
+
+    @Test
+    public void testLakeConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getLakeConfigurationTooltip(UTILS, new LakeFeature.Configuration(
+                BlockStateProvider.simple(Blocks.STONE),
+                BlockStateProvider.simple(Blocks.DIRT)
+        )).build(), List.of(
+                "Lake:",
+                "  -> Fluid:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:stone",
+                "  -> Barrier:",
+                "    -> Auto-detected: minecraft:simple_state_provider",
+                "      -> state:",
+                "        -> minecraft:dirt"
+        ));
+    }
+
+    @Test
+    public void testFossilFeatureConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getFossilFeatureConfigurationTooltip(UTILS, new FossilFeatureConfiguration(
+                List.of(new ResourceLocation("minecraft", "fossil/spine_1")),
+                List.of(new ResourceLocation("minecraft", "fossil_spine_1")),
+                Holder.direct(new StructureProcessorList(List.of())),
+                Holder.direct(new StructureProcessorList(List.of())),
+                3
+        )).build(), List.of(
+                "Fossil Feature:",
+                "  -> Fossil Structure: minecraft:fossil/spine_1",
+                "  -> Overlay Structure: minecraft:fossil_spine_1",
+                "  -> Max Empty Corners Allowed: 3"
+        ));
+    }
+
+    @Test
+    public void testHugeFungusConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getHugeFungusConfigurationTooltip(UTILS, new HugeFungusConfiguration(
+                Blocks.NETHERRACK.defaultBlockState(),
+                Blocks.CRIMSON_NYLIUM.defaultBlockState(),
+                Blocks.SHROOMLIGHT.defaultBlockState(),
+                Blocks.WARPED_WART_BLOCK.defaultBlockState(),
+                BlockPredicate.solid(),
+                true
+        )).build(), List.of(
+                "Huge Fungus:",
+                "  -> Valid Base State:",
+                "    -> Block: Netherrack",
+                "  -> Stem State:",
+                "    -> Block: Crimson Nylium",
+                "  -> Hat State:",
+                "    -> Block: Shroomlight",
+                "  -> Decor State:",
+                "    -> Block: Warped Wart Block",
+                "  -> Replaceable Blocks:",
+                "    -> Solid:",
+                "      -> Offset: [0,0,0]",
+                "  -> Planted: true"
         ));
     }
 }
