@@ -155,7 +155,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getBlockColumnConfigurationLayerTooltip(IServerUtils utils, BlockColumnConfiguration.Layer value) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.height()).build(Lang.Value.HEIGHT));
+            b.add(utils.getValueTooltip(utils, value.height()).build(Lang.Branch.HEIGHT));
             b.add(utils.getValueTooltip(utils, value.state()).build(Lang.Branch.STATE));
         }).key(Lang.Branch.ENTRY);
     }
@@ -206,8 +206,8 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.getCenterX()).build(Lang.Value.CENTER_X));
             b.add(utils.getValueTooltip(utils, value.getCenterZ()).build(Lang.Value.CENTER_Z));
-            b.add(utils.getValueTooltip(utils, value.getRadius()).build(Lang.Value.RADIUS));
-            b.add(utils.getValueTooltip(utils, value.getHeight()).build(Lang.Value.HEIGHT));
+            b.add(utils.getValueTooltip(utils, value.getRadius()).build(Lang.Branch.RADIUS));
+            b.add(utils.getValueTooltip(utils, value.getHeight()).build(Lang.Branch.HEIGHT));
             b.add(utils.getValueTooltip(utils, value.isGuarded()).build(Lang.Value.IS_GUARDED));
         });
     }

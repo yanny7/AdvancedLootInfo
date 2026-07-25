@@ -58,7 +58,8 @@ import java.util.concurrent.ExecutionException;
         FeatureConfigurationTooltipTest.class,
         PlacementModifierTooltipTest.class,
         HeightProviderTooltipTest.class,
-        BlockPredicateTooltipTest.class
+        BlockPredicateTooltipTest.class,
+        IntProviderTooltipTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;

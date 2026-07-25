@@ -45,11 +45,15 @@ public class FeatureConfigurationTooltipTest {
     public void testCountConfiguration() {
         assertTooltip(FeatureConfigurationTooltipUtils.getCountConfigurationTooltip(UTILS, new CountConfiguration(5)).build(), List.of(
                 "Count:",
-                "  -> Count: 5"
+                "  -> Count:",
+                "    -> Constant:",
+                "      -> Value: 5"
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getCountConfigurationTooltip(UTILS, new CountConfiguration(UniformInt.of(1, 2))).build(), List.of(
                 "Count:",
-                "  -> Count: 1-2 (Uniform)"
+                "  -> Count:",
+                "    -> Uniform:",
+                "      -> Range: 1-2"
         ));
     }
 
@@ -86,7 +90,9 @@ public class FeatureConfigurationTooltipTest {
                 "Block Column:",
                 "  -> Layers:",
                 "    -> Entry:",
-                "      -> Height: 3",
+                "      -> Height:",
+                "        -> Constant:",
+                "          -> Value: 3",
                 "      -> State:",
                 "        -> Auto-detected: minecraft:simple_state_provider",
                 "          -> state:",
@@ -124,8 +130,12 @@ public class FeatureConfigurationTooltipTest {
     public void testColumnFeatureConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getColumnFeatureConfigurationTooltip(UTILS, new ColumnFeatureConfiguration(ConstantInt.of(1), ConstantInt.of(4))).build(), List.of(
                 "Column Feature:",
-                "  -> Reach: 1",
-                "  -> Height: 4"
+                "  -> Reach:",
+                "    -> Constant:",
+                "      -> Value: 1",
+                "  -> Height:",
+                "    -> Constant:",
+                "      -> Value: 4"
         ));
     }
 
@@ -142,8 +152,12 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Magma Block",
                 "  -> Rim:",
                 "    -> Block: Obsidian",
-                "  -> Size: 3",
-                "  -> Rim Size: 1"
+                "  -> Size:",
+                "    -> Constant:",
+                "      -> Value: 3",
+                "  -> Rim Size:",
+                "    -> Constant:",
+                "      -> Value: 1"
         ));
     }
 
@@ -164,7 +178,9 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Target:",
                 "    -> Solid:",
                 "      -> Offset: [0,0,0]",
-                "  -> Radius: 3",
+                "  -> Radius:",
+                "    -> Constant:",
+                "      -> Value: 3",
                 "  -> Half Height: 2"
         ));
     }
@@ -186,11 +202,17 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Dripstone Cluster:",
                 "  -> Search Range: 10",
-                "  -> Height: 6",
-                "  -> Radius: 3",
+                "  -> Height:",
+                "    -> Constant:",
+                "      -> Value: 6",
+                "  -> Radius:",
+                "    -> Constant:",
+                "      -> Value: 3",
                 "  -> Max Height Diff: 1",
                 "  -> Height Deviation: 2",
-                "  -> Layer Thickness: 4",
+                "  -> Layer Thickness:",
+                "    -> Constant:",
+                "      -> Value: 4",
                 "  -> Density: %s",
                 "    -> Auto-detected: minecraft:constant",
                 "      -> 0.7",
@@ -283,9 +305,15 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Potential Placement Chance: 0.35",
                 "  -> Alternate Layer Chance: 0.0",
                 "  -> Require Alternate Layer: true",
-                "  -> Outer Wall Distance: 5",
-                "  -> Distribution Points: 4",
-                "  -> Point Offset: 2",
+                "  -> Outer Wall Distance:",
+                "    -> Constant:",
+                "      -> Value: 5",
+                "  -> Distribution Points:",
+                "    -> Constant:",
+                "      -> Value: 4",
+                "  -> Point Offset:",
+                "    -> Constant:",
+                "      -> Value: 2",
                 "  -> Min Gen Offset: -16",
                 "  -> Max Gen Offset: 16",
                 "  -> Noise Multiplier: 0.05",
@@ -342,7 +370,9 @@ public class FeatureConfigurationTooltipTest {
         )).build(), List.of(
                 "Large Dripstone:",
                 "  -> Search Range: 30",
-                "  -> Column Radius: 6",
+                "  -> Column Radius:",
+                "    -> Constant:",
+                "      -> Value: 6",
                 "  -> Height Scale: %s",
                 "    -> Auto-detected: minecraft:constant",
                 "      -> 4.0",
@@ -512,7 +542,9 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Stone",
                 "  -> Replace State:",
                 "    -> Block: Dirt",
-                "  -> Radius: 3"
+                "  -> Radius:",
+                "    -> Constant:",
+                "      -> Value: 3"
         ));
     }
 
@@ -573,7 +605,9 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Spread Attempts: 3",
                 "  -> Growth Rounds: 1",
                 "  -> Spread Rounds: 1",
-                "  -> Extra Rare Growths: 2",
+                "  -> Extra Rare Growths:",
+                "    -> Constant:",
+                "      -> Value: 2",
                 "  -> Catalyst Chance: 0.5"
         ));
     }
@@ -737,11 +771,15 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Config:",
                 "        -> None Feature:",
                 "  -> Surface: FLOOR",
-                "  -> Depth: 3",
+                "  -> Depth:",
+                "    -> Constant:",
+                "      -> Value: 3",
                 "  -> Extra Bottom Block Chance: 0.5",
                 "  -> Vertical Range: 5",
                 "  -> Vegetation Chance: 0.3",
-                "  -> XZ Radius: 2",
+                "  -> XZ Radius:",
+                "    -> Constant:",
+                "      -> Value: 2",
                 "  -> Extra Edge Column Chance: 0.1"
         ));
     }

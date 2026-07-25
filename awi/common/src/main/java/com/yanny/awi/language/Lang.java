@@ -110,6 +110,7 @@ public final class Lang {
         DENSITY("density", "Density: %s"),
         DEPTH("depth", "Depth: %s"),
         DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface: %s"),
+        DEVIATION("deviation", "Deviation: %s"),
         DIRECTION("direction", "Direction: %s"),
         DIRECTION_OF_SEARCH("direction_of_search", "Direction Of Search: %s"),
         DISCARD_CHANCE_ON_AIR_EXPOSURE("discard_chance_on_air_exposure", "Discard Chance On Air Exposure: %s"),
@@ -155,6 +156,7 @@ public final class Lang {
         MAX_HEIGHT_DIFF("max_height_diff", "Max Height Diff: %s"),
         MAX_STEPS("max_steps", "Max Steps: %s"),
         MAX_WATER_DEPTH("max_water_depth", "Max Water Depth: %s"),
+        MEAN("mean", "Mean: %s"),
         MIDDLE_LAYER("middle_layer", "Middle Layer: %s"),
         MIN_BLUNTNESS_FOR_WIND("min_bluntness_for_wind", "Min Bluntness For Wind: %s"),
         MIN_GEN_OFFSET("min_gen_offset", "Min Gen Offset: %s"),
@@ -207,6 +209,7 @@ public final class Lang {
         TOTAL_WEIGHT("total_weight", "Total Weight: %s"),
         TRIES("tries", "Tries: %s"),
         VALID_BLOCK("valid_block", "Valid Block: %s"),
+        VALUE("value", "Value: %s"),
         VEGETATION_CHANCE("vegetation_chance", "Vegetation Chance: %s"),
         VERTICAL_RANGE("vertical_range", "Vertical Range: %s"),
         WEIGHT("weight", "Weight: %s"),
@@ -241,15 +244,20 @@ public final class Lang {
         CANNOT_REPLACE("cannot_replace", "Cannot Replace:"),
         CAN_BE_PLACED_ON(Value.CAN_BE_PLACED_ON, "can_be_placed_on", "Can Be Placed On:"),
         CAP_PROVIDER("cap_provider", "Cap Provider:"),
+        COLUMN_RADIUS(Value.COLUMN_RADIUS, "column_radius", "Column Radius:"),
         CONFIG("config", "Config:"),
         CONFIGURED_FEATURE("configured_feature", "Configured Feature:"),
         CONTENTS("contents", "Contents:"),
+        COUNT(Value.COUNT, "count", "Count:"),
         DATA("data", "Data:"),
         DECORATORS("decorators", "Decorators:"),
         DECOR_STATE("decor_state", "Decor State:"),
         DEFAULT_FEATURE("default_feature", "Default Feature:"),
+        DEPTH(Value.DEPTH, "depth", "Depth:"),
         DIRT_PROVIDER("dirt_provider", "Dirt Provider:"),
+        DISTRIBUTION_POINTS(Value.DISTRIBUTION_POINTS, "distribution_points", "Distribution Points:"),
         ENTRY("entry", "Entry:"),
+        EXTRA_RARE_GROWTHS(Value.EXTRA_RARE_GROWTHS, "extra_rare_growths", "Extra Rare Growths:"),
         FALLBACK("fallback", "Fallback:"),
         FEATURE("feature", "Feature:"),
         FEATURES("features", "Features:"),
@@ -268,7 +276,7 @@ public final class Lang {
         GROUND_STATE("ground_state", "Ground State:"),
         HANGING_ROOT_STATE_PROVIDER("hanging_root_state_provider", "Hanging Root State Provider:"),
         HAT_STATE("hat_state", "Hat State:"),
-        HEIGHT("height", "Height:"),
+        HEIGHT(Value.HEIGHT, "height", "Height:"),
         IF_TRUE("if_true", "If True:"),
         INNER_LAYER_PROVIDER("inner_layer_provider", "Inner Layer Provider:"),
         INNER_PLACEMENTS("inner_placements", "Inner Placements:"),
@@ -276,23 +284,31 @@ public final class Lang {
         ITEMS(Value.ITEM, "items", "Items:"),
         LAYERS("layers", "Layers:"),
         LAYERS_AT_Y(Value.LAYER_AT_Y, "layers_at_y", "Layers At Y:"),
+        LAYER_THICKNESS(Value.LAYER_THICKNESS, "layer_thickness", "Layer Thickness:"),
         MAX("max", "Max:"),
         MIDDLE_LAYER_PROVIDER("middle_layer_provider", "Middle Layer Provider:"),
         MIN("min", "Min:"),
         MINIMUM_SIZE("minimum_size", "Minimum Size:"),
         OUTER_LAYER_PROVIDER("outer_layer_provider", "Outer Layer Provider:"),
+        OUTER_WALL_DISTANCE(Value.OUTER_WALL_DISTANCE, "outer_wall_distance", "Outer Wall Distance:"),
         OVERLAY_PROCESSORS("overlay_processors", "Overlay Processors:"),
         OVERLAY_STRUCTURES(Value.OVERLAY_STRUCTURE, "overlay_structures", "Overlay Structures:"),
         PLACEMENT("placement", "Placement:"),
+        POINT_OFFSET(Value.POINT_OFFSET, "point_offset", "Point Offset:"),
         PREDICATE("predicate", "Predicate:"),
         PREDICATES("predicates", "Predicates:"),
         PROPERTIES("properties", "Properties:"),
+        RADIUS(Value.RADIUS, "radius", "Radius:"),
+        REACH(Value.REACH, "reach", "Reach:"),
         REPLACEABLE_BLOCKS("replaceable_blocks", "Replaceable Blocks:"),
         REPLACE_STATE("replace_state", "Replace State:"),
         RIM("rim", "Rim:"),
+        RIM_SIZE(Value.RIM_SIZE, "rim_size", "Rim Size:"),
         ROOT_PLACER("root_placer", "Root Placer:"),
         ROOT_STATE_PROVIDER("root_state_provider", "Root State Provider:"),
         RULES("rules", "Rules:"),
+        SIZE(Value.SIZE, "size", "Size:"),
+        SOURCE("source", "Source:"),
         SPIKES("spikes", "Spikes:"),
         STATE("state", "State:"),
         STATE_PROVIDER("state_provider", "StateProvider:"),
@@ -310,6 +326,7 @@ public final class Lang {
         VALID_BASE_STATE("valid_base_state", "Valid Base State:"),
         VALID_BLOCKS(Value.VALID_BLOCK, "valid_blocks", "Valid Blocks:"),
         VEGETATION_FEATURE("vegetation_feature", "Vegetation Feature:"),
+        XZ_RADIUS(Value.XZ_RADIUS, "xz_radius", "XZ Radius:"),
         ;
 
         private final Translation translation;
@@ -367,6 +384,28 @@ public final class Lang {
 
         PlacementModifier(String k, String e) {
             this.translation = new Translation("awi.property.placement_modifier." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum IntProvider implements ITooltipKey {
+        BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom:"),
+        CLAMPED("clamped", "Clamped:"),
+        CLAMPED_NORMAL("clamped_normal", "Clamped Normal:"),
+        CONSTANT("constant", "Constant:"),
+        UNIFORM("uniform", "Uniform:"),
+        WEIGHTED_LIST("weighted_list", "Weighted List:"),
+        ;
+
+        private final Translation translation;
+
+        IntProvider(String k, String e) {
+            this.translation = new Translation("awi.property.int_provider." + k, e);
         }
 
         @NotNull

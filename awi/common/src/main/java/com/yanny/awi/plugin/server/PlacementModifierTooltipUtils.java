@@ -28,12 +28,12 @@ public class PlacementModifierTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getCountOnEveryLayerPlacementTooltip(IServerUtils utils, CountOnEveryLayerPlacement placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.count).build(Lang.Value.COUNT)), Lang.PlacementModifier.COUNT_ON_EVERY_LAYER);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.count).build(Lang.Branch.COUNT)), Lang.PlacementModifier.COUNT_ON_EVERY_LAYER);
     }
 
     @NotNull
     public static TooltipBuilder getCountPlacementTooltip(IServerUtils utils, CountPlacement placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.count).build(Lang.Value.COUNT)), Lang.PlacementModifier.COUNT_PLACEMENT);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.count).build(Lang.Branch.COUNT)), Lang.PlacementModifier.COUNT_PLACEMENT);
     }
 
     @NotNull

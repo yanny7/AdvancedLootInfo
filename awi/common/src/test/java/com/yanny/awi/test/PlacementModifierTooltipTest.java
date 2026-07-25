@@ -46,12 +46,16 @@ public class PlacementModifierTooltipTest {
         //noinspection deprecation
         assertTooltip(PlacementModifierTooltipUtils.getCountOnEveryLayerPlacementTooltip(UTILS, CountOnEveryLayerPlacement.of(5)).build(), List.of(
                 "Count On Every Layer:",
-                "  -> Count: 5"
+                "  -> Count:",
+                "    -> Constant:",
+                "      -> Value: 5"
         ));
         //noinspection deprecation
         assertTooltip(PlacementModifierTooltipUtils.getCountOnEveryLayerPlacementTooltip(UTILS, CountOnEveryLayerPlacement.of(UniformInt.of(1, 3))).build(), List.of(
                 "Count On Every Layer:",
-                "  -> Count: 1-3 (Uniform)"
+                "  -> Count:",
+                "    -> Uniform:",
+                "      -> Range: 1-3"
         ));
     }
 
@@ -59,11 +63,15 @@ public class PlacementModifierTooltipTest {
     public void testCountPlacementTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getCountPlacementTooltip(UTILS, CountPlacement.of(3)).build(), List.of(
                 "Count Placement:",
-                "  -> Count: 3"
+                "  -> Count:",
+                "    -> Constant:",
+                "      -> Value: 3"
         ));
         assertTooltip(PlacementModifierTooltipUtils.getCountPlacementTooltip(UTILS, CountPlacement.of(UniformInt.of(2, 6))).build(), List.of(
                 "Count Placement:",
-                "  -> Count: 2-6 (Uniform)"
+                "  -> Count:",
+                "    -> Uniform:",
+                "      -> Range: 2-6"
         ));
     }
 
