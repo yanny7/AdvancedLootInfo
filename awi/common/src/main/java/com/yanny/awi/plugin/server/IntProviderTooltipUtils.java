@@ -36,8 +36,7 @@ public class IntProviderTooltipUtils {
     @NotNull
     public static TooltipBuilder getWeightedListIntTooltip(IServerUtils utils, WeightedListInt provider) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, provider.distribution.totalWeight).build(Lang.Value.TOTAL_WEIGHT));
-            b.add(utils.getValueTooltip(utils, provider.distribution.unwrap()).build(Lang.Branch.ITEMS));
+            b.add(utils.getValueTooltip(utils, provider.distribution).build(Lang.Branch.DISTRIBUTION));
             b.add(utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()).toIntString()).build(Lang.Value.RANGE));
         }, Lang.IntProvider.WEIGHTED_LIST);
     }

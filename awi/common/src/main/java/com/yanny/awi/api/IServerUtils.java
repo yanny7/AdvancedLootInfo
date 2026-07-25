@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -65,4 +66,7 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils> {
 
     @NotNull
     <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry);
+
+    @NotNull
+    <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry);
 }

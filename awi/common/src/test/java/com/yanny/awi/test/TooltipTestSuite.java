@@ -37,6 +37,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.platform.suite.api.AfterSuite;
@@ -59,7 +60,16 @@ import java.util.concurrent.ExecutionException;
         PlacementModifierTooltipTest.class,
         HeightProviderTooltipTest.class,
         BlockPredicateTooltipTest.class,
-        IntProviderTooltipTest.class
+        IntProviderTooltipTest.class,
+        FloatProviderTooltipTest.class,
+        TrunkPlacerTooltipTest.class,
+        RuleTestTooltipTest.class,
+        FeatureSizeTooltipTest.class,
+        RootPlacerTooltipTest.class,
+        BlockStateProviderTooltipTest.class,
+        TreeDecoratorTooltipTest.class,
+        FoliagePlacerTooltipTest.class,
+        StructureProcessorTooltipTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -178,6 +188,11 @@ public class TooltipTestSuite {
             @Override
             public @NotNull <T extends FloatProvider> TooltipBuilder getFloatProviderTooltip(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.getFloatProviderTooltip(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.getStructureProcessorTooltip(utils, entry);
             }
 
             @Override

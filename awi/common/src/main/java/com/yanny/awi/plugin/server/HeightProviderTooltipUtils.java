@@ -52,10 +52,7 @@ public class HeightProviderTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getWeightedListHeightTooltip(IServerUtils utils, WeightedListHeight provider) {
-        return array((b) -> {
-            b.add(utils.getValueTooltip(utils, provider.distribution.totalWeight).build(Lang.Value.TOTAL_WEIGHT));
-            b.add(utils.getValueTooltip(utils, provider.distribution.unwrap()).build(Lang.Branch.ITEMS));
-        }, Lang.HeightProvider.WEIGHTED_LIST);
+        return array((b) -> b.add(utils.getValueTooltip(utils, provider.distribution)), Lang.HeightProvider.WEIGHTED_LIST);
     }
 
     @NotNull

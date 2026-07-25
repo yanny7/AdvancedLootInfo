@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,6 +52,7 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FoliagePlacer, TooltipBuilder>> foliagePlacerTooltips = registerClassKeyed("foliage placer tooltips", true, HashMap::new, BuiltInRegistries.FOLIAGE_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, BuiltInRegistries.TRUNK_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FloatProvider, TooltipBuilder>> floatProviderTooltips = registerClassKeyed("float provider tooltips", true, HashMap::new, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, StructureProcessor, TooltipBuilder>> structureProcessorTooltips = registerClassKeyed("structure processor tooltips", true, HashMap::new, BuiltInRegistries.STRUCTURE_PROCESSOR);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -144,6 +146,12 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     public <T extends FloatProvider> void registerFloatProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         floatProviderTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends StructureProcessor> void registerStructureProcessorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
+        //noinspection unchecked
+        structureProcessorTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -265,6 +273,14 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
         return floatProviderTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> MissingTooltipUtils.getMissingFloatProviderTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry) {
+        return structureProcessorTooltips.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(() -> MissingTooltipUtils.getMissingStructureProcessorTooltip(utils, entry));
     }
 
     @NotNull

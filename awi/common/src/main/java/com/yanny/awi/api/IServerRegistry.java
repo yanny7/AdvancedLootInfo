@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -50,4 +51,6 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends TrunkPlacer> void registerTrunkPlacerTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T extends FloatProvider> void registerFloatProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
+
+    <T extends StructureProcessor> void registerStructureProcessorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 }

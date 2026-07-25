@@ -17,7 +17,10 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorTy
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.PosRuleTestType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifierType;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -108,5 +111,20 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProviderType<?> type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLOAT_PROVIDER_TYPE, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getStructureProcessorTypeTooltip(IServerUtils utils, StructureProcessorType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.STRUCTURE_PROCESSOR, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getPosRuleTestTypeTooltip(IServerUtils utils, PosRuleTestType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.POS_RULE_TEST, type);
+    }
+
+    @NotNull
+    public static TooltipBuilder getRuleBlockEntityModifierTooltip(IServerUtils utils, RuleBlockEntityModifierType<?> type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.RULE_BLOCK_ENTITY_MODIFIER, type);
     }
 }

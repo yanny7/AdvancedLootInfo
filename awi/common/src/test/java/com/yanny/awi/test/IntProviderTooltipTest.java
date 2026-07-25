@@ -55,18 +55,19 @@ public class IntProviderTooltipTest {
                         .build()
         )).build(), List.of(
                 "Weighted List:",
-                "  -> Total Weight: 3",
-                "  -> Items:",
-                "    -> Entry:",
-                "      -> Weight: 2",
-                "      -> Data:",
-                "        -> Constant:",
-                "          -> Value: 5",
-                "    -> Entry:",
-                "      -> Weight: 1",
-                "      -> Data:",
-                "        -> Constant:",
-                "          -> Value: 10",
+                "  -> Distribution:",
+                "    -> Total Weight: 3",
+                "    -> Items:",
+                "      -> Entry:",
+                "        -> Weight: 2",
+                "        -> Data:",
+                "          -> Constant:",
+                "            -> Value: 5",
+                "      -> Entry:",
+                "        -> Weight: 1",
+                "        -> Data:",
+                "          -> Constant:",
+                "            -> Value: 10",
                 "  -> Range: 5-10"
         ));
     }

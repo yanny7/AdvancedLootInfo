@@ -23,6 +23,7 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -292,6 +293,28 @@ public class MissingTooltipUtils {
         } catch (Throwable e) {
 //            if (utils.getConfiguration().logMoreStatistics) { FIXME
             LOGGER.warn("Failed to get float provider from serialized data for {} in {}", BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
+//            }
+
+//            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
+        }
+
+        return tooltip.key(CoreLang.Utils.AUTO_DETECTED);
+    }
+
+    @NotNull
+    public static TooltipBuilder getMissingStructureProcessorTooltip(IServerUtils utils, StructureProcessor processor) {
+        TooltipBuilder tooltip = utils.getValueTooltip(utils, processor.getType());
+
+        try {
+            RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
+            //noinspection unchecked
+            Codec<StructureProcessor> codec = ((Codec<StructureProcessor>) processor.getType().codec());
+            JsonElement jsonElement = codec.encodeStart(registryOps, processor).getOrThrow(true, (s) -> {});
+
+            tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
+        } catch (Throwable e) {
+//            if (utils.getConfiguration().logMoreStatistics) { FIXME
+            LOGGER.warn("Failed to get structure processor from serialized data for {} in {}", BuiltInRegistries.STRUCTURE_PROCESSOR.getKey(processor.getType()), TooltipContext.get(), e);
 //            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME

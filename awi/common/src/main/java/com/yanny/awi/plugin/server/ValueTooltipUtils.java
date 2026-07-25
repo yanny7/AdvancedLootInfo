@@ -4,6 +4,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.Weight;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
+import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
@@ -29,8 +32,8 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
@@ -93,6 +96,11 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getPlacementModifierTooltip(IServerUtils utils, PlacementModifier value) {
         return utils.getPlacementModifierTooltip(utils, value);
+    }
+
+    @NotNull
+    public static TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, StructureProcessor value) {
+        return utils.getStructureProcessorTooltip(utils, value);
     }
 
     @NotNull
@@ -247,5 +255,54 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getStructureProcessorListTooltip(IServerUtils utils, StructureProcessorList value) {
         return utils.getValueTooltip(utils, value.list());
+    }
+
+    @NotNull
+    public static TooltipBuilder getProcessorRuleTooltip(IServerUtils utils, ProcessorRule value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.inputPredicate).build(Lang.Branch.INPUT_PREDICATE));
+            b.add(utils.getValueTooltip(utils, value.locPredicate).build(Lang.Branch.LOCATION_PREDICATE));
+            b.add(utils.getValueTooltip(utils, value.posPredicate).build(Lang.Value.POSITION_PREDICATE));
+            b.add(utils.getValueTooltip(utils, value.outputState).build(Lang.Branch.OUTPUT_STATE));
+            b.add(utils.getValueTooltip(utils, value.blockEntityModifier).build(Lang.Value.BLOCK_ENTITY_MODIFIER));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getMangroveRootPlacementTooltip(IServerUtils utils, MangroveRootPlacement value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.canGrowThrough()).build(Lang.Branch.CAN_GROW_THROUGH));
+            b.add(utils.getValueTooltip(utils, value.muddyRootsIn()).build(Lang.Branch.MUDDY_ROOTS_IN));
+            b.add(utils.getValueTooltip(utils, value.muddyRootsProvider()).build(Lang.Branch.MUDDY_ROOTS_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.maxRootWidth()).build(Lang.Value.MAX_ROOT_WIDTH));
+            b.add(utils.getValueTooltip(utils, value.maxRootLength()).build(Lang.Value.MAX_ROOT_LENGTH));
+            b.add(utils.getValueTooltip(utils, value.randomSkewChance()).build(Lang.Value.RANDOM_SKEW_CHANCE));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getAboveRootPlacementTooltip(IServerUtils utils, AboveRootPlacement value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.aboveRootProvider()).build(Lang.Branch.ABOVE_ROOT_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.aboveRootPlacementChance()).build(Lang.Value.PLACEMENT_CHANCE));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getSimpleWeightedRandomListTooltip(IServerUtils utils, SimpleWeightedRandomList<?> value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.totalWeight).build(Lang.Value.TOTAL_WEIGHT));
+            b.add(utils.getValueTooltip(utils, value.unwrap()).build(Lang.Branch.ITEMS));
+        });
+    }
+
+    @NotNull
+    public static TooltipBuilder getPosRuleTestTooltip(IServerUtils utils, PosRuleTest value) {
+        return utils.getValueTooltip(utils, value.getType());
+    }
+
+    @NotNull
+    public static TooltipBuilder getRuleBlockEntityModifierTooltip(IServerUtils utils, RuleBlockEntityModifier value) {
+        return utils.getValueTooltip(utils, value.getType());
     }
 }

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.UUID;
 
 public class CommonValueTooltip<
@@ -24,6 +25,7 @@ public class CommonValueTooltip<
     public void registerAll(TServerRegistry registry) {
         registry.registerValueTooltip(Collection.class, this::getCollectionTooltip);
         registry.registerValueTooltip(Optional.class, this::getOptionalTooltip);
+        registry.registerValueTooltip(OptionalInt.class, this::getOptionalIntTooltip);
         registry.registerValueTooltip(Holder.class, this::getHolderTooltip);
         registry.registerValueTooltip(Boolean.class, this::getBooleanTooltip);
         registry.registerValueTooltip(Integer.class, this::getIntegerTooltip);
@@ -66,6 +68,16 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getOptionalTooltip(TServerUtils utils, Optional<?> optional) {
         return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(TooltipBuilder.empty());
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    @NotNull
+    private TooltipBuilder getOptionalIntTooltip(TServerUtils utils, OptionalInt optional) {
+        if (optional.isPresent()) {
+            return utils.getValueTooltip(utils, optional.getAsInt());
+        }
+
+        return TooltipBuilder.empty();
     }
 
     @NotNull
