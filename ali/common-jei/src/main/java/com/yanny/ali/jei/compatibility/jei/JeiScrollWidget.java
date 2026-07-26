@@ -63,6 +63,14 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     @Override
     public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         for (IRecipeWidget widget : widgets) {
+            if (widget instanceof JeiLootSlotWidget) {
+                boolean tooHigh = widget.getPosition().y() + 18 < scrollOffsetY * contentRect.height() - scrollRect.height() * scrollOffsetY;
+                boolean tooLow = widget.getPosition().y() > scrollOffsetY * contentRect.height() + scrollRect.height() - (scrollOffsetY*scrollRect.height());
+                if (tooHigh || tooLow) {
+                    continue;
+                }
+            }
+
             widget.drawWidget(guiGraphics, mouseX, mouseY);
         }
     }
