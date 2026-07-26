@@ -250,31 +250,57 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(BlockColumnConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockColumnConfigurationBlocks);
         registry.registerFeatureBlockCollector(BlockPileConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockPileConfigurationBlocks);
         registry.registerFeatureBlockCollector(BlockStateConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockStateConfigurationBlocks);
+        registry.registerFeatureBlockCollector(ColumnFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectColumnFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(CountConfiguration.class, FeatureConfigurationCollectorUtils::collectCountConfigurationBlocks);
         registry.registerFeatureBlockCollector(DeltaFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectDeltaFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(DiskConfiguration.class, FeatureConfigurationCollectorUtils::collectDiskConfigurationBlocks);
+        registry.registerFeatureBlockCollector(DripstoneClusterConfiguration.class, FeatureConfigurationCollectorUtils::collectDripstoneClusterConfigurationBlocks);
+        registry.registerFeatureBlockCollector(EndGatewayConfiguration.class, FeatureConfigurationCollectorUtils::collectEndGatewayConfigurationBlocks);
+        registry.registerFeatureBlockCollector(GeodeConfiguration.class, FeatureConfigurationCollectorUtils::collectGeodeConfigurationBlocks);
         registry.registerFeatureBlockCollector(HugeMushroomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectHugeMushroomFeatureConfigurationBlocks);
-        registry.registerFeatureBlockCollector(LakeFeature.Configuration.class, FeatureConfigurationCollectorUtils::collectLakeFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(LargeDripstoneConfiguration.class, FeatureConfigurationCollectorUtils::collectLargeDripstoneConfigurationBlocks);
         registry.registerFeatureBlockCollector(LayerConfiguration.class, FeatureConfigurationCollectorUtils::collectLayeredConfigurationBlocks);
         registry.registerFeatureBlockCollector(MultifaceGrowthConfiguration.class, FeatureConfigurationCollectorUtils::collectMultifaceGrowthConfigurationBlocks);
+        registry.registerFeatureBlockCollector(NetherForestVegetationConfig.class, FeatureConfigurationCollectorUtils::collectNetherForestVegetationConfigurationBlocks);
+        registry.registerFeatureBlockCollector(NoneFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectNoneFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(OreConfiguration.class, FeatureConfigurationCollectorUtils::collectOreConfigurationBlocks);
+        registry.registerFeatureBlockCollector(PointedDripstoneConfiguration.class, FeatureConfigurationCollectorUtils::collectPointedDripstoneConfigurationBlocks);
+        registry.registerFeatureBlockCollector(ProbabilityFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectProbabilityFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomBooleanFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomBooleanFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomPatchConfigurationBlocks);
         registry.registerFeatureBlockCollector(ReplaceBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectReplaceBlockConfigurationBlocks);
         registry.registerFeatureBlockCollector(ReplaceSphereConfiguration.class, FeatureConfigurationCollectorUtils::collectReplaceSphereConfigurationBlocks);
         registry.registerFeatureBlockCollector(RootSystemConfiguration.class, FeatureConfigurationCollectorUtils::collectRootSystemConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SculkPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectSculkPatchConfigurationBlocks);
         registry.registerFeatureBlockCollector(SimpleBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleBlockConfigurationBlocks);
         registry.registerFeatureBlockCollector(SimpleRandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleRandomFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SpikeConfiguration.class, FeatureConfigurationCollectorUtils::collectSpikeConfigurationBlocks);
         registry.registerFeatureBlockCollector(SpringConfiguration.class, FeatureConfigurationCollectorUtils::collectSpringConfigurationBlocks);
         registry.registerFeatureBlockCollector(TreeConfiguration.class, FeatureConfigurationCollectorUtils::collectTreeConfigurationBlocks);
+        registry.registerFeatureBlockCollector(TwistingVinesConfig.class, FeatureConfigurationCollectorUtils::collectTwistingVinesConfigurationBlocks);
+        registry.registerFeatureBlockCollector(UnderwaterMagmaConfiguration.class, FeatureConfigurationCollectorUtils::collectUnderwaterMagmaConfigurationBlocks);
         registry.registerFeatureBlockCollector(VegetationPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectVegetationPatchConfigurationBlocks);
+        registry.registerFeatureBlockCollector(LakeFeature.Configuration.class, FeatureConfigurationCollectorUtils::collectLakeFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(FossilFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectFossilFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(HugeFungusConfiguration.class, FeatureConfigurationCollectorUtils::collectHugeFungusConfigurationBlocks);
 
         registry.registerStateProviderBlockCollector(SimpleStateProvider.class, BlockStateProviderCollectorUtils::collectSimple);
         registry.registerStateProviderBlockCollector(NoiseProvider.class, BlockStateProviderCollectorUtils::collectNoise);
+        registry.registerStateProviderBlockCollector(DualNoiseProvider.class, BlockStateProviderCollectorUtils::collectDualNoise);
         registry.registerStateProviderBlockCollector(NoiseThresholdProvider.class, BlockStateProviderCollectorUtils::collectNoiseThreshold);
         registry.registerStateProviderBlockCollector(RandomizedIntStateProvider.class, BlockStateProviderCollectorUtils::collectRandomized);
         registry.registerStateProviderBlockCollector(RotatedBlockProvider.class, BlockStateProviderCollectorUtils::collectRotated);
         registry.registerStateProviderBlockCollector(WeightedStateProvider.class, BlockStateProviderCollectorUtils::collectWeighted);
+
+        registry.registerTreeDecoratorBlockCollector(TrunkVineDecorator.class, TreeDecoratorCollectorUtils::collectTrunkVine);
+        registry.registerTreeDecoratorBlockCollector(LeaveVineDecorator.class, TreeDecoratorCollectorUtils::collectLeaveVine);
+        registry.registerTreeDecoratorBlockCollector(CocoaDecorator.class, TreeDecoratorCollectorUtils::collectCocoa);
+        registry.registerTreeDecoratorBlockCollector(BeehiveDecorator.class, TreeDecoratorCollectorUtils::collectBeehive);
+        registry.registerTreeDecoratorBlockCollector(AlterGroundDecorator.class, TreeDecoratorCollectorUtils::collectAlterGround);
+        registry.registerTreeDecoratorBlockCollector(AttachedToLeavesDecorator.class, TreeDecoratorCollectorUtils::collectAttachedToLeaves);
+
+        registry.registerRootPlacerBlockCollector(MangroveRootPlacer.class, RootPlacerCollectorUtils::collectMangrove);
 
         registry.registerBlockStateProviderTooltip(SimpleStateProvider.class, BlockStateProviderTooltipUtils::getSimpleStateProviderTooltip);
         registry.registerBlockStateProviderTooltip(WeightedStateProvider.class, BlockStateProviderTooltipUtils::getWeightedStateProviderTooltip);

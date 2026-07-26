@@ -29,6 +29,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends BlockStateProvider> void registerStateProviderBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
 
+    <T extends RootPlacer> void registerRootPlacerBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
+
+    <T extends TreeDecorator> void registerTreeDecoratorBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
+
     <T extends FeatureConfiguration> void registerFeatureTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T extends PlacementModifier> void registerPlacementModifierTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);

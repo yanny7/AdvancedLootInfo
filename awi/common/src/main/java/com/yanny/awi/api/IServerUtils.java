@@ -33,6 +33,12 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils> {
     <T extends BlockStateProvider> List<Block> collectBlocks(IServerUtils utils, T entry);
 
     @NotNull
+    <T extends RootPlacer> List<Block> collectBlocks(IServerUtils utils, T entry);
+
+    @NotNull
+    <T extends TreeDecorator> List<Block> collectBlocks(IServerUtils utils, T entry);
+
+    @NotNull
     <T extends FeatureConfiguration> TooltipBuilder getFeatureTooltip(IServerUtils utils, T entry);
 
     @NotNull

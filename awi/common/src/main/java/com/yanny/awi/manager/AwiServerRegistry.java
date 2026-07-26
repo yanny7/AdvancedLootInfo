@@ -39,6 +39,8 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Block>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, List<Block>>> rootPlacerBlockCollector = registerClassKeyed("root placer block collectors", false, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, List<Block>>> treeDecoratorBlockCollector = registerClassKeyed("tree decorator block collectors", false, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
     // tooltips
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
@@ -73,6 +75,18 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     public <T extends BlockStateProvider> void registerStateProviderBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
         //noinspection unchecked
         stateProviderBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends RootPlacer> void registerRootPlacerBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
+        //noinspection unchecked
+        rootPlacerBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends TreeDecorator> void registerTreeDecoratorBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
+        //noinspection unchecked
+        treeDecoratorBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
     }
 
     @Override
@@ -194,6 +208,20 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     @Override
     public <T extends BlockStateProvider> List<Block> collectBlocks(IServerUtils utils, T entry) {
         return stateProviderBlockCollector.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(List::of); //TODO log missing collector ?
+    }
+
+    @Override
+    public @NotNull <T extends RootPlacer> List<Block> collectBlocks(IServerUtils utils, T entry) {
+        return rootPlacerBlockCollector.get(entry.getClass())
+                .map((e) -> e.apply(utils, entry))
+                .orElseGet(List::of); //TODO log missing collector ?
+    }
+
+    @Override
+    public @NotNull <T extends TreeDecorator> List<Block> collectBlocks(IServerUtils utils, T entry) {
+        return treeDecoratorBlockCollector.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(List::of); //TODO log missing collector ?
     }

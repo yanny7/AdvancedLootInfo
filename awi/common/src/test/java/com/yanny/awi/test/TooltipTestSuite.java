@@ -127,7 +127,17 @@ public class TooltipTestSuite {
             @NotNull
             @Override
             public <T extends BlockStateProvider> List<Block> collectBlocks(IServerUtils utils, T entry) {
-                return List.of();
+                return PluginManager.getInstance().serverRegistry.collectBlocks(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends RootPlacer> List<Block> collectBlocks(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.collectBlocks(utils, entry);
+            }
+
+            @Override
+            public @NotNull <T extends TreeDecorator> List<Block> collectBlocks(IServerUtils utils, T entry) {
+                return PluginManager.getInstance().serverRegistry.collectBlocks(utils, entry);
             }
 
             @Override
