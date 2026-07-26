@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.server;
 
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.FossilFeatureConfiguration;
@@ -9,12 +10,15 @@ import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class FeatureConfigurationCollectorUtils {
     @NotNull
@@ -288,10 +292,26 @@ public class FeatureConfigurationCollectorUtils {
         return blocks;
     }
 
-    @Unmodifiable
     @NotNull
     public static List<Block> collectFossilFeatureConfigurationBlocks(IServerUtils utils, FossilFeatureConfiguration configuration) {
-        return collectFeatureBlocks(utils, configuration);
+        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+        StructureTemplateManager manager = utils.getServerLevel().getServer().getStructureManager();
+
+        Stream.concat(configuration.fossilStructures.stream(), configuration.overlayStructures.stream())
+                .distinct()
+                .forEach((id) -> manager.get(id).ifPresent((template) -> {
+                    for (StructureTemplate.Palette palette : template.palettes) { // private field unlocked via awi.accesswidener
+                        for (StructureTemplate.StructureBlockInfo info : palette.blocks()) {
+                            Block block = info.state().getBlock();
+
+                            if (block != Blocks.AIR && block != Blocks.STRUCTURE_VOID) { // palettes contain structure_void markers
+                                blocks.add(block);
+                            }
+                        }
+                    }
+                }));
+
+        return blocks;
     }
 
     @NotNull
