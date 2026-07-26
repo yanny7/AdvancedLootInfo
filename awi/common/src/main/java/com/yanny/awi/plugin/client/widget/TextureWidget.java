@@ -57,6 +57,11 @@ public class TextureWidget implements IWidget {
         this.components.addAll(CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 
+    /** Adds a raw component line to the tooltip (e.g. a white title). Call before {@link #tooltipText} to keep it first. */
+    public void tooltipComponent(Component component) {
+        this.components.add(component);
+    }
+
     @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {

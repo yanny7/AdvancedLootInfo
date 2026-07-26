@@ -28,6 +28,7 @@ public class LanguageHolder {
         CoreLang.register(Lang.BlockPredicate.class);
         CoreLang.register(Lang.GenerationStep.class);
         CoreLang.register(Lang.StructureProcessor.class);
+        CoreLang.register(Lang.Kind.class);
 
         TRANSLATION_MAP = new HashMap<>(CoreLang.TRANSLATION_MAP);
     }

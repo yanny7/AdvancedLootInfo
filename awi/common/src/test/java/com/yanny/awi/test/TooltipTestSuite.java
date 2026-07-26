@@ -5,6 +5,10 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
+import com.yanny.awi.plugin.server.summary.CountSpan;
+import com.yanny.awi.plugin.server.summary.HeightSpan;
+import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import com.yanny.awi.test.utils.TestUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
@@ -69,7 +73,8 @@ import java.util.concurrent.ExecutionException;
         BlockStateProviderTooltipTest.class,
         TreeDecoratorTooltipTest.class,
         FoliagePlacerTooltipTest.class,
-        StructureProcessorTooltipTest.class
+        StructureProcessorTooltipTest.class,
+        PlacementSummaryTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -198,6 +203,21 @@ public class TooltipTestSuite {
             @Override
             public @NotNull <T> TooltipBuilder getValueTooltip(IServerUtils utils, @Nullable T value) {
                 return PluginManager.getInstance().serverRegistry.getValueTooltip(utils, value);
+            }
+
+            @Override
+            public @NotNull <T extends IntProvider> CountSpan getIntSpan(IServerUtils utils, T provider) {
+                return PluginManager.getInstance().serverRegistry.getIntSpan(utils, provider);
+            }
+
+            @Override
+            public @NotNull <T extends HeightProvider> HeightSpan getHeightSpan(IServerUtils utils, T provider, ColumnContext ctx) {
+                return PluginManager.getInstance().serverRegistry.getHeightSpan(utils, provider, ctx);
+            }
+
+            @Override
+            public @NotNull <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx) {
+                return PluginManager.getInstance().serverRegistry.getPlacementContribution(utils, modifier, ctx);
             }
         };
 

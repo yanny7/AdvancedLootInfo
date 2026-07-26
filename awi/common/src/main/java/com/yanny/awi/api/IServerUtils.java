@@ -2,6 +2,10 @@ package com.yanny.awi.api;
 
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
+import com.yanny.awi.plugin.server.summary.CountSpan;
+import com.yanny.awi.plugin.server.summary.HeightSpan;
+import com.yanny.awi.plugin.server.summary.PlacementContribution;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
@@ -69,4 +73,13 @@ public interface IServerUtils extends ICoreServerUtils<IServerUtils> {
 
     @NotNull
     <T extends StructureProcessor> TooltipBuilder getStructureProcessorTooltip(IServerUtils utils, T entry);
+
+    @NotNull
+    <T extends IntProvider> CountSpan getIntSpan(IServerUtils utils, T provider);
+
+    @NotNull
+    <T extends HeightProvider> HeightSpan getHeightSpan(IServerUtils utils, T provider, ColumnContext ctx);
+
+    @NotNull
+    <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx);
 }

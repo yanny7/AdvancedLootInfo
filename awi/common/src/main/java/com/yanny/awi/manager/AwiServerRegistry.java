@@ -1,5 +1,6 @@
 package com.yanny.awi.manager;
 
+import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
 import com.yanny.aci.manager.ManagedRegistry;
@@ -8,6 +9,7 @@ import com.yanny.awi.api.ICommonUtils;
 import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.MissingTooltipUtils;
+import com.yanny.awi.plugin.server.summary.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -53,6 +55,9 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TrunkPlacer, TooltipBuilder>> trunkPlacerTooltips = registerClassKeyed("trunk placer tooltips", true, HashMap::new, BuiltInRegistries.TRUNK_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FloatProvider, TooltipBuilder>> floatProviderTooltips = registerClassKeyed("float provider tooltips", true, HashMap::new, BuiltInRegistries.FLOAT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, StructureProcessor, TooltipBuilder>> structureProcessorTooltips = registerClassKeyed("structure processor tooltips", true, HashMap::new, BuiltInRegistries.STRUCTURE_PROCESSOR);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, CountSpan>> intSpanPropagators = registerClassKeyed("int span propagators", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, HeightSpanPropagator<HeightProvider>> heightSpanPropagators = registerClassKeyed("height span propagators", true, HashMap::new, BuiltInRegistries.HEIGHT_PROVIDER_TYPE);
+    private final ManagedRegistry<Class<?>, PlacementPropagator<PlacementModifier>> placementPropagators = registerClassKeyed("placement propagators", false, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
 
     public AwiServerRegistry(AwiCommonRegistry registry, ServerLevel level) {
         super(registry, level);
@@ -152,6 +157,24 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     public <T extends StructureProcessor> void registerStructureProcessorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter) {
         //noinspection unchecked
         structureProcessorTooltips.put(type, (u, t) -> getter.apply(u, (T) t));
+    }
+
+    @Override
+    public <T extends IntProvider> void registerIntSpanPropagator(Class<T> type, BiFunction<IServerUtils, T, CountSpan> getter) {
+        //noinspection unchecked
+        intSpanPropagators.put(type, (u, p) -> getter.apply(u, (T) p));
+    }
+
+    @Override
+    public <T extends HeightProvider> void registerHeightSpanPropagator(Class<T> type, HeightSpanPropagator<T> getter) {
+        //noinspection unchecked
+        heightSpanPropagators.put(type, (u, p, c) -> getter.apply(u, (T) p, c));
+    }
+
+    @Override
+    public <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter) {
+        //noinspection unchecked
+        placementPropagators.put(type, (u, m, c) -> getter.apply(u, (T) m, c));
     }
 
     @Override
@@ -281,6 +304,31 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
         return structureProcessorTooltips.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(() -> MissingTooltipUtils.getMissingStructureProcessorTooltip(utils, entry));
+    }
+
+    @NotNull
+    @Override
+    public <T extends IntProvider> CountSpan getIntSpan(IServerUtils utils, T provider) {
+        return intSpanPropagators.get(provider.getClass())
+                .map((e) -> e.apply(utils, provider))
+                // fallback: even an unregistered provider exposes a generic min/max range
+                .orElseGet(() -> CountSpan.unknown(new RangeValue(provider.getMinValue(), provider.getMaxValue())));
+    }
+
+    @NotNull
+    @Override
+    public <T extends HeightProvider> HeightSpan getHeightSpan(IServerUtils utils, T provider, ColumnContext ctx) {
+        return heightSpanPropagators.get(provider.getClass())
+                .map((e) -> e.apply(utils, provider, ctx))
+                .orElseGet(HeightSpan::unknown);
+    }
+
+    @NotNull
+    @Override
+    public <T extends PlacementModifier> PlacementContribution getPlacementContribution(IServerUtils utils, T modifier, ColumnContext ctx) {
+        return placementPropagators.get(modifier.getClass())
+                .map((e) -> e.apply(utils, modifier, ctx))
+                .orElse(PlacementContribution.EMPTY);
     }
 
     @NotNull

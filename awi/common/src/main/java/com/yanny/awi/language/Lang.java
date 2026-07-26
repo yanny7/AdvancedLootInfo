@@ -114,6 +114,8 @@ public final class Lang {
         ALLOWED_VERTICAL_WATER_FOR_TREE("allowed_vertical_water_for_tree", "Allowed Vertical Water For Tree: %s"),
         ALTERNATE_LAYER_CHANCE("alternate_layer_chance", "Alternate Layer Chance: %s"),
         AMOUNT_PER_CHARGE("amount_per_charge", "Amount Per Charge: %s"),
+        ATTEMPTS_PER_CHUNK("attempts_per_chunk", "Attempts Per Chunk: %s"),
+        ATTEMPTS_PER_CHUNK_DIST("attempts_per_chunk_dist", "Attempts Per Chunk: %s (%s)"),
         BASE_CRACK_SIZE("base_crack_size", "Base Crack Size: %s"),
         BASE_HEIGHT("base_height", "Base Height: %s"),
         BELOW_NOISE("below_noise", "Below Noise: %s"),
@@ -177,6 +179,8 @@ public final class Lang {
         HANGING_ROOT_RADIUS("hanging_root_radius", "Hanging Root Radius: %s"),
         HANGING_ROOT_VERTICAL_SPAN("hanging_root_vertical_span", "Hanging Root Vertical Span: %s"),
         HEIGHT("height", "Height: %s"),
+        HEIGHT_DIST("height_dist", "Height: %s (%s)"),
+        HEIGHT_DIST_BAND("height_dist_band", "Height: %s (%s), most likely %s"),
         HEIGHTMAP("heightmap", "Heightmap: %s"),
         HEIGHT_BIAS_RADIUS("height_bias_radius", "Height Bias Radius: %s"),
         HEIGHT_DEVIATION("height_deviation", "Height Deviation: %s"),
@@ -709,6 +713,31 @@ public final class Lang {
 
         BlockPredicate(String k, String e) {
             this.translation = new Translation("awi.property.block_predicate." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum Kind implements ITooltipKey {
+        BIASED_TO_BOTTOM("biased_to_bottom", "Biased To Bottom"),
+        CLAMPED("clamped", "Clamped"),
+        CLAMPED_NORMAL("clamped_normal", "Clamped Normal"),
+        CONSTANT("constant", "Constant"),
+        TRAPEZOID("trapezoid", "Trapezoid"),
+        UNIFORM("uniform", "Uniform"),
+        UNKNOWN("unknown", "Unknown"),
+        VERY_BIASED_TO_BOTTOM("very_biased_to_bottom", "Very Biased To Bottom"),
+        WEIGHTED("weighted", "Weighted"),
+        ;
+
+        private final Translation translation;
+
+        Kind(String k, String e) {
+            this.translation = new Translation("awi.property.kind." + k, e);
         }
 
         @NotNull

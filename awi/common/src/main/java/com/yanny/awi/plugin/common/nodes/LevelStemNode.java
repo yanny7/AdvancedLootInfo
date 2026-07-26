@@ -8,6 +8,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -42,6 +43,7 @@ public class LevelStemNode extends ListNode {
 
     public LevelStemNode(IServerUtils utils, LevelStem levelStem) {
         ChunkGenerator generator = levelStem.generator();
+        ColumnContext columnContext = new ColumnContext(generator.getMinY(), generator.getGenDepth());
         Block defaultBlock = Blocks.AIR;
         Fluid defaultFluid = Fluids.EMPTY;
         int seaLevel = generator.getSeaLevel();
@@ -55,15 +57,15 @@ public class LevelStemNode extends ListNode {
         TooltipNode tooltip = buildTooltip(utils, defaultBlock, defaultFluid, seaLevel);
 
         if (generator instanceof NoiseBasedChunkGenerator noiseGenerator) {
-            processNoiseGenerator(utils, noiseGenerator, generator, tooltip);
+            processNoiseGenerator(utils, noiseGenerator, generator, tooltip, columnContext);
         } else {
-            processDefaultGenerator(utils, generator, tooltip);
+            processDefaultGenerator(utils, generator, tooltip, columnContext);
         }
     }
 
-    private void processDefaultGenerator(IServerUtils utils, ChunkGenerator generator, TooltipNode tooltip) {
+    private void processDefaultGenerator(IServerUtils utils, ChunkGenerator generator, TooltipNode tooltip, ColumnContext columnContext) {
         for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
-            addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, Collections.emptySet()));
+            addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, Collections.emptySet(), columnContext));
         }
     }
 
@@ -98,7 +100,7 @@ public class LevelStemNode extends ListNode {
         }).build();
     }
 
-    private void processNoiseGenerator(IServerUtils utils, NoiseBasedChunkGenerator noiseGenerator, ChunkGenerator generator, TooltipNode tooltip) {
+    private void processNoiseGenerator(IServerUtils utils, NoiseBasedChunkGenerator noiseGenerator, ChunkGenerator generator, TooltipNode tooltip, ColumnContext columnContext) {
         ServerLevel serverLevel = utils.getServerLevel();
         RegistryAccess registryAccess = serverLevel.registryAccess();
         Supplier<NodeUtils.DimensionContext> contextFactory = () -> {
@@ -126,7 +128,7 @@ public class LevelStemNode extends ListNode {
             for (Future<BiomeResult> future : futures) {
                 try {
                     BiomeResult res = future.get();
-                    addChildren(new BiomeNode(utils, res.biomeHolder().value(), tooltip, res.layers.getBlockInfos()));
+                    addChildren(new BiomeNode(utils, res.biomeHolder().value(), tooltip, res.layers.getBlockInfos(), columnContext));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     LOGGER.error("Biome analysis interrupted", e);

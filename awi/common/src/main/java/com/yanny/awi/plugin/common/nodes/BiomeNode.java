@@ -5,6 +5,7 @@ import com.yanny.awi.Utils;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,7 +25,7 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks) {
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks, ColumnContext columnContext) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
@@ -34,7 +35,7 @@ public class BiomeNode extends ListNode {
             HolderSet<PlacedFeature> feature = features.get(i);
             GenerationStep.Decoration step = GenerationStep.Decoration.values()[i];
 
-            addChildren(new GenerationStepNode(utils, step, feature));
+            addChildren(new GenerationStepNode(utils, step, feature, columnContext));
         }
 
         this.tooltip = tooltip;

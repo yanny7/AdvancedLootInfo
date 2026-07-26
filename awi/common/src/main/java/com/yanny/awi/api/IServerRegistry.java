@@ -2,6 +2,9 @@ package com.yanny.awi.api;
 
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.awi.plugin.server.summary.CountSpan;
+import com.yanny.awi.plugin.server.summary.HeightSpanPropagator;
+import com.yanny.awi.plugin.server.summary.PlacementPropagator;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
@@ -53,4 +56,10 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
     <T extends FloatProvider> void registerFloatProviderTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T extends StructureProcessor> void registerStructureProcessorTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
+
+    <T extends IntProvider> void registerIntSpanPropagator(Class<T> type, BiFunction<IServerUtils, T, CountSpan> getter);
+
+    <T extends HeightProvider> void registerHeightSpanPropagator(Class<T> type, HeightSpanPropagator<T> getter);
+
+    <T extends PlacementModifier> void registerPlacementPropagator(Class<T> type, PlacementPropagator<T> getter);
 }

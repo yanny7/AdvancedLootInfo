@@ -6,6 +6,9 @@ import com.yanny.awi.datagen.LanguageHolder;
 import com.yanny.awi.plugin.client.widget.*;
 import com.yanny.awi.plugin.common.nodes.*;
 import com.yanny.awi.plugin.server.*;
+import com.yanny.awi.plugin.server.summary.HeightSpanPropagatorUtils;
+import com.yanny.awi.plugin.server.summary.IntSpanPropagatorUtils;
+import com.yanny.awi.plugin.server.summary.PlacementPropagatorUtils;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.random.Weight;
@@ -220,6 +223,29 @@ public class Plugin implements IPlugin {
         registry.registerPlacementModifierTooltip(RandomOffsetPlacement.class, PlacementModifierTooltipUtils::getRandomOffsetPlacementTooltip);
         registry.registerPlacementModifierTooltip(SurfaceRelativeThresholdFilter.class, PlacementModifierTooltipUtils::getSurfaceRelativeThresholdFilterTooltip);
         registry.registerPlacementModifierTooltip(SurfaceWaterDepthFilter.class, PlacementModifierTooltipUtils::getSurfaceWaterDepthFilterTooltip);
+
+        registry.registerIntSpanPropagator(ConstantInt.class, IntSpanPropagatorUtils::getConstantInt);
+        registry.registerIntSpanPropagator(UniformInt.class, IntSpanPropagatorUtils::getUniformInt);
+        registry.registerIntSpanPropagator(BiasedToBottomInt.class, IntSpanPropagatorUtils::getBiasedToBottomInt);
+        registry.registerIntSpanPropagator(ClampedInt.class, IntSpanPropagatorUtils::getClampedInt);
+        registry.registerIntSpanPropagator(ClampedNormalInt.class, IntSpanPropagatorUtils::getClampedNormalInt);
+        registry.registerIntSpanPropagator(WeightedListInt.class, IntSpanPropagatorUtils::getWeightedListInt);
+
+        registry.registerHeightSpanPropagator(ConstantHeight.class, HeightSpanPropagatorUtils::getConstantHeight);
+        registry.registerHeightSpanPropagator(UniformHeight.class, HeightSpanPropagatorUtils::getUniformHeight);
+        registry.registerHeightSpanPropagator(TrapezoidHeight.class, HeightSpanPropagatorUtils::getTrapezoidHeight);
+        registry.registerHeightSpanPropagator(BiasedToBottomHeight.class, HeightSpanPropagatorUtils::getBiasedToBottomHeight);
+        registry.registerHeightSpanPropagator(VeryBiasedToBottomHeight.class, HeightSpanPropagatorUtils::getVeryBiasedToBottomHeight);
+        registry.registerHeightSpanPropagator(WeightedListHeight.class, HeightSpanPropagatorUtils::getWeightedListHeight);
+
+        registry.registerPlacementPropagator(CountPlacement.class, PlacementPropagatorUtils::getCountPlacement);
+        registry.registerPlacementPropagator(CountOnEveryLayerPlacement.class, PlacementPropagatorUtils::getCountOnEveryLayerPlacement);
+        registry.registerPlacementPropagator(NoiseBasedCountPlacement.class, PlacementPropagatorUtils::getNoiseBasedCountPlacement);
+        registry.registerPlacementPropagator(NoiseThresholdCountPlacement.class, PlacementPropagatorUtils::getNoiseThresholdCountPlacement);
+        registry.registerPlacementPropagator(RarityFilter.class, PlacementPropagatorUtils::getRarityFilter);
+        registry.registerPlacementPropagator(HeightRangePlacement.class, PlacementPropagatorUtils::getHeightRangePlacement);
+        registry.registerPlacementPropagator(HeightmapPlacement.class, PlacementPropagatorUtils::getHeightmapPlacement);
+        registry.registerPlacementPropagator(SurfaceRelativeThresholdFilter.class, PlacementPropagatorUtils::getSurfaceRelativeThresholdFilter);
 
         registry.registerFeatureBlockCollector(BlockColumnConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockColumnConfigurationBlocks);
         registry.registerFeatureBlockCollector(BlockPileConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockPileConfigurationBlocks);
