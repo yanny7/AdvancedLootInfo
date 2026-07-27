@@ -66,6 +66,29 @@ public class TooltipNode {
         return (flags & FLAG_HAS_KEY) != 0;
     }
 
+    /**
+     * Number of lines this node contributes to its parent's indent level. Nodes without a key/value/component are
+     * transparent when rendered - they emit no line of their own and splice their children into the parent instead
+     * (see {@link #getComponents}), so a single node can span multiple lines.
+     */
+    public int lineSpan() {
+        if (is(FLAG_EMPTY)) {
+            return 0;
+        }
+
+        if (hasKey() || is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT)) {
+            return 1;
+        }
+
+        int span = 0;
+
+        for (TooltipNode child : children) {
+            span += child.lineSpan();
+        }
+
+        return span;
+    }
+
     public boolean isEmpty(boolean isAdvanced) {
         if (is(FLAG_EMPTY)) {
             return true;

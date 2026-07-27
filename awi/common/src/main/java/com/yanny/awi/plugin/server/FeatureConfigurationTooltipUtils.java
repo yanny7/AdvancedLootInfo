@@ -74,8 +74,8 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.maxStalagmiteStalactiteHeightDiff).build(Lang.Value.MAX_HEIGHT_DIFF));
             b.add(utils.getValueTooltip(utils, configuration.heightDeviation).build(Lang.Value.HEIGHT_DEVIATION));
             b.add(utils.getValueTooltip(utils, configuration.dripstoneBlockLayerThickness).build(Lang.Branch.LAYER_THICKNESS));
-            b.add(utils.getValueTooltip(utils, configuration.density).build(Lang.Value.DENSITY));
-            b.add(utils.getValueTooltip(utils, configuration.wetness).build(Lang.Value.WETNESS));
+            b.add(utils.getValueTooltip(utils, configuration.density).build(Lang.Branch.DENSITY));
+            b.add(utils.getValueTooltip(utils, configuration.wetness).build(Lang.Branch.WETNESS));
             b.add(utils.getValueTooltip(utils, configuration.chanceOfDripstoneColumnAtMaxDistanceFromCenter).build(Lang.Value.EDGE_CHANCE));
             b.add(utils.getValueTooltip(utils, configuration.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn).build(Lang.Value.CHANCE_RADIUS));
             b.add(utils.getValueTooltip(utils, configuration.maxDistanceFromCenterAffectingHeightBias).build(Lang.Value.HEIGHT_BIAS_RADIUS));
@@ -123,11 +123,11 @@ public class FeatureConfigurationTooltipUtils {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.floorToCeilingSearchRange).build(Lang.Value.SEARCH_RANGE));
             b.add(utils.getValueTooltip(utils, configuration.columnRadius).build(Lang.Branch.COLUMN_RADIUS));
-            b.add(utils.getValueTooltip(utils, configuration.heightScale).build(Lang.Value.HEIGHT_SCALE));
+            b.add(utils.getValueTooltip(utils, configuration.heightScale).build(Lang.Branch.HEIGHT_SCALE));
             b.add(utils.getValueTooltip(utils, configuration.maxColumnRadiusToCaveHeightRatio).build(Lang.Value.RADIUS_TO_HEIGHT_RATIO));
-            b.add(utils.getValueTooltip(utils, configuration.stalactiteBluntness).build(Lang.Value.STALACTITE_BLUNTNESS));
-            b.add(utils.getValueTooltip(utils, configuration.stalagmiteBluntness).build(Lang.Value.STALAGMITE_BLUNTNESS));
-            b.add(utils.getValueTooltip(utils, configuration.windSpeed).build(Lang.Value.WIND_SPEED));
+            b.add(utils.getValueTooltip(utils, configuration.stalactiteBluntness).build(Lang.Branch.STALACTITE_BLUNTNESS));
+            b.add(utils.getValueTooltip(utils, configuration.stalagmiteBluntness).build(Lang.Branch.STALAGMITE_BLUNTNESS));
+            b.add(utils.getValueTooltip(utils, configuration.windSpeed).build(Lang.Branch.WIND_SPEED));
             b.add(utils.getValueTooltip(utils, configuration.minRadiusForWind).build(Lang.Value.MIN_RADIUS_FOR_WIND));
             b.add(utils.getValueTooltip(utils, configuration.minBluntnessForWind).build(Lang.Value.MIN_BLUNTNESS_FOR_WIND));
         }, Lang.FeatureConfiguration.LARGE_DRIPSTONE);
