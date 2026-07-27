@@ -19,6 +19,7 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +48,14 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Widget> widgets = new ArrayList<>();
 
         widgets.addAll(slotWidgets.stream().map((h) -> {
+            // Blocks without an item form (fire, end_gateway, *_plant, ...) are drawn as a 3D block model.
+            if (h.block.asItem() == Items.AIR && h.block.defaultBlockState().getFluidState().isEmpty()) {
+                EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, h.block, h.rect.getX(), h.rect.getY());
+
+                blockWidget.recipeContext(h.recipe);
+                return (Widget) blockWidget;
+            }
+
             EmiIngredient ingredient;
 
             if (h.block.defaultBlockState().getFluidState().isEmpty()) {
