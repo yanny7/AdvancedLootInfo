@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidget, IJeiInputHandler, ISlottedRecipeWidget {
+    private static final int SLOT_SIZE = 18;
+
     private final List<IRecipeWidget> widgets;
 
     public JeiScrollWidget(Rect rect, int contentHeight, List<IRecipeWidget> widgets) {
@@ -63,12 +65,8 @@ public class JeiScrollWidget extends AbstractScrollWidget implements IRecipeWidg
     @Override
     public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
         for (IRecipeWidget widget : widgets) {
-            if (widget instanceof JeiLootSlotWidget) {
-                boolean tooHigh = widget.getPosition().y() + 18 < scrollOffsetY * contentRect.height() - scrollRect.height() * scrollOffsetY;
-                boolean tooLow = widget.getPosition().y() > scrollOffsetY * contentRect.height() + scrollRect.height() - (scrollOffsetY*scrollRect.height());
-                if (tooHigh || tooLow) {
-                    continue;
-                }
+            if (widget instanceof JeiLootSlotWidget && isOutsideViewport(widget.getPosition().y(), SLOT_SIZE)) {
+                continue;
             }
 
             widget.drawWidget(guiGraphics, mouseX, mouseY);
