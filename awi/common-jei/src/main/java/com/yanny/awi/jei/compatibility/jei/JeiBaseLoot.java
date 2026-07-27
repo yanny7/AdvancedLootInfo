@@ -4,7 +4,6 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
-import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
@@ -24,6 +23,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,10 +81,13 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
             IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY)
                     .setStandardSlotBackground()
                     .setSlotName(String.valueOf(i))
-                    .setPosition(h.rect.getX(), h.rect.getY())
-                    .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
-                            -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
-            slotBuilder.addItemLike(h.block);
+                    .setPosition(h.rect.getX(), h.rect.getY());
+
+            if (!h.block.defaultBlockState().getFluidState().isEmpty()) {
+                slotBuilder.addFluidStack(h.block.defaultBlockState().getFluidState().getType());
+            } else {
+                slotBuilder.addItemLike(h.block);
+            }
         }
     }
 
@@ -107,7 +110,12 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
             Holder h = slotParams.get(i);
 
             builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent((slotDrawable) -> {
-                scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), new RangeValue(1)));
+                if (isBlockModel(h.block)) {
+                    scrollWidgets.add(new JeiBlockSlotWidget(slotDrawable, h.block, h.rect.getX(), h.rect.getY()));
+                } else {
+                    scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), new RangeValue(1)));
+                }
+
                 slotDrawables.add(slotDrawable);
             });
         }
@@ -127,6 +135,14 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
     @Override
     public int getHeight() {
         return CATEGORY_HEIGHT;
+    }
+
+    /**
+     * A block with no item form and no fluid state can only be shown as a 3D block model
+     * (see {@link JeiBlockSlotWidget}) rather than as a JEI item/fluid ingredient.
+     */
+    static boolean isBlockModel(Block block) {
+        return block.asItem() == Items.AIR && block.defaultBlockState().getFluidState().isEmpty();
     }
 
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, RecipeHolder recipe);

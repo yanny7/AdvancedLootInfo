@@ -216,6 +216,12 @@ public class TooltipTestSuite {
                 return PluginManager.getInstance().serverRegistry.getTooltipCache();
             }
 
+            @NotNull
+            @Override
+            public HolderLookup.Provider lookupProvider() {
+                return PluginManager.getInstance().serverRegistry.lookupProvider();
+            }
+
             @Override
             public int getTranslationKeyIndex(String key) {
                 return PluginManager.getInstance().serverRegistry.getTranslationKeyIndex(key);

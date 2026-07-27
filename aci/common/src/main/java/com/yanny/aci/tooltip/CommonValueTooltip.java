@@ -2,8 +2,10 @@ package com.yanny.aci.tooltip;
 
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
+import com.yanny.aci.api.RangeValue;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -15,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.UUID;
 
 public class CommonValueTooltip<
@@ -24,6 +27,7 @@ public class CommonValueTooltip<
     public void registerAll(TServerRegistry registry) {
         registry.registerValueTooltip(Collection.class, this::getCollectionTooltip);
         registry.registerValueTooltip(Optional.class, this::getOptionalTooltip);
+        registry.registerValueTooltip(OptionalInt.class, this::getOptionalIntTooltip);
         registry.registerValueTooltip(Holder.class, this::getHolderTooltip);
         registry.registerValueTooltip(Boolean.class, this::getBooleanTooltip);
         registry.registerValueTooltip(Integer.class, this::getIntegerTooltip);
@@ -43,6 +47,8 @@ public class CommonValueTooltip<
         registry.registerValueTooltip(IntList.class, this::getIntListTooltip);
         registry.registerValueTooltip(EitherHolder.class, this::getEitherHolderTooltip);
         registry.registerValueTooltip(Property.class, this::getPropertyTooltip);
+        registry.registerValueTooltip(RangeValue.class, this::getRangeValueTooltip);
+        registry.registerValueTooltip(HolderSet.class, this::getHolderSetTooltip);
     }
 
     private TooltipBuilder getCollectionTooltip(TServerUtils utils, Collection<?> collection) {
@@ -66,6 +72,16 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getOptionalTooltip(TServerUtils utils, Optional<?> optional) {
         return optional.map((v) -> utils.getValueTooltip(utils, v)).orElse(TooltipBuilder.empty());
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    @NotNull
+    private TooltipBuilder getOptionalIntTooltip(TServerUtils utils, OptionalInt optional) {
+        if (optional.isPresent()) {
+            return utils.getValueTooltip(utils, optional.getAsInt());
+        }
+
+        return TooltipBuilder.empty();
     }
 
     @NotNull
@@ -156,5 +172,23 @@ public class CommonValueTooltip<
     @NotNull
     private TooltipBuilder getPropertyTooltip(TServerUtils utils, Property<?> property) {
         return utils.getValueTooltip(utils, property.getName());
+    }
+
+    @NotNull
+    private TooltipBuilder getRangeValueTooltip(TServerUtils utils, RangeValue value) {
+        return utils.getValueTooltip(utils, value.toIntString());
+    }
+
+    @NotNull
+    private TooltipBuilder getHolderSetTooltip(TServerUtils utils, HolderSet<?> collection) {
+        if (collection.size() == 0) {
+            return TooltipBuilder.empty();
+        }
+
+        return TooltipBuilder.branch((b) -> {
+            for (Object o : collection) {
+                b.add(utils.getValueTooltip(utils, o));
+            }
+        });
     }
 }

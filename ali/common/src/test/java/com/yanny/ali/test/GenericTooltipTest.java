@@ -161,7 +161,7 @@ public class GenericTooltipTest {
                 .forSlot(EquipmentSlotGroup.CHEST)
                 .forSlot(EquipmentSlotGroup.LEGS)
                 .forSlot(EquipmentSlotGroup.FEET)
-                .build()).build(Lang.Branch.MODIFIER), List.of(
+                .build()).build(), List.of(
                 "Modifier:",
                 "  -> Attribute: minecraft:generic.armor",
                 "  -> Operation: ADD_MULTIPLIED_TOTAL",
