@@ -129,7 +129,7 @@ public class TrunkPlacerTooltipTest {
                 "  -> Second Branch Start Offset From Top:",
                 "    -> Uniform:",
                 "      -> Range: 2-3",
-                "  -> Branch End Offset From Top: %s",
+                "  -> Branch End Offset From Top:",
                 "    -> Constant:",
                 "      -> Value: 1"
         ));

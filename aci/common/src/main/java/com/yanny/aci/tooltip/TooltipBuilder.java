@@ -1,6 +1,7 @@
 package com.yanny.aci.tooltip;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.language.IMultiKey;
 import com.yanny.aci.manager.CorePluginManager;
 import net.minecraft.core.HolderLookup;
@@ -134,6 +135,26 @@ public class TooltipBuilder {
         return builder;
     }
 
+    /**
+     * Builds one element of an iterated sequence. An element that renders as more than one line but carries no header
+     * of its own splices those lines straight into its parent, leaving no visible boundary between neighbouring
+     * elements - those get a generic header. A sequence holding a single element needs no boundary, so it is left
+     * alone, as is any element that already names itself.
+     *
+     * @param builder element to build
+     * @param size    total number of elements in the sequence being iterated
+     */
+    @NotNull
+    public static TooltipNode asElement(TooltipBuilder builder, int size) {
+        TooltipNode node = builder.build();
+
+        if (size > 1 && !node.hasKey() && node.lineSpan() > 1) {
+            return TooltipBuilder.branch((b) -> b.add(node)).build(CoreLang.Utils.ENTRY);
+        }
+
+        return node;
+    }
+
     private TooltipBuilder() {}
 
     public TooltipBuilder isAdvancedTooltip() {
@@ -164,10 +185,6 @@ public class TooltipBuilder {
     }
 
     public TooltipNode build(IMultiKey mk) {
-        if (this.hasKey()) {
-            return TooltipBuilder.branch((b) -> b.add(this)).key(mk).build();
-        }
-
         return this.key(mk).build();
     }
 

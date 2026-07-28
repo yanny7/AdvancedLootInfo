@@ -58,7 +58,7 @@ public class CommonValueTooltip<
 
         return TooltipBuilder.branch((b) -> {
             for (Object o : collection) {
-                b.add(utils.getValueTooltip(utils, o));
+                b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, o), collection.size()));
             }
         });
     }
@@ -187,7 +187,7 @@ public class CommonValueTooltip<
 
         return TooltipBuilder.branch((b) -> {
             for (Object o : collection) {
-                b.add(utils.getValueTooltip(utils, o));
+                b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, o), collection.size()));
             }
         });
     }

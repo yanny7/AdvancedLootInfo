@@ -10,6 +10,7 @@ public final class CoreLang {
 
     public enum Utils implements ITooltipKey {
         AUTO_DETECTED("auto_detected", "Auto-detected: %s"),
+        ENTRY("entry", "Entry:"),
         NOT_IMPLEMENTED("missing", "Not implemented: %s"),
         REMOVED("removed", "REMOVED"),
         ;
