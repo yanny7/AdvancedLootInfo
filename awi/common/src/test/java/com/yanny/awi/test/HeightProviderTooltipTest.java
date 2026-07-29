@@ -93,11 +93,10 @@ public class HeightProviderTooltipTest {
                 "Weighted List:",
                 "  -> Total Weight: 2",
                 "  -> Items:",
-                "    -> Entry:",
-                "      -> Weight: 2",
-                "      -> Data:",
-                "        -> Constant:",
-                "          -> Absolute Y: 5"
+                "    -> Weight: 2",
+                "    -> Data:",
+                "      -> Constant:",
+                "        -> Absolute Y: 5"
         ));
     }
 }
