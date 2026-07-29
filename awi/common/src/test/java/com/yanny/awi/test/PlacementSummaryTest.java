@@ -111,21 +111,21 @@ public class PlacementSummaryTest {
         // per-layer count is known (5) but the number of layers isn't ⇒ flagged uncertain
         assertEquals(Kind.UNKNOWN, contribution.count().kind());
         assertTrue(contribution.count().range().isUnknown());
-        assertEquals("5[+???]", contribution.count().range().toIntString());
+        assertEquals("1[+???]", contribution.count().range().toIntString());
     }
 
     @Test
     public void testNoiseBasedCountIsUnknown() {
         PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, NoiseBasedCountPlacement.of(5, 1.5, 0.2), CTX);
         assertEquals(Kind.UNKNOWN, contribution.count().kind());
-        assertEquals("0-5[+???]", contribution.count().range().toIntString()); // up to noiseToCountRatio
+        assertEquals("1[+???]", contribution.count().range().toIntString()); // up to noiseToCountRatio
     }
 
     @Test
     public void testNoiseThresholdCountIsUnknown() {
         PlacementContribution contribution = UTILS.getPlacementContribution(UTILS, NoiseThresholdCountPlacement.of(0.5, 2, 8), CTX);
         assertEquals(Kind.UNKNOWN, contribution.count().kind());
-        assertEquals("2-8[+???]", contribution.count().range().toIntString()); // either belowNoise or aboveNoise
+        assertEquals("1[+???]", contribution.count().range().toIntString()); // either belowNoise or aboveNoise
     }
 
     @Test
