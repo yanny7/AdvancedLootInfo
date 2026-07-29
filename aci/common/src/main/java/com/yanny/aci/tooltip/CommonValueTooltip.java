@@ -1,8 +1,10 @@
 package com.yanny.aci.tooltip;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.api.RangeValue;
+import com.yanny.aci.language.CoreLang;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -15,10 +17,7 @@ import net.minecraft.world.item.EitherHolder;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.OptionalInt;
-import java.util.UUID;
+import java.util.*;
 
 public class CommonValueTooltip<
         TServerUtils    extends ICoreServerUtils<TServerUtils>,
@@ -180,15 +179,24 @@ public class CommonValueTooltip<
     }
 
     @NotNull
-    private TooltipBuilder getHolderSetTooltip(TServerUtils utils, HolderSet<?> collection) {
-        if (collection.size() == 0) {
+    public TooltipBuilder getHolderSetTooltip(TServerUtils utils, HolderSet<?> holderSet) {
+        //noinspection unchecked
+        Either<TagKey<?>, List<Holder<?>>> either = (Either<TagKey<?>, List<Holder<?>>>)(Object) holderSet.unwrap();
+        Optional<TagKey<?>> left = either.left();
+        Optional<List<Holder<?>>> right = either.right();
+
+        if (left.isEmpty() && right.orElse(List.of()).isEmpty()) {
             return TooltipBuilder.empty();
         }
 
-        return TooltipBuilder.branch((b) -> {
-            for (Object o : collection) {
-                b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, o), collection.size()));
-            }
-        });
+        return left
+                .map(tagKey -> TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, tagKey).key(CoreLang.Utils.TAG))))
+                .orElseGet(() -> TooltipBuilder.branch((b) -> {
+                    List<Holder<?>> list = right.get();
+
+                    if (!list.isEmpty()) {
+                        list.forEach((holder) -> b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, holder), list.size())));
+                    }
+                }));
     }
 }
