@@ -131,4 +131,12 @@ public class BlockPredicateTooltipTest {
                 "True Block"
         ));
     }
+
+    @Test
+    public void testUnobstructedPredicateTooltip() {
+        assertTooltip(BlockPredicateTooltipUtils.getUnobstructedPredicateTooltip(UTILS, new UnobstructedPredicate(new Vec3i(1, 2, 3))).build(), List.of(
+                "Unobstructed:",
+                "  -> Offset: [1,2,3]"
+        ));
+    }
 }

@@ -386,6 +386,7 @@ public final class Lang {
         OVERLAY_STRUCTURES(Value.OVERLAY_STRUCTURE, "overlay_structures", "Overlay Structures:"),
         PLACEMENT("placement", "Placement:"),
         POINT_OFFSET(Value.POINT_OFFSET, "point_offset", "Point Offset:"),
+        POSITIONS("positions", "Positions:"),
         PREDICATE("predicate", "Predicate:"),
         PREDICATES("predicates", "Predicates:"),
         PROPERTIES("properties", "Properties:"),
@@ -706,6 +707,7 @@ public final class Lang {
         REPLACEABLE("replaceable", "Replaceable:"),
         SOLID("solid", "Solid:"),
         TRUE_BLOCK("true_block", "True Block"),
+        UNOBSTRUCTED("unobstructed", "Unobstructed:"),
         WOULD_SURVIVE("would_survive", "Would Survive:"),
         ;
 

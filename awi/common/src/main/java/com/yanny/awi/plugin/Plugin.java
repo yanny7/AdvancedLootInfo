@@ -207,6 +207,7 @@ public class Plugin implements IPlugin {
         registry.registerBlockPredicateTooltip(AllOfPredicate.class, BlockPredicateTooltipUtils::getAllOfPredicateTooltip);
         registry.registerBlockPredicateTooltip(NotPredicate.class, BlockPredicateTooltipUtils::getNotPredicateTooltip);
         registry.registerBlockPredicateTooltip(TrueBlockPredicate.class, BlockPredicateTooltipUtils::getTrueBlockPredicateTooltip);
+        registry.registerBlockPredicateTooltip(UnobstructedPredicate.class, BlockPredicateTooltipUtils::getUnobstructedPredicateTooltip);
 
         registry.registerPlacementModifierTooltip(BiomeFilter.class, PlacementModifierTooltipUtils::getBiomeFilterTooltip);
         registry.registerPlacementModifierTooltip(BlockPredicateFilter.class, PlacementModifierTooltipUtils::getBlockPredicateFilterTooltip);
@@ -223,6 +224,7 @@ public class Plugin implements IPlugin {
         registry.registerPlacementModifierTooltip(RandomOffsetPlacement.class, PlacementModifierTooltipUtils::getRandomOffsetPlacementTooltip);
         registry.registerPlacementModifierTooltip(SurfaceRelativeThresholdFilter.class, PlacementModifierTooltipUtils::getSurfaceRelativeThresholdFilterTooltip);
         registry.registerPlacementModifierTooltip(SurfaceWaterDepthFilter.class, PlacementModifierTooltipUtils::getSurfaceWaterDepthFilterTooltip);
+        registry.registerPlacementModifierTooltip(FixedPlacement.class, PlacementModifierTooltipUtils::getFixedPlacementTooltip);
 
         registry.registerIntSpanPropagator(ConstantInt.class, IntSpanPropagatorUtils::getConstantInt);
         registry.registerIntSpanPropagator(UniformInt.class, IntSpanPropagatorUtils::getUniformInt);
@@ -246,6 +248,7 @@ public class Plugin implements IPlugin {
         registry.registerPlacementPropagator(HeightRangePlacement.class, PlacementPropagatorUtils::getHeightRangePlacement);
         registry.registerPlacementPropagator(HeightmapPlacement.class, PlacementPropagatorUtils::getHeightmapPlacement);
         registry.registerPlacementPropagator(SurfaceRelativeThresholdFilter.class, PlacementPropagatorUtils::getSurfaceRelativeThresholdFilter);
+        registry.registerPlacementPropagator(FixedPlacement.class, PlacementPropagatorUtils::getFixedPlacement);
 
         registry.registerFeatureBlockCollector(BlockColumnConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockColumnConfigurationBlocks);
         registry.registerFeatureBlockCollector(BlockPileConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockPileConfigurationBlocks);

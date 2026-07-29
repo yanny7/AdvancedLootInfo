@@ -83,4 +83,9 @@ public class BlockPredicateTooltipUtils {
     public static TooltipBuilder getTrueBlockPredicateTooltip(IServerUtils ignoredUtils, TrueBlockPredicate ignoredPredicate) {
         return array(TooltipBuilder::showEmpty, Lang.BlockPredicate.TRUE_BLOCK);
     }
+
+    @NotNull
+    public static TooltipBuilder getUnobstructedPredicateTooltip(IServerUtils utils, UnobstructedPredicate predicate) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset()).build(Lang.Value.OFFSET)), Lang.BlockPredicate.UNOBSTRUCTED);
+    }
 }

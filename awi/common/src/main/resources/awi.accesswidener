@@ -25,6 +25,7 @@ accessible method net/minecraft/world/level/levelgen/feature/foliageplacers/Foli
 accessible method net/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacer type ()Lnet/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacerType;
 accessible method net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessor getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorType;
 accessible method net/minecraft/world/level/levelgen/structure/templatesystem/PosRuleTest getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/PosRuleTestType;
+accessible method net/minecraft/world/level/levelgen/blockpredicates/UnobstructedPredicate <init> (Lnet/minecraft/core/Vec3i;)V
 
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context surfaceDepth I
 accessible field net/minecraft/world/level/levelgen/SurfaceRules$Context stoneDepthAbove I
@@ -163,7 +164,7 @@ accessible field net/minecraft/world/level/levelgen/structure/templatesystem/Axi
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/AxisAlignedLinearPosTest minDist I
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/AxisAlignedLinearPosTest maxDist I
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/AxisAlignedLinearPosTest axis Lnet/minecraft/core/Direction$Axis;
-accessible field net/minecraft/world/level/levelgen/structure/templatesystem/rule/blockentity/AppendLoot lootTable Lnet/minecraft/resources/ResourceLocation;
+accessible field net/minecraft/world/level/levelgen/structure/templatesystem/rule/blockentity/AppendLoot lootTable Lnet/minecraft/resources/ResourceKey;
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/rule/blockentity/AppendStatic tag Lnet/minecraft/nbt/CompoundTag;
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacer radius Lnet/minecraft/util/valueproviders/IntProvider;
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacer offset Lnet/minecraft/util/valueproviders/IntProvider;
@@ -179,6 +180,7 @@ accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/Cherr
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer cornerHoleChance F
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer hangingLeavesChance F
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer hangingLeavesExtensionChance F
+accessible field net/minecraft/world/level/levelgen/placement/FixedPlacement positions Ljava/util/List;
 
 accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
 accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker
@@ -190,6 +192,7 @@ accessible class net/minecraft/world/level/levelgen/blockpredicates/AllOfPredica
 accessible class net/minecraft/world/level/levelgen/blockpredicates/NotPredicate
 accessible class net/minecraft/world/level/levelgen/blockpredicates/TrueBlockPredicate
 accessible class net/minecraft/world/level/levelgen/blockpredicates/ReplaceablePredicate
+accessible class net/minecraft/world/level/levelgen/blockpredicates/UnobstructedPredicate
 
 # fossil structure templates
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate palettes Ljava/util/List;

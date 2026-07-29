@@ -53,6 +53,11 @@ public class PlacementPropagatorUtils {
         return PlacementContribution.ofHeight(HeightSpan.relativeTo(placement.heightmap));
     }
 
+    @NotNull
+    public static PlacementContribution getFixedPlacement(IServerUtils utils, FixedPlacement placement, ColumnContext ignoredCtx) {
+        return PlacementContribution.ofCount(new CountSpan(markUnknown(), Kind.UNKNOWN, unknownDetails(utils, placement)));
+    }
+
     /** Keeps the numeric range but flags it uncertain (rendered as {@code Unknown}). */
     @NotNull
     private static RangeValue markUnknown() {
