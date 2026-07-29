@@ -68,11 +68,11 @@ public class FunctionTooltipTest {
                 "Copy Nbt:",
                 "  -> Nbt Provider: minecraft:context",
                 "  -> Operations:",
-                "    -> Operation:",
+                "    -> Entry:",
                 "      -> Source: asdf",
                 "      -> Target: jklo",
                 "      -> Merge Strategy: MERGE",
-                "    -> Operation:",
+                "    -> Entry:",
                 "      -> Source: qwer",
                 "      -> Target: uiop",
                 "      -> Merge Strategy: APPEND"
@@ -200,7 +200,7 @@ public class FunctionTooltipTest {
                         .forSlot(EquipmentSlot.MAINHAND))
                 .build()).build(), List.of(
                 "Set Attributes:",
-                "  -> Modifier:",
+                "  -> Entry:",
                 "    -> Name: armor",
                 "    -> Attribute: minecraft:generic.armor",
                 "    -> Operation: MULTIPLY_TOTAL",
@@ -210,7 +210,7 @@ public class FunctionTooltipTest {
                 "      -> LEGS",
                 "      -> CHEST",
                 "      -> HEAD",
-                "  -> Modifier:",
+                "  -> Entry:",
                 "    -> Name: chest",
                 "    -> Attribute: minecraft:generic.armor_toughness",
                 "    -> Operation: MULTIPLY_BASE",

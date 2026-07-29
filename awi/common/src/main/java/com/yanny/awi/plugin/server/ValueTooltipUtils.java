@@ -152,7 +152,7 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.getWeight()).build(Lang.Value.WEIGHT));
             b.add(utils.getValueTooltip(utils, value.getData()).build(Lang.Branch.DATA));
-        }).key(Lang.Branch.ENTRY);
+        });
     }
 
     @NotNull
@@ -165,7 +165,7 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.height()).build(Lang.Branch.HEIGHT));
             b.add(utils.getValueTooltip(utils, value.state()).build(Lang.Branch.STATE));
-        }).key(Lang.Branch.ENTRY);
+        });
     }
 
     @NotNull

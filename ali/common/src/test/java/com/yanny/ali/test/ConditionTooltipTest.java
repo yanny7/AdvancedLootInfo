@@ -195,8 +195,7 @@ public class ConditionTooltipTest {
         ).build()).build(), List.of(
                 "Match Tool:",
                 "  -> Enchantments:",
-                "    -> Predicate:",
-                "      -> Enchantment: minecraft:looting"
+                "    -> Enchantment: minecraft:looting"
         ));
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
                 ItemPredicate.Builder.item()

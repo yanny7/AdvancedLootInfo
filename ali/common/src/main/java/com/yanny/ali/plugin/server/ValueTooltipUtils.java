@@ -63,7 +63,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, modifier.amount).build(Lang.Value.AMOUNT));
             b.add(utils.getValueTooltip(utils, modifier.id).build(Lang.Value.UUID));
             b.add(utils.getValueTooltip(utils, modifier.slots).build(Lang.Branch.EQUIPMENT_SLOTS));
-        }).key(Lang.Branch.MODIFIER);
+        });
     }
 
     @NotNull
@@ -279,7 +279,7 @@ public class ValueTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, enchantmentPredicate.enchantment).build(Lang.Branch.ENCHANTMENTS));
             b.add(utils.getValueTooltip(utils, enchantmentPredicate.level).build(Lang.Value.LEVEL));
-        }).key(Lang.Branch.PREDICATE);
+        });
     }
 
     @NotNull
@@ -330,7 +330,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, copyOperation.sourcePathText).build(Lang.Value.SOURCE));
             b.add(utils.getValueTooltip(utils, copyOperation.targetPathText).build(Lang.Value.TARGET));
             b.add(utils.getValueTooltip(utils, copyOperation.op).build(Lang.Value.MERGE_STRATEGY));
-        }).key(Lang.Branch.OPERATION);
+        });
     }
 
     @NotNull
