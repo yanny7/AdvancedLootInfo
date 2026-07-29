@@ -172,10 +172,15 @@ public class PlacementSummaryTest {
 
     @Test
     public void testSummaryTooltipUnknownCountRendersAsUnknown() {
-        // noise-based count has no clean numeric value ⇒ show "Unknown", not "0-5[+???]"
+        // noise-based count has no clean numeric value ⇒ show "Unknown", not "0-5[+???]", but nest the
+        // modifier's own tooltip (header + parameters) so the reader can see which values it came from
         List<PlacementModifier> modifiers = List.of(NoiseBasedCountPlacement.of(5, 1.5, 0.2));
         assertTooltip(renderSummary(modifiers), List.of(
-                "Attempts Per Chunk: Unknown"
+                "Attempts Per Chunk: Unknown",
+                "  -> Noise Based Count Placement:",
+                "    -> Noise To Count Ratio: 5",
+                "    -> Noise Factor: 1.5",
+                "    -> Noise Offset: 0.2"
         ));
     }
 

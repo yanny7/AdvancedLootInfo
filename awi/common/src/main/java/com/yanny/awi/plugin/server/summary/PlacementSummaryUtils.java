@@ -62,7 +62,13 @@ public class PlacementSummaryUtils {
     /** Attempts per chunk (feature tries, NOT block count), with the count distribution kind when meaningful. */
     private static void addCount(TooltipBuilder b, CountSpan count) {
         if (count.range().isUnknown()) {
-            b.add(TooltipBuilder.value(TooltipBuilder.translate(Lang.Kind.UNKNOWN.singular())).build(Lang.Value.ATTEMPTS_PER_CHUNK));
+            TooltipBuilder value = TooltipBuilder.value(TooltipBuilder.translate(Lang.Kind.UNKNOWN.singular()));
+
+            if (count.details() != null) {
+                value.add(count.details());
+            }
+
+            b.add(value.build(Lang.Value.ATTEMPTS_PER_CHUNK));
             return;
         }
 
