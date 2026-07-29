@@ -1,6 +1,7 @@
 ## []
 
 - Improved rendering performance with a lot of slots (radimous)
+- Minor changes to tooltips - less levels in some cases
 
 ## [1.12.0]
 
