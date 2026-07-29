@@ -608,7 +608,7 @@ public class GenericTooltipTest {
                 "    -> Tag: minecraft:exclusive_set/boots",
                 "  -> Level: ≤2"
         ));
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(), List.of(
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling"
         ));
@@ -850,7 +850,7 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getPossibleEffectTooltip(UTILS, new FoodProperties.PossibleEffect(
                 new MobEffectInstance(MobEffects.LUCK, 1),
                 0.5f
-        )).build(), List.of(
+        )).build(Lang.Branch.POSSIBLE_EFFECT), List.of(
                 "Possible Effect:",
                 "  -> Effect:",
                 "    -> Effect: minecraft:luck",

@@ -45,7 +45,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<PlacementModifier> codec = ((Codec<PlacementModifier>) placement.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placement).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, placement).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -67,7 +67,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<IntProvider> codec = ((Codec<IntProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -89,7 +89,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<RuleTest> codec = ((Codec<RuleTest>) test.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, test).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, test).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -111,7 +111,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<HeightProvider> codec = ((Codec<HeightProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -133,7 +133,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<BlockPredicate> codec = ((Codec<BlockPredicate>) predicate.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, predicate).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, predicate).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -155,7 +155,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<BlockStateProvider> codec = ((Codec<BlockStateProvider>) provider.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -177,7 +177,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<TreeDecorator> codec = ((Codec<TreeDecorator>) decorator.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, decorator).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, decorator).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -199,7 +199,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<FeatureSize> codec = ((Codec<FeatureSize>) size.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, size).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, size).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -221,7 +221,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<RootPlacer> codec = ((Codec<RootPlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -243,7 +243,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<FoliagePlacer> codec = ((Codec<FoliagePlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -265,7 +265,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<TrunkPlacer> codec = ((Codec<TrunkPlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -287,7 +287,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<FloatProvider> codec = ((Codec<FloatProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -309,7 +309,7 @@ public class MissingTooltipUtils {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
             Codec<StructureProcessor> codec = ((Codec<StructureProcessor>) processor.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, processor).getOrThrow(true, (s) -> {});
+            JsonElement jsonElement = codec.encodeStart(registryOps, processor).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {

@@ -63,7 +63,7 @@ public class HeightSpanPropagatorUtils {
         int bestWeight = -1;
 
         for (WeightedEntry.Wrapper<HeightProvider> entry : provider.distribution.unwrap()) {
-            HeightSpan span = utils.getHeightSpan(utils, entry.getData(), ctx);
+            HeightSpan span = utils.getHeightSpan(utils, entry.data(), ctx);
             min = Math.min(min, span.range().min());
             max = Math.max(max, span.range().max());
 

@@ -19,7 +19,6 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.commands.arguments.NbtPathArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.*;
 import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
@@ -400,7 +399,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(EntityPredicate.LocationWrapper.class, ValueTooltipUtils::getLocationWrapperTooltip);
         registry.registerValueTooltip(MovementPredicate.class, ValueTooltipUtils::getMovementPredicateTooltip);
         registry.registerValueTooltip(SlotsPredicate.class, ValueTooltipUtils::getSlotPredicateTooltip);
-        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
+//        registry.registerValueTooltip(HolderSet.class, ValueTooltipUtils::getHolderSetTooltip);
         registry.registerValueTooltip(CollectionPredicate.class, ValueTooltipUtils::getCollectionPredicateTooltip);
         registry.registerValueTooltip(CollectionContentsPredicate.class, ValueTooltipUtils::getCollectionContentsPredicateTooltip);
         registry.registerValueTooltip(CollectionCountsPredicate.class, ValueTooltipUtils::getCollectionCountsPredicateTooltip);

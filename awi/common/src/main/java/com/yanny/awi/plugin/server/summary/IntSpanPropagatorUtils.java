@@ -46,7 +46,7 @@ public class IntSpanPropagatorUtils {
         float max = -Float.MAX_VALUE;
 
         for (WeightedEntry.Wrapper<IntProvider> entry : provider.distribution.unwrap()) {
-            RangeValue range = utils.getIntSpan(utils, entry.getData()).range();
+            RangeValue range = utils.getIntSpan(utils, entry.data()).range();
             min = Math.min(min, range.min());
             max = Math.max(max, range.max());
         }

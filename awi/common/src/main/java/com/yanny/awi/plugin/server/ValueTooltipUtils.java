@@ -151,7 +151,7 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getWeightedEntryWrapperTooltip(IServerUtils utils, WeightedEntry.Wrapper<?> value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.getWeight()).build(Lang.Value.WEIGHT));
-            b.add(utils.getValueTooltip(utils, value.getData()).build(Lang.Branch.DATA));
+            b.add(utils.getValueTooltip(utils, value.data()).build(Lang.Branch.DATA));
         });
     }
 

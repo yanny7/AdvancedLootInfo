@@ -139,13 +139,12 @@ public class DataComponentTooltipTest {
                 true
         )).build(), List.of(
                 "Blocks:",
-                "  -> Predicate:",
+                "  -> Entry:",
                 "    -> Blocks:",
                 "      -> Tag: minecraft:beds",
                 "    -> Properties:",
                 "      -> part: foot",
-                "  -> Predicate:",
-                "    -> Block: minecraft:bell",
+                "  -> Block: minecraft:bell",
                 "Tooltip: Bell",
                 "Show In Tooltip: true"
         ));
@@ -177,14 +176,14 @@ public class DataComponentTooltipTest {
                 false
         )).build(), List.of(
                 "Modifiers:",
-                "  -> Modifier:",
+                "  -> Entry:",
                 "    -> Attribute: minecraft:generic.armor",
                 "    -> Modifier:",
                 "      -> Id: minecraft:hello",
                 "      -> Amount: 0.5",
                 "      -> Operation: ADD_VALUE",
                 "    -> Slot: HEAD",
-                "  -> Modifier:",
+                "  -> Entry:",
                 "    -> Attribute: minecraft:generic.armor_toughness",
                 "    -> Modifier:",
                 "      -> Id: minecraft:world",
@@ -237,7 +236,7 @@ public class DataComponentTooltipTest {
                 "  -> Item: minecraft:coal",
                 "  -> Count: 5",
                 "Effects:",
-                "  -> Possible Effect:",
+                "  -> Entry:",
                 "    -> Effect:",
                 "      -> Effect: minecraft:luck",
                 "      -> Duration: 0",
@@ -246,7 +245,7 @@ public class DataComponentTooltipTest {
                 "      -> Is Visible: true",
                 "      -> Show Icon: true",
                 "    -> Probability: 0.5",
-                "  -> Possible Effect:",
+                "  -> Entry:",
                 "    -> Effect:",
                 "      -> Effect: minecraft:blindness",
                 "      -> Duration: 5",
@@ -277,14 +276,13 @@ public class DataComponentTooltipTest {
                 10
         )).build(), List.of(
                 "Rules:",
-                "  -> Rule:",
+                "  -> Entry:",
                 "    -> Blocks:",
                 "      -> minecraft:dirt",
                 "      -> minecraft:stone",
                 "    -> Correct For Drops: true",
                 "    -> Speed: 2.5",
-                "  -> Rule:",
-                "    -> Block: minecraft:furnace",
+                "  -> Block: minecraft:furnace",
                 "Default Mining Speed: 0.5",
                 "Damage Per Block: 10"
         ));
@@ -345,10 +343,10 @@ public class DataComponentTooltipTest {
                 new ItemStack(Holder.direct(Items.SNOWBALL), 2)
         ))).build(), List.of(
                 "Items:",
-                "  -> Item:",
+                "  -> Entry:",
                 "    -> Item: minecraft:arrow",
                 "    -> Count: 25",
-                "  -> Item:",
+                "  -> Entry:",
                 "    -> Item: minecraft:snowball",
                 "    -> Count: 2",
                 "    -> Components:",
@@ -364,10 +362,10 @@ public class DataComponentTooltipTest {
                 new ItemStack(Holder.direct(Items.DIORITE))
         ))).build(), List.of(
                 "Items:",
-                "  -> Item:",
+                "  -> Entry:",
                 "    -> Item: minecraft:coal_block",
                 "    -> Count: 1",
-                "  -> Item:",
+                "  -> Entry:",
                 "    -> Item: minecraft:diorite",
                 "    -> Count: 1",
                 "Fraction: 1/32"
@@ -387,14 +385,14 @@ public class DataComponentTooltipTest {
                 "Potion: minecraft:harming",
                 "Custom Color: 5",
                 "Custom Effects:",
-                "  -> Effect:",
+                "  -> Entry:",
                 "    -> Effect: minecraft:blindness",
                 "    -> Duration: 5",
                 "    -> Amplifier: 2",
                 "    -> Ambient: false",
                 "    -> Is Visible: true",
                 "    -> Show Icon: true",
-                "  -> Effect:",
+                "  -> Entry:",
                 "    -> Effect: minecraft:absorption",
                 "    -> Duration: 0",
                 "    -> Amplifier: 0",
@@ -425,10 +423,10 @@ public class DataComponentTooltipTest {
                 new Filterable<>("Lorem", Optional.of("Ipsum"))
         ))).build(), List.of(
                 "Pages:",
-                "  -> Page:",
+                "  -> Entry:",
                 "    -> Raw: Hello",
                 "    -> Filtered: World",
-                "  -> Page:",
+                "  -> Entry:",
                 "    -> Raw: Lorem",
                 "    -> Filtered: Ipsum"
         ));
@@ -452,10 +450,10 @@ public class DataComponentTooltipTest {
                 "Author: Yanny",
                 "Generation: 3",
                 "Pages:",
-                "  -> Page:",
+                "  -> Entry:",
                 "    -> Raw: Lorem",
                 "    -> Filtered: Ipsum",
-                "  -> Page:",
+                "  -> Entry:",
                 "    -> Raw: Sum",
                 "    -> Filtered: Rum",
                 "Resolved: true"
@@ -568,13 +566,13 @@ public class DataComponentTooltipTest {
         )).build(), List.of(
                 "Flight Duration: 10",
                 "Explosions:",
-                "  -> Explosion:",
+                "  -> Entry:",
                 "    -> Shape: STAR",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
                 "    -> Has Trail: true",
                 "    -> Has Twinkle: true",
-                "  -> Explosion:",
+                "  -> Entry:",
                 "    -> Shape: CREEPER",
                 "    -> Colors: []",
                 "    -> Fade Colors: []",
@@ -600,16 +598,14 @@ public class DataComponentTooltipTest {
                 "Properties:",
                 "  -> Hello",
                 "    -> Properties:",
-                "      -> Property:",
-                "        -> Name: asdf",
-                "        -> Value: jklo",
-                "        -> Signature: sign",
+                "      -> Name: asdf",
+                "      -> Value: jklo",
+                "      -> Signature: sign",
                 "  -> World",
                 "    -> Properties:",
-                "      -> Property:",
-                "        -> Name: qwer",
-                "        -> Value: uiop",
-                "        -> Signature: help"
+                "      -> Name: qwer",
+                "      -> Value: uiop",
+                "      -> Signature: help"
         ));
     }
 
@@ -659,10 +655,10 @@ public class DataComponentTooltipTest {
                 new ItemStack(Holder.direct(Items.DIORITE), 1)
         ))).build(), List.of(
                 "Items:",
-                "  -> Item:",
+                "  -> Entry:",
                 "    -> Item: minecraft:andesite",
                 "    -> Count: 10",
-                "  -> Item:",
+                "  -> Entry:",
                 "    -> Item: minecraft:diorite",
                 "    -> Count: 1"
         ));
@@ -689,11 +685,11 @@ public class DataComponentTooltipTest {
                 new BeehiveBlockEntity.Occupant(CustomData.of(new CompoundTag()), 1000, 30)
         )).build(), List.of(
                 "Bees:",
-                "  -> Occupant:",
+                "  -> Entry:",
                 "    -> Entity Data: {}",
                 "    -> Ticks In Hive: 100",
                 "    -> Min Ticks In Hive: 20",
-                "  -> Occupant:",
+                "  -> Entry:",
                 "    -> Entity Data: {}",
                 "    -> Ticks In Hive: 1000",
                 "    -> Min Ticks In Hive: 30"

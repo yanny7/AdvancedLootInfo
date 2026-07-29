@@ -808,8 +808,8 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testFossilFeatureConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getFossilFeatureConfigurationTooltip(UTILS, new FossilFeatureConfiguration(
-                List.of(new ResourceLocation("minecraft", "fossil/spine_1")),
-                List.of(new ResourceLocation("minecraft", "fossil_spine_1")),
+                List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "fossil/spine_1")),
+                List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "fossil_spine_1")),
                 Holder.direct(new StructureProcessorList(List.of())),
                 Holder.direct(new StructureProcessorList(List.of())),
                 3
