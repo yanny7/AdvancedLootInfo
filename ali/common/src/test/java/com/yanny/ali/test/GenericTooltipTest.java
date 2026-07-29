@@ -161,7 +161,7 @@ public class GenericTooltipTest {
                 .forSlot(EquipmentSlotGroup.CHEST)
                 .forSlot(EquipmentSlotGroup.LEGS)
                 .forSlot(EquipmentSlotGroup.FEET)
-                .build()).build(), List.of(
+                .build()).build(Lang.Branch.MODIFIER), List.of(
                 "Modifier:",
                 "  -> Attribute: minecraft:generic.armor",
                 "  -> Operation: ADD_MULTIPLIED_TOTAL",
@@ -565,17 +565,17 @@ public class GenericTooltipTest {
                 "    -> Damage:",
                 "      -> Durability: ≤5",
                 "    -> Enchantments:",
-                "      -> Predicate:",
+                "      -> Entry:",
                 "        -> Enchantment: minecraft:smite",
                 "        -> Level: ≥1",
-                "      -> Predicate:",
+                "      -> Entry:",
                 "        -> Enchantment: minecraft:mending",
                 "        -> Level: 2-4",
                 "    -> Stored Enchantments:",
-                "      -> Predicate:",
+                "      -> Entry:",
                 "        -> Enchantment: minecraft:depth_strider",
                 "        -> Level: ≤5",
-                "      -> Predicate:",
+                "      -> Entry:",
                 "        -> Enchantment: minecraft:lure",
                 "        -> Level: ≥4",
                 "    -> Potions:",
@@ -587,14 +587,14 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(), List.of(
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Level: ≥1"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING),
                 MinMaxBounds.Ints.atMost(2))
-        ).build(), List.of(
+        ).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling",
                 "  -> Level: ≤2"
@@ -602,7 +602,7 @@ public class GenericTooltipTest {
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.BOOTS_EXCLUSIVE).orElseThrow(),
                 MinMaxBounds.Ints.atMost(2))
-        ).build(), List.of(
+        ).build(Lang.Branch.PREDICATE), List.of(
                 "Predicate:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:exclusive_set/boots",
