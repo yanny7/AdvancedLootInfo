@@ -5,13 +5,13 @@ import com.yanny.awi.Utils;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<Block> blocks) {
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks, ColumnContext columnContext) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
@@ -35,7 +35,7 @@ public class BiomeNode extends ListNode {
             HolderSet<PlacedFeature> feature = features.get(i);
             GenerationStep.Decoration step = GenerationStep.Decoration.values()[i];
 
-            addChildren(new GenerationStepNode(utils, step, feature));
+            addChildren(new GenerationStepNode(utils, step, feature, columnContext));
         }
 
         this.tooltip = tooltip;

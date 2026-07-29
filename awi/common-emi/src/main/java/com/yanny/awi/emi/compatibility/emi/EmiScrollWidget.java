@@ -22,6 +22,12 @@ public class EmiScrollWidget extends Widget implements IMouseEvents {
             @Override
             public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {
+                    Bounds b = widget.getBounds();
+
+                    if (isOutsideViewport(b.y(), b.height())) {
+                        continue;
+                    }
+
                     widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
             }

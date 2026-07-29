@@ -54,9 +54,8 @@ public class DataComponentPredicateTooltipTest {
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
         ))).build(), List.of(
                 "Enchantments:",
-                "  -> Enchantment:",
-                "    -> Enchantment: minecraft:looting",
-                "  -> Enchantment:",
+                "  -> Enchantment: minecraft:looting",
+                "  -> Entry:",
                 "    -> Enchantment: minecraft:mending",
                 "    -> Level: 1-5"
         ));
@@ -68,10 +67,9 @@ public class DataComponentPredicateTooltipTest {
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.LOOTING).orElseThrow(), MinMaxBounds.Ints.ANY),
                 new EnchantmentPredicate(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.MENDING).orElseThrow(), MinMaxBounds.Ints.between(1, 5))
         ))).build(), List.of(
-                "Enchantments:",
-                "  -> Enchantment:",
-                "    -> Enchantment: minecraft:looting",
-                "  -> Enchantment:",
+                "Stored Enchantments:",
+                "  -> Enchantment: minecraft:looting",
+                "  -> Entry:",
                 "    -> Enchantment: minecraft:mending",
                 "    -> Level: 1-5"
         ));
@@ -109,13 +107,11 @@ public class DataComponentPredicateTooltipTest {
         )))).build(), List.of(
                 "Items:",
                 "  -> Contains:",
-                "    -> Predicate:",
-                "      -> Item: minecraft:andesite",
+                "    -> Item: minecraft:andesite",
                 "  -> Counts:",
-                "    -> Predicate:",
-                "      -> Items:",
-                "        -> Tag: minecraft:arrows",
-                "      -> Count: 1-5",
+                "    -> Items:",
+                "      -> Tag: minecraft:arrows",
+                "    -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -129,13 +125,11 @@ public class DataComponentPredicateTooltipTest {
         )))).build(), List.of(
                 "Items:",
                 "  -> Contains:",
-                "    -> Predicate:",
-                "      -> Item: minecraft:andesite",
+                "    -> Item: minecraft:andesite",
                 "  -> Counts:",
-                "    -> Predicate:",
-                "      -> Items:",
-                "        -> Tag: minecraft:arrows",
-                "      -> Count: 1-5",
+                "    -> Items:",
+                "      -> Tag: minecraft:arrows",
+                "    -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }
@@ -147,11 +141,10 @@ public class DataComponentPredicateTooltipTest {
                 Optional.of(true),
                 Optional.of(false)
         ))).build(), List.of(
-                "Predicate:",
-                "  -> Firework:",
-                "    -> Shape: LARGE_BALL",
-                "    -> Trail: false",
-                "    -> Twinkle: true"
+                "Firework Explosion:",
+                "  -> Shape: LARGE_BALL",
+                "  -> Trail: false",
+                "  -> Twinkle: true"
         ));
     }
 
@@ -165,12 +158,10 @@ public class DataComponentPredicateTooltipTest {
                 "Predicate:",
                 "  -> Explosions:",
                 "    -> Contains:",
-                "      -> Firework:",
-                "        -> Shape: BURST",
+                "      -> Shape: BURST",
                 "    -> Counts:",
-                "      -> Firework:",
-                "        -> Shape: CREEPER",
-                "        -> Count: 1-5",
+                "      -> Shape: CREEPER",
+                "      -> Count: 1-5",
                 "    -> Size: ≥4",
                 "  -> Flight Duration: 1-4"
         ));
@@ -236,16 +227,14 @@ public class DataComponentPredicateTooltipTest {
         )))).build(), List.of(
                 "Modifiers:",
                 "  -> Contains:",
-                "    -> Modifier:",
-                "      -> Attribute: minecraft:armor",
-                "      -> Id: minecraft:help",
-                "      -> Amount: 1.0-4.0",
-                "      -> Operation: ADD_VALUE",
-                "      -> Slot: ARMOR",
+                "    -> Attribute: minecraft:generic.armor",
+                "    -> Id: minecraft:help",
+                "    -> Amount: 1.0-4.0",
+                "    -> Operation: ADD_VALUE",
+                "    -> Slot: ARMOR",
                 "  -> Counts:",
-                "    -> Modifier:",
-                "      -> Attribute: minecraft:gravity",
-                "      -> Count: 1-5",
+                "    -> Attribute: minecraft:generic.gravity",
+                "    -> Count: 1-5",
                 "  -> Size: ≥4"
         ));
     }

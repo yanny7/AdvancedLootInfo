@@ -817,29 +817,29 @@ public class GenericTooltipTest {
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(), List.of(
-                "Enchantment:",
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Level: ≥1"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING),
                 MinMaxBounds.Ints.atMost(2))
-        ).build(), List.of(
-                "Enchantment:",
+        ).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling",
                 "  -> Level: ≤2"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.BOOTS_EXCLUSIVE).orElseThrow(),
                 MinMaxBounds.Ints.atMost(2))
-        ).build(), List.of(
-                "Enchantment:",
+        ).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:exclusive_set/boots",
                 "  -> Level: ≤2"
         ));
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(), List.of(
-                "Enchantment:",
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling"
         ));
     }

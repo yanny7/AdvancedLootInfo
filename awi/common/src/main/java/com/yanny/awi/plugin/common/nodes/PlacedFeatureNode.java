@@ -1,89 +1,93 @@
 package com.yanny.awi.plugin.common.nodes;
 
+import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
+import com.yanny.awi.language.Lang;
+import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
+import com.yanny.awi.plugin.server.summary.ColumnContext;
+import com.yanny.awi.plugin.server.summary.PlacementSummaryUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class PlacedFeatureNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("placed_feature");
 
     private final TooltipNode tooltip;
+    @Nullable
+    private final ResourceLocation featureId;
 
-    public PlacedFeatureNode(IServerUtils utils, PlacedFeature placedFeature) {
+    public PlacedFeatureNode(IServerUtils utils, PlacedFeature placedFeature, ColumnContext columnContext, @Nullable ResourceLocation featureId) {
         // -> PlacedFeatureNode
+        //   -> Count / Chance / Height (top-level summary)
         //   -> ConfiguredFeature:
         //     -> FeatureConfiguration (items)
         //     -> Feature
         //   -> Placement: (conditions)
 
+        this.featureId = featureId;
+
         ConfiguredFeature<?, ?> configuredFeature = placedFeature.feature().value();
-
         FeatureConfiguration featureConfiguration = configuredFeature.config(); // values
+        Set<Block> blocks = new HashSet<>(utils.collectBlocks(utils, featureConfiguration));
+        blocks.addAll(FeatureBytecodeScanner.scan(utils, configuredFeature.feature())); // PoC: hardcoded blocks via ASM bytecode scan
 
-//        List<Component> components = CoreTooltipUtils.toComponents(utils.getFeatureTooltip(utils, featureConfiguration).build(), 0, false);
+        tooltip = TooltipBuilder.branch((b) -> {
+            PlacementSummaryUtils.appendSummary(b, utils, placedFeature.placement(), columnContext);
 
-//        for (Component component : components) {
-//            System.out.println(component.toString());
-//        }
+            b.add(TooltipBuilder.array((c) -> {
+                c.add(utils.getValueTooltip(utils, configuredFeature.feature()).build(Lang.Value.FEATURE));
+                c.add(utils.getValueTooltip(utils, featureConfiguration));
+                c.isAdvancedTooltip();
+            }, Lang.Branch.CONFIGURED_FEATURE));
 
-        Set<Block> blocks = new HashSet<>();
-        Iterator<BlockPos> posIterable = BlockPos.randomInCube(utils.getServerLevel().getRandom(), 128, BlockPos.ZERO, 128).iterator();
+            b.add(TooltipBuilder.array((c) -> {
+                for (PlacementModifier placementModifier : placedFeature.placement()) {
+                    c.add(utils.getPlacementModifierTooltip(utils, placementModifier));
+                }
 
-        Biome biome = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.BIOME).getValue(Biomes.BADLANDS);
+                c.isAdvancedTooltip();
+            }, Lang.Branch.PLACEMENT));
+        }).build();
 
-        try {
-//            for (int i = 0; i < 5; i++) {
-//                configuredFeature.place(
-//                        new FakeWorldGenLevel(utils.getServerLevel(), blocks),
-//                        new FakeChunkGenerator(utils.getServerLevel(), Holder.direct(biome)),
-//                        utils.getServerLevel().getRandom(),
-//                        posIterable.next()
-//                );
-//            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-            System.out.println("Failed to place");
-        } finally {
-            blocks.addAll(utils.collectBlocks(utils, featureConfiguration));
-        }
-
-        for (Block block : blocks) {
+        for (Block block : blocks.stream().filter((b) -> b != Blocks.AIR && b != Blocks.CAVE_AIR && b != Blocks.VOID_AIR).toList()) {
             addChildren(new BlockNode(utils, block));
         }
-
-        for (PlacementModifier placementModifier : placedFeature.placement()) {
-            // conditions
-        }
-
-        tooltip = TooltipNode.empty();
     }
 
     public PlacedFeatureNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
+        featureId = buf.readBoolean() ? buf.readResourceLocation() : null;
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
+        buf.writeBoolean(featureId != null);
+
+        if (featureId != null) {
+            buf.writeResourceLocation(featureId);
+        }
+    }
+
+    @Nullable
+    public ResourceLocation getFeatureId() {
+        return featureId;
     }
 
     @NotNull
