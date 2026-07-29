@@ -12,13 +12,13 @@ public class IngredientTooltipUtils {
         return TooltipBuilder.array((b) -> {
             for (Ingredient.Value value : ingredient.values) {
                 if (value instanceof Ingredient.ItemValue itemValue) {
-                    b.add(utils.getValueTooltip(utils, itemValue.item()).build(Lang.Branch.ITEM));
+                    b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, itemValue.item()), ingredient.values.length));
                 } else if (value instanceof Ingredient.TagValue tagValue) {
-                    b.add(utils.getValueTooltip(utils, tagValue.tag()).build(Lang.Value.TAG));
+                    b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, tagValue.tag()).key(Lang.Value.TAG), ingredient.values.length));
                 } else {
-                    b.add(TooltipBuilder.error(value.getClass().getSimpleName()).build());
+                    b.add(TooltipBuilder.asElement(TooltipBuilder.error(value.getClass().getSimpleName()), ingredient.values.length));
                 }
             }
-        }).key(Lang.Branch.ITEMS);
+        });
     }
 }
