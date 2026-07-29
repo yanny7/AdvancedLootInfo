@@ -4,6 +4,7 @@ import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
@@ -81,7 +82,10 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
             IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY)
                     .setStandardSlotBackground()
                     .setSlotName(String.valueOf(i))
-                    .setPosition(h.rect.getX(), h.rect.getY());
+                    .setPosition(h.rect.getX(), h.rect.getY())
+                    .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
+                            -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+
 
             if (!h.block.defaultBlockState().getFluidState().isEmpty()) {
                 slotBuilder.addFluidStack(h.block.defaultBlockState().getFluidState().getType());
