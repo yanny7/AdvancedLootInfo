@@ -12,42 +12,42 @@ public class DataComponentPredicateTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, predicate.damage()).build(Lang.Value.DAMAGE));
             b.add(utils.getValueTooltip(utils, predicate.durability()).build(Lang.Value.DURABILITY));
-        }, Lang.Branch.PREDICATE);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getEnchantmentsPredicateTooltip(IServerUtils utils, EnchantmentsPredicate.Enchantments predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.enchantments)), Lang.Branch.ENCHANTMENTS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.enchantments)));
     }
 
     @NotNull
     public static TooltipBuilder getStoredEnchantmentsPredicateTooltip(IServerUtils utils, EnchantmentsPredicate.StoredEnchantments predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.enchantments)), Lang.Branch.ENCHANTMENTS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.enchantments)));
     }
 
     @NotNull
     public static TooltipBuilder getPotionsPredicateTooltip(IServerUtils utils, PotionsPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.potions())), Lang.Branch.POTIONS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.potions())));
     }
 
     @NotNull
     public static TooltipBuilder getCustomDataPredicateTooltip(IServerUtils utils, CustomDataPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.value()).build(Lang.Value.NBT)), Lang.Branch.PREDICATE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.value()).build(Lang.Value.NBT)));
     }
 
     @NotNull
     public static TooltipBuilder getContainerPredicateTooltip(IServerUtils utils, ContainerPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.items())), Lang.Branch.ITEMS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.items())));
     }
 
     @NotNull
     public static TooltipBuilder getBundlePredicateTooltip(IServerUtils utils, BundlePredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.items())), Lang.Branch.ITEMS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.items())));
     }
 
     @NotNull
     public static TooltipBuilder getFireworkExplosionPredicateTooltip(IServerUtils utils, FireworkExplosionPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.predicate())), Lang.Branch.PREDICATE);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.predicate())));
     }
 
     @NotNull
@@ -55,12 +55,12 @@ public class DataComponentPredicateTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, predicate.explosions()).build(Lang.Branch.EXPLOSIONS));
             b.add(utils.getValueTooltip(utils, predicate.flightDuration()).build(Lang.Value.FLIGHT_DURATION));
-        }, Lang.Branch.PREDICATE);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getWritableBookPredicateTooltip(IServerUtils utils, WritableBookPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.pages())), Lang.Branch.PAGES);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.pages())));
     }
 
     @NotNull
@@ -71,12 +71,12 @@ public class DataComponentPredicateTooltipUtils {
             b.add(utils.getValueTooltip(utils, predicate.title()).build(Lang.Value.TITLE));
             b.add(utils.getValueTooltip(utils, predicate.generation()).build(Lang.Value.GENERATION));
             b.add(utils.getValueTooltip(utils, predicate.resolved()).build(Lang.Value.RESOLVED));
-        }, Lang.Branch.PREDICATE);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getAttributeModifiersPredicateTooltip(IServerUtils utils, AttributeModifiersPredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.modifiers())), Lang.Branch.MODIFIERS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.modifiers())));
     }
 
     @NotNull
@@ -84,11 +84,11 @@ public class DataComponentPredicateTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, predicate.material()).build(Lang.Branch.MATERIALS));
             b.add(utils.getValueTooltip(utils, predicate.pattern()).build(Lang.Branch.PATTERNS));
-        }, Lang.Branch.PREDICATE);
+        });
     }
 
     @NotNull
     public static TooltipBuilder getJukeboxPlayableTooltip(IServerUtils utils, JukeboxPlayablePredicate predicate) {
-        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.song())), Lang.Branch.SONGS);
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, predicate.song())));
     }
 }

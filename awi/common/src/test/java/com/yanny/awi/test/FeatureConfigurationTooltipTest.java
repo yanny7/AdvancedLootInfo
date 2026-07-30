@@ -11,7 +11,7 @@ import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.MultifaceBlock;
+import net.minecraft.world.level.block.MultifaceSpreadeableBlock;
 import net.minecraft.world.level.levelgen.GeodeBlockSettings;
 import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
@@ -403,7 +403,7 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testMultifaceGrowthConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getMultifaceGrowthConfigurationTooltip(UTILS, new MultifaceGrowthConfiguration(
-                (MultifaceBlock) Blocks.GLOW_LICHEN,
+                (MultifaceSpreadeableBlock) Blocks.GLOW_LICHEN,
                 8,
                 true,
                 false,

@@ -183,8 +183,6 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
             PoseStack poseStack = guiGraphics.pose();
 
-            RenderSystem.enableDepthTest();
-
             Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
             Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
             RenderSystem.setShaderLights(light0, light1);
@@ -195,10 +193,8 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             poseStack.scale(9, -9, 9);
             poseStack.mulPose(Axis.XP.rotationDegrees(30f));
             poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
-            guiGraphics.bufferSource().endBatch();
+            guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
             poseStack.popPose();
-            RenderSystem.disableDepthTest();
             Lighting.setupForFlatItems();
         }
     }

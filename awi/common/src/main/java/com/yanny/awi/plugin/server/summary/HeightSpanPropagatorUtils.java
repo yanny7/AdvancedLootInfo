@@ -2,7 +2,7 @@ package com.yanny.awi.plugin.server.summary;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.awi.api.IServerUtils;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.Weighted;
 import net.minecraft.world.level.levelgen.heightproviders.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,12 +62,12 @@ public class HeightSpanPropagatorUtils {
         RangeValue bestBand = null;
         int bestWeight = -1;
 
-        for (WeightedEntry.Wrapper<HeightProvider> entry : provider.distribution.unwrap()) {
-            HeightSpan span = utils.getHeightSpan(utils, entry.data(), ctx);
+        for (Weighted<HeightProvider> entry : provider.distribution.unwrap()) {
+            HeightSpan span = utils.getHeightSpan(utils, entry.value(), ctx);
             min = Math.min(min, span.range().min());
             max = Math.max(max, span.range().max());
 
-            int weight = entry.getWeight().asInt();
+            int weight = entry.weight();
             if (weight > bestWeight && span.bestBand() != null) {
                 bestWeight = weight;
                 bestBand = span.bestBand(); // best band of the heaviest branch

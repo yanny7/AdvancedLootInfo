@@ -2,7 +2,7 @@ package com.yanny.awi.plugin.server.summary;
 
 import com.yanny.aci.api.RangeValue;
 import com.yanny.awi.api.IServerUtils;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.Weighted;
 import net.minecraft.util.valueproviders.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,8 +45,8 @@ public class IntSpanPropagatorUtils {
         float min = Float.MAX_VALUE;
         float max = -Float.MAX_VALUE;
 
-        for (WeightedEntry.Wrapper<IntProvider> entry : provider.distribution.unwrap()) {
-            RangeValue range = utils.getIntSpan(utils, entry.data()).range();
+        for (Weighted<IntProvider> entry : provider.distribution.unwrap()) {
+            RangeValue range = utils.getIntSpan(utils, entry.value()).range();
             min = Math.min(min, range.min());
             max = Math.max(max, range.max());
         }

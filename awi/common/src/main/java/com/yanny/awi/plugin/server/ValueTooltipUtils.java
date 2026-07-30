@@ -4,9 +4,8 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.language.Lang;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.state.BlockState;
@@ -148,16 +147,11 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getWeightedEntryWrapperTooltip(IServerUtils utils, WeightedEntry.Wrapper<?> value) {
+    public static TooltipBuilder getWeightedTooltip(IServerUtils utils, Weighted<?> value) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.getWeight()).build(Lang.Value.WEIGHT));
-            b.add(utils.getValueTooltip(utils, value.data()).build(Lang.Branch.DATA));
+            b.add(utils.getValueTooltip(utils, value.weight()).build(Lang.Value.WEIGHT));
+            b.add(utils.getValueTooltip(utils, value.value()).build(Lang.Branch.VALUE));
         });
-    }
-
-    @NotNull
-    public static TooltipBuilder getWeightTooltip(IServerUtils utils, Weight value) {
-        return utils.getValueTooltip(utils, value.asInt());
     }
 
     @NotNull
@@ -289,7 +283,7 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getSimpleWeightedRandomListTooltip(IServerUtils utils, SimpleWeightedRandomList<?> value) {
+    public static TooltipBuilder getWeightedListTooltip(IServerUtils utils, WeightedList<?> value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.totalWeight).build(Lang.Value.TOTAL_WEIGHT));
             b.add(utils.getValueTooltip(utils, value.unwrap()).build(Lang.Branch.ITEMS));

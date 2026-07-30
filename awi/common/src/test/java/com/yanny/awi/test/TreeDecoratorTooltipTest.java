@@ -29,6 +29,24 @@ public class TreeDecoratorTooltipTest {
     }
 
     @Test
+    public void testPaleMossDecoratorTooltip() {
+        assertTooltip(TreeDecoratorTooltipUtils.getPaleMossDecoratorTooltip(UTILS, new PaleMossDecorator(0.25f, 0.35f, 0.45f)).build(), List.of(
+                "Pale Moss:",
+                "  -> Leaves Probability: 0.25",
+                "  -> Trunk Probability: 0.35",
+                "  -> Ground Probability: 0.45"
+        ));
+    }
+
+    @Test
+    public void testCreakingHeartDecoratorTooltip() {
+        assertTooltip(TreeDecoratorTooltipUtils.getCreakingHeartDecoratorTooltip(UTILS, new CreakingHeartDecorator(0.25f)).build(), List.of(
+                "Creaking Heart:",
+                "  -> Probability: 0.25"
+        ));
+    }
+
+    @Test
     public void testCocoaDecoratorTooltip() {
         assertTooltip(TreeDecoratorTooltipUtils.getCocoaDecoratorTooltip(UTILS, new CocoaDecorator(0.2f)).build(), List.of(
                 "Cocoa:",
@@ -80,6 +98,52 @@ public class TreeDecoratorTooltipTest {
                 "          -> persistent: false",
                 "          -> waterlogged: false",
                 "  -> Required Empty Blocks: 2",
+                "  -> Directions:",
+                "    -> UP",
+                "    -> DOWN"
+        ));
+    }
+
+    @Test
+    public void testPlaceOnGroundDecoratorTooltip() {
+        assertTooltip(TreeDecoratorTooltipUtils.getPlaceOnGroundDecoratorTooltip(UTILS, new PlaceOnGroundDecorator(
+                3,
+                2,
+                1,
+                BlockStateProvider.simple(Blocks.CHERRY_LEAVES)
+        )).build(), List.of(
+                "Place On Ground:",
+                "  -> Tries: 3",
+                "  -> Radius: 2",
+                "  -> Height: 1",
+                "  -> Block Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Cherry Leaves",
+                "        -> Properties:",
+                "          -> distance: 7",
+                "          -> persistent: false",
+                "          -> waterlogged: false"
+        ));
+    }
+
+    @Test
+    public void testAttachedToLogsDecoratorTooltip() {
+        assertTooltip(TreeDecoratorTooltipUtils.getAttachedToLogsDecoratorTooltip(UTILS, new AttachedToLogsDecorator(
+                0.1f,
+                BlockStateProvider.simple(Blocks.CHERRY_LEAVES),
+                List.of(Direction.UP, Direction.DOWN)
+        )).build(), List.of(
+                "Attached To Logs:",
+                "  -> Probability: 0.1",
+                "  -> Block Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Cherry Leaves",
+                "        -> Properties:",
+                "          -> distance: 7",
+                "          -> persistent: false",
+                "          -> waterlogged: false",
                 "  -> Directions:",
                 "    -> UP",
                 "    -> DOWN"

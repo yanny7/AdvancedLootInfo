@@ -10,9 +10,8 @@ import com.yanny.awi.plugin.server.summary.HeightSpanPropagatorUtils;
 import com.yanny.awi.plugin.server.summary.IntSpanPropagatorUtils;
 import com.yanny.awi.plugin.server.summary.PlacementPropagatorUtils;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.util.random.Weight;
-import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -91,8 +90,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(BlockState.class, ValueTooltipUtils::getBlockStateTooltip);
         registry.registerValueTooltip(FluidState.class, ValueTooltipUtils::getFluidStateTooltip);
         registry.registerValueTooltip(Vec3i.class, ValueTooltipUtils::getVec3iTooltip);
-        registry.registerValueTooltip(WeightedEntry.Wrapper.class, ValueTooltipUtils::getWeightedEntryWrapperTooltip);
-        registry.registerValueTooltip(Weight.class, ValueTooltipUtils::getWeightTooltip);
+        registry.registerValueTooltip(Weighted.class, ValueTooltipUtils::getWeightedTooltip);
         registry.registerValueTooltip(BlockColumnConfiguration.Layer.class, ValueTooltipUtils::getBlockColumnConfigurationLayerTooltip);
         registry.registerValueTooltip(GeodeBlockSettings.class, ValueTooltipUtils::getGeodeBlockSettingsTooltip);
         registry.registerValueTooltip(GeodeLayerSettings.class, ValueTooltipUtils::getGeodeLayerSettingsTooltip);
@@ -108,7 +106,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(ProcessorRule.class, ValueTooltipUtils::getProcessorRuleTooltip);
         registry.registerValueTooltip(MangroveRootPlacement.class, ValueTooltipUtils::getMangroveRootPlacementTooltip);
         registry.registerValueTooltip(AboveRootPlacement.class, ValueTooltipUtils::getAboveRootPlacementTooltip);
-        registry.registerValueTooltip(SimpleWeightedRandomList.class, ValueTooltipUtils::getSimpleWeightedRandomListTooltip);
+        registry.registerValueTooltip(WeightedList.class, ValueTooltipUtils::getWeightedListTooltip);
         registry.registerValueTooltip(PosRuleTest.class, ValueTooltipUtils::getPosRuleTestTooltip);
         registry.registerValueTooltip(RuleBlockEntityModifier.class, ValueTooltipUtils::getRuleBlockEntityModifierTooltip);
 
@@ -211,7 +209,6 @@ public class Plugin implements IPlugin {
 
         registry.registerPlacementModifierTooltip(BiomeFilter.class, PlacementModifierTooltipUtils::getBiomeFilterTooltip);
         registry.registerPlacementModifierTooltip(BlockPredicateFilter.class, PlacementModifierTooltipUtils::getBlockPredicateFilterTooltip);
-        registry.registerPlacementModifierTooltip(CarvingMaskPlacement.class, PlacementModifierTooltipUtils::getCarvingMaskPlacementTooltip);
         registry.registerPlacementModifierTooltip(CountOnEveryLayerPlacement.class, PlacementModifierTooltipUtils::getCountOnEveryLayerPlacementTooltip);
         registry.registerPlacementModifierTooltip(CountPlacement.class, PlacementModifierTooltipUtils::getCountPlacementTooltip);
         registry.registerPlacementModifierTooltip(EnvironmentScanPlacement.class, PlacementModifierTooltipUtils::getEnvironmentScanPlacementTooltip);
@@ -298,10 +295,14 @@ public class Plugin implements IPlugin {
 
         registry.registerTreeDecoratorBlockCollector(TrunkVineDecorator.class, TreeDecoratorCollectorUtils::collectTrunkVine);
         registry.registerTreeDecoratorBlockCollector(LeaveVineDecorator.class, TreeDecoratorCollectorUtils::collectLeaveVine);
+        registry.registerTreeDecoratorBlockCollector(PaleMossDecorator.class, TreeDecoratorCollectorUtils::collectLPaleMoss);
+        registry.registerTreeDecoratorBlockCollector(CreakingHeartDecorator.class, TreeDecoratorCollectorUtils::collectCreakingHeart);
         registry.registerTreeDecoratorBlockCollector(CocoaDecorator.class, TreeDecoratorCollectorUtils::collectCocoa);
         registry.registerTreeDecoratorBlockCollector(BeehiveDecorator.class, TreeDecoratorCollectorUtils::collectBeehive);
         registry.registerTreeDecoratorBlockCollector(AlterGroundDecorator.class, TreeDecoratorCollectorUtils::collectAlterGround);
         registry.registerTreeDecoratorBlockCollector(AttachedToLeavesDecorator.class, TreeDecoratorCollectorUtils::collectAttachedToLeaves);
+        registry.registerTreeDecoratorBlockCollector(PlaceOnGroundDecorator.class, TreeDecoratorCollectorUtils::collectPlaceOnGround);
+        registry.registerTreeDecoratorBlockCollector(AttachedToLogsDecorator.class, TreeDecoratorCollectorUtils::collectAttachedToLogs);
 
         registry.registerRootPlacerBlockCollector(MangroveRootPlacer.class, RootPlacerCollectorUtils::collectMangrove);
 
@@ -325,10 +326,14 @@ public class Plugin implements IPlugin {
 
         registry.registerTreeDecoratorTooltip(TrunkVineDecorator.class, TreeDecoratorTooltipUtils::getTrunkVineDecoratorTooltip);
         registry.registerTreeDecoratorTooltip(LeaveVineDecorator.class, TreeDecoratorTooltipUtils::getLeaveVineDecoratorTooltip);
+        registry.registerTreeDecoratorTooltip(PaleMossDecorator.class, TreeDecoratorTooltipUtils::getPaleMossDecoratorTooltip);
+        registry.registerTreeDecoratorTooltip(CreakingHeartDecorator.class, TreeDecoratorTooltipUtils::getCreakingHeartDecoratorTooltip);
         registry.registerTreeDecoratorTooltip(CocoaDecorator.class, TreeDecoratorTooltipUtils::getCocoaDecoratorTooltip);
         registry.registerTreeDecoratorTooltip(BeehiveDecorator.class, TreeDecoratorTooltipUtils::getBeehiveDecoratorTooltip);
         registry.registerTreeDecoratorTooltip(AlterGroundDecorator.class, TreeDecoratorTooltipUtils::getAlterGroundDecoratorTooltip);
         registry.registerTreeDecoratorTooltip(AttachedToLeavesDecorator.class, TreeDecoratorTooltipUtils::getAttachedToLeavesDecoratorTooltip);
+        registry.registerTreeDecoratorTooltip(PlaceOnGroundDecorator.class, TreeDecoratorTooltipUtils::getPlaceOnGroundDecoratorTooltip);
+        registry.registerTreeDecoratorTooltip(AttachedToLogsDecorator.class, TreeDecoratorTooltipUtils::getAttachedToLogsDecoratorTooltip);
 
         registry.registerFoliagePlacerTooltip(BlobFoliagePlacer.class, FoliagePlacerTooltipUtils::getBlobFoliagePlacerTooltip);
         registry.registerFoliagePlacerTooltip(SpruceFoliagePlacer.class, FoliagePlacerTooltipUtils::getSpruceFoliagePlacerTooltip);

@@ -66,8 +66,7 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
         poseStack.scale(9, -9, 9);
         poseStack.mulPose(Axis.XP.rotationDegrees(30f));
         poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-        blockRenderer.renderSingleBlock(blockState, poseStack, guiGraphics.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
-        guiGraphics.bufferSource().endBatch();
+        guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
         poseStack.popPose();
     }
 

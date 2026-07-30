@@ -2,7 +2,7 @@ package com.yanny.awi.test;
 
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.*;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.*;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -44,7 +44,7 @@ public class PlacementSummaryTest {
 
     @Test
     public void testWeightedListIntSpanRecurses() {
-        SimpleWeightedRandomList<IntProvider> distribution = SimpleWeightedRandomList.<IntProvider>builder()
+        WeightedList<IntProvider> distribution = WeightedList.<IntProvider>builder()
                 .add(ConstantInt.of(2), 1)
                 .add(ConstantInt.of(8), 3)
                 .build();
@@ -94,7 +94,7 @@ public class PlacementSummaryTest {
 
     @Test
     public void testWeightedListHeightSpanRecurses() {
-        SimpleWeightedRandomList<HeightProvider> distribution = SimpleWeightedRandomList.<HeightProvider>builder()
+        WeightedList<HeightProvider> distribution = WeightedList.<HeightProvider>builder()
                 .add(ConstantHeight.of(VerticalAnchor.absolute(10)), 1)
                 .add(ConstantHeight.of(VerticalAnchor.absolute(100)), 5)
                 .build();

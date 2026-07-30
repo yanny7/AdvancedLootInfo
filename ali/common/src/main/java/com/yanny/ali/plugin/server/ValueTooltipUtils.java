@@ -716,7 +716,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.type()).build(Lang.Branch.DAMAGE_TYPES));
             b.add(utils.getValueTooltip(utils, value.base()).build(Lang.Value.BASE));
             b.add(utils.getValueTooltip(utils, value.factor()).build(Lang.Value.FACTOR));
-        }).key(Lang.Branch.DAMAGE_REDUCTION);
+        });
     }
 
     @NotNull
@@ -732,7 +732,7 @@ public class ValueTooltipUtils {
     public static TooltipBuilder getDataComponentMatchersTooltip(IServerUtils utils, DataComponentMatchers dataComponentMatchers) {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
             return TooltipBuilder.array((b) -> {
-                b.add(utils.getValueTooltip(utils, dataComponentMatchers.exact()));
+                b.add(utils.getValueTooltip(utils, dataComponentMatchers.exact()).build(Lang.Branch.EXPECTED_COMPONENTS));
                 b.add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build(Lang.Branch.PARTIAL_MATCHERS));
             });
         }
@@ -742,6 +742,6 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentExactPredicateTooltip(IServerUtils utils, DataComponentExactPredicate dataComponentMatchers) {
-        return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents).key(Lang.Branch.EXPECTED_COMPONENTS);
+        return utils.getValueTooltip(utils, dataComponentMatchers.expectedComponents);
     }
 }

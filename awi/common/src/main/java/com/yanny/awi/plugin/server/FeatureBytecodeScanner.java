@@ -13,11 +13,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 import org.objectweb.asm.tree.analysis.Analyzer;
 import org.objectweb.asm.tree.analysis.Frame;
 import org.objectweb.asm.tree.analysis.SourceInterpreter;
@@ -28,11 +24,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -100,7 +92,7 @@ public final class FeatureBytecodeScanner {
 
     private Set<Block> doScan(IServerUtils utils, Class<?> featureClass) {
         ClassLoader cl = featureClass.getClassLoader();
-        Registry<Block> blockRegistry = utils.getServerLevel().registryAccess().registryOrThrow(Registries.BLOCK);
+        Registry<Block> blockRegistry = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.BLOCK);
         String rootPkg = rootPackage(Type.getInternalName(featureClass));
 
         Set<Block> out = new HashSet<>();
@@ -254,7 +246,7 @@ public final class FeatureBytecodeScanner {
             return;
         }
 
-        blockRegistry.getTag((TagKey<Block>) tag).ifPresent((named) -> named.forEach((holder) -> out.add(holder.value())));
+        blockRegistry.getTagOrEmpty((TagKey<Block>) tag).forEach((holder) -> out.add(holder.value()));
     }
 
     // -- ASM stack helpers -----------------------------------------------------------------------------------------

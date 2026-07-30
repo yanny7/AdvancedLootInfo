@@ -1,7 +1,7 @@
 package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.HeightProviderTooltipUtils;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.*;
 import org.junit.jupiter.api.Test;
@@ -86,7 +86,7 @@ public class HeightProviderTooltipTest {
     @Test
     public void testWeightedListHeightTooltip() {
         assertTooltip(HeightProviderTooltipUtils.getWeightedListHeightTooltip(UTILS, new WeightedListHeight(
-                SimpleWeightedRandomList.<HeightProvider>builder()
+                WeightedList.<HeightProvider>builder()
                         .add(ConstantHeight.of(VerticalAnchor.absolute(5)), 2)
                         .build()
         )).build(), List.of(
@@ -94,7 +94,7 @@ public class HeightProviderTooltipTest {
                 "  -> Total Weight: 2",
                 "  -> Items:",
                 "    -> Weight: 2",
-                "    -> Data:",
+                "    -> Value:",
                 "      -> Constant:",
                 "        -> Absolute Y: 5"
         ));

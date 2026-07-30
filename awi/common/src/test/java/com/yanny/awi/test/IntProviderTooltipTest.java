@@ -1,7 +1,7 @@
 package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.IntProviderTooltipUtils;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.*;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ public class IntProviderTooltipTest {
     @Test
     public void testWeightedListIntTooltip() {
         assertTooltip(IntProviderTooltipUtils.getWeightedListIntTooltip(UTILS, new WeightedListInt(
-                SimpleWeightedRandomList.<IntProvider>builder()
+                WeightedList.<IntProvider>builder()
                         .add(ConstantInt.of(5), 2)
                         .add(ConstantInt.of(10), 1)
                         .build()
@@ -60,12 +60,12 @@ public class IntProviderTooltipTest {
                 "    -> Items:",
                 "      -> Entry:",
                 "        -> Weight: 2",
-                "        -> Data:",
+                "        -> Value:",
                 "          -> Constant:",
                 "            -> Value: 5",
                 "      -> Entry:",
                 "        -> Weight: 1",
-                "        -> Data:",
+                "        -> Value:",
                 "          -> Constant:",
                 "            -> Value: 10",
                 "  -> Range: 5-10"

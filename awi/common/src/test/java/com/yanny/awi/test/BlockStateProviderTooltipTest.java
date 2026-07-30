@@ -1,7 +1,7 @@
 package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.BlockStateProviderTooltipUtils;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
@@ -25,7 +25,7 @@ public class BlockStateProviderTooltipTest {
     @Test
     public void testWeightedStateProviderTooltip() {
         assertTooltip(BlockStateProviderTooltipUtils.getWeightedStateProviderTooltip(UTILS, new WeightedStateProvider(
-                SimpleWeightedRandomList.<net.minecraft.world.level.block.state.BlockState>builder()
+                WeightedList.<net.minecraft.world.level.block.state.BlockState>builder()
                         .add(Blocks.STONE.defaultBlockState(), 2)
                         .add(Blocks.DIRT.defaultBlockState(), 1)
         )).build(), List.of(
@@ -35,11 +35,11 @@ public class BlockStateProviderTooltipTest {
                 "    -> Items:",
                 "      -> Entry:",
                 "        -> Weight: 2",
-                "        -> Data:",
+                "        -> Value:",
                 "          -> Block: Stone",
                 "      -> Entry:",
                 "        -> Weight: 1",
-                "        -> Data:",
+                "        -> Value:",
                 "          -> Block: Dirt"
         ));
     }

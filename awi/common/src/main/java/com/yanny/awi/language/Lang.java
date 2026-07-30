@@ -170,6 +170,7 @@ public final class Lang {
         FOSSIL_STRUCTURE("fossil_structure", "Fossil Structure: %s"),
         GENERATE_CRACK_CHANCE("generate_crack_chance", "Generate Crack Chance: %s"),
         GENERATION_STEP("generation_step", "Generation Step: %s"),
+        GROUND_PROBABILITY("ground_probability", "Ground Probability: %s"),
         GROWTH_ROUNDS("growth_rounds", "Growth Rounds: %s"),
         HALF_HEIGHT("half_height", "Half Height: %s"),
         HANGING_LEAVES_CHANCE("hanging_leaves_chance", "Hanging Leaves Chance: %s"),
@@ -198,6 +199,7 @@ public final class Lang {
         LAYER_AT_Y("layer_at_y", "Layer At Y: %s"),
         LAYER_THICKNESS("layer_thickness", "Layer Thickness: %s"),
         LEAF_PLACEMENT_ATTEMPTS("leaf_placement_attempts", "Leaf Placement Attempts: %s"),
+        LEAVES_PROBABILITY("leaves_probability", "Leaves Probability: %s"),
         LIMIT("limit", "Limit: %s"),
         LOWER_SIZE("lower_size", "Lower Size: %s"),
         MAX_EMPTY_CORNERS_ALLOWED("max_empty_corners_allowed", "Max Empty Corners Allowed: %s"),
@@ -269,6 +271,7 @@ public final class Lang {
         THRESHOLD("threshold", "Threshold: %s"),
         TOTAL_WEIGHT("total_weight", "Total Weight: %s"),
         TRIES("tries", "Tries: %s"),
+        TRUNK_PROBABILITY("trunk_probability", "Trunk Probability: %s"),
         UPPER_LIMIT("upper_limit", "Upper Limit: %s"),
         UPPER_SIZE("upper_size", "Upper Size: %s"),
         VALID_BLOCK("valid_block", "Valid Block: %s"),
@@ -427,6 +430,7 @@ public final class Lang {
         TRUNK_PROVIDER("trunk_provider", "Trunk Provider:"),
         VALID_BASE_STATE("valid_base_state", "Valid Base State:"),
         VALID_BLOCKS(Value.VALID_BLOCK, "valid_blocks", "Valid Blocks:"),
+        VALUE("value", "Value:"),
         VALUES("values",  "Values:"),
         VEGETATION_FEATURE("vegetation_feature", "Vegetation Feature:"),
         WEIGHTED_LIST("weighted_list", "Weighted List:"),
@@ -540,6 +544,10 @@ public final class Lang {
         BEEHIVE("beehive", "Beehive:"),
         ALTER_GROUND("alter_ground", "Alter Ground:"),
         ATTACHED_TO_LEAVES("attached_to_leaves", "Attached To Leaves:"),
+        PALE_MOSS("pale_moss", "Pale Moss:"),
+        CREAKING_HEART("creaking_heart", "Creaking Heart:"),
+        PLACE_ON_GROUND("place_on_ground", "Place On Ground:"),
+        ATTACHED_TO_LOGS("attached_to_logs", "Attached To Logs:"),
         ;
 
         private final Translation translation;

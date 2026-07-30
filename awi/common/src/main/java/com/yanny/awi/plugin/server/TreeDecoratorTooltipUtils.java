@@ -20,6 +20,20 @@ public class TreeDecoratorTooltipUtils {
     }
 
     @NotNull
+    public static TooltipBuilder getPaleMossDecoratorTooltip(IServerUtils utils, PaleMossDecorator decorator) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, decorator.leavesProbability).build(Lang.Value.LEAVES_PROBABILITY));
+            b.add(utils.getValueTooltip(utils, decorator.trunkProbability).build(Lang.Value.TRUNK_PROBABILITY));
+            b.add(utils.getValueTooltip(utils, decorator.groundProbability).build(Lang.Value.GROUND_PROBABILITY));
+        }, Lang.TreeDecorator.PALE_MOSS);
+    }
+
+    @NotNull
+    public static TooltipBuilder getCreakingHeartDecoratorTooltip(IServerUtils utils, CreakingHeartDecorator decorator) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, decorator.probability).build(Lang.Value.PROBABILITY)), Lang.TreeDecorator.CREAKING_HEART);
+    }
+
+    @NotNull
     public static TooltipBuilder getCocoaDecoratorTooltip(IServerUtils utils, CocoaDecorator decorator) {
         return array((b) -> b.add(utils.getValueTooltip(utils, decorator.probability).build(Lang.Value.PROBABILITY)), Lang.TreeDecorator.COCOA);
     }
@@ -44,5 +58,24 @@ public class TreeDecoratorTooltipUtils {
             b.add(utils.getValueTooltip(utils, decorator.requiredEmptyBlocks).build(Lang.Value.REQUIRED_EMPTY_BLOCKS));
             b.add(utils.getValueTooltip(utils, decorator.directions).build(Lang.Branch.DIRECTIONS));
         }, Lang.TreeDecorator.ATTACHED_TO_LEAVES);
+    }
+
+    @NotNull
+    public static TooltipBuilder getPlaceOnGroundDecoratorTooltip(IServerUtils utils, PlaceOnGroundDecorator decorator) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, decorator.tries).build(Lang.Value.TRIES));
+            b.add(utils.getValueTooltip(utils, decorator.radius).build(Lang.Value.RADIUS));
+            b.add(utils.getValueTooltip(utils, decorator.height).build(Lang.Value.HEIGHT));
+            b.add(utils.getValueTooltip(utils, decorator.blockStateProvider).build(Lang.Branch.BLOCK_PROVIDER));
+        }, Lang.TreeDecorator.PLACE_ON_GROUND);
+    }
+
+    @NotNull
+    public static TooltipBuilder getAttachedToLogsDecoratorTooltip(IServerUtils utils, AttachedToLogsDecorator decorator) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, decorator.probability).build(Lang.Value.PROBABILITY));
+            b.add(utils.getValueTooltip(utils, decorator.blockProvider).build(Lang.Branch.BLOCK_PROVIDER));
+            b.add(utils.getValueTooltip(utils, decorator.directions).build(Lang.Branch.DIRECTIONS));
+        }, Lang.TreeDecorator.ATTACHED_TO_LOGS);
     }
 }

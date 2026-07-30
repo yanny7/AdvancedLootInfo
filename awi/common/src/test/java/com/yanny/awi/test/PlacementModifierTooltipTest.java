@@ -4,7 +4,6 @@ import com.yanny.awi.plugin.server.PlacementModifierTooltipUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -30,14 +29,6 @@ public class PlacementModifierTooltipTest {
                 "Block predicate:",
                 "  -> Solid:",
                 "    -> Offset: [0,0,0]"
-        ));
-    }
-
-    @Test
-    public void testCarvingMaskPlacementTooltip() {
-        assertTooltip(PlacementModifierTooltipUtils.getCarvingMaskPlacementTooltip(UTILS, CarvingMaskPlacement.forStep(GenerationStep.Carving.AIR)).build(), List.of(
-                "Carving Mask Placement:",
-                "  -> Step: AIR"
         ));
     }
 
