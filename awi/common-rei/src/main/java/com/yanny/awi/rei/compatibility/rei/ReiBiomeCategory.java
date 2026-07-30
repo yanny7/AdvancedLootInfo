@@ -37,7 +37,7 @@ public class ReiBiomeCategory extends ReiBaseCategory<ReiBiomeDisplay> {
         Component title = Component.translatable("biome." + display.getEntry().id().getNamespace() + "." + display.getEntry().id().getPath());
 
         fullBounds.move(bounds.getCenterX() - fullBounds.width / 2, bounds.y + PADDING);
-        innerWidgets.add(Widgets.createLabel(new Point(0, 0), title).leftAligned().noShadow().color(0));
+        innerWidgets.add(Widgets.createLabel(new Point(0, 0), title).leftAligned().noShadow().color(0xFF000000));
         widgets.add(Widgets.createCategoryBase(fullBounds));
         widgets.add(Widgets.withTranslate(
                 new ReiScrollWidget(new Rect(0, 0, fullBounds.width - 2 * PADDING, fullBounds.height - 2 * PADDING), innerBounds.height, innerWidgets),

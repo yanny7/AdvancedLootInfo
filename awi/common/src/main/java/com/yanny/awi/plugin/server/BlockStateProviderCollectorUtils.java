@@ -24,6 +24,12 @@ public class BlockStateProviderCollectorUtils {
         return provider.states.stream().map(BlockBehaviour.BlockStateBase::getBlock).toList();
     }
 
+    @Unmodifiable
+    @NotNull
+    public static List<Block> collectDualNoise(IServerUtils utils, DualNoiseProvider provider) {
+        return collectNoise(utils, provider);
+    }
+
     @NotNull
     public static List<Block> collectNoiseThreshold(IServerUtils ignoredUtils, NoiseThresholdProvider provider) {
         List<Block> blocks = new ArrayList<>();
