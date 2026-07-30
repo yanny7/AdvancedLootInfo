@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -809,8 +809,8 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testFossilFeatureConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getFossilFeatureConfigurationTooltip(UTILS, new FossilFeatureConfiguration(
-                List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "fossil/spine_1")),
-                List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "fossil_spine_1")),
+                List.of(Identifier.fromNamespaceAndPath("minecraft", "fossil/spine_1")),
+                List.of(Identifier.fromNamespaceAndPath("minecraft", "fossil_spine_1")),
                 Holder.direct(new StructureProcessorList(List.of())),
                 Holder.direct(new StructureProcessorList(List.of())),
                 3
