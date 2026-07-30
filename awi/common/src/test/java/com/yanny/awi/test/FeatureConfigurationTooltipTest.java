@@ -22,6 +22,7 @@ import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSi
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.CocoaDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -844,6 +845,31 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Solid:",
                 "      -> Offset: [0,0,0]",
                 "  -> Planted: true"
+        ));
+    }
+
+    @Test
+    public void testFallenTreeConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getFallenTreeConfigurationTooltip(UTILS, new FallenTreeConfiguration.FallenTreeConfigurationBuilder(
+                BlockStateProvider.simple(Blocks.OAK_LOG),
+                ConstantInt.of(5)
+        ).stumpDecorators(List.of(new CocoaDecorator(0.2f))).logDecorators(List.of(new CocoaDecorator(0.3f))).build()).build(), List.of(
+                "Fallen Tree:",
+                "  -> Trunk Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Oak Log",
+                "        -> Properties:",
+                "          -> axis: y",
+                "  -> Log Length:",
+                "    -> Constant:",
+                "      -> Value: 5",
+                "  -> Stump Decorators:",
+                "    -> Cocoa:",
+                "      -> Probability: 0.2",
+                "  -> Log Decorators:",
+                "    -> Cocoa:",
+                "      -> Probability: 0.3"
         ));
     }
 }

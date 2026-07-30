@@ -373,4 +373,14 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.planted).build(Lang.Value.PLANTED));
         }, Lang.FeatureConfiguration.HUGE_FUNGUS);
     }
+
+    @NotNull
+    public static TooltipBuilder getFallenTreeConfigurationTooltip(IServerUtils utils, FallenTreeConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.trunkProvider).build(Lang.Branch.TRUNK_PROVIDER));
+            b.add(utils.getValueTooltip(utils, configuration.logLength).build(Lang.Branch.LOG_LENGTH));
+            b.add(utils.getValueTooltip(utils, configuration.stumpDecorators).build(Lang.Branch.STUMP_DECORATORS));
+            b.add(utils.getValueTooltip(utils, configuration.logDecorators).build(Lang.Branch.LOG_DECORATORS));
+        }, Lang.FeatureConfiguration.FALLEN_TREE);
+    }
 }
