@@ -30,7 +30,6 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.getFilterableTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 
 public class DataComponentTooltipUtils {
@@ -288,7 +287,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getWritableBookContentTooltip(IServerUtils utils, WritableBookContent value) {
-        return getFilterableTooltip(utils, Lang.Branch.PAGE, value.pages()).key(Lang.Branch.PAGES);
+        return utils.getValueTooltip(utils, value.pages()).key(Lang.Branch.PAGES);
     }
 
     @NotNull
@@ -297,7 +296,7 @@ public class DataComponentTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.title()).build(Lang.Branch.TITLE));
             b.add(utils.getValueTooltip(utils, value.author()).build(Lang.Value.AUTHOR));
             b.add(utils.getValueTooltip(utils, value.generation()).build(Lang.Value.GENERATION));
-            b.add(getFilterableTooltip(utils, Lang.Branch.PAGE, value.pages()).build(Lang.Branch.PAGES));
+            b.add(utils.getValueTooltip(utils, value.pages()).build(Lang.Branch.PAGES));
             b.add(utils.getValueTooltip(utils, value.resolved()).build(Lang.Value.RESOLVED));
         });
     }

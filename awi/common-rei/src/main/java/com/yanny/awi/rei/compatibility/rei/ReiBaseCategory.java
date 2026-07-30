@@ -1,5 +1,9 @@
 package com.yanny.awi.rei.compatibility.rei;
 
+import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -21,12 +25,17 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
+import org.joml.Vector3f;
 import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
@@ -72,11 +81,29 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
         widgets.add(widgetWrapper);
         slotWidgets.forEach((h) -> {
-            EntryStack<ItemStack> stack = EntryStacks.of(h.block);
+            int slotX = h.rect.getX() + bounds.getX();
+            int slotY = h.rect.getY() + bounds.getY();
 
-            stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
-            widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
-            widgets.add(Widgets.wrapRenderer(new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), 18, 18), new SlotCountRenderer(new RangeValue(1))));
+            if (h.block.asItem() == Items.AIR && h.block.defaultBlockState().getFluidState().isEmpty()) {
+                Rectangle slotRect = new Rectangle(slotX, slotY, 18, 18);
+
+                widgets.add(Widgets.createSlotBase(slotRect));
+                widgets.add(Widgets.wrapRenderer(slotRect, new BlockSlotRenderer(h.block)));
+                widgets.add(Widgets.createTooltip(slotRect, Component.translatable(h.block.getDescriptionId())));
+            } else {
+                EntryStack<?> stack;
+
+                if (h.block.defaultBlockState().getFluidState().isEmpty()) {
+                    stack = EntryStacks.of(h.block);
+                } else {
+                    stack = EntryStacks.of(h.block.defaultBlockState().getFluidState().getType());
+                }
+
+                stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
+                widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entry(stack).markOutput());
+            }
+
+            widgets.add(Widgets.wrapRenderer(new Rectangle(slotX, slotY, 18, 18), new SlotCountRenderer(new RangeValue(1))));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }
@@ -145,4 +172,32 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     }
 
     protected record WidgetHolder(List<Widget> widgets, RelativeRect bounds){}
+
+    private static class BlockSlotRenderer implements Renderer {
+        private final BlockState blockState;
+
+        public BlockSlotRenderer(Block block) {
+            this.blockState = block.defaultBlockState();
+        }
+
+        @Override
+        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
+            PoseStack poseStack = guiGraphics.pose();
+
+            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
+            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
+            RenderSystem.setShaderLights(light0, light1);
+
+            poseStack.pushPose();
+            poseStack.translate(bounds.getX(), bounds.getY(), 100);
+            poseStack.translate(15.5, 13.5, 300);
+            poseStack.scale(9, -9, 9);
+            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
+            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
+            guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
+            poseStack.popPose();
+            Lighting.setupForFlatItems();
+        }
+    }
 }

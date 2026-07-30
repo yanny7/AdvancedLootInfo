@@ -88,15 +88,14 @@ public class ConditionTooltipTest {
                         .isDirect(true)
         ).build()).build(), List.of(
                 "Damage Source Properties:",
-                "  -> Predicate:",
-                "    -> Tags:",
-                "      -> minecraft:bypasses_armor: true",
-                "      -> minecraft:is_explosion: false",
-                "    -> Direct Entity:",
-                "      -> Entity Type: minecraft:warden",
-                "    -> Source Entity:",
-                "      -> Team: Blue",
-                "    -> Is Direct: true"
+                "  -> Tags:",
+                "    -> minecraft:bypasses_armor: true",
+                "    -> minecraft:is_explosion: false",
+                "  -> Direct Entity:",
+                "    -> Entity Type: minecraft:warden",
+                "  -> Source Entity:",
+                "    -> Team: Blue",
+                "  -> Is Direct: true"
         ));
     }
 
@@ -200,15 +199,13 @@ public class ConditionTooltipTest {
     public void testItemMatchTooltip() {
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE, Items.DIORITE)).build()).build(), List.of(
                 "Match Tool:",
-                "  -> Predicate:",
-                "    -> Items:",
-                "      -> minecraft:andesite",
-                "      -> minecraft:diorite"
+                "  -> Items:",
+                "    -> minecraft:andesite",
+                "    -> minecraft:diorite"
         ));
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(ItemPredicate.Builder.item().of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.ANDESITE)).build()).build(), List.of(
                 "Match Tool:",
-                "  -> Predicate:",
-                "    -> Item: minecraft:andesite"
+                "  -> Item: minecraft:andesite"
         ));
         assertTooltip(ConditionTooltipUtils.getMatchToolTooltip(UTILS, (MatchTool) MatchTool.toolMatches(
                 ItemPredicate.Builder.item()

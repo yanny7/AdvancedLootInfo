@@ -1,7 +1,6 @@
 package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.language.CoreLang;
-import com.yanny.aci.language.IMultiKey;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
@@ -13,7 +12,6 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.network.Filterable;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.component.MapDecorations;
@@ -72,19 +70,6 @@ public class GenericTooltipUtils {
             b.add(utils.getValueTooltip(utils, s.value()).build(Lang.Branch.VALUES));
             b.add(utils.getValueTooltip(utils, s.operation()).build(Lang.Value.LIST_OPERATION));
         })).orElseGet(TooltipBuilder::empty);
-
-    }
-
-    @NotNull
-    public static <T> TooltipBuilder getFilterableTooltip(IServerUtils utils, IMultiKey value, Collection<Filterable<T>> data) {
-        return TooltipBuilder.array((b) -> {
-            for (Filterable<T> d : data) {
-                b.add(TooltipBuilder.array((c) -> {
-                    c.add(utils.getValueTooltip(utils, d.raw()).build(Lang.Value.RAW));
-                    c.add(utils.getValueTooltip(utils, d.filtered()).build(Lang.Value.FILTERED));
-                }).key(value));
-            }
-        });
     }
 
     // MAP ENTRY
