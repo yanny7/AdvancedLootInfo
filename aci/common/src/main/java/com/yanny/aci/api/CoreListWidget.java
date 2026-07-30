@@ -105,7 +105,7 @@ public abstract class CoreListWidget<
 
         if (height > 0) {
             // The trunk region is vertically uniform, so a single stretched blit is pixel-identical to tiling it.
-            guiGraphics.blit(RenderType::guiTextured, getTexture(), bounds.getX() + groupWidgetWidth / 2, top, 0, 0, 2, height, 2, 1, 256, 256);
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getTexture(), bounds.getX() + groupWidgetWidth / 2, top, 0, 0, 2, height, 2, 1, 256, 256);
         }
 
         lastDirection = null;

@@ -1,8 +1,8 @@
 package com.yanny.awi.jei.compatibility.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import com.yanny.aci.api.Rect;
+import com.yanny.awi.pip.BlockRenderState;
+import com.yanny.awi.platform.Services;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.inputs.RecipeSlotUnderMouse;
@@ -11,13 +11,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix3x2fStack;
 
 import java.util.Optional;
 
@@ -53,21 +51,18 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
 
     @Override
     public void drawWidget(GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        PoseStack poseStack = guiGraphics.pose();
-        BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
+        Matrix3x2fStack poseStack = guiGraphics.pose();
 
-        poseStack.translate(1, 1, 0);
+        poseStack.pushMatrix();
         slotDrawable.draw(guiGraphics);
-        poseStack.translate(-1, -1, 0);
 
-        poseStack.pushPose();
-        poseStack.translate(rect.x(), rect.y(), 0);
-        poseStack.translate(15.5, 13.5, 300);
-        poseStack.scale(9, -9, 9);
-        poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-        poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-        guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
-        poseStack.popPose();
+        int x = (int) guiGraphics.pose().m20() - 4;
+        int y = (int) guiGraphics.pose().m21() - 4;
+
+        BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, rect.width() + x, rect.height() + y, 1, null);
+        Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
+
+        poseStack.popMatrix();
     }
 
     public void getTooltip(ITooltipBuilder tooltip, double mouseX, double mouseY) {

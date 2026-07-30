@@ -1,9 +1,5 @@
 package com.yanny.awi.rei.compatibility.rei;
 
-import com.mojang.blaze3d.platform.Lighting;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
@@ -12,6 +8,8 @@ import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
 import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.pip.BlockRenderState;
+import com.yanny.awi.platform.Services;
 import com.yanny.awi.plugin.client.ClientUtils;
 import com.yanny.awi.plugin.client.widget.BiomeWidget;
 import me.shedaniel.math.Point;
@@ -25,9 +23,7 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -35,7 +31,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
-import org.joml.Vector3f;
 import oshi.util.tuples.Triplet;
 
 import java.util.LinkedList;
@@ -175,29 +170,27 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
 
     private static class BlockSlotRenderer implements Renderer {
         private final BlockState blockState;
+        private final ClientLevel level;
 
         public BlockSlotRenderer(Block block) {
             this.blockState = block.defaultBlockState();
+            level = Minecraft.getInstance().level;
         }
 
         @Override
         public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
-            BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
-            PoseStack poseStack = guiGraphics.pose();
+            Matrix3x2fStack poseStack = guiGraphics.pose();
 
-            Vector3f light0 = new Vector3f(0.6F, -1.0F, 0.8F).normalize();
-            Vector3f light1 = new Vector3f(-0.6F, 1.0F, -0.8F).normalize();
-            RenderSystem.setShaderLights(light0, light1);
+            poseStack.pushMatrix();
+            poseStack.translate(bounds.getX(), bounds.getY());
 
-            poseStack.pushPose();
-            poseStack.translate(bounds.getX(), bounds.getY(), 100);
-            poseStack.translate(15.5, 13.5, 300);
-            poseStack.scale(9, -9, 9);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(225f));
-            guiGraphics.drawSpecial((bufferSource) -> blockRenderer.renderSingleBlock(blockState, poseStack, bufferSource, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY));
-            poseStack.popPose();
-            Lighting.setupForFlatItems();
+            int x = (int) guiGraphics.pose().m20() - 4;
+            int y = (int) guiGraphics.pose().m21() - 4;
+
+            BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1, null);
+            Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
+
+            poseStack.popMatrix();
         }
     }
 }
