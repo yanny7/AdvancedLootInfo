@@ -311,8 +311,7 @@ public class GenericTooltipTest {
                 "        -> Value: 3",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Predicate:",
-                "          -> Durability: 1-8"
+                "        -> Durability: 1-8"
         ));
     }
 
@@ -435,8 +434,7 @@ public class GenericTooltipTest {
                 "        -> Value: 3",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Predicate:",
-                "          -> Durability: 1-8"
+                "        -> Durability: 1-8"
         ));
     }
 
@@ -576,11 +574,9 @@ public class GenericTooltipTest {
                 "  -> Components:",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Predicate:",
-                "          -> Durability: ≤5",
+                "        -> Durability: ≤5",
                 "      -> minecraft:custom_data",
-                "        -> Predicate:",
-                "          -> Nbt: {healing:1b}"
+                "        -> Nbt: {healing:1b}"
         ));
         assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND)
@@ -711,136 +707,111 @@ public class GenericTooltipTest {
                 "  -> Components:",
                 "    -> Partial Matchers:",
                 "      -> minecraft:damage",
-                "        -> Predicate:",
-                "          -> Damage: =6",
-                "          -> Durability: ≤5",
+                "        -> Damage: =6",
+                "        -> Durability: ≤5",
                 "      -> minecraft:enchantments",
-                "        -> Enchantments:",
-                "          -> Enchantment:",
-                "            -> Enchantment: minecraft:flame",
-                "            -> Level: 1-2",
+                "        -> Enchantment: minecraft:flame",
+                "        -> Level: 1-2",
                 "      -> minecraft:stored_enchantments",
-                "        -> Enchantments:",
-                "          -> Enchantment:",
-                "            -> Enchantment: minecraft:breach",
-                "            -> Level: 1-2",
+                "        -> Enchantment: minecraft:breach",
+                "        -> Level: 1-2",
                 "      -> minecraft:potion_contents",
-                "        -> Potions:",
-                "          -> minecraft:healing",
+                "        -> minecraft:healing",
                 "      -> minecraft:custom_data",
-                "        -> Predicate:",
-                "          -> Nbt: {healing:1b}",
+                "        -> Nbt: {healing:1b}",
                 "      -> minecraft:container",
-                "        -> Items:",
-                "          -> Contains:",
-                "            -> Predicate:",
-                "              -> Count: 2-3",
-                "          -> Counts:",
-                "            -> Predicate:",
-                "              -> Count: =5",
-                "          -> Size: ≥4",
+                "        -> Contains:",
+                "          -> Count: 2-3",
+                "        -> Counts:",
+                "          -> Count: =5",
+                "        -> Size: ≥4",
                 "      -> minecraft:bundle_contents",
-                "        -> Items:",
-                "          -> Contains:",
-                "            -> Predicate:",
-                "              -> Count: 1-3",
-                "          -> Counts:",
-                "            -> Predicate:",
-                "              -> Count: =2",
-                "          -> Size: ≥1",
+                "        -> Contains:",
+                "          -> Count: 1-3",
+                "        -> Counts:",
+                "          -> Count: =2",
+                "        -> Size: ≥1",
                 "      -> minecraft:firework_explosion",
-                "        -> Predicate:",
-                "          -> Firework:",
-                "            -> Shape: CREEPER",
-                "            -> Trail: false",
-                "            -> Twinkle: true",
+                "        -> Shape: CREEPER",
+                "        -> Trail: false",
+                "        -> Twinkle: true",
                 "      -> minecraft:fireworks",
-                "        -> Predicate:",
-                "          -> Explosions:",
-                "            -> Contains:",
-                "              -> Firework:",
-                "                -> Shape: STAR",
-                "            -> Counts:",
-                "              -> Firework:",
-                "                -> Shape: LARGE_BALL",
-                "                -> Count: ≤6",
-                "            -> Size: ≥1",
-                "          -> Flight Duration: =3",
+                "        -> Explosions:",
+                "          -> Contains:",
+                "            -> Shape: STAR",
+                "          -> Counts:",
+                "            -> Shape: LARGE_BALL",
+                "            -> Count: ≤6",
+                "          -> Size: ≥1",
+                "        -> Flight Duration: =3",
                 "      -> minecraft:writable_book_content",
+                "        -> Contains:",
+                "          -> Page: Hello",
+                "          -> Page: World",
+                "        -> Counts:",
+                "          -> Page: Star",
+                "            -> Count: 1-5",
+                "          -> Page: Wars",
+                "            -> Count: ≥3",
+                "        -> Size: ≥4",
+                "      -> minecraft:written_book_content",
                 "        -> Pages:",
                 "          -> Contains:",
                 "            -> Page: Hello",
+                "          -> Counts:",
                 "            -> Page: World",
-                "          -> Counts:",
-                "            -> Page: Star",
-                "              -> Count: 1-5",
-                "            -> Page: Wars",
-                "              -> Count: ≥3",
-                "          -> Size: ≥4",
-                "      -> minecraft:written_book_content",
-                "        -> Predicate:",
-                "          -> Pages:",
-                "            -> Contains:",
-                "              -> Page: Hello",
-                "            -> Counts:",
-                "              -> Page: World",
-                "                -> Count: ≤3",
-                "            -> Size: =2",
-                "          -> Author: asdf",
-                "          -> Title: jklo",
-                "          -> Generation: =3",
-                "          -> Resolved: false",
-                "      -> minecraft:attribute_modifiers",
-                "        -> Modifiers:",
-                "          -> Contains:",
-                "            -> Modifier:",
-                "              -> Attribute: minecraft:armor",
-                "              -> Id: minecraft:test",
-                "              -> Amount: =3.2",
-                "              -> Operation: ADD_VALUE",
-                "              -> Slot: CHEST",
-                "          -> Counts:",
-                "            -> Modifier:",
-                "              -> Amount: 1.0-3.5",
-                "              -> Slot: BODY",
-                "              -> Count: ≤8",
+                "              -> Count: ≤3",
                 "          -> Size: =2",
+                "        -> Author: asdf",
+                "        -> Title: jklo",
+                "        -> Generation: =3",
+                "        -> Resolved: false",
+                "      -> minecraft:attribute_modifiers",
+                "        -> Contains:",
+                "          -> Attribute: minecraft:armor",
+                "          -> Id: minecraft:test",
+                "          -> Amount: =3.2",
+                "          -> Operation: ADD_VALUE",
+                "          -> Slot: CHEST",
+                "        -> Counts:",
+                "          -> Amount: 1.0-3.5",
+                "          -> Slot: BODY",
+                "          -> Count: ≤8",
+                "        -> Size: =2",
                 "      -> minecraft:trim",
-                "        -> Predicate:",
-                "          -> Material: minecraft:gold",
-                "          -> Pattern: minecraft:dune",
+                "        -> Material: minecraft:gold",
+                "        -> Pattern: minecraft:dune",
                 "      -> minecraft:jukebox_playable",
-                "        -> Songs:",
-                "          -> minecraft:pigstep"
+                "        -> minecraft:pigstep"
         ));
 
     }
 
     @Test
     public void testEnchantmentPredicateTooltip() {
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(), List.of(
-                "Enchantment:",
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(Optional.empty(), MinMaxBounds.Ints.atLeast(1))).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Level: ≥1"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING),
                 MinMaxBounds.Ints.atMost(2))
-        ).build(), List.of(
-                "Enchantment:",
+        ).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling",
                 "  -> Level: ≤2"
         ));
         assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(
                 LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).get(EnchantmentTags.BOOTS_EXCLUSIVE).orElseThrow(),
                 MinMaxBounds.Ints.atMost(2))
-        ).build(), List.of(
-                "Enchantment:",
+        ).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Enchantments:",
                 "    -> Tag: minecraft:exclusive_set/boots",
                 "  -> Level: ≤2"
         ));
-        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(), List.of(
-                "Enchantment:",
+        assertTooltip(ValueTooltipUtils.getEnchantmentPredicateTooltip(UTILS, new EnchantmentPredicate(LOOKUP.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FEATHER_FALLING), MinMaxBounds.Ints.ANY)).build(Lang.Branch.PREDICATE), List.of(
+                "Predicate:",
                 "  -> Enchantment: minecraft:feather_falling"
         ));
     }
