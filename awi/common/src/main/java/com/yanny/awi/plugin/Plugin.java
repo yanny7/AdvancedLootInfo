@@ -166,6 +166,7 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(LakeFeature.Configuration.class, FeatureConfigurationTooltipUtils::getLakeConfigurationTooltip);
         registry.registerFeatureTooltip(FossilFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getFossilFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(HugeFungusConfiguration.class, FeatureConfigurationTooltipUtils::getHugeFungusConfigurationTooltip);
+        registry.registerFeatureTooltip(FallenTreeConfiguration.class, FeatureConfigurationTooltipUtils::getFallenTreeConfigurationTooltip);
 
         registry.registerIntProviderTooltip(ConstantInt.class, IntProviderTooltipUtils::getConstantIntTooltip);
         registry.registerIntProviderTooltip(UniformInt.class, IntProviderTooltipUtils::getUniformIntTooltip);
