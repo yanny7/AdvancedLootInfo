@@ -14,6 +14,8 @@ public abstract class AbstractScrollWidget {
     protected static final int SCROLLBAR_WIDTH = 8;
     protected static final int MIN_SCROLL_MARKER_HEIGHT = 14;
     protected static final int SCROLL_RATE = 8;
+    /** Slack around the viewport, so widgets that draw outside their declared bounds (3D block models) are never clipped. */
+    protected static final int CULLING_MARGIN = 32;
 
     protected final Rect rect;
     protected final Rect contentRect;
@@ -94,6 +96,17 @@ public abstract class AbstractScrollWidget {
 
     public float getScrollAmount() {
         return getHiddenAmount() * scrollOffsetY;
+    }
+
+    /**
+     * Tests whether a content-space vertical span is scrolled completely out of view. Such widgets get skipped
+     * instead of drawn - the scissor in {@link #drawContents} would discard them anyway, but only after they have
+     * already been submitted as draw calls.
+     */
+    protected boolean isOutsideViewport(int y, int height) {
+        float scrollAmount = getScrollAmount();
+
+        return y + height + CULLING_MARGIN < scrollAmount || y - CULLING_MARGIN > scrollAmount + rect.height();
     }
 
     protected Rect calculateScrollbarMarkerArea() {

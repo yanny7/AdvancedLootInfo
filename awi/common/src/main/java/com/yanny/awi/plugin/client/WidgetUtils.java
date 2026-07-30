@@ -7,6 +7,9 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.awi.Utils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.plugin.client.widget.TextureWidget;
+import com.yanny.awi.plugin.common.nodes.PlacedFeatureNode;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -26,6 +29,11 @@ public class WidgetUtils {
     @NotNull
     public static IWidget getAllWidget(RelativeRect rect, IDataNode node) {
         TextureWidget widget = new TextureWidget(TEXTURE_LOC, new RelativeRect(0, 0, GROUP_WIDGET_WIDTH, GROUP_WIDGET_HEIGHT, rect), 0, GROUP_WIDGET_HEIGHT);
+
+        // show the placed feature's id as a white title at the top of its tooltip (like an item's name)
+        if (node instanceof PlacedFeatureNode placedFeature && placedFeature.getFeatureId() != null) {
+            widget.tooltipComponent(Component.literal(placedFeature.getFeatureId().toString()).withStyle(ChatFormatting.WHITE));
+        }
 
         widget.tooltipText(node.getTooltip());
         return widget;

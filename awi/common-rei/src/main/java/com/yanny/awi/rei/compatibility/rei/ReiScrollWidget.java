@@ -2,7 +2,9 @@ package com.yanny.awi.rei.compatibility.rei;
 
 import com.yanny.aci.api.Rect;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
+import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
+import me.shedaniel.rei.api.client.gui.widgets.WidgetWithBounds;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -22,6 +24,14 @@ public class ReiScrollWidget extends Widget {
             @Override
             public void renderWidgets(GuiGraphics guiGraphics, double mouseX, double mouseY) {
                 for (Widget widget : widgets) {
+                    if (widget instanceof WidgetWithBounds boundedWidget) {
+                        Rectangle b = boundedWidget.getBounds();
+
+                        if (isOutsideViewport(b.y, b.height)) {
+                            continue;
+                        }
+                    }
+
                     widget.render(guiGraphics, (int) mouseX, (int) mouseY, 0);
                 }
             }

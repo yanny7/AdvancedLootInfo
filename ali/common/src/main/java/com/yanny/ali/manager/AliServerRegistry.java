@@ -270,7 +270,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         if (valueClass.isArray()) {
             return TooltipBuilder.branch((b) -> {
                 for (int i = 0; i < Array.getLength(value); i++) {
-                    b.add(utils.getValueTooltip(utils, Array.get(value, i)));
+                    b.add(TooltipBuilder.asElement(utils.getValueTooltip(utils, Array.get(value, i)), Array.getLength(value)));
                 }
             });
         } else {

@@ -8,6 +8,8 @@ import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
 import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.pip.BlockRenderState;
+import com.yanny.awi.platform.Services;
 import com.yanny.awi.plugin.client.ClientUtils;
 import com.yanny.awi.plugin.client.widget.BiomeWidget;
 import me.shedaniel.math.Point;
@@ -21,9 +23,11 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
@@ -72,11 +76,29 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         widgets.add(Widgets.createTooltip(widgetWrapper::getTooltip));
         widgets.add(widgetWrapper);
         slotWidgets.forEach((h) -> {
-            EntryStack<ItemStack> stack = EntryStacks.of(h.block);
+            int slotX = h.rect.getX() + bounds.getX();
+            int slotY = h.rect.getY() + bounds.getY();
 
-            stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
-            widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
-            widgets.add(Widgets.wrapRenderer(new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), 18, 18), new SlotCountRenderer(new RangeValue(1))));
+            if (h.block.asItem() == Items.AIR && h.block.defaultBlockState().getFluidState().isEmpty()) {
+                Rectangle slotRect = new Rectangle(slotX, slotY, 18, 18);
+
+                widgets.add(Widgets.createSlotBase(slotRect));
+                widgets.add(Widgets.wrapRenderer(slotRect, new BlockSlotRenderer(h.block)));
+                widgets.add(Widgets.createTooltip(slotRect, Component.translatable(h.block.getDescriptionId())));
+            } else {
+                EntryStack<?> stack;
+
+                if (h.block.defaultBlockState().getFluidState().isEmpty()) {
+                    stack = EntryStacks.of(h.block);
+                } else {
+                    stack = EntryStacks.of(h.block.defaultBlockState().getFluidState().getType());
+                }
+
+                stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
+                widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entry(stack).markOutput());
+            }
+
+            widgets.add(Widgets.wrapRenderer(new Rectangle(slotX, slotY, 18, 18), new SlotCountRenderer(new RangeValue(1))));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }
@@ -145,4 +167,30 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
     }
 
     protected record WidgetHolder(List<Widget> widgets, RelativeRect bounds){}
+
+    private static class BlockSlotRenderer implements Renderer {
+        private final BlockState blockState;
+        private final ClientLevel level;
+
+        public BlockSlotRenderer(Block block) {
+            this.blockState = block.defaultBlockState();
+            level = Minecraft.getInstance().level;
+        }
+
+        @Override
+        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            Matrix3x2fStack poseStack = guiGraphics.pose();
+
+            poseStack.pushMatrix();
+            poseStack.translate(bounds.getX(), bounds.getY());
+
+            int x = (int) guiGraphics.pose().m20() - 4;
+            int y = (int) guiGraphics.pose().m21() - 4;
+
+            BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, bounds.width + x, bounds.height + y, 1, null);
+            Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
+
+            poseStack.popMatrix();
+        }
+    }
 }

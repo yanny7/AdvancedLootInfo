@@ -103,7 +103,11 @@ public abstract class CoreListWidget<
         int top = bounds.getY() + 18;
         int height = lastY - bounds.getY() - 9;
 
-        blitRepeating(guiGraphics, getTexture(), bounds.getX() + groupWidgetWidth / 2, top, 2, height, 0, 0, 2, 18);
+        if (height > 0) {
+            // The trunk region is vertically uniform, so a single stretched blit is pixel-identical to tiling it.
+            guiGraphics.blit(RenderPipelines.GUI_TEXTURED, getTexture(), bounds.getX() + groupWidgetWidth / 2, top, 0, 0, 2, height, 2, 1, 256, 256);
+        }
+
         lastDirection = null;
 
         for (IWidget widget : widgets) {

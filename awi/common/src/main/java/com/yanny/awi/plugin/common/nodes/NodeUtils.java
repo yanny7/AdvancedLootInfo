@@ -1,11 +1,11 @@
 package com.yanny.awi.plugin.common.nodes;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -21,15 +21,47 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.BiPredicate;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
+/**
+ * Determines, per biome, which blocks the dimension's surface rules place and at what vertical position.
+ * <p>
+ * Instead of fuzzing the {@link SurfaceRules.Context} inputs across a fixed grid of guessed values, this
+ * evaluates the (mod-agnostic) compiled surface rule against a <b>physically consistent, canonical column</b>:
+ * flat terrain with the surface at an assumed height {@code H}, solid below, water up to sea level, air above.
+ * All rule inputs ({@code stoneDepthAbove/Below}, {@code waterHeight}, {@code minSurfaceLevel}) are then
+ * <i>derived</i> from that column exactly like {@code SurfaceSystem#buildSurface} does — no magic constants.
+ * <p>
+ * The assumed surface height {@code H} is swept across the world's build range (its only bound) and a handful of
+ * horizontal sample points feed the real 2D surface/noise-threshold fields. Every rule hit is recorded both as an
+ * absolute Y and as a depth below the assumed surface; a block is then classified empirically:
+ * <ul>
+ *     <li><b>surface-relative</b> (grass, dirt, sand, badlands bands) — its depth below the surface is stable while
+ *     its absolute Y tracks {@code H}; reported as "depth below surface".</li>
+ *     <li><b>absolute</b> (deepslate, bedrock) — its absolute Y is stable while its depth tracks {@code H}; reported
+ *     as an absolute Y range.</li>
+ * </ul>
+ */
 public class NodeUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final int[] TEST_SURFACE_DEPTHS = {4, 0, -4};
-    private static final int[] TEST_ABOVE_LEVELS   = {1, 2};
+    // Sampling knobs (performance/coverage trade-off, NOT rule-logic magic values).
+    // The scan converges: each round samples a fresh batch of horizontal points and a shifted surface-height phase;
+    // it repeats while rounds keep discovering new (block, position) observations and stops once a full phase cycle
+    // adds nothing. This lets simple dimensions finish in a couple rounds while volumetric ones densify themselves.
+    private static final int COLUMNS_PER_ROUND = 8;
+    private static final int SURFACE_HEIGHT_STEP = 4;
+    // Stop after this many consecutive rounds add nothing new. A full phase cycle (== step) guarantees every surface
+    // height was retried before concluding coverage is complete.
+    private static final int STABLE_ROUNDS = SURFACE_HEIGHT_STEP;
+    // Hard safety cap so a pathological rule cannot loop forever; hitting it is logged, never silently truncated.
+    private static final int MAX_ROUNDS = 40;
+    // How far below the preliminary surface vanilla builds surface (SurfaceRules.Context constant), used to derive minSurfaceLevel.
+    private static final int SURFACE_BUILD_DEPTH = 8;
+    // Besides the solid column, each surface height is also probed as a thin floating stone slab (air below it) so that
+    // ceiling-gated rules fire: ON_CEILING (stoneDepthBelow<=1, e.g. badlands red_sandstone) and UNDER_CEILING
+    // (stoneDepthBelow<=1+surfaceDepth). Slab thickness is swept 1..this to cover that window.
+    private static final int MAX_CEILING_THICKNESS = 8;
 
     public static class DimensionContext {
         private final SurfaceRules.SurfaceRule compiledRule;
@@ -37,6 +69,8 @@ public class NodeUtils {
         private final int minBuildHeight;
         private final int maxBuildHeight;
         private final int seaLevel;
+        private final BlockState defaultBlock;
+        private final BlockState defaultFluid;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
         public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
@@ -59,10 +93,11 @@ public class NodeUtils {
             this.minBuildHeight = heightAccessor.getMinY();
             this.maxBuildHeight = heightAccessor.getMaxY();
             this.seaLevel = noiseGenerator.getSeaLevel();
+            this.defaultBlock = settings.defaultBlock();
+            this.defaultFluid = settings.defaultFluid();
 
             ProtoChunk mockChunk = new ProtoChunk(new ChunkPos(0, 0), UpgradeData.EMPTY, heightAccessor, palettedContainerFactory, null);
             WorldGenerationContext genContext = new WorldGenerationContext(noiseGenerator, heightAccessor);
-            BlockState defaultFluid = settings.defaultFluid();
 
             NoiseChunk dummyNoiseChunk = NoiseChunk.forChunk(
                     mockChunk, randomState,
@@ -89,365 +124,399 @@ public class NodeUtils {
         }
     }
 
-    static final int maxTestDepth  = 16;
-    static final int maxSameReject = 8;
-
-    public static class Range {
-        int min, max;
-
-        public Range(int min, int max) {
-            this.min = min;
-            this.max = max;
-        }
-
-        @Override
-        public String toString() {
-            return (min == max) ? String.valueOf(min) : min + ".." + max;
-        }
-    }
-
+    /** Collects a set of integer positions and compacts them into contiguous ranges. */
     public static class RangeHolder {
-        private final Set<Integer> yLevels = new HashSet<>();
+        private final Set<Integer> positions = new HashSet<>();
 
         public boolean add(int position) {
-            return yLevels.add(position);
+            return positions.add(position);
         }
 
-        public List<Range> buildRanges() {
-            if (yLevels.isEmpty()) {
+        public int size() {
+            return positions.size();
+        }
+
+        /** Whether two holders recorded exactly the same set of positions (used to detect floor==ceiling depths). */
+        public boolean sameValuesAs(RangeHolder other) {
+            return positions.equals(other.positions);
+        }
+
+        /** Number of disjoint contiguous ranges the recorded positions collapse into (1 == a single solid band). */
+        public int clusterCount() {
+            return buildRanges().size();
+        }
+
+        /** Span between the lowest and highest recorded position (0 when empty or single-valued). */
+        public int spread() {
+            if (positions.isEmpty()) {
+                return 0;
+            }
+
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+
+            for (int p : positions) {
+                min = Math.min(min, p);
+                max = Math.max(max, p);
+            }
+
+            return max - min;
+        }
+
+        public List<RangeValue> buildRanges() {
+            if (positions.isEmpty()) {
                 return Collections.emptyList();
             }
 
-            List<Integer> sortedPositions = new ArrayList<>(yLevels);
+            List<Integer> sorted = new ArrayList<>(positions);
 
-            Collections.sort(sortedPositions);
+            Collections.sort(sorted);
 
-            List<Range> compiledRanges = new ArrayList<>();
-            int start = sortedPositions.get(0);
+            List<RangeValue> ranges = new ArrayList<>();
+            int start = sorted.get(0);
             int end = start;
 
-            for (int i = 1; i < sortedPositions.size(); i++) {
-                int current = sortedPositions.get(i);
+            for (int i = 1; i < sorted.size(); i++) {
+                int current = sorted.get(i);
 
                 if (current != end + 1) {
-                    compiledRanges.add(new Range(start, end));
+                    ranges.add(new RangeValue(start, end));
                     start = current;
                 }
 
                 end = current;
             }
 
-            compiledRanges.add(new Range(start, end));
-            return compiledRanges;
+            ranges.add(new RangeValue(start, end));
+            return ranges;
         }
     }
+
+    /** Per-block observations: every rule hit is recorded both by depth-below-surface and by absolute Y. */
+    private static class BlockObservation {
+        // A surface-relative block whose absolute Y fragments into at least this many disjoint bands is reported as
+        // "layered" rather than "depth below surface": its identity is a periodic function of absolute Y (e.g. the
+        // badlands banded-terracotta strata, clay bands mod 192) so a single depth range would be actively misleading.
+        // This is a reporting/classification threshold, not rule logic — observed banded blocks fragment into 5..28
+        // bands while plain surface layers stay at a single contiguous band, so the boundary is wide.
+        private static final int LAYERED_MIN_BANDS = 3;
+
+        final RangeHolder depths = new RangeHolder();
+        final RangeHolder absolute = new RangeHolder();
+        // Depths split by placement context: floor = normal below-surface placement (sandstone under the sand),
+        // ceiling = ON_CEILING overhang placement (red_sandstone). Kept apart because merging them pollutes the
+        // reported "depth below surface" — an overhang exposes a block at depth 0 that is really several blocks down.
+        final RangeHolder floorDepths = new RangeHolder();
+        final RangeHolder ceilingDepths = new RangeHolder();
+        // Which flooding contexts the rule placed this block in. Set from whether the walk had water above the surface:
+        // ocean-floor blocks (sandstone, gravel) only fire when the underwater rule branches see a water column,
+        // dry-land blocks only fire without one, and depth blocks (deepslate, bedrock) appear either way.
+        private boolean seenUnderwater;
+        private boolean seenDry;
+
+        void record(int depthBelowSurface, int absoluteY, boolean underwater, boolean ceiling) {
+            depths.add(depthBelowSurface);
+            absolute.add(absoluteY);
+            (ceiling ? ceilingDepths : floorDepths).add(depthBelowSurface);
+
+            if (underwater) {
+                seenUnderwater = true;
+            } else {
+                seenDry = true;
+            }
+        }
+
+        /** Whether this block requires water above it, dry land above it, or occurs regardless of the water level. */
+        WaterConstraint waterConstraint() {
+            if (seenUnderwater && seenDry) {
+                return WaterConstraint.ANY;
+            }
+
+            return seenUnderwater ? WaterConstraint.UNDERWATER : WaterConstraint.DRY;
+        }
+
+        /**
+         * Whether this block is a normal below-surface (floor) placement, an overhang-only (ceiling) placement such as
+         * badlands red_sandstone, or occurs both ways. Ceiling-only blocks are the ones the "depth below surface"
+         * framing does not fit — they only exist on the underside of an overhang.
+         */
+        Placement placement() {
+            boolean floor = floorDepths.size() > 0;
+            boolean ceiling = ceilingDepths.size() > 0;
+
+            if (floor && ceiling) {
+                return Placement.ANY;
+            }
+
+            return ceiling ? Placement.CEILING : Placement.FLOOR;
+        }
+
+        Kind classify() {
+            // Surface-relative: depth-below-surface stays tighter than absolute Y as the assumed surface height is
+            // swept (grass/sand track the surface), whereas absolute features (deepslate, bedrock) and volumetric
+            // fills (netherrack) keep a smaller — or no smaller — absolute span.
+            boolean surfaceRelative = depths.spread() < absolute.spread();
+
+            if (!surfaceRelative) {
+                return Kind.ABSOLUTE;
+            }
+            // Layered strata recur at many separated absolute-Y bands AND span a depth window at least as thick as the
+            // surface-height sampling step. The thickness guard is essential and non-arbitrary: a block thinner than
+            // the height step is only ever recorded once per swept surface height, so its absolute Y fragments into a
+            // regular grid (spacing == the step) that mimics banding — a sampling artifact, not strata (a one-block
+            // ice skin on frozen peaks, a lava-sea top). Only when the depth window bridges the step do consecutive
+            // surface heights overlap, making the absolute-Y clustering a real property of the rule rather than the grid.
+            if (depths.spread() >= SURFACE_HEIGHT_STEP && absolute.clusterCount() >= LAYERED_MIN_BANDS) {
+                return Kind.LAYERED;
+            }
+
+            return Kind.SURFACE;
+        }
+    }
+
+    private enum Kind { SURFACE, ABSOLUTE, LAYERED }
+
+    /**
+     * How a block's vertical positions are stored/reported.
+     * <ul>
+     *     <li>{@link #RELATIVE} — depth below the surface (grass, dirt, sand); {@link BlockInfo#ranges} are depths.</li>
+     *     <li>{@link #ABSOLUTE} — a stable absolute Y band (deepslate, bedrock); {@link BlockInfo#ranges} are absolute Ys.</li>
+     *     <li>{@link #LAYERED} — recurring absolute-Y strata (badlands bands); {@link BlockInfo#ranges} are absolute Ys.</li>
+     * </ul>
+     */
+    public enum StorageType { RELATIVE, ABSOLUTE, LAYERED }
+
+    /** Whether a placed block needs water above it, dry land above it, or is indifferent to the water level. */
+    public enum WaterConstraint { UNDERWATER, DRY, ANY }
+
+    /** Whether a block is a normal below-surface placement, an overhang/ceiling-only placement, or occurs both ways. */
+    public enum Placement { FLOOR, CEILING, ANY }
+
+    /**
+     * Structured result for a single surface block: the block itself, how its positions are stored
+     * ({@link StorageType}), the value {@link RangeValue}s in that storage's units, its {@link WaterConstraint}, and
+     * its {@link Placement} (floor vs. ceiling/overhang).
+     */
+    public record BlockInfo(Block block, StorageType storageType, List<RangeValue> ranges, WaterConstraint water, Placement placement) {}
 
     public static class LayerHolder {
-        Map<Block, RangeHolder> blocks = new HashMap<>();
+        private final Map<Block, BlockObservation> blocks = new HashMap<>();
 
-        public boolean add(Block block, int y) {
-            return blocks.computeIfAbsent(block, k -> new RangeHolder()).add(y);
+        public boolean isEmpty() {
+            return blocks.isEmpty();
         }
 
-        public void log() {
-            if (blocks.isEmpty()) {
-                LOGGER.info("   -> No surface blocks discovered for this biome.");
-                return;
-            }
-
-            List<Block> sortedBlocks = new ArrayList<>(blocks.keySet());
-            sortedBlocks.sort(Comparator.comparing(b -> BuiltInRegistries.BLOCK.getKey(b).toString()));
-
-            for (Block block : sortedBlocks) {
-                String blockId = BuiltInRegistries.BLOCK.getKey(block).toString();
-                List<Range> rangesList = blocks.get(block).buildRanges();
-                String rangesString = rangesList.stream()
-                        .map(Range::toString)
-                        .collect(Collectors.joining(", ", "[", "]"));
-
-                LOGGER.info(" * {} -> Y levels: {}", blockId, rangesString);
-            }
+        void record(Block block, int assumedSurface, int y, boolean underwater, boolean ceiling) {
+            blocks.computeIfAbsent(block, k -> new BlockObservation()).record(assumedSurface - y, y, underwater, ceiling);
         }
-    }
 
-    private static void iterateSpiralChunks(BiPredicate<Integer, Integer> consumer) {
-        int x = 0, z = 0, dx = 0, dz = -1;
-        int step = 1, stepCount = 0, turnCount = 0;
-        boolean first = true;
+        /** Total number of distinct (block, depth) and (block, absoluteY) observations collected so far. */
+        int observationCount() {
+            int total = 0;
 
-        while (true) {
-            if (first) {
-                first = false;
-            } else {
-                x += dx;
-                z += dz;
-                stepCount++;
+            for (BlockObservation obs : blocks.values()) {
+                total += obs.depths.size() + obs.absolute.size();
+            }
 
-                if (stepCount == step) {
-                    int tmp = dx;
+            return total;
+        }
 
-                    stepCount = 0;
-                    dx = -dz;
-                    dz = tmp;
-                    turnCount++;
+        /**
+         * Snapshots every discovered block as one or more {@link BlockInfo}s: its storage type (surface-relative depth
+         * vs. absolute Y vs. layered strata), the value ranges, its water constraint, and its placement.
+         * <p>
+         * Surface-relative (depth) blocks are split by placement when their floor and ceiling depths genuinely differ,
+         * so a block that is both a normal below-surface layer <i>and</i> an exposed overhang (e.g. warm-ocean
+         * sandstone) keeps both modes instead of collapsing to one. Absolute/layered blocks are keyed by absolute Y,
+         * which placement does not change, so they stay a single entry (splitting them would also mis-read a thin
+         * ceiling slab of an absolute block, whose few depth samples look surface-relative).
+         */
+        public Set<BlockInfo> getBlockInfos() {
+            Set<BlockInfo> infos = new HashSet<>();
 
-                    if (turnCount % 2 == 0) {
-                        step++;
+            for (Map.Entry<Block, BlockObservation> entry : blocks.entrySet()) {
+                Block block = entry.getKey();
+                BlockObservation obs = entry.getValue();
+                WaterConstraint water = obs.waterConstraint();
+
+                switch (obs.classify()) {
+                    case SURFACE -> {
+                        boolean hasFloor = obs.floorDepths.size() > 0;
+                        boolean hasCeiling = obs.ceilingDepths.size() > 0;
+
+                        if (hasFloor && hasCeiling && !obs.floorDepths.sameValuesAs(obs.ceilingDepths)) {
+                            // Genuinely two placement modes with different depths — keep both.
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.floorDepths.buildRanges(), water, Placement.FLOOR));
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), water, Placement.CEILING));
+                        } else if (hasCeiling && !hasFloor) {
+                            // Overhang-only block (badlands red_sandstone).
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.ceilingDepths.buildRanges(), water, Placement.CEILING));
+                        } else {
+                            // Floor-only, or floor and ceiling identical: one entry (ANY == no overhang annotation).
+                            infos.add(new BlockInfo(block, StorageType.RELATIVE, obs.floorDepths.buildRanges(), water, obs.placement()));
+                        }
                     }
-                }
-                if (!consumer.test(x, z)) {
-                    return;
+                    case ABSOLUTE -> infos.add(new BlockInfo(block, StorageType.ABSOLUTE, obs.absolute.buildRanges(), water, obs.placement()));
+                    case LAYERED -> infos.add(new BlockInfo(block, StorageType.LAYERED, obs.absolute.buildRanges(), water, obs.placement()));
+                    default -> throw new IllegalStateException("Unknown kind for block " + block);
                 }
             }
+
+            return infos;
         }
     }
 
-    private static boolean scanEdges(DimensionContext dimCtx, LayerHolder blocks, int chunkX, int chunkZ) {
-        boolean anyChange = false;
-
-        int posX = chunkX * 16 + 8;
-        int posZ = chunkZ * 16 + 8;
+    /**
+     * Walks a single canonical column, mirroring {@code SurfaceSystem#buildSurface}: iterate top-down over a
+     * contiguous stone run {@code [stoneBottom, surfaceTop]}, derive the real rule inputs from the column shape and
+     * record every block the surface rule places.
+     * <p>
+     * The stone run's bottom is explicit so the same walk models two shapes:
+     * <ul>
+     *     <li>a normal surface — {@code stoneBottom} at world bottom, optional water above (large {@code stoneDepthBelow});</li>
+     *     <li>a thin floating slab / overhang — {@code stoneBottom} just below the surface, air below it, which drives
+     *     {@code stoneDepthBelow} down to 1 and fires ceiling-gated rules.</li>
+     * </ul>
+     */
+    private static void walkColumn(DimensionContext dimCtx, LayerHolder holder, int posX, int posZ,
+                                   int surfaceTop, int stoneBottom, boolean hasWaterAbove) {
+        SurfaceRules.Context context = dimCtx.context;
+        SurfaceRules.SurfaceRule rule = dimCtx.compiledRule;
         int seaLevel = dimCtx.seaLevel;
-        int minH = dimCtx.minBuildHeight;
-        int maxH = dimCtx.maxBuildHeight;
-
-        SurfaceRules.Context context  = dimCtx.context;
-        SurfaceRules.SurfaceRule compiledRule = dimCtx.compiledRule;
-        Map<Block, List<Integer>> pendingChanges = new HashMap<>();
-        Map<Integer, Set<Block>> mins = new HashMap<>();
-        Map<Integer, Set<Block>> maxs = new HashMap<>();
-
-
-        for (Map.Entry<Block, RangeHolder> entry : blocks.blocks.entrySet()) {
-            Block expectedBlock = entry.getKey();
-
-            for (Range range : entry.getValue().buildRanges()) {
-                mins.computeIfAbsent(range.min, k -> new HashSet<>()).add(expectedBlock);
-                maxs.computeIfAbsent(range.max, k -> new HashSet<>()).add(expectedBlock);
-            }
-        }
-
-
-        for (Map.Entry<Integer, Set<Block>> entry : mins.entrySet()) {
-            int min = entry.getKey();
-            Set<Block> expectedBlocks = entry.getValue();
-
-            for (int y = min; y >= minH; y--) {
-                Set<Block> foundBlocks = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
-
-                if (foundBlocks.isEmpty()) {
-                    break;
-                }
-
-                boolean foundNewBlock = false;
-
-                for (Block found : foundBlocks) {
-                    if (!blocks.blocks.containsKey(found)) {
-                        foundNewBlock = true;
-                    }
-                    if (y < min || !expectedBlocks.contains(found)) {
-                        pendingChanges.computeIfAbsent(found, k -> new ArrayList<>()).add(y);
-                    }
-                }
-
-                if (foundNewBlock) {
-                    return fullScan(context, compiledRule, blocks, posX, posZ, seaLevel, minH, maxH);
-                }
-
-                if (Collections.disjoint(foundBlocks, expectedBlocks)) {
-                    break;
-                }
-            }
-        }
-
-        for (Map.Entry<Integer, Set<Block>> entry : maxs.entrySet()) {
-            int max = entry.getKey();
-            Set<Block> expectedBlocks = entry.getValue();
-
-            for (int y = max; y <= maxH; y++) {
-                Set<Block> foundBlocks = queryBlock(context, compiledRule, posX, posZ, y, seaLevel);
-
-                if (foundBlocks.isEmpty()) {
-                    break;
-                }
-
-                boolean foundNewBlock = false;
-
-                for (Block found : foundBlocks) {
-                    if (!blocks.blocks.containsKey(found)) {
-                        foundNewBlock = true;
-                    }
-                    if (y > max || !expectedBlocks.contains(found)) {
-                        pendingChanges.computeIfAbsent(found, k -> new ArrayList<>()).add(y);
-                    }
-                }
-
-                if (foundNewBlock) {
-                    return fullScan(context, compiledRule, blocks, posX, posZ, seaLevel, minH, maxH);
-                }
-
-                if (Collections.disjoint(foundBlocks, expectedBlocks)) {
-                    break;
-                }
-            }
-        }
-
-        for (Map.Entry<Block, List<Integer>> change : pendingChanges.entrySet()) {
-            for (int y : change.getValue()) {
-                if (blocks.add(change.getKey(), y)) {
-                    anyChange = true;
-                }
-            }
-        }
-
-        return anyChange;
-    }
-
-    private static boolean fullScan(SurfaceRules.Context context, SurfaceRules.SurfaceRule compiledRule, LayerHolder blocks,
-                                    int posX, int posZ, int seaLevel, int minH, int maxH) {
-        boolean anyChange = false;
-        BlockState lastState = null;
-        int[] fluidLevel;
 
         context.updateXZ(posX, posZ);
 
-        for (int y = maxH; y >= minH; y--) {
-            int[] minSurfaceLevels = new int[]{y - 1, y + 1};
+        // Pin the preliminary surface to the assumed surface height so that surface-relative conditions
+        // (above_preliminary_surface) resolve against it, exactly as vanilla derives minSurfaceLevel.
+        context.minSurfaceLevel = surfaceTop + context.surfaceDepth - SURFACE_BUILD_DEPTH;
+        context.lastMinSurfaceLevelUpdate = context.lastUpdateXZ;
 
-            if (y <= seaLevel) {
-                fluidLevel = new int[]{Integer.MIN_VALUE, seaLevel};
-            } else {
-                fluidLevel = new int[]{seaLevel};
-            }
+        boolean water = hasWaterAbove && surfaceTop < seaLevel;
+        int top = water ? seaLevel : surfaceTop;
 
-            for (int above : TEST_ABOVE_LEVELS) {
-                for (int level : fluidLevel) {
-                    for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
-                        int consecutiveSame = 0;
+        int stoneDepthAbove = 0;
+        int waterHeight = Integer.MIN_VALUE;
 
-                        for (int minSurfaceLevel : minSurfaceLevels) {
-                            for (int depth = 0; depth <= maxTestDepth; depth++) {
-                                context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
-                                context.surfaceDepth = surfaceDepth;
-                                context.minSurfaceLevel = minSurfaceLevel;
-                                context.updateY(depth, above, level, posX, y, posZ);
-
-                                BlockState cur = compiledRule.tryApply(posX, y, posZ);
-
-                                if (Objects.equals(cur, lastState)) {
-                                    if (++consecutiveSame >= maxSameReject) break;
-                                } else {
-                                    consecutiveSame = 0;
-                                    lastState = cur;
-
-                                    if (cur != null && blocks.add(cur.getBlock(), y)) {
-                                        anyChange = true;
-                                    }
-                                }
-                            }
-
-                            consecutiveSame = 0;
-
-                            for (int depth = 0; depth <= maxTestDepth; depth++) {
-                                context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
-                                context.surfaceDepth = surfaceDepth;
-                                context.minSurfaceLevel = minSurfaceLevel;
-                                context.updateY(above, depth, level, posX, y, posZ);
-
-                                BlockState cur = compiledRule.tryApply(posX, y, posZ);
-
-                                if (Objects.equals(cur, lastState)) {
-                                    if (++consecutiveSame >= maxSameReject) break;
-                                } else {
-                                    consecutiveSame = 0;
-                                    lastState = cur;
-
-                                    if (cur != null && blocks.add(cur.getBlock(), y)) {
-                                        anyChange = true;
-                                    }
-                                }
-                            }
-                        }
+        for (int y = top; y >= stoneBottom; y--) {
+            if (y > surfaceTop) {
+                // above the solid surface: water down to sea level (if any), else air
+                if (water && y <= seaLevel) {
+                    if (waterHeight == Integer.MIN_VALUE) {
+                        waterHeight = y + 1;
                     }
+                } else {
+                    stoneDepthAbove = 0;
+                    waterHeight = Integer.MIN_VALUE;
                 }
+                continue;
+            }
+
+            stoneDepthAbove++;
+            int stoneDepthBelow = y - stoneBottom + 1;
+            context.updateY(stoneDepthAbove, stoneDepthBelow, waterHeight, posX, y, posZ);
+
+            BlockState result = rule.tryApply(posX, y, posZ);
+
+            if (result != null && !result.isAir() && dimCtx.defaultFluid != result && dimCtx.defaultBlock != result) {
+                // A block placed at the underside of the stone run (stoneDepthBelow<=1, ON_CEILING) is an overhang/
+                // ceiling placement (badlands red_sandstone), distinct from a normal below-surface floor placement.
+                boolean ceiling = stoneDepthBelow <= 1;
+                holder.record(result.getBlock(), surfaceTop, y, water, ceiling);
             }
         }
-
-        return anyChange;
-    }
-
-    @NotNull
-    private static Set<Block> queryBlock(SurfaceRules.Context context, SurfaceRules.SurfaceRule compiledRule, int posX, int posZ, int y, int seaLevel) {
-        context.updateXZ(posX, posZ);
-
-        Set<Block> foundBlocks = new HashSet<>();
-        int[] fluidLevel;
-        int[] minSurfaceLevels = new int[]{y - 1, y + 1};
-
-        if (y <= seaLevel) {
-            fluidLevel = new int[]{Integer.MIN_VALUE, seaLevel};
-        } else {
-            fluidLevel = new int[]{seaLevel};
-        }
-
-        for (int above : TEST_ABOVE_LEVELS) {
-            for (int level : fluidLevel) {
-                for (int surfaceDepth : TEST_SURFACE_DEPTHS) {
-                    for (int minSurfaceLevel : minSurfaceLevels) {
-                        for (int depth = 0; depth <= maxTestDepth; depth++) {
-                            context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
-                            context.surfaceDepth = surfaceDepth;
-                            context.minSurfaceLevel = minSurfaceLevel;
-                            context.updateY(depth, above, level, posX, y, posZ);
-
-                            BlockState cur = compiledRule.tryApply(posX, y, posZ);
-
-                            if (cur != null) {
-                                foundBlocks.add(cur.getBlock());
-                            }
-                        }
-
-                        for (int depth = 0; depth <= maxTestDepth; depth++) {
-                            context.lastMinSurfaceLevelUpdate = ++context.lastUpdateXZ;
-                            context.surfaceDepth = surfaceDepth;
-                            context.minSurfaceLevel = minSurfaceLevel;
-                            context.updateY(above, depth, level, posX, y, posZ);
-
-                            BlockState cur = compiledRule.tryApply(posX, y, posZ);
-
-                            if (cur != null) {
-                                foundBlocks.add(cur.getBlock());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return foundBlocks;
     }
 
     @NotNull
     public static LayerHolder getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
         LayerHolder discoveredBlocks = new LayerHolder();
+        int round = 0;
+        int stableRounds = 0;
 
         try {
-            int[] noChangeCount = {0};
-
             dimCtx.biomeWrapper.currentBiome = targetBiome;
-            fullScan(dimCtx.context, dimCtx.compiledRule, discoveredBlocks, 8, 8, dimCtx.seaLevel, dimCtx.minBuildHeight, dimCtx.maxBuildHeight);
 
-            iterateSpiralChunks((cx, cz) -> {
-                if (scanEdges(dimCtx, discoveredBlocks, cx, cz)) {
-                    noChangeCount[0] = 0;
-                } else {
-                    return ++noChangeCount[0] < maxSameReject * 8;
+            // Repeat until a full phase cycle discovers nothing new (or the safety cap is hit).
+            while (stableRounds < STABLE_ROUNDS && round < MAX_ROUNDS) {
+                int before = discoveredBlocks.observationCount();
+                // Fresh horizontal points every round (new 2D noise values) and a shifted surface-height phase so that,
+                // over a full cycle, every possible surface height is retried (fills absolute-Y gaps in volumetric dims).
+                int heightPhase = round % SURFACE_HEIGHT_STEP;
+                List<long[]> samples = sampleColumns(round * COLUMNS_PER_ROUND);
+
+                for (long[] xz : samples) {
+                    int posX = (int) xz[0];
+                    int posZ = (int) xz[1];
+
+                    for (int h = dimCtx.maxBuildHeight - 1 - heightPhase; h >= dimCtx.minBuildHeight; h -= SURFACE_HEIGHT_STEP) {
+                        // Normal surface: solid stone from the world bottom up to h.
+                        walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, dimCtx.minBuildHeight, true);
+
+                        // Overhang surfaces: thin floating slabs so ceiling-gated rules fire. Dry slabs cover land
+                        // overhangs (badlands red_sandstone); below sea level a water-covered slab is also probed so
+                        // underwater ceiling rules fire (lukewarm-ocean sandstone), which a dry column never reaches.
+                        for (int thickness = 1; thickness <= MAX_CEILING_THICKNESS; thickness++) {
+                            int stoneBottom = h - thickness + 1;
+
+                            if (stoneBottom < dimCtx.minBuildHeight) {
+                                break;
+                            }
+
+                            walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, false);
+
+                            if (h < dimCtx.seaLevel) {
+                                walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, true);
+                            }
+                        }
+                    }
                 }
 
-                return true;
-            });
+                stableRounds = (discoveredBlocks.observationCount() == before) ? stableRounds + 1 : 0;
+                round++;
+            }
+        } catch (Throwable t) {
+            LOGGER.warn("Surface scan failed for biome {}", targetBiome.unwrapKey().map(Object::toString).orElse("?"), t);
+        }
 
-        } catch (Throwable ignored) {}
+        if (round >= MAX_ROUNDS) {
+            LOGGER.warn("Surface scan for biome {} hit the {}-round cap; coverage may be incomplete",
+                    targetBiome.unwrapKey().map(Object::toString).orElse("?"), MAX_ROUNDS);
+        }
 
         return discoveredBlocks;
+    }
+
+    /**
+     * Returns {@code count} chunk-center block positions along an outward spiral around the origin, skipping the first
+     * {@code start} points. Consecutive batches therefore cover distinct, ever-widening horizontal samples.
+     */
+    private static List<long[]> sampleColumns(int start) {
+        int total = start + NodeUtils.COLUMNS_PER_ROUND;
+        List<long[]> spiral = new ArrayList<>(total);
+        int cx = 0, cz = 0, dx = 0, dz = -1;
+        int step = 1, stepCount = 0, turnCount = 0;
+
+        spiral.add(new long[]{8, 8});
+
+        while (spiral.size() < total) {
+            cx += dx;
+            cz += dz;
+            stepCount++;
+
+            if (stepCount == step) {
+                int tmp = dx;
+                stepCount = 0;
+                dx = -dz;
+                dz = tmp;
+                turnCount++;
+
+                if (turnCount % 2 == 0) {
+                    step++;
+                }
+            }
+
+            spiral.add(new long[]{cx * 16L + 8, cz * 16L + 8});
+        }
+
+        return spiral.subList(start, total);
     }
 }
