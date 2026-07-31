@@ -22,7 +22,6 @@ accessible method net/minecraft/world/level/levelgen/feature/featuresize/Feature
 accessible method net/minecraft/world/level/levelgen/feature/rootplacers/RootPlacer type ()Lnet/minecraft/world/level/levelgen/feature/rootplacers/RootPlacerType;
 accessible method net/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacer type ()Lnet/minecraft/world/level/levelgen/feature/foliageplacers/FoliagePlacerType;
 accessible method net/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacer type ()Lnet/minecraft/world/level/levelgen/feature/trunkplacers/TrunkPlacerType;
-accessible method net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessor getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorType;
 accessible method net/minecraft/world/level/levelgen/structure/templatesystem/PosRuleTest getType ()Lnet/minecraft/world/level/levelgen/structure/templatesystem/PosRuleTestType;
 accessible method net/minecraft/world/level/levelgen/blockpredicates/UnobstructedPredicate <init> (Lnet/minecraft/core/Vec3i;)V
 
@@ -195,6 +194,7 @@ accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RuleB
 accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration crystalInvulnerable Z
 accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration spikes Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration crystalBeamTarget Lnet/minecraft/core/BlockPos;
+accessible field net/minecraft/world/level/levelgen/blockpredicates/MatchingBiomesPredicate biomes Lnet/minecraft/core/HolderSet;
 
 accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
 accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker
@@ -210,4 +210,4 @@ accessible class net/minecraft/world/level/levelgen/blockpredicates/Unobstructed
 
 # fossil structure templates
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate palettes Ljava/util/List;
-accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;
+accessible field net/minecraft/client/renderer/entity/EntityRenderDispatcher blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;

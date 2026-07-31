@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TemplateFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
@@ -165,14 +166,14 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getGeodeBlockSettingsTooltip(IServerUtils utils, GeodeBlockSettings value) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.fillingProvider).build(Lang.Branch.FILLING_PROVIDER));
-            b.add(utils.getValueTooltip(utils, value.innerLayerProvider).build(Lang.Branch.INNER_LAYER_PROVIDER));
-            b.add(utils.getValueTooltip(utils, value.alternateInnerLayerProvider).build(Lang.Branch.ALTERNATE_INNER_LAYER_PROVIDER));
-            b.add(utils.getValueTooltip(utils, value.middleLayerProvider).build(Lang.Branch.MIDDLE_LAYER_PROVIDER));
-            b.add(utils.getValueTooltip(utils, value.outerLayerProvider).build(Lang.Branch.OUTER_LAYER_PROVIDER));
-            b.add(utils.getValueTooltip(utils, value.innerPlacements).build(Lang.Branch.INNER_PLACEMENTS));
-            b.add(utils.getValueTooltip(utils, value.cannotReplace).build(Lang.Branch.CANNOT_REPLACE));
-            b.add(utils.getValueTooltip(utils, value.invalidBlocks).build(Lang.Branch.INVALID_BLOCKS));
+            b.add(utils.getValueTooltip(utils, value.fillingProvider()).build(Lang.Branch.FILLING_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.innerLayerProvider()).build(Lang.Branch.INNER_LAYER_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.alternateInnerLayerProvider()).build(Lang.Branch.ALTERNATE_INNER_LAYER_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.middleLayerProvider()).build(Lang.Branch.MIDDLE_LAYER_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.outerLayerProvider()).build(Lang.Branch.OUTER_LAYER_PROVIDER));
+            b.add(utils.getValueTooltip(utils, value.innerPlacements()).build(Lang.Branch.INNER_PLACEMENTS));
+            b.add(utils.getValueTooltip(utils, value.cannotReplace()).build(Lang.Branch.CANNOT_REPLACE));
+            b.add(utils.getValueTooltip(utils, value.invalidBlocks()).build(Lang.Branch.INVALID_BLOCKS));
         });
     }
 
@@ -198,8 +199,8 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getWeightedPlacedFeatureTooltip(IServerUtils utils, WeightedPlacedFeature value) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.feature).build(Lang.Branch.FEATURE));
-            b.add(utils.getValueTooltip(utils, value.chance).build(Lang.Value.CHANCE));
+            b.add(utils.getValueTooltip(utils, value.feature()).build(Lang.Branch.FEATURE));
+            b.add(utils.getValueTooltip(utils, value.chance()).build(Lang.Value.CHANCE));
         });
     }
 
@@ -290,5 +291,13 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getRuleBlockEntityModifierTooltip(IServerUtils utils, RuleBlockEntityModifier value) {
         return utils.getValueTooltip(utils, value.getType());
+    }
+
+    @NotNull
+    public static TooltipBuilder getTemplateEntryTooltip(IServerUtils utils, TemplateFeatureConfiguration.TemplateEntry value) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, value.template()).build(Lang.Value.TEMPLATE));
+            b.add(utils.getValueTooltip(utils, value.rotations()).build(Lang.Branch.ROTATIONS));
+        });
     }
 }

@@ -3,6 +3,8 @@ package com.yanny.awi.test;
 import com.yanny.awi.plugin.server.BlockPredicateTooltipUtils;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.blockpredicates.*;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 
@@ -137,6 +140,17 @@ public class BlockPredicateTooltipTest {
         assertTooltip(BlockPredicateTooltipUtils.getUnobstructedPredicateTooltip(UTILS, new UnobstructedPredicate(new Vec3i(1, 2, 3))).build(), List.of(
                 "Unobstructed:",
                 "  -> Offset: [1,2,3]"
+        ));
+    }
+
+    @Test
+    public void testMatchingBiomePredicateTooltip() {
+        assertTooltip(BlockPredicateTooltipUtils.getMatchingBiomesPredicateTooltip(UTILS, new MatchingBiomesPredicate(
+                LOOKUP.lookupOrThrow(Registries.BIOME).getOrThrow(BiomeTags.HAS_IGLOO)
+        )).build(), List.of(
+                "Matching Biomes:",
+                "  -> Biomes:",
+                "    -> Tag: minecraft:has_structure/igloo"
         ));
     }
 }

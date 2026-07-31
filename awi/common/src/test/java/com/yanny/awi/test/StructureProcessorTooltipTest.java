@@ -3,6 +3,7 @@ package com.yanny.awi.test;
 import com.yanny.awi.plugin.server.StructureProcessorTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Blocks;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 
@@ -100,9 +102,12 @@ public class StructureProcessorTooltipTest {
 
     @Test
     public void testProtectedBlockProcessorTooltip() {
-        assertTooltip(StructureProcessorTooltipUtils.getProtectedBlockProcessorTooltip(UTILS, new ProtectedBlockProcessor(BlockTags.WOOL)).build(), List.of(
+        assertTooltip(StructureProcessorTooltipUtils.getProtectedBlockProcessorTooltip(UTILS, new ProtectedBlockProcessor(
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.WOOL)
+        )).build(), List.of(
                 "Protected Blocks:",
-                "  -> Cannot Replace:"
+                "  -> Cannot Replace:",
+                "    -> Tag: minecraft:wool"
         ));
     }
 

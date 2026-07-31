@@ -74,12 +74,6 @@ public class FeatureConfigurationCollectorUtils {
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectDripstoneClusterConfigurationBlocks(IServerUtils utils, DripstoneClusterConfiguration configuration) {
-        return collectFeatureBlocks(utils, configuration);
-    }
-
-    @Unmodifiable
-    @NotNull
     public static List<Block> collectEndGatewayConfigurationBlocks(IServerUtils utils, EndGatewayConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
@@ -88,12 +82,12 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectGeodeConfigurationBlocks(IServerUtils utils, GeodeConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.fillingProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.innerLayerProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.alternateInnerLayerProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.middleLayerProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.outerLayerProvider));
-        blocks.addAll(configuration.geodeBlockSettings.innerPlacements.stream().map(BlockBehaviour.BlockStateBase::getBlock).toList());
+        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings().fillingProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings().innerLayerProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings().alternateInnerLayerProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings().middleLayerProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings().outerLayerProvider()));
+        blocks.addAll(configuration.geodeBlockSettings().innerPlacements().stream().map(BlockBehaviour.BlockStateBase::getBlock).toList());
         return blocks;
     }
 
@@ -145,12 +139,6 @@ public class FeatureConfigurationCollectorUtils {
 
         blocks.addAll(configuration.targetStates.stream().map((state) -> state.state.getBlock()).toList());
         return blocks;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Block> collectPointedDripstoneConfigurationBlocks(IServerUtils utils, PointedDripstoneConfiguration configuration) {
-        return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable
@@ -215,14 +203,6 @@ public class FeatureConfigurationCollectorUtils {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(utils.collectBlocks(utils, configuration.toPlace()));
-        return blocks;
-    }
-
-    @NotNull
-    public static List<Block> collectSimpleRandomFeatureConfigurationBlocks(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
-
-        blocks.addAll(configuration.getSubFeatures().map((v) -> utils.collectBlocks(utils, v.value().config())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
@@ -320,6 +300,46 @@ public class FeatureConfigurationCollectorUtils {
 
         blocks.add(configuration.state().getBlock());
         return blocks;
+    }
+
+    @NotNull
+    public static List<Block> collectCompositeFeatureConfigurationBlocks(IServerUtils utils, CompositeFeatureConfiguration configuration) {
+        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.addAll(configuration.features().stream().map((feature) -> utils.collectBlocks(utils, feature.value().feature().value().config())).flatMap(Collection::stream).toList());
+        return blocks;
+    }
+
+    @NotNull
+    public static List<Block> collectSpeleothemClusterConfigurationBlocks(IServerUtils utils, SpeleothemClusterConfiguration configuration) {
+        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.add(configuration.baseBlock().getBlock());
+        blocks.add(configuration.pointedBlock().getBlock());
+        return blocks;
+    }
+
+    @NotNull
+    public static List<Block> collectWeightedRandomFeatureConfigurationBlocks(IServerUtils utils, WeightedRandomFeatureConfiguration configuration) {
+        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.addAll(configuration.features().unwrap().stream().map((feature) -> utils.collectBlocks(utils, feature.value().value().feature().value().config())).flatMap(Collection::stream).toList());
+        return blocks;
+    }
+
+    @NotNull
+    public static List<Block> collectSpeleothemConfigurationBlocks(IServerUtils utils, SpeleothemConfiguration configuration) {
+        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.add(configuration.baseBlock().getBlock());
+        blocks.add(configuration.pointedBlock().getBlock());
+        return blocks;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Block> collectTemplateFeatureConfigurationBlocks(IServerUtils utils, TemplateFeatureConfiguration configuration) {
+        return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable

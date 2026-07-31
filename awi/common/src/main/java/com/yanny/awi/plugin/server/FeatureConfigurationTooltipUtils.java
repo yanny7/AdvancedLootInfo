@@ -66,23 +66,6 @@ public class FeatureConfigurationTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getDripstoneClusterConfigurationTooltip(IServerUtils utils, DripstoneClusterConfiguration configuration) {
-        return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.floorToCeilingSearchRange).build(Lang.Value.SEARCH_RANGE));
-            b.add(utils.getValueTooltip(utils, configuration.height).build(Lang.Branch.HEIGHT));
-            b.add(utils.getValueTooltip(utils, configuration.radius).build(Lang.Branch.RADIUS));
-            b.add(utils.getValueTooltip(utils, configuration.maxStalagmiteStalactiteHeightDiff).build(Lang.Value.MAX_HEIGHT_DIFF));
-            b.add(utils.getValueTooltip(utils, configuration.heightDeviation).build(Lang.Value.HEIGHT_DEVIATION));
-            b.add(utils.getValueTooltip(utils, configuration.dripstoneBlockLayerThickness).build(Lang.Branch.LAYER_THICKNESS));
-            b.add(utils.getValueTooltip(utils, configuration.density).build(Lang.Branch.DENSITY));
-            b.add(utils.getValueTooltip(utils, configuration.wetness).build(Lang.Branch.WETNESS));
-            b.add(utils.getValueTooltip(utils, configuration.chanceOfDripstoneColumnAtMaxDistanceFromCenter).build(Lang.Value.EDGE_CHANCE));
-            b.add(utils.getValueTooltip(utils, configuration.maxDistanceFromEdgeAffectingChanceOfDripstoneColumn).build(Lang.Value.CHANCE_RADIUS));
-            b.add(utils.getValueTooltip(utils, configuration.maxDistanceFromCenterAffectingHeightBias).build(Lang.Value.HEIGHT_BIAS_RADIUS));
-        }, Lang.FeatureConfiguration.DRIPSTONE_CLUSTER);
-    }
-
-    @NotNull
     public static TooltipBuilder getEndGatewayConfigurationTooltip(IServerUtils utils, EndGatewayConfiguration configuration) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.getExit()).build(Lang.Value.EXIT));
@@ -93,19 +76,19 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getGeodeConfigurationTooltip(IServerUtils utils, GeodeConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.geodeBlockSettings).build(Lang.Branch.GEODE_BLOCK_SETTINGS));
-            b.add(utils.getValueTooltip(utils, configuration.geodeLayerSettings).build(Lang.Branch.GEODE_LAYER_SETTINGS));
-            b.add(utils.getValueTooltip(utils, configuration.geodeCrackSettings).build(Lang.Branch.GEODE_CRACK_SETTINGS));
-            b.add(utils.getValueTooltip(utils, configuration.usePotentialPlacementsChance).build(Lang.Value.POTENTIAL_PLACEMENT_CHANCE));
-            b.add(utils.getValueTooltip(utils, configuration.useAlternateLayer0Chance).build(Lang.Value.ALTERNATE_LAYER_CHANCE));
-            b.add(utils.getValueTooltip(utils, configuration.placementsRequireLayer0Alternate).build(Lang.Value.REQUIRE_ALTERNATE_LAYER));
-            b.add(utils.getValueTooltip(utils, configuration.outerWallDistance).build(Lang.Branch.OUTER_WALL_DISTANCE));
-            b.add(utils.getValueTooltip(utils, configuration.distributionPoints).build(Lang.Branch.DISTRIBUTION_POINTS));
-            b.add(utils.getValueTooltip(utils, configuration.pointOffset).build(Lang.Branch.POINT_OFFSET));
-            b.add(utils.getValueTooltip(utils, configuration.minGenOffset).build(Lang.Value.MIN_GEN_OFFSET));
-            b.add(utils.getValueTooltip(utils, configuration.maxGenOffset).build(Lang.Value.MAX_GEN_OFFSET));
-            b.add(utils.getValueTooltip(utils, configuration.noiseMultiplier).build(Lang.Value.NOISE_MULTIPLIER));
-            b.add(utils.getValueTooltip(utils, configuration.invalidBlocksThreshold).build(Lang.Value.INVALID_BLOCKS_THRESHOLD));
+            b.add(utils.getValueTooltip(utils, configuration.geodeBlockSettings()).build(Lang.Branch.GEODE_BLOCK_SETTINGS));
+            b.add(utils.getValueTooltip(utils, configuration.geodeLayerSettings()).build(Lang.Branch.GEODE_LAYER_SETTINGS));
+            b.add(utils.getValueTooltip(utils, configuration.geodeCrackSettings()).build(Lang.Branch.GEODE_CRACK_SETTINGS));
+            b.add(utils.getValueTooltip(utils, configuration.usePotentialPlacementsChance()).build(Lang.Value.POTENTIAL_PLACEMENT_CHANCE));
+            b.add(utils.getValueTooltip(utils, configuration.useAlternateLayer0Chance()).build(Lang.Value.ALTERNATE_LAYER_CHANCE));
+            b.add(utils.getValueTooltip(utils, configuration.placementsRequireLayer0Alternate()).build(Lang.Value.REQUIRE_ALTERNATE_LAYER));
+            b.add(utils.getValueTooltip(utils, configuration.outerWallDistance()).build(Lang.Branch.OUTER_WALL_DISTANCE));
+            b.add(utils.getValueTooltip(utils, configuration.distributionPoints()).build(Lang.Branch.DISTRIBUTION_POINTS));
+            b.add(utils.getValueTooltip(utils, configuration.pointOffset()).build(Lang.Branch.POINT_OFFSET));
+            b.add(utils.getValueTooltip(utils, configuration.minGenOffset()).build(Lang.Value.MIN_GEN_OFFSET));
+            b.add(utils.getValueTooltip(utils, configuration.maxGenOffset()).build(Lang.Value.MAX_GEN_OFFSET));
+            b.add(utils.getValueTooltip(utils, configuration.noiseMultiplier()).build(Lang.Value.NOISE_MULTIPLIER));
+            b.add(utils.getValueTooltip(utils, configuration.invalidBlocksThreshold()).build(Lang.Value.INVALID_BLOCKS_THRESHOLD));
         }, Lang.FeatureConfiguration.GEODE);
     }
 
@@ -177,16 +160,6 @@ public class FeatureConfigurationTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getPointedDripstoneConfigurationTooltip(IServerUtils utils, PointedDripstoneConfiguration configuration) {
-        return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.chanceOfTallerDripstone).build(Lang.Value.CHANCE_OF_TALLER_DRIPSTONE));
-            b.add(utils.getValueTooltip(utils, configuration.chanceOfDirectionalSpread).build(Lang.Value.CHANCE_OF_DIRECTIONAL_SPEED));
-            b.add(utils.getValueTooltip(utils, configuration.chanceOfSpreadRadius2).build(Lang.Value.CHANCE_OF_SPREAD_RADIUS_2));
-            b.add(utils.getValueTooltip(utils, configuration.chanceOfSpreadRadius3).build(Lang.Value.CHANCE_OF_SPREAD_RADIUS_3));
-        }, Lang.FeatureConfiguration.POINTED_DRIPSTONE);
-    }
-
-    @NotNull
     public static TooltipBuilder getProbabilityFeatureConfigurationTooltip(IServerUtils utils, ProbabilityFeatureConfiguration configuration) {
         return array((b) -> b.add(utils.getValueTooltip(utils, configuration.probability).build(Lang.Value.PROBABILITY)), Lang.FeatureConfiguration.PROBABILITY_FEATURE);
     }
@@ -202,8 +175,8 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getRandomFeatureConfigurationTooltip(IServerUtils utils, RandomFeatureConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.features).build(Lang.Branch.FEATURES));
-            b.add(utils.getValueTooltip(utils, configuration.defaultFeature).build(Lang.Branch.DEFAULT_FEATURE));
+            b.add(utils.getValueTooltip(utils, configuration.features()).build(Lang.Branch.FEATURES));
+            b.add(utils.getValueTooltip(utils, configuration.defaultFeature()).build(Lang.Branch.DEFAULT_FEATURE));
         }, Lang.FeatureConfiguration.RANDOM_FEATURE);
     }
 
@@ -224,19 +197,19 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getRootSystemConfigurationTooltip(IServerUtils utils, RootSystemConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.treeFeature).build(Lang.Branch.TREE_FEATURE));
-            b.add(utils.getValueTooltip(utils, configuration.requiredVerticalSpaceForTree).build(Lang.Value.REQUIRED_VERTICAL_SPACE_FOR_TREE));
-            b.add(utils.getValueTooltip(utils, configuration.rootRadius).build(Lang.Value.ROOT_RADIUS));
-            b.add(utils.getValueTooltip(utils, configuration.rootReplaceable).build(Lang.Value.ROOT_REPLACEABLE));
-            b.add(utils.getValueTooltip(utils, configuration.rootStateProvider).build(Lang.Branch.ROOT_STATE_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.rootPlacementAttempts).build(Lang.Value.ROOT_PLACEMENT_ATTEMPTS));
-            b.add(utils.getValueTooltip(utils, configuration.rootColumnMaxHeight).build(Lang.Value.ROOT_COLUMN_MAX_HEIGHT));
-            b.add(utils.getValueTooltip(utils, configuration.hangingRootRadius).build(Lang.Value.HANGING_ROOT_RADIUS));
-            b.add(utils.getValueTooltip(utils, configuration.hangingRootsVerticalSpan).build(Lang.Value.HANGING_ROOT_VERTICAL_SPAN));
-            b.add(utils.getValueTooltip(utils, configuration.hangingRootStateProvider).build(Lang.Branch.HANGING_ROOT_STATE_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.hangingRootPlacementAttempts).build(Lang.Value.HANGING_ROOT_PLACEMENT_ATTEMPTS));
-            b.add(utils.getValueTooltip(utils, configuration.allowedVerticalWaterForTree).build(Lang.Value.ALLOWED_VERTICAL_WATER_FOR_TREE));
-            b.add(utils.getValueTooltip(utils, configuration.allowedTreePosition).build(Lang.Branch.ALLOWED_TREE_POSITION));
+            b.add(utils.getValueTooltip(utils, configuration.treeFeature()).build(Lang.Branch.TREE_FEATURE));
+            b.add(utils.getValueTooltip(utils, configuration.requiredVerticalSpaceForTree()).build(Lang.Value.REQUIRED_VERTICAL_SPACE_FOR_TREE));
+            b.add(utils.getValueTooltip(utils, configuration.rootRadius()).build(Lang.Value.ROOT_RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.rootReplaceable()).build(Lang.Branch.ROOT_REPLACEABLE));
+            b.add(utils.getValueTooltip(utils, configuration.rootStateProvider()).build(Lang.Branch.ROOT_STATE_PROVIDER));
+            b.add(utils.getValueTooltip(utils, configuration.rootPlacementAttempts()).build(Lang.Value.ROOT_PLACEMENT_ATTEMPTS));
+            b.add(utils.getValueTooltip(utils, configuration.rootColumnMaxHeight()).build(Lang.Value.ROOT_COLUMN_MAX_HEIGHT));
+            b.add(utils.getValueTooltip(utils, configuration.hangingRootRadius()).build(Lang.Value.HANGING_ROOT_RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.hangingRootsVerticalSpan()).build(Lang.Value.HANGING_ROOT_VERTICAL_SPAN));
+            b.add(utils.getValueTooltip(utils, configuration.hangingRootStateProvider()).build(Lang.Branch.HANGING_ROOT_STATE_PROVIDER));
+            b.add(utils.getValueTooltip(utils, configuration.hangingRootPlacementAttempts()).build(Lang.Value.HANGING_ROOT_PLACEMENT_ATTEMPTS));
+            b.add(utils.getValueTooltip(utils, configuration.allowedVerticalWaterForTree()).build(Lang.Value.ALLOWED_VERTICAL_WATER_FOR_TREE));
+            b.add(utils.getValueTooltip(utils, configuration.allowedTreePosition()).build(Lang.Branch.ALLOWED_TREE_POSITION));
         }, Lang.FeatureConfiguration.ROOT_SYSTEM);
     }
 
@@ -256,11 +229,6 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getSimpleBlockConfigurationTooltip(IServerUtils utils, SimpleBlockConfiguration configuration) {
         return array((b) -> b.add(utils.getValueTooltip(utils, configuration.toPlace()).build(Lang.Branch.TO_PLACE)), Lang.FeatureConfiguration.SIMPLE_BLOCK);
-    }
-
-    @NotNull
-    public static TooltipBuilder getSimpleRandomFeatureConfigurationTooltip(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, configuration.features).build(Lang.Branch.FEATURES)), Lang.FeatureConfiguration.SIMPLE_RANDOM_FEATURES);
     }
 
     @NotNull
@@ -319,16 +287,16 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getVegetationPatchConfigurationTooltip(IServerUtils utils, VegetationPatchConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.replaceable).build(Lang.Value.REPLACEABLE));
-            b.add(utils.getValueTooltip(utils, configuration.groundState).build(Lang.Branch.GROUND_STATE));
-            b.add(utils.getValueTooltip(utils, configuration.vegetationFeature).build(Lang.Branch.VEGETATION_FEATURE));
-            b.add(utils.getValueTooltip(utils, configuration.surface).build(Lang.Value.SURFACE));
-            b.add(utils.getValueTooltip(utils, configuration.depth).build(Lang.Branch.DEPTH));
-            b.add(utils.getValueTooltip(utils, configuration.extraBottomBlockChance).build(Lang.Value.EXTRA_BOTTOM_BLOCK_CHANCE));
-            b.add(utils.getValueTooltip(utils, configuration.verticalRange).build(Lang.Value.VERTICAL_RANGE));
-            b.add(utils.getValueTooltip(utils, configuration.vegetationChance).build(Lang.Value.VEGETATION_CHANCE));
-            b.add(utils.getValueTooltip(utils, configuration.xzRadius).build(Lang.Branch.XZ_RADIUS));
-            b.add(utils.getValueTooltip(utils, configuration.extraEdgeColumnChance).build(Lang.Value.EXTRA_EDGE_COLUMN_CHANCE));
+            b.add(utils.getValueTooltip(utils, configuration.replaceable()).build(Lang.Branch.REPLACEABLE));
+            b.add(utils.getValueTooltip(utils, configuration.groundState()).build(Lang.Branch.GROUND_STATE));
+            b.add(utils.getValueTooltip(utils, configuration.vegetationFeature()).build(Lang.Branch.VEGETATION_FEATURE));
+            b.add(utils.getValueTooltip(utils, configuration.surface()).build(Lang.Value.SURFACE));
+            b.add(utils.getValueTooltip(utils, configuration.depth()).build(Lang.Branch.DEPTH));
+            b.add(utils.getValueTooltip(utils, configuration.extraBottomBlockChance()).build(Lang.Value.EXTRA_BOTTOM_BLOCK_CHANCE));
+            b.add(utils.getValueTooltip(utils, configuration.verticalRange()).build(Lang.Value.VERTICAL_RANGE));
+            b.add(utils.getValueTooltip(utils, configuration.vegetationChance()).build(Lang.Value.VEGETATION_CHANCE));
+            b.add(utils.getValueTooltip(utils, configuration.xzRadius()).build(Lang.Branch.XZ_RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.extraEdgeColumnChance()).build(Lang.Value.EXTRA_EDGE_COLUMN_CHANCE));
         }, Lang.FeatureConfiguration.VEGETATION_PATCH);
     }
 
@@ -388,5 +356,53 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.spikes).build(Lang.Branch.SPIKES));
             b.add(utils.getValueTooltip(utils, configuration.crystalBeamTarget).build(Lang.Value.CRYSTAL_BEAM_TARGET));
         }, Lang.FeatureConfiguration.END_SPIKE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getCompositeFeatureConfigurationTooltip(IServerUtils utils, CompositeFeatureConfiguration configuration) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, configuration.features()).build(Lang.Branch.FEATURES)), Lang.FeatureConfiguration.COMPOSITE_FEATURE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getSpeleothemClusterConfigurationTooltip(IServerUtils utils, SpeleothemClusterConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.baseBlock()).build(Lang.Branch.BASE_BLOCK));
+            b.add(utils.getValueTooltip(utils, configuration.pointedBlock()).build(Lang.Branch.POINTED_BLOCK));
+            b.add(utils.getValueTooltip(utils, configuration.replaceableBlocks()).build(Lang.Branch.REPLACEABLE_BLOCKS));
+            b.add(utils.getValueTooltip(utils, configuration.floorToCeilingSearchRange()).build(Lang.Value.FLOOR_TO_CEILING_SEARCH_RANGE));
+            b.add(utils.getValueTooltip(utils, configuration.height()).build(Lang.Branch.HEIGHT));
+            b.add(utils.getValueTooltip(utils, configuration.radius()).build(Lang.Branch.RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.maxStalagmiteStalactiteHeightDiff()).build(Lang.Value.MAX_STALAGMITE_STALACTITE_HEIGHT_DIFF));
+            b.add(utils.getValueTooltip(utils, configuration.heightDeviation()).build(Lang.Value.HEIGHT_DEVIATION));
+            b.add(utils.getValueTooltip(utils, configuration.speleothemBlockLayerThickness()).build(Lang.Branch.SPELEOTHEM_BLOCK_LAYER_THICKNESS));
+            b.add(utils.getValueTooltip(utils, configuration.density()).build(Lang.Branch.DENSITY));
+            b.add(utils.getValueTooltip(utils, configuration.wetness()).build(Lang.Branch.WETNESS));
+            b.add(utils.getValueTooltip(utils, configuration.chanceOfSpeleothemAtMaxDistanceFromCenter()).build(Lang.Value.CHANCE_OF_SPELEOTHEM_AT_MAX_DISTANCE_FROM_CENTER));
+            b.add(utils.getValueTooltip(utils, configuration.maxDistanceFromEdgeAffectingChanceOfSpeleothem()).build(Lang.Value.MAX_DISTANCE_FROM_EDGE_AFFECTING_CHANCE_OF_SPELEOTHEM));
+            b.add(utils.getValueTooltip(utils, configuration.maxDistanceFromCenterAffectingHeightBias()).build(Lang.Value.MAX_DISTANCE_FROM_CENTER_AFFECTING_HEIGHT_BIAS));
+        }, Lang.FeatureConfiguration.SPELEOTHEM_CLUSTER);
+    }
+
+    @NotNull
+    public static TooltipBuilder getWeightedRandomFeatureConfigurationTooltip(IServerUtils utils, WeightedRandomFeatureConfiguration configuration) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, configuration.features()).build(Lang.Branch.FEATURES)), Lang.FeatureConfiguration.WEIGHTED_RANDOM);
+    }
+
+    @NotNull
+    public static TooltipBuilder getSpeleothemConfigurationTooltip(IServerUtils utils, SpeleothemConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.baseBlock()).build(Lang.Branch.BASE_BLOCK));
+            b.add(utils.getValueTooltip(utils, configuration.pointedBlock()).build(Lang.Branch.POINTED_BLOCK));
+            b.add(utils.getValueTooltip(utils, configuration.replaceableBlocks()).build(Lang.Branch.REPLACEABLE_BLOCKS));
+            b.add(utils.getValueTooltip(utils, configuration.chanceOfTallerGeneration()).build(Lang.Value.CHANCE_OF_TALLER_GENERATION));
+            b.add(utils.getValueTooltip(utils, configuration.chanceOfDirectionalSpread()).build(Lang.Value.CHANCE_OF_DIRECTIONAL_SPREAD));
+            b.add(utils.getValueTooltip(utils, configuration.chanceOfSpreadRadius2()).build(Lang.Value.CHANCE_OF_SPREAD_RADIUS_2));
+            b.add(utils.getValueTooltip(utils, configuration.chanceOfSpreadRadius3()).build(Lang.Value.CHANCE_OF_SPREAD_RADIUS_3));
+        }, Lang.FeatureConfiguration.SPELEOTHEM_CLUSTER);
+    }
+
+    @NotNull
+    public static TooltipBuilder getTemplateFeatureConfigurationTooltip(IServerUtils utils, TemplateFeatureConfiguration configuration) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, configuration.templates()).build(Lang.Branch.TEMPLATES)), Lang.FeatureConfiguration.TEMPLATE);
     }
 }

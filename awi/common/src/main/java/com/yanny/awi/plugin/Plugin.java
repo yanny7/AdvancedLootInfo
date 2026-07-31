@@ -108,11 +108,11 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(WeightedList.class, ValueTooltipUtils::getWeightedListTooltip);
         registry.registerValueTooltip(PosRuleTest.class, ValueTooltipUtils::getPosRuleTestTooltip);
         registry.registerValueTooltip(RuleBlockEntityModifier.class, ValueTooltipUtils::getRuleBlockEntityModifierTooltip);
+        registry.registerValueTooltip(TemplateFeatureConfiguration.TemplateEntry.class, ValueTooltipUtils::getTemplateEntryTooltip);
 
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
         registry.registerValueTooltip(PlacementModifierType.class, RegistriesTooltipUtils::getPlacementModifierTooltip);
-//        registry.registerValueTooltip(IntProvider.class, RegistriesTooltipUtils::getIntProviderTooltip);
         registry.registerValueTooltip(RuleTestType.class, RegistriesTooltipUtils::getRuleTestTypeTooltip);
         registry.registerValueTooltip(HeightProviderType.class, RegistriesTooltipUtils::getHeightProviderTooltip);
         registry.registerValueTooltip(BlockPredicateType.class, RegistriesTooltipUtils::getBlockPredicateTooltip);
@@ -123,8 +123,6 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(RootPlacerType.class, RegistriesTooltipUtils::getRootPlacerTooltip);
         registry.registerValueTooltip(FoliagePlacerType.class, RegistriesTooltipUtils::getFoliagePlacerTooltip);
         registry.registerValueTooltip(TrunkPlacerType.class, RegistriesTooltipUtils::getTrunkPlacerTooltip);
-//        registry.registerValueTooltip(FloatProvider.class, RegistriesTooltipUtils::getFloatProviderTooltip);
-        registry.registerValueTooltip(StructureProcessorType.class, RegistriesTooltipUtils::getStructureProcessorTypeTooltip);
         registry.registerValueTooltip(PosRuleTestType.class, RegistriesTooltipUtils::getPosRuleTestTypeTooltip);
         registry.registerValueTooltip(RuleBlockEntityModifierType.class, RegistriesTooltipUtils::getRuleBlockEntityModifierTooltip);
 
@@ -135,7 +133,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(CountConfiguration.class, FeatureConfigurationTooltipUtils::getCountConfigurationTooltip);
         registry.registerFeatureTooltip(DeltaFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getDeltaFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(DiskConfiguration.class, FeatureConfigurationTooltipUtils::getDiscConfigurationTooltip);
-        registry.registerFeatureTooltip(DripstoneClusterConfiguration.class, FeatureConfigurationTooltipUtils::getDripstoneClusterConfigurationTooltip);
         registry.registerFeatureTooltip(EndGatewayConfiguration.class, FeatureConfigurationTooltipUtils::getEndGatewayConfigurationTooltip);
         registry.registerFeatureTooltip(GeodeConfiguration.class, FeatureConfigurationTooltipUtils::getGeodeConfigurationTooltip);
         registry.registerFeatureTooltip(HugeMushroomFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getHugeMushroomFeatureConfigurationTooltip);
@@ -145,7 +142,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(NetherForestVegetationConfig.class, FeatureConfigurationTooltipUtils::getNetherForestVegetationConfigurationTooltip);
         registry.registerFeatureTooltip(NoneFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getNoneFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(OreConfiguration.class, FeatureConfigurationTooltipUtils::getOreConfigurationTooltip);
-        registry.registerFeatureTooltip(PointedDripstoneConfiguration.class, FeatureConfigurationTooltipUtils::getPointedDripstoneConfigurationTooltip);
         registry.registerFeatureTooltip(ProbabilityFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getProbabilityFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(RandomBooleanFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getRandomBooleanFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(RandomFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getRandomFeatureConfigurationTooltip);
@@ -154,7 +150,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(RootSystemConfiguration.class, FeatureConfigurationTooltipUtils::getRootSystemConfigurationTooltip);
         registry.registerFeatureTooltip(SculkPatchConfiguration.class, FeatureConfigurationTooltipUtils::getSculkPatchConfigurationTooltip);
         registry.registerFeatureTooltip(SimpleBlockConfiguration.class, FeatureConfigurationTooltipUtils::getSimpleBlockConfigurationTooltip);
-        registry.registerFeatureTooltip(SimpleRandomFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getSimpleRandomFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(SpikeConfiguration.class, FeatureConfigurationTooltipUtils::getSpikeConfigurationTooltip);
         registry.registerFeatureTooltip(SpringConfiguration.class, FeatureConfigurationTooltipUtils::getSpringConfigurationTooltip);
         registry.registerFeatureTooltip(TreeConfiguration.class, FeatureConfigurationTooltipUtils::getTreeConfigurationTooltip);
@@ -167,6 +162,11 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(FallenTreeConfiguration.class, FeatureConfigurationTooltipUtils::getFallenTreeConfigurationTooltip);
         registry.registerFeatureTooltip(BlockBlobConfiguration.class, FeatureConfigurationTooltipUtils::getBlockBlobConfigurationTooltip);
         registry.registerFeatureTooltip(EndSpikeConfiguration.class, FeatureConfigurationTooltipUtils::getEndSpikeConfigurationTooltip);
+        registry.registerFeatureTooltip(CompositeFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getCompositeFeatureConfigurationTooltip);
+        registry.registerFeatureTooltip(SpeleothemClusterConfiguration.class, FeatureConfigurationTooltipUtils::getSpeleothemClusterConfigurationTooltip);
+        registry.registerFeatureTooltip(WeightedRandomFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getWeightedRandomFeatureConfigurationTooltip);
+        registry.registerFeatureTooltip(SpeleothemConfiguration.class, FeatureConfigurationTooltipUtils::getSpeleothemConfigurationTooltip);
+        registry.registerFeatureTooltip(TemplateFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getTemplateFeatureConfigurationTooltip);
 
         registry.registerIntProviderTooltip(ConstantInt.class, IntProviderTooltipUtils::getConstantIntTooltip);
         registry.registerIntProviderTooltip(UniformInt.class, IntProviderTooltipUtils::getUniformIntTooltip);
@@ -208,6 +208,7 @@ public class Plugin implements IPlugin {
         registry.registerBlockPredicateTooltip(NotPredicate.class, BlockPredicateTooltipUtils::getNotPredicateTooltip);
         registry.registerBlockPredicateTooltip(TrueBlockPredicate.class, BlockPredicateTooltipUtils::getTrueBlockPredicateTooltip);
         registry.registerBlockPredicateTooltip(UnobstructedPredicate.class, BlockPredicateTooltipUtils::getUnobstructedPredicateTooltip);
+        registry.registerBlockPredicateTooltip(MatchingBiomesPredicate.class, BlockPredicateTooltipUtils::getMatchingBiomesPredicateTooltip);
 
         registry.registerPlacementModifierTooltip(BiomeFilter.class, PlacementModifierTooltipUtils::getBiomeFilterTooltip);
         registry.registerPlacementModifierTooltip(BlockPredicateFilter.class, PlacementModifierTooltipUtils::getBlockPredicateFilterTooltip);
@@ -257,7 +258,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(CountConfiguration.class, FeatureConfigurationCollectorUtils::collectCountConfigurationBlocks);
         registry.registerFeatureBlockCollector(DeltaFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectDeltaFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(DiskConfiguration.class, FeatureConfigurationCollectorUtils::collectDiskConfigurationBlocks);
-        registry.registerFeatureBlockCollector(DripstoneClusterConfiguration.class, FeatureConfigurationCollectorUtils::collectDripstoneClusterConfigurationBlocks);
         registry.registerFeatureBlockCollector(EndGatewayConfiguration.class, FeatureConfigurationCollectorUtils::collectEndGatewayConfigurationBlocks);
         registry.registerFeatureBlockCollector(GeodeConfiguration.class, FeatureConfigurationCollectorUtils::collectGeodeConfigurationBlocks);
         registry.registerFeatureBlockCollector(HugeMushroomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectHugeMushroomFeatureConfigurationBlocks);
@@ -267,7 +267,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(NetherForestVegetationConfig.class, FeatureConfigurationCollectorUtils::collectNetherForestVegetationConfigurationBlocks);
         registry.registerFeatureBlockCollector(NoneFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectNoneFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(OreConfiguration.class, FeatureConfigurationCollectorUtils::collectOreConfigurationBlocks);
-        registry.registerFeatureBlockCollector(PointedDripstoneConfiguration.class, FeatureConfigurationCollectorUtils::collectPointedDripstoneConfigurationBlocks);
         registry.registerFeatureBlockCollector(ProbabilityFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectProbabilityFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomBooleanFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomBooleanFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(RandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectRandomFeatureConfigurationBlocks);
@@ -276,7 +275,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(RootSystemConfiguration.class, FeatureConfigurationCollectorUtils::collectRootSystemConfigurationBlocks);
         registry.registerFeatureBlockCollector(SculkPatchConfiguration.class, FeatureConfigurationCollectorUtils::collectSculkPatchConfigurationBlocks);
         registry.registerFeatureBlockCollector(SimpleBlockConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleBlockConfigurationBlocks);
-        registry.registerFeatureBlockCollector(SimpleRandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectSimpleRandomFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(SpikeConfiguration.class, FeatureConfigurationCollectorUtils::collectSpikeConfigurationBlocks);
         registry.registerFeatureBlockCollector(SpringConfiguration.class, FeatureConfigurationCollectorUtils::collectSpringConfigurationBlocks);
         registry.registerFeatureBlockCollector(TreeConfiguration.class, FeatureConfigurationCollectorUtils::collectTreeConfigurationBlocks);
@@ -287,6 +285,11 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(FossilFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectFossilFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(HugeFungusConfiguration.class, FeatureConfigurationCollectorUtils::collectHugeFungusConfigurationBlocks);
         registry.registerFeatureBlockCollector(BlockBlobConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockBlobConfigurationBlocks);
+        registry.registerFeatureBlockCollector(CompositeFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectCompositeFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SpeleothemClusterConfiguration.class, FeatureConfigurationCollectorUtils::collectSpeleothemClusterConfigurationBlocks);
+        registry.registerFeatureBlockCollector(WeightedRandomFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectWeightedRandomFeatureConfigurationBlocks);
+        registry.registerFeatureBlockCollector(SpeleothemConfiguration.class, FeatureConfigurationCollectorUtils::collectSpeleothemConfigurationBlocks);
+        registry.registerFeatureBlockCollector(TemplateFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectTemplateFeatureConfigurationBlocks);
 
         registry.registerStateProviderBlockCollector(SimpleStateProvider.class, BlockStateProviderCollectorUtils::collectSimple);
         registry.registerStateProviderBlockCollector(NoiseProvider.class, BlockStateProviderCollectorUtils::collectNoise);

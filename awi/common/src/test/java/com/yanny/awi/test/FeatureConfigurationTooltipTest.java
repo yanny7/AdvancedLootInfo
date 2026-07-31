@@ -5,13 +5,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.MultifaceSpreadeableBlock;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.GeodeBlockSettings;
 import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
@@ -33,6 +37,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 
@@ -184,46 +189,6 @@ public class FeatureConfigurationTooltipTest {
     }
 
     @Test
-    public void testDripstoneClusterConfigurationTooltip() {
-        assertTooltip(FeatureConfigurationTooltipUtils.getDripstoneClusterConfigurationTooltip(UTILS, new DripstoneClusterConfiguration(
-                10,
-                ConstantInt.of(6),
-                ConstantInt.of(3),
-                1,
-                2,
-                ConstantInt.of(4),
-                ConstantFloat.of(0.7f),
-                ConstantFloat.of(0.5f),
-                0.2f,
-                3,
-                4
-        )).build(), List.of(
-                "Dripstone Cluster:",
-                "  -> Search Range: 10",
-                "  -> Height:",
-                "    -> Constant:",
-                "      -> Value: 6",
-                "  -> Radius:",
-                "    -> Constant:",
-                "      -> Value: 3",
-                "  -> Max Height Diff: 1",
-                "  -> Height Deviation: 2",
-                "  -> Layer Thickness:",
-                "    -> Constant:",
-                "      -> Value: 4",
-                "  -> Density:",
-                "    -> Constant:",
-                "      -> Value: 0.7",
-                "  -> Wetness:",
-                "    -> Constant:",
-                "      -> Value: 0.5",
-                "  -> Edge Chance: 0.2",
-                "  -> Chance Radius: 3",
-                "  -> Height Bias Radius: 4"
-        ));
-    }
-
-    @Test
     public void testEndGatewayConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getEndGatewayConfigurationTooltip(UTILS, EndGatewayConfiguration.knownExit(new BlockPos(1, 2, 3), true)).build(), List.of(
                 "End Gateway:",
@@ -246,8 +211,8 @@ public class FeatureConfigurationTooltipTest {
                         BlockStateProvider.simple(Blocks.CALCITE),
                         BlockStateProvider.simple(Blocks.SMOOTH_BASALT),
                         List.of(Blocks.AMETHYST_CLUSTER.defaultBlockState()),
-                        BlockTags.WOOL,
-                        BlockTags.LOGS
+                        LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.WOOL),
+                        LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.LOGS)
                 ),
                 new GeodeLayerSettings(1.7, 2.2, 3.2, 4.2),
                 new GeodeCrackSettings(1.0, 2.0, 2),
@@ -290,7 +255,9 @@ public class FeatureConfigurationTooltipTest {
                 "        -> facing: up",
                 "        -> waterlogged: false",
                 "    -> Cannot Replace:",
+                "      -> Tag: minecraft:wool",
                 "    -> Invalid Blocks:",
+                "      -> Tag: minecraft:logs",
                 "  -> Geode Layer Settings:",
                 "    -> Filling: 1.7",
                 "    -> Inner Layer: 2.2",
@@ -357,6 +324,7 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testLargeDripstoneConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getLargeDripstoneConfigurationTooltip(UTILS, new LargeDripstoneConfiguration(
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.FEATURES_CANNOT_REPLACE),
                 30,
                 ConstantInt.of(6),
                 ConstantFloat.of(4.0f),
@@ -439,17 +407,6 @@ public class FeatureConfigurationTooltipTest {
     public void testNoneFeatureConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getNoneFeatureConfigurationTooltip(UTILS, NoneFeatureConfiguration.INSTANCE).build(), List.of(
                 "None Feature:"
-        ));
-    }
-
-    @Test
-    public void testPointedDripstoneConfigurationTooltip() {
-        assertTooltip(FeatureConfigurationTooltipUtils.getPointedDripstoneConfigurationTooltip(UTILS, new PointedDripstoneConfiguration(0.2f, 0.7f, 0.5f, 0.5f)).build(), List.of(
-                "Pointed Dripstone:",
-                "  -> Chance Of Taller Dripstone: 0.2",
-                "  -> Chance Of Directional Speed: 0.7",
-                "  -> Chance Of Spread Radius 2: 0.5",
-                "  -> Chance Of Spread Radius 3: 0.5"
         ));
     }
 
@@ -538,7 +495,9 @@ public class FeatureConfigurationTooltipTest {
                 PLACED_FEATURE,
                 3,
                 2,
-                BlockTags.WOOL,
+                4,
+                2,
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.WOOL),
                 BlockStateProvider.simple(Blocks.DIRT),
                 20,
                 32,
@@ -557,7 +516,8 @@ public class FeatureConfigurationTooltipTest {
                 "        -> None Feature:",
                 "  -> Required Vertical Space For Tree: 3",
                 "  -> Root Radius: 2",
-                "  -> Root Replaceable: minecraft:wool",
+                "  -> Root Replaceable:",
+                "    -> Tag: minecraft:wool",
                 "  -> Root State Provider:",
                 "    -> Simple:",
                 "      -> State:",
@@ -608,18 +568,6 @@ public class FeatureConfigurationTooltipTest {
     }
 
     @Test
-    public void testSimpleRandomFeatureConfigurationTooltip() {
-        assertTooltip(FeatureConfigurationTooltipUtils.getSimpleRandomFeatureConfigurationTooltip(UTILS, new SimpleRandomFeatureConfiguration(HolderSet.direct(PLACED_FEATURE))).build(), List.of(
-                "Simple Random Features:",
-                "  -> Features:",
-                "    -> Feature:",
-                "      -> Feature: minecraft:no_op",
-                "      -> Config:",
-                "        -> None Feature:"
-        ));
-    }
-
-    @Test
     public void testSpikeConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getSpikeConfigurationTooltip(UTILS, new SpikeConfiguration(
                 Blocks.DIRT.defaultBlockState(),
@@ -665,7 +613,8 @@ public class FeatureConfigurationTooltipTest {
                 new StraightTrunkPlacer(5, 2, 0),
                 BlockStateProvider.simple(Blocks.OAK_LEAVES),
                 new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                BlockStateProvider.simple(Blocks.SAND)
         ).build()).build(), List.of(
                 "Tree:",
                 "  -> Trunk Provider:",
@@ -703,18 +652,9 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Upper Size: 1",
                 "  -> Ignore Vines: false",
                 "  -> Below Trunk Provider:",
-                "    -> Rule Based:",
-                "      -> Rules:",
-                "        -> If True:",
-                "          -> Not:",
-                "            -> Predicate:",
-                "              -> Matching Block Tag:",
-                "                -> Tag: minecraft:cannot_replace_below_tree_trunk",
-                "                -> Offset: [0,0,0]",
-                "        -> Then:",
-                "          -> Simple:",
-                "            -> State:",
-                "              -> Block: Dirt"
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Sand"
         ));
     }
 
@@ -741,7 +681,7 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testVegetationPatchConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getVegetationPatchConfigurationTooltip(UTILS, new VegetationPatchConfiguration(
-                BlockTags.WOOL,
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.WOOL),
                 BlockStateProvider.simple(Blocks.PODZOL),
                 PLACED_FEATURE,
                 CaveSurface.FLOOR,
@@ -753,7 +693,8 @@ public class FeatureConfigurationTooltipTest {
                 0.1f
         )).build(), List.of(
                 "Vegetation Patch:",
-                "  -> Replaceable: minecraft:wool",
+                "  -> Replaceable:",
+                "    -> Tag: minecraft:wool",
                 "  -> Ground State:",
                 "    -> Simple:",
                 "      -> State:",
@@ -783,7 +724,10 @@ public class FeatureConfigurationTooltipTest {
     public void testLakeConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getLakeConfigurationTooltip(UTILS, new LakeFeature.Configuration(
                 BlockStateProvider.simple(Blocks.STONE),
-                BlockStateProvider.simple(Blocks.DIRT)
+                BlockStateProvider.simple(Blocks.DIRT),
+                BlockPredicate.solid(),
+                BlockPredicate.noFluid(),
+                BlockPredicate.alwaysTrue()
         )).build(), List.of(
                 "Lake:",
                 "  -> Fluid:",
@@ -895,6 +839,141 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Height: 30",
                 "    -> Is Guarded: true",
                 "  -> Crystal Beam Target: [1,2,3]"
+        ));
+    }
+
+    @Test
+    public void testCompositeFeatureConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getCompositeFeatureConfigurationTooltip(UTILS, new CompositeFeatureConfiguration(
+                HolderSet.direct(PLACED_FEATURE)
+        )).build(), List.of(
+                "Composite Feature:",
+                "  -> Features:",
+                "    -> Feature:",
+                "      -> Feature: minecraft:no_op",
+                "      -> Config:",
+                "        -> None Feature:"
+        ));
+    }
+
+    @Test
+    public void testSpeleothemClusterConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getSpeleothemClusterConfigurationTooltip(UTILS, new SpeleothemClusterConfiguration(
+                Blocks.DRIPSTONE_BLOCK.defaultBlockState(),
+                Blocks.POINTED_DRIPSTONE.defaultBlockState(),
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.WOOL),
+                12,
+                ConstantInt.of(3),
+                ConstantInt.of(8),
+                2,
+                1,
+                ConstantInt.of(2),
+                ConstantFloat.of(0.5f),
+                ConstantFloat.of(0.1f),
+                0.3f,
+                4,
+                6
+        )).build(), List.of(
+                "Speleothem Cluster:",
+                "  -> Base Block:",
+                "    -> Block: Dripstone Block",
+                "  -> Pointed Block:",
+                "    -> Block: Pointed Dripstone",
+                "    -> Properties:",
+                "      -> thickness: tip",
+                "      -> vertical_direction: up",
+                "      -> waterlogged: false",
+                "  -> Replaceable Blocks:",
+                "    -> Tag: minecraft:wool",
+                "  -> Floor-Ceiling Search Range: 12",
+                "  -> Height:",
+                "    -> Constant:",
+                "      -> Value: 3",
+                "  -> Radius:",
+                "    -> Constant:",
+                "      -> Value: 8",
+                "  -> Max Stalagmite/Stalactite Diff: 2",
+                "  -> Height Deviation: 1",
+                "  -> Speleothem Layer Thickness:",
+                "    -> Constant:",
+                "      -> Value: 2",
+                "  -> Density:",
+                "    -> Constant:",
+                "      -> Value: 0.5",
+                "  -> Wetness:",
+                "    -> Constant:",
+                "      -> Value: 0.1",
+                "  -> Chance At Max Center Distance: 0.3",
+                "  -> Max Edge Distance For Chance: 4",
+                "  -> Max Center Distance For Height Bias: 6"
+        ));
+    }
+
+    @Test
+    public void testWeightedRandomFeatureConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getWeightedRandomFeatureConfigurationTooltip(UTILS, new WeightedRandomFeatureConfiguration(
+                WeightedList.of(List.of(new Weighted<>(PLACED_FEATURE, 3)))
+        )).build(), List.of(
+                "Weighted Random:",
+                "  -> Features:",
+                "    -> Total Weight: 3",
+                "    -> Items:",
+                "      -> Weight: 3",
+                "      -> Value:",
+                "        -> Feature:",
+                "          -> Feature: minecraft:no_op",
+                "          -> Config:",
+                "            -> None Feature:"
+        ));
+    }
+
+    @Test
+    public void testSpeleothemConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getSpeleothemConfigurationTooltip(UTILS, new SpeleothemConfiguration(
+                Blocks.DRIPSTONE_BLOCK.defaultBlockState(),
+                Blocks.POINTED_DRIPSTONE.defaultBlockState(),
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.WOOL),
+                0.2f,
+                0.7f,
+                0.5f,
+                0.1f
+        )).build(), List.of(
+                "Speleothem Cluster:",
+                "  -> Base Block:",
+                "    -> Block: Dripstone Block",
+                "  -> Pointed Block:",
+                "    -> Block: Pointed Dripstone",
+                "    -> Properties:",
+                "      -> thickness: tip",
+                "      -> vertical_direction: up",
+                "      -> waterlogged: false",
+                "  -> Replaceable Blocks:",
+                "    -> Tag: minecraft:wool",
+                "  -> Chance Of Taller Generation: 0.2",
+                "  -> Chance Of Directional Speed: 0.7",
+                "  -> Chance Of Spread Radius 2: 0.5",
+                "  -> Chance Of Spread Radius 3: 0.1"
+        ));
+    }
+
+    @Test
+    public void testTemplateFeatureConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getTemplateFeatureConfigurationTooltip(UTILS, new TemplateFeatureConfiguration(
+                WeightedList.of(List.of(new Weighted<>(new TemplateFeatureConfiguration.TemplateEntry(
+                        Identifier.fromNamespaceAndPath("minecraft", "trail_ruins/tower/tower_1"),
+                        List.of(Rotation.NONE, Rotation.CLOCKWISE_90)
+                ), 2)))
+        )).build(), List.of(
+                "Template:",
+                "  -> Templates:",
+                "    -> Total Weight: 2",
+                "    -> Items:",
+                "      -> Weight: 2",
+                "      -> Value:",
+                "        -> Template: minecraft:trail_ruins/tower/tower_1",
+                "        -> Rotations:",
+                "          -> NONE",
+                "          -> CLOCKWISE_90"
         ));
     }
 }

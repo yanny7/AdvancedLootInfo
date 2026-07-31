@@ -19,7 +19,6 @@ import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.PosRuleTestType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifierType;
 import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
@@ -111,11 +110,6 @@ public class RegistriesTooltipUtils {
     @NotNull
     public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProvider type) {
         return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLOAT_PROVIDER_TYPE, type.codec());
-    }
-
-    @NotNull
-    public static TooltipBuilder getStructureProcessorTypeTooltip(IServerUtils utils, StructureProcessorType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.STRUCTURE_PROCESSOR, type);
     }
 
     @NotNull

@@ -88,4 +88,9 @@ public class BlockPredicateTooltipUtils {
     public static TooltipBuilder getUnobstructedPredicateTooltip(IServerUtils utils, UnobstructedPredicate predicate) {
         return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset()).build(Lang.Value.OFFSET)), Lang.BlockPredicate.UNOBSTRUCTED);
     }
+
+    @NotNull
+    public static TooltipBuilder getMatchingBiomesPredicateTooltip(IServerUtils utils, MatchingBiomesPredicate predicate) {
+        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.biomes).build(Lang.Branch.BIOMES)), Lang.BlockPredicate.MATCHING_BIOMES);
+    }
 }

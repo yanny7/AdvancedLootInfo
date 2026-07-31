@@ -27,6 +27,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import static com.yanny.aci.tooltip.CoreTooltipUtils.getBuiltInRegistryTooltip;
+
 public class MissingTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
@@ -303,18 +305,18 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingStructureProcessorTooltip(IServerUtils utils, StructureProcessor processor) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, processor.getType());
+        TooltipBuilder tooltip = getBuiltInRegistryTooltip(utils, BuiltInRegistries.STRUCTURE_PROCESSOR, processor.codec());
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<StructureProcessor> codec = ((Codec<StructureProcessor>) processor.getType().codec());
+            Codec<StructureProcessor> codec = ((Codec<StructureProcessor>) processor.codec());
             JsonElement jsonElement = codec.encodeStart(registryOps, processor).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
 //            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get structure processor from serialized data for {} in {}", BuiltInRegistries.STRUCTURE_PROCESSOR.getKey(processor.getType()), TooltipContext.get(), e);
+            LOGGER.warn("Failed to get structure processor from serialized data for {} in {}", BuiltInRegistries.STRUCTURE_PROCESSOR.getKey(processor.codec()), TooltipContext.get(), e);
 //            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
