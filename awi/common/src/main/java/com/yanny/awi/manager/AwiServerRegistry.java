@@ -340,7 +340,7 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
         return intSpanPropagators.get(provider.getClass())
                 .map((e) -> e.apply(utils, provider))
                 // fallback: even an unregistered provider exposes a generic min/max range
-                .orElseGet(() -> CountSpan.unknown(new RangeValue(provider.getMinValue(), provider.getMaxValue())));
+                .orElseGet(() -> CountSpan.unknown(new RangeValue(provider.minInclusive(), provider.maxInclusive())));
     }
 
     @NotNull

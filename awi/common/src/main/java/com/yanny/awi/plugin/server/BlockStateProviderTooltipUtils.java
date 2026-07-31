@@ -51,4 +51,12 @@ public class BlockStateProviderTooltipUtils {
             b.add(utils.getValueTooltip(utils, placer.values).build(Lang.Branch.VALUES));
         }, Lang.BlockStateProvider.RANDOMIZED_INT_STATE);
     }
+
+    @NotNull
+    public static TooltipBuilder getRuleBasedStateProviderTooltip(IServerUtils utils, RuleBasedStateProvider placer) {
+        return TooltipBuilder.array((b) -> {
+            b.add(utils.getValueTooltip(utils, placer.fallback).build(Lang.Branch.FALLBACK));
+            b.add(utils.getValueTooltip(utils, placer.rules).build(Lang.Branch.RULES));
+        }, Lang.BlockStateProvider.RULE_BASED);
+    }
 }

@@ -81,4 +81,13 @@ public class IntProviderTooltipTest {
                 "  -> Range: 0-10"
         ));
     }
+
+    @Test
+    public void testTrapezoidIntTooltip() {
+        assertTooltip(IntProviderTooltipUtils.getTrapezoidIntTooltip(UTILS, TrapezoidInt.of(0, 10, 3)).build(), List.of(
+                "Trapezoid:",
+                "  -> Range: 0-10",
+                "  -> Plateau: 3"
+        ));
+    }
 }

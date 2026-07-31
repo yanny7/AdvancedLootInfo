@@ -56,4 +56,14 @@ public class BlockStateProviderCollectorUtils {
     public static List<Block> collectWeighted(IServerUtils ignoredUtils, WeightedStateProvider provider) {
         return provider.weightedList.unwrap().stream().map((entry) -> entry.value().getBlock()).toList();
     }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Block> collectRuleBased(IServerUtils utils, RuleBasedStateProvider provider) {
+        if (provider.fallback != null) {
+            return utils.collectBlocks(utils, provider.fallback);
+        }
+
+        return Collections.emptyList();
+    }
 }

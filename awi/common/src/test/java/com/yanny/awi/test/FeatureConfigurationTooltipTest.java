@@ -21,7 +21,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.CocoaDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
@@ -99,8 +98,8 @@ public class FeatureConfigurationTooltipTest {
                 "          -> Block: Stone",
                 "  -> Direction: UP",
                 "  -> Allowed Placement:",
-                "    -> Matching Blocks:",
-                "      -> Block: Air",
+                "    -> Matching Block Tag:",
+                "      -> Tag: minecraft:air",
                 "      -> Offset: [0,0,0]",
                 "  -> Prioritize Tip: true"
         ));
@@ -164,17 +163,16 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testDiscConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getDiscConfigurationTooltip(UTILS, new DiskConfiguration(
-                RuleBasedBlockStateProvider.simple(Blocks.SAND),
+                BlockStateProvider.simple(Blocks.SAND),
                 BlockPredicate.solid(),
                 ConstantInt.of(3),
                 2
         )).build(), List.of(
                 "Disk:",
                 "  -> StateProvider:",
-                "    -> Fallback:",
-                "      -> Simple:",
-                "        -> State:",
-                "          -> Block: Sand",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Sand",
                 "  -> Target:",
                 "    -> Solid:",
                 "      -> Offset: [0,0,0]",
@@ -326,7 +324,8 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getHugeMushroomFeatureConfigurationTooltip(UTILS, new HugeMushroomFeatureConfiguration(
                 BlockStateProvider.simple(Blocks.RED_MUSHROOM_BLOCK),
                 BlockStateProvider.simple(Blocks.MUSHROOM_STEM),
-                2
+                2,
+                BlockPredicate.solid()
         )).build(), List.of(
                 "Huge Mushroom Feature:",
                 "  -> Cap Provider:",
@@ -502,21 +501,6 @@ public class FeatureConfigurationTooltipTest {
     }
 
     @Test
-    public void testRandomPatchConfigurationTooltip() {
-        assertTooltip(FeatureConfigurationTooltipUtils.getRandomPatchConfigurationTooltip(UTILS, new RandomPatchConfiguration(64, 5, 2, PLACED_FEATURE)).build(), List.of(
-                "Random Patch:",
-                "  -> Tries: 64",
-                "  -> XZ Spread: 5",
-                "  -> Y Spread: 2",
-                "  -> Feature:",
-                "    -> Feature:",
-                "      -> Feature: minecraft:no_op",
-                "      -> Config:",
-                "        -> None Feature:"
-        ));
-    }
-
-    @Test
     public void testReplaceableBlockConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getReplaceableBlockConfigurationTooltip(UTILS, new ReplaceBlockConfiguration(Blocks.STONE.defaultBlockState(), Blocks.DIRT.defaultBlockState())).build(), List.of(
                 "Replaceable Block:",
@@ -638,19 +622,18 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testSpikeConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getSpikeConfigurationTooltip(UTILS, new SpikeConfiguration(
-                false,
-                List.of(new SpikeFeature.EndSpike(1, 2, 3, 4, true)),
-                new BlockPos(5, 6, 7)
+                Blocks.DIRT.defaultBlockState(),
+                BlockPredicate.solid(),
+                BlockPredicate.alwaysTrue()
         )).build(), List.of(
                 "Spike:",
-                "  -> Is Crystal Vulnerable: false",
-                "  -> Spikes:",
-                "    -> Center X: 1",
-                "    -> Center Z: 2",
-                "    -> Radius: 3",
-                "    -> Height: 4",
-                "    -> Is Guarded: true",
-                "  -> Crystal Beam Target: [5,6,7]"
+                "  -> State:",
+                "    -> Block: Dirt",
+                "  -> Can Place On:",
+                "    -> Solid:",
+                "      -> Offset: [0,0,0]",
+                "  -> Can Replace:",
+                "    -> True Block"
         ));
     }
 
@@ -691,10 +674,6 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Block: Oak Log",
                 "        -> Properties:",
                 "          -> axis: y",
-                "  -> Dirt Provider:",
-                "    -> Simple:",
-                "      -> State:",
-                "        -> Block: Dirt",
                 "  -> Trunk Placer:",
                 "    -> Straight Trunk:",
                 "      -> Base Height: 5",
@@ -723,7 +702,19 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Lower Size: 0",
                 "      -> Upper Size: 1",
                 "  -> Ignore Vines: false",
-                "  -> Force Dirt: false"
+                "  -> Below Trunk Provider:",
+                "    -> Rule Based:",
+                "      -> Rules:",
+                "        -> If True:",
+                "          -> Not:",
+                "            -> Predicate:",
+                "              -> Matching Block Tag:",
+                "                -> Tag: minecraft:cannot_replace_below_tree_trunk",
+                "                -> Offset: [0,0,0]",
+                "        -> Then:",
+                "          -> Simple:",
+                "            -> State:",
+                "              -> Block: Dirt"
         ));
     }
 
@@ -870,6 +861,40 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Log Decorators:",
                 "    -> Cocoa:",
                 "      -> Probability: 0.3"
+        ));
+    }
+
+    @Test
+    public void testBlockBlobConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getBlockBlobConfigurationTooltip(UTILS, new BlockBlobConfiguration(
+                Blocks.DIRT.defaultBlockState(),
+                BlockPredicate.solid()
+        )).build(), List.of(
+                "Block Blob:",
+                "  -> State:",
+                "    -> Block: Dirt",
+                "  -> Can Place On:",
+                "    -> Solid:",
+                "      -> Offset: [0,0,0]"
+        ));
+    }
+
+    @Test
+    public void testEndSpikeConfigurationTooltip() {
+        assertTooltip(FeatureConfigurationTooltipUtils.getEndSpikeConfigurationTooltip(UTILS, new EndSpikeConfiguration(
+                true,
+                List.of(new EndSpikeFeature.EndSpike(1, 2, 5, 30, true)),
+                new BlockPos(1, 2, 3)
+        )).build(), List.of(
+                "End Spike:",
+                "  -> Is Crystal Vulnerable: true",
+                "  -> Spikes:",
+                "    -> Center X: 1",
+                "    -> Center Z: 2",
+                "    -> Radius: 5",
+                "    -> Height: 30",
+                "    -> Is Guarded: true",
+                "  -> Crystal Beam Target: [1,2,3]"
         ));
     }
 }

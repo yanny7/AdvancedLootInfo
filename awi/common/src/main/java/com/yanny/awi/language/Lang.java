@@ -6,11 +6,13 @@ import org.jetbrains.annotations.NotNull;
 
 public final class Lang {
     public enum FeatureConfiguration implements ITooltipKey {
+        BLOCK_BLOB("block_blob", "Block Blob:"),
         BLOCK_COLUMN("block_column", "Block Column:"),
         BLOCK_PILE("block_pile", "Block Pile:"),
         BLOCK_STATE("block_state", "Block State:"),
         COLUMN_FEATURE("column_feature", "Column Feature:"),
         COUNT("count", "Count:"),
+        END_SPIKE("end_spike", "End Spike:"),
         DELTA_FEATURE("delta_feature", "Delta Feature:"),
         DISK("disk", "Disk:"),
         DRIPSTONE_CLUSTER("dripstone_cluster", "Dripstone Cluster:"),
@@ -309,6 +311,7 @@ public final class Lang {
         ALTERNATE_INNER_LAYER_PROVIDER("alternate_inner_layer_provider", "Alternate Inner Layer Provider:"),
         BAND_LENGTH("band_length", "Band Length:"),
         BARRIER("barrier", "Barrier:"),
+        BELOW_TRUNK_PROVIDER("below_trunk_provider", "Below Trunk Provider:"),
         BLOCK_PROVIDER("block_provider", "Block Provider:"),
         BLOCKS(Value.BLOCK, "blocks", "Blocks:"),
         BRANCH_COUNT("branch_count", "Branch Count:"),
@@ -318,7 +321,9 @@ public final class Lang {
         CANNOT_REPLACE("cannot_replace", "Cannot Replace:"),
         CAN_BE_PLACED_ON(Value.CAN_BE_PLACED_ON, "can_be_placed_on", "Can Be Placed On:"),
         CAN_GROW_THROUGH(Value.CAN_GROW_THROUGH, "can_grow_through", "Can Grow Through:"),
+        CAN_PLACE_ON("can_place_on", "Can Place On:"),
         CAP_PROVIDER("cap_provider", "Cap Provider:"),
+        CAN_REPLACE("can_replace",  "Can Replace:"),
         COLUMN_RADIUS(Value.COLUMN_RADIUS, "column_radius", "Column Radius:"),
         CONFIG("config", "Config:"),
         CONFIGURED_FEATURE("configured_feature", "Configured Feature:"),
@@ -573,6 +578,7 @@ public final class Lang {
         NOISE_THRESHOLD("noise_threshold", "Noise Threshold:"),
         RANDOMIZED_INT_STATE("randomized_int", "Randomized Int State:"),
         ROTATED_BLOCK("rotated_block", "Rotated Block:"),
+        RULE_BASED("rule_based",  "Rule Based:"),
         SIMPLE("simple", "Simple:"),
         WEIGHTED("weighted", "Weighted:"),
         ;
@@ -648,6 +654,7 @@ public final class Lang {
         CLAMPED("clamped", "Clamped:"),
         CLAMPED_NORMAL("clamped_normal", "Clamped Normal:"),
         CONSTANT("constant", "Constant:"),
+        TRAPEZOID("trapezoid", "Trapezoid:"),
         UNIFORM("uniform", "Uniform:"),
         WEIGHTED_LIST("weighted_list", "Weighted List:"),
         ;

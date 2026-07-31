@@ -779,7 +779,7 @@ public class ValueTooltipUtils {
                 .add(utils.getValueTooltip(utils, itemStackTemplate.item()).build("ali.property.value.item"))
                 .add(utils.getValueTooltip(utils, itemStackTemplate.count()).build("ali.property.value.count"))
                 .add(utils.getValueTooltip(utils, itemStackTemplate.components()).build("ali.property.branch.components"))
-        ).key(Lang.Branch.ITEM);
+        );
     }
 
     @NotNull

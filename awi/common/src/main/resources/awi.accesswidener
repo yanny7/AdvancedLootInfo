@@ -190,6 +190,11 @@ accessible field net/minecraft/world/level/levelgen/feature/treedecorators/Place
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator probability F
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator blockProvider Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/AttachedToLogsDecorator directions Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RuleBasedStateProvider fallback Lnet/minecraft/world/level/levelgen/feature/stateproviders/BlockStateProvider;
+accessible field net/minecraft/world/level/levelgen/feature/stateproviders/RuleBasedStateProvider rules Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration crystalInvulnerable Z
+accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration spikes Ljava/util/List;
+accessible field net/minecraft/world/level/levelgen/feature/configurations/EndSpikeConfiguration crystalBeamTarget Lnet/minecraft/core/BlockPos;
 
 accessible class net/minecraft/world/level/levelgen/SurfaceRules$SurfaceRule
 accessible class net/minecraft/world/level/levelgen/DensityFunctions$BeardifierMarker
@@ -205,3 +210,4 @@ accessible class net/minecraft/world/level/levelgen/blockpredicates/Unobstructed
 
 # fossil structure templates
 accessible field net/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate palettes Ljava/util/List;
+accessible field net/minecraft/client/Minecraft blockModelResolver Lnet/minecraft/client/renderer/block/BlockModelResolver;

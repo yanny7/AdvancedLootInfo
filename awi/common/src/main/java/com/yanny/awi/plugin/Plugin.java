@@ -96,11 +96,10 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(GeodeLayerSettings.class, ValueTooltipUtils::getGeodeLayerSettingsTooltip);
         registry.registerValueTooltip(GeodeCrackSettings.class, ValueTooltipUtils::getGeodeCrackSettingsTooltip);
         registry.registerValueTooltip(WeightedPlacedFeature.class, ValueTooltipUtils::getWeightedPlacedFeatureTooltip);
-        registry.registerValueTooltip(SpikeFeature.EndSpike.class, ValueTooltipUtils::getEndSpikeTooltip);
-        registry.registerValueTooltip(RuleBasedBlockStateProvider.class, ValueTooltipUtils::getRuleBasedBlockStateProviderTooltip);
+        registry.registerValueTooltip(EndSpikeFeature.EndSpike.class, ValueTooltipUtils::getEndSpikeTooltip);
         registry.registerValueTooltip(PlacedFeature.class, ValueTooltipUtils::getPlacedFeatureTooltip);
         registry.registerValueTooltip(ConfiguredFeature.class, ValueTooltipUtils::getConfiguredFeatureTooltip);
-        registry.registerValueTooltip(RuleBasedBlockStateProvider.Rule.class, ValueTooltipUtils::getRuleBasedBlockStateProviderRuleTooltip);
+        registry.registerValueTooltip(RuleBasedStateProvider.Rule.class, ValueTooltipUtils::getRuleBasedBlockStateProviderRuleTooltip);
         registry.registerValueTooltip(StructureProcessorList.class, ValueTooltipUtils::getStructureProcessorListTooltip);
         registry.registerValueTooltip(StructureProcessor.class, ValueTooltipUtils::getStructureProcessorTooltip);
         registry.registerValueTooltip(ProcessorRule.class, ValueTooltipUtils::getProcessorRuleTooltip);
@@ -113,7 +112,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(Block.class, RegistriesTooltipUtils::getBlockTooltip);
         registry.registerValueTooltip(Fluid.class, RegistriesTooltipUtils::getFluidTooltip);
         registry.registerValueTooltip(PlacementModifierType.class, RegistriesTooltipUtils::getPlacementModifierTooltip);
-        registry.registerValueTooltip(IntProviderType.class, RegistriesTooltipUtils::getIntProviderTooltip);
+//        registry.registerValueTooltip(IntProvider.class, RegistriesTooltipUtils::getIntProviderTooltip);
         registry.registerValueTooltip(RuleTestType.class, RegistriesTooltipUtils::getRuleTestTypeTooltip);
         registry.registerValueTooltip(HeightProviderType.class, RegistriesTooltipUtils::getHeightProviderTooltip);
         registry.registerValueTooltip(BlockPredicateType.class, RegistriesTooltipUtils::getBlockPredicateTooltip);
@@ -124,7 +123,7 @@ public class Plugin implements IPlugin {
         registry.registerValueTooltip(RootPlacerType.class, RegistriesTooltipUtils::getRootPlacerTooltip);
         registry.registerValueTooltip(FoliagePlacerType.class, RegistriesTooltipUtils::getFoliagePlacerTooltip);
         registry.registerValueTooltip(TrunkPlacerType.class, RegistriesTooltipUtils::getTrunkPlacerTooltip);
-        registry.registerValueTooltip(FloatProviderType.class, RegistriesTooltipUtils::getFloatProviderTooltip);
+//        registry.registerValueTooltip(FloatProvider.class, RegistriesTooltipUtils::getFloatProviderTooltip);
         registry.registerValueTooltip(StructureProcessorType.class, RegistriesTooltipUtils::getStructureProcessorTypeTooltip);
         registry.registerValueTooltip(PosRuleTestType.class, RegistriesTooltipUtils::getPosRuleTestTypeTooltip);
         registry.registerValueTooltip(RuleBlockEntityModifierType.class, RegistriesTooltipUtils::getRuleBlockEntityModifierTooltip);
@@ -150,7 +149,6 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(ProbabilityFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getProbabilityFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(RandomBooleanFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getRandomBooleanFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(RandomFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getRandomFeatureConfigurationTooltip);
-        registry.registerFeatureTooltip(RandomPatchConfiguration.class, FeatureConfigurationTooltipUtils::getRandomPatchConfigurationTooltip);
         registry.registerFeatureTooltip(ReplaceBlockConfiguration.class, FeatureConfigurationTooltipUtils::getReplaceableBlockConfigurationTooltip);
         registry.registerFeatureTooltip(ReplaceSphereConfiguration.class, FeatureConfigurationTooltipUtils::getReplaceableSphereConfigurationTooltip);
         registry.registerFeatureTooltip(RootSystemConfiguration.class, FeatureConfigurationTooltipUtils::getRootSystemConfigurationTooltip);
@@ -167,6 +165,8 @@ public class Plugin implements IPlugin {
         registry.registerFeatureTooltip(FossilFeatureConfiguration.class, FeatureConfigurationTooltipUtils::getFossilFeatureConfigurationTooltip);
         registry.registerFeatureTooltip(HugeFungusConfiguration.class, FeatureConfigurationTooltipUtils::getHugeFungusConfigurationTooltip);
         registry.registerFeatureTooltip(FallenTreeConfiguration.class, FeatureConfigurationTooltipUtils::getFallenTreeConfigurationTooltip);
+        registry.registerFeatureTooltip(BlockBlobConfiguration.class, FeatureConfigurationTooltipUtils::getBlockBlobConfigurationTooltip);
+        registry.registerFeatureTooltip(EndSpikeConfiguration.class, FeatureConfigurationTooltipUtils::getEndSpikeConfigurationTooltip);
 
         registry.registerIntProviderTooltip(ConstantInt.class, IntProviderTooltipUtils::getConstantIntTooltip);
         registry.registerIntProviderTooltip(UniformInt.class, IntProviderTooltipUtils::getUniformIntTooltip);
@@ -174,6 +174,7 @@ public class Plugin implements IPlugin {
         registry.registerIntProviderTooltip(ClampedInt.class, IntProviderTooltipUtils::getClampedIntTooltip);
         registry.registerIntProviderTooltip(WeightedListInt.class, IntProviderTooltipUtils::getWeightedListIntTooltip);
         registry.registerIntProviderTooltip(ClampedNormalInt.class, IntProviderTooltipUtils::getClampedNormalIntTooltip);
+        registry.registerIntProviderTooltip(TrapezoidInt.class, IntProviderTooltipUtils::getTrapezoidIntTooltip);
 
         registry.registerFloatProviderTooltip(ConstantFloat.class, FloatProviderTooltipUtils::getConstantFloatTooltip);
         registry.registerFloatProviderTooltip(UniformFloat.class, FloatProviderTooltipUtils::getUniformFloatTooltip);
@@ -230,6 +231,7 @@ public class Plugin implements IPlugin {
         registry.registerIntSpanPropagator(ClampedInt.class, IntSpanPropagatorUtils::getClampedInt);
         registry.registerIntSpanPropagator(ClampedNormalInt.class, IntSpanPropagatorUtils::getClampedNormalInt);
         registry.registerIntSpanPropagator(WeightedListInt.class, IntSpanPropagatorUtils::getWeightedListInt);
+        registry.registerIntSpanPropagator(TrapezoidInt.class, IntSpanPropagatorUtils::getTrapezoidInt);
 
         registry.registerHeightSpanPropagator(ConstantHeight.class, HeightSpanPropagatorUtils::getConstantHeight);
         registry.registerHeightSpanPropagator(UniformHeight.class, HeightSpanPropagatorUtils::getUniformHeight);
@@ -284,6 +286,7 @@ public class Plugin implements IPlugin {
         registry.registerFeatureBlockCollector(LakeFeature.Configuration.class, FeatureConfigurationCollectorUtils::collectLakeFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(FossilFeatureConfiguration.class, FeatureConfigurationCollectorUtils::collectFossilFeatureConfigurationBlocks);
         registry.registerFeatureBlockCollector(HugeFungusConfiguration.class, FeatureConfigurationCollectorUtils::collectHugeFungusConfigurationBlocks);
+        registry.registerFeatureBlockCollector(BlockBlobConfiguration.class, FeatureConfigurationCollectorUtils::collectBlockBlobConfigurationBlocks);
 
         registry.registerStateProviderBlockCollector(SimpleStateProvider.class, BlockStateProviderCollectorUtils::collectSimple);
         registry.registerStateProviderBlockCollector(NoiseProvider.class, BlockStateProviderCollectorUtils::collectNoise);
@@ -292,6 +295,7 @@ public class Plugin implements IPlugin {
         registry.registerStateProviderBlockCollector(RandomizedIntStateProvider.class, BlockStateProviderCollectorUtils::collectRandomized);
         registry.registerStateProviderBlockCollector(RotatedBlockProvider.class, BlockStateProviderCollectorUtils::collectRotated);
         registry.registerStateProviderBlockCollector(WeightedStateProvider.class, BlockStateProviderCollectorUtils::collectWeighted);
+        registry.registerStateProviderBlockCollector(RuleBasedStateProvider.class, BlockStateProviderCollectorUtils::collectRuleBased);
 
         registry.registerTreeDecoratorBlockCollector(TrunkVineDecorator.class, TreeDecoratorCollectorUtils::collectTrunkVine);
         registry.registerTreeDecoratorBlockCollector(LeaveVineDecorator.class, TreeDecoratorCollectorUtils::collectLeaveVine);
@@ -313,6 +317,7 @@ public class Plugin implements IPlugin {
         registry.registerBlockStateProviderTooltip(DualNoiseProvider.class, BlockStateProviderTooltipUtils::getDualNoiseProviderTooltip);
         registry.registerBlockStateProviderTooltip(RotatedBlockProvider.class, BlockStateProviderTooltipUtils::getRotatedBlockProviderTooltip);
         registry.registerBlockStateProviderTooltip(RandomizedIntStateProvider.class, BlockStateProviderTooltipUtils::getRandomizedIntStateProviderTooltip);
+        registry.registerBlockStateProviderTooltip(RuleBasedStateProvider.class, BlockStateProviderTooltipUtils::getRuleBasedStateProviderTooltip);
 
         registry.registerTrunkPlacerTooltip(StraightTrunkPlacer.class, TrunkPlacerTooltipUtils::getStraightTrunkPlacerTooltip);
         registry.registerTrunkPlacerTooltip(ForkingTrunkPlacer.class, TrunkPlacerTooltipUtils::getForkingTrunkPlacerTooltip);

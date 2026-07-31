@@ -61,18 +61,18 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingIntProviderTooltip(IServerUtils utils, IntProvider provider) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, provider.getType());
+        TooltipBuilder tooltip = RegistriesTooltipUtils.getIntProviderTooltip(utils, provider);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<IntProvider> codec = ((Codec<IntProvider>) provider.getType().codec());
+            Codec<IntProvider> codec = ((Codec<IntProvider>) provider.codec());
             JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
 //            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get int provider from serialized data for {} in {}", BuiltInRegistries.INT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
+            LOGGER.warn("Failed to get int provider from serialized data for {} in {}", BuiltInRegistries.INT_PROVIDER_TYPE.getKey(provider.codec()), TooltipContext.get(), e);
 //            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
@@ -281,18 +281,18 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingFloatProviderTooltip(IServerUtils utils, FloatProvider provider) {
-        TooltipBuilder tooltip = utils.getValueTooltip(utils, provider.getType());
+        TooltipBuilder tooltip = RegistriesTooltipUtils.getFloatProviderTooltip(utils, provider);
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<FloatProvider> codec = ((Codec<FloatProvider>) provider.getType().codec());
+            Codec<FloatProvider> codec = ((Codec<FloatProvider>) provider.codec());
             JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
 //            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get float provider from serialized data for {} in {}", BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
+            LOGGER.warn("Failed to get float provider from serialized data for {} in {}", BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(provider.codec()), TooltipContext.get(), e);
 //            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME

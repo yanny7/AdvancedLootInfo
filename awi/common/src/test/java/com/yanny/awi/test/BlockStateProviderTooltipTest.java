@@ -3,6 +3,7 @@ package com.yanny.awi.test;
 import com.yanny.awi.plugin.server.BlockStateProviderTooltipUtils;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.junit.jupiter.api.Test;
@@ -122,6 +123,25 @@ public class BlockStateProviderTooltipTest {
                 "  -> Values:",
                 "    -> Constant:",
                 "      -> Value: 1"
+        ));
+    }
+
+    @Test
+    public void testRuleBasedStateProviderTooltip() {
+        assertTooltip(BlockStateProviderTooltipUtils.getRuleBasedStateProviderTooltip(UTILS, RuleBasedStateProvider.ifTrueThenProvide(
+                BlockPredicate.matchesBlocks(Blocks.DIRT),
+                Blocks.DIAMOND_BLOCK
+        )).build(), List.of(
+                "Rule Based:",
+                "  -> Rules:",
+                "    -> If True:",
+                "      -> Matching Blocks:",
+                "        -> Block: Dirt",
+                "        -> Offset: [0,0,0]",
+                "    -> Then:",
+                "      -> Simple:",
+                "        -> State:",
+                "          -> Block: Block of Diamond"
         ));
     }
 }

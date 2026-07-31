@@ -112,9 +112,9 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getHugeMushroomFeatureConfigurationTooltip(IServerUtils utils, HugeMushroomFeatureConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.capProvider).build(Lang.Branch.CAP_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.stemProvider).build(Lang.Branch.STEM_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.foliageRadius).build(Lang.Value.FOLIAGE_RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.capProvider()).build(Lang.Branch.CAP_PROVIDER));
+            b.add(utils.getValueTooltip(utils, configuration.stemProvider()).build(Lang.Branch.STEM_PROVIDER));
+            b.add(utils.getValueTooltip(utils, configuration.foliageRadius()).build(Lang.Value.FOLIAGE_RADIUS));
         }, Lang.FeatureConfiguration.HUGE_MUSHROOM_FEATURE);
     }
 
@@ -208,16 +208,6 @@ public class FeatureConfigurationTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getRandomPatchConfigurationTooltip(IServerUtils utils, RandomPatchConfiguration configuration) {
-        return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.tries()).build(Lang.Value.TRIES));
-            b.add(utils.getValueTooltip(utils, configuration.xzSpread()).build(Lang.Value.XZ_SPREAD));
-            b.add(utils.getValueTooltip(utils, configuration.ySpread()).build(Lang.Value.Y_SPREAD));
-            b.add(utils.getValueTooltip(utils, configuration.feature()).build(Lang.Branch.FEATURE));
-        }, Lang.FeatureConfiguration.RANDOM_PATCH);
-    }
-
-    @NotNull
     public static TooltipBuilder getReplaceableBlockConfigurationTooltip(IServerUtils utils, ReplaceBlockConfiguration configuration) {
         return array((b) -> b.add(utils.getValueTooltip(utils, configuration.targetStates).build(Lang.Branch.TARGET_STATES)), Lang.FeatureConfiguration.REPLACEABLE_BLOCK);
     }
@@ -276,9 +266,9 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getSpikeConfigurationTooltip(IServerUtils utils, SpikeConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.isCrystalInvulnerable()).build(Lang.Value.IS_CRYSTAL_VULNERABLE));
-            b.add(utils.getValueTooltip(utils, configuration.getSpikes()).build(Lang.Branch.SPIKES));
-            b.add(utils.getValueTooltip(utils, configuration.getCrystalBeamTarget()).build(Lang.Value.CRYSTAL_BEAM_TARGET));
+            b.add(utils.getValueTooltip(utils, configuration.state()).build(Lang.Branch.STATE));
+            b.add(utils.getValueTooltip(utils, configuration.canPlaceOn()).build(Lang.Branch.CAN_PLACE_ON));
+            b.add(utils.getValueTooltip(utils, configuration.canReplace()).build(Lang.Branch.CAN_REPLACE));
         }, Lang.FeatureConfiguration.SPIKE);
     }
 
@@ -297,7 +287,6 @@ public class FeatureConfigurationTooltipUtils {
     public static TooltipBuilder getTreeConfigurationTooltip(IServerUtils utils, TreeConfiguration configuration) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.trunkProvider).build(Lang.Branch.TRUNK_PROVIDER));
-            b.add(utils.getValueTooltip(utils, configuration.dirtProvider).build(Lang.Branch.DIRT_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.trunkPlacer).build(Lang.Branch.TRUNK_PLACER));
             b.add(utils.getValueTooltip(utils, configuration.foliageProvider).build(Lang.Branch.FOLIAGE_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.foliagePlacer).build(Lang.Branch.FOLIAGE_PLACER));
@@ -305,7 +294,7 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.minimumSize).build(Lang.Branch.MINIMUM_SIZE));
             b.add(utils.getValueTooltip(utils, configuration.decorators).build(Lang.Branch.DECORATORS));
             b.add(utils.getValueTooltip(utils, configuration.ignoreVines).build(Lang.Value.IGNORE_VINES));
-            b.add(utils.getValueTooltip(utils, configuration.forceDirt).build(Lang.Value.FORCE_DIRT));
+            b.add(utils.getValueTooltip(utils, configuration.belowTrunkProvider).build(Lang.Branch.BELOW_TRUNK_PROVIDER));
         }, Lang.FeatureConfiguration.TREE);
     }
 
@@ -382,5 +371,22 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.stumpDecorators).build(Lang.Branch.STUMP_DECORATORS));
             b.add(utils.getValueTooltip(utils, configuration.logDecorators).build(Lang.Branch.LOG_DECORATORS));
         }, Lang.FeatureConfiguration.FALLEN_TREE);
+    }
+
+    @NotNull
+    public static TooltipBuilder getBlockBlobConfigurationTooltip(IServerUtils utils, BlockBlobConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.state()).build(Lang.Branch.STATE));
+            b.add(utils.getValueTooltip(utils, configuration.canPlaceOn()).build(Lang.Branch.CAN_PLACE_ON));
+        }, Lang.FeatureConfiguration.BLOCK_BLOB);
+    }
+
+    @NotNull
+    public static TooltipBuilder getEndSpikeConfigurationTooltip(IServerUtils utils, EndSpikeConfiguration configuration) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.crystalInvulnerable).build(Lang.Value.IS_CRYSTAL_VULNERABLE));
+            b.add(utils.getValueTooltip(utils, configuration.spikes).build(Lang.Branch.SPIKES));
+            b.add(utils.getValueTooltip(utils, configuration.crystalBeamTarget).build(Lang.Value.CRYSTAL_BEAM_TARGET));
+        }, Lang.FeatureConfiguration.END_SPIKE);
     }
 }

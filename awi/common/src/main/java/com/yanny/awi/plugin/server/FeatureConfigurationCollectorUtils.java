@@ -3,12 +3,11 @@ package com.yanny.awi.plugin.server;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.FossilFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
-import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +68,7 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectDiskConfigurationBlocks(IServerUtils utils, DiskConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(collectRuleBasedBlockStateProvider(utils, configuration.stateProvider()));
+        blocks.addAll(utils.collectBlocks(utils, configuration.stateProvider()));
         return blocks;
     }
 
@@ -179,14 +178,6 @@ public class FeatureConfigurationCollectorUtils {
     }
 
     @NotNull
-    public static List<Block> collectRandomPatchConfigurationBlocks(IServerUtils utils, RandomPatchConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
-
-        blocks.addAll(utils.collectBlocks(utils, configuration.feature().value().feature().value().config()));
-        return blocks;
-    }
-
-    @NotNull
     public static List<Block> collectReplaceBlockConfigurationBlocks(IServerUtils utils, ReplaceBlockConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
@@ -231,7 +222,7 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectSimpleRandomFeatureConfigurationBlocks(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(configuration.getFeatures().map(ConfiguredFeature::config).map((config) -> utils.collectBlocks(utils, config)).flatMap(Collection::stream).toList());
+        blocks.addAll(configuration.getSubFeatures().map((v) -> utils.collectBlocks(utils, v.value().config())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
@@ -323,20 +314,17 @@ public class FeatureConfigurationCollectorUtils {
         return blocks;
     }
 
+    @NotNull
+    public static List<Block> collectBlockBlobConfigurationBlocks(IServerUtils utils, BlockBlobConfiguration configuration) {
+        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.add(configuration.state().getBlock());
+        return blocks;
+    }
+
     @Unmodifiable
     @NotNull
     private static List<Block> collectFeatureBlocks(IServerUtils utils, FeatureConfiguration configuration) {
-        return configuration.getFeatures().map(ConfiguredFeature::config).map((config) -> utils.collectBlocks(utils, config)).flatMap(Collection::stream).toList();
-    }
-
-    @NotNull
-    private static List<Block> collectRuleBasedBlockStateProvider(IServerUtils utils, RuleBasedBlockStateProvider provider) {
-        List<Block> blocks = new ArrayList<>(utils.collectBlocks(utils, provider.fallback()));
-
-        for (RuleBasedBlockStateProvider.Rule rule : provider.rules()) {
-            blocks.addAll(utils.collectBlocks(utils, rule.then()));
-        }
-
-        return blocks;
+        return configuration.getSubFeatures().map((v) -> utils.collectBlocks(utils, v.value().config())).flatMap(Collection::stream).toList();
     }
 }

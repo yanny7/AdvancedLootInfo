@@ -4,8 +4,8 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.IServerUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.valueproviders.FloatProviderType;
-import net.minecraft.util.valueproviders.IntProviderType;
+import net.minecraft.util.valueproviders.FloatProvider;
+import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -54,8 +54,8 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProviderType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.INT_PROVIDER_TYPE, type);
+    public static TooltipBuilder getIntProviderTooltip(IServerUtils utils, IntProvider type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.INT_PROVIDER_TYPE, type.codec());
     }
 
     @NotNull
@@ -109,8 +109,8 @@ public class RegistriesTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProviderType<?> type) {
-        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLOAT_PROVIDER_TYPE, type);
+    public static TooltipBuilder getFloatProviderTooltip(IServerUtils utils, FloatProvider type) {
+        return getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLOAT_PROVIDER_TYPE, type.codec());
     }
 
     @NotNull

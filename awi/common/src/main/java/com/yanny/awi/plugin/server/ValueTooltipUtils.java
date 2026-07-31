@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.SpikeFeature;
+import net.minecraft.world.level.levelgen.feature.EndSpikeFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
@@ -25,7 +25,7 @@ import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
@@ -134,7 +134,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.getType()).build(Lang.Value.FLUID));
 
             TooltipBuilder array = TooltipBuilder.array((c) -> {
-                value.getValues().forEach((p, v) -> c.add(TooltipBuilder.keyValue(p.getName(), v.toString())));
+                value.getValues().forEach((p) -> c.add(TooltipBuilder.keyValue(p.property().getName(), p.value())));
             });
 
             b.add(array.build(Lang.Branch.PROPERTIES));
@@ -204,21 +204,13 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getEndSpikeTooltip(IServerUtils utils, SpikeFeature.EndSpike value) {
+    public static TooltipBuilder getEndSpikeTooltip(IServerUtils utils, EndSpikeFeature.EndSpike value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.getCenterX()).build(Lang.Value.CENTER_X));
             b.add(utils.getValueTooltip(utils, value.getCenterZ()).build(Lang.Value.CENTER_Z));
             b.add(utils.getValueTooltip(utils, value.getRadius()).build(Lang.Branch.RADIUS));
             b.add(utils.getValueTooltip(utils, value.getHeight()).build(Lang.Branch.HEIGHT));
             b.add(utils.getValueTooltip(utils, value.isGuarded()).build(Lang.Value.IS_GUARDED));
-        });
-    }
-
-    @NotNull
-    public static TooltipBuilder getRuleBasedBlockStateProviderTooltip(IServerUtils utils, RuleBasedBlockStateProvider value) {
-        return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, value.fallback()).build(Lang.Branch.FALLBACK));
-            b.add(utils.getValueTooltip(utils, value.rules()).build(Lang.Branch.RULES));
         });
     }
 
@@ -239,7 +231,7 @@ public class ValueTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getRuleBasedBlockStateProviderRuleTooltip(IServerUtils utils, RuleBasedBlockStateProvider.Rule value) {
+    public static TooltipBuilder getRuleBasedBlockStateProviderRuleTooltip(IServerUtils utils, RuleBasedStateProvider.Rule value) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.ifTrue()).build(Lang.Branch.IF_TRUE));
             b.add(utils.getValueTooltip(utils, value.then()).build(Lang.Branch.THEN));

@@ -17,19 +17,19 @@ public class IntProviderTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getUniformIntTooltip(IServerUtils utils, UniformInt provider) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()).toIntString()).build(Lang.Value.RANGE)), Lang.IntProvider.UNIFORM);
+        return array((b) -> b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE)), Lang.IntProvider.UNIFORM);
     }
 
     @NotNull
     public static TooltipBuilder getBiasedToBottomIntTooltip(IServerUtils utils, BiasedToBottomInt provider) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()).toIntString()).build(Lang.Value.RANGE)), Lang.IntProvider.BIASED_TO_BOTTOM);
+        return array((b) -> b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE)), Lang.IntProvider.BIASED_TO_BOTTOM);
     }
 
     @NotNull
     public static TooltipBuilder getClampedIntTooltip(IServerUtils utils, ClampedInt provider) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, provider.source).build(Lang.Branch.SOURCE));
-            b.add(utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()).toIntString()).build(Lang.Value.RANGE));
+            b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE));
         }, Lang.IntProvider.CLAMPED);
     }
 
@@ -37,7 +37,7 @@ public class IntProviderTooltipUtils {
     public static TooltipBuilder getWeightedListIntTooltip(IServerUtils utils, WeightedListInt provider) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, provider.distribution).build(Lang.Branch.DISTRIBUTION));
-            b.add(utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()).toIntString()).build(Lang.Value.RANGE));
+            b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE));
         }, Lang.IntProvider.WEIGHTED_LIST);
     }
 
@@ -46,7 +46,15 @@ public class IntProviderTooltipUtils {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, provider.mean).build(Lang.Value.MEAN));
             b.add(utils.getValueTooltip(utils, provider.deviation).build(Lang.Value.DEVIATION));
-            b.add(utils.getValueTooltip(utils, new RangeValue(provider.getMinValue(), provider.getMaxValue()).toIntString()).build(Lang.Value.RANGE));
+            b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE));
         }, Lang.IntProvider.CLAMPED_NORMAL);
+    }
+
+    @NotNull
+    public static TooltipBuilder getTrapezoidIntTooltip(IServerUtils utils, TrapezoidInt provider) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, new RangeValue(provider.minInclusive(), provider.maxInclusive()).toIntString()).build(Lang.Value.RANGE));
+            b.add(utils.getValueTooltip(utils, provider.plateau()).build(Lang.Value.PLATEAU));
+        }, Lang.IntProvider.TRAPEZOID);
     }
 }

@@ -14,29 +14,29 @@ import org.jetbrains.annotations.NotNull;
 public class IntSpanPropagatorUtils {
     @NotNull
     public static CountSpan getConstantInt(IServerUtils ignoredUtils, ConstantInt provider) {
-        return new CountSpan(new RangeValue(provider.getValue()), Kind.CONSTANT);
+        return new CountSpan(new RangeValue(provider.value()), Kind.CONSTANT);
     }
 
     @NotNull
     public static CountSpan getUniformInt(IServerUtils ignoredUtils, UniformInt provider) {
-        return new CountSpan(new RangeValue(provider.getMinValue(), provider.getMaxValue()), Kind.UNIFORM);
+        return new CountSpan(new RangeValue(provider.minInclusive(), provider.maxInclusive()), Kind.UNIFORM);
     }
 
     @NotNull
     public static CountSpan getBiasedToBottomInt(IServerUtils ignoredUtils, BiasedToBottomInt provider) {
-        return new CountSpan(new RangeValue(provider.getMinValue(), provider.getMaxValue()), Kind.BIASED_TO_BOTTOM);
+        return new CountSpan(new RangeValue(provider.minInclusive(), provider.maxInclusive()), Kind.BIASED_TO_BOTTOM);
     }
 
     @NotNull
     public static CountSpan getClampedNormalInt(IServerUtils ignoredUtils, ClampedNormalInt provider) {
-        return new CountSpan(new RangeValue(provider.getMinValue(), provider.getMaxValue()), Kind.CLAMPED_NORMAL);
+        return new CountSpan(new RangeValue(provider.minInclusive(), provider.maxInclusive()), Kind.CLAMPED_NORMAL);
     }
 
     @NotNull
     public static CountSpan getClampedInt(IServerUtils utils, ClampedInt provider) {
         // recurse into the wrapped source, then clamp it to the outer bounds
         CountSpan source = utils.getIntSpan(utils, provider.source);
-        RangeValue clamped = source.range().clamp(provider.getMinValue(), provider.getMaxValue());
+        RangeValue clamped = source.range().clamp(provider.minInclusive(), provider.maxInclusive());
         return new CountSpan(clamped, Kind.CLAMPED);
     }
 
@@ -52,5 +52,11 @@ public class IntSpanPropagatorUtils {
         }
 
         return new CountSpan(new RangeValue(min, max), Kind.WEIGHTED);
+    }
+
+    @NotNull
+    public static CountSpan getTrapezoidInt(IServerUtils ignoredUtils, TrapezoidInt provider) {
+        return new CountSpan(new RangeValue(provider.minInclusive(), provider.maxInclusive()), Kind.TRAPEZOID);
+
     }
 }
