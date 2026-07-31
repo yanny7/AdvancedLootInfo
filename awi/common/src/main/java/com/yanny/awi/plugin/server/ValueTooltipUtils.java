@@ -144,6 +144,10 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getVec3iTooltip(IServerUtils utils, Vec3i value) {
+        if (value.getX() == 0 && value.getY() == 0 && value.getZ() == 0) {
+            return TooltipBuilder.empty();
+        }
+
         return utils.getValueTooltip(utils, "[" + value.getX() + "," + value.getY() + "," + value.getZ() + "]");
     }
 

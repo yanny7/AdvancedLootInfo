@@ -100,7 +100,6 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Allowed Placement:",
                 "    -> Matching Blocks:",
                 "      -> Block: Air",
-                "      -> Offset: [0,0,0]",
                 "  -> Prioritize Tip: true"
         ));
     }
@@ -176,7 +175,6 @@ public class FeatureConfigurationTooltipTest {
                 "          -> Block: Sand",
                 "  -> Target:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Radius:",
                 "    -> Constant:",
                 "      -> Value: 3",
@@ -588,8 +586,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Hanging Root Placement Attempts: 20",
                 "  -> Allowed Vertical Water For Tree: 2",
                 "  -> Allowed Tree Position:",
-                "    -> Solid:",
-                "      -> Offset: [0,0,0]"
+                "    -> Solid:"
         ));
     }
 
@@ -842,7 +839,6 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Warped Wart Block",
                 "  -> Replaceable Blocks:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Planted: true"
         ));
     }
