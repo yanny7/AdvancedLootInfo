@@ -68,7 +68,7 @@ public class ServerUtilsTest {
                 "    -> minecraft:provides_trim_material",
                 "      -> Value: minecraft:emerald"
         ));
-        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(CoreLang.Utils.NOT_IMPLEMENTED), List.of(
+        assertTooltip(UTILS.getValueTooltip(UTILS, new StringBuilder()).build(), List.of(
                 "Not implemented: [java.lang.StringBuilder]"
         ));
     }

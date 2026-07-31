@@ -6,7 +6,8 @@ import com.yanny.ali.language.Lang;
 import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
 
-import static com.yanny.ali.plugin.server.GenericTooltipUtils.*;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
+import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStandaloneTooltip;
 
 public class FunctionTooltipUtils {
     @NotNull
@@ -338,7 +339,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetWrittenBookPagesTooltip(IServerUtils utils, SetWrittenBookPagesFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getFilterableTooltip(utils, Lang.Branch.PAGE, fun.pages).build(Lang.Branch.PAGES));
+            b.add(utils.getValueTooltip(utils, fun.pages).build(Lang.Branch.PAGES));
             b.add(utils.getValueTooltip(utils, fun.pageOperation).build(Lang.Value.LIST_OPERATION));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }, Lang.Functions.SET_WRITTEN_BOOK_PAGES);
@@ -347,7 +348,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetWritableBookPagesTooltip(IServerUtils utils, SetWritableBookPagesFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getFilterableTooltip(utils, Lang.Branch.PAGE, fun.pages).build(Lang.Branch.PAGES));
+            b.add(utils.getValueTooltip(utils, fun.pages).build(Lang.Branch.PAGES));
             b.add(utils.getValueTooltip(utils, fun.pageOperation).build(Lang.Value.LIST_OPERATION));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }, Lang.Functions.SET_WRITABLE_BOOK_PAGES);

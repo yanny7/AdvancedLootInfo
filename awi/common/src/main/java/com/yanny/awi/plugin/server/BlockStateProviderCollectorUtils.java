@@ -24,6 +24,12 @@ public class BlockStateProviderCollectorUtils {
         return provider.states.stream().map(BlockBehaviour.BlockStateBase::getBlock).toList();
     }
 
+    @Unmodifiable
+    @NotNull
+    public static List<Block> collectDualNoise(IServerUtils utils, DualNoiseProvider provider) {
+        return collectNoise(utils, provider);
+    }
+
     @NotNull
     public static List<Block> collectNoiseThreshold(IServerUtils ignoredUtils, NoiseThresholdProvider provider) {
         List<Block> blocks = new ArrayList<>();
@@ -49,5 +55,15 @@ public class BlockStateProviderCollectorUtils {
     @NotNull
     public static List<Block> collectWeighted(IServerUtils ignoredUtils, WeightedStateProvider provider) {
         return provider.weightedList.unwrap().stream().map((entry) -> entry.value().getBlock()).toList();
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Block> collectRuleBased(IServerUtils utils, RuleBasedStateProvider provider) {
+        if (provider.fallback != null) {
+            return utils.collectBlocks(utils, provider.fallback);
+        }
+
+        return Collections.emptyList();
     }
 }

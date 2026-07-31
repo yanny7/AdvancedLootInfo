@@ -6,11 +6,13 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
+import com.yanny.awi.plugin.server.TooltipUtils;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.Set;
 
 import static com.yanny.aci.tooltip.TooltipBuilder.*;
@@ -20,10 +22,10 @@ public class BaseTerrainNode extends ListNode {
 
     private final TooltipNode tooltip;
 
-    public BaseTerrainNode(IServerUtils utils, Set<Block> baseBlocks) {
-        for (Block block : baseBlocks) {
-            addChildren(new BlockNode(utils, block));
-        }
+    public BaseTerrainNode(IServerUtils utils, Set<NodeUtils.BlockInfo> baseBlocks) {
+        baseBlocks.stream()
+                .sorted(Comparator.comparing((info) -> BuiltInRegistries.BLOCK.getKey(info.block()).getPath()))
+                .forEach((info) -> addChildren(new BlockNode(utils, info.block(), TooltipUtils.getBlockInfoTooltip(utils, info).build())));
 
         tooltip = array((b) -> b.add(value(translate(Lang.GenerationStep.BASE_TERRAIN.singular())).build(Lang.Value.GENERATION_STEP))).build();
     }

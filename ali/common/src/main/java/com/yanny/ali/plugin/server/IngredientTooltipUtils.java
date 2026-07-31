@@ -15,6 +15,6 @@ public class IngredientTooltipUtils {
             for (Holder<Item> value : ingredient.values) {
                 b.add(utils.getValueTooltip(utils, value).build(Lang.Value.ITEM));
             }
-        }).key(Lang.Branch.ITEMS);
+        });
     }
 }
