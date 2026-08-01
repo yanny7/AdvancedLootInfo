@@ -5,6 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -22,7 +23,12 @@ public class RootPlacerTooltipTest {
         assertTooltip(RootPlacerTooltipUtils.getMangroveRootPlacerTooltip(UTILS, new MangroveRootPlacer(
                 ConstantInt.of(2),
                 BlockStateProvider.simple(Blocks.MANGROVE_ROOTS),
-                Optional.empty(),
+                Optional.of(
+                        new AboveRootPlacement(
+                                BlockStateProvider.simple(Blocks.AMETHYST_BLOCK),
+                                0.5f
+                        )
+                ),
                 new MangroveRootPlacement(
                         HolderSet.direct(Holder.direct(Blocks.MUD)),
                         HolderSet.direct(Holder.direct(Blocks.MUD)),
@@ -42,6 +48,12 @@ public class RootPlacerTooltipTest {
                 "        -> Block: Mangrove Roots",
                 "        -> Properties:",
                 "          -> waterlogged: false",
+                "  -> Above Root Placement:",
+                "    -> Above Root Provider:",
+                "      -> Simple:",
+                "        -> State:",
+                "          -> Block: Block of Amethyst",
+                "    -> Placement Chance: 0.5",
                 "  -> Mangrove Root Placement:",
                 "    -> Can Grow Through: Mud",
                 "    -> Muddy Roots In: Mud",

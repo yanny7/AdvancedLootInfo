@@ -62,7 +62,7 @@ public class StructureProcessorTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getProtectedBlockProcessorTooltip(IServerUtils utils, ProtectedBlockProcessor processor) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, processor.cannotReplace).build(Lang.Branch.CANNOT_REPLACE)), Lang.StructureProcessor.PROTECTED_BLOCKS);
+        return array((b) -> b.add(utils.getValueTooltip(utils, processor.cannotReplace).build(Lang.Value.CANNOT_REPLACE)), Lang.StructureProcessor.PROTECTED_BLOCKS);
     }
 
     @NotNull

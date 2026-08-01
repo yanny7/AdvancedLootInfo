@@ -288,8 +288,8 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Properties:",
                 "        -> facing: up",
                 "        -> waterlogged: false",
-                "    -> Cannot Replace:",
-                "    -> Invalid Blocks:",
+                "    -> Cannot Replace: minecraft:wool",
+                "    -> Invalid Blocks: minecraft:logs",
                 "  -> Geode Layer Settings:",
                 "    -> Filling: 1.7",
                 "    -> Inner Layer: 2.2",
@@ -445,7 +445,7 @@ public class FeatureConfigurationTooltipTest {
         assertTooltip(FeatureConfigurationTooltipUtils.getPointedDripstoneConfigurationTooltip(UTILS, new PointedDripstoneConfiguration(0.2f, 0.7f, 0.5f, 0.5f)).build(), List.of(
                 "Pointed Dripstone:",
                 "  -> Chance Of Taller Dripstone: 0.2",
-                "  -> Chance Of Directional Speed: 0.7",
+                "  -> Chance Of Directional Spread: 0.7",
                 "  -> Chance Of Spread Radius 2: 0.5",
                 "  -> Chance Of Spread Radius 3: 0.5"
         ));
