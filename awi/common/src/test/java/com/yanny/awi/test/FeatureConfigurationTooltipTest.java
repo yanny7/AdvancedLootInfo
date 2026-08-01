@@ -980,8 +980,8 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Max Empty Corners Allowed: 3"
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getFossilFeatureConfigurationTooltip(UTILS, new FossilFeatureConfiguration(
-                List.of(new ResourceLocation("minecraft", "fossil/spine_1"), new ResourceLocation("minecraft", "fossil/spine_2")),
-                List.of(new ResourceLocation("minecraft", "fossil_spine_1"), new ResourceLocation("minecraft", "fossil_spine_2")),
+                List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "fossil/spine_1"), ResourceLocation.fromNamespaceAndPath("minecraft", "fossil/spine_2")),
+                List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "fossil_spine_1"), ResourceLocation.fromNamespaceAndPath("minecraft", "fossil_spine_2")),
                 Holder.direct(new StructureProcessorList(List.of(BlockIgnoreProcessor.AIR))),
                 Holder.direct(new StructureProcessorList(List.of(BlockIgnoreProcessor.AIR))),
                 3

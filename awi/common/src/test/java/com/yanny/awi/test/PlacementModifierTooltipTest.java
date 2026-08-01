@@ -1,6 +1,7 @@
 package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.PlacementModifierTooltipUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -187,6 +188,23 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceWaterDepthFilterTooltip(UTILS, SurfaceWaterDepthFilter.forMaxDepth(3)).build(), List.of(
                 "Surface Water Depth Filter:",
                 "  -> Max Water Depth: 3"
+        ));
+    }
+
+    @Test
+    public void testFixedPlacementTooltip() {
+        assertTooltip(PlacementModifierTooltipUtils.getFixedPlacementTooltip(UTILS, FixedPlacement.of(new BlockPos(1, 2, 3))).build(), List.of(
+                "Fixed Placement:",
+                "  -> Position: [1,2,3]"
+        ));
+        assertTooltip(PlacementModifierTooltipUtils.getFixedPlacementTooltip(UTILS, FixedPlacement.of(
+                new BlockPos(1, 2, 3),
+                new BlockPos(3, 2, 1)
+        )).build(), List.of(
+                "Fixed Placement:",
+                "  -> Positions:",
+                "    -> [1,2,3]",
+                "    -> [3,2,1]"
         ));
     }
 }

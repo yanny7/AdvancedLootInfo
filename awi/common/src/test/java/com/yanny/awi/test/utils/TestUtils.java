@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -24,7 +25,6 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagLoader;
-import net.minecraft.tags.TagManager;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringDecomposer;
 import org.jetbrains.annotations.NotNull;
@@ -168,13 +168,13 @@ public class TestUtils {
 
     /**
      * {@link net.minecraft.server.Bootstrap#bootStrap()} only fills the built-in registries with their elements - tags are
-     * datapack-driven and stay empty until {@link net.minecraft.tags.TagManager} runs, which never happens in tests. Since
+     * datapack-driven and stay empty until {@code TagManager} runs, which never happens in tests. Since
      * {@code VanillaRegistries.createLookup()} exposes built-in registries through {@code MappedRegistry#asLookup()} (a live
      * view of {@code MappedRegistry#tags}), every {@code lookupOrThrow(Registries.BLOCK).getOrThrow(someTag)} fails.
      * This loads the vanilla datapack and binds its tags into the built-in registries, mirroring what {@code TagManager} does.
      */
     public static void bindVanillaTags() {
-        PackRepository packRepository = new PackRepository(new ServerPacksSource());
+        PackRepository packRepository = ServerPacksSource.createVanillaTrustedRepository();
 
         packRepository.reload();
         packRepository.setSelected(List.of("vanilla"));
@@ -187,7 +187,7 @@ public class TestUtils {
     private static <T> void bindTags(ResourceManager resourceManager, RegistryAccess.RegistryEntry<T> entry) {
         ResourceKey<? extends Registry<T>> registryKey = entry.key();
         Registry<T> registry = entry.value();
-        TagLoader<Holder<T>> tagLoader = new TagLoader<>((location) -> registry.getHolder(ResourceKey.create(registryKey, location)), TagManager.getTagDir(registryKey));
+        TagLoader<Holder<T>> tagLoader = new TagLoader<>((location) -> registry.getHolder(ResourceKey.create(registryKey, location)), Registries.tagsDirPath(registryKey));
         Map<TagKey<T>, List<Holder<T>>> tags = new HashMap<>();
 
         tagLoader.loadAndBuild(resourceManager).forEach((location, holders) -> tags.put(TagKey.create(registryKey, location), List.copyOf(holders)));

@@ -115,6 +115,6 @@ public class PlacementModifierTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFixedPlacementTooltip(IServerUtils utils, FixedPlacement placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.positions).build(Lang.Branch.POSITIONS)), Lang.PlacementModifier.SURFACE_WATER_DEPTH_FILTER);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.positions).build(Lang.Branch.POSITIONS)), Lang.PlacementModifier.FIXED_PLACEMENT);
     }
 }
