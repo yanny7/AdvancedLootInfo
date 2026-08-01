@@ -44,7 +44,7 @@ public class TooltipUtils {
 
     private static TooltipBuilder getElementTooltip(IServerUtils utils, JsonElement element) {
         if (element.isJsonObject()) {
-            return TooltipBuilder.array((b) -> element.getAsJsonObject().asMap().forEach((key, e) -> b.add(getElementTooltip(utils, e)).rawKey(key)));
+            return TooltipBuilder.array((b) -> element.getAsJsonObject().asMap().forEach((key, e) -> b.add(getElementTooltip(utils, e).rawKey(key))));
         } else if (element.isJsonArray()) {
             return TooltipBuilder.array((b) -> element.getAsJsonArray().forEach((e) -> b.add(getElementTooltip(utils, e))));
         } else if (element.isJsonPrimitive()) {
