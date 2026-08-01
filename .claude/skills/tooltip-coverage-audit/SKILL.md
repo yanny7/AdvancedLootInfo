@@ -73,10 +73,21 @@ Every `get<X>Tooltip(IServerUtils utils, VanillaType value)` method in a `*Toolt
 
 ### B2. Finding each vanilla type's real field list
 
-Extract from the decompiled Minecraft sources jar (path varies by MC version/branch — locate it first, e.g. `find ~/.gradle/caches/fabric-loom -iname "*-sources.jar"` for Fabric-Loom-based branches):
+**First, get the branch's actual MC version — don't skip this.** Read `minecraft_version` from the repo-root `gradle.properties`. This repo's sibling branches (`ali_1_20_1/`, `ali_1_21_1/`, ...) all share the same `~/.gradle/caches` — a version-agnostic search like `find ~/.gradle/caches/fabric-loom -iname "*-sources.jar"` will happily return a jar for a *different* branch's MC version, and it will look completely plausible (it decompiles fine, classes exist, fields exist) while being silently wrong for this branch. This already happened once during this skill's use: two of three dispatched subagents were hand-given a `1.20.1` jar path for a `1.21.1` branch, used it without noticing, and it took a manual out-of-band re-verification against the correct version to confirm their findings still held. Don't rely on subagents to catch this themselves — verify the version yourself before handing out any jar path.
+
+Once you know the target version, locate the jar and confirm its name actually contains that version string before trusting it:
 
 ```
-unzip -o -q "<sources-jar>" "net/minecraft/path/to/SomeClass.java" -d /tmp/mcsrc
+find ~/.gradle/caches/fabric-loom -iname "*-sources.jar" | grep -- "-<version-with-dots-and-underscores>-"
+find <repo-root>/.gradle/loom-cache -iname "*-sources.jar"   # project-local cache, check here too
+```
+
+**Watch for loader-patch-only jars, not full merged sources.** A `forge-<mc>-...-sources.jar` or `neoforge-<mc>-...-sources.jar` in the loom cache is sometimes just that loader's own patch classes (a ~1MB jar containing only `net/minecraftforge/...` or `net/neoforged/...`, no `net/minecraft/...` at all) rather than the full decompiled merged Minecraft source tree — `unzip -l | grep -c "net/minecraft/"` (not `minecraftforge`/`neoforged`) before trusting it as a source of vanilla field lists. If no full decompiled tree is cached locally for the exact loader/version this branch builds (this can happen for Fabric-only mods like AWI, where loom may not have run a `genSources`/decompile step), a decompiled tree for the *same MC version* from a different loader (Forge/NeoForge/another sibling checkout on disk) is an acceptable substitute for vanilla (non-loader-patched) classes — the vanilla source is identical regardless of which loader's toolchain decompiled it, only the version has to match.
+
+Extract the target class with:
+
+```
+unzip -o -q "<sources-jar-or-run>" "net/minecraft/path/to/SomeClass.java" -d /tmp/mcsrc
 ```
 
 If the path is unknown, `unzip -l "<sources-jar>" | grep -i SomeClassName` first. Read the class's **`CODEC` definition** as the authoritative field list — a field *not* present in the codec (not serialized) is almost always a derived/cache value (e.g. a precomputed bounding box, a `NormalNoise` instance built from a `seed`) and is correctly *not* rendered; only fields that ARE in the codec are real user-facing configuration that must show up somewhere. Also check the immediate abstract superclass's own codec-builder helper (often a `protected static ... xxxParts(Instance<P> instance)` method) for inherited fields.
@@ -90,7 +101,7 @@ A field can be legitimately absent from the tooltip for reasons that are NOT bug
 
 ### B4. Execution approach — delegate, then personally verify the worst findings
 
-This is a large, mechanical, file-by-file cross-referencing task across ~15-20 `*TooltipUtils` classes. Split the file list into 3-5 roughly line-count-balanced groups and dispatch one `Agent` (subagent_type `general-purpose`, `run_in_background: false` since you need all results before reporting) per group, each with: the exact file list, the sources-jar path, the CODEC-as-ground-truth rule, and the three false-positive patterns from B3. Do not use the `Workflow` tool for this unless the user has explicitly opted into multi-agent orchestration (see the `Workflow` tool's own gating rules) — plain parallel `Agent` calls in one message are sufficient and don't require that opt-in.
+This is a large, mechanical, file-by-file cross-referencing task across ~15-20 `*TooltipUtils` classes. Split the file list into 3-5 roughly line-count-balanced groups and dispatch one `Agent` (subagent_type `general-purpose`, `run_in_background: false` since you need all results before reporting) per group, each with: the exact file list, the sources-jar path you verified in B2 (state the MC version explicitly, e.g. "this branch targets 1.21.1"), the CODEC-as-ground-truth rule, and the three false-positive patterns from B3. Also tell every agent explicitly to spot-check that the jar you handed them actually matches the stated version (per B2) before trusting it, and to flag rather than silently proceed if it doesn't — one out of three agents in this skill's first real run caught a version mismatch in a jar path it was handed and self-corrected by finding a same-version jar elsewhere; the other two used the wrong-version jar without comment. Don't assume an agent will catch this on its own just because it's capable of it — say it explicitly. Do not use the `Workflow` tool for this unless the user has explicitly opted into multi-agent orchestration (see the `Workflow` tool's own gating rules) — plain parallel `Agent` calls in one message are sufficient and don't require that opt-in.
 
 Agents can and do overstate confidence or misread a field list. Before reporting any finding to the user as a "definite bug," personally re-verify the highest-severity ones yourself: extract the same vanilla source, confirm the field really is in the `CODEC`, and re-read the flagged `*TooltipUtils` method directly. Only findings you've personally confirmed should be reported as "definite" — downgrade anything you haven't independently checked to "reported by audit, unverified."
 
@@ -102,3 +113,4 @@ Per this project's standing instructions: report findings, do not edit productio
 
 - The mechanism (`TooltipBuilder`, `TooltipTestSuite`, `Lang.java` shape, the `UNUSED` tracking) is identical across branches per `aci/CLAUDE.md` — only the sources-jar path, concrete vanilla field names, and which `*TooltipUtils` classes/methods exist will differ (new MC versions add/remove/rename vanilla subtypes).
 - Re-run Part A fresh every time even if Part B found no new issues since the last branch's audit — a MC version bump can add new vanilla fields/subtypes to existing types (new `Lang` keys) independent of any code changes in this repo.
+- Because sibling branches share `~/.gradle/caches`, a generic sources-jar search can return the *wrong* branch's MC version without any obvious signal that it's wrong (see B2) — always confirm the version against `gradle.properties` first, every time, even if last run's jar path is still sitting in your context from a previous session.
