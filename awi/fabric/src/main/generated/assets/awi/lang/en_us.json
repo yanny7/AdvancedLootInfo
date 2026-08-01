@@ -320,7 +320,7 @@
   "awi.property.value.integrity": "Integrity: %s",
   "awi.property.value.invalid_blocks": "Invalid Blocks: %s",
   "awi.property.value.invalid_blocks_threshold": "Invalid Blocks Threshold: %s",
-  "awi.property.value.is_crystal_vulnerable": "Is Crystal Vulnerable: %s",
+  "awi.property.value.is_crystal_invulnerable": "Is Crystal Invulnerable: %s",
   "awi.property.value.is_guarded": "Is Guarded: %s",
   "awi.property.value.layer_at_y": "Layer At Y: %s",
   "awi.property.value.leaf_placement_attempts": "Leaf Placement Attempts: %s",

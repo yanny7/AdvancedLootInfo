@@ -189,7 +189,7 @@ public final class Lang {
         INTEGRITY("integrity", "Integrity: %s"),
         INVALID_BLOCKS("invalid_blocks", "Invalid Blocks: %s"),
         INVALID_BLOCKS_THRESHOLD("invalid_blocks_threshold", "Invalid Blocks Threshold: %s"),
-        IS_CRYSTAL_VULNERABLE("is_crystal_vulnerable", "Is Crystal Vulnerable: %s"),
+        IS_CRYSTAL_INVULNERABLE("is_crystal_invulnerable", "Is Crystal Invulnerable: %s"),
         IS_GUARDED("is_guarded", "Is Guarded: %s"),
         LAYER_AT_Y("layer_at_y", "Layer At Y: %s"),
         LEAF_PLACEMENT_ATTEMPTS("leaf_placement_attempts", "Leaf Placement Attempts: %s"),
