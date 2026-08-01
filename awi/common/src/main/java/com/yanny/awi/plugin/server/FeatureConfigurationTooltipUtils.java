@@ -157,6 +157,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getNetherForestVegetationConfigurationTooltip(IServerUtils utils, NetherForestVegetationConfig configuration) {
         return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.stateProvider).build(Lang.Branch.STATE_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.spreadWidth).build(Lang.Value.SPREAD_WIDTH));
             b.add(utils.getValueTooltip(utils, configuration.spreadHeight).build(Lang.Value.SPREAD_HEIGHT));
         }, Lang.FeatureConfiguration.NETHER_FOREST_VEGETATION);

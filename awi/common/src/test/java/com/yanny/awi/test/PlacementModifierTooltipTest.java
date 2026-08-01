@@ -152,7 +152,15 @@ public class PlacementModifierTooltipTest {
 
     @Test
     public void testRandomOffsetPlacementTooltip() {
-        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of());
+        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of(
+                "Random Offset:",
+                "  -> XZ Spread:",
+                "    -> Constant:",
+                "      -> Value: 1",
+                "  -> Y Spread:",
+                "    -> Constant:",
+                "      -> Value: 2"
+        ));
     }
 
     @Test

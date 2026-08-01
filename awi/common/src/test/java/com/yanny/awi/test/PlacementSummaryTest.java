@@ -152,6 +152,15 @@ public class PlacementSummaryTest {
     }
 
     @Test
+    public void testSummaryTooltipCountShowsDistributionKind() {
+        // non-constant, known count range ⇒ shown with its distribution kind, e.g. "2-6 (Uniform)"
+        List<PlacementModifier> modifiers = List.of(CountPlacement.of(UniformInt.of(2, 6)));
+        assertTooltip(renderSummary(modifiers), List.of(
+                "Attempts Per Chunk: 2-6 (Uniform)"
+        ));
+    }
+
+    @Test
     public void testSummaryTooltipHidesMostLikelyWhenEqualToRange() {
         // uniform ⇒ best band == full range ⇒ "Most Likely" would be redundant, so it's omitted
         List<PlacementModifier> modifiers = List.of(
