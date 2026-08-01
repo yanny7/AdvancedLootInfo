@@ -157,6 +157,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getNetherForestVegetationConfigurationTooltip(IServerUtils utils, NetherForestVegetationConfig configuration) {
         return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.stateProvider).build(Lang.Branch.STATE_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.spreadWidth).build(Lang.Value.SPREAD_WIDTH));
             b.add(utils.getValueTooltip(utils, configuration.spreadHeight).build(Lang.Value.SPREAD_HEIGHT));
         }, Lang.FeatureConfiguration.NETHER_FOREST_VEGETATION);
@@ -180,7 +181,7 @@ public class FeatureConfigurationTooltipUtils {
     public static TooltipBuilder getPointedDripstoneConfigurationTooltip(IServerUtils utils, PointedDripstoneConfiguration configuration) {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.chanceOfTallerDripstone).build(Lang.Value.CHANCE_OF_TALLER_DRIPSTONE));
-            b.add(utils.getValueTooltip(utils, configuration.chanceOfDirectionalSpread).build(Lang.Value.CHANCE_OF_DIRECTIONAL_SPEED));
+            b.add(utils.getValueTooltip(utils, configuration.chanceOfDirectionalSpread).build(Lang.Value.CHANCE_OF_DIRECTIONAL_SPREAD));
             b.add(utils.getValueTooltip(utils, configuration.chanceOfSpreadRadius2).build(Lang.Value.CHANCE_OF_SPREAD_RADIUS_2));
             b.add(utils.getValueTooltip(utils, configuration.chanceOfSpreadRadius3).build(Lang.Value.CHANCE_OF_SPREAD_RADIUS_3));
         }, Lang.FeatureConfiguration.POINTED_DRIPSTONE);
@@ -276,7 +277,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getSpikeConfigurationTooltip(IServerUtils utils, SpikeConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.isCrystalInvulnerable()).build(Lang.Value.IS_CRYSTAL_VULNERABLE));
+            b.add(utils.getValueTooltip(utils, configuration.isCrystalInvulnerable()).build(Lang.Value.IS_CRYSTAL_INVULNERABLE));
             b.add(utils.getValueTooltip(utils, configuration.getSpikes()).build(Lang.Branch.SPIKES));
             b.add(utils.getValueTooltip(utils, configuration.getCrystalBeamTarget()).build(Lang.Value.CRYSTAL_BEAM_TARGET));
         }, Lang.FeatureConfiguration.SPIKE);
