@@ -697,7 +697,7 @@ public class FeatureConfigurationTooltipTest {
                 new BlockPos(5, 6, 7)
         )).build(), List.of(
                 "Spike:",
-                "  -> Is Crystal Vulnerable: false",
+                "  -> Is Crystal Invulnerable: false",
                 "  -> Spikes:",
                 "    -> Center X: 1",
                 "    -> Center Z: 2",
