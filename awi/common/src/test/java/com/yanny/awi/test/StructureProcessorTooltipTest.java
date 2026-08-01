@@ -3,6 +3,7 @@ package com.yanny.awi.test;
 import com.yanny.awi.plugin.server.StructureProcessorTooltipUtils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Blocks;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
 import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 
@@ -20,17 +22,35 @@ public class StructureProcessorTooltipTest {
     public void testBlockIgnoreProcessorTooltip() {
         assertTooltip(StructureProcessorTooltipUtils.getBlockIgnoreProcessorTooltip(UTILS, BlockIgnoreProcessor.AIR).build(), List.of(
                 "Block Ignore:",
+                "  -> To Ignore: Air"
+        ));
+        assertTooltip(StructureProcessorTooltipUtils.getBlockIgnoreProcessorTooltip(UTILS, new BlockIgnoreProcessor(
+                List.of(Blocks.STONE, Blocks.ANDESITE)
+        )).build(), List.of(
+                "Block Ignore:",
                 "  -> To Ignore:",
-                "    -> Air"
+                "    -> Stone",
+                "    -> Andesite"
         ));
     }
 
     @Test
     public void testBlockRotProcessorTooltip() {
-        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(HolderSet.direct(Holder.direct(Blocks.STONE)), 0.5f)).build(), List.of(
+        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(
+                HolderSet.direct(Holder.direct(Blocks.STONE)),
+                0.5f
+        )).build(), List.of(
+                "Block Rot:",
+                "  -> Rottable Block: Stone",
+                "  -> Integrity: 0.5"
+        ));
+        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.LOGS),
+                0.5f
+        )).build(), List.of(
                 "Block Rot:",
                 "  -> Rottable Blocks:",
-                "    -> Stone",
+                "    -> Tag: minecraft:logs",
                 "  -> Integrity: 0.5"
         ));
     }
@@ -102,7 +122,7 @@ public class StructureProcessorTooltipTest {
     public void testProtectedBlockProcessorTooltip() {
         assertTooltip(StructureProcessorTooltipUtils.getProtectedBlockProcessorTooltip(UTILS, new ProtectedBlockProcessor(BlockTags.WOOL)).build(), List.of(
                 "Protected Blocks:",
-                "  -> Cannot Replace:"
+                "  -> Cannot Replace: minecraft:wool"
         ));
     }
 
