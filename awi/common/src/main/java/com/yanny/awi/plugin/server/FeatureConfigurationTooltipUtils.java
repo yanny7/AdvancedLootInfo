@@ -266,7 +266,10 @@ public class FeatureConfigurationTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSimpleBlockConfigurationTooltip(IServerUtils utils, SimpleBlockConfiguration configuration) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, configuration.toPlace()).build(Lang.Branch.TO_PLACE)), Lang.FeatureConfiguration.SIMPLE_BLOCK);
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.scheduleTick()).build(Lang.Value.SCHEDULE_TICK));
+            b.add(utils.getValueTooltip(utils, configuration.toPlace()).build(Lang.Branch.TO_PLACE));
+        }, Lang.FeatureConfiguration.SIMPLE_BLOCK);
     }
 
     @NotNull

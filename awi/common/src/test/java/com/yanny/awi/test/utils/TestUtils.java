@@ -5,26 +5,13 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.datagen.LanguageHolder;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.repository.PackRepository;
-import net.minecraft.server.packs.repository.ServerPacksSource;
-import net.minecraft.server.packs.resources.CloseableResourceManager;
-import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.tags.TagKey;
-import net.minecraft.tags.TagLoader;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.StringDecomposer;
 import org.jetbrains.annotations.NotNull;
@@ -164,37 +151,6 @@ public class TestUtils {
 
             return sb.append(pre).append(text).append(post.reverse()).toString();
         });
-    }
-
-    /**
-     * {@link net.minecraft.server.Bootstrap#bootStrap()} only fills the built-in registries with their elements - tags are
-     * datapack-driven and stay empty until {@code TagManager} runs, which never happens in tests. Since
-     * {@code VanillaRegistries.createLookup()} exposes built-in registries through {@code MappedRegistry#asLookup()} (a live
-     * view of {@code MappedRegistry#tags}), every {@code lookupOrThrow(Registries.BLOCK).getOrThrow(someTag)} fails.
-     * This loads the vanilla datapack and binds its tags into the built-in registries, mirroring what {@code TagManager} does.
-     */
-    public static void bindVanillaTags() {
-        PackRepository packRepository = ServerPacksSource.createVanillaTrustedRepository();
-
-        packRepository.reload();
-        packRepository.setSelected(List.of("vanilla"));
-
-        try (CloseableResourceManager resourceManager = new MultiPackResourceManager(PackType.SERVER_DATA, packRepository.openAllSelected())) {
-            RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY).registries().forEach((entry) -> bindTags(resourceManager, entry));
-        }
-    }
-
-    private static <T> void bindTags(ResourceManager resourceManager, RegistryAccess.RegistryEntry<T> entry) {
-        ResourceKey<? extends Registry<T>> registryKey = entry.key();
-        Registry<T> registry = entry.value();
-        TagLoader<Holder<T>> tagLoader = new TagLoader<>((location) -> registry.getHolder(ResourceKey.create(registryKey, location)), Registries.tagsDirPath(registryKey));
-        Map<TagKey<T>, List<Holder<T>>> tags = new HashMap<>();
-
-        tagLoader.loadAndBuild(resourceManager).forEach((location, holders) -> tags.put(TagKey.create(registryKey, location), List.copyOf(holders)));
-
-        if (!tags.isEmpty()) {
-            registry.bindTags(tags);
-        }
     }
 
     @NotNull

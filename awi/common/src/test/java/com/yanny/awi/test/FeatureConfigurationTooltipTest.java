@@ -436,7 +436,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Can be Placed On: Stone"
         ));
         assertTooltip(FeatureConfigurationTooltipUtils.getMultifaceGrowthConfigurationTooltip(UTILS, new MultifaceGrowthConfiguration(
-                (MultifaceBlock) Blocks.GLOW_LICHEN,
+                (MultifaceSpreadeableBlock) Blocks.GLOW_LICHEN,
                 8,
                 true,
                 false,
@@ -671,6 +671,7 @@ public class FeatureConfigurationTooltipTest {
     public void testSimpleBlockConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getSimpleBlockConfigurationTooltip(UTILS, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.STONE))).build(), List.of(
                 "Simple Block:",
+                "  -> Schedule Tick: false",
                 "  -> To Place:",
                 "    -> Simple:",
                 "      -> State:",

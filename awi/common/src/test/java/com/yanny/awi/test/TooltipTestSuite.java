@@ -94,7 +94,7 @@ public class TooltipTestSuite {
         Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
 
         Language.inject(pair.getA());
-        TestUtils.bindVanillaTags();
+//        TestUtils.bindVanillaTags();
         LOOKUP = VanillaRegistries.createLookup();
         UNUSED = pair.getB();
         LOOKUP = VanillaRegistries.createLookup();

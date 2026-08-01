@@ -252,6 +252,7 @@ public final class Lang {
         ROOT_RADIUS("root_radius", "Root Radius: %s"),
         ROOT_REPLACEABLE("root_replaceable", "Root Replaceable: %s"),
         ROTTABLE_BLOCK("rottable_block", "Rottable Block: %s"),
+        SCHEDULE_TICK("schedule_tick", "Schedule Tick: %s"),
         SEARCH_RANGE("search_range", "Search Range: %s"),
         SEA_LEVEL("sea_level", "Sea Level: %s"),
         SIZE("size", "Size: %s"),
@@ -259,7 +260,6 @@ public final class Lang {
         SPREAD_HEIGHT("spread_height", "Spread Height: %s"),
         SPREAD_ROUNDS("spread_rounds", "Spread Rounds: %s"),
         SPREAD_WIDTH("spread_width", "Spread Width: %s"),
-        STEP("step",  "Step: %s"),
         SURFACE("surface", "Surface: %s"),
         TAG("tag", "Tag: %s"),
         THRESHOLD("threshold", "Threshold: %s"),
@@ -317,7 +317,6 @@ public final class Lang {
         CONTENTS("contents", "Contents:"),
         COUNT("count", "Count:"),
         CROWN_HEIGHT("crown_height", "Crown Height:"),
-        DATA("data", "Data:"),
         DECORATORS("decorators", "Decorators:"),
         DECOR_STATE("decor_state", "Decor State:"),
         DEFAULT_FEATURE("default_feature", "Default Feature:"),
@@ -609,7 +608,6 @@ public final class Lang {
 
     public enum PlacementModifier implements ITooltipKey {
         BLOCK_PREDICATE("block_predicate", "Block predicate:"),
-        CARVING_MASK_PLACEMENT("carving_mask_placement", "Carving Mask Placement:"),
         COUNT_ON_EVERY_LAYER("count_on_every_layer", "Count On Every Layer:"),
         COUNT_PLACEMENT("count_placement", "Count Placement:"),
         ENVIRONMENT_SCAN_PLACEMENT("environment_scan_placement", "Environment Scan Placement:"),
