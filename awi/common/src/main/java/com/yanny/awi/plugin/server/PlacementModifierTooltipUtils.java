@@ -85,8 +85,11 @@ public class PlacementModifierTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getRandomOffsetPlacementTooltip(IServerUtils ignoredUtils, RandomOffsetPlacement ignoredPlacement) {
-        return empty(); // Nothing useful
+    public static TooltipBuilder getRandomOffsetPlacementTooltip(IServerUtils utils, RandomOffsetPlacement placement) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, placement.xzSpread).build(Lang.Branch.XZ_SPREAD));
+            b.add(utils.getValueTooltip(utils, placement.ySpread).build(Lang.Branch.Y_SPREAD));
+        }, Lang.PlacementModifier.RANDOM_OFFSET);
     }
 
     @NotNull

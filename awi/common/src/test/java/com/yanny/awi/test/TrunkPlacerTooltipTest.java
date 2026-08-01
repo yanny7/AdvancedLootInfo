@@ -79,6 +79,9 @@ public class TrunkPlacerTooltipTest {
     public void testBendingTrunkPlacerTooltip() {
         assertTooltip(TrunkPlacerTooltipUtils.getBendingTrunkPlacerTooltip(UTILS, new BendingTrunkPlacer(5, 2, 1, 3, ConstantInt.of(2))).build(), List.of(
                 "Bending Trunk:",
+                "  -> Base Height: 5",
+                "  -> Height Rand A: 2",
+                "  -> Height Rand B: 1",
                 "  -> Min Height For Leaves: 3",
                 "  -> Band Length:",
                 "    -> Constant:",
@@ -93,9 +96,12 @@ public class TrunkPlacerTooltipTest {
                 ConstantInt.of(2),
                 0.25f,
                 ConstantInt.of(3),
-                HolderSet.direct(Holder.direct(Blocks.OAK_LOG))
+                HolderSet.direct(Holder.direct(Blocks.OAK_LOG), Holder.direct(Blocks.SPRUCE_LOG))
         )).build(), List.of(
                 "Upward Branching Trunk:",
+                "  -> Base Height: 5",
+                "  -> Height Rand A: 2",
+                "  -> Height Rand B: 1",
                 "  -> Extra Branch Steps:",
                 "    -> Constant:",
                 "      -> Value: 2",
@@ -103,7 +109,9 @@ public class TrunkPlacerTooltipTest {
                 "  -> Extra Branch Length:",
                 "    -> Constant:",
                 "      -> Value: 3",
-                "  -> Can Grow Through: Oak Log"
+                "  -> Can Grow Through:",
+                "    -> Oak Log",
+                "    -> Spruce Log"
         ));
     }
 
@@ -117,6 +125,9 @@ public class TrunkPlacerTooltipTest {
                 ConstantInt.of(1)
         )).build(), List.of(
                 "Cherry:",
+                "  -> Base Height: 5",
+                "  -> Height Rand A: 2",
+                "  -> Height Rand B: 1",
                 "  -> Branch Count:",
                 "    -> Constant:",
                 "      -> Value: 4",

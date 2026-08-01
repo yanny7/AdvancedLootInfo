@@ -43,12 +43,12 @@ public class BlockPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSolidPredicateTooltip(IServerUtils utils, SolidPredicate predicate) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)), Lang.BlockPredicate.SOLID);
+        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)).showEmpty(), Lang.BlockPredicate.SOLID);
     }
 
     @NotNull
     public static TooltipBuilder getReplaceablePredicateTooltip(IServerUtils utils, ReplaceablePredicate predicate) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)), Lang.BlockPredicate.REPLACEABLE);
+        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)).showEmpty(), Lang.BlockPredicate.REPLACEABLE);
     }
 
     @NotNull
@@ -61,7 +61,7 @@ public class BlockPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getInsideWorldBoundsPredicateTooltip(IServerUtils utils, InsideWorldBoundsPredicate predicate) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)), Lang.BlockPredicate.INSIDE_WORLD_BOUNDS);
+        return array((b) -> b.add(utils.getValueTooltip(utils, predicate.offset).build(Lang.Value.OFFSET)).showEmpty(), Lang.BlockPredicate.INSIDE_WORLD_BOUNDS);
     }
 
     @NotNull

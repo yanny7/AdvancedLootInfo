@@ -94,7 +94,9 @@ public class BlockStateProviderTooltipTest {
                 1.0f,
                 List.of(Blocks.STONE.defaultBlockState())
         )).build(), List.of(
-                "Dual Noise Provider:"
+                "Dual Noise Provider:",
+                "  -> States:",
+                "    -> Block: Stone"
         ));
     }
 

@@ -14,8 +14,9 @@ import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 public class FeatureSizeTooltipTest {
     @Test
     public void testTwoLayersFeatureSizeTooltip() {
-        assertTooltip(FeatureSizeTooltipUtils.getTwoLayersFeatureSizeTooltip(UTILS, new TwoLayersFeatureSize(1, 0, 1, OptionalInt.empty())).build(), List.of(
+        assertTooltip(FeatureSizeTooltipUtils.getTwoLayersFeatureSizeTooltip(UTILS, new TwoLayersFeatureSize(1, 0, 1, OptionalInt.of(5))).build(), List.of(
                 "Two Layers:",
+                "  -> Min Clipped Height: 5",
                 "  -> Limit: 1",
                 "  -> Lower Size: 0",
                 "  -> Upper Size: 1"

@@ -28,8 +28,7 @@ public class PlacementModifierTooltipTest {
     public void testBlockPredicateFilterTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getBlockPredicateFilterTooltip(UTILS, BlockPredicateFilter.forPredicate(BlockPredicate.solid())).build(), List.of(
                 "Block predicate:",
-                "  -> Solid:",
-                "    -> Offset: [0,0,0]"
+                "  -> Solid:"
         ));
     }
 
@@ -87,10 +86,8 @@ public class PlacementModifierTooltipTest {
                 "  -> Direction Of Search: UP",
                 "  -> Target Condition:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Allowed Search Condition:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Max Steps: 32"
         ));
     }
@@ -155,7 +152,15 @@ public class PlacementModifierTooltipTest {
 
     @Test
     public void testRandomOffsetPlacementTooltip() {
-        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of());
+        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of(
+                "Random Offset:",
+                "  -> XZ Spread:",
+                "    -> Constant:",
+                "      -> Value: 1",
+                "  -> Y Spread:",
+                "    -> Constant:",
+                "      -> Value: 2"
+        ));
     }
 
     @Test
