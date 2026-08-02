@@ -83,7 +83,7 @@ public class TrunkPlacerTooltipTest {
                 "  -> Height Rand A: 2",
                 "  -> Height Rand B: 1",
                 "  -> Min Height For Leaves: 3",
-                "  -> Band Length:",
+                "  -> Bend Length:",
                 "    -> Constant:",
                 "      -> Value: 2"
         ));
