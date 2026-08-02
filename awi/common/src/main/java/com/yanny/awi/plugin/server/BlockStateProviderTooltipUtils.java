@@ -20,6 +20,7 @@ public class BlockStateProviderTooltipUtils {
     @NotNull
     public static TooltipBuilder getNoiseThresholdProviderTooltip(IServerUtils utils, NoiseThresholdProvider placer) {
         return TooltipBuilder.array((b) -> {
+            // Noise seed, parameters, scale and noise fields are intentionally hidden
             b.add(utils.getValueTooltip(utils, placer.threshold).build(Lang.Value.THRESHOLD));
             b.add(utils.getValueTooltip(utils, placer.highChance).build(Lang.Value.HIGH_CHANCE));
             b.add(utils.getValueTooltip(utils, placer.defaultState).build(Lang.Branch.DEFAULT_STATE));
@@ -30,12 +31,14 @@ public class BlockStateProviderTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getNoiseProviderTooltip(IServerUtils utils, NoiseProvider provider) {
+        // Noise seed, parameters, scale and noise fields are intentionally hidden
         return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, provider.states).build(Lang.Branch.STATES)), Lang.BlockStateProvider.NOISE_PROVIDER);
     }
 
     @NotNull
-    public static TooltipBuilder getDualNoiseProviderTooltip(IServerUtils ignoredUtils, DualNoiseProvider ignoredProvider) {
-        return TooltipBuilder.array(TooltipBuilder::showEmpty, Lang.BlockStateProvider.DUAL_NOISE_PROVIDER);
+    public static TooltipBuilder getDualNoiseProviderTooltip(IServerUtils utils, DualNoiseProvider provider) {
+        // Other noise fields are intentionally hidden
+        return TooltipBuilder.array((b) -> b.add(utils.getValueTooltip(utils, provider.states).build(Lang.Branch.STATES)), Lang.BlockStateProvider.DUAL_NOISE_PROVIDER);
     }
 
     @NotNull
