@@ -46,7 +46,6 @@ import java.util.Objects;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
-import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class GenericTooltipTest {
     @Test
@@ -539,7 +538,7 @@ public class GenericTooltipTest {
                 "Entity Sub Predicate:",
                 "  -> Is In Open Water: true"
         ));
-        assertUnorderedTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
+        assertTooltip(ValueTooltipUtils.getEntitySubPredicateTooltip(UTILS, PlayerPredicate.Builder.player()
                 .setLevel(MinMaxBounds.Ints.atLeast(3))
                 .setGameType(GameType.SURVIVAL)
                 .addStat(Stats.BLOCK_MINED.get(Blocks.COBBLESTONE), MinMaxBounds.Ints.atLeast(4))
@@ -555,16 +554,14 @@ public class GenericTooltipTest {
                 "  -> Level: ≥3",
                 "  -> Game Type: SURVIVAL",
                 "  -> Stats:",
-                List.of(
-                        "    -> Item: minecraft:salmon",
-                        "      -> Times Used: ≥5",
-                        "    -> Block: minecraft:cobblestone",
-                        "      -> Times Mined: ≥4",
-                        "    -> Entity Type: minecraft:bat",
-                        "      -> You killed %s %s: ≥5", //FIXME this should be fixed
-                        "    -> Id: minecraft:leave_game",
-                        "      -> Games Quit: 1-10"
-                ),
+                "    -> Id: minecraft:leave_game",
+                "      -> Games Quit: 1-10",
+                "    -> Entity Type: minecraft:bat",
+                "      -> You killed %s %s: ≥5", //FIXME this should be fixed
+                "    -> Block: minecraft:cobblestone",
+                "      -> Times Mined: ≥4",
+                "    -> Item: minecraft:salmon",
+                "      -> Times Used: ≥5",
                 "  -> Recipes:",
                 "    -> minecraft:recipe1: true",
                 "    -> minecraft:recipe2: false",

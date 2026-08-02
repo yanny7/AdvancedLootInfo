@@ -25,7 +25,7 @@ public class TrunkPlacerTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getMegaJungleTrunkPlacerTooltip(IServerUtils utils, GiantTrunkPlacer placer) {
+    public static TooltipBuilder getMegaJungleTrunkPlacerTooltip(IServerUtils utils, MegaJungleTrunkPlacer placer) {
         return array((b) -> addBaseTrunkPlacerTooltip(utils, b, placer), Lang.TrunkPlacer.MEGA_JUNGLE);
     }
 

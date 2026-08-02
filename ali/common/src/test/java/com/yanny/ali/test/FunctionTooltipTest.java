@@ -34,7 +34,6 @@ import java.util.Objects;
 
 import static com.yanny.ali.test.TooltipTestSuite.UTILS;
 import static com.yanny.ali.test.utils.TestUtils.assertTooltip;
-import static com.yanny.ali.test.utils.TestUtils.assertUnorderedTooltip;
 
 public class FunctionTooltipTest {
     @Test
@@ -81,7 +80,7 @@ public class FunctionTooltipTest {
 
     @Test
     public void testCopyStateTooltip() {
-        assertUnorderedTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
+        assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
                 .copy(BlockStateProperties.LIT)
                 .copy(BlockStateProperties.HORIZONTAL_FACING)
                 .build()
@@ -89,10 +88,8 @@ public class FunctionTooltipTest {
                 "Copy State:",
                 "  -> Block: minecraft:furnace",
                 "  -> Properties:",
-                List.of(
-                    "    -> lit",
-                    "    -> facing"
-                )
+                "    -> lit",
+                "    -> facing"
         ));
         assertTooltip(FunctionTooltipUtils.getCopyStateTooltip(UTILS, (CopyBlockState) CopyBlockState.copyState(Blocks.FURNACE)
                 .copy(BlockStateProperties.LIT)
@@ -270,18 +267,16 @@ public class FunctionTooltipTest {
                 "Set Enchantments:",
                 "  -> Add: true"
         ));
-        assertUnorderedTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
+        assertTooltip(FunctionTooltipUtils.getSetEnchantmentsTooltip(UTILS, (SetEnchantmentsFunction) new SetEnchantmentsFunction.Builder(false)
                 .withEnchantment(Enchantments.CHANNELING, ConstantValue.exactly(1))
                 .withEnchantment(Enchantments.MENDING, ConstantValue.exactly(2))
                 .build()).build(), List.of(
                 "Set Enchantments:",
                 "  -> Enchantments:",
-                List.of(
-                        "    -> minecraft:channeling",
-                        "      -> Levels: 1",
-                        "    -> minecraft:mending",
-                        "      -> Levels: 2"
-                ),
+                "    -> minecraft:channeling",
+                "      -> Levels: 1",
+                "    -> minecraft:mending",
+                "      -> Levels: 2",
                 "  -> Add: false"
         ));
     }

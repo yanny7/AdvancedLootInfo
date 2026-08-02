@@ -27,7 +27,7 @@ public class PlacementModifierTooltipTest {
     @Test
     public void testBlockPredicateFilterTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getBlockPredicateFilterTooltip(UTILS, BlockPredicateFilter.forPredicate(BlockPredicate.solid())).build(), List.of(
-                "Block predicate:",
+                "Block Predicate Filter:",
                 "  -> Solid:"
         ));
     }

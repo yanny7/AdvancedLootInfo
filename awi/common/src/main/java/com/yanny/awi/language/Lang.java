@@ -594,7 +594,7 @@ public final class Lang {
     }
 
     public enum PlacementModifier implements ITooltipKey {
-        BLOCK_PREDICATE("block_predicate", "Block predicate:"),
+        BLOCK_PREDICATE_FILTER("block_predicate_filter", "Block Predicate Filter:"),
         CARVING_MASK_PLACEMENT("carving_mask_placement", "Carving Mask Placement:"),
         COUNT_ON_EVERY_LAYER("count_on_every_layer", "Count On Every Layer:"),
         COUNT_PLACEMENT("count_placement", "Count Placement:"),

@@ -8,6 +8,8 @@ import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.stats.Stat;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.IntRange;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -219,7 +222,7 @@ public class ValueTooltipUtils {
     @NotNull
     public static TooltipBuilder getMobEffectPredicateTooltip(IServerUtils utils, MobEffectsPredicate mobEffectsPredicate) {
         if (mobEffectsPredicate != MobEffectsPredicate.ANY) {
-            return getMapTooltip(utils, mobEffectsPredicate.effects, GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
+            return getMapTooltip(utils, mobEffectsPredicate.effects, Comparator.comparing(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
         }
 
         return TooltipBuilder.empty();
@@ -297,9 +300,9 @@ public class ValueTooltipUtils {
                     } else if (entitySubPredicate instanceof PlayerPredicate playerPredicate) {
                         b.add(utils.getValueTooltip(utils, playerPredicate.level).build(Lang.Value.LEVEL));
                         b.add(utils.getValueTooltip(utils, playerPredicate.gameType).build(Lang.Value.GAME_TYPE));
-                        b.add(getMapTooltip(utils, playerPredicate.stats, GenericTooltipUtils::getStatsEntryTooltip).build(Lang.Branch.STATS));
-                        b.add(getMapTooltip(utils, playerPredicate.recipes, GenericTooltipUtils::getRecipeEntryTooltip).build(Lang.Branch.RECIPES));
-                        b.add(getMapTooltip(utils, playerPredicate.advancements, GenericTooltipUtils::getAdvancementEntryTooltip).build(Lang.Branch.ADVANCEMENTS));
+                        b.add(getMapTooltip(utils, playerPredicate.stats, Comparator.comparing(Stat::getName), GenericTooltipUtils::getStatsEntryTooltip).build(Lang.Branch.STATS));
+                        b.add(getMapTooltip(utils, playerPredicate.recipes, Comparator.naturalOrder(), GenericTooltipUtils::getRecipeEntryTooltip).build(Lang.Branch.RECIPES));
+                        b.add(getMapTooltip(utils, playerPredicate.advancements, Comparator.naturalOrder(), GenericTooltipUtils::getAdvancementEntryTooltip).build(Lang.Branch.ADVANCEMENTS));
                         b.add(utils.getValueTooltip(utils, playerPredicate.lookingAt).build(Lang.Branch.LOOKING_AT));
                     } else if (entitySubPredicate instanceof SlimePredicate slimePredicate) {
                         b.add(utils.getValueTooltip(utils, slimePredicate.size).build(Lang.Value.SIZE));
@@ -340,7 +343,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getAdvancementCriterionsPredicateTooltip(IServerUtils utils, PlayerPredicate.AdvancementCriterionsPredicate predicate) {
-        return getMapTooltip(utils, predicate.criterions, GenericTooltipUtils::getCriterionEntryTooltip).key(Lang.Branch.CRITERIONS);
+        return getMapTooltip(utils, predicate.criterions, Comparator.naturalOrder(), GenericTooltipUtils::getCriterionEntryTooltip).key(Lang.Branch.CRITERIONS);
     }
 
     @NotNull

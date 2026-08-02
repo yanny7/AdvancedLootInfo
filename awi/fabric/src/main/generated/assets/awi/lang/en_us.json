@@ -211,7 +211,7 @@
   "awi.property.placement.on_ceiling": "On Ceiling",
   "awi.property.placement.on_land": "On Land",
   "awi.property.placement.underwater": "Underwater",
-  "awi.property.placement_modifier.block_predicate": "Block predicate:",
+  "awi.property.placement_modifier.block_predicate_filter": "Block Predicate Filter:",
   "awi.property.placement_modifier.carving_mask_placement": "Carving Mask Placement:",
   "awi.property.placement_modifier.count_on_every_layer": "Count On Every Layer:",
   "awi.property.placement_modifier.count_placement": "Count Placement:",
