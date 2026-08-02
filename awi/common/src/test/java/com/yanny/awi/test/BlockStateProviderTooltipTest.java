@@ -139,7 +139,6 @@ public class BlockStateProviderTooltipTest {
                 "    -> If True:",
                 "      -> Matching Blocks:",
                 "        -> Block: Dirt",
-                "        -> Offset: [0,0,0]",
                 "    -> Then:",
                 "      -> Simple:",
                 "        -> State:",

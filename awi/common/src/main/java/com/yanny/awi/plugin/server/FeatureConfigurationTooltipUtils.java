@@ -388,7 +388,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getEndSpikeConfigurationTooltip(IServerUtils utils, EndSpikeConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.crystalInvulnerable).build(Lang.Value.IS_CRYSTAL_VULNERABLE));
+            b.add(utils.getValueTooltip(utils, configuration.crystalInvulnerable).build(Lang.Value.IS_CRYSTAL_INVULNERABLE));
             b.add(utils.getValueTooltip(utils, configuration.spikes).build(Lang.Branch.SPIKES));
             b.add(utils.getValueTooltip(utils, configuration.crystalBeamTarget).build(Lang.Value.CRYSTAL_BEAM_TARGET));
         }, Lang.FeatureConfiguration.END_SPIKE);

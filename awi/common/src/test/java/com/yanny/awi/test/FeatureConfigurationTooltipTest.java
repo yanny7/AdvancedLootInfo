@@ -26,7 +26,6 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.treedecorators.CocoaDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TrunkVineDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
-import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
@@ -168,27 +167,16 @@ public class FeatureConfigurationTooltipTest {
     @Test
     public void testDiscConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getDiscConfigurationTooltip(UTILS, new DiskConfiguration(
-                new RuleBasedBlockStateProvider(BlockStateProvider.simple(Blocks.SAND), List.of(
-                        new RuleBasedBlockStateProvider.Rule(BlockPredicate.ONLY_IN_AIR_PREDICATE, BlockStateProvider.simple(Blocks.STONE))
-                )),
+                BlockStateProvider.simple(Blocks.SAND),
                 BlockPredicate.solid(),
                 ConstantInt.of(3),
                 2
         )).build(), List.of(
                 "Disk:",
                 "  -> State Provider:",
-                "    -> Fallback:",
-                "      -> Simple:",
-                "        -> State:",
-                "          -> Block: Sand",
-                "    -> Rules:",
-                "      -> If True:",
-                "        -> Matching Blocks:",
-                "          -> Block: Air",
-                "      -> Then:",
-                "        -> Simple:",
-                "          -> State:",
-                "            -> Block: Stone",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Sand",
                 "  -> Target:",
                 "    -> Solid:",
                 "  -> Radius:",
@@ -767,7 +755,6 @@ public class FeatureConfigurationTooltipTest {
                 "            -> Predicate:",
                 "              -> Matching Block Tag:",
                 "                -> Tag: minecraft:cannot_replace_below_tree_trunk",
-                "                -> Offset: [0,0,0]",
                 "        -> Then:",
                 "          -> Simple:",
                 "            -> State:",
@@ -791,7 +778,8 @@ public class FeatureConfigurationTooltipTest {
                                 0.5f
                         )
                 )),
-                new TwoLayersFeatureSize(1, 0, 1)
+                new TwoLayersFeatureSize(1, 0, 1),
+                BlockStateProvider.simple(Blocks.BONE_BLOCK)
         ).decorators(List.of(TrunkVineDecorator.INSTANCE)).build()).build(), List.of(
                 "Tree:",
                 "  -> Trunk Provider:",
@@ -800,10 +788,6 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Block: Oak Log",
                 "        -> Properties:",
                 "          -> axis: y",
-                "  -> Dirt Provider:",
-                "    -> Simple:",
-                "      -> State:",
-                "        -> Block: Dirt",
                 "  -> Trunk Placer:",
                 "    -> Straight Trunk:",
                 "      -> Base Height: 5",
@@ -857,7 +841,12 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Decorators:",
                 "    -> Trunk Vine",
                 "  -> Ignore Vines: false",
-                "  -> Force Dirt: false"
+                "  -> Below Trunk Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Bone Block",
+                "        -> Properties:",
+                "          -> axis: y"
         ));
     }
 
@@ -1038,8 +1027,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> State:",
                 "    -> Block: Dirt",
                 "  -> Can Place On:",
-                "    -> Solid:",
-                "      -> Offset: [0,0,0]"
+                "    -> Solid:"
         ));
     }
 
@@ -1051,7 +1039,7 @@ public class FeatureConfigurationTooltipTest {
                 new BlockPos(1, 2, 3)
         )).build(), List.of(
                 "End Spike:",
-                "  -> Is Crystal Vulnerable: true",
+                "  -> Is Crystal Invulnerable: true",
                 "  -> Spikes:",
                 "    -> Center X: 1",
                 "    -> Center Z: 2",
