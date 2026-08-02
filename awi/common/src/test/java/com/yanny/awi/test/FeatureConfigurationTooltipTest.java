@@ -343,6 +343,8 @@ public class FeatureConfigurationTooltipTest {
                 1.0f
         )).build(), List.of(
                 "Large Dripstone:",
+                "  -> Replaceable Blocks:",
+                "    -> Tag: minecraft:features_cannot_replace",
                 "  -> Search Range: 30",
                 "  -> Column Radius:",
                 "    -> Constant:",
@@ -561,6 +563,8 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Block Predicate Filter:",
                 "        -> Solid:",
                 "  -> Required Vertical Space For Tree: 3",
+                "  -> Level Test Distance: 2",
+                "  -> Max Level Deviation: 4",
                 "  -> Root Radius: 2",
                 "  -> Root Replaceable:",
                 "    -> Tag: minecraft:wool",
@@ -892,7 +896,14 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Barrier:",
                 "    -> Simple:",
                 "      -> State:",
-                "        -> Block: Dirt"
+                "        -> Block: Dirt",
+                "  -> Can Place Feature:",
+                "    -> Solid:",
+                "  -> Can Replace With Air Or Fluid:",
+                "    -> Matching Fluids:",
+                "      -> Fluid: minecraft:empty",
+                "  -> Can Replace With Barrier:",
+                "    -> True Block"
         ));
     }
 
@@ -1155,6 +1166,21 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Rotations:",
                 "          -> NONE",
                 "          -> CLOCKWISE_90"
+        ));
+        assertTooltip(FeatureConfigurationTooltipUtils.getTemplateFeatureConfigurationTooltip(UTILS, new TemplateFeatureConfiguration(
+                WeightedList.of(List.of(new Weighted<>(new TemplateFeatureConfiguration.TemplateEntry(
+                        Identifier.fromNamespaceAndPath("minecraft", "trail_ruins/tower/tower_1"),
+                        List.of(Rotation.NONE)
+                ), 2)))
+        )).build(), List.of(
+                "Template:",
+                "  -> Templates:",
+                "    -> Total Weight: 2",
+                "    -> Items:",
+                "      -> Weight: 2",
+                "      -> Value:",
+                "        -> Template: minecraft:trail_ruins/tower/tower_1",
+                "        -> Rotation: NONE"
         ));
     }
 }

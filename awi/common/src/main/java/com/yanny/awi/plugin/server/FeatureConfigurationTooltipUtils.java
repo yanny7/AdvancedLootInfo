@@ -105,6 +105,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getLargeDripstoneConfigurationTooltip(IServerUtils utils, LargeDripstoneConfiguration configuration) {
         return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.replaceableBlocks).build(Lang.Branch.REPLACEABLE_BLOCKS));
             b.add(utils.getValueTooltip(utils, configuration.floorToCeilingSearchRange).build(Lang.Value.SEARCH_RANGE));
             b.add(utils.getValueTooltip(utils, configuration.columnRadius).build(Lang.Branch.COLUMN_RADIUS));
             b.add(utils.getValueTooltip(utils, configuration.heightScale).build(Lang.Branch.HEIGHT_SCALE));
@@ -201,6 +202,8 @@ public class FeatureConfigurationTooltipUtils {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.treeFeature()).build(Lang.Branch.TREE_FEATURE));
             b.add(utils.getValueTooltip(utils, configuration.requiredVerticalSpaceForTree()).build(Lang.Value.REQUIRED_VERTICAL_SPACE_FOR_TREE));
+            b.add(utils.getValueTooltip(utils, configuration.levelTestDistance()).build(Lang.Value.LEVEL_TEST_DISTANCE));
+            b.add(utils.getValueTooltip(utils, configuration.maxLevelDeviation()).build(Lang.Value.MAX_LEVEL_DEVIATION));
             b.add(utils.getValueTooltip(utils, configuration.rootRadius()).build(Lang.Value.ROOT_RADIUS));
             b.add(utils.getValueTooltip(utils, configuration.rootReplaceable()).build(Lang.Branch.ROOT_REPLACEABLE));
             b.add(utils.getValueTooltip(utils, configuration.rootStateProvider()).build(Lang.Branch.ROOT_STATE_PROVIDER));
@@ -310,6 +313,9 @@ public class FeatureConfigurationTooltipUtils {
         return array((b) -> {
             b.add(utils.getValueTooltip(utils, configuration.fluid()).build(Lang.Branch.FLUID));
             b.add(utils.getValueTooltip(utils, configuration.barrier()).build(Lang.Branch.BARRIER));
+            b.add(utils.getValueTooltip(utils, configuration.canPlaceFeature()).build(Lang.Branch.CAN_PLACE_FEATURE));
+            b.add(utils.getValueTooltip(utils, configuration.canReplaceWithAirOrFluid()).build(Lang.Branch.CAN_REPLACE_WITH_AIR_OR_FLUID));
+            b.add(utils.getValueTooltip(utils, configuration.canReplaceWithBarrier()).build(Lang.Branch.CAN_REPLACE_WITH_BARRIER));
         }, Lang.FeatureConfiguration.LAKE);
     }
 
