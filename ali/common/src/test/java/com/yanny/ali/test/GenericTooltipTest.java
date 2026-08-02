@@ -562,6 +562,8 @@ public class GenericTooltipTest {
                 "      -> Right: minecraft:granite",
                 "      -> Front: minecraft:stone",
                 "  -> Item Predicates:",
+                "    -> Custom Data:",
+                "      -> Nbt: {healing:1b}",
                 "    -> Damage:",
                 "      -> Durability: ≤5",
                 "    -> Enchantments:",
@@ -571,17 +573,15 @@ public class GenericTooltipTest {
                 "      -> Entry:",
                 "        -> Enchantment: minecraft:mending",
                 "        -> Level: 2-4",
+                "    -> Potions:",
+                "      -> minecraft:healing",
                 "    -> Stored Enchantments:",
                 "      -> Entry:",
                 "        -> Enchantment: minecraft:depth_strider",
                 "        -> Level: ≤5",
                 "      -> Entry:",
                 "        -> Enchantment: minecraft:lure",
-                "        -> Level: ≥4",
-                "    -> Potions:",
-                "      -> minecraft:healing",
-                "    -> Custom Data:",
-                "      -> Nbt: {healing:1b}"
+                "        -> Level: ≥4"
         ));
     }
 
@@ -771,15 +771,15 @@ public class GenericTooltipTest {
                 .set(new TypedDataComponent<>(DataComponents.CUSTOM_NAME, Component.literal("Hello"))).build()
         ).build(Lang.Branch.COMPONENTS), List.of(
                 "Components:",
-                "  -> minecraft:damage",
-                "    -> REMOVED",
-                "  -> minecraft:max_damage",
-                "    -> REMOVED",
                 "  -> minecraft:base_color",
                 "    -> Color: BLUE",
-                "  -> minecraft:hide_tooltip",
                 "  -> minecraft:custom_name",
-                "    -> Custom Name: Hello"
+                "    -> Custom Name: Hello",
+                "  -> minecraft:damage",
+                "    -> REMOVED",
+                "  -> minecraft:hide_tooltip",
+                "  -> minecraft:max_damage",
+                "    -> REMOVED"
         ));
     }
 

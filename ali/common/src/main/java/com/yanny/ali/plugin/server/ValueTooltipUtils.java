@@ -20,6 +20,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.inventory.SlotRange;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.*;
@@ -35,7 +36,10 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
@@ -210,7 +214,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMobEffectPredicateTooltip(IServerUtils utils, MobEffectsPredicate mobEffectsPredicate) {
-        return getMapTooltip(utils, mobEffectsPredicate.effectMap(), Comparator.comparing(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
+        return getMapTooltip(utils, mobEffectsPredicate.effectMap(), TooltipUtils.comparingHolder(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
     }
 
     @NotNull
@@ -245,7 +249,7 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, itemPredicate.items()).build(Lang.Branch.ITEMS));
             b.add(utils.getValueTooltip(utils, itemPredicate.count()).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, itemPredicate.components()).build(Lang.Branch.COMPONENTS));
-            b.add(getMapTooltip(utils, itemPredicate.subPredicates(), GenericTooltipUtils::getItemSubPredicateEntryTooltip).build(Lang.Branch.ITEM_PREDICATES));
+            b.add(getMapTooltip(utils, itemPredicate.subPredicates(), Comparator.comparing(BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE::getKey), GenericTooltipUtils::getItemSubPredicateEntryTooltip).build(Lang.Branch.ITEM_PREDICATES));
         });
     }
 
@@ -456,7 +460,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentPatchTooltip(IServerUtils utils, DataComponentPatch data) {
-        return getMapTooltip(utils, data.map, GenericTooltipUtils::getDataComponentPatchEntryTooltip);
+        return getMapTooltip(utils, data.map, Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_TYPE::getKey), GenericTooltipUtils::getDataComponentPatchEntryTooltip);
     }
 
     @NotNull
@@ -673,7 +677,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSlotPredicateTooltip(IServerUtils utils, SlotsPredicate predicate) {
-        return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
+        return getMapTooltip(utils, predicate.slots(), SLOT_RANGE_COMPARATOR, GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
     }
 
     @NotNull
@@ -694,4 +698,20 @@ public class ValueTooltipUtils {
     public static <A, B extends Predicate<A>> TooltipBuilder getCollectionCountsPredicateTooltip(IServerUtils utils, CollectionCountsPredicate<A, B> predicate) {
         return utils.getValueTooltip(utils, predicate.unpack());
     }
+
+    private static final Comparator<SlotRange> SLOT_RANGE_COMPARATOR = (l1, l2) -> {
+        int size1 = l1.size();
+        int size2 = l2.size();
+        int minSize = Math.min(size1, size2);
+
+        for (int i = 0; i < minSize; i++) {
+            int cmp = Integer.compare(l1.slots().getInt(i), l2.slots().getInt(i));
+
+            if (cmp != 0) {
+                return cmp;
+            }
+        }
+
+        return Integer.compare(size1, size2);
+    };
 }

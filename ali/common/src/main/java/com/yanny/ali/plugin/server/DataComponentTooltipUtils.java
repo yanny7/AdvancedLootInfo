@@ -16,7 +16,9 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.armortrim.ArmorTrim;
 import net.minecraft.world.item.component.*;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BannerPatternLayers;
 import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.PotDecorations;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.saveddata.maps.MapId;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
@@ -75,7 +78,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getItemEnchantmentsTooltip(IServerUtils utils, ItemEnchantments value) {
-        return getMapTooltip(utils, value.enchantments, GenericTooltipUtils::getEnchantmentLevelEntryTooltip).key(Lang.Branch.ENCHANTMENTS);
+        return getMapTooltip(utils, value.enchantments, TooltipUtils.comparingHolder(Enchantment::toString), GenericTooltipUtils::getEnchantmentLevelEntryTooltip).key(Lang.Branch.ENCHANTMENTS);
     }
 
     @NotNull
@@ -156,7 +159,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMapDecorationsTooltip(IServerUtils utils, MapDecorations value) {
-        return getMapTooltip(utils, value.decorations(), GenericTooltipUtils::getMapDecorationEntryTooltip).key(Lang.Branch.DECORATIONS);
+        return getMapTooltip(utils, value.decorations(), Comparator.naturalOrder(), GenericTooltipUtils::getMapDecorationEntryTooltip).key(Lang.Branch.DECORATIONS);
     }
 
     @Unmodifiable
@@ -219,7 +222,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDebugStickStateTooltip(IServerUtils utils, DebugStickState value) {
-        return getMapTooltip(utils, value.properties(), GenericTooltipUtils::getBlockPropertyEntryTooltip).key(Lang.Branch.PROPERTIES);
+        return getMapTooltip(utils, value.properties(), TooltipUtils.comparingHolder(Block::toString), GenericTooltipUtils::getBlockPropertyEntryTooltip).key(Lang.Branch.PROPERTIES);
     }
 
     @Unmodifiable
@@ -274,7 +277,7 @@ public class DataComponentTooltipUtils {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, value.name()).build(Lang.Value.NAME));
             b.add(utils.getValueTooltip(utils, value.id()).build(Lang.Value.UUID));
-            b.add(getMapTooltip(utils, value.properties().asMap(), GenericTooltipUtils::getPropertiesEntryTooltip).build(Lang.Branch.PROPERTIES));
+            b.add(getMapTooltip(utils, value.properties().asMap(), Comparator.naturalOrder(), GenericTooltipUtils::getPropertiesEntryTooltip).build(Lang.Branch.PROPERTIES));
         });
     }
 
@@ -313,7 +316,7 @@ public class DataComponentTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getBlockStateTooltip(IServerUtils utils, BlockItemStateProperties properties) {
-        return getMapTooltip(utils, properties.properties(), GenericTooltipUtils::getStringEntryTooltip).key(Lang.Branch.PROPERTIES);
+        return getMapTooltip(utils, properties.properties(), Comparator.naturalOrder(), GenericTooltipUtils::getStringEntryTooltip).key(Lang.Branch.PROPERTIES);
     }
 
     @NotNull

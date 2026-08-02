@@ -4,6 +4,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -187,7 +188,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetEnchantmentsTooltip(IServerUtils utils, SetEnchantmentsFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getMapTooltip(utils, fun.enchantments, Comparator.comparing(BuiltInRegistries.ENCHANTMENT::getKey), GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
+            b.add(getMapTooltip(utils, fun.enchantments, TooltipUtils.comparingHolder(Enchantment::toString), GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }, Lang.Functions.SET_ENCHANTMENTS);
@@ -356,7 +357,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getMapTooltip(utils, fun.values, GenericTooltipUtils::getToggleEntryTooltip).build(Lang.Branch.COMPONENTS));
+            b.add(getMapTooltip(utils, fun.values, Comparator.comparing((c) -> BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(c.type())), GenericTooltipUtils::getToggleEntryTooltip).build(Lang.Branch.COMPONENTS));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }, Lang.Functions.TOGGLE_TOOLTIPS);
     }
