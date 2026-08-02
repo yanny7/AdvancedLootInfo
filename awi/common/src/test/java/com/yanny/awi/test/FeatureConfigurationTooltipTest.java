@@ -1027,7 +1027,10 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
     }
 
@@ -1098,7 +1101,10 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Feature:",
                 "          -> Feature: minecraft:no_op",
                 "          -> Config:",
-                "            -> None Feature:"
+                "            -> None Feature:",
+                "        -> Placement:",
+                "          -> Block Predicate Filter:",
+                "            -> Solid:"
         ));
     }
 
@@ -1125,7 +1131,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Replaceable Blocks:",
                 "    -> Tag: minecraft:wool",
                 "  -> Chance Of Taller Generation: 0.2",
-                "  -> Chance Of Directional Speed: 0.7",
+                "  -> Chance Of Directional Spread: 0.7",
                 "  -> Chance Of Spread Radius 2: 0.5",
                 "  -> Chance Of Spread Radius 3: 0.1"
         ));

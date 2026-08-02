@@ -4,6 +4,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.predicates.entity.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
 
@@ -147,7 +148,7 @@ public class EntitySubPredicateTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getPredicatesTooltip(IServerUtils utils, EntityPartialComponentsPredicate predicate) {
-        return getMapTooltip(utils, predicate.predicates(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).key(Lang.EntitySubPredicates.PREDICATES);
+        return getMapTooltip(utils, predicate.predicates(), Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE::getKey), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).key(Lang.EntitySubPredicates.PREDICATES);
     }
 
     @NotNull
