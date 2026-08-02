@@ -8,6 +8,7 @@ import net.minecraft.world.level.storage.loot.predicates.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
@@ -55,7 +56,7 @@ public class ConditionTooltipUtils {
     public static TooltipBuilder getEntityScoresTooltip(IServerUtils utils, EntityHasScoreCondition cond) {
         return TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, cond.entityTarget()).build(Lang.Value.TARGET));
-            b.add(getMapTooltip(utils, cond.scores(), GenericTooltipUtils::getIntRangeEntryTooltip).build(Lang.Branch.SCORES));
+            b.add(getMapTooltip(utils, cond.scores(), Comparator.naturalOrder(), GenericTooltipUtils::getIntRangeEntryTooltip).build(Lang.Branch.SCORES));
         }, Lang.Conditions.ENTITY_SCORES);
     }
 

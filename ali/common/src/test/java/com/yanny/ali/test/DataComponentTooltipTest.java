@@ -469,16 +469,16 @@ public class DataComponentTooltipTest {
 
         assertTooltip(DataComponentTooltipUtils.getMapDecorationsTooltip(UTILS, new MapDecorations(map)).build(), List.of(
                 "Decorations:",
-                "  -> Decoration: Village",
-                "    -> minecraft:village_desert",
-                "      -> X: 100.0",
-                "      -> Z: 200.0",
-                "      -> Rotation: 25.5",
                 "  -> Decoration: Player",
                 "    -> minecraft:player",
                 "      -> X: 10.0",
                 "      -> Z: 20.0",
-                "      -> Rotation: 90.0"
+                "      -> Rotation: 90.0",
+                "  -> Decoration: Village",
+                "    -> minecraft:village_desert",
+                "      -> X: 100.0",
+                "      -> Z: 200.0",
+                "      -> Rotation: 25.5"
         ));
     }
 
@@ -657,10 +657,10 @@ public class DataComponentTooltipTest {
 
         assertTooltip(DataComponentTooltipUtils.getDebugStickStateTooltip(UTILS, new DebugStickState(map)).build(), List.of(
                 "Properties:",
-                "  -> Block: minecraft:stone",
-                "    -> Property: vertical_direction",
                 "  -> Block: minecraft:furnace",
-                "    -> Property: lit"
+                "    -> Property: lit",
+                "  -> Block: minecraft:stone",
+                "    -> Property: vertical_direction"
         ));
     }
 
@@ -839,8 +839,8 @@ public class DataComponentTooltipTest {
 
         assertTooltip(DataComponentTooltipUtils.getBlockStateTooltip(UTILS, new BlockItemStateProperties(map)).build(), List.of(
                 "Properties:",
-                "  -> lit: true",
-                "  -> level: 5"
+                "  -> level: 5",
+                "  -> lit: true"
         ));
     }
 
