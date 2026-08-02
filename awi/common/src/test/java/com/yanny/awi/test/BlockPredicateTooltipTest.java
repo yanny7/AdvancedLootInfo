@@ -44,8 +44,7 @@ public class BlockPredicateTooltipTest {
                 "Matching Fluids:",
                 "  -> Fluids:",
                 "    -> minecraft:water",
-                "    -> minecraft:lava",
-                "  -> Offset: [0,0,0]"
+                "    -> minecraft:lava"
         ));
     }
 
@@ -80,8 +79,7 @@ public class BlockPredicateTooltipTest {
         assertTooltip(BlockPredicateTooltipUtils.getWouldSurvivePredicateTooltip(UTILS, (WouldSurvivePredicate) BlockPredicate.wouldSurvive(Blocks.STONE.defaultBlockState(), Vec3i.ZERO)).build(), List.of(
                 "Would Survive:",
                 "  -> State:",
-                "    -> Block: Stone",
-                "  -> Offset: [0,0,0]"
+                "    -> Block: Stone"
         ));
     }
 
@@ -99,9 +97,7 @@ public class BlockPredicateTooltipTest {
                 "Any Of:",
                 "  -> Predicates:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
-                "    -> Replaceable:",
-                "      -> Offset: [0,0,0]"
+                "    -> Replaceable:"
         ));
     }
 
@@ -111,10 +107,8 @@ public class BlockPredicateTooltipTest {
                 "All Of:",
                 "  -> Predicates:",
                 "    -> Inside World Bounds:",
-                "      -> Offset: [0,0,0]",
                 "    -> Has Sturdy Face:",
-                "      -> Direction: UP",
-                "      -> Offset: [0,0,0]"
+                "      -> Direction: UP"
         ));
     }
 
@@ -123,8 +117,7 @@ public class BlockPredicateTooltipTest {
         assertTooltip(BlockPredicateTooltipUtils.getNotPredicateTooltip(UTILS, new NotPredicate(BlockPredicate.solid())).build(), List.of(
                 "Not:",
                 "  -> Predicate:",
-                "    -> Solid:",
-                "      -> Offset: [0,0,0]"
+                "    -> Solid:"
         ));
     }
 

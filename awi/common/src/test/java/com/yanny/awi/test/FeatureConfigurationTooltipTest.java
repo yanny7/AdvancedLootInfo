@@ -24,18 +24,24 @@ import net.minecraft.world.level.levelgen.feature.*;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
+import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.treedecorators.CocoaDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TrunkVineDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.material.Fluids;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static com.yanny.awi.test.TooltipTestSuite.LOOKUP;
 import static com.yanny.awi.test.TooltipTestSuite.UTILS;
@@ -43,7 +49,8 @@ import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 
 public class FeatureConfigurationTooltipTest {
     private static final Holder<PlacedFeature> PLACED_FEATURE = Holder.direct(new PlacedFeature(
-            Holder.direct(new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE)), List.of()
+            Holder.direct(new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE)),
+            List.of(BlockPredicateFilter.forPredicate(BlockPredicate.solid()))
     ));
 
     @Test
@@ -105,7 +112,6 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Allowed Placement:",
                 "    -> Matching Block Tag:",
                 "      -> Tag: minecraft:air",
-                "      -> Offset: [0,0,0]",
                 "  -> Prioritize Tip: true"
         ));
     }
@@ -114,7 +120,7 @@ public class FeatureConfigurationTooltipTest {
     public void testBlockPileConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getBlockPileConfigurationTooltip(UTILS, new BlockPileConfiguration(BlockStateProvider.simple(Blocks.SAND))).build(), List.of(
                 "Block Pile:",
-                "  -> StateProvider:",
+                "  -> State Provider:",
                 "    -> Simple:",
                 "      -> State:",
                 "        -> Block: Sand"
@@ -174,13 +180,12 @@ public class FeatureConfigurationTooltipTest {
                 2
         )).build(), List.of(
                 "Disk:",
-                "  -> StateProvider:",
+                "  -> State Provider:",
                 "    -> Simple:",
                 "      -> State:",
                 "        -> Block: Sand",
                 "  -> Target:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Radius:",
                 "    -> Constant:",
                 "      -> Value: 3",
@@ -317,7 +322,9 @@ public class FeatureConfigurationTooltipTest {
                 "          -> south: true",
                 "          -> up: true",
                 "          -> west: true",
-                "  -> Foliage Radius: 2"
+                "  -> Foliage Radius: 2",
+                "  -> Can Place On:",
+                "    -> Solid:"
         ));
     }
 
@@ -388,6 +395,26 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Chance Of Spreading: 0.3",
                 "  -> Can be Placed On: Stone"
         ));
+        assertTooltip(FeatureConfigurationTooltipUtils.getMultifaceGrowthConfigurationTooltip(UTILS, new MultifaceGrowthConfiguration(
+                (MultifaceSpreadeableBlock) Blocks.GLOW_LICHEN,
+                8,
+                true,
+                false,
+                true,
+                0.3f,
+                HolderSet.direct(Holder.direct(Blocks.STONE), Holder.direct(Blocks.DIRT))
+        )).build(), List.of(
+                "Multiface Growth:",
+                "  -> Place Block: Glow Lichen",
+                "  -> Search Range: 8",
+                "  -> Can Place On Floor: true",
+                "  -> Can Place On Ceiling: false",
+                "  -> Can Place On Wall: true",
+                "  -> Chance Of Spreading: 0.3",
+                "  -> Can Be Placed On:",
+                "    -> Stone",
+                "    -> Dirt"
+        ));
     }
 
     @Test
@@ -398,6 +425,10 @@ public class FeatureConfigurationTooltipTest {
                 3
         )).build(), List.of(
                 "Nether Forest Vegetation:",
+                "  -> State Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Crimson Roots",
                 "  -> Spread Width: 2",
                 "  -> Spread Height: 3"
         ));
@@ -427,11 +458,17 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
                 "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:",
                 "  -> Feature False:",
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
     }
 
@@ -448,12 +485,18 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Feature: minecraft:no_op",
                 "        -> Config:",
                 "          -> None Feature:",
+                "      -> Placement:",
+                "        -> Block Predicate Filter:",
+                "          -> Solid:",
                 "    -> Chance: 0.5",
                 "  -> Default Feature:",
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
     }
 
@@ -514,6 +557,9 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
                 "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:",
                 "  -> Required Vertical Space For Tree: 3",
                 "  -> Root Radius: 2",
                 "  -> Root Replaceable:",
@@ -533,8 +579,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Hanging Root Placement Attempts: 20",
                 "  -> Allowed Vertical Water For Tree: 2",
                 "  -> Allowed Tree Position:",
-                "    -> Solid:",
-                "      -> Offset: [0,0,0]"
+                "    -> Solid:"
         ));
     }
 
@@ -560,6 +605,7 @@ public class FeatureConfigurationTooltipTest {
     public void testSimpleBlockConfigurationTooltip() {
         assertTooltip(FeatureConfigurationTooltipUtils.getSimpleBlockConfigurationTooltip(UTILS, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.STONE))).build(), List.of(
                 "Simple Block:",
+                "  -> Schedule Tick: false",
                 "  -> To Place:",
                 "    -> Simple:",
                 "      -> State:",
@@ -579,7 +625,6 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Dirt",
                 "  -> Can Place On:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Can Replace:",
                 "    -> True Block"
         ));
@@ -603,6 +648,25 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Rock Count: 4",
                 "  -> Hole Count: 1",
                 "  -> Valid Block: Stone"
+        ));
+        assertTooltip(FeatureConfigurationTooltipUtils.getSpringConfigurationTooltip(UTILS, new SpringConfiguration(
+                Fluids.WATER.defaultFluidState(),
+                true,
+                4,
+                1,
+                HolderSet.direct(Holder.direct(Blocks.STONE), Holder.direct(Blocks.DIRT))
+        )).build(), List.of(
+                "Spring:",
+                "  -> State:",
+                "    -> Fluid: minecraft:water",
+                "    -> Properties:",
+                "      -> falling: true",
+                "  -> Requires Block Below: true",
+                "  -> Rock Count: 4",
+                "  -> Hole Count: 1",
+                "  -> Valid Blocks:",
+                "    -> Stone",
+                "    -> Dirt"
         ));
     }
 
@@ -656,6 +720,94 @@ public class FeatureConfigurationTooltipTest {
                 "      -> State:",
                 "        -> Block: Sand"
         ));
+        assertTooltip(FeatureConfigurationTooltipUtils.getTreeConfigurationTooltip(UTILS, new TreeConfiguration.TreeConfigurationBuilder(
+                BlockStateProvider.simple(Blocks.OAK_LOG),
+                new StraightTrunkPlacer(5, 2, 0),
+                BlockStateProvider.simple(Blocks.OAK_LEAVES),
+                new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
+                Optional.of(new MangroveRootPlacer(
+                        ConstantInt.of(2),
+                        BlockStateProvider.simple(Blocks.MANGROVE_ROOTS),
+                        Optional.empty(),
+                        new MangroveRootPlacement(
+                                HolderSet.direct(Holder.direct(Blocks.MUD)),
+                                HolderSet.direct(Holder.direct(Blocks.MUD)),
+                                BlockStateProvider.simple(Blocks.MUDDY_MANGROVE_ROOTS),
+                                8,
+                                15,
+                                0.5f
+                        )
+                )),
+                new TwoLayersFeatureSize(1, 0, 1),
+                BlockStateProvider.simple(Blocks.BONE_BLOCK)
+        ).decorators(List.of(TrunkVineDecorator.INSTANCE)).build()).build(), List.of(
+                "Tree:",
+                "  -> Trunk Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Oak Log",
+                "        -> Properties:",
+                "          -> axis: y",
+                "  -> Trunk Placer:",
+                "    -> Straight Trunk:",
+                "      -> Base Height: 5",
+                "      -> Height Rand A: 2",
+                "      -> Height Rand B: 0",
+                "  -> Foliage Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Oak Leaves",
+                "        -> Properties:",
+                "          -> distance: 7",
+                "          -> persistent: false",
+                "          -> waterlogged: false",
+                "  -> Foliage Placer:",
+                "    -> Blob:",
+                "      -> Radius:",
+                "        -> Constant:",
+                "          -> Value: 2",
+                "      -> Offset:",
+                "        -> Constant:",
+                "          -> Value: 0",
+                "      -> Height: 3",
+                "  -> Root Placer:",
+                "    -> Mangrove Root:",
+                "      -> Trunk Offset Y:",
+                "        -> Constant:",
+                "          -> Value: 2",
+                "      -> Root Provider:",
+                "        -> Simple:",
+                "          -> State:",
+                "            -> Block: Mangrove Roots",
+                "            -> Properties:",
+                "              -> waterlogged: false",
+                "      -> Mangrove Root Placement:",
+                "        -> Can Grow Through: Mud",
+                "        -> Muddy Roots In: Mud",
+                "        -> Muddy Root Provider:",
+                "          -> Simple:",
+                "            -> State:",
+                "              -> Block: Muddy Mangrove Roots",
+                "              -> Properties:",
+                "                -> axis: y",
+                "        -> Max Root Width: 8",
+                "        -> Max Root Length: 15",
+                "        -> Random Skew Chance: 0.5",
+                "  -> Minimum Size:",
+                "    -> Two Layers:",
+                "      -> Limit: 1",
+                "      -> Lower Size: 0",
+                "      -> Upper Size: 1",
+                "  -> Decorators:",
+                "    -> Trunk Vine",
+                "  -> Ignore Vines: false",
+                "  -> Below Trunk Provider:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Bone Block",
+                "        -> Properties:",
+                "          -> axis: y"
+        ));
     }
 
     @Test
@@ -706,6 +858,9 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
                 "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:",
                 "  -> Surface: FLOOR",
                 "  -> Depth:",
                 "    -> Constant:",
@@ -755,6 +910,28 @@ public class FeatureConfigurationTooltipTest {
                 "  -> Overlay Structure: minecraft:fossil_spine_1",
                 "  -> Max Empty Corners Allowed: 3"
         ));
+        assertTooltip(FeatureConfigurationTooltipUtils.getFossilFeatureConfigurationTooltip(UTILS, new FossilFeatureConfiguration(
+                List.of(Identifier.fromNamespaceAndPath("minecraft", "fossil/spine_1"), Identifier.fromNamespaceAndPath("minecraft", "fossil/spine_2")),
+                List.of(Identifier.fromNamespaceAndPath("minecraft", "fossil_spine_1"), Identifier.fromNamespaceAndPath("minecraft", "fossil_spine_2")),
+                Holder.direct(new StructureProcessorList(List.of(BlockIgnoreProcessor.AIR))),
+                Holder.direct(new StructureProcessorList(List.of(BlockIgnoreProcessor.AIR))),
+                3
+        )).build(), List.of(
+                "Fossil Feature:",
+                "  -> Fossil Structures:",
+                "    -> minecraft:fossil/spine_1",
+                "    -> minecraft:fossil/spine_2",
+                "  -> Overlay Structures:",
+                "    -> minecraft:fossil_spine_1",
+                "    -> minecraft:fossil_spine_2",
+                "  -> Fossil Processors:",
+                "    -> Block Ignore:",
+                "      -> To Ignore: Air",
+                "  -> Overlay Processors:",
+                "    -> Block Ignore:",
+                "      -> To Ignore: Air",
+                "  -> Max Empty Corners Allowed: 3"
+        ));
     }
 
     @Test
@@ -778,7 +955,6 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Block: Warped Wart Block",
                 "  -> Replaceable Blocks:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Planted: true"
         ));
     }
@@ -818,8 +994,7 @@ public class FeatureConfigurationTooltipTest {
                 "  -> State:",
                 "    -> Block: Dirt",
                 "  -> Can Place On:",
-                "    -> Solid:",
-                "      -> Offset: [0,0,0]"
+                "    -> Solid:"
         ));
     }
 
@@ -831,7 +1006,7 @@ public class FeatureConfigurationTooltipTest {
                 new BlockPos(1, 2, 3)
         )).build(), List.of(
                 "End Spike:",
-                "  -> Is Crystal Vulnerable: true",
+                "  -> Is Crystal Invulnerable: true",
                 "  -> Spikes:",
                 "    -> Center X: 1",
                 "    -> Center Z: 2",

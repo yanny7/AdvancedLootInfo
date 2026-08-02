@@ -95,7 +95,9 @@ public class BlockStateProviderTooltipTest {
                 1.0f,
                 List.of(Blocks.STONE.defaultBlockState())
         )).build(), List.of(
-                "Dual Noise Provider:"
+                "Dual Noise Provider:",
+                "  -> States:",
+                "    -> Block: Stone"
         ));
     }
 
@@ -137,7 +139,29 @@ public class BlockStateProviderTooltipTest {
                 "    -> If True:",
                 "      -> Matching Blocks:",
                 "        -> Block: Dirt",
-                "        -> Offset: [0,0,0]",
+                "    -> Then:",
+                "      -> Simple:",
+                "        -> State:",
+                "          -> Block: Block of Diamond"
+        ));
+        assertTooltip(BlockStateProviderTooltipUtils.getRuleBasedStateProviderTooltip(UTILS, new RuleBasedStateProvider(
+                BlockStateProvider.simple(Blocks.GRASS_BLOCK),
+                List.of(new RuleBasedStateProvider.Rule(
+                        BlockPredicate.matchesBlocks(Blocks.DIRT),
+                        BlockStateProvider.simple(Blocks.DIAMOND_BLOCK)
+                ))
+        )).build(), List.of(
+                "Rule Based:",
+                "  -> Fallback:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Grass Block",
+                "        -> Properties:",
+                "          -> snowy: false",
+                "  -> Rules:",
+                "    -> If True:",
+                "      -> Matching Blocks:",
+                "        -> Block: Dirt",
                 "    -> Then:",
                 "      -> Simple:",
                 "        -> State:",

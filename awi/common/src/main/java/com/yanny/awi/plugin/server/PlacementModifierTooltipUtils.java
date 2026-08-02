@@ -18,7 +18,7 @@ public class PlacementModifierTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getBlockPredicateFilterTooltip(IServerUtils utils, BlockPredicateFilter placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.predicate)), Lang.PlacementModifier.BLOCK_PREDICATE);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.predicate)), Lang.PlacementModifier.BLOCK_PREDICATE_FILTER);
     }
 
     @NotNull
@@ -80,8 +80,11 @@ public class PlacementModifierTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getRandomOffsetPlacementTooltip(IServerUtils ignoredUtils, RandomOffsetPlacement ignoredPlacement) {
-        return empty(); // Nothing useful
+    public static TooltipBuilder getRandomOffsetPlacementTooltip(IServerUtils utils, RandomOffsetPlacement placement) {
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, placement.xzSpread).build(Lang.Branch.XZ_SPREAD));
+            b.add(utils.getValueTooltip(utils, placement.ySpread).build(Lang.Branch.Y_SPREAD));
+        }, Lang.PlacementModifier.RANDOM_OFFSET);
     }
 
     @NotNull
@@ -107,6 +110,6 @@ public class PlacementModifierTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getFixedPlacementTooltip(IServerUtils utils, FixedPlacement placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.positions).build(Lang.Branch.POSITIONS)), Lang.PlacementModifier.SURFACE_WATER_DEPTH_FILTER);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.positions).build(Lang.Branch.POSITIONS)), Lang.PlacementModifier.FIXED_PLACEMENT);
     }
 }

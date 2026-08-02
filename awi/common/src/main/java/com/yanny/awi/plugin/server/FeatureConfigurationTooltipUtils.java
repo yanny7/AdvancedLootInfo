@@ -98,6 +98,7 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.capProvider()).build(Lang.Branch.CAP_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.stemProvider()).build(Lang.Branch.STEM_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.foliageRadius()).build(Lang.Value.FOLIAGE_RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.canPlaceOn()).build(Lang.Branch.CAN_PLACE_ON));
         }, Lang.FeatureConfiguration.HUGE_MUSHROOM_FEATURE);
     }
 
@@ -140,6 +141,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getNetherForestVegetationConfigurationTooltip(IServerUtils utils, NetherForestVegetationConfig configuration) {
         return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.stateProvider).build(Lang.Branch.STATE_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.spreadWidth).build(Lang.Value.SPREAD_WIDTH));
             b.add(utils.getValueTooltip(utils, configuration.spreadHeight).build(Lang.Value.SPREAD_HEIGHT));
         }, Lang.FeatureConfiguration.NETHER_FOREST_VEGETATION);
@@ -228,7 +230,10 @@ public class FeatureConfigurationTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSimpleBlockConfigurationTooltip(IServerUtils utils, SimpleBlockConfiguration configuration) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, configuration.toPlace()).build(Lang.Branch.TO_PLACE)), Lang.FeatureConfiguration.SIMPLE_BLOCK);
+        return array((b) -> {
+            b.add(utils.getValueTooltip(utils, configuration.scheduleTick()).build(Lang.Value.SCHEDULE_TICK));
+            b.add(utils.getValueTooltip(utils, configuration.toPlace()).build(Lang.Branch.TO_PLACE));
+        }, Lang.FeatureConfiguration.SIMPLE_BLOCK);
     }
 
     @NotNull
@@ -352,7 +357,7 @@ public class FeatureConfigurationTooltipUtils {
     @NotNull
     public static TooltipBuilder getEndSpikeConfigurationTooltip(IServerUtils utils, EndSpikeConfiguration configuration) {
         return array((b) -> {
-            b.add(utils.getValueTooltip(utils, configuration.crystalInvulnerable).build(Lang.Value.IS_CRYSTAL_VULNERABLE));
+            b.add(utils.getValueTooltip(utils, configuration.crystalInvulnerable).build(Lang.Value.IS_CRYSTAL_INVULNERABLE));
             b.add(utils.getValueTooltip(utils, configuration.spikes).build(Lang.Branch.SPIKES));
             b.add(utils.getValueTooltip(utils, configuration.crystalBeamTarget).build(Lang.Value.CRYSTAL_BEAM_TARGET));
         }, Lang.FeatureConfiguration.END_SPIKE);

@@ -1,6 +1,7 @@
 package com.yanny.awi.test;
 
 import com.yanny.awi.plugin.server.PlacementModifierTooltipUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -26,9 +27,8 @@ public class PlacementModifierTooltipTest {
     @Test
     public void testBlockPredicateFilterTooltip() {
         assertTooltip(PlacementModifierTooltipUtils.getBlockPredicateFilterTooltip(UTILS, BlockPredicateFilter.forPredicate(BlockPredicate.solid())).build(), List.of(
-                "Block predicate:",
-                "  -> Solid:",
-                "    -> Offset: [0,0,0]"
+                "Block Predicate Filter:",
+                "  -> Solid:"
         ));
     }
 
@@ -78,10 +78,8 @@ public class PlacementModifierTooltipTest {
                 "  -> Direction Of Search: UP",
                 "  -> Target Condition:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Allowed Search Condition:",
                 "    -> Solid:",
-                "      -> Offset: [0,0,0]",
                 "  -> Max Steps: 32"
         ));
     }
@@ -146,7 +144,15 @@ public class PlacementModifierTooltipTest {
 
     @Test
     public void testRandomOffsetPlacementTooltip() {
-        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of());
+        assertTooltip(PlacementModifierTooltipUtils.getRandomOffsetPlacementTooltip(UTILS, RandomOffsetPlacement.of(ConstantInt.of(1), ConstantInt.of(2))).build(), List.of(
+                "Random Offset:",
+                "  -> XZ Spread:",
+                "    -> Constant:",
+                "      -> Value: 1",
+                "  -> Y Spread:",
+                "    -> Constant:",
+                "      -> Value: 2"
+        ));
     }
 
     @Test
@@ -173,6 +179,23 @@ public class PlacementModifierTooltipTest {
         assertTooltip(PlacementModifierTooltipUtils.getSurfaceWaterDepthFilterTooltip(UTILS, SurfaceWaterDepthFilter.forMaxDepth(3)).build(), List.of(
                 "Surface Water Depth Filter:",
                 "  -> Max Water Depth: 3"
+        ));
+    }
+
+    @Test
+    public void testFixedPlacementTooltip() {
+        assertTooltip(PlacementModifierTooltipUtils.getFixedPlacementTooltip(UTILS, FixedPlacement.of(new BlockPos(1, 2, 3))).build(), List.of(
+                "Fixed Placement:",
+                "  -> Position: [1,2,3]"
+        ));
+        assertTooltip(PlacementModifierTooltipUtils.getFixedPlacementTooltip(UTILS, FixedPlacement.of(
+                new BlockPos(1, 2, 3),
+                new BlockPos(3, 2, 1)
+        )).build(), List.of(
+                "Fixed Placement:",
+                "  -> Positions:",
+                "    -> [1,2,3]",
+                "    -> [3,2,1]"
         ));
     }
 }

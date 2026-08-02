@@ -25,7 +25,7 @@ public class TrunkPlacerTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getMegaJungleTrunkPlacerTooltip(IServerUtils utils, GiantTrunkPlacer placer) {
+    public static TooltipBuilder getMegaJungleTrunkPlacerTooltip(IServerUtils utils, MegaJungleTrunkPlacer placer) {
         return array((b) -> addBaseTrunkPlacerTooltip(utils, b, placer), Lang.TrunkPlacer.MEGA_JUNGLE);
     }
 
@@ -42,14 +42,16 @@ public class TrunkPlacerTooltipUtils {
     @NotNull
     public static TooltipBuilder getBendingTrunkPlacerTooltip(IServerUtils utils, BendingTrunkPlacer value) {
         return TooltipBuilder.array((b) -> {
+            addBaseTrunkPlacerTooltip(utils, b, value);
             b.add(utils.getValueTooltip(utils, value.minHeightForLeaves).build(Lang.Value.MIN_HEIGHT_FOR_LEAVES));
-            b.add(utils.getValueTooltip(utils, value.bendLength).build(Lang.Branch.BAND_LENGTH));
+            b.add(utils.getValueTooltip(utils, value.bendLength).build(Lang.Branch.BEND_LENGTH));
         }, Lang.TrunkPlacer.BENDING_TRUNK);
     }
 
     @NotNull
     public static TooltipBuilder getUpwardBranchingTrunkPlacerTooltip(IServerUtils utils, UpwardsBranchingTrunkPlacer value) {
         return TooltipBuilder.array((b) -> {
+            addBaseTrunkPlacerTooltip(utils, b, value);
             b.add(utils.getValueTooltip(utils, value.extraBranchSteps).build(Lang.Branch.EXTRA_BRANCH_STEPS));
             b.add(utils.getValueTooltip(utils, value.placeBranchPerLogProbability).build(Lang.Value.BRANCH_PER_LOG_CHANCE));
             b.add(utils.getValueTooltip(utils, value.extraBranchLength).build(Lang.Branch.EXTRA_BRANCH_LENGTH));
@@ -60,6 +62,7 @@ public class TrunkPlacerTooltipUtils {
     @NotNull
     public static TooltipBuilder getCherryTrunkPlacerTooltip(IServerUtils utils, CherryTrunkPlacer value) {
         return TooltipBuilder.array((b) -> {
+            addBaseTrunkPlacerTooltip(utils, b, value);
             b.add(utils.getValueTooltip(utils, value.branchCount).build(Lang.Branch.BRANCH_COUNT));
             b.add(utils.getValueTooltip(utils, value.branchHorizontalLength).build(Lang.Branch.BRANCH_HORIZONTAL_LENGTH));
             b.add(utils.getValueTooltip(utils, value.branchStartOffsetFromTop).build(Lang.Branch.BRANCH_START_OFFSET_FROM_TOP));

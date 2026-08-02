@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.yanny.aci.language.CoreLang;
+import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.awi.api.IServerUtils;
@@ -63,7 +64,7 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingIntProviderTooltip(IServerUtils utils, IntProvider provider) {
-        TooltipBuilder tooltip = RegistriesTooltipUtils.getIntProviderTooltip(utils, provider);
+        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.INT_PROVIDER_TYPE, provider.codec());
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
@@ -283,7 +284,7 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingFloatProviderTooltip(IServerUtils utils, FloatProvider provider) {
-        TooltipBuilder tooltip = RegistriesTooltipUtils.getFloatProviderTooltip(utils, provider);
+        TooltipBuilder tooltip = CoreTooltipUtils.getBuiltInRegistryTooltip(utils, BuiltInRegistries.FLOAT_PROVIDER_TYPE, provider.codec());
 
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());

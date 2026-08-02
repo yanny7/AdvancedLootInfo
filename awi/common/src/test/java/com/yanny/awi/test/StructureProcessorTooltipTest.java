@@ -22,17 +22,35 @@ public class StructureProcessorTooltipTest {
     public void testBlockIgnoreProcessorTooltip() {
         assertTooltip(StructureProcessorTooltipUtils.getBlockIgnoreProcessorTooltip(UTILS, BlockIgnoreProcessor.AIR).build(), List.of(
                 "Block Ignore:",
+                "  -> To Ignore: Air"
+        ));
+        assertTooltip(StructureProcessorTooltipUtils.getBlockIgnoreProcessorTooltip(UTILS, new BlockIgnoreProcessor(
+                List.of(Blocks.STONE, Blocks.ANDESITE)
+        )).build(), List.of(
+                "Block Ignore:",
                 "  -> To Ignore:",
-                "    -> Air"
+                "    -> Stone",
+                "    -> Andesite"
         ));
     }
 
     @Test
     public void testBlockRotProcessorTooltip() {
-        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(HolderSet.direct(Holder.direct(Blocks.STONE)), 0.5f)).build(), List.of(
+        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(
+                HolderSet.direct(Holder.direct(Blocks.STONE)),
+                0.5f
+        )).build(), List.of(
+                "Block Rot:",
+                "  -> Rottable Block: Stone",
+                "  -> Integrity: 0.5"
+        ));
+        assertTooltip(StructureProcessorTooltipUtils.getBlockRotProcessorTooltip(UTILS, new BlockRotProcessor(
+                LOOKUP.lookupOrThrow(Registries.BLOCK).getOrThrow(BlockTags.LOGS),
+                0.5f
+        )).build(), List.of(
                 "Block Rot:",
                 "  -> Rottable Blocks:",
-                "    -> Stone",
+                "    -> Tag: minecraft:logs",
                 "  -> Integrity: 0.5"
         ));
     }

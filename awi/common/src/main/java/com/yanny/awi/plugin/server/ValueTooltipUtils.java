@@ -144,6 +144,10 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getVec3iTooltip(IServerUtils utils, Vec3i value) {
+        if (value.getX() == 0 && value.getY() == 0 && value.getZ() == 0) {
+            return TooltipBuilder.empty();
+        }
+
         return utils.getValueTooltip(utils, "[" + value.getX() + "," + value.getY() + "," + value.getZ() + "]");
     }
 
@@ -172,8 +176,8 @@ public class ValueTooltipUtils {
             b.add(utils.getValueTooltip(utils, value.middleLayerProvider()).build(Lang.Branch.MIDDLE_LAYER_PROVIDER));
             b.add(utils.getValueTooltip(utils, value.outerLayerProvider()).build(Lang.Branch.OUTER_LAYER_PROVIDER));
             b.add(utils.getValueTooltip(utils, value.innerPlacements()).build(Lang.Branch.INNER_PLACEMENTS));
-            b.add(utils.getValueTooltip(utils, value.cannotReplace()).build(Lang.Branch.CANNOT_REPLACE));
-            b.add(utils.getValueTooltip(utils, value.invalidBlocks()).build(Lang.Branch.INVALID_BLOCKS));
+            b.add(utils.getValueTooltip(utils, value.cannotReplace()).build(Lang.Value.CANNOT_REPLACE));
+            b.add(utils.getValueTooltip(utils, value.invalidBlocks()).build(Lang.Value.INVALID_BLOCKS));
         });
     }
 

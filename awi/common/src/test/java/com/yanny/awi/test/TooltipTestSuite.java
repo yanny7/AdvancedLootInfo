@@ -75,7 +75,8 @@ import java.util.concurrent.ExecutionException;
         TreeDecoratorTooltipTest.class,
         FoliagePlacerTooltipTest.class,
         StructureProcessorTooltipTest.class,
-        PlacementSummaryTest.class
+        PlacementSummaryTest.class,
+        TooltipUtilsTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -93,6 +94,7 @@ public class TooltipTestSuite {
         Pair<Language, Set<String>> pair = TestUtils.loadDefaultLanguage(resourceManager);
 
         Language.inject(pair.getA());
+//        TestUtils.bindVanillaTags();
         LOOKUP = VanillaRegistries.createLookup();
         UNUSED = pair.getB();
         LOOKUP = VanillaRegistries.createLookup();

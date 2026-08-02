@@ -152,10 +152,10 @@ public class ConditionTooltipTest {
                 "Entity Scores:",
                 "  -> Target: DIRECT_ATTACKER",
                 "  -> Scores:",
-                "    -> single",
-                "      -> Limit: 2 - 5",
                 "    -> double",
-                "      -> Limit: 1 - 7"
+                "      -> Limit: 1 - 7",
+                "    -> single",
+                "      -> Limit: 2 - 5"
         ));
     }
 

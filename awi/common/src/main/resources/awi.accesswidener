@@ -177,6 +177,8 @@ accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/Cherr
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer cornerHoleChance F
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer hangingLeavesChance F
 accessible field net/minecraft/world/level/levelgen/feature/foliageplacers/CherryFoliagePlacer hangingLeavesExtensionChance F
+accessible field net/minecraft/world/level/levelgen/placement/RandomOffsetPlacement xzSpread Lnet/minecraft/util/valueproviders/IntProvider;
+accessible field net/minecraft/world/level/levelgen/placement/RandomOffsetPlacement ySpread Lnet/minecraft/util/valueproviders/IntProvider;
 accessible field net/minecraft/world/level/levelgen/placement/FixedPlacement positions Ljava/util/List;
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PaleMossDecorator leavesProbability F
 accessible field net/minecraft/world/level/levelgen/feature/treedecorators/PaleMossDecorator trunkProbability F
