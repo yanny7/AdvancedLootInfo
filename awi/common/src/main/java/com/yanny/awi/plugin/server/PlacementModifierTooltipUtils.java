@@ -18,7 +18,7 @@ public class PlacementModifierTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getBlockPredicateFilterTooltip(IServerUtils utils, BlockPredicateFilter placement) {
-        return array((b) -> b.add(utils.getValueTooltip(utils, placement.predicate)), Lang.PlacementModifier.BLOCK_PREDICATE);
+        return array((b) -> b.add(utils.getValueTooltip(utils, placement.predicate)), Lang.PlacementModifier.BLOCK_PREDICATE_FILTER);
     }
 
     @NotNull

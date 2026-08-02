@@ -572,10 +572,10 @@ public class GenericTooltipTest {
                 "  -> Count: 10-15",
                 "  -> Components:",
                 "    -> Partial Matchers:",
-                "      -> minecraft:damage",
-                "        -> Durability: ≤5",
                 "      -> minecraft:custom_data",
-                "        -> Nbt: {healing:1b}"
+                "        -> Nbt: {healing:1b}",
+                "      -> minecraft:damage",
+                "        -> Durability: ≤5"
         ));
         assertTooltip(ValueTooltipUtils.getItemPredicateTooltip(UTILS, ItemPredicate.Builder.item()
                 .of(LOOKUP.lookupOrThrow(Registries.ITEM), Items.DIAMOND)
@@ -958,15 +958,16 @@ public class GenericTooltipTest {
                 .set(new TypedDataComponent<>(DataComponents.CUSTOM_NAME, Component.literal("Hello"))).build()
         ).build(Lang.Branch.COMPONENTS), List.of(
                 "Components:",
-                "  -> minecraft:damage",
-                "    -> REMOVED",
-                "  -> minecraft:max_damage",
-                "    -> REMOVED",
                 "  -> minecraft:base_color",
                 "    -> Color: BLUE",
-                "  -> minecraft:glider",
                 "  -> minecraft:custom_name",
-                "    -> Custom Name: Hello"
+                "    -> Custom Name: Hello",
+                "  -> minecraft:damage",
+                "    -> REMOVED",
+                "  -> minecraft:glider",
+                "  -> minecraft:hide_tooltip",
+                "  -> minecraft:max_damage",
+                "    -> REMOVED"
         ));
     }
 

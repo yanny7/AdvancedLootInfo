@@ -28,12 +28,10 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 public class TooltipUtils {
@@ -249,6 +247,12 @@ public class TooltipUtils {
         }
 
         return getElementTooltip(utils, element);
+    }
+
+    @NotNull
+    public static <T, U extends Comparable<? super U>> Comparator<Holder<T>> comparingHolder(Function<? super T, ? extends U> keyExtractor) {
+        Objects.requireNonNull(keyExtractor);
+        return (Comparator<Holder<T>> & Serializable) (h1, h2) -> keyExtractor.apply(h1.value()).compareTo(keyExtractor.apply(h2.value()));
     }
 
     private static TooltipBuilder getElementTooltip(IServerUtils utils, JsonElement element) {
