@@ -734,7 +734,7 @@ public class ValueTooltipUtils {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
             return TooltipBuilder.array((b) -> {
                 b.add(utils.getValueTooltip(utils, dataComponentMatchers.exact()).build(Lang.Branch.EXPECTED_COMPONENTS));
-                b.add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build(Lang.Branch.PARTIAL_MATCHERS));
+                b.add(getMapTooltip(utils, dataComponentMatchers.partial(), Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE::getKey), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build(Lang.Branch.PARTIAL_MATCHERS));
             });
         }
 

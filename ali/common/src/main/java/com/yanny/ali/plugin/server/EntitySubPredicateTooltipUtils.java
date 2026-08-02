@@ -4,6 +4,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -31,7 +32,7 @@ public class EntitySubPredicateTooltipUtils {
             b.add(utils.getValueTooltip(utils, predicate.level()).build(Lang.Value.LEVEL));
             b.add(utils.getValueTooltip(utils, predicate.gameType()).build(Lang.Branch.GAME_TYPES));
             b.add(utils.getValueTooltip(utils, predicate.stats()).build(Lang.Branch.STATS));
-            b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.recipes(), Comparator.naturalOrder(), GenericTooltipUtils::getRecipeEntryTooltip).build(Lang.Branch.RECIPES));
+            b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.recipes(), Comparator.comparing(ResourceKey::location), GenericTooltipUtils::getRecipeEntryTooltip).build(Lang.Branch.RECIPES));
             b.add(GenericTooltipUtils.getMapTooltip(utils, predicate.advancements(), Comparator.naturalOrder(), GenericTooltipUtils::getAdvancementEntryTooltip).build(Lang.Branch.ADVANCEMENTS));
             b.add(utils.getValueTooltip(utils, predicate.lookingAt()).build(Lang.Branch.LOOKING_AT));
             b.add(utils.getValueTooltip(utils, predicate.input()).build(Lang.Branch.INPUT));

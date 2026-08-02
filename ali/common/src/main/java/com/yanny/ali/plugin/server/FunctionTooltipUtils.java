@@ -357,7 +357,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getToggleTooltipsTooltip(IServerUtils utils, ToggleTooltips fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getMapTooltip(utils, fun.values, Comparator.comparing((c) -> BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(c.type())), GenericTooltipUtils::getDataComponentEntryTooltip).build(Lang.Branch.COMPONENTS));
+            b.add(getMapTooltip(utils, fun.values, Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_TYPE::getKey), GenericTooltipUtils::getDataComponentEntryTooltip).build(Lang.Branch.COMPONENTS));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }, Lang.Functions.TOGGLE_TOOLTIPS);
     }
