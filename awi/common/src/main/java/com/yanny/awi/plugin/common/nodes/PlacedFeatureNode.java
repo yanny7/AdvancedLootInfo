@@ -64,7 +64,7 @@ public class PlacedFeatureNode extends ListNode {
             }, Lang.Branch.PLACEMENT));
         }).build();
 
-        for (Block block : blocks.stream().filter((b) -> b != Blocks.AIR && b != Blocks.CAVE_AIR && b != Blocks.VOID_AIR).toList()) {
+        for (Block block : blocks.stream().filter((b) -> b != Blocks.AIR && b != Blocks.CAVE_AIR && b != Blocks.VOID_AIR && b != Blocks.BARRIER).toList()) {
             addChildren(new BlockNode(utils, block));
         }
     }

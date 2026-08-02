@@ -225,7 +225,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMobEffectPredicateTooltip(IServerUtils utils, MobEffectsPredicate mobEffectsPredicate) {
-        return getMapTooltip(utils, mobEffectsPredicate.effectMap(), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
+        return getMapTooltip(utils, mobEffectsPredicate.effectMap(), TooltipUtils.comparingHolder(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
     }
 
     @NotNull
@@ -298,7 +298,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getAdvancementCriterionsPredicateTooltip(IServerUtils utils, PlayerPredicate.AdvancementCriterionsPredicate predicate) {
-        return getMapTooltip(utils, predicate.criterions(), GenericTooltipUtils::getCriterionEntryTooltip).key(Lang.Branch.CRITERIONS);
+        return getMapTooltip(utils, predicate.criterions(), Comparator.naturalOrder(), GenericTooltipUtils::getCriterionEntryTooltip).key(Lang.Branch.CRITERIONS);
     }
 
     @NotNull
@@ -461,7 +461,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getDataComponentPatchTooltip(IServerUtils utils, DataComponentPatch data) {
-        return getMapTooltip(utils, data.map, GenericTooltipUtils::getDataComponentPatchEntryTooltip);
+        return getMapTooltip(utils, data.map, Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_TYPE::getKey), GenericTooltipUtils::getDataComponentPatchEntryTooltip);
     }
 
     @NotNull
@@ -670,7 +670,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSlotPredicateTooltip(IServerUtils utils, SlotsPredicate predicate) {
-        return getMapTooltip(utils, predicate.slots(), GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
+        return getMapTooltip(utils, predicate.slots(), SLOT_RANGE_COMPARATOR, GenericTooltipUtils::getSlotRangePredicateEntryTooltip);
     }
 
     @NotNull
@@ -737,7 +737,7 @@ public class ValueTooltipUtils {
         if (!dataComponentMatchers.partial().isEmpty() || !dataComponentMatchers.exact().isEmpty()) {
             return TooltipBuilder.array((b) -> {
                 b.add(utils.getValueTooltip(utils, dataComponentMatchers.exact()).build(Lang.Branch.EXPECTED_COMPONENTS));
-                b.add(getMapTooltip(utils, dataComponentMatchers.partial(), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build(Lang.Branch.PARTIAL_MATCHERS));
+                b.add(getMapTooltip(utils, dataComponentMatchers.partial(), Comparator.comparing(BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE::getKey), GenericTooltipUtils::getDataComponentPredicateEntryTooltip).build(Lang.Branch.PARTIAL_MATCHERS));
             });
         }
 
@@ -793,4 +793,20 @@ public class ValueTooltipUtils {
 
         return TooltipBuilder.empty();
     }
+
+    private static final Comparator<SlotRange> SLOT_RANGE_COMPARATOR = (l1, l2) -> {
+        int size1 = l1.size();
+        int size2 = l2.size();
+        int minSize = Math.min(size1, size2);
+
+        for (int i = 0; i < minSize; i++) {
+            int cmp = Integer.compare(l1.slots().getInt(i), l2.slots().getInt(i));
+
+            if (cmp != 0) {
+                return cmp;
+            }
+        }
+
+        return Integer.compare(size1, size2);
+    };
 }

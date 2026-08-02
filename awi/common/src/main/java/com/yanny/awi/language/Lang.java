@@ -302,9 +302,9 @@ public final class Lang {
         ALLOWED_SEARCH_CONDITION("allowed_search_condition", "Allowed Search Condition:"),
         ALLOWED_TREE_POSITION("allowed_tree_position", "Allowed Tree Position:"),
         ALTERNATE_INNER_LAYER_PROVIDER("alternate_inner_layer_provider", "Alternate Inner Layer Provider:"),
-        BAND_LENGTH("band_length", "Band Length:"),
         BARRIER("barrier", "Barrier:"),
         BELOW_TRUNK_PROVIDER("below_trunk_provider", "Below Trunk Provider:"),
+        BEND_LENGTH("bend_length", "Bend Length:"),
         BLOCK_PROVIDER("block_provider", "Block Provider:"),
         BLOCKS(Value.BLOCK, "blocks", "Blocks:"),
         BRANCH_COUNT("branch_count", "Branch Count:"),
@@ -613,7 +613,7 @@ public final class Lang {
     }
 
     public enum PlacementModifier implements ITooltipKey {
-        BLOCK_PREDICATE("block_predicate", "Block predicate:"),
+        BLOCK_PREDICATE_FILTER("block_predicate_filter", "Block Predicate Filter:"),
         COUNT_ON_EVERY_LAYER("count_on_every_layer", "Count On Every Layer:"),
         COUNT_PLACEMENT("count_placement", "Count Placement:"),
         ENVIRONMENT_SCAN_PLACEMENT("environment_scan_placement", "Environment Scan Placement:"),
