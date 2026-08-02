@@ -44,7 +44,8 @@ import static com.yanny.awi.test.utils.TestUtils.assertTooltip;
 
 public class FeatureConfigurationTooltipTest {
     private static final Holder<PlacedFeature> PLACED_FEATURE = Holder.direct(new PlacedFeature(
-            Holder.direct(new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE)), List.of()
+            Holder.direct(new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE)),
+            List.of(BlockPredicateFilter.forPredicate(BlockPredicate.solid()))
     ));
 
     @Test
@@ -508,11 +509,17 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
                 "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:",
                 "  -> Feature False:",
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
     }
 
@@ -529,12 +536,18 @@ public class FeatureConfigurationTooltipTest {
                 "        -> Feature: minecraft:no_op",
                 "        -> Config:",
                 "          -> None Feature:",
+                "      -> Placement:",
+                "        -> Block Predicate Filter:",
+                "          -> Solid:",
                 "    -> Chance: 0.5",
                 "  -> Default Feature:",
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
     }
 
@@ -549,7 +562,10 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
         Holder<PlacedFeature> placedFeatureWithPlacement = Holder.direct(new PlacedFeature(
                 Holder.direct(new ConfiguredFeature<>(Feature.NO_OP, NoneFeatureConfiguration.INSTANCE)),
@@ -566,7 +582,7 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Config:",
                 "        -> None Feature:",
                 "    -> Placement:",
-                "      -> Block predicate:",
+                "      -> Block Predicate Filter:",
                 "        -> Solid:"
         ));
     }
@@ -626,6 +642,9 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
                 "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:",
                 "  -> Required Vertical Space For Tree: 3",
                 "  -> Root Radius: 2",
                 "  -> Root Replaceable: minecraft:wool",
@@ -685,7 +704,10 @@ public class FeatureConfigurationTooltipTest {
                 "    -> Feature:",
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
-                "        -> None Feature:"
+                "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:"
         ));
     }
 
@@ -933,6 +955,9 @@ public class FeatureConfigurationTooltipTest {
                 "      -> Feature: minecraft:no_op",
                 "      -> Config:",
                 "        -> None Feature:",
+                "    -> Placement:",
+                "      -> Block Predicate Filter:",
+                "        -> Solid:",
                 "  -> Surface: FLOOR",
                 "  -> Depth:",
                 "    -> Constant:",

@@ -3,8 +3,11 @@ package com.yanny.ali.plugin.server;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.functions.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Comparator;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStandaloneTooltip;
@@ -184,7 +187,7 @@ public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getSetEnchantmentsTooltip(IServerUtils utils, SetEnchantmentsFunction fun) {
         return TooltipBuilder.array((b) -> {
-            b.add(getMapTooltip(utils, fun.enchantments, GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
+            b.add(getMapTooltip(utils, fun.enchantments, Comparator.comparing(BuiltInRegistries.ENCHANTMENT::getKey), GenericTooltipUtils::getEnchantmentLevelsEntryTooltip).build(Lang.Branch.ENCHANTMENTS));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
         }, Lang.Functions.SET_ENCHANTMENTS);

@@ -54,9 +54,11 @@ public class GenericTooltipUtils {
     }
 
     @NotNull
-    public static <K, V> TooltipBuilder getMapTooltip(IServerUtils utils, Map<K, V> values, BiFunction<IServerUtils, Map.Entry<K, V>, TooltipBuilder> mapper) {
+    public static <K, V> TooltipBuilder getMapTooltip(IServerUtils utils, Map<K, V> values, Comparator<K> comparator, BiFunction<IServerUtils, Map.Entry<K, V>, TooltipBuilder> mapper) {
         if (!values.isEmpty()) {
-            return TooltipBuilder.branch((b) -> values.entrySet().forEach((e) -> b.add(mapper.apply(utils, e))));
+            return TooltipBuilder.branch((b) -> values.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey(comparator))
+                    .forEach((e) -> b.add(mapper.apply(utils, e))));
         }
 
         return TooltipBuilder.empty();

@@ -35,10 +35,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static com.yanny.ali.plugin.server.GenericTooltipUtils.getMapTooltip;
@@ -213,7 +210,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMobEffectPredicateTooltip(IServerUtils utils, MobEffectsPredicate mobEffectsPredicate) {
-        return getMapTooltip(utils, mobEffectsPredicate.effectMap(), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
+        return getMapTooltip(utils, mobEffectsPredicate.effectMap(), Comparator.comparing(BuiltInRegistries.MOB_EFFECT::getKey), GenericTooltipUtils::getMobEffectPredicateEntryTooltip);
     }
 
     @NotNull
@@ -287,7 +284,7 @@ public class ValueTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getAdvancementCriterionsPredicateTooltip(IServerUtils utils, PlayerPredicate.AdvancementCriterionsPredicate predicate) {
-        return getMapTooltip(utils, predicate.criterions(), GenericTooltipUtils::getCriterionEntryTooltip).key(Lang.Branch.CRITERIONS);
+        return getMapTooltip(utils, predicate.criterions(), Comparator.naturalOrder(), GenericTooltipUtils::getCriterionEntryTooltip).key(Lang.Branch.CRITERIONS);
     }
 
     @NotNull
