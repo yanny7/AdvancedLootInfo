@@ -25,7 +25,7 @@ public class TrunkPlacerTooltipUtils {
     }
 
     @NotNull
-    public static TooltipBuilder getMegaJungleTrunkPlacerTooltip(IServerUtils utils, GiantTrunkPlacer placer) {
+    public static TooltipBuilder getMegaJungleTrunkPlacerTooltip(IServerUtils utils, MegaJungleTrunkPlacer placer) {
         return array((b) -> addBaseTrunkPlacerTooltip(utils, b, placer), Lang.TrunkPlacer.MEGA_JUNGLE);
     }
 
@@ -44,7 +44,7 @@ public class TrunkPlacerTooltipUtils {
         return TooltipBuilder.array((b) -> {
             addBaseTrunkPlacerTooltip(utils, b, value);
             b.add(utils.getValueTooltip(utils, value.minHeightForLeaves).build(Lang.Value.MIN_HEIGHT_FOR_LEAVES));
-            b.add(utils.getValueTooltip(utils, value.bendLength).build(Lang.Branch.BAND_LENGTH));
+            b.add(utils.getValueTooltip(utils, value.bendLength).build(Lang.Branch.BEND_LENGTH));
         }, Lang.TrunkPlacer.BENDING_TRUNK);
     }
 
