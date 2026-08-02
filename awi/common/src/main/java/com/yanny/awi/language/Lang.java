@@ -33,7 +33,6 @@ public final class Lang {
         PROBABILITY_FEATURE("probability_feature", "Probability Feature:"),
         RANDOM_BOOLEAN_FEATURE("random_boolean_feature", "Random Boolean Feature:"),
         RANDOM_FEATURE("random_feature", "Random Feature:"),
-        RANDOM_PATCH("random_patch", "Random Patch:"),
         REPLACEABLE_BLOCK("replaceable_block", "Replaceable Block:"),
         REPLACEABLE_SPHERE("replaceable_sphere", "Replaceable Sphere:"),
         ROOT_SYSTEM("root_system", "Root System:"),
@@ -165,7 +164,6 @@ public final class Lang {
         FLOOR_RANGE_SEARCH("floor_range_search", "Floor Range Search: %s"),
         FLUID("fluid",  "Fluid: %s"),
         FOLIAGE_RADIUS("foliage_radius", "Foliage Radius: %s"),
-        FORCE_DIRT("force_dirt", "Force Dirt: %s"),
         FOSSIL_STRUCTURE("fossil_structure", "Fossil Structure: %s"),
         GENERATE_CRACK_CHANCE("generate_crack_chance", "Generate Crack Chance: %s"),
         GENERATION_STEP("generation_step", "Generation Step: %s"),
@@ -277,8 +275,6 @@ public final class Lang {
         VERTICAL_RANGE("vertical_range", "Vertical Range: %s"),
         WIDE_BOTTOM_LAYER_HOLE_CHANCE("wide_bottom_layer_hole_chance", "Wide Bottom Layer Hole Chance: %s"),
         WEIGHT("weight", "Weight: %s"),
-        XZ_SPREAD("xz_spread", "XZ Spread: %s"),
-        Y_SPREAD("y_spread", "Y Spread: %s"),
         ;
 
         private final Translation translation;
@@ -329,7 +325,6 @@ public final class Lang {
         DELEGATE("delegate", "Delegate:"),
         DENSITY("density", "Density:"),
         DEPTH("depth", "Depth:"),
-        DIRT_PROVIDER("dirt_provider", "Dirt Provider:"),
         DIRECTIONS(Value.DIRECTION, "directions", "Directions:"),
         DISTRIBUTION("distribution", "Distribution:"),
         DISTRIBUTION_POINTS("distribution_points", "Distribution Points:"),

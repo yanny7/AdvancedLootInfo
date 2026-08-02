@@ -26,6 +26,7 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 import net.minecraft.world.level.levelgen.feature.treedecorators.CocoaDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TrunkVineDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
+import net.minecraft.world.level.levelgen.placement.BlockPredicateFilter;
 import net.minecraft.world.level.levelgen.placement.CaveSurface;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
@@ -354,7 +355,9 @@ public class FeatureConfigurationTooltipTest {
                 "          -> south: true",
                 "          -> up: true",
                 "          -> west: true",
-                "  -> Foliage Radius: 2"
+                "  -> Foliage Radius: 2",
+                "  -> Can Place On:",
+                "    -> Solid:"
         ));
     }
 

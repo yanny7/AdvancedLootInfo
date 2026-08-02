@@ -144,5 +144,28 @@ public class BlockStateProviderTooltipTest {
                 "        -> State:",
                 "          -> Block: Block of Diamond"
         ));
+        assertTooltip(BlockStateProviderTooltipUtils.getRuleBasedStateProviderTooltip(UTILS, new RuleBasedStateProvider(
+                BlockStateProvider.simple(Blocks.GRASS_BLOCK),
+                List.of(new RuleBasedStateProvider.Rule(
+                        BlockPredicate.matchesBlocks(Blocks.DIRT),
+                        BlockStateProvider.simple(Blocks.DIAMOND_BLOCK)
+                ))
+        )).build(), List.of(
+                "Rule Based:",
+                "  -> Fallback:",
+                "    -> Simple:",
+                "      -> State:",
+                "        -> Block: Grass Block",
+                "        -> Properties:",
+                "          -> snowy: false",
+                "  -> Rules:",
+                "    -> If True:",
+                "      -> Matching Blocks:",
+                "        -> Block: Dirt",
+                "    -> Then:",
+                "      -> Simple:",
+                "        -> State:",
+                "          -> Block: Block of Diamond"
+        ));
     }
 }

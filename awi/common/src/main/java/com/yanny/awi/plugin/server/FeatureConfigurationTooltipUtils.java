@@ -115,6 +115,7 @@ public class FeatureConfigurationTooltipUtils {
             b.add(utils.getValueTooltip(utils, configuration.capProvider()).build(Lang.Branch.CAP_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.stemProvider()).build(Lang.Branch.STEM_PROVIDER));
             b.add(utils.getValueTooltip(utils, configuration.foliageRadius()).build(Lang.Value.FOLIAGE_RADIUS));
+            b.add(utils.getValueTooltip(utils, configuration.canPlaceOn()).build(Lang.Branch.CAN_PLACE_ON));
         }, Lang.FeatureConfiguration.HUGE_MUSHROOM_FEATURE);
     }
 
