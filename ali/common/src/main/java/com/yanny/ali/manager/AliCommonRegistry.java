@@ -42,6 +42,15 @@ public class AliCommonRegistry extends CoreCommonRegistry<AliConfig> implements 
                 Entity entity = type.create(l);
 
                 if (entity != null) {
+                    // some renderers derive their state from position/rotation, make sure it is not left at NaN/uninitialized values
+                    try {
+                        entity.moveTo(0, 0, 0);
+                        entity.setYRot(0);
+                        entity.setXRot(0);
+                    } catch (Throwable e) {
+                        LOGGER.warn("Failed to initialize entity {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(type), e.getMessage(), e);
+                    }
+
                     return Collections.singletonList(entity);
                 } else {
                     LOGGER.warn("Failed to create entity: {} (NULL)", type);

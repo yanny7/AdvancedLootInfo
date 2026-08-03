@@ -35,6 +35,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     private final List<Holder> slotWidgets = new LinkedList<>();
 
     public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<Block> outputs) {
+        // '/' prefix marks the recipe as synthetic - EMI requires it for recipes that are not present in the recipe manager
         super(category, ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), 1024);
         RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
         widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));

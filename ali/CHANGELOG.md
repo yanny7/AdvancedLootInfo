@@ -1,7 +1,8 @@
 ## []
 
 - Improved rendering performance with a lot of slots (radimous)
-- Minor changes to tooltips - less levels in some cases
+- Minor changes to tooltips - fewer levels in some cases
+- Added tooltip note on trade level/pool badges showing how many trades are randomly selected
 
 ## [1.12.0]
 
