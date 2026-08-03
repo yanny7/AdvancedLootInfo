@@ -1,5 +1,6 @@
 package com.yanny.ali.compatibility.common;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -57,6 +58,7 @@ public class GenericUtils {
     private static final ResourceLocation TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
+    private static final Set<EntityType<?>> BROKEN_ENTITY_RENDERERS = new HashSet<>(); // entity types whose renderer crashed, do not retry every frame
 
     public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -97,20 +99,34 @@ public class GenericUtils {
                     256
             );
 
-            guiGraphics.enableScissor(screenX + bounds.x() + 1, screenY + bounds.y() + 1, screenX + bounds.right() - 1, screenY + bounds.bottom() - 1);
+            if (!BROKEN_ENTITY_RENDERERS.contains(entity.getType())) {
+                guiGraphics.enableScissor(screenX + bounds.x() + 1, screenY + bounds.y() + 1, screenX + bounds.right() - 1, screenY + bounds.bottom() - 1);
 
-            EntityDimensions dimensions = entity.getType().getDimensions();
-            InventoryScreen.renderEntityInInventoryFollowsMouse(
-                    guiGraphics,
-                    bounds.x() + bounds.width() / 2,
-                    bounds.y() + WIDGET_SIZE - 5,
-                    (int) (Math.min(20 / dimensions.height, 20 / dimensions.width)),
-                    -mouseX + ((float) fullWidth / 2),
-                    -mouseY + WIDGET_SIZE / 2f,
-                    livingEntity
-            );
+                EntityDimensions dimensions = entity.getType().getDimensions();
 
-            guiGraphics.disableScissor();
+                try {
+                    InventoryScreen.renderEntityInInventoryFollowsMouse(
+                            guiGraphics,
+                            bounds.x() + bounds.width() / 2,
+                            bounds.y() + WIDGET_SIZE - 5,
+                            (int) (Math.min(20 / dimensions.height, 20 / dimensions.width)),
+                            -mouseX + ((float) fullWidth / 2),
+                            -mouseY + WIDGET_SIZE / 2f,
+                            livingEntity
+                    );
+                } catch (Throwable e) {
+                    BROKEN_ENTITY_RENDERERS.add(entity.getType());
+                    LOGGER.warn("Failed to render entity {}, skipping it from now on: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()), e.getMessage(), e);
+
+                    // InventoryScreen#renderEntityInInventory pushed the pose and changed the render state, but never restored it
+                    guiGraphics.pose().popPose();
+                    minecraft.getEntityRenderDispatcher().setRenderShadow(true);
+                    Lighting.setupFor3DItems();
+                }
+
+                guiGraphics.disableScissor();
+            }
+
             guiGraphics.pose().popPose();
         }
     }
