@@ -346,8 +346,8 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return NodeUtils.getLootTableNode(modifiers);
     }
 
-    public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
-        return new TradeNode(this, itemListingMap);
+    public IDataNode parseTrade(Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, boolean isWanderingTrader) {
+        return new TradeNode(this, itemListingMap, isWanderingTrader);
     }
 
     // hitCount != null means this table is referenced from another table's tree; the paramSet check
