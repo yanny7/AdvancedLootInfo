@@ -350,6 +350,15 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
         return new TradeNode(this, itemListingMap);
     }
 
+    // hitCount != null means this table is referenced from another table's tree; the paramSet check
+    // limits "sub table" detection to tables with no context type of their own, so tables that are
+    // independently meaningful despite being referenced elsewhere (e.g. GLM rules referencing
+    // "minecraft:fishing", or any modded/vanilla reference into a typed block/entity/gameplay table)
+    // still show up under their own category.
+    // Known gap: vanilla sub-tables that DO declare a concrete type purely to resolve their own
+    // conditions - e.g. per-color sheep drop/shearing tables (entities/sheep/<color>,
+    // shearing/sheep/<color>, type "minecraft:entity"/"minecraft:shearing") - aren't caught here and
+    // show up as duplicate top-level entries instead of being hidden as "injected".
     public boolean isSubTable(ResourceLocation resourceLocation) {
         Integer hitCount = hitMap.get(resourceLocation);
 
