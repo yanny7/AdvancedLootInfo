@@ -42,7 +42,14 @@ import java.util.Optional;
 
 public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory<RecipeHolder<T>> {
     static final int CATEGORY_WIDTH = 9 * 18;
-    static final int CATEGORY_HEIGHT = 7 * 18;
+    /**
+     * JEI reports the height per <i>category</i>, not per recipe, and does not scissor recipe drawing - anything
+     * taller than the recipe area is drawn over the JEI window frame. So this is the largest height JEI is
+     * guaranteed to be able to give us: the smallest allowed {@code appearance.RecipeGuiHeight} (175) minus the
+     * header/padding JEI reserves around the recipe area (40) minus the per-recipe border (8) = 127.
+     * Verified against JEI 15.20.0.105 - re-check {@code RecipesGui}/{@code RecipeGuiLogic} on other branches.
+     */
+    static final int MAX_SAFE_HEIGHT = 7 * 18;
 
     protected final IGuiHelper guiHelper;
     private final RecipeType<RecipeHolder<T>> recipeType;
@@ -131,7 +138,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
             });
         }
 
-        Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollbarExtraWidth(), CATEGORY_HEIGHT);
+        Rect renderRect = new Rect(0, 0, CATEGORY_WIDTH + JeiScrollWidget.getScrollbarExtraWidth(), MAX_SAFE_HEIGHT);
         JeiScrollWidget scrollWidget = new JeiScrollWidget(renderRect, widgetWrapper.getRect().height() + getYOffset(recipe.type()), scrollWidgets);
 
         builder.addSlottedWidget(scrollWidget, slotDrawables);
@@ -145,7 +152,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
 
     @Override
     public int getHeight() {
-        return CATEGORY_HEIGHT;
+        return MAX_SAFE_HEIGHT;
     }
 
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, T recipe);

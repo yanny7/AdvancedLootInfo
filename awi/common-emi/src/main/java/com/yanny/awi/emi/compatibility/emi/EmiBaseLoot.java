@@ -36,7 +36,8 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
     public EmiBaseLoot(EmiRecipeCategory category, ResourceLocation id, IDataNode lootTable, int widgetX, int widgetY, List<ItemStack> inputs, List<Block> outputs) {
         // '/' prefix marks the recipe as synthetic - EMI requires it for recipes that are not present in the recipe manager
-        super(category, new ResourceLocation(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), 1024);
+        // the height passed to super is never read - getDisplayHeight() below overrides BasicEmiRecipe's accessor
+        super(category, new ResourceLocation(id.getNamespace(), "/" + id.getPath()), CATEGORY_WIDTH + AbstractScrollWidget.getScrollbarExtraWidth(), 0);
         RelativeRect rect = new RelativeRect(widgetX, widgetY, CATEGORY_WIDTH, 0);
         widget = new EmiWidgetWrapper(getRootWidget(getEmiUtils(this), lootTable, rect, CATEGORY_WIDTH));
         this.inputs.addAll(inputs.stream().map(EmiStack::of).toList());
@@ -75,6 +76,16 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         widgetHolder.add(new EmiScrollWidget(rect, getDisplayHeight(), widgets));
     }
 
+    /**
+     * EMI treats this as the <i>maximum</i> height the recipe wants and clamps it to the space it can actually
+     * provide ({@link WidgetHolder#getHeight()}), so reporting the full content height is safe - a tall biome
+     * simply gets a page of its own.
+     */
+    @Override
+    public final int getDisplayHeight() {
+        return getHeaderHeight() + getItemsHeight();
+    }
+
     @Override
     public Recipe<?> getBackingRecipe() {
         return null;
@@ -92,6 +103,9 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
     protected List<Widget> getAdditionalWidgets(WidgetHolder widgetHolder) {
         return List.of();
     }
+
+    /** Vertical space this category needs above the item tree - must match the {@code widgetY} passed to the constructor. */
+    protected abstract int getHeaderHeight();
 
     abstract IWidget getRootWidget(IWidgetUtils utils, IDataNode entry, RelativeRect rect, int maxWidth);
 

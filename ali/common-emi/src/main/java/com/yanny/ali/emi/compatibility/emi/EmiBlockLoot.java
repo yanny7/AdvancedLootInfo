@@ -31,8 +31,8 @@ public class EmiBlockLoot extends EmiBaseLoot {
     }
 
     @Override
-    public int getDisplayHeight() {
-        return (isSpecial ? 30 : 22) + getItemsHeight();
+    protected int getHeaderHeight() {
+        return isSpecial ? 30 : 22;
     }
 
     @Override
