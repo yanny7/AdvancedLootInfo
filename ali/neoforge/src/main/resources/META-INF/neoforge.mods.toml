@@ -23,7 +23,7 @@ config = "ali.neoforge.mixins.json"
 [[dependencies.ali]] #optional
 modId = "neoforge" #mandatory
 type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
-versionRange = "${neoforge_loader_version_range}" #mandatory
+versionRange = "${neoforge_version_range}" #mandatory
 ordering = "AFTER" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
 side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
 

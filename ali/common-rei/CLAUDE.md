@@ -2,7 +2,7 @@
 
 Guidance for `ali/common-rei` (`com.yanny.ali.rei`) — ALI's REI integration. **The shared recipe-viewer integration pattern (package shape, `aci.IWidget` foundation, widget-wrapper adapter convention) is documented once in `ali/common-emi/CLAUDE.md` — read that first.** This file only covers what's specific to REI, which is the one viewer whose registration shape genuinely diverges from EMI/JEI.
 
-Enabled independently per branch via `gradle.properties` (`rei_enabled` + `<platform>_rei_enabled`).
+Enabled independently per branch via `gradle.properties` (`rei_enabled` + `<platform>_rei_enabled`). On this branch REI is the only viewer enabled on *both* live loaders (`fabric_rei_enabled`/`neoforge_rei_enabled=true`), which makes it the default choice for reproducing a viewer-side issue.
 
 ## Package contents
 

@@ -2,7 +2,7 @@
 
 Guidance for `ali/common-emi` (`com.yanny.ali.emi`) — ALI's EMI integration. **This file is the canonical description of the recipe-viewer integration pattern shared by all six `<mod>/common-<viewer>` modules** (`ali/common-emi`, `ali/common-jei`, `ali/common-rei`, `awi/common-emi`, `awi/common-jei`, `awi/common-rei`): same package shape, same widget-adapter convention, same entry-point role, differing only in the host viewer's API and the domain type being displayed. `ali/common-jei/CLAUDE.md`, `ali/common-rei/CLAUDE.md`, and the `awi/common-<viewer>/CLAUDE.md` files reference this doc for the shared pattern and only describe what's specific to them — don't restate the pattern there.
 
-Enabled independently per branch via `gradle.properties` (`emi_enabled` + `<platform>_emi_enabled`); see the repo-root `CLAUDE.md`.
+Enabled independently per branch via `gradle.properties` (`emi_enabled` + `<platform>_emi_enabled`); see the repo-root `CLAUDE.md`. **On this `1.21.5` branch `emi_enabled=false`**, so `ali/common-emi` and `awi/common-emi` are excluded from the build (EMI has no 1.21.5 release yet — `emi_version` is still a `+1.21.1` build) and no `run*Emi*` task exists. This doc remains the canonical pattern reference regardless; only the EMI-specific parts below are currently untested against 1.21.5.
 
 ## Shared foundation (lives in `aci`, not duplicated per viewer)
 
