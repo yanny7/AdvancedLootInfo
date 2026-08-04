@@ -2,7 +2,7 @@
 
 Guidance for `awi/common-emi` (`com.yanny.awi.emi`) — AWI's EMI integration. **The shared recipe-viewer integration pattern is documented once in `ali/common-emi/CLAUDE.md` — read that first.** This module is structurally identical to `ali/common-emi` (same package shape, same `aci.IWidget`/`CoreListWidget` foundation, same `Compatibility`/`WidgetWrapper`/`ScrollWidget` adapter convention); this file only notes the domain substitution.
 
-Enabled independently per branch via `gradle.properties` (`emi_enabled` + `<platform>_emi_enabled`).
+Enabled independently per branch via `gradle.properties` (`emi_enabled` + `<platform>_emi_enabled`). **Not built on this `1.21.5` branch** (`emi_enabled=false`); see `ali/common-emi/CLAUDE.md` for why, and `awi/neoforge/CLAUDE.md` for the `awi.emi.mixins.json` declaration that had to be removed from `neoforge.mods.toml` as a consequence.
 
 ## Package contents
 

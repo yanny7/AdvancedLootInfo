@@ -1,0 +1,54 @@
+modLoader = "javafml" #mandatory
+loaderVersion = "${neoforge_loader_version_range}" #mandatory
+license = "${license}" # Review your options at https://choosealicense.com/.
+issueTrackerURL="https://github.com/yanny7/advancedlootinfo/issues" #optional
+
+[[mods]] #mandatory
+modId = "awi" #mandatory
+version = "${awi_version}" #mandatory
+displayName = "${awi_mod_name}" #mandatory
+displayTest = "IGNORE_ALL_VERSION"
+displayURL="https://github.com/yanny7/advancedlootinfo" #optional (displayed in the mod UI)
+logoBlur = false
+authors = "${mod_author}" #optional
+description = '''${awi_description}''' #mandatory (Supports multiline text)
+
+[[mixins]]
+config = "awi.mixins.json"
+[[mixins]]
+config = "awi.neoforge.mixins.json"
+
+[[dependencies.awi]] #optional
+modId = "neoforge" #mandatory
+type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange = "${neoforge_version_range}" #mandatory
+ordering = "AFTER" # The order that this dependency should load in relation to your mod, required to be either 'BEFORE' or 'AFTER' if the dependency is not mandatory
+side = "BOTH" # Side this dependency is applied on - 'BOTH', 'CLIENT' or 'SERVER'
+
+[[dependencies.awi]]
+modId = "minecraft"
+type="required" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange = "${minecraft_version_range}"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.awi]]
+modId="emi"
+type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange="${emi_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.awi]]
+modId="jei"
+type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange="${jei_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.awi]]
+modId="rei"
+type="optional" #mandatory (Can be one of "required", "optional", "incompatible" or "discouraged")
+versionRange="${rei_version_range}"
+ordering="AFTER"
+side="BOTH"

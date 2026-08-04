@@ -26,8 +26,8 @@ public class EmiBiomeLoot extends EmiBaseLoot {
     }
 
     @Override
-    public int getDisplayHeight() {
-        return 10 + getItemsHeight();
+    protected int getHeaderHeight() {
+        return 10;
     }
 
     @Override
