@@ -1,6 +1,6 @@
 # awi/neoforge/CLAUDE.md
 
-Guidance for `awi/neoforge` (`com.yanny.awi.neoforge`) — AWI's NeoForge loader entry point. See `awi/CLAUDE.md` for the mod logic this glues into, and `aci/CLAUDE.md`'s "platform" section for the `ICorePlatformHelper`/`Services` abstraction being implemented here. This module is a near copy-paste of `ali/neoforge` with the loot domain stripped out; where it differs from `awi/forge`, the difference is NeoForge-vs-Forge API, not AWI logic — so a change to one loader module usually needs a matching change to the others (`awi/fabric/CLAUDE.md`, `awi/forge/CLAUDE.md`).
+Guidance for `awi/neoforge` (`com.yanny.awi.neoforge`) — AWI's NeoForge loader entry point. See `awi/CLAUDE.md` for the mod logic this glues into, and `aci/CLAUDE.md`'s "platform" section for the `ICorePlatformHelper`/`Services` abstraction being implemented here. This module is a near copy-paste of `ali/neoforge` (see `ali/neoforge/CLAUDE.md`) with the loot domain stripped out; where it differs from `awi/forge`, the difference is NeoForge-vs-Forge API, not AWI logic — so a change to one loader module usually needs a matching change to the others (`awi/fabric/CLAUDE.md`, `awi/forge/CLAUDE.md`).
 
 ## Entry point
 

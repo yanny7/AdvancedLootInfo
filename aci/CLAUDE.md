@@ -10,9 +10,9 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 - `ICorePlugin<TCommonRegistry, TClientRegistry, TServerRegistry>` — plugin entry-point contract (`getModId`, `registerCommon/Client/Server`); implemented by `ali.api.IPlugin` and `awi.api.IPlugin`.
 - `ICoreCommonRegistry` / `ICoreClientRegistry` / `ICoreServerRegistry` and their `...Utils` counterparts (`ICoreCommonUtils`, `ICoreClientUtils`, `ICoreServerUtils`, `ICoreWidgetUtils`) — side-specific registration/runtime-helper contracts. Backed by the abstract `manager.Core*Registry` classes below, extended by `Ali*Registry`/`Awi*Registry`.
-- `ICoreDataNode<TServerUtils>` — base for network-serializable, tooltip-bearing, chance-comparable data entries (`encode`, `getTooltip`, `getChance`, `Comparable`). Every mod-specific node type (`ali.plugin.common.nodes.*`, `awi.plugin.common.nodes.*`) implements this.
+- `ICoreDataNode<TServerUtils>` — base for network-serializable, tooltip-bearing, chance-comparable data entries (`getTooltip`, `getId`, `encode`, defaulted `getChance`, `Comparable` by descending chance). Every mod-specific node type (`ali.plugin.common.nodes.*`, `awi.plugin.common.nodes.*`) implements this.
 - `CoreListNode<TServerUtils,TDataNode,TClientUtils>` — abstract composite `ICoreDataNode` holding a sorted child-node list plus shared network encode/decode logic; base for `ali.api.ListNode`/`awi.api.ListNode`.
-- `IWidget` — GUI widget contract (`render`, `getRect`, `getTooltipComponents`) — the single rendering abstraction every recipe-viewer widget wrapper (EMI/JEI/REI, in both mods) adapts to its host viewer's native widget interface. See `ali/common-emi/CLAUDE.md` for how that adaptation works.
+- `IWidget` — GUI widget contract (`getRect`, `getDirection`, defaulted `render`/`getTooltipComponents`, shared `PADDING`) — the single rendering abstraction every recipe-viewer widget wrapper (EMI/JEI/REI, in both mods) adapts to its host viewer's native widget interface. See `ali/common-emi/CLAUDE.md` for how that adaptation works.
 - `CoreListWidget<TDataNode,TWidgetUtils,TClientUtils>` — abstract widget that lays out a tree of child `IWidget`s and draws the connecting branch lines; base for `ali.*.ListWidget`/`awi.*.ListWidget`.
 - `Rect` (record) / `RelativeRect` (mutable, parent-chained) / `WidgetDirection` (enum) — geometry primitives for widget layout.
 - `RangeValue` — immutable numeric range/score value type (min/max, "is range", "has score", "is unknown" flags), used throughout tooltip value formatting.
@@ -37,7 +37,7 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 ### `language`
 
-Supporting types for the translation-key model (not the whole wiring mechanism, described below):
+Supporting types for the translation-key model, plus `CoreLang` (the static `TRANSLATION_MAP` aggregator — the wiring itself is described under "Language wiring" below):
 - `IMultiKey` — `singular()`/`plural()` accessor contract.
 - `ITooltipKey extends IMultiKey` — adds `getTranslation()` plus English fallback accessors; implemented by generated lang enums (`ali.language.Lang`, `awi.language.Lang`).
 - `Translation` (record: `sKey, pKey, sEng, pEng`) — the singular/plural key + English-fallback tuple.

@@ -14,13 +14,14 @@ ali/common-rei/CLAUDE.md       — REI specifics: Category/Display split, filler
 ali/common-lootjs/CLAUDE.md    — optional LootJS compatibility module
 ali/fabric/CLAUDE.md           — ALI's Fabric loader glue
 ali/forge/CLAUDE.md            — ALI's Forge loader glue
+ali/neoforge/CLAUDE.md         — ALI's NeoForge loader glue (incl. the GLM bridge and the accesswidener → accesstransformer duplication)
 awi/CLAUDE.md                  — AWI mod: worldgen data-scan (incl. surface-rule reverse engineering), plugin wiring, networking (mirrors ali/CLAUDE.md)
 awi/common-emi/CLAUDE.md       — EMI specifics for AWI (references ali/common-emi/CLAUDE.md)
 awi/common-jei/CLAUDE.md       — JEI specifics for AWI
 awi/common-rei/CLAUDE.md       — REI specifics for AWI
 awi/fabric/CLAUDE.md           — AWI's Fabric loader glue
 awi/forge/CLAUDE.md            — AWI's Forge loader glue
-awi/neoforge/CLAUDE.md         — AWI's NeoForge loader glue (incl. the accesswidener → accesstransformer duplication)
+awi/neoforge/CLAUDE.md         — AWI's NeoForge loader glue (references ali/neoforge/CLAUDE.md)
 ```
 
 Cross-cutting mechanisms are documented **once**, in whichever doc owns them, and referenced (not restated) everywhere else: the tooltip tree system lives in `aci/CLAUDE.md`; the recipe-viewer integration pattern lives in `ali/common-emi/CLAUDE.md`; the networking pattern lives in `ali/CLAUDE.md` (AWI's is a byte-for-byte structural mirror, documented as a diff in `awi/CLAUDE.md`). When editing one of these, check whether the change belongs in the canonical doc or a per-instance one before writing anything.
@@ -64,7 +65,7 @@ Loader-specific behavior is isolated via a `ServiceLoader`-based expect/actual p
 - Each `fabric`/`forge`/`neoforge` module provides the concrete implementation and registers it via `META-INF/services`.
 - Never call Fabric-, Forge-, or NeoForge-specific APIs directly from a `common` module — go through the platform service interface instead. The one sanctioned exception is depending on `fabric-loader` in `common` build scripts purely to get `@Environment` annotations/mixin support — do not use other Fabric loader classes from `common`.
 
-See `aci/CLAUDE.md`'s `platform` section for the shared `ICorePlatformHelper` contract, and `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`/`awi/fabric/CLAUDE.md`/`awi/forge/CLAUDE.md`/`awi/neoforge/CLAUDE.md` for the concrete per-loader implementations (`ali/neoforge` has no doc of its own yet — `awi/neoforge/CLAUDE.md` notes where the two differ).
+See `aci/CLAUDE.md`'s `platform` section for the shared `ICorePlatformHelper` contract, and `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`/`ali/neoforge/CLAUDE.md`/`awi/fabric/CLAUDE.md`/`awi/forge/CLAUDE.md`/`awi/neoforge/CLAUDE.md` for the concrete per-loader implementations.
 
 ## Plugin/extension architecture
 
