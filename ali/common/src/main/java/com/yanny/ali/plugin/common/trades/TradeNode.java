@@ -23,7 +23,7 @@ import java.util.Optional;
 public class TradeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade");
 
-    public TradeNode(IServerUtils utils, VillagerProfession profession) {
+    public TradeNode(IServerUtils utils, VillagerProfession profession, boolean isWanderingTrader) {
         List<Int2ObjectMap.Entry<ResourceKey<TradeSet>>> entries = profession.tradeSetsByLevel().int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
@@ -33,13 +33,13 @@ public class TradeNode extends ListNode {
         for (Int2ObjectMap.Entry<ResourceKey<TradeSet>> entry : entries) {
             Optional<Holder.Reference<TradeSet>> tradeSetReference = lookup.get(entry.getValue());
 
-            tradeSetReference.ifPresent((tradeSet) -> addChildren(new TradeLevelNode(utils, entry.getIntKey(), tradeSet.value())));
+            tradeSetReference.ifPresent((tradeSet) -> addChildren(new TradeLevelNode(utils, entry.getIntKey(), tradeSet.value(), isWanderingTrader)));
         }
     }
 
-    public TradeNode(IServerUtils utils, List<TradeSet> trades) {
+    public TradeNode(IServerUtils utils, List<TradeSet> trades, boolean isWanderingTrader) {
         for (int i = 0; i < trades.size(); i++) {
-            addChildren(new TradeLevelNode(utils, i, trades.get(i)));
+            addChildren(new TradeLevelNode(utils, i, trades.get(i), isWanderingTrader));
         }
     }
 
