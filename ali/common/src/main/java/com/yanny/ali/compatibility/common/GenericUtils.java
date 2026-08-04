@@ -57,6 +57,7 @@ public class GenericUtils {
     private static final Identifier TEXTURE_LOC = com.yanny.ali.Utils.modLoc("textures/gui/gui.png");
     private static final int WIDGET_SIZE = 36;
     private static final int DOTS_WIDTH = Minecraft.getInstance().font.width("...");
+    private static final Set<EntityType<?>> BROKEN_ENTITY_RENDERERS = new HashSet<>(); // entity types whose renderer crashed, do not retry every frame
 
     public static void renderEntity(Entity entity, Rect bounds, int fullWidth, GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (entity instanceof LivingEntity livingEntity) {
@@ -76,21 +77,28 @@ public class GenericUtils {
                     256
             );
 
-            float screenMouseX = (float) (Minecraft.getInstance().mouseHandler.xpos() / Minecraft.getInstance().getWindow().getGuiScale());
-            float screenMouseY = (float) (Minecraft.getInstance().mouseHandler.ypos() / Minecraft.getInstance().getWindow().getGuiScale());
-            EntityDimensions dimensions = entity.getType().getDimensions();
-            renderEntityInInventoryFollowsMouse(
-                    guiGraphics,
-                    bounds.x() + 1,
-                    bounds.y() + 1,
-                    bounds.right() - 1,
-                    bounds.bottom() - 1,
-                    (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
-                    0.0625F,
-                    mouseX + screenMouseX - bounds.x(),
-                    mouseY+ screenMouseY,
-                    livingEntity
-            );
+            if (!BROKEN_ENTITY_RENDERERS.contains(entity.getType())) {
+                try {
+                    float screenMouseX = (float) (Minecraft.getInstance().mouseHandler.xpos() / Minecraft.getInstance().getWindow().getGuiScale());
+                    float screenMouseY = (float) (Minecraft.getInstance().mouseHandler.ypos() / Minecraft.getInstance().getWindow().getGuiScale());
+                    EntityDimensions dimensions = entity.getType().getDimensions();
+                    renderEntityInInventoryFollowsMouse(
+                            guiGraphics,
+                            bounds.x() + 1,
+                            bounds.y() + 1,
+                            bounds.right() - 1,
+                            bounds.bottom() - 1,
+                            (int) (Math.min(20 / dimensions.height(), 20 / dimensions.width())),
+                            0.0625F,
+                            mouseX + screenMouseX - bounds.x(),
+                            mouseY+ screenMouseY,
+                            livingEntity
+                    );
+                } catch (Throwable e) {
+                    BROKEN_ENTITY_RENDERERS.add(entity.getType());
+                    LOGGER.warn("Failed to render entity {}, skipping it from now on: {}", BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()), e.getMessage(), e);
+                }
+            }
 
             guiGraphics.pose().popMatrix();
         }

@@ -2,7 +2,7 @@
 
 Guidance for `awi/common-rei` (`com.yanny.awi.rei`) — AWI's REI integration. **The shared recipe-viewer integration pattern, and the reason for REI's Category/Display split and filler/predicate registration, are documented once in `ali/common-emi/CLAUDE.md` and `ali/common-rei/CLAUDE.md` — read those first.** This module is structurally identical to `ali/common-rei`; this file only notes the domain substitution.
 
-Enabled independently per branch via `gradle.properties` (`rei_enabled` + `<platform>_rei_enabled`).
+Enabled independently per branch via `gradle.properties` (`rei_enabled` + `<platform>_rei_enabled`). On this branch it is the only viewer enabled on both live loaders (Fabric and NeoForge).
 
 ## Package contents
 

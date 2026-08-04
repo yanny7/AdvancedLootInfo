@@ -2,7 +2,7 @@
 
 Guidance for `ali/common-jei` (`com.yanny.ali.jei`) — ALI's JEI integration. **The shared recipe-viewer integration pattern (package shape, `aci.IWidget` foundation, widget-wrapper adapter convention) is documented once in `ali/common-emi/CLAUDE.md` — read that first.** This file only covers what's specific to JEI.
 
-Enabled independently per branch via `gradle.properties` (`jei_enabled` + `<platform>_jei_enabled`).
+Enabled independently per branch via `gradle.properties` (`jei_enabled` + `<platform>_jei_enabled`). On this branch `jei_enabled=true` but only for NeoForge (`neoforge_jei_enabled=true`, `fabric_jei_enabled=false`).
 
 ## Package contents
 

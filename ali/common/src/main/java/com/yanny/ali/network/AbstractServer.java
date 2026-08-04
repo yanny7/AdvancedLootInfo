@@ -387,7 +387,7 @@ public abstract class AbstractServer {
 
                 if (itemListingMap != null && itemListingMap.int2ObjectEntrySet().stream().anyMatch((e) -> e.getValue().length > 0)) {
                     try {
-                        nodes.put(location, serverRegistry.parseTrade(itemListingMap));
+                        nodes.put(location, serverRegistry.parseTrade(itemListingMap, false));
                         tradeItems.put(location, ItemCollectorUtils.collectTradeItems(serverRegistry, itemListingMap));
                     } catch (Throwable e) {
                         LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
@@ -406,7 +406,7 @@ public abstract class AbstractServer {
     @NotNull
     private static IDataNode processWanderingTrader(ServerLevel level, AliServerRegistry serverRegistry) {
         try {
-            return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES);
+            return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES, true);
         } catch (Throwable e) {
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
             return new MissingNode(TooltipNode.empty());
@@ -522,7 +522,7 @@ public abstract class AbstractServer {
 
             // write dummy data
             buf.writerIndex(wtStart);
-            new TradeNode(utils, new Int2ObjectOpenHashMap<>()).encode(utils, buf);
+            new TradeNode(utils, new Int2ObjectOpenHashMap<>(), true).encode(utils, buf);
             buf.writeCollection(List.of(), (b, i) -> {});
             buf.writeCollection(List.of(), (b, i) -> {});
         } finally {

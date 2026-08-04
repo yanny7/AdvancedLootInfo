@@ -9,6 +9,7 @@
   "ali.description.count": "Count: %s",
   "ali.description.count_bonus": "%s (%s %s)",
   "ali.description.quality": "Quality: %s",
+  "ali.description.random_trade_selection": "Randomly Selects %s Of These Trades",
   "ali.description.rolls": "Rolls: %s%s",
   "ali.enum.group_type.all": "Selects all entries",
   "ali.enum.group_type.alternatives": "Selects only first successful entry",

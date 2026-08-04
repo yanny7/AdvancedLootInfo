@@ -561,6 +561,7 @@ public final class Lang {
         COUNT("count", "Count: %s"),
         COUNT_BONUS("count_bonus", "%s (%s %s)"),
         QUALITY("quality", "Quality: %s"),
+        RANDOM_TRADE_SELECTION("random_trade_selection", "Randomly Selects %s Of These Trades"),
         ;
 
         private final Translation translation;

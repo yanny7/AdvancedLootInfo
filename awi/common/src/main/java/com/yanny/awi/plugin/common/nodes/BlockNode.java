@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockNode implements IDataNode, IBlockNode {
-    public static Identifier ID = Utils.modLoc("block");
+    public static final Identifier ID = Utils.modLoc("block");
 
     private final Block block;
     private final TooltipNode tooltip;

@@ -44,8 +44,8 @@ public class EmiEntityLoot extends EmiBaseLoot {
     }
 
     @Override
-    public int getDisplayHeight() {
-        return 48 + getItemsHeight();
+    protected int getHeaderHeight() {
+        return 48;
     }
 
     @Override

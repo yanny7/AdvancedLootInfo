@@ -20,7 +20,7 @@ import java.util.List;
 public class TradeNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade");
 
-    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
+    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, boolean isWanderingTrader) {
         List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
@@ -28,13 +28,13 @@ public class TradeNode extends ListNode {
 
         for (Int2ObjectMap.Entry<VillagerTrades.ItemListing[]> entry : entries) {
             if (entry.getValue().length > 0) {
-                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue()));
+                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue(), isWanderingTrader));
             }
         }
     }
 
-    public TradeNode(IServerUtils utils, List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList) {
-        this(utils, convert(itemListingList));
+    public TradeNode(IServerUtils utils, List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList, boolean isWanderingTrader) {
+        this(utils, convert(itemListingList), isWanderingTrader);
     }
 
     public TradeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
