@@ -15,7 +15,7 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 ## Mixins
 
-`MixinLootTableFabric` (accessor), `MixinMinecraft`, `MixinCombinedIngredient`, `ConfigPlugin`.
+`MixinLootTableFabric` (accessor), `MixinMinecraft`, `MixinCombinedIngredient`.
 
 ## Fabric-only compat plugins
 
