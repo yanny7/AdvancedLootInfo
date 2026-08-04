@@ -18,9 +18,17 @@ public class TradeLevelNode extends ListNode {
     public static final Identifier ID = Utils.modLoc("trade_level");
 
     public final int level;
+    public final int selectionCount;
 
-    public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet) {
+    // Vanilla picks a fixed number of trades at random from this level's pool at villager-spawn/level-up time
+    // (Villager#updateTrades / AbstractVillager#addOffersFromItemListings passes a literal `2`; the Wandering
+    // Trader's two pools use `5` and `1` respectively, see WanderingTrader#updateTrades) - clamped to the pool
+    // size since vanilla adds every entry instead of picking randomly when the pool is that small or smaller.
+    public TradeLevelNode(IServerUtils utils, int level, TradeSet tradeSet, boolean isWanderingTrader) {
         this.level = level;
+        this.selectionCount = isWanderingTrader
+                ? (level == 2 ? 1 : Math.min(5, tradeSet.getTrades().size()))
+                : Math.min(2, tradeSet.getTrades().size());
 
         for (Holder<VillagerTrade> trade : tradeSet.getTrades()) {
             addChildren(TradeUtils.getNode(utils, trade.value()));
@@ -30,17 +38,22 @@ public class TradeLevelNode extends ListNode {
     public TradeLevelNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
         super(utils, buf);
         level = buf.readInt();
+        selectionCount = buf.readInt();
     }
 
     @Override
     public void encodeNode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         buf.writeInt(level);
+        buf.writeInt(selectionCount);
     }
 
     @NotNull
     @Override
     public TooltipNode getTooltip() {
-        return TooltipBuilder.value(level).build(Lang.Value.LEVEL);
+        return TooltipBuilder.branch((b) -> b
+                .add(TooltipBuilder.value(level).build(Lang.Value.LEVEL))
+                .add(TooltipBuilder.value(selectionCount).build(Lang.Description.RANDOM_TRADE_SELECTION))
+        ).build();
     }
 
     @NotNull

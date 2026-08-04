@@ -404,7 +404,7 @@ public abstract class AbstractServer {
 
             if (config.tradeCategories.stream().filter((f) -> f.validate(location)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
                 try {
-                    nodes.put(location, serverRegistry.parseTrade(profession));
+                    nodes.put(location, serverRegistry.parseTrade(profession, false));
                 } catch (Throwable e) {
                     LOGGER.warn("Failed to parse trade for villager {} with error {}", location, e.getMessage(), e);
                 }
@@ -426,7 +426,7 @@ public abstract class AbstractServer {
             registry.get(TradeSets.WANDERING_TRADER_COMMON).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
             registry.get(TradeSets.WANDERING_TRADER_UNCOMMON).ifPresent((tradeSet) -> trades.add(tradeSet.value()));
 
-            return serverRegistry.parseTrade(trades);
+            return serverRegistry.parseTrade(trades, true);
         } catch (Throwable e) {
             LOGGER.warn("Failed to parse wandering trader with error {}", e.getMessage(), e);
             return new MissingNode(TooltipNode.empty());
@@ -573,7 +573,7 @@ public abstract class AbstractServer {
 
             // write dummy data
             buf.writerIndex(wtStart);
-            new TradeNode(utils, Collections.emptyList()).encode(utils, buf);
+            new TradeNode(utils, Collections.emptyList(), true).encode(utils, buf);
             buf.writeCollection(List.of(), (b, i) -> {});
             buf.writeCollection(List.of(), (b, i) -> {});
         } finally {
