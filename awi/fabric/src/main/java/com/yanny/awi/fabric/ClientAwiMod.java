@@ -5,7 +5,7 @@ import com.yanny.awi.fabric.network.NetworkUtils;
 import com.yanny.awi.manager.PluginManager;
 import net.fabricmc.api.ClientModInitializer;
 
-public class ClientAliMod implements ClientModInitializer {
+public class ClientAwiMod implements ClientModInitializer {
     public static final Client CLIENT = new Client();
 
     @Override

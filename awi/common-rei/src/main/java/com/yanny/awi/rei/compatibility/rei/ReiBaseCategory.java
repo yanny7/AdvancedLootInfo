@@ -16,7 +16,9 @@ import com.yanny.awi.plugin.client.ClientUtils;
 import com.yanny.awi.plugin.client.widget.BiomeWidget;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.client.config.ConfigObject;
 import me.shedaniel.rei.api.client.gui.Renderer;
+import me.shedaniel.rei.api.client.gui.config.SearchFieldLocation;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
@@ -42,8 +44,20 @@ import java.util.List;
 
 public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements DisplayCategory<T> {
     static final int CATEGORY_WIDTH = 9 * 18;
-    static final int CATEGORY_HEIGHT = 8 * 18;
     static final int PADDING = 4;
+
+    // Mirrors REI's own recipe-window layout math (RoughlyEnoughItems 12.1.785, DefaultDisplayViewingScreen#init):
+    // the window is INNER_PADDING_Y + (getDisplayHeight() + DISPLAY_GAP) * displaysPerPage tall, capped by the space
+    // between the tab bar and the (optionally centered) search field and by the user's "Max recipes page height".
+    // Re-verify these numbers against REI's sources when porting to another branch.
+    private static final int INNER_PADDING_Y = 36;
+    private static final int DISPLAY_GAP = 4;
+    private static final int OUTER_PADDING = 2;
+    private static final int TAB_SIZE = 28;
+    private static final int COMPACT_TAB_SIZE = 24;
+    private static final int TAB_OVERFLOW_HEIGHT = 16;
+    private static final int CENTERED_SEARCH_HEIGHT = 22;
+    private static final int MIN_PAGE_HEIGHT = 100;
 
     public ReiBaseCategory() {
     }
@@ -56,9 +70,31 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
         return CATEGORY_WIDTH;
     }
 
+    /**
+     * One biome per page - the tree wants the whole window, and it makes the window/display relation
+     * deterministic so {@link #getDisplayHeight()} does not have to guess how many displays REI will stack.
+     */
+    @Override
+    public int getFixedDisplaysPerPage() {
+        return 1;
+    }
+
+    /**
+     * REI asks for the height per <i>category</i>, not per display, so we report the largest height REI can
+     * actually give us instead of a fixed guess. Recomputed on every screen init (including resizes); smaller
+     * biomes are clamped down again by {@link #prepareWidgets}, they just get a taller, partly empty viewport.
+     * The tab-overflow allowance is always included because whether the tabs overflow is not exposed by REI's API -
+     * under-reporting the top margin would make the display draw over the window frame.
+     */
     @Override
     public int getDisplayHeight() {
-        return CATEGORY_HEIGHT;
+        ConfigObject config = ConfigObject.getInstance();
+        int topMargin = OUTER_PADDING + (config.isUsingCompactTabs() ? COMPACT_TAB_SIZE : TAB_SIZE) - 2 + TAB_OVERFLOW_HEIGHT;
+        int bottomMargin = OUTER_PADDING + (config.getSearchFieldLocation() == SearchFieldLocation.CENTER ? CENTERED_SEARCH_HEIGHT : 0);
+        int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+        int largestHeight = Math.min(Math.max(screenHeight - topMargin - bottomMargin, MIN_PAGE_HEIGHT), config.getMaxRecipesPageHeight());
+
+        return largestHeight - INNER_PADDING_Y - DISPLAY_GAP;
     }
 
     protected Triplet<Rectangle, Rectangle, List<Widget>> prepareWidgets(T display, Rectangle bounds, int offset) {
