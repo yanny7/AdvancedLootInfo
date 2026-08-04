@@ -22,7 +22,7 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 - `ClassKeyedMap` / `ManagedRegistry` / `CorePluginManager` — the generic dispatch/discovery machinery; see "Tooltip system" below for the two dispatch tiers, and the repo-root `CLAUDE.md`'s "Adding a new category" recipe for how `ali`/`awi` build on top of these.
 - `BaseRegistry` (package-private) — tracks every `ManagedRegistry` a mod's registry creates, exposing `clearData`/`printRegistrationInfo`/`printRuntimeInfo` (see "Missing-entry fallback and coverage reporting" below). Parent of `CoreCommonRegistry`/`CoreServerRegistry`.
 - `CoreCommonRegistry<TConfig>` — implements `ICoreCommonRegistry`+`ICoreCommonUtils`; owns the translation-key dictionary (`HashBiMap<String,Integer>`) and config access. Extended by `AliCommonRegistry`/`AwiCommonRegistry`.
-- `CoreServerRegistry<TConfig,TCommonUtils,TServerUtils>` — server-side utils base holding the `ServerLevel`, tooltip cache, and `HolderLookup.Provider`. Extended by `AliServerRegistry`/`AwiServerRegistry`.
+- `CoreServerRegistry<TConfig,TCommonUtils,TServerUtils>` — server-side utils base holding the `ServerLevel` and the tooltip cache; `lookupProvider()` is derived from `serverLevel.registryAccess()` rather than stored, which is why neither mod needs a platform-level `getLookupProvider()`. Extended by `AliServerRegistry`/`AwiServerRegistry`.
 - `CoreClientRegistry<...>` — client-side registry; owns widget/data-node factory maps, and uses `compatibility.DataReceiver` plus a `ScheduledExecutorService` to reassemble chunked payloads received over the network (see each mod's `network` package). Extended by `AliClientRegistry`/`AwiClientRegistry`.
 
 ### `compatibility`
@@ -33,7 +33,7 @@ Guidance for working in `aci` (`com.yanny.aci`), the shared core library consume
 
 ### `platform`
 
-- `ICorePlatformHelper<T extends ICorePlugin<?,?,?>>` — `getPlugins()` (loader-specific plugin discovery) + `getConfiguration()` (config path). Implemented by `ali.platform.services.IPlatformHelper` and `awi.platform.services.IPlatformHelper`, each with per-loader implementations living outside `common` (see `ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`, `awi/fabric/CLAUDE.md`).
+- `ICorePlatformHelper<T extends ICorePlugin<?,?,?>>` — `getPlugins()` (loader-specific plugin discovery) + `getConfiguration()` (config path). Extended by `ali.platform.services.IPlatformHelper` (which adds only `getSpawnEggItem`) and `awi.platform.services.IPlatformHelper` (which adds nothing), each with per-loader implementations living outside `common` (see `ali/fabric/CLAUDE.md`, `ali/neoforge/CLAUDE.md`, `awi/fabric/CLAUDE.md`, `awi/neoforge/CLAUDE.md`).
 
 ### `language`
 

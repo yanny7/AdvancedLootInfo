@@ -11,27 +11,30 @@ ali/CLAUDE.md                  — ALI mod: loot/trade data-scan, plugin wiring,
 ali/common-emi/CLAUDE.md       — canonical EMI/JEI/REI viewer-integration pattern (shared by all 6 common-<viewer> modules) + EMI specifics
 ali/common-jei/CLAUDE.md       — JEI specifics (references ali/common-emi/CLAUDE.md for the shared pattern)
 ali/common-rei/CLAUDE.md       — REI specifics: Category/Display split, filler/predicate registration
-ali/common-lootjs/CLAUDE.md    — optional LootJS compatibility module
+ali/common-lootjs/CLAUDE.md    — optional LootJS compatibility module (not built on this branch)
 ali/fabric/CLAUDE.md           — ALI's Fabric loader glue
-ali/forge/CLAUDE.md            — ALI's Forge loader glue
+ali/forge/CLAUDE.md            — ALI's Forge loader glue (not built on this branch)
 ali/neoforge/CLAUDE.md         — ALI's NeoForge loader glue (incl. the GLM bridge and the accesswidener → accesstransformer duplication)
 awi/CLAUDE.md                  — AWI mod: worldgen data-scan (incl. surface-rule reverse engineering), plugin wiring, networking (mirrors ali/CLAUDE.md)
 awi/common-emi/CLAUDE.md       — EMI specifics for AWI (references ali/common-emi/CLAUDE.md)
 awi/common-jei/CLAUDE.md       — JEI specifics for AWI
 awi/common-rei/CLAUDE.md       — REI specifics for AWI
 awi/fabric/CLAUDE.md           — AWI's Fabric loader glue
-awi/forge/CLAUDE.md            — AWI's Forge loader glue
+awi/forge/CLAUDE.md            — AWI's Forge loader glue (not built on this branch)
 awi/neoforge/CLAUDE.md         — AWI's NeoForge loader glue (references ali/neoforge/CLAUDE.md)
 ```
+
+On this `1.21.5` branch `forge_enabled`, `emi_enabled` and `lootjs_enabled` are all `false`, so `ali/forge`, `awi/forge`, `ali/common-emi`, `awi/common-emi` and `ali/common-lootjs` are **not part of the build** (see "Module layout" below). Their sources and docs are still in the tree; the Forge ones in particular have *not* been ported to 1.21.5 and would not compile as-is.
 
 Cross-cutting mechanisms are documented **once**, in whichever doc owns them, and referenced (not restated) everywhere else: the tooltip tree system lives in `aci/CLAUDE.md`; the recipe-viewer integration pattern lives in `ali/common-emi/CLAUDE.md`; the networking pattern lives in `ali/CLAUDE.md` (AWI's is a byte-for-byte structural mirror, documented as a diff in `awi/CLAUDE.md`). When editing one of these, check whether the change belongs in the canonical doc or a per-instance one before writing anything.
 
 ## Repo/branch layout
 
-This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Each Minecraft version is checked out into its own sibling directory (this one, `ali_1_21_1/`, is the `1.21.1` branch).
+This is a single mod (source: `https://github.com/yanny7/AdvancedLootInfo`) developed across multiple Minecraft versions in parallel, one version per git branch (`1.20.1`, `1.21.1`, `1.21.5`, `1.21.8`, `1.21.10`, `1.21.11`, `26.1.2`, `master` for the latest/in-development version, plus archived `archive/1.2x.y` branches). Each Minecraft version is checked out into its own sibling directory (this one, `ali_1_21_5/`, is the `1.21.5` branch).
 
 The mod's architecture, package layout, and plugin model described across this doc tree are identical across all these branches — they should stay accurate regardless of which version branch they're read from. What legitimately differs per branch:
-- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.1` branch, both ALI and AWI ship `fabric`+`forge`+`neoforge`.
+- Which loaders are available/enabled (see Module layout below): Fabric on every branch, Forge from `1.20.1` on, NeoForge from `1.21.1` on (Forge support has been getting phased out on newer branches in favor of NeoForge). On this `1.21.5` branch that phase-out has happened: `forge_enabled=false`, so only `fabric`+`neoforge` are built for both ALI and AWI.
+- Which recipe viewers are available: on this branch `jei_enabled`/`rei_enabled=true` but `emi_enabled=false` (EMI has no 1.21.5 build — note `emi_version` is still pinned at a `+1.21.1` version), and `lootjs_enabled=false`.
 - Loader/dependency versions in `gradle.properties` (`minecraft_version`, `forge_version`, `fabric_version`, `neoforge_version`, EMI/JEI/REI/architectury versions, etc.).
 - Minor Minecraft-API glue inside `fabric`/`forge`/`neoforge` modules and datagen.
 
@@ -51,7 +54,7 @@ Each mod (`ali/`, `awi/`) follows the same subproject pattern:
 - `common` — platform-agnostic mod logic (loader-independent). Depends on `aci:common`.
 - `common-emi`, `common-jei`, `common-rei` — optional integrations for each supported recipe viewer, enabled independently via `gradle.properties` flags (`<viewer>_enabled` + `<platform>_<viewer>_enabled`).
 - `common-lootjs` (ALI only) — optional LootJS compatibility module.
-- `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch (`forge` from `1.20.1` on, `neoforge` from `1.21.1` on).
+- `fabric`, `forge`, `neoforge` — per-loader entry points/glue code. Both ALI and AWI ship whichever of these are enabled on the current branch; on this branch that is `fabric` and `neoforge` only.
 
 `aci/common` has no per-loader modules — it is a pure shared library consumed by `ali:common` and `awi:common`.
 
@@ -65,7 +68,7 @@ Loader-specific behavior is isolated via a `ServiceLoader`-based expect/actual p
 - Each `fabric`/`forge`/`neoforge` module provides the concrete implementation and registers it via `META-INF/services`.
 - Never call Fabric-, Forge-, or NeoForge-specific APIs directly from a `common` module — go through the platform service interface instead. The one sanctioned exception is depending on `fabric-loader` in `common` build scripts purely to get `@Environment` annotations/mixin support — do not use other Fabric loader classes from `common`.
 
-See `aci/CLAUDE.md`'s `platform` section for the shared `ICorePlatformHelper` contract, and `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`/`ali/neoforge/CLAUDE.md`/`awi/fabric/CLAUDE.md`/`awi/forge/CLAUDE.md`/`awi/neoforge/CLAUDE.md` for the concrete per-loader implementations.
+See `aci/CLAUDE.md`'s `platform` section for the shared `ICorePlatformHelper` contract, and `ali/fabric/CLAUDE.md`/`ali/neoforge/CLAUDE.md`/`awi/fabric/CLAUDE.md`/`awi/neoforge/CLAUDE.md` for the concrete per-loader implementations (plus the unbuilt `ali/forge/CLAUDE.md`/`awi/forge/CLAUDE.md`).
 
 ## Plugin/extension architecture
 
@@ -96,13 +99,14 @@ Build/work on a single mod or module:
 
 Run the game (client) with a given loader/viewer combination — generated per-platform tasks follow the pattern `run<Ali|Awi><Fabric|Forge|NeoForge><Emi|Jei|Rei>Client`:
 ```
-./gradlew runAliForgeJeiClient
-./gradlew runAliFabricEmiClient
+./gradlew runAliNeoforgeJeiClient
 ./gradlew runAliNeoforgeReiClient
+./gradlew runAliFabricReiClient
+./gradlew runAwiNeoforgeJeiClient
+./gradlew runAwiNeoforgeReiClient
 ./gradlew runAwiFabricReiClient
-./gradlew runAwiForgeJeiClient
 ```
-(Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks — e.g. `run*Neoforge*` tasks only exist on `1.21.1`+ branches.)
+(Only combinations enabled via `gradle.properties` flags on the current branch are registered as tasks. On this branch that is exactly the six above: Fabric has only REI enabled (`fabric_rei_enabled=true`, `fabric_jei_enabled`/`fabric_emi_enabled=false`) and NeoForge has JEI+REI (`neoforge_emi_enabled=false`); no `run*Forge*` or `run*Emi*` task exists.)
 
 Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — recipe-viewer modules have empty/placeholder test dirs):
 ```

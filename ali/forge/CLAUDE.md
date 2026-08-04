@@ -2,6 +2,10 @@
 
 Guidance for `ali/forge` (`com.yanny.ali.forge`) — ALI's Forge loader entry point. See `ali/CLAUDE.md` for the mod logic this glues into, and `aci/CLAUDE.md`'s "platform" section for the `ICorePlatformHelper`/`Services` abstraction being implemented here. See also `ali/fabric/CLAUDE.md` and `ali/neoforge/CLAUDE.md` — the loader modules implement the same contract independently; there's no shared loader-glue base class, so a change to one commonly needs a mirrored change to the others.
 
+## ⚠️ Not built on this branch
+
+`forge_enabled=false` in `gradle.properties`, so `settings.gradle` never includes `ali:forge` — Forge has been dropped on `1.21.5` in favour of NeoForge. The sources are still here but were **not ported to 1.21.5** and would not compile if the flag were flipped on: `ForgePlatformHelper` still `@Override`s a `getLookupProvider()` that no longer exists on `IPlatformHelper`, and `AliMod.onAddReloadListener` still calls the no-arg `SERVER.getFakeLootDataManager()` (now `getFakeLootDataManager(HolderLookup.Provider)`). Treat everything below as a description of the last working (1.21.1) state, and port from `ali/neoforge` if Forge is ever revived here.
+
 ## Entry point
 
 Single `AliMod` (`@Mod`). Its static initializer builds the `SimpleChannel` (`net.minecraftforge.network.ChannelBuilder.named(...)`, int protocol version `2`, `.optional()`), constructs `SERVER`, and registers message handlers via `network.NetworkUtils`. The constructor wires `FMLJavaModLoadingContext` mod-bus listeners (`DataGeneration::generate`, common/client setup → `PluginManager`) and registers itself on `MinecraftForge.EVENT_BUS` for `@SubscribeEvent onAddReloadListener(AddReloadListenerEvent)`, which publishes `event.getRegistries()` into `ForgePlatformHelper.PROVIDER` (the backing store for `getLookupProvider()`) and registers `SERVER.getFakeLootDataManager()` as a reload listener (see `ali/CLAUDE.md`'s `configuration`/`datagen` section for `FakeLootDataManager`).
@@ -25,7 +29,7 @@ This is a *smaller* set than `ali/neoforge`'s, which also needs accessors for `L
 
 `plugin.{ForgePlugin, GlobalLootModifier, IForgePlugin}` plus `plugin.mods.farmers_delight` — Forge-specific GLM glue mirroring `ali/neoforge`'s `plugin/` package but targeting Forge's native GLM API (`ali/CLAUDE.md`'s `plugin/glm` package is the loader-agnostic half). `ForgePlugin` registers the `CanToolPerformAction`/`LootTableIdCondition` condition tooltips and the GLM bridge over `MixinForgeInternalHandler.getLootModifierManager()`.
 
-`compatibility/` holds only a `package-info` on this branch: REI is disabled for Forge (`forge_rei_enabled=false`, only `runAliForgeJeiClient` is generated), and `@REIPluginClient` is loader-specific so it cannot live in `ali/common-rei` — a `compatibility.ReiCompatibilityWrapper` must be (re)added if that flag is ever flipped on, mirroring `ali/neoforge`'s. `awi/forge` is in the same state for the same reason.
+`compatibility/` holds only a `package-info`: REI was disabled for Forge (`forge_rei_enabled=false`; no `run*Forge*` task is generated at all now), and `@REIPluginClient` is loader-specific so it cannot live in `ali/common-rei` — a `compatibility.ReiCompatibilityWrapper` must be (re)added if that flag is ever flipped on, mirroring `ali/neoforge`'s. `awi/forge` is in the same state for the same reason.
 
 ## Boilerplate vs genuine glue
 

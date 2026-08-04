@@ -6,8 +6,9 @@ Guidance for working on **ALI** (`AdvancedLootInfo`, `com.yanny.ali`) — the re
 
 - `ali/common` — platform-agnostic mod logic, covered by this file.
 - `ali/common-emi`, `ali/common-jei`, `ali/common-rei` — recipe-viewer integrations. See `ali/common-emi/CLAUDE.md` (canonical pattern doc), `ali/common-jei/CLAUDE.md`, `ali/common-rei/CLAUDE.md`.
-- `ali/common-lootjs` — optional LootJS compatibility module. See `ali/common-lootjs/CLAUDE.md`.
-- `ali/fabric`, `ali/forge`, `ali/neoforge` — per-loader entry points. See `ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`, `ali/neoforge/CLAUDE.md`.
+- `ali/common-lootjs` — optional LootJS compatibility module, **not built on this branch** (`lootjs_enabled=false`). See `ali/common-lootjs/CLAUDE.md`.
+- `ali/fabric`, `ali/neoforge` — per-loader entry points. See `ali/fabric/CLAUDE.md`, `ali/neoforge/CLAUDE.md`. `ali/forge` still exists in the tree but is excluded from the build on this branch and unported to 1.21.5 — see `ali/forge/CLAUDE.md`.
+- `ali/common-emi` is also excluded on this branch (`emi_enabled=false`).
 
 ## `ali/common` package map (`com.yanny.ali`)
 
@@ -20,7 +21,7 @@ Wires ALI's registries into `aci`'s generic `CorePluginManager` machinery.
 - `AliCommonRegistry` — holds `AliConfig` (via `ConfigUtils.readConfiguration()`) and an entity-variant registry (e.g. sheep colors).
 - `AliClientRegistry` — client-side widget/data-node factories.
 - `AliServerRegistry` — the workhorse: item collectors, entry/condition/function tooltip builders, value tooltips, chance/count/itemstack modifiers, item listings, and the loot-table/trade parsing entry points `parseTable`/`parseTrade`, plus the tooltip cache.
-- `FakeLootDataManager` — a `SimpleJsonResourceReloadListener` on the `fake_loot` datapack folder; merges "fake" loot pools declared by other mods' compat shims into real tables at read time (see `datagen.FakeLootProvider` below).
+- `FakeLootDataManager` — a `SimpleJsonResourceReloadListener` on the `fake_loot` datapack folder; merges "fake" loot pools declared by other mods' compat shims into real tables at read time (see `datagen.FakeLootProvider` below). Obtained via `AbstractServer.getFakeLootDataManager(HolderLookup.Provider)` — the provider is passed in by each loader's reload wiring, which is why ALI no longer needs a `getLookupProvider()` platform method.
 
 ### `plugin/Plugin.java` — the `@AliEntrypoint`
 This is where every category and value type from `aci`'s two dispatch tiers actually gets instantiated for ALI. At a survey level:
@@ -69,14 +70,14 @@ Backs the datapack-based `ali_config.schema.json` format:
 **Flow**:
 1. Client-side, `compatibility.common.GenericUtils.register(...)` checks `PluginManager.getInstance().clientRegistry.getCurrentDataFuture()`; if not yet resolved, it calls `AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestLootDataMessage())`.
 2. Server-side, the loader's `Server` class receives the request (wired via `NetworkUtils.registerCommon`) and calls `AbstractServer.syncLootTables(player)`.
-3. `AbstractServer.readLootTables(LootDataManager)` (called at world-load/reload time, not per-request) parses all block/entity/gameplay loot tables and trades into `IDataNode`s, writes the tooltip palette header (see `aci/CLAUDE.md`'s tree-model section) followed by the node data into a `FriendlyByteBuf`, gzips it, and slices it into ≤32KB chunks, cached in memory.
+3. `AbstractServer.readLootTables(ReloadableServerRegistries.Holder)` (called at world-load/reload time, not per-request) parses all block/entity/gameplay loot tables and trades into `IDataNode`s, writes the tooltip palette header (see `aci/CLAUDE.md`'s tree-model section) followed by the node data into a `FriendlyByteBuf`, gzips it, and slices it into ≤32KB chunks, cached in memory.
 4. `syncLootTables` sends `StartMessage(chunks.size())`, then each `LootDataChunkMessage(index, data)`, then `DoneMessage()`.
 5. `AbstractClient.onStart`/`onLootDataChunk`/`onDone` forward into `PluginManager.getInstance().clientRegistry` (`startLootData`, `addChunkData`, `doneLootData`), which decompresses and decodes the reassembled buffer into the cached node tree (client-side chunk reassembly itself is `aci.compatibility.DataReceiver`, used inside `CoreClientRegistry`).
 
 `AbstractServer`/`AbstractClient` are template-method base classes: they hold all the shared logic above and declare `protected abstract send*` methods that each loader's `Server`/`Client` subclass implements over its native networking API (Fabric's `ServerPlayNetworking`/`ClientPlayNetworking`, Forge's `SimpleChannel`).
 
 ## `mixin`
-`MixinBushBlock` (invoker accessor exposing protected `mayPlaceOn` for loot-modifier predicate checks). `MixinClientPlayNetworkHandler` (injects into `handleUpdateTags` tail to trigger `clientRegistry.reloadData()` on tag reload).
+`MixinVegetationBlock` (invoker accessor exposing protected `mayPlaceOn` for loot-modifier predicate checks — the class vanilla renamed from `BushBlock` in 1.21.5). `MixinClientPlayNetworkHandler` (client mixin; injects into `handleUpdateTags` tail to trigger `clientRegistry.reloadData()` on tag reload). Both are declared in `ali.mixins.json`.
 
 ## `platform` / `platform/services`
-`Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` (loader-specific operations: get plugins, config dir, fake-loot-table parsing) — implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`/`ali/neoforge/CLAUDE.md`.
+`Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` — on top of `aci`'s `ICorePlatformHelper` (`getPlugins`/`getConfiguration`) it adds exactly **one** method, `getSpawnEggItem(EntityType<?>)`. There is no longer a `getLookupProvider()`: `CoreServerRegistry.lookupProvider()` derives it from the `ServerLevel` being scanned, and `FakeLootDataManager` takes the provider as a parameter. Implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/neoforge/CLAUDE.md`.

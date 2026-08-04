@@ -2,7 +2,7 @@
 
 Guidance for `awi/common-jei` (`com.yanny.awi.jei`) — AWI's JEI integration. **The shared recipe-viewer integration pattern, and JEI's three-phase entry-point lifecycle, are documented once in `ali/common-emi/CLAUDE.md` and `ali/common-jei/CLAUDE.md` — read those first.** This module is structurally identical to `ali/common-jei`; this file only notes the domain substitution.
 
-Enabled independently per branch via `gradle.properties` (`jei_enabled` + `<platform>_jei_enabled`).
+Enabled independently per branch via `gradle.properties` (`jei_enabled` + `<platform>_jei_enabled`). On this branch that means NeoForge only (`fabric_jei_enabled=false`).
 
 ## Package contents
 

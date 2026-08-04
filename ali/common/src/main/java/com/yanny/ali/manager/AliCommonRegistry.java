@@ -11,7 +11,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -45,7 +47,7 @@ public class AliCommonRegistry extends CoreCommonRegistry<AliConfig> implements 
                 if (entity != null) {
                     // some renderers derive their state from position/rotation, make sure it is not left at NaN/uninitialized values
                     try {
-                        entity.moveTo(0, 0, 0);
+                        entity.move(MoverType.SELF, new Vec3(0, 0, 0));
                         entity.setYRot(0);
                         entity.setXRot(0);
                     } catch (Throwable e) {

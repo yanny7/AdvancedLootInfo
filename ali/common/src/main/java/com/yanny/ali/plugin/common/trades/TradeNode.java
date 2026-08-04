@@ -33,8 +33,8 @@ public class TradeNode extends ListNode {
         }
     }
 
-    public TradeNode(IServerUtils utils, List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList) {
-        this(utils, convert(itemListingList));
+    public TradeNode(IServerUtils utils, List<Pair<VillagerTrades.ItemListing[], Integer>> itemListingList, boolean isWanderingTrader) {
+        this(utils, convert(itemListingList), isWanderingTrader);
     }
 
     public TradeNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {

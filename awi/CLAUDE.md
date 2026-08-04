@@ -5,10 +5,10 @@ Guidance for working on **AWI** (`AdvancedWorldInfo`, `com.yanny.awi`) — the r
 ## Module layout
 
 - `awi/common` — platform-agnostic mod logic, covered by this file.
-- `awi/common-emi`, `awi/common-jei`, `awi/common-rei` — recipe-viewer integrations. See `awi/common-emi/CLAUDE.md`, `awi/common-jei/CLAUDE.md`, `awi/common-rei/CLAUDE.md` (all reference `ali/common-emi/CLAUDE.md` for the shared pattern).
+- `awi/common-emi`, `awi/common-jei`, `awi/common-rei` — recipe-viewer integrations. See `awi/common-emi/CLAUDE.md`, `awi/common-jei/CLAUDE.md`, `awi/common-rei/CLAUDE.md` (all reference `ali/common-emi/CLAUDE.md` for the shared pattern). `awi/common-emi` is **not built on this branch** (`emi_enabled=false`).
 - `awi/fabric` — Fabric loader module. See `awi/fabric/CLAUDE.md`.
-- `awi/forge` — Forge loader module (enabled via `forge_enabled`). See `awi/forge/CLAUDE.md`.
 - `awi/neoforge` — NeoForge loader module (enabled via `neoforge_enabled`). See `awi/neoforge/CLAUDE.md`.
+- `awi/forge` — Forge loader module; **excluded from the build on this branch** (`forge_enabled=false`) and unported to 1.21.5. See `awi/forge/CLAUDE.md`.
 
 AWI has no `common-lootjs` equivalent, no `configuration` package, and no user-facing config file at all — there's nothing to filter, since worldgen registries are enumerated exhaustively rather than matched against user-declared categories (contrast with ALI's `ali_config.schema.json`-driven filtering).
 
@@ -39,7 +39,7 @@ Mirrors ALI's `manager` package exactly in shape:
 ### `plugin/common/nodes` — the AWI data-scan engine
 Server-side tree construction; each class doubles as codec (server constructor + `IClientUtils`/`FriendlyByteBuf` decode constructor + `encodeNode`, per `aci/CLAUDE.md`'s dual-constructor convention).
 
-- `LevelStemNode` (entry-level node) — walks `RegistryAccess.registryOrThrow(Registries.LEVEL_STEM)` per dimension; for a `NoiseBasedChunkGenerator`, spins up a thread pool and calls `NodeUtils.getBaseBlocksForBiome` per biome in parallel.
+- `LevelStemNode` (entry-level node) — one per dimension, built from the `Registries.LEVEL_STEM` registry that `AbstractServer` enumerates via `registryAccess.lookupOrThrow(...)` (1.21.5 renamed `registryOrThrow` → `lookupOrThrow`); for a `NoiseBasedChunkGenerator`, spins up a thread pool and calls `NodeUtils.getBaseBlocksForBiome` per biome in parallel.
 - `BiomeNode` → iterates `BiomeGenerationSettings.features()` per `GenerationStep.Decoration` → `GenerationStepNode` → `PlacedFeatureNode` (splits into `ConfiguredFeature`/`FeatureConfiguration` blocks via `utils.collectBlocks`, and `PlacementModifier` tooltips) → `BlockNode` (leaf).
 - `BaseTerrainNode` — leaf list of blocks discovered by the surface-rule scanner below.
 - **`NodeUtils`** — the real worldgen-data-collection engine, and the single most distinctive piece of AWI's architecture: there is no `BuiltInRegistries.PLACED_FEATURE`-style enumeration for surface blocks (features come from a biome's own `BiomeGenerationSettings`, reached only through the per-dimension `LevelStem`→generator→biome path above). Instead, `DimensionContext` builds a mock `SurfaceRules.Context`/`ProtoChunk`/`NoiseChunk`, and `walkColumn` empirically **fires the biome's compiled `SurfaceRules.SurfaceRule` over synthetic canonical columns** (swept surface heights, spiral-sampled XZ, ceiling/overhang probes) to reverse-engineer which blocks the rule places — there is no vanilla API that just answers "what blocks can this biome's surface rule produce," so AWI empirically probes it. Each discovered block gets classified as RELATIVE/ABSOLUTE/LAYERED with water/floor-ceiling constraints. (An earlier abandoned attempt to instead *run* feature placement against mock `Fake*` level/chunk implementations was removed as a dead end — empirically running `Feature.place()` is unreliable because placement reads the surrounding world; see the ASM approach in `plugin/server` below.)
@@ -67,7 +67,7 @@ Only `LanguageHolder` — registers `Lang.*` enum classes into `aci.CoreLang.TRA
 Single `MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail) to trigger `clientRegistry.reloadData()` on resource reload (same role as ALI's mixin of the same name).
 
 ### `platform` / `platform/services`
-`Services` (`ServiceLoader`-based platform accessor) + `IPlatformHelper extends ICorePlatformHelper<IPlugin>` — a smaller interface than ALI's (only `getPlugins`/`getConfiguration`, no loot-pool/spawn-egg/loot-table-parsing methods since AWI has no loot domain). Per-loader implementations live in `awi/fabric`, `awi/forge` and `awi/neoforge` (see `awi/fabric/CLAUDE.md`, `awi/forge/CLAUDE.md`, `awi/neoforge/CLAUDE.md`).
+`Services` (`ServiceLoader`-based platform accessor) + `IPlatformHelper extends ICorePlatformHelper<IPlugin>` — an **empty** marker extension: it adds nothing to `aci`'s `getPlugins`/`getConfiguration`, since AWI has no loot domain (ALI's adds `getSpawnEggItem`). Per-loader implementations live in `awi/fabric` and `awi/neoforge` (see `awi/fabric/CLAUDE.md`, `awi/neoforge/CLAUDE.md`; `awi/forge`'s is unported).
 
 ## Data-scan entry point
 
@@ -79,9 +79,9 @@ Mirrors `ali/CLAUDE.md`'s networking pattern exactly — same `AbstractServer`/`
 
 | ALI | AWI |
 |---|---|
-| `AbstractServer.readLootTables(LootDataManager)` | `AbstractServer.readWorldgenInfo(ServerLevel)` |
+| `AbstractServer.readLootTables(ReloadableServerRegistries.Holder)` | `AbstractServer.readWorldgenInfo(ServerLevel)` |
 | `LootDataChunkMessage(int, byte[])` | `WorldgenDataChunkMessage(int, byte[])` |
 | `RequestLootDataMessage()` | `RequestWorldgenDataMessage()` |
 | `syncLootTables` server method name | also named `syncLootTables` — **not renamed for AWI**, a naming leftover from copy-pasting ALI's sync logic (`onLootDataChunk`/`startLootData` client-side callbacks are similarly still loot-named). Don't be confused by "loot" naming showing up in AWI's worldgen sync path — it's cosmetic, not a sign the code is misplaced. |
 
-Actual packet/channel registration lives in the loader modules (`awi/fabric`, `awi/forge`, `awi/neoforge`), same division of responsibility as ALI.
+Actual packet/channel registration lives in the loader modules (`awi/fabric`, `awi/neoforge`, plus the unbuilt `awi/forge`), same division of responsibility as ALI.
