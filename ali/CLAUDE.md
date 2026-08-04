@@ -7,7 +7,7 @@ Guidance for working on **ALI** (`AdvancedLootInfo`, `com.yanny.ali`) — the re
 - `ali/common` — platform-agnostic mod logic, covered by this file.
 - `ali/common-emi`, `ali/common-jei`, `ali/common-rei` — recipe-viewer integrations. See `ali/common-emi/CLAUDE.md` (canonical pattern doc), `ali/common-jei/CLAUDE.md`, `ali/common-rei/CLAUDE.md`.
 - `ali/common-lootjs` — optional LootJS compatibility module. See `ali/common-lootjs/CLAUDE.md`.
-- `ali/fabric`, `ali/forge` — per-loader entry points. See `ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`. (No `neoforge` module on this `1.20.1` branch.)
+- `ali/fabric`, `ali/forge`, `ali/neoforge` — per-loader entry points. See `ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`, `ali/neoforge/CLAUDE.md`.
 
 ## `ali/common` package map (`com.yanny.ali`)
 
@@ -62,7 +62,7 @@ Backs the datapack-based `ali_config.schema.json` format:
 
 ## Networking (canonical pattern — `awi/CLAUDE.md` mirrors this)
 
-`ali/common/.../network` implements ALI's on-demand data-sync protocol; packet registration/codec wiring itself lives in the loader modules (`ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`), this package holds the shared logic and abstract template.
+`ali/common/.../network` implements ALI's on-demand data-sync protocol; packet registration/codec wiring itself lives in the loader modules (`ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`, `ali/neoforge/CLAUDE.md`), this package holds the shared logic and abstract template.
 
 **Packets**: `StartMessage(int totalMessages)`, `DoneMessage()` (empty marker), `LootDataChunkMessage(int index, byte[] data)` (chunk payload), `RequestLootDataMessage()` (empty client→server request marker).
 
@@ -79,4 +79,4 @@ Backs the datapack-based `ali_config.schema.json` format:
 `MixinBushBlock` (invoker accessor exposing protected `mayPlaceOn` for loot-modifier predicate checks). `MixinClientPlayNetworkHandler` (injects into `handleUpdateTags` tail to trigger `clientRegistry.reloadData()` on tag reload).
 
 ## `platform` / `platform/services`
-`Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` (loader-specific operations: get plugins, config dir, fake-loot-table parsing) — implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`.
+`Services` (static holder loading `IPlatformHelper` via `ServiceLoader`), `IPlatformHelper` (loader-specific operations: get plugins, config dir, fake-loot-table parsing) — implemented per-loader, see `ali/fabric/CLAUDE.md`/`ali/forge/CLAUDE.md`/`ali/neoforge/CLAUDE.md`.

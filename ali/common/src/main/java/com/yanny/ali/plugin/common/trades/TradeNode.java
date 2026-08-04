@@ -20,7 +20,7 @@ import java.util.List;
 public class TradeNode extends ListNode {
     public static final ResourceLocation ID = Utils.modLoc("trade");
 
-    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap) {
+    public TradeNode(IServerUtils utils, Int2ObjectMap<VillagerTrades.ItemListing[]> itemListingMap, boolean isWanderingTrader) {
         List<Int2ObjectMap.Entry<VillagerTrades.ItemListing[]>> entries = itemListingMap.int2ObjectEntrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(Int2ObjectMap.Entry::getIntKey))
@@ -28,7 +28,7 @@ public class TradeNode extends ListNode {
 
         for (Int2ObjectMap.Entry<VillagerTrades.ItemListing[]> entry : entries) {
             if (entry.getValue().length > 0) {
-                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue()));
+                addChildren(new TradeLevelNode(utils, entry.getIntKey(), entry.getValue(), isWanderingTrader));
             }
         }
     }

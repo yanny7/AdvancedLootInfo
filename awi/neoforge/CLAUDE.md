@@ -1,0 +1,26 @@
+# awi/neoforge/CLAUDE.md
+
+Guidance for `awi/neoforge` (`com.yanny.awi.neoforge`) — AWI's NeoForge loader entry point. See `awi/CLAUDE.md` for the mod logic this glues into, and `aci/CLAUDE.md`'s "platform" section for the `ICorePlatformHelper`/`Services` abstraction being implemented here. This module is a near copy-paste of `ali/neoforge` (see `ali/neoforge/CLAUDE.md`) with the loot domain stripped out; where it differs from `awi/forge`, the difference is NeoForge-vs-Forge API, not AWI logic — so a change to one loader module usually needs a matching change to the others (`awi/fabric/CLAUDE.md`, `awi/forge/CLAUDE.md`).
+
+## Entry point
+
+Single `AwiMod` (`@Mod`, constructor takes the mod `IEventBus`). Unlike Forge it builds **no** `SimpleChannel`: `SERVER`/`CLIENT` are plain instances and payload registration happens in `RegisterPayloadHandlersEvent` (`registrar(MOD_ID).optional().versioned("1")`). Mod-bus listeners: `DataGeneration::generate`, common/client setup → `PluginManager`. There is no `AddReloadListenerEvent` listener — that one exists in `ali/neoforge` only, to publish `HolderLookup.Provider` for ALI's `getLookupProvider` and to register its fake-loot data manager; AWI needs neither.
+
+`NeoForgeCommonBusSubscriber` (`ServerStartingEvent` → `registerServerEvent` + `SERVER.readWorldgenInfo(overworld)`, `ServerStoppingEvent` → `deregisterServerEvent`) and `NeoForgeClientBusSubscriber` (`ClientPlayerNetworkEvent.LoggingIn`/`LoggingOut`) are the game-bus halves, both `@EventBusSubscriber(bus = Bus.GAME)`. There is no client level-unload handler — AWI has no per-level client cache to drop (`ali/neoforge` has one for `EntityStorage`).
+
+## Platform + networking implementation
+
+- `platform.NeoForgePlatformHelper implements IPlatformHelper` — identical in shape to `awi/forge`'s: only `getPlugins` (`ModFileScanData`/`@AwiEntrypoint` ASM type match, memoized) and `getConfiguration` (`FMLPaths.CONFIGDIR`). Plugin discovery is by **annotation**, so a new plugin class must also be added to `fabric.mod.json`'s `awi` entrypoint for Fabric.
+- `network.{Client,Server,NetworkUtils}` — the 4 worldgen messages registered as native `CustomPacketPayload`s: `registrar.executesOn(HandlerThread.NETWORK).playToClient/playToServer(TYPE, CODEC, handler)`. No codec casting is needed (NeoForge accepts the `StreamCodec<RegistryFriendlyByteBuf, ...>` that `awi/common` declares) and there is no `setPacketHandled` boilerplate — this is the main reason the classes are shorter than `awi/forge`'s. Sends go through `PacketDistributor.sendToPlayer`/`sendToServer`, each guarded by `hasChannel(<payload>.TYPE)` so nothing is written to a client without the mod. The client's login check uses `NetworkRegistry.hasChannel(connection, ConnectionProtocol.PLAY, RequestWorldgenDataMessage.TYPE.id())`.
+
+## Mixins
+
+`mixin.MixinMinecraftServer` only, same as `awi/forge`: `reloadResources` TAIL → `PluginManager.reloadServer()` + `SERVER.readWorldgenInfo(server.overworld())`. Mixin configs are declared **once** here, in `META-INF/neoforge.mods.toml`'s `[[mixins]]` blocks (`awi.mixins.json`, `awi.emi.mixins.json`, `awi.neoforge.mixins.json`) — there is no `loom { forge { mixinConfig ... } }`/manifest duplication like on Forge. The toml lists `awi.emi.mixins.json` unconditionally, so it assumes `neoforge_emi_enabled=true`; flipping that flag off would leave the toml pointing at a config that is no longer shadowed in (`ali/neoforge`'s toml has the same assumption).
+
+## Access transformers
+
+NeoForge does not read access wideners, so `META-INF/accesstransformer.cfg` is a hand-maintained translation of `awi/common`'s `awi.accesswidener` (`accessible field X y Ldesc;` → `public X y`, `accessible method X y (desc)ret` → `public X y(desc)ret`, `accessible class X` → `public X`). **Any entry added to `awi.accesswidener` must be mirrored here**, or the shadowed `awi/common` code will pass compilation (it compiles against the widened jar) and then fail at runtime on NeoForge with `IllegalAccessError`. `ali/neoforge` carries the same duplicated file for the same reason.
+
+## Viewer wiring
+
+All three viewers are enabled for NeoForge on this branch (`neoforge_emi_enabled`/`neoforge_jei_enabled`/`neoforge_rei_enabled=true`), so `runAwiNeoforgeEmiClient`/`...JeiClient`/`...ReiClient` all exist. EMI (`@EmiEntrypoint`) and JEI (`@JeiPlugin`) are discovered by annotation from the shadowed common modules; REI needs `compatibility.ReiCompatibilityWrapper`, a `@REIPluginClient`-annotated subclass of `awi/common-rei`'s `ReiCompatibility`, because that annotation is loader-specific and cannot live in `awi/common-rei` (mirrors `ali/neoforge`).

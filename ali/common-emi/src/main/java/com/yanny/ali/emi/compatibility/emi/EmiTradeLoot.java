@@ -47,8 +47,8 @@ public class EmiTradeLoot extends EmiBaseLoot {
     }
 
     @Override
-    public int getDisplayHeight() {
-        return (pois.isEmpty() ? 10 : 20) + (accepts.isEmpty() ? 0 : 20) + getItemsHeight();
+    protected int getHeaderHeight() {
+        return (pois.isEmpty() ? 10 : 20) + (accepts.isEmpty() ? 0 : 20);
     }
 
     @Override
