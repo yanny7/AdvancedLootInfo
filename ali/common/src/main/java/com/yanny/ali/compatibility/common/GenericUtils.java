@@ -1,6 +1,5 @@
 package com.yanny.ali.compatibility.common;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.Rect;
 import com.yanny.ali.api.IClientUtils;
@@ -22,6 +21,7 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
@@ -52,8 +52,6 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
-
-import static net.minecraft.client.gui.screens.inventory.InventoryScreen.renderEntityInInventoryFollowsMouse;
 
 public class GenericUtils {
     private static final Logger LOGGER = LogUtils.getLogger();

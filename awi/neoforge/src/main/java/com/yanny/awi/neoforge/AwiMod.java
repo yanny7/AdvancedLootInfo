@@ -6,10 +6,13 @@ import com.yanny.awi.neoforge.datagen.DataGeneration;
 import com.yanny.awi.neoforge.network.Client;
 import com.yanny.awi.neoforge.network.NetworkUtils;
 import com.yanny.awi.neoforge.network.Server;
+import com.yanny.awi.pip.BlockPictureInPictureRenderer;
+import com.yanny.awi.pip.BlockRenderState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterPictureInPictureRenderersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @Mod(Utils.MOD_ID)
@@ -23,6 +26,7 @@ public class AwiMod {
         modEventBus.addListener(AwiMod::registerCommonEvent);
         modEventBus.addListener(AwiMod::registerClientEvent);
         modEventBus.addListener(AwiMod::registerPayloadHandler);
+        modEventBus.addListener(AwiMod::registerPipRenderer);
     }
 
     public static void registerCommonEvent(@SuppressWarnings("unused") FMLCommonSetupEvent event) {
@@ -36,5 +40,9 @@ public class AwiMod {
     public static void registerPayloadHandler(final RegisterPayloadHandlersEvent event) {
         NetworkUtils.registerClient(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION), CLIENT);
         NetworkUtils.registerCommon(event.registrar(Utils.MOD_ID).optional().versioned(PROTOCOL_VERSION), SERVER);
+    }
+
+    public static void registerPipRenderer(final RegisterPictureInPictureRenderersEvent event) {
+        event.register(BlockRenderState.class, BlockPictureInPictureRenderer::new);
     }
 }

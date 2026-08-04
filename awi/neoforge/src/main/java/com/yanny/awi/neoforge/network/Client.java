@@ -1,13 +1,9 @@
 package com.yanny.awi.neoforge.network;
 
-import com.yanny.awi.network.AbstractClient;
-import com.yanny.awi.network.DoneMessage;
-import com.yanny.awi.network.RequestWorldgenDataMessage;
-import com.yanny.awi.network.StartMessage;
-import com.yanny.awi.network.WorldgenDataChunkMessage;
+import com.yanny.awi.network.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class Client extends AbstractClient {
@@ -28,7 +24,7 @@ public class Client extends AbstractClient {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
         if (listener != null && listener.hasChannel(RequestWorldgenDataMessage.TYPE)) {
-            PacketDistributor.sendToServer(message);
+            ClientPacketDistributor.sendToServer(message);
         }
     }
 }
