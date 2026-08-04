@@ -22,11 +22,13 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     private final Supplier<List<IPlugin>> pluginsSupplier = Suppliers.memoize(this::loadPlugins);
 
+    @NotNull
     @Override
     public List<IPlugin> getPlugins() {
         return pluginsSupplier.get();
     }
 
+    @NotNull
     @Override
     public Path getConfiguration() {
         return FMLPaths.CONFIGDIR.get();

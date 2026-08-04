@@ -6,11 +6,9 @@ import com.yanny.awi.network.RequestWorldgenDataMessage;
 import com.yanny.awi.network.StartMessage;
 import com.yanny.awi.network.WorldgenDataChunkMessage;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.function.Supplier;
+import net.minecraftforge.network.SimpleChannel;
 
 public class Server extends AbstractServer {
     private final SimpleChannel channel;
@@ -19,34 +17,32 @@ public class Server extends AbstractServer {
         this.channel = channel;
     }
 
-    public void onStartSendingWorldgenData(@SuppressWarnings("unused") RequestWorldgenDataMessage ignoredMessage, Supplier<NetworkEvent.Context> contextSupplier) {
-        NetworkEvent.Context context = contextSupplier.get();
-
-        if (context.getDirection().getReceptionSide().isServer() && context.getSender() != null) {
-            context.enqueueWork(() -> syncLootTables(context.getSender()));
+    public void onStartSendingWorldgenData(@SuppressWarnings("unused") RequestWorldgenDataMessage ignoredMessage, CustomPayloadEvent.Context contextSupplier) {
+        if (contextSupplier.isServerSide() && contextSupplier.getSender() != null) {
+            contextSupplier.enqueueWork(() -> syncLootTables(contextSupplier.getSender()));
         }
 
-        context.setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 
     @Override
     protected void sendStartMessage(ServerPlayer serverPlayer, StartMessage message) {
-        if (channel.isRemotePresent(serverPlayer.connection.connection)) {
-            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), message);
+        if (channel.isRemotePresent(serverPlayer.connection.getConnection())) {
+            channel.send(message, PacketDistributor.PLAYER.with(serverPlayer));
         }
     }
 
     @Override
     protected void sendWorldgenDataChunkMessage(ServerPlayer serverPlayer, WorldgenDataChunkMessage message) {
-        if (channel.isRemotePresent(serverPlayer.connection.connection)) {
-            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), message);
+        if (channel.isRemotePresent(serverPlayer.connection.getConnection())) {
+            channel.send(message, PacketDistributor.PLAYER.with(serverPlayer));
         }
     }
 
     @Override
     protected void sendDoneMessage(ServerPlayer serverPlayer, DoneMessage message) {
-        if (channel.isRemotePresent(serverPlayer.connection.connection)) {
-            channel.send(PacketDistributor.PLAYER.with(() -> serverPlayer), message);
+        if (channel.isRemotePresent(serverPlayer.connection.getConnection())) {
+            channel.send(message, PacketDistributor.PLAYER.with(serverPlayer));
         }
     }
 }

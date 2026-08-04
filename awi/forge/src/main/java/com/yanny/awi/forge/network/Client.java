@@ -3,10 +3,9 @@ package com.yanny.awi.forge.network;
 import com.yanny.awi.network.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.SimpleChannel;
 
 public class Client extends AbstractClient {
     private final SimpleChannel channel;
@@ -15,28 +14,28 @@ public class Client extends AbstractClient {
         this.channel = channel;
     }
 
-    public void onWorldgenDataChunk(WorldgenDataChunkMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        if (contextSupplier.get().getDirection().getReceptionSide().isClient()) {
+    public void onWorldgenDataChunk(WorldgenDataChunkMessage msg, CustomPayloadEvent.Context contextSupplier) {
+        if (contextSupplier.isClientSide()) {
             super.onLootDataChunk(msg);
         }
 
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 
-    public void onStart(StartMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        if (contextSupplier.get().getDirection().getReceptionSide().isClient()) {
+    public void onStart(StartMessage msg, CustomPayloadEvent.Context contextSupplier) {
+        if (contextSupplier.isClientSide()) {
             super.onStart(msg);
         }
 
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 
-    public void onDone(DoneMessage msg, Supplier<NetworkEvent.Context> contextSupplier) {
-        if (contextSupplier.get().getDirection().getReceptionSide().isClient()) {
+    public void onDone(DoneMessage msg, CustomPayloadEvent.Context contextSupplier) {
+        if (contextSupplier.isClientSide()) {
             super.onDone(msg);
         }
 
-        contextSupplier.get().setPacketHandled(true);
+        contextSupplier.setPacketHandled(true);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class Client extends AbstractClient {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
         if (listener != null && channel.isRemotePresent(listener.getConnection())) {
-            channel.sendToServer(message);
+            channel.send(message, PacketDistributor.SERVER.noArg());
         }
     }
 }
