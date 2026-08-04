@@ -71,4 +71,5 @@ if (settings.forge_enabled == "true") {
 
 if (settings.neoforge_enabled == "true") {
     include("ali:neoforge")
+    include("awi:neoforge")
 }
