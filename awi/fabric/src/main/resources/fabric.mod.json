@@ -17,10 +17,10 @@
     "accessWidener": "awi.accesswidener",
     "entrypoints": {
         "main": [
-          "com.yanny.awi.fabric.CommonAliMod"
+            "com.yanny.awi.fabric.CommonAwiMod"
         ],
         "client": [
-            "com.yanny.awi.fabric.ClientAliMod"
+          "com.yanny.awi.fabric.ClientAwiMod"
         ],
         "fabric-datagen": [
             "com.yanny.awi.fabric.datagen.DataGeneration"

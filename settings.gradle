@@ -62,4 +62,5 @@ if (settings.fabric_enabled == "true") {
 
 if (settings.forge_enabled == "true") {
     include("ali:forge")
+    include("awi:forge")
 }

@@ -6,7 +6,8 @@ Guidance for working on **AWI** (`AdvancedWorldInfo`, `com.yanny.awi`) — the r
 
 - `awi/common` — platform-agnostic mod logic, covered by this file.
 - `awi/common-emi`, `awi/common-jei`, `awi/common-rei` — recipe-viewer integrations. See `awi/common-emi/CLAUDE.md`, `awi/common-jei/CLAUDE.md`, `awi/common-rei/CLAUDE.md` (all reference `ali/common-emi/CLAUDE.md` for the shared pattern).
-- `awi/fabric` — AWI's **only** loader module, on every branch (no `forge`/`neoforge` ever). See `awi/fabric/CLAUDE.md`.
+- `awi/fabric` — Fabric loader module. See `awi/fabric/CLAUDE.md`.
+- `awi/forge` — Forge loader module (enabled via `forge_enabled`). See `awi/forge/CLAUDE.md`.
 
 AWI has no `common-lootjs` equivalent, no `configuration` package, and no user-facing config file at all — there's nothing to filter, since worldgen registries are enumerated exhaustively rather than matched against user-declared categories (contrast with ALI's `ali_config.schema.json`-driven filtering).
 
@@ -57,7 +58,7 @@ Only `LanguageHolder` — registers `Lang.*` enum classes into `aci.CoreLang.TRA
 Single `MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail) to trigger `clientRegistry.reloadData()` on resource reload (same role as ALI's mixin of the same name).
 
 ### `platform` / `platform/services`
-`Services` (`ServiceLoader`-based platform accessor) + `IPlatformHelper extends ICorePlatformHelper<IPlugin>` — a smaller interface than ALI's (only `getPlugins`/`getConfiguration`, no loot-pool/spawn-egg/loot-table-parsing methods since AWI has no loot domain). Fabric-only implementation lives in `awi/fabric` (see `awi/fabric/CLAUDE.md`).
+`Services` (`ServiceLoader`-based platform accessor) + `IPlatformHelper extends ICorePlatformHelper<IPlugin>` — a smaller interface than ALI's (only `getPlugins`/`getConfiguration`, no loot-pool/spawn-egg/loot-table-parsing methods since AWI has no loot domain). Per-loader implementations live in `awi/fabric` and `awi/forge` (see `awi/fabric/CLAUDE.md`, `awi/forge/CLAUDE.md`).
 
 ## Data-scan entry point
 
@@ -74,4 +75,4 @@ Mirrors `ali/CLAUDE.md`'s networking pattern exactly — same `AbstractServer`/`
 | `RequestLootDataMessage()` | `RequestWorldgenDataMessage()` |
 | `syncLootTables` server method name | also named `syncLootTables` — **not renamed for AWI**, a naming leftover from copy-pasting ALI's sync logic (`onLootDataChunk`/`startLootData` client-side callbacks are similarly still loot-named). Don't be confused by "loot" naming showing up in AWI's worldgen sync path — it's cosmetic, not a sign the code is misplaced. |
 
-Actual packet/channel registration lives in `awi/fabric` (see `awi/fabric/CLAUDE.md`), same division of responsibility as ALI.
+Actual packet/channel registration lives in the loader modules (`awi/fabric`, `awi/forge`), same division of responsibility as ALI.

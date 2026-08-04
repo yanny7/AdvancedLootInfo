@@ -7,7 +7,7 @@ Guidance for working on **ALI** (`AdvancedLootInfo`, `com.yanny.ali`) — the re
 - `ali/common` — platform-agnostic mod logic, covered by this file.
 - `ali/common-emi`, `ali/common-jei`, `ali/common-rei` — recipe-viewer integrations. See `ali/common-emi/CLAUDE.md` (canonical pattern doc), `ali/common-jei/CLAUDE.md`, `ali/common-rei/CLAUDE.md`.
 - `ali/common-lootjs` — optional LootJS compatibility module. See `ali/common-lootjs/CLAUDE.md`.
-- `ali/fabric`, `ali/forge` — per-loader entry points. See `ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`. (No `neoforge` module on this `1.20.1` branch.)
+- `ali/fabric`, `ali/forge` — per-loader entry points. See `ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`.
 
 ## `ali/common` package map (`com.yanny.ali`)
 
