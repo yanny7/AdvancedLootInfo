@@ -183,7 +183,7 @@ public abstract class CoreClientRegistry<
         receiver.messageReceived(index, data);
     }
 
-    public synchronized void startLootData(int totalMessages) {
+    public synchronized void startReceivingData(int totalMessages) {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
         }
@@ -209,7 +209,7 @@ public abstract class CoreClientRegistry<
         LOGGER.info("Started receiving data");
     }
 
-    public synchronized void clearLootData() {
+    public synchronized void clearReceivedData() {
         if (currentDataReceiver != null) {
             currentDataReceiver.cancelOperation();
             currentDataReceiver = null;
@@ -224,7 +224,7 @@ public abstract class CoreClientRegistry<
         // reload is called on login, causing clearing already received data
         if (loggedIn.get()) {
             LOGGER.info("Reloading data");
-            clearLootData();
+            clearReceivedData();
         }
     }
 
@@ -251,11 +251,11 @@ public abstract class CoreClientRegistry<
             oldPromise.cancel(true);
         }
 
-        clearLootData();
+        clearReceivedData();
         loggedIn.set(false);
     }
 
-    public synchronized void doneLootData() {
+    public synchronized void doneReceivingData() {
         DataReceiver receiver = currentDataReceiver;
 
         if (receiver == null) {

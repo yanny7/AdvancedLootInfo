@@ -74,7 +74,7 @@ public class GenericUtils {
 
             if (!futureData.isDone()) {
                 LOGGER.info("Data not ready. Requesting data from server (Attempt {}/{})", currentTry, maxRetries);
-                AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestWorldgenDataMessage());
+                AbstractClient.INSTANCE.sendWorldgenDataToPlayer(new RequestWorldgenDataMessage());
             } else {
                 LOGGER.info("Data already received, processing instantly.");
             }
@@ -87,7 +87,7 @@ public class GenericUtils {
                 return;
             } catch (TimeoutException e) {
                 LOGGER.warn("Timeout while waiting for server data! The server didn't respond in time or packets were lost.", e);
-                PluginManager.getInstance().clientRegistry.clearLootData();
+                PluginManager.getInstance().clientRegistry.clearReceivedData();
             } catch (CancellationException e) {
                 LOGGER.warn("Data reception was cancelled. Retrying with new data stream...", e);
                 try {

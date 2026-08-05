@@ -10,7 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class Client extends AbstractClient {
     public void onWorldgenDataChunk(Minecraft ignoredClient, ClientPacketListener ignoredHandler, FriendlyByteBuf buf, PacketSender ignoredResponseSender) {
-        super.onLootDataChunk(new WorldgenDataChunkMessage(buf));
+        super.onWorldgenDataChunk(new WorldgenDataChunkMessage(buf));
     }
 
     public void onStart(Minecraft ignoredClient, ClientPacketListener ignoredHandler, FriendlyByteBuf buf, PacketSender ignoredResponseSender) {
@@ -22,7 +22,7 @@ public class Client extends AbstractClient {
     }
 
     @Override
-    public void sendLootDataToPlayer(RequestWorldgenDataMessage message) {
+    public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
         if (ClientPlayNetworking.canSend(NetworkUtils.REQUEST_WORLDGEN_DATA_ID)) {
             FriendlyByteBuf buf = PacketByteBufs.create();
 
