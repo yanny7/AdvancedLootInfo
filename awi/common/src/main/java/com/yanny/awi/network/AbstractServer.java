@@ -50,12 +50,17 @@ public abstract class AbstractServer {
         for (LevelStem levelStem : levelStemRegistry) {
             ResourceLocation location = levelStemRegistry.getKey(levelStem);
 
-            worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
+            try {
+                TooltipContext.set(location);
+                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
+            } finally {
+                TooltipContext.clear();
+            }
         }
 
         worldgenNodes = removeEmptyNodes(worldgenNodes);
 
-        LOGGER.info("Processing {} worldgen data took {}ms", worldgenNodes.size(), System.currentTimeMillis() - startTime);
+        LOGGER.info("Processing {} levels took {}ms", worldgenNodes.size(), System.currentTimeMillis() - startTime);
 
         ByteBuf rawBuf = Unpooled.buffer();
         FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);

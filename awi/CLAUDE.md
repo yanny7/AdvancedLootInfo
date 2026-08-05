@@ -9,7 +9,7 @@ Guidance for working on **AWI** (`AdvancedWorldInfo`, `com.yanny.awi`) — the r
 - `awi/fabric` — Fabric loader module. See `awi/fabric/CLAUDE.md`.
 - `awi/forge` — Forge loader module (enabled via `forge_enabled`). See `awi/forge/CLAUDE.md`.
 
-AWI has no `common-lootjs` equivalent, no `configuration` package, and no user-facing config file at all — there's nothing to filter, since worldgen registries are enumerated exhaustively rather than matched against user-declared categories (contrast with ALI's `ali_config.schema.json`-driven filtering).
+AWI has no `common-lootjs` equivalent, and its `configuration` package is minimal compared to ALI's: `AwiConfig` (`configVersion`, `logMoreStatistics`, `showInGameNames`) plus `ConfigUtils` (same read/version-rotate/re-create logic as ALI's, minus the loot-category Gson adapters), written to `<config>/awi/awi_common.json`. There are no loot-category-style filters to configure, since worldgen registries are enumerated exhaustively rather than matched against user-declared categories (contrast with ALI's `ali_config.schema.json`-driven filtering).
 
 ## `awi/common` package map (`com.yanny.awi`)
 
@@ -52,7 +52,7 @@ GUI-side rendering: `ClientUtils`, `WidgetUtils` (dispatch to per-node-id widget
 `AbstractScrollWidget` (custom scrollbar widget base), `GenericUtils` (gunzip + decode the reassembled network buffer client-side into `Map<ResourceLocation, LevelStemNode>` — the recipe-viewer-integration glue analogous to ALI's `compatibility/common`, consumed by `awi/common-emi`/`common-jei`/`common-rei`).
 
 ### `datagen`
-Only `LanguageHolder` — registers `Lang.*` enum classes into `aci.CoreLang.TRANSLATION_MAP` (see `aci/CLAUDE.md`'s "Language wiring"). No `configuration` package exists in AWI at all: no user-config surface, just tooltip/translation registration.
+Only `LanguageHolder` — registers `Lang.*` enum classes into `aci.CoreLang.TRANSLATION_MAP` (see `aci/CLAUDE.md`'s "Language wiring"). Unlike ALI, AWI's `datagen` generates no config: the whole user-config surface is the two-field `AwiConfig` described under Module layout above.
 
 ### `mixin`
 Single `MixinClientPlayNetworkHandler` — injects into `handleUpdateTags` (tail) to trigger `clientRegistry.reloadData()` on resource reload (same role as ALI's mixin of the same name).
