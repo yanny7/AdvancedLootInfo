@@ -57,6 +57,8 @@ public abstract class AbstractServer {
         ByteBuf rawBuf = Unpooled.buffer();
         FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);
 
+        chunks.clear();
+
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
         writeWorldgenData(serverRegistry, buf, worldgenNodes);
         compressAndStoreData(buf);
