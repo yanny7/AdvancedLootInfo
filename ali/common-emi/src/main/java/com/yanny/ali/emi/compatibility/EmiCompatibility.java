@@ -18,10 +18,12 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.runtime.EmiHidden;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +68,7 @@ public class EmiCompatibility implements EmiPlugin {
                     clientRegistry,
                     config,
                     fullCompressedData,
+                    EmiCompatibility::isVisible,
                     (node, location, block, outputs) ->
                             addRecipe(registry, blockCategories, block, (category) -> new EmiBlockLoot(category, location, block, node, outputs)),
                     (node, location, entity, outputs) ->
@@ -80,6 +83,15 @@ public class EmiCompatibility implements EmiPlugin {
         } else {
             LOGGER.warn("EMI integration was not loaded! Level is null!");
         }
+    }
+
+    /**
+     * Mirrors {@code EmiStackList#bakeFiltered}, which is what decides whether the player can see a stack at all:
+     * {@code isDisabled} covers datapack/plugin-disabled stacks, {@code isHidden} the ones hidden in the EMI UI.
+     */
+    private static boolean isVisible(ItemStack stack) {
+        EmiStack emiStack = EmiStack.of(stack);
+        return emiStack.isEmpty() || (!EmiHidden.isDisabled(emiStack) && !EmiHidden.isHidden(emiStack));
     }
 
     private static <T, U extends EmiRecipe> void addRecipe(EmiRegistry registry, Map<LootCategory<T>, EmiRecipeCategory> categories, T object, Function<EmiRecipeCategory, U> supplier) {

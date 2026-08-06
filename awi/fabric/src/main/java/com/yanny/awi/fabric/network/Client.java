@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 public class Client extends AbstractClient {
     public void onWorldgenDataChunk(WorldgenDataChunkMessage message, ClientPlayNetworking.Context context) {
-        super.onLootDataChunk(message);
+        super.onWorldgenDataChunk(message);
     }
 
     public void onStart(StartMessage message, ClientPlayNetworking.Context context) {
@@ -17,7 +17,7 @@ public class Client extends AbstractClient {
     }
 
     @Override
-    public void sendLootDataToPlayer(RequestWorldgenDataMessage message) {
+    public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
         if (ClientPlayNetworking.canSend(RequestWorldgenDataMessage.TYPE)) {
             ClientPlayNetworking.send(message);
         }

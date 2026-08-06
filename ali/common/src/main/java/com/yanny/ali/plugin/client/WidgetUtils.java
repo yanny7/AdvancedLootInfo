@@ -96,7 +96,6 @@ public class WidgetUtils {
     @NotNull
     public static IWidget getLevelWidget(RelativeRect rect, IDataNode node, int level) {
         RelativeRect r = new RelativeRect(0, 0, 18, 18, rect);
-        List<Component> components = CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
         String txt = Integer.toString(level);
         int txtWidth = Minecraft.getInstance().font.width(txt);
         return new IWidget() {
@@ -115,7 +114,7 @@ public class WidgetUtils {
             @NotNull
             @Override
             public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-                return components;
+                return CoreTooltipUtils.toComponents(node.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips);
             }
 
             @Override
