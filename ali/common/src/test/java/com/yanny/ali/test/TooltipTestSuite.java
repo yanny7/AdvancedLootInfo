@@ -83,7 +83,8 @@ import java.util.concurrent.ExecutionException;
         IngredientTooltipTest.class,
         TooltipTest.class,
         NodeTest.class,
-        ServerUtilsTest.class
+        ServerUtilsTest.class,
+        ConfigTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
