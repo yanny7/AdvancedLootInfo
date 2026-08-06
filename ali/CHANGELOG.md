@@ -7,6 +7,8 @@
 - Hiding items in EMI/JEI/REI doesn't hide whole loot table, only removes specific item
 - Displaying/hiding advanced tooltip in EMI/REI without reload
 - Hiding empty `----- MODIFIERS -----` line in tooltip
+- Conditional count modifiers are no longer hidden in non-advanced tooltip
+- Conditional count modifiers widen displayed count range instead of being ignored
 
 ## [1.12.0]
 
