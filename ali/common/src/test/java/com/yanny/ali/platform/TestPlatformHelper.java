@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class TestPlatformHelper implements IPlatformHelper {
+    public static Path CONFIG_DIR = null;
+
     @Override
     public List<LootPool> getLootPools(LootTable table) {
         return List.of();
@@ -27,7 +29,7 @@ public class TestPlatformHelper implements IPlatformHelper {
 
     @Override
     public Path getConfiguration() {
-        return null;
+        return CONFIG_DIR;
     }
 
     @Override

@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class TestPlatformHelper implements IPlatformHelper {
+    public static Path CONFIG_DIR = null;
+
     @Override
     public List<IPlugin> getPlugins() {
         return List.of(new Plugin());
@@ -15,6 +17,6 @@ public class TestPlatformHelper implements IPlatformHelper {
 
     @Override
     public Path getConfiguration() {
-        return null;
+        return CONFIG_DIR;
     }
 }

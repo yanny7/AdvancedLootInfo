@@ -79,7 +79,9 @@ public class ConfigUtils {
     private static AwiConfig load(Path configFilePath, Gson gson) {
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
             LOGGER.info("Loading configuration file {}", configFilePath);
-            return gson.fromJson(reader, AwiConfig.class);
+            AwiConfig config = gson.fromJson(reader, AwiConfig.class);
+
+            return config != null ? config : new AwiConfig();
         } catch (Exception e) {
             LOGGER.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return new AwiConfig();
