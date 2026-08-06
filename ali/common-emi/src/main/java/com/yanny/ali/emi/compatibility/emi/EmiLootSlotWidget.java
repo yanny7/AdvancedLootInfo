@@ -9,18 +9,29 @@ import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class EmiLootSlotWidget extends SlotWidget {
+    private final IDataNode entry;
     @Nullable
     private Component count;
     private boolean isRange = false;
 
     public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
         super(ingredient, x, y);
-        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips).forEach(this::appendTooltip);
+        this.entry = entry;
         setCount(count);
+    }
+
+    @Override
+    protected void addSlotTooltip(List<ClientTooltipComponent> list) {
+        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)
+                .forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
+        super.addSlotTooltip(list);
     }
 
     @Override

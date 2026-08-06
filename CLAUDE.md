@@ -79,7 +79,7 @@ Core flow, per mod (see `ali/CLAUDE.md` / `awi/CLAUDE.md` for the concrete insta
 
 Server-collected data is sent to the client over custom networking (`network` package) — the client requests data on demand rather than the server eagerly pushing it. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
 
-Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI has no equivalent config surface.
+Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI's config surface is much smaller: just `AwiConfig` (`configVersion`, `logMoreStatistics`, `showInGameNames`) in `awi/common`'s `configuration` package — no datapack-driven categories.
 
 ## Common commands
 
