@@ -8,6 +8,7 @@ import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.api.ICommonUtils;
 import com.yanny.awi.api.IServerRegistry;
 import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.plugin.server.MissingTooltipUtils;
 import com.yanny.awi.plugin.server.summary.*;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -35,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
+public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Block>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
@@ -384,5 +385,9 @@ public class AwiServerRegistry extends CoreServerRegistry<Object, AwiCommonRegis
     @Override
     public void printRuntimeInfo() {
         super.printRuntimeInfo();
+
+        if (this.getConfiguration().logMoreStatistics) {
+            getTooltipCache().logStatistics();
+        }
     }
 }

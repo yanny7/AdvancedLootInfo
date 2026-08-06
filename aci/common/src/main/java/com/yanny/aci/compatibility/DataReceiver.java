@@ -25,7 +25,10 @@ public class DataReceiver {
             return;
         }
 
-        chunkMap.put(index, data);
+        if (chunkMap.put(index, data) != null) {
+            LOGGER.warn("Received duplicate chunk with index {}, ignoring", index);
+            return;
+        }
 
         if (receivedChunksCount.incrementAndGet() == totalChunks) {
             completeFuture();
@@ -52,6 +55,15 @@ public class DataReceiver {
 
         for (int i = 0; i < totalChunks; i++) {
             byte[] chunk = chunkMap.get(i);
+
+            if (chunk == null) {
+                String errorMsg = String.format("Missing chunk with index %d out of %d. Data is unusable.", i, totalChunks);
+
+                LOGGER.error(errorMsg);
+                chunkMap.clear();
+                dataFuture.completeExceptionally(new IllegalStateException(errorMsg));
+                return;
+            }
 
             System.arraycopy(chunk, 0, fullCompressedData, offset, chunk.length);
             offset += chunk.length;

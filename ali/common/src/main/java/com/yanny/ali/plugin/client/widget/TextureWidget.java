@@ -25,7 +25,7 @@ public class TextureWidget implements IWidget {
     protected final int regionHeight;
     protected final int textureWidth;
     protected final int textureHeight;
-    private final List<Component> components = new LinkedList<>();
+    private final List<TooltipNode> tooltips = new LinkedList<>();
 
     public TextureWidget(ResourceLocation texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
         this.texture = texture;
@@ -56,13 +56,13 @@ public class TextureWidget implements IWidget {
     }
 
     public void tooltipText(TooltipNode tooltip) {
-        this.components.addAll(CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
+        this.tooltips.add(tooltip);
     }
 
     @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        return components;
+        return CoreTooltipUtils.toComponents(tooltips, 0, Minecraft.getInstance().options.advancedItemTooltips);
     }
 
     @Override

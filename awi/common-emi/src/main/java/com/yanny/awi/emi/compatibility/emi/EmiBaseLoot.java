@@ -55,7 +55,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
                 EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, h.block, h.rect.getX(), h.rect.getY());
 
                 blockWidget.recipeContext(h.recipe);
-                return (Widget) blockWidget;
+                return blockWidget;
             }
 
             EmiIngredient ingredient;

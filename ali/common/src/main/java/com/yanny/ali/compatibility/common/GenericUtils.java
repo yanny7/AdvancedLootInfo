@@ -5,9 +5,12 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.api.IItemNode;
+import com.yanny.ali.api.ListNode;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
@@ -53,6 +56,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPInputStream;
@@ -190,7 +194,66 @@ public class GenericUtils {
         return new Pair<>(lootData, tradeData);
     }
 
+    /**
+     * Drops every item the recipe viewer hides from the decoded loot trees, along with any pool/group left empty by
+     * that, and drops loot tables left with nothing at all. Must run before a tree is handed to a recipe/widget, so
+     * that the rendered tree and the recipe outputs agree on what is visible.
+     * <p>
+     * Tag entries are always kept - a tag is not a stack the viewer can hide, and resolving it here would change what
+     * the tooltip claims the loot table contains.
+     *
+     * @param isVisible viewer-specific visibility test
+     */
+    public static void pruneHiddenItems(Map<ResourceLocation, LootData> lootData, Predicate<ItemStack> isVisible) {
+        Iterator<Map.Entry<ResourceLocation, LootData>> iterator = lootData.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<ResourceLocation, LootData> entry = iterator.next();
+            LootData data = entry.getValue();
+
+            if (data.node() instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))) {
+                iterator.remove();
+            } else {
+                entry.setValue(new LootData(data.node(), data.items().stream().filter(isVisible).toList()));
+            }
+        }
+    }
+
+    /**
+     * Same as {@link #pruneHiddenItems}, for villager trades. A single trade ({@code ItemsToItemsNode}) is all or
+     * nothing - it disappears as soon as any of its inputs or its result is hidden, because a trade shown without one
+     * of its costs reads as a different, cheaper trade. Trade levels and professions left empty by that are dropped
+     * too. See {@code CoreListNode#requiresAllChildren}.
+     * <p>
+     * The flat input/output lists are filtered per item rather than recomputed from the pruned tree: they only feed
+     * the viewer's ingredient index, and the tree does not record which side of a trade an item sat on. An item that
+     * is visible itself but only occurred in a dropped trade therefore stays in the index.
+     */
+    public static void pruneHiddenTrades(Map<ResourceLocation, TradeData> tradeData, Predicate<ItemStack> isVisible) {
+        Iterator<Map.Entry<ResourceLocation, TradeData>> iterator = tradeData.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<ResourceLocation, TradeData> entry = iterator.next();
+            TradeData data = entry.getValue();
+
+            if (data.node() instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))) {
+                iterator.remove();
+            } else {
+                entry.setValue(new TradeData(data.node(),
+                        data.inputs().stream().filter((item) -> isVisible.test(item.getDefaultInstance())).toList(),
+                        data.outputs().stream().filter((item) -> isVisible.test(item.getDefaultInstance())).toList()));
+            }
+        }
+    }
+
+    @NotNull
+    private static Predicate<ICoreDataNode<?>> hiddenItemFilter(Predicate<ItemStack> isVisible) {
+        return (node) -> !(node instanceof IItemNode itemNode)
+                || itemNode.getModifiedItem().map(isVisible::test, (tag) -> true);
+    }
+
     public static void processData(ClientLevel level, AliClientRegistry clientRegistry, AliConfig config, byte[] fullCompressedData,
+                                   Predicate<ItemStack> isVisible,
                                    QuadConsumer<IDataNode, ResourceLocation, Block, List<ItemStack>> blockConsumer,
                                    QuadConsumer<IDataNode, ResourceLocation, EntityType<?>, List<ItemStack>> entityConsumer,
                                    TriConsumer<IDataNode, ResourceLocation, List<ItemStack>> gameplayConsumer,
@@ -199,6 +262,9 @@ public class GenericUtils {
         Pair<Map<ResourceLocation, LootData>, Map<ResourceLocation, TradeData>> pair = GenericUtils.decompressLootData(clientRegistry, fullCompressedData, level.registryAccess());
         Map<ResourceLocation, LootData> lootData = pair.getA();
         Map<ResourceLocation, TradeData> tradeData = pair.getB();
+
+        pruneHiddenItems(lootData, isVisible);
+        pruneHiddenTrades(tradeData, isVisible);
 
         for (Block block : BuiltInRegistries.BLOCK) {
             block.getLootTable().ifPresent((resourceKey -> {
@@ -304,7 +370,7 @@ public class GenericUtils {
                 return;
             } catch (TimeoutException e) {
                 LOGGER.warn("Timeout while waiting for server data! The server didn't respond in time or packets were lost.", e);
-                PluginManager.getInstance().clientRegistry.clearLootData();
+                PluginManager.getInstance().clientRegistry.clearReceivedData();
             } catch (CancellationException e) {
                 LOGGER.warn("Data reception was cancelled. Retrying with new data stream...", e);
                 try {

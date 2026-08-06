@@ -1,6 +1,7 @@
 package com.yanny.awi.compatibility;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.ListNode;
@@ -24,10 +25,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
@@ -55,8 +58,13 @@ public class GenericUtils {
         try {
             utils.getTooltipCache().decode(utils, buf);
             readWorldgenData(utils, buf, worldgenData);
+
+            if (buf.isReadable()) {
+                LOGGER.warn("Worldgen payload has {} trailing byte(s) after decoding - the stream is desynchronized!", buf.readableBytes());
+            }
         } catch (Throwable e) {
-            LOGGER.warn("Failed to decode worldgen data!", e);
+            LOGGER.warn("Failed to decode worldgen data! Decoded {} level(s) before failing at reader index {} ({} byte(s) left unread)",
+                    worldgenData.size(), buf.readerIndex(), buf.readableBytes(), e);
         } finally {
             buf.release();
         }
@@ -75,7 +83,7 @@ public class GenericUtils {
 
             if (!futureData.isDone()) {
                 LOGGER.info("Data not ready. Requesting data from server (Attempt {}/{})", currentTry, maxRetries);
-                AbstractClient.INSTANCE.sendLootDataToPlayer(new RequestWorldgenDataMessage());
+                AbstractClient.INSTANCE.sendWorldgenDataToPlayer(new RequestWorldgenDataMessage());
             } else {
                 LOGGER.info("Data already received, processing instantly.");
             }
@@ -88,7 +96,7 @@ public class GenericUtils {
                 return;
             } catch (TimeoutException e) {
                 LOGGER.warn("Timeout while waiting for server data! The server didn't respond in time or packets were lost.", e);
-                PluginManager.getInstance().clientRegistry.clearLootData();
+                PluginManager.getInstance().clientRegistry.clearReceivedData();
             } catch (CancellationException e) {
                 LOGGER.warn("Data reception was cancelled. Retrying with new data stream...", e);
                 try {
@@ -108,6 +116,20 @@ public class GenericUtils {
         }
 
         LOGGER.error("CRITICAL: Could not fetch loot data from server after {} attempts. Recipe viewer integration will be empty or incomplete.", maxRetries);
+    }
+
+    /**
+     * Drops every block the recipe viewer hides from the decoded tree, along with any generation step, placed feature
+     * or biome left empty by that. Must run before the tree is handed to a recipe/widget, so that the rendered tree
+     * and {@link #collectBlocks} agree on what is visible.
+     *
+     * @param isVisible viewer-specific visibility test; memoized here because the same block recurs across biomes
+     */
+    public static void pruneHiddenBlocks(Map<ResourceLocation, LevelStemNode> worldgenData, Predicate<Block> isVisible) {
+        Map<Block, Boolean> cache = new IdentityHashMap<>();
+
+        worldgenData.values().removeIf((level) -> level.prune(
+                (node) -> !(node instanceof IBlockNode blockNode) || cache.computeIfAbsent(blockNode.getBlock(), isVisible::test)));
     }
 
     @NotNull
@@ -148,13 +170,24 @@ public class GenericUtils {
     }
 
     private static void readWorldgenData(IClientUtils utils, RegistryFriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {
-        int lootDataCount = readerBuf.readInt();
+        int levelCount = readerBuf.readInt();
 
-        for (int i = 0; i < lootDataCount; i++) {
+        if (levelCount < 0 || levelCount > 4096) {
+            throw new IllegalStateException("Implausible level count " + levelCount + " at reader index "
+                    + readerBuf.readerIndex() + " - the stream is desynchronized.");
+        }
+
+        for (int i = 0; i < levelCount; i++) {
+            int startOfNode = readerBuf.readerIndex();
             ResourceLocation location = readerBuf.readResourceLocation();
-            LevelStemNode dataNode = (LevelStemNode) utils.getDataNodeFactory(LevelStemNode.ID).apply(utils, readerBuf);
 
-            lootData.put(location, dataNode);
+            try {
+                lootData.put(location, (LevelStemNode) utils.getDataNodeFactory(LevelStemNode.ID).apply(utils, readerBuf));
+            } catch (Throwable e) {
+                LOGGER.error("Failed to decode level {}/{} {} - started at buffer offset {}, failed at {} ({} byte(s) left unread). Aborting, remaining levels will be missing.",
+                        i + 1, levelCount, location, startOfNode, readerBuf.readerIndex(), readerBuf.readableBytes(), e);
+                throw e;
+            }
         }
     }
 }
