@@ -2,10 +2,12 @@ package com.yanny.awi.configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.logging.LogUtils;
+import com.mojang.serialization.JsonOps;
 import com.yanny.awi.Utils;
 import com.yanny.awi.platform.Services;
-import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -18,6 +20,7 @@ import java.nio.file.Path;
 
 public class ConfigUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @NotNull
     public static AwiConfig readConfiguration() {
@@ -41,13 +44,12 @@ public class ConfigUtils {
         }
 
         File config = configFile.toFile();
-        Gson gson = createGson();
 
         if (!config.exists()) {
-            saveConfig(configFile, gson);
+            saveConfig(configFile);
         }
 
-        AwiConfig loadedConfig = load(configFile, gson);
+        AwiConfig loadedConfig = load(configFile);
 
         if (loadedConfig.configVersion < AwiConfig.CURRENT_VERSION) {
             LOGGER.info("Config version mismatch (found {}, expected {}). Re-creating...", loadedConfig.configVersion, AwiConfig.CURRENT_VERSION);
@@ -65,8 +67,8 @@ public class ConfigUtils {
                     LOGGER.warn("Failed to rename config file {} to {}", config, backupFile);
                 }
 
-                saveConfig(configFile, gson);
-                return load(configFile, gson);
+                saveConfig(configFile);
+                return load(configFile);
             } catch (Exception e) {
                 LOGGER.warn("Failed to rotate outdated config file!", e);
             }
@@ -76,33 +78,31 @@ public class ConfigUtils {
     }
 
     @NotNull
-    private static AwiConfig load(Path configFilePath, Gson gson) {
+    private static AwiConfig load(Path configFilePath) {
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
             LOGGER.info("Loading configuration file {}", configFilePath);
-            return gson.fromJson(reader, AwiConfig.class);
+
+            JsonElement json = JsonParser.parseReader(reader);
+
+            return AwiConfig.CODEC.parse(JsonOps.INSTANCE, json).getOrThrow((s) -> new RuntimeException("Config error: " + s));
         } catch (Exception e) {
             LOGGER.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return new AwiConfig();
         }
     }
 
-    private static void saveConfig(Path configFilePath, Gson gson) {
+    private static void saveConfig(Path configFilePath) {
         try (FileWriter writer = new FileWriter(configFilePath.toFile())) {
+            LOGGER.info("Creating new configuration file {}", configFilePath);
             AwiConfig config = new AwiConfig();
 
             config.configVersion = AwiConfig.CURRENT_VERSION;
-            gson.toJson(config, writer);
-            LOGGER.info("Created new configuration file {}", configFilePath);
+
+            JsonElement json = AwiConfig.CODEC.encodeStart(JsonOps.INSTANCE, config).getOrThrow((s) -> new RuntimeException("Config save error: " + s));
+
+            GSON.toJson(json, writer);
         } catch (IOException e) {
             LOGGER.warn("Error while writing configuration file: {}", e.getMessage(), e);
         }
-    }
-
-    @NotNull
-    private static Gson createGson() {
-        return new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-                .create();
     }
 }
