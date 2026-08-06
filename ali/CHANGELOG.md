@@ -5,6 +5,7 @@
 - Added tooltip note on trade level/pool badges showing how many trades are randomly selected
 - Improved category height management in REI
 - Hiding items in EMI/JEI/REI doesn't hide whole loot table, only removes specific item
+- Displaying/hiding advanced tooltip in EMI/REI without reload
 
 ## [1.12.0]
 
