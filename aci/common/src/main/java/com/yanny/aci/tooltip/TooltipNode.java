@@ -97,8 +97,32 @@ public class TooltipNode {
         return is(FLAG_ADVANCED) && !isAdvanced;
     }
 
-    public List<Component> getComponents(int indentLevel, boolean isAdvanced) {
+    /**
+     * Whether this node renders no line at all at the given advanced-tooltip level, its whole subtree included. A node
+     * that only carries a key (a header) is blank once every child below it got filtered out.
+     */
+    public boolean isBlank(boolean isAdvanced) {
         if (isEmpty(isAdvanced)) {
+            return true;
+        }
+
+        for (TooltipNode child : children) {
+            if (!child.isBlank(isAdvanced)) {
+                return false;
+            }
+        }
+
+        boolean hasOwnValue = is(FLAG_HAS_VALUE) || is(FLAG_COMPONENT) || is(FLAG_ERROR);
+
+        if (hasOwnValue) {
+            return false;
+        }
+
+        return !is(FLAG_HAS_KEY) || !children.isEmpty();
+    }
+
+    public List<Component> getComponents(int indentLevel, boolean isAdvanced) {
+        if (isBlank(isAdvanced)) {
             return List.of();
         }
 

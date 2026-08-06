@@ -6,6 +6,7 @@
 - Improved category height management in REI
 - Hiding items in EMI/JEI/REI doesn't hide whole loot table, only removes specific item
 - Displaying/hiding advanced tooltip in EMI/REI without reload
+- Hiding empty `----- MODIFIERS -----` line in tooltip
 
 ## [1.12.0]
 
