@@ -9,6 +9,7 @@
 - Hiding empty `----- MODIFIERS -----` line in tooltip
 - Conditional count modifiers are no longer hidden in non-advanced tooltip
 - Conditional count modifiers widen displayed count range instead of being ignored
+- Blocks that only drop themselves are hidden by default (configurable)
 
 ## [1.12.0]
 

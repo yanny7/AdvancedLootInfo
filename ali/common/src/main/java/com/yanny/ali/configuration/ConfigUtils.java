@@ -76,14 +76,47 @@ public class ConfigUtils {
         return loadedConfig;
     }
 
+    @NotNull
     private static AliConfig load(Path configFilePath, Gson gson) {
         try (Reader reader = Files.newBufferedReader(configFilePath)) {
             LOGGER.info("Loading configuration file {}", configFilePath);
-            return gson.fromJson(reader, AliConfig.class);
+            AliConfig config = gson.fromJson(reader, AliConfig.class);
+
+            return config != null ? normalize(config) : new AliConfig();
         } catch (Exception e) {
             LOGGER.warn("Error while reading configuration file: {}", e.getMessage(), e);
             return new AliConfig();
         }
+    }
+
+    // an explicit null in the config file is treated the same way as a missing key - it falls back to the default value
+    @NotNull
+    private static AliConfig normalize(AliConfig config) {
+        AliConfig defaults = new AliConfig();
+
+        if (config.blockCategories == null) {
+            config.blockCategories = defaults.blockCategories;
+        }
+        if (config.entityCategories == null) {
+            config.entityCategories = defaults.entityCategories;
+        }
+        if (config.gameplayCategories == null) {
+            config.gameplayCategories = defaults.gameplayCategories;
+        }
+        if (config.tradeCategories == null) {
+            config.tradeCategories = defaults.tradeCategories;
+        }
+        if (config.disabledEntities == null) {
+            config.disabledEntities = defaults.disabledEntities;
+        }
+        if (config.defaultBlockLootConditions == null) {
+            config.defaultBlockLootConditions = defaults.defaultBlockLootConditions;
+        }
+        if (config.defaultBlockLootFunctions == null) {
+            config.defaultBlockLootFunctions = defaults.defaultBlockLootFunctions;
+        }
+
+        return config;
     }
 
     private static void saveConfig(Path configFilePath, Gson gson) {

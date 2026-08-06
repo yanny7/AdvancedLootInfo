@@ -27,9 +27,12 @@ public class AliConfig {
     public List<TradeLootCategory> tradeCategories;
 
     public List<ResourceLocation> disabledEntities;
+    public List<ResourceLocation> defaultBlockLootConditions;
+    public List<ResourceLocation> defaultBlockLootFunctions;
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
+    public boolean hideDefaultBlockLoot = true;
 
     public AliConfig() {
         blockCategories = new ArrayList<>();
@@ -53,6 +56,9 @@ public class AliConfig {
         tradeCategories.add(new TradeLootCategory(Utils.modLoc("trade_loot"), Items.EMERALD_BLOCK, false, of(), Collections.singletonList(Pattern.compile(".*"))));
 
         disabledEntities = new ArrayList<>();
+
+        defaultBlockLootConditions = new ArrayList<>(List.of(new ResourceLocation("survives_explosion")));
+        defaultBlockLootFunctions = new ArrayList<>(List.of(new ResourceLocation("explosion_decay")));
     }
 
     @NotNull
