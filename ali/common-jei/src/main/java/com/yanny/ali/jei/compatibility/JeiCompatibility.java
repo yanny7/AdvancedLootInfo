@@ -10,12 +10,14 @@ import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IIngredientVisibility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
@@ -87,6 +89,7 @@ public class JeiCompatibility implements IModPlugin {
         AliClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
         AliConfig config = PluginManager.getInstance().commonRegistry.getConfiguration();
         ClientLevel level = Minecraft.getInstance().level;
+        IIngredientVisibility ingredientVisibility = registration.getJeiHelpers().getIngredientVisibility();
 
         LOGGER.info("Adding loot information to JEI");
 
@@ -101,6 +104,7 @@ public class JeiCompatibility implements IModPlugin {
                     clientRegistry,
                     config,
                     fullCompressedData,
+                    (stack) -> stack.isEmpty() || ingredientVisibility.isIngredientVisible(VanillaTypes.ITEM_STACK, stack),
                     (node, location, block, outputs) ->
                             addRecipeType(blockCategories, blockRecipeTypes, block, () -> new BlockLootType(block, node, outputs)),
                     (node, location, entity, outputs) ->

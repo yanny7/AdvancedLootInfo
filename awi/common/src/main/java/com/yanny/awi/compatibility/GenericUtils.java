@@ -1,6 +1,7 @@
 package com.yanny.awi.compatibility;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.ListNode;
@@ -23,10 +24,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.zip.GZIPInputStream;
 
 public class GenericUtils {
@@ -112,6 +115,20 @@ public class GenericUtils {
         }
 
         LOGGER.error("CRITICAL: Could not fetch loot data from server after {} attempts. Recipe viewer integration will be empty or incomplete.", maxRetries);
+    }
+
+    /**
+     * Drops every block the recipe viewer hides from the decoded tree, along with any generation step, placed feature
+     * or biome left empty by that. Must run before the tree is handed to a recipe/widget, so that the rendered tree
+     * and {@link #collectBlocks} agree on what is visible.
+     *
+     * @param isVisible viewer-specific visibility test; memoized here because the same block recurs across biomes
+     */
+    public static void pruneHiddenBlocks(Map<ResourceLocation, LevelStemNode> worldgenData, Predicate<Block> isVisible) {
+        Map<Block, Boolean> cache = new IdentityHashMap<>();
+
+        worldgenData.values().removeIf((level) -> level.prune(
+                (node) -> !(node instanceof IBlockNode blockNode) || cache.computeIfAbsent(blockNode.getBlock(), isVisible::test)));
     }
 
     @NotNull
