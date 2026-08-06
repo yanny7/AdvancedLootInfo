@@ -96,7 +96,7 @@ public abstract class AbstractServer {
         Map<ResourceLocation, IDataNode> tradeNodes;
         Map<ResourceLocation, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
         Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
-        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry.getServerLevel(), serverRegistry);
+        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
@@ -205,8 +205,10 @@ public abstract class AbstractServer {
         int defaultDropLootTables = 0;
 
         for (Block block : BuiltInRegistries.BLOCK) {
-            block.getLootTable().ifPresent((resourceKey) -> {
-                ResourceLocation location = resourceKey.location();
+            Optional<ResourceKey<LootTable>> resourceKey = block.getLootTable();
+
+            if (resourceKey.isPresent()) {
+                ResourceLocation location = resourceKey.get().location();
                 LootTable lootTable = lootTables.remove(location);
 
                 TooltipContext.set(location);
@@ -259,7 +261,7 @@ public abstract class AbstractServer {
                 }
 
                 TooltipContext.clear();
-            });
+            }
         }
 
         if (defaultDropLootTables > 0) {
@@ -467,7 +469,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode processWanderingTrader(ServerLevel level, AliServerRegistry serverRegistry) {
+    private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry) {
         try {
             return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES, true);
         } catch (Throwable e) {
