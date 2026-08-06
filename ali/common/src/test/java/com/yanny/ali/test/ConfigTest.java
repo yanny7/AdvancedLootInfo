@@ -118,8 +118,8 @@ public class ConfigTest {
 
         assertFalse(config.hideDefaultBlockLoot);
         assertTrue(config.logMoreStatistics);
-        assertEquals(List.of(new ResourceLocation("minecraft", "sheep")), config.disabledEntities);
-        assertEquals(List.of(new ResourceLocation("minecraft", "survives_explosion"), new ResourceLocation("minecraft", "match_tool")),
+        assertEquals(List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "sheep")), config.disabledEntities);
+        assertEquals(List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "survives_explosion"), ResourceLocation.fromNamespaceAndPath("minecraft", "match_tool")),
                 config.defaultBlockLootConditions);
         assertEquals(List.of(), config.defaultBlockLootFunctions);
     }
