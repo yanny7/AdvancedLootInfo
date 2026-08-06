@@ -7,18 +7,25 @@ import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.AliClientRegistry;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.rei.compatibility.rei.*;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import me.shedaniel.rei.api.client.config.ConfigObject;
+import me.shedaniel.rei.api.client.config.entry.EntryStackProvider;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReasons;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
+import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.function.TriFunction;
@@ -26,10 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -85,6 +89,7 @@ public class ReiCompatibility implements REIClientPlugin {
                     clientRegistry,
                     config,
                     fullCompressedData,
+                    ReiCompatibility.visibilityFilter(),
                     (node, location, block, outputs) ->
                             addLootType(blockCategories, blockRecipeTypes, block, () -> new BlockLootType(block, node, outputs)),
                     (node, location, entity, outputs) ->
@@ -106,7 +111,29 @@ public class ReiCompatibility implements REIClientPlugin {
         }
     }
 
+    /**
+     * REI has no {@code isDisabled}/{@code isHidden} pair like EMI - the entries the player hid live in the config as
+     * filtered stack providers. {@code EntryRegistry#getPreFilteredList} would also cover rule-based filtering, but it
+     * is not guaranteed to be populated while displays are still being registered, so the config is the safe source.
+     * The hidden set is collected once and captured, rather than re-read per item.
+     */
     @NotNull
+    private static Predicate<ItemStack> visibilityFilter() {
+        LongSet hidden = new LongOpenHashSet();
+
+        for (EntryStackProvider<?> provider : ConfigObject.getInstance().getFilteredStackProviders()) {
+            if (provider.isValid()) {
+                EntryStack<?> stack = provider.provide();
+
+                if (!stack.isEmpty()) {
+                    hidden.add(EntryStacks.hashFuzzy(stack));
+                }
+            }
+        }
+
+        return (stack) -> stack.isEmpty() || !hidden.contains(EntryStacks.hashFuzzy(EntryStacks.of(stack)));
+    }
+
     private static <D extends ReiBaseDisplay, T, U> Holder<D, T, U> createCategory(LootCategory<U> lootCategory,
                                                                             BiFunction<T, CategoryIdentifier<D>, D> displayFactory,
                                                                             TriFunction<CategoryIdentifier<D>, Component, LootCategory<U>, ReiBaseCategory<D, U>> categoryFactory) {

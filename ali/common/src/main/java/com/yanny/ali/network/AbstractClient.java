@@ -14,11 +14,11 @@ public abstract class AbstractClient {
     }
 
     protected void onStart(StartMessage msg) {
-        PluginManager.getInstance().clientRegistry.startLootData(msg.totalMessages);
+        PluginManager.getInstance().clientRegistry.startReceivingData(msg.totalMessages);
     }
 
     protected void onDone(DoneMessage ignoredMsg) {
-        PluginManager.getInstance().clientRegistry.doneLootData();
+        PluginManager.getInstance().clientRegistry.doneReceivingData();
     }
 
     public abstract void sendLootDataToPlayer(RequestLootDataMessage message);
