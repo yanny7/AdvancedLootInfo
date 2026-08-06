@@ -59,7 +59,8 @@
         "minecraft:suspicious_gravel"
       ],
       "pattern": [
-        "^.*:archaeology/.*$"
+        "^.*:archaeology/.*$",
+        "^.*:brush/.*$"
       ],
       "key": "ali:archaeology_loot",
       "icon": "minecraft:decorated_pot"
@@ -141,6 +142,43 @@
       ],
       "key": "ali:chicken_lay",
       "icon": "minecraft:egg"
+    },
+    {
+      "catalysts": [
+        "minecraft:shears"
+      ],
+      "pattern": [
+        "^.*:carve/.*$"
+      ],
+      "key": "ali:carving",
+      "icon": "minecraft:carved_pumpkin"
+    },
+    {
+      "catalysts": [
+        "minecraft:creeper_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:charged_creeper/.*$"
+      ],
+      "key": "ali:charged_creeper",
+      "icon": "minecraft:creeper_head"
+    },
+    {
+      "pattern": [
+        "^.*:harvest/.*$"
+      ],
+      "key": "ali:harvesting",
+      "icon": "minecraft:flower_pot"
+    },
+    {
+      "catalysts": [
+        "minecraft:turtle_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/turtle_grow.*$"
+      ],
+      "key": "ali:turtle_grow",
+      "icon": "minecraft:turtle_scute"
     },
     {
       "pattern": [
