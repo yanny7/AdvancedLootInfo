@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,29 +17,47 @@ public class TooltipNodePalette {
 
     private final Map<CacheKey, TooltipNode> pool = new HashMap<>();
     private final List<TooltipNode> idToNode = new ArrayList<>();
+    private final Map<TooltipNode, Integer> nodeToId = new IdentityHashMap<>();
 
     private int hits = 0;
     private int misses = 0;
 
     public TooltipNode getOrCreate(CacheKey key) {
-        if (pool.containsKey(key)) {
+        TooltipNode cached = pool.get(key);
+
+        if (cached != null) {
             hits++;
-            return pool.get(key);
+            return cached;
         }
 
         TooltipNode newNode = new TooltipNode(key);
 
         misses++;
         pool.put(key, newNode);
+        nodeToId.put(newNode, idToNode.size());
         idToNode.add(newNode);
         return newNode;
     }
 
     public int getNodeId(TooltipNode node) {
-        return idToNode.indexOf(node);
+        Integer id = nodeToId.get(node);
+
+        if (id == null) {
+            // Writing -1 here produces a payload the client cannot decode (getNodeById(-1) throws), which aborts the
+            // whole decode and silently truncates the data - so fail loudly on the server instead.
+            throw new IllegalStateException("Tooltip node is not present in the palette (palette size: " + idToNode.size()
+                    + "). It was created outside of TooltipNodePalette#getOrCreate or after the palette was encoded/cleared.");
+        }
+
+        return id;
     }
 
     public TooltipNode getNodeById(int id) {
+        if (id < 0 || id >= idToNode.size()) {
+            throw new IllegalStateException("Tooltip node id " + id + " is out of palette bounds (size: " + idToNode.size()
+                    + "). Stream is most likely desynchronized.");
+        }
+
         return idToNode.get(id);
     }
 
@@ -56,6 +75,7 @@ public class TooltipNodePalette {
 
         idToNode.clear();
         pool.clear();
+        nodeToId.clear();
 
         for (int i = 0; i < size; i++) {
             rawTooltipNodes.add(TooltipNode.decodeRaw(utils, buf));
@@ -76,6 +96,7 @@ public class TooltipNodePalette {
     public void clear() {
         idToNode.clear();
         pool.clear();
+        nodeToId.clear();
         hits = 0;
         misses = 0;
     }

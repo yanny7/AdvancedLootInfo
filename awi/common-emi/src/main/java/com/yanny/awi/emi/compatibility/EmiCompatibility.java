@@ -48,8 +48,15 @@ public class EmiCompatibility implements EmiPlugin {
                 registry.addCategory(category);
 
                 for (IDataNode biomeNode : levelNode.nodes()) {
-                    List<Block> blocks = GenericUtils.collectBlocks(biomeNode);
-                    registry.addRecipe(new EmiBiomeLoot(category, ((BiomeNode) biomeNode).getBiomeId(), biomeNode, blocks));
+                    ResourceLocation biomeId = ((BiomeNode) biomeNode).getBiomeId();
+
+                    try {
+                        List<Block> blocks = GenericUtils.collectBlocks(biomeNode);
+
+                        registry.addRecipe(new EmiBiomeLoot(category, biomeId, biomeNode, blocks));
+                    } catch (Throwable e) {
+                        LOGGER.error("Failed to add EMI recipe for biome {} in category {}", biomeId, key, e);
+                    }
                 }
             });
         }

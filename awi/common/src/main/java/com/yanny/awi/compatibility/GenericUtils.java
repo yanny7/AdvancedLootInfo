@@ -54,8 +54,13 @@ public class GenericUtils {
         try {
             utils.getTooltipCache().decode(utils, buf);
             readWorldgenData(utils, buf, worldgenData);
+
+            if (buf.isReadable()) {
+                LOGGER.warn("Worldgen payload has {} trailing byte(s) after decoding - the stream is desynchronized!", buf.readableBytes());
+            }
         } catch (Throwable e) {
-            LOGGER.warn("Failed to decode worldgen data!", e);
+            LOGGER.warn("Failed to decode worldgen data! Decoded {} level(s) before failing at reader index {} ({} byte(s) left unread)",
+                    worldgenData.size(), buf.readerIndex(), buf.readableBytes(), e);
         } finally {
             buf.release();
         }
@@ -147,13 +152,24 @@ public class GenericUtils {
     }
 
     private static void readWorldgenData(IClientUtils utils, FriendlyByteBuf readerBuf, Map<ResourceLocation, LevelStemNode> lootData) {
-        int lootDataCount = readerBuf.readInt();
+        int levelCount = readerBuf.readInt();
 
-        for (int i = 0; i < lootDataCount; i++) {
+        if (levelCount < 0 || levelCount > 4096) {
+            throw new IllegalStateException("Implausible level count " + levelCount + " at reader index "
+                    + readerBuf.readerIndex() + " - the stream is desynchronized.");
+        }
+
+        for (int i = 0; i < levelCount; i++) {
+            int startOfNode = readerBuf.readerIndex();
             ResourceLocation location = readerBuf.readResourceLocation();
-            LevelStemNode dataNode = (LevelStemNode) utils.getDataNodeFactory(LevelStemNode.ID).apply(utils, readerBuf);
 
-            lootData.put(location, dataNode);
+            try {
+                lootData.put(location, (LevelStemNode) utils.getDataNodeFactory(LevelStemNode.ID).apply(utils, readerBuf));
+            } catch (Throwable e) {
+                LOGGER.error("Failed to decode level {}/{} {} - started at buffer offset {}, failed at {} ({} byte(s) left unread). Aborting, remaining levels will be missing.",
+                        i + 1, levelCount, location, startOfNode, readerBuf.readerIndex(), readerBuf.readableBytes(), e);
+                throw e;
+            }
         }
     }
 }

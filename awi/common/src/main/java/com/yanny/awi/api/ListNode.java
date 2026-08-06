@@ -2,6 +2,7 @@ package com.yanny.awi.api;
 
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.CoreListNode;
+import com.yanny.aci.tooltip.TooltipContext;
 import net.minecraft.network.FriendlyByteBuf;
 import org.slf4j.Logger;
 
@@ -37,11 +38,14 @@ public abstract class ListNode extends CoreListNode<IServerUtils, IDataNode, ICl
                 successfulNodes++;
             } catch (Throwable e) {
                 buf.writerIndex(startOfNode);
-                LOGGER.warn("Failed to write node", e);
+                LOGGER.warn("Failed to write child node {} of parent {} (dimension {})", node.getId(), getId(), TooltipContext.get(), e);
             }
         }
 
         if (successfulNodes != nodes.size()) {
+            LOGGER.warn("Dropped {} of {} child node(s) of {} (dimension {}) while encoding",
+                    nodes.size() - successfulNodes, nodes.size(), getId(), TooltipContext.get());
+
             int endIndex = buf.writerIndex();
 
             buf.writerIndex(countIndex);

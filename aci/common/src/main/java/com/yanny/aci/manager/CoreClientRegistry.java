@@ -175,6 +175,7 @@ public abstract class CoreClientRegistry<
         DataReceiver receiver = currentDataReceiver;
 
         if (receiver == null) {
+            LOGGER.warn("Dropping data chunk {} - no active receiver (StartMessage was never received or data was cleared)", index);
             return;
         }
 
