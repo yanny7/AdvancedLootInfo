@@ -21,6 +21,9 @@ import java.util.regex.Pattern;
 public class AliConfig {
     public static final int CURRENT_VERSION = 2;
 
+    private static final List<ResourceLocation> DEFAULT_BLOCK_LOOT_CONDITIONS = List.of(ResourceLocation.withDefaultNamespace("survives_explosion"));
+    private static final List<ResourceLocation> DEFAULT_BLOCK_LOOT_FUNCTIONS = List.of(ResourceLocation.withDefaultNamespace("explosion_decay"));
+
     public static final Codec<AliConfig> CODEC = RecordCodecBuilder.create((instance) ->
         instance.group(
                 Codec.INT.optionalFieldOf("configVersion", 0).forGetter((c) -> c.configVersion),
@@ -30,8 +33,11 @@ public class AliConfig {
                 TradeLootCategory.CODEC.codec().listOf().optionalFieldOf("tradeCategories", Collections.emptyList()).forGetter(c -> c.tradeCategories),
                 ResourceLocation.CODEC.listOf().optionalFieldOf("disabledEntities", Collections.emptyList()).forGetter((c) -> c.disabledEntities),
                 Codec.BOOL.optionalFieldOf("logMoreStatistics", false).forGetter((c) -> c.logMoreStatistics),
-                Codec.BOOL.optionalFieldOf("showInGameNames", true).forGetter((c) -> c.showInGameNames)
-        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show) -> {
+                Codec.BOOL.optionalFieldOf("showInGameNames", true).forGetter((c) -> c.showInGameNames),
+                Codec.BOOL.optionalFieldOf("hideDefaultBlockLoot", true).forGetter((c) -> c.hideDefaultBlockLoot),
+                ResourceLocation.CODEC.listOf().optionalFieldOf("defaultBlockLootConditions", DEFAULT_BLOCK_LOOT_CONDITIONS).forGetter((c) -> c.defaultBlockLootConditions),
+                ResourceLocation.CODEC.listOf().optionalFieldOf("defaultBlockLootFunctions", DEFAULT_BLOCK_LOOT_FUNCTIONS).forGetter((c) -> c.defaultBlockLootFunctions)
+        ).apply(instance, (version, blocks, entities, gameplay, trades, disabled, log, show, hideDefaultLoot, defaultConditions, defaultFunctions) -> {
             AliConfig config = new AliConfig();
 
             config.configVersion = version;
@@ -42,6 +48,9 @@ public class AliConfig {
             config.entityCategories = entities;
             config.gameplayCategories = gameplay;
             config.tradeCategories = trades;
+            config.hideDefaultBlockLoot = hideDefaultLoot;
+            config.defaultBlockLootConditions = new ArrayList<>(defaultConditions);
+            config.defaultBlockLootFunctions = new ArrayList<>(defaultFunctions);
             return config;
         })
     );
@@ -97,8 +106,8 @@ public class AliConfig {
 
         disabledEntities = new ArrayList<>();
 
-        defaultBlockLootConditions = new ArrayList<>(List.of(new ResourceLocation("survives_explosion")));
-        defaultBlockLootFunctions = new ArrayList<>(List.of(new ResourceLocation("explosion_decay")));
+        defaultBlockLootConditions = new ArrayList<>(DEFAULT_BLOCK_LOOT_CONDITIONS);
+        defaultBlockLootFunctions = new ArrayList<>(DEFAULT_BLOCK_LOOT_FUNCTIONS);
     }
 
     @NotNull

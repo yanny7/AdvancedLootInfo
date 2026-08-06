@@ -12,7 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class Client extends AbstractClient {
     public void onWorldgenDataChunk(WorldgenDataChunkMessage msg, @SuppressWarnings("unused") IPayloadContext context) {
-        super.onLootDataChunk(msg);
+        super.onWorldgenDataChunk(msg);
     }
 
     public void onStart(StartMessage msg, @SuppressWarnings("unused") IPayloadContext context) {
@@ -24,7 +24,7 @@ public class Client extends AbstractClient {
     }
 
     @Override
-    public void sendLootDataToPlayer(RequestWorldgenDataMessage message) {
+    public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
         if (listener != null && listener.hasChannel(RequestWorldgenDataMessage.TYPE)) {

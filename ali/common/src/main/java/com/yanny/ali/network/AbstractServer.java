@@ -285,24 +285,24 @@ public abstract class AbstractServer {
 
         LootPool pool = pools.getFirst();
 
-        if (pool.entries.length != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
+        if (pool.entries.size() != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
                 || !isConstant(serverRegistry, pool.rolls, 1) || !isConstant(serverRegistry, pool.bonusRolls, 0)) {
             return false;
         }
 
-        if (!(pool.entries[0] instanceof LootItem lootItem) || lootItem.item != block.asItem() || !isIgnoredFunctions(config, lootItem.functions)) {
+        if (!(pool.entries.getFirst() instanceof LootItem lootItem) || lootItem.item.value() != block.asItem() || !isIgnoredFunctions(config, lootItem.functions)) {
             return false;
         }
 
         return isIgnoredConditions(config, lootItem.conditions);
     }
 
-    private static boolean isIgnoredFunctions(AliConfig config, LootItemFunction[] functions) {
-        return Arrays.stream(functions).allMatch((f) -> config.defaultBlockLootFunctions.contains(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType())));
+    private static boolean isIgnoredFunctions(AliConfig config, List<LootItemFunction> functions) {
+        return functions.stream().allMatch((f) -> config.defaultBlockLootFunctions.contains(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType())));
     }
 
-    private static boolean isIgnoredConditions(AliConfig config, LootItemCondition[] conditions) {
-        return Arrays.stream(conditions).allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
+    private static boolean isIgnoredConditions(AliConfig config, List<LootItemCondition> conditions) {
+        return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
     }
 
     private static boolean isConstant(AliServerRegistry serverRegistry, NumberProvider numberProvider, float value) {

@@ -1,16 +1,14 @@
 package com.yanny.ali.test;
 
+import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.plugin.server.EntryTooltipUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -205,7 +203,7 @@ public class TooltipTest {
                 "Count: 1",
                 "----- Predicates -----",
                 "Random Chance:",
-                "  -> Probability: 0.25"
+                "  -> Chance: 0.25"
         ));
     }
 
@@ -242,7 +240,7 @@ public class TooltipTest {
         ))).build(), List.of("Count: 4-8"));
 
         assertTooltip(getCountTooltip(getEnchantedCount(UTILS, List.of(
-                ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE, 2).when(ExplosionCondition.survivesExplosion()).build()
+                ApplyBonusCount.addUniformBonusCount(LOOKUP.lookup(Registries.ENCHANTMENT).orElseThrow().get(Enchantments.FORTUNE).orElseThrow(), 2).when(ExplosionCondition.survivesExplosion()).build()
         ))).build(), List.of(
                 "Count: 1",
                 "  -> 1-3 (Fortune I)",
