@@ -145,7 +145,7 @@ public class LevelStemNode extends ListNode {
     }
 
     private static String biomeName(Holder<Biome> biomeHolder) {
-        return biomeHolder.unwrapKey().map(k -> k.location().toString()).orElse("<unnamed biome>");
+        return biomeHolder.unwrapKey().map(k -> k.identifier().toString()).orElse("<unnamed biome>");
     }
 
     record BiomeResult(Holder<Biome> biomeHolder, NodeUtils.LayerHolder layers) {}

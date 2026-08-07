@@ -6,7 +6,7 @@ import com.yanny.ali.Utils;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.configuration.ConfigUtils;
 import com.yanny.ali.platform.TestPlatformHelper;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,8 +120,8 @@ public class ConfigTest {
 
         assertFalse(config.hideDefaultBlockLoot);
         assertTrue(config.logMoreStatistics);
-        assertEquals(List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "sheep")), config.disabledEntities);
-        assertEquals(List.of(ResourceLocation.fromNamespaceAndPath("minecraft", "survives_explosion"), ResourceLocation.fromNamespaceAndPath("minecraft", "match_tool")),
+        assertEquals(List.of(Identifier.fromNamespaceAndPath("minecraft", "sheep")), config.disabledEntities);
+        assertEquals(List.of(Identifier.fromNamespaceAndPath("minecraft", "survives_explosion"), Identifier.fromNamespaceAndPath("minecraft", "match_tool")),
                 config.defaultBlockLootConditions);
         assertEquals(List.of(), config.defaultBlockLootFunctions);
     }

@@ -207,11 +207,11 @@ public class GenericUtils {
      *
      * @param isVisible viewer-specific visibility test
      */
-    public static void pruneHiddenItems(Map<ResourceLocation, LootData> lootData, Predicate<ItemStack> isVisible) {
-        Iterator<Map.Entry<ResourceLocation, LootData>> iterator = lootData.entrySet().iterator();
+    public static void pruneHiddenItems(Map<Identifier, LootData> lootData, Predicate<ItemStack> isVisible) {
+        Iterator<Map.Entry<Identifier, LootData>> iterator = lootData.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<ResourceLocation, LootData> entry = iterator.next();
+            Map.Entry<Identifier, LootData> entry = iterator.next();
             LootData data = entry.getValue();
 
             if (data.node() instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))) {
@@ -232,11 +232,11 @@ public class GenericUtils {
      * the viewer's ingredient index, and the tree does not record which side of a trade an item sat on. An item that
      * is visible itself but only occurred in a dropped trade therefore stays in the index.
      */
-    public static void pruneHiddenTrades(Map<ResourceLocation, TradeData> tradeData, Predicate<ItemStack> isVisible) {
-        Iterator<Map.Entry<ResourceLocation, TradeData>> iterator = tradeData.entrySet().iterator();
+    public static void pruneHiddenTrades(Map<Identifier, TradeData> tradeData, Predicate<ItemStack> isVisible) {
+        Iterator<Map.Entry<Identifier, TradeData>> iterator = tradeData.entrySet().iterator();
 
         while (iterator.hasNext()) {
-            Map.Entry<ResourceLocation, TradeData> entry = iterator.next();
+            Map.Entry<Identifier, TradeData> entry = iterator.next();
             TradeData data = entry.getValue();
 
             if (data.node() instanceof ListNode listNode && listNode.prune(hiddenItemFilter(isVisible))) {

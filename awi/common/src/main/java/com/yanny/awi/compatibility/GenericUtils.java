@@ -23,11 +23,7 @@ import org.slf4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
@@ -125,7 +121,7 @@ public class GenericUtils {
      *
      * @param isVisible viewer-specific visibility test; memoized here because the same block recurs across biomes
      */
-    public static void pruneHiddenBlocks(Map<ResourceLocation, LevelStemNode> worldgenData, Predicate<Block> isVisible) {
+    public static void pruneHiddenBlocks(Map<Identifier, LevelStemNode> worldgenData, Predicate<Block> isVisible) {
         Map<Block, Boolean> cache = new IdentityHashMap<>();
 
         worldgenData.values().removeIf((level) -> level.prune(
