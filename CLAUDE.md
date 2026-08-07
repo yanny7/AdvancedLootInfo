@@ -75,7 +75,7 @@ Core flow, per mod (see `ali/CLAUDE.md` / `awi/CLAUDE.md` for the concrete insta
 - `plugin/client` — client-side widget/rendering utilities.
 - ALI additionally has `plugin/glm` (Global Loot Modifier compatibility) and `plugin/mods` (reflection-based third-party compat shims) — see `ali/CLAUDE.md`.
 
-Server-collected data is sent to the client over custom networking (`network` package) — the client requests data on demand rather than the server eagerly pushing it. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
+Server-collected data is sent to the client over custom networking (`network` package). **Only the transfer is on demand**: the whole data tree is built eagerly on the server thread at server start (and on datapack/tag reload) by `AbstractServer.readLootTables`/`readWorldgenInfo`, and the recipe viewer's `RequestLootDataMessage`/`RequestWorldgenDataMessage` merely starts streaming the already-built, gzipped chunks to that client. Scan cost is therefore server-startup cost — it is never deferred until a viewer asks. See `ali/CLAUDE.md`'s networking section (canonical) and `awi/CLAUDE.md`'s (the same pattern, diffed).
 
 Mod compatibility for ALI's built-in loot categories is data-driven: `ali_config.schema.json` documents the datapack-based configuration format (loot categories, ingredients, tags) that ALI's `configuration`/`datagen` packages read and generate — see `ali/CLAUDE.md`. AWI's config surface is much smaller: just `AwiConfig` (`configVersion`, `logMoreStatistics`, `showInGameNames`) in `awi/common`'s `configuration` package — no datapack-driven categories.
 
@@ -111,6 +111,12 @@ Run all tests (JUnit 5 via `junit-platform-suite`, in `common` modules only — 
 Run a single test class:
 ```
 ./gradlew :ali:common:test --tests "com.yanny.ali.test.NodeTest"
+```
+
+AWI's base-layout scan is guarded by a golden file instead of unit assertions, with two opt-in switches (see `awi/CLAUDE.md`'s test-harness section):
+```
+./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutTest" -Dawi.baselayout.regenerate=true
+./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutSweepTest" -Dawi.baselayout.sweep=true
 ```
 
 Tests are organized behind JUnit Platform `@Suite`/`@SelectClasses` runners (`TooltipTestSuite` in each mod's `common` test tree) that bootstrap Minecraft's registries/resources (`Bootstrap.bootStrap()`, `SharedConstants.setVersion(...)`) once before delegating to individual `@Test` classes — run the suite class, not only an individual test class, if a test depends on that shared bootstrap state.

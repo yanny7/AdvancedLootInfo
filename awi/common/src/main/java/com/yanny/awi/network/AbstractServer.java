@@ -7,6 +7,7 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
+import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -46,13 +47,14 @@ public abstract class AbstractServer {
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
         Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();
+        BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, serverRegistry.getConfiguration().logMoreStatistics);
 
         for (LevelStem levelStem : levelStemRegistry) {
             ResourceLocation location = levelStemRegistry.getKey(levelStem);
 
             try {
                 TooltipContext.set(location);
-                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
+                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem, baseLayoutScanner.getBaseLayouts(location)));
             } catch (Throwable e) {
                 LOGGER.error("Failed to build level stem {}", location, e);
             } finally {
@@ -62,7 +64,23 @@ public abstract class AbstractServer {
 
         worldgenNodes = removeEmptyNodes(worldgenNodes);
 
+        BaseLayoutScanner.Stats baseLayoutStats = baseLayoutScanner.getStats();
+
         LOGGER.info("Processing {} levels took {}ms", worldgenNodes.size(), System.currentTimeMillis() - startTime);
+
+        if (serverRegistry.getConfiguration().logMoreStatistics) {
+            LOGGER.info("Base Layout generation for {} biomes took {}ms, {} biomes were reused from cache",
+                    baseLayoutStats.scannedBiomeCount(), baseLayoutStats.totalTimeMs(), baseLayoutStats.cachedBiomeCount());
+            LOGGER.info("Base Layout scanned {} dimensions using {} distinct surface rules ({} distinct rule instances)",
+                    baseLayoutStats.scannedDimensionCount(), baseLayoutStats.distinctSurfaceRules(), baseLayoutStats.distinctSurfaceRuleInstances());
+            LOGGER.info("Base Layout time per biome: min {}ms, max {}ms, mean {}ms",
+                    baseLayoutStats.minBiomeTimeMs(), baseLayoutStats.maxBiomeTimeMs(), DOUBLE_FORMAT.format(baseLayoutStats.meanBiomeTimeMs()));
+
+            for (BaseLayoutScanner.DimensionCost cost : baseLayoutStats.costliestDimensions()) {
+                LOGGER.info("Base Layout costliest dimension {}: {}ms over {} biomes, {} of them stopped only at the round cap",
+                        cost.dimension(), cost.timeMs(), cost.biomeCount(), cost.roundCappedCount());
+            }
+        }
 
         ByteBuf rawBuf = Unpooled.buffer();
         FriendlyByteBuf buf = new FriendlyByteBuf(rawBuf);
