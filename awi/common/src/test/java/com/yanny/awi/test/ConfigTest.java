@@ -1,5 +1,7 @@
 package com.yanny.awi.test;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.yanny.awi.Utils;
 import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.configuration.ConfigUtils;
@@ -119,14 +121,14 @@ public class ConfigTest {
         }
     }
 
-    private String writtenConfig() throws IOException {
-        return Files.readString(configFile()).stripTrailing();
+    private JsonElement writtenConfig() throws IOException {
+        return JsonParser.parseString(Files.readString(configFile()));
     }
 
-    private static String expectedConfig() throws IOException {
+    private static JsonElement expectedConfig() throws IOException {
         try (InputStream stream = ConfigTest.class.getResourceAsStream("/config/" + Utils.COMMON_CONFIG_NAME)) {
             assertNotNull(stream, "Missing expected configuration file");
-            return new String(stream.readAllBytes(), StandardCharsets.UTF_8).stripTrailing();
+            return JsonParser.parseString(new String(stream.readAllBytes(), StandardCharsets.UTF_8));
         }
     }
 }
