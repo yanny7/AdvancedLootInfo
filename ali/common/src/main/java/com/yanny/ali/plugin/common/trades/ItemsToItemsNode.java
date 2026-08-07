@@ -81,6 +81,12 @@ public class ItemsToItemsNode extends ListNode {
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
     }
 
+    /** A trade missing one of its inputs or its result is not a cheaper trade - it is a wrong one. */
+    @Override
+    protected boolean requiresAllChildren() {
+        return true;
+    }
+
     @NotNull
     @Override
     public TooltipNode getTooltip() {

@@ -1,0 +1,215 @@
+{
+  "hideDefaultBlockLoot": true,
+  "defaultBlockLootConditions": [
+    "minecraft:survives_explosion"
+  ],
+  "defaultBlockLootFunctions": [
+    "minecraft:explosion_decay"
+  ],
+  "disabledEntities": [],
+  "logMoreStatistics": false,
+  "showInGameNames": true,
+  "entityCategories": [
+    {
+      "entityTypes": [],
+      "key": "ali:entity_loot",
+      "icon": "minecraft:skeleton_skull"
+    }
+  ],
+  "gameplayCategories": [
+    {
+      "pattern": [
+        "^.*:chests/[a-z_]*$",
+        "^.*:chests/village/[a-z_]*$"
+      ],
+      "key": "ali:chest_loot",
+      "icon": "minecraft:chest"
+    },
+    {
+      "catalysts": [
+        "minecraft:trial_spawner",
+        "minecraft:trial_key",
+        "minecraft:ominous_trial_key"
+      ],
+      "pattern": [
+        "^.*:chests/trial_chambers/.*$",
+        "^.*:pots/trial_chambers/.*$",
+        "^.*:dispensers/trial_chambers/.*$",
+        "^.*:spawners/ominous/trial_chamber/.*$",
+        "^.*:spawners/trial_chamber/.*$",
+        "^.*:equipment/.*$"
+      ],
+      "key": "ali:trial_chambers",
+      "icon": "minecraft:trial_spawner"
+    },
+    {
+      "catalysts": [
+        "minecraft:fishing_rod"
+      ],
+      "pattern": [
+        "^.*:gameplay/fishing.*$"
+      ],
+      "key": "ali:fishing_loot",
+      "icon": "minecraft:fishing_rod"
+    },
+    {
+      "catalysts": [
+        "minecraft:brush",
+        "minecraft:suspicious_sand",
+        "minecraft:suspicious_gravel"
+      ],
+      "pattern": [
+        "^.*:archaeology/.*$",
+        "^.*:brush/.*$"
+      ],
+      "key": "ali:archaeology_loot",
+      "icon": "minecraft:decorated_pot"
+    },
+    {
+      "pattern": [
+        "^.*:gameplay/hero_of_the_village/.*$"
+      ],
+      "key": "ali:hero_loot",
+      "icon": "minecraft:emerald"
+    },
+    {
+      "catalysts": [
+        "minecraft:cat_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/cat_morning_gift.*$"
+      ],
+      "key": "ali:cat_morning_gift",
+      "icon": "minecraft:phantom_membrane"
+    },
+    {
+      "catalysts": [
+        "minecraft:piglin_spawn_egg",
+        "minecraft:gold_ingot"
+      ],
+      "pattern": [
+        "^.*:gameplay/piglin_bartering.*$"
+      ],
+      "key": "ali:piglin_bartering",
+      "icon": "minecraft:gold_ingot"
+    },
+    {
+      "catalysts": [
+        "minecraft:sniffer_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/sniffer_digging.*$"
+      ],
+      "key": "ali:sniffer_digging",
+      "icon": "minecraft:sniffer_egg"
+    },
+    {
+      "catalysts": [
+        "minecraft:panda_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/panda_sneeze.*$"
+      ],
+      "key": "ali:panda_sneeze",
+      "icon": "minecraft:bamboo"
+    },
+    {
+      "catalysts": [
+        "minecraft:shears"
+      ],
+      "pattern": [
+        "^.*:shearing/.*$"
+      ],
+      "key": "ali:shearing",
+      "icon": "minecraft:shears"
+    },
+    {
+      "catalysts": [
+        "minecraft:armadillo_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/armadillo_shed.*$"
+      ],
+      "key": "ali:armadillo_shed",
+      "icon": "minecraft:armadillo_scute"
+    },
+    {
+      "catalysts": [
+        "minecraft:chicken_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/chicken_lay.*$"
+      ],
+      "key": "ali:chicken_lay",
+      "icon": "minecraft:egg"
+    },
+    {
+      "catalysts": [
+        "minecraft:shears"
+      ],
+      "pattern": [
+        "^.*:carve/.*$"
+      ],
+      "key": "ali:carving",
+      "icon": "minecraft:carved_pumpkin"
+    },
+    {
+      "catalysts": [
+        "minecraft:creeper_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:charged_creeper/.*$"
+      ],
+      "key": "ali:charged_creeper",
+      "icon": "minecraft:creeper_head"
+    },
+    {
+      "pattern": [
+        "^.*:harvest/.*$"
+      ],
+      "key": "ali:harvesting",
+      "icon": "minecraft:flower_pot"
+    },
+    {
+      "catalysts": [
+        "minecraft:turtle_spawn_egg"
+      ],
+      "pattern": [
+        "^.*:gameplay/turtle_grow.*$"
+      ],
+      "key": "ali:turtle_grow",
+      "icon": "minecraft:turtle_scute"
+    },
+    {
+      "pattern": [
+        ".*"
+      ],
+      "key": "ali:gameplay_loot",
+      "icon": "minecraft:compass"
+    }
+  ],
+  "tradeCategories": [
+    {
+      "pattern": [
+        ".*"
+      ],
+      "key": "ali:trade_loot",
+      "icon": "minecraft:emerald_block"
+    }
+  ],
+  "configVersion": 2,
+  "blockCategories": [
+    {
+      "blocks": [
+        "#minecraft:crops"
+      ],
+      "key": "ali:plant_loot",
+      "icon": "minecraft:diamond_hoe"
+    },
+    {
+      "blocks": [],
+      "key": "ali:block_loot",
+      "icon": "minecraft:diamond_pickaxe"
+    }
+  ]
+}

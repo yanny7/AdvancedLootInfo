@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IServerUtils;
+import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.CountSpan;
@@ -76,7 +77,8 @@ import java.util.concurrent.ExecutionException;
         FoliagePlacerTooltipTest.class,
         StructureProcessorTooltipTest.class,
         PlacementSummaryTest.class,
-        TooltipUtilsTest.class
+        TooltipUtilsTest.class,
+        ConfigTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
@@ -121,6 +123,12 @@ public class TooltipTestSuite {
             @Override
             public int getTranslationKeyIndex(String key) {
                 return PluginManager.getInstance().serverRegistry.getTranslationKeyIndex(key);
+            }
+
+            @NotNull
+            @Override
+            public AwiConfig getConfiguration() {
+                return PluginManager.getInstance().serverRegistry.getConfiguration();
             }
 
             @Override

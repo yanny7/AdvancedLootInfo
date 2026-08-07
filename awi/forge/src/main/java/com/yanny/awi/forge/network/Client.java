@@ -16,7 +16,7 @@ public class Client extends AbstractClient {
 
     public void onWorldgenDataChunk(WorldgenDataChunkMessage msg, CustomPayloadEvent.Context contextSupplier) {
         if (contextSupplier.isClientSide()) {
-            super.onLootDataChunk(msg);
+            super.onWorldgenDataChunk(msg);
         }
 
         contextSupplier.setPacketHandled(true);
@@ -39,7 +39,7 @@ public class Client extends AbstractClient {
     }
 
     @Override
-    public void sendLootDataToPlayer(RequestWorldgenDataMessage message) {
+    public void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message) {
         ClientPacketListener listener = Minecraft.getInstance().getConnection();
 
         if (listener != null && channel.isRemotePresent(listener.getConnection())) {

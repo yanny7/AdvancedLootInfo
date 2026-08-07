@@ -1,6 +1,7 @@
 package com.yanny.ali.network;
 
 import com.mojang.logging.LogUtils;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
@@ -39,8 +40,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import oshi.util.tuples.Pair;
 
@@ -89,7 +96,7 @@ public abstract class AbstractServer {
         Map<Identifier, IDataNode> tradeNodes;
         Map<Identifier, Pair<List<Item>, List<Item>>> tradeItems = new HashMap<>();
         Pair<List<Item>, List<Item>> wanderingTraderItems = ItemCollectorUtils.collectTradeItems(serverRegistry, VillagerTrades.WANDERING_TRADER_TRADES);
-        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry.getServerLevel(), serverRegistry);
+        IDataNode wanderingTraderNode = processWanderingTrader(serverRegistry);
 
         lootTables.forEach(serverRegistry::addLootTable); // used for table references
         lootTableItems = collectLootTableItems(lootTables, fakeLootTables);
@@ -195,10 +202,13 @@ public abstract class AbstractServer {
                                                                   Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> blockLootModifiers,
                                                                   List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
         Map<Identifier, IDataNode> lootNodes = new HashMap<>();
+        int defaultDropLootTables = 0;
 
         for (Block block : BuiltInRegistries.BLOCK) {
-            block.getLootTable().ifPresent((resourceKey) -> {
-                Identifier location = resourceKey.identifier();
+            Optional<ResourceKey<LootTable>> resourceKey = block.getLootTable();
+
+            if (resourceKey.isPresent()) {
+                Identifier location = resourceKey.get().identifier();
                 LootTable lootTable = lootTables.remove(location);
 
                 TooltipContext.set(location);
@@ -209,6 +219,13 @@ public abstract class AbstractServer {
                             blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
                             lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
                     ).toList();
+
+                    if (config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
+                            && isDefaultBlockDrop(serverRegistry, config, block, lootTable)) {
+                        defaultDropLootTables++;
+                        TooltipContext.clear();
+                        continue;
+                    }
 
                     try {
                         if (lootTable != null) {
@@ -244,10 +261,58 @@ public abstract class AbstractServer {
                 }
 
                 TooltipContext.clear();
-            });
+            }
+        }
+
+        if (defaultDropLootTables > 0) {
+            LOGGER.info("Skipped {} block loot tables dropping only the block itself", defaultDropLootTables);
         }
 
         return lootNodes;
+    }
+
+    /**
+     * Matches the shape produced by vanilla's {@code dropSelf}: a single pool with exactly one roll, holding a single
+     * {@link LootItem} for the block's own item. Functions and conditions make the table non-default unless their type
+     * is listed in the config's {@code defaultBlockLootFunctions}/{@code defaultBlockLootConditions}.
+     */
+    private static boolean isDefaultBlockDrop(AliServerRegistry serverRegistry, AliConfig config, Block block, @Nullable LootTable lootTable) {
+        if (lootTable == null || !isIgnoredFunctions(config, lootTable.functions)) {
+            return false;
+        }
+
+        List<LootPool> pools = lootTable.pools;
+
+        if (pools.size() != 1) {
+            return false;
+        }
+
+        LootPool pool = pools.getFirst();
+
+        if (pool.entries.size() != 1 || !isIgnoredFunctions(config, pool.functions) || !isIgnoredConditions(config, pool.conditions)
+                || !isConstant(serverRegistry, pool.rolls, 1) || !isConstant(serverRegistry, pool.bonusRolls, 0)) {
+            return false;
+        }
+
+        if (!(pool.entries.getFirst() instanceof LootItem lootItem) || lootItem.item.value() != block.asItem() || !isIgnoredFunctions(config, lootItem.functions)) {
+            return false;
+        }
+
+        return isIgnoredConditions(config, lootItem.conditions);
+    }
+
+    private static boolean isIgnoredFunctions(AliConfig config, List<LootItemFunction> functions) {
+        return functions.stream().allMatch((f) -> config.defaultBlockLootFunctions.contains(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType())));
+    }
+
+    private static boolean isIgnoredConditions(AliConfig config, List<LootItemCondition> conditions) {
+        return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
+    }
+
+    private static boolean isConstant(AliServerRegistry serverRegistry, NumberProvider numberProvider, float value) {
+        RangeValue range = serverRegistry.convertNumber(serverRegistry, numberProvider);
+
+        return !range.isUnknown() && range.min() == value && range.max() == value;
     }
 
     @NotNull
@@ -404,7 +469,7 @@ public abstract class AbstractServer {
     }
 
     @NotNull
-    private static IDataNode processWanderingTrader(ServerLevel level, AliServerRegistry serverRegistry) {
+    private static IDataNode processWanderingTrader(AliServerRegistry serverRegistry) {
         try {
             return serverRegistry.parseTrade(VillagerTrades.WANDERING_TRADER_TRADES, true);
         } catch (Throwable e) {

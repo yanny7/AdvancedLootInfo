@@ -41,6 +41,7 @@ public abstract class AbstractServer {
     public void readWorldgenInfo(ServerLevel level) {
         LOGGER.info("Started reading worldgen info");
 
+        long startTime = System.currentTimeMillis();
         AwiServerRegistry serverRegistry = PluginManager.getInstance().serverRegistry;
         RegistryAccess registryAccess = level.registryAccess();
         Registry<LevelStem> levelStemRegistry = registryAccess.lookupOrThrow(Registries.LEVEL_STEM);
@@ -49,13 +50,24 @@ public abstract class AbstractServer {
         for (LevelStem levelStem : levelStemRegistry) {
             Identifier location = levelStemRegistry.getKey(levelStem);
 
-            worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
+            try {
+                TooltipContext.set(location);
+                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem));
+            } catch (Throwable e) {
+                LOGGER.error("Failed to build level stem {}", location, e);
+            } finally {
+                TooltipContext.clear();
+            }
         }
 
         worldgenNodes = removeEmptyNodes(worldgenNodes);
 
+        LOGGER.info("Processing {} levels took {}ms", worldgenNodes.size(), System.currentTimeMillis() - startTime);
+
         ByteBuf rawBuf = Unpooled.buffer();
         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(rawBuf, registryAccess);
+
+        chunks.clear();
 
         serverRegistry.getTooltipCache().encode(serverRegistry, buf);
         writeWorldgenData(serverRegistry, buf, worldgenNodes);
@@ -115,6 +127,8 @@ public abstract class AbstractServer {
         }
 
         if (successfulNodes != worldgenNodes.size()) {
+            LOGGER.warn("Only {} of {} level(s) were encoded successfully", successfulNodes, worldgenNodes.size());
+
             int endIndex = buf.writerIndex();
 
             buf.writerIndex(countIndex);
@@ -168,7 +182,13 @@ public abstract class AbstractServer {
 
                 if (!listNode.nodes().isEmpty()) {
                     result.put(entry.getKey(), listNode);
+                } else {
+                    emptyNodes++;
+                    LOGGER.warn("Level {} was dropped - it contains no non-empty biome nodes", entry.getKey());
                 }
+            } else {
+                emptyNodes++;
+                LOGGER.warn("Level {} was dropped - node {} is not a ListNode", entry.getKey(), node.getClass().getName());
             }
         }
 

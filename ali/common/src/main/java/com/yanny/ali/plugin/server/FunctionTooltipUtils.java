@@ -16,11 +16,11 @@ import static com.yanny.ali.plugin.server.GenericTooltipUtils.getStandaloneToolt
 public class FunctionTooltipUtils {
     @NotNull
     public static TooltipBuilder getApplyBonusTooltip(IServerUtils utils, ApplyBonusCount fun) {
-        return TooltipBuilder.array((b) -> {
+        return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.enchantment).build(Lang.Value.ENCHANTMENT));
             b.add(utils.getValueTooltip(utils, fun.formula).build(Lang.Value.FORMULA));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }, Lang.Functions.APPLY_BONUS).isAdvancedTooltip();
+        }, Lang.Functions.APPLY_BONUS), fun);
     }
 
     @NotNull
@@ -106,10 +106,10 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getLimitCountTooltip(IServerUtils utils, LimitCount fun) {
-        return TooltipBuilder.array((b) -> {
+        return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.limiter).build(Lang.Value.LIMIT));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }, Lang.Functions.LIMIT_COUNT).isAdvancedTooltip();
+        }, Lang.Functions.LIMIT_COUNT), fun);
     }
 
     @NotNull
@@ -169,11 +169,11 @@ public class FunctionTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getSetCountTooltip(IServerUtils utils, SetItemCountFunction fun) {
-        return TooltipBuilder.array((b) -> {
+        return hideWhenFoldedIntoCount(TooltipBuilder.array((b) -> {
             b.add(utils.getValueTooltip(utils, fun.value).build(Lang.Value.COUNT));
             b.add(utils.getValueTooltip(utils, fun.add).build(Lang.Value.ADD));
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
-        }, Lang.Functions.SET_COUNT).isAdvancedTooltip();
+        }, Lang.Functions.SET_COUNT), fun);
     }
 
     @NotNull
@@ -388,5 +388,19 @@ public class FunctionTooltipUtils {
             b.add(utils.getValueTooltip(utils, fun.predicates).build(Lang.Branch.CONDITIONS));
             b.showEmpty();
         }, Lang.Functions.DISCARD_ITEM);
+    }
+
+    /**
+     * Marks a function whose effect {@link TooltipUtils} already folds into the displayed count as advanced-only - the
+     * count says it all, so repeating the function is noise. A conditional function is not folded in the same way (it
+     * only widens the range), so it stays visible and keeps its predicates readable.
+     */
+    @NotNull
+    private static TooltipBuilder hideWhenFoldedIntoCount(TooltipBuilder builder, LootItemConditionalFunction fun) {
+        if (!TooltipUtils.isConditional(fun)) {
+            builder.isAdvancedTooltip();
+        }
+
+        return builder;
     }
 }

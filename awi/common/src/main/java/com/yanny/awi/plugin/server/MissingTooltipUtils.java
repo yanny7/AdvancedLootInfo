@@ -49,9 +49,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get placement modifier from serialized data for {} in {}", BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get placement modifier from serialized data for {} in {}", BuiltInRegistries.PLACEMENT_MODIFIER_TYPE.getKey(placement.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -71,9 +71,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get int provider from serialized data for {} in {}", BuiltInRegistries.INT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get int provider from serialized data for {} in {}", BuiltInRegistries.INT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -93,9 +93,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get rule test from serialized data for {} in {}", BuiltInRegistries.RULE_TEST.getKey(test.getType()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get rule test from serialized data for {} in {}", BuiltInRegistries.RULE_TEST.getKey(test.getType()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -115,9 +115,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get height provider from serialized data for {} in {}", BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get height provider from serialized data for {} in {}", BuiltInRegistries.HEIGHT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -137,9 +137,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get block predicate from serialized data for {} in {}", BuiltInRegistries.BLOCK_PREDICATE_TYPE.getKey(predicate.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get block predicate from serialized data for {} in {}", BuiltInRegistries.BLOCK_PREDICATE_TYPE.getKey(predicate.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -159,9 +159,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get block state provider from serialized data for {} in {}", BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE.getKey(provider.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get block state provider from serialized data for {} in {}", BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE.getKey(provider.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -181,9 +181,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get tree decorator from serialized data for {} in {}", BuiltInRegistries.TREE_DECORATOR_TYPE.getKey(decorator.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get tree decorator from serialized data for {} in {}", BuiltInRegistries.TREE_DECORATOR_TYPE.getKey(decorator.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -203,9 +203,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get feature size from serialized data for {} in {}", BuiltInRegistries.FEATURE_SIZE_TYPE.getKey(size.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get feature size from serialized data for {} in {}", BuiltInRegistries.FEATURE_SIZE_TYPE.getKey(size.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -225,9 +225,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get root placer from serialized data for {} in {}", BuiltInRegistries.ROOT_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get root placer from serialized data for {} in {}", BuiltInRegistries.ROOT_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -247,9 +247,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get foliage placer from serialized data for {} in {}", BuiltInRegistries.FOLIAGE_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get foliage placer from serialized data for {} in {}", BuiltInRegistries.FOLIAGE_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -269,9 +269,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get trunk placer from serialized data for {} in {}", BuiltInRegistries.TRUNK_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get trunk placer from serialized data for {} in {}", BuiltInRegistries.TRUNK_PLACER_TYPE.getKey(placer.type()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -291,9 +291,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get float provider from serialized data for {} in {}", BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get float provider from serialized data for {} in {}", BuiltInRegistries.FLOAT_PROVIDER_TYPE.getKey(provider.getType()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
@@ -313,9 +313,9 @@ public class MissingTooltipUtils {
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
-//            if (utils.getConfiguration().logMoreStatistics) { FIXME
-            LOGGER.warn("Failed to get structure processor from serialized data for {} in {}", BuiltInRegistries.STRUCTURE_PROCESSOR.getKey(processor.getType()), TooltipContext.get(), e);
-//            }
+            if (utils.getConfiguration().logMoreStatistics) {
+                LOGGER.warn("Failed to get structure processor from serialized data for {} in {}", BuiltInRegistries.STRUCTURE_PROCESSOR.getKey(processor.getType()), TooltipContext.get(), e);
+            }
 
 //            TooltipUtils.addObjectFields(utils, tooltip, entry, CompositeEntryBase.class); FIXME
         }
