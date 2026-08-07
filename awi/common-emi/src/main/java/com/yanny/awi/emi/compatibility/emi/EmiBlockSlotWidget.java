@@ -23,11 +23,19 @@ import java.util.List;
 
 public class EmiBlockSlotWidget extends SlotWidget {
     private final BlockState blockState;
+    private final IDataNode entry;
 
     public EmiBlockSlotWidget(IDataNode entry, Block block, int x, int y) {
         super(EmiStack.of(block), x, y);
         this.blockState = block.defaultBlockState();
-        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips).forEach(this::appendTooltip);
+        this.entry = entry;
+    }
+
+    @Override
+    protected void addSlotTooltip(List<ClientTooltipComponent> list) {
+        CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)
+                .forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
+        super.addSlotTooltip(list);
     }
 
     @Override

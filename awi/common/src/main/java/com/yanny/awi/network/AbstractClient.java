@@ -9,17 +9,17 @@ public abstract class AbstractClient {
         INSTANCE = this;
     }
 
-    protected void onLootDataChunk(WorldgenDataChunkMessage msg) {
+    protected void onWorldgenDataChunk(WorldgenDataChunkMessage msg) {
         PluginManager.getInstance().clientRegistry.addChunkData(msg.index(), msg.data());
     }
 
     protected void onStart(StartMessage msg) {
-        PluginManager.getInstance().clientRegistry.startLootData(msg.totalMessages);
+        PluginManager.getInstance().clientRegistry.startReceivingData(msg.totalMessages);
     }
 
     protected void onDone(DoneMessage ignoredMsg) {
-        PluginManager.getInstance().clientRegistry.doneLootData();
+        PluginManager.getInstance().clientRegistry.doneReceivingData();
     }
 
-    public abstract void sendLootDataToPlayer(RequestWorldgenDataMessage message);
+    public abstract void sendWorldgenDataToPlayer(RequestWorldgenDataMessage message);
 }

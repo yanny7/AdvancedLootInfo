@@ -134,13 +134,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
                 ItemStack itemStack = left.get();
                 EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
 
-                stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
+                stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
             } else if (right.isPresent()) {
                 TagKey<? extends ItemLike> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
-                ingredient.map((stack) -> stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                ingredient.map((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
                 widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entries(ingredient).markOutput());
             }
 

@@ -12,8 +12,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class TextureWidget implements IWidget {
     protected final Identifier texture;
@@ -24,7 +26,7 @@ public class TextureWidget implements IWidget {
     protected final int regionHeight;
     protected final int textureWidth;
     protected final int textureHeight;
-    private final List<Component> components = new LinkedList<>();
+    private final List<Supplier<List<Component>>> components = new LinkedList<>();
 
     public TextureWidget(Identifier texture, RelativeRect rect, int u, int v, int regionWidth, int regionHeight, int textureWidth, int textureHeight) {
         this.texture = texture;
@@ -55,18 +57,21 @@ public class TextureWidget implements IWidget {
     }
 
     public void tooltipText(TooltipNode tooltip) {
-        this.components.addAll(CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
+        this.components.add(() -> CoreTooltipUtils.toComponents(tooltip, 0, Minecraft.getInstance().options.advancedItemTooltips));
     }
 
-    /** Adds a raw component line to the tooltip (e.g. a white title). Call before {@link #tooltipText} to keep it first. */
+    /** Adds a raw component line to the tooltip (e.g. a white title). Lines appear in the order they were added. */
     public void tooltipComponent(Component component) {
-        this.components.add(component);
+        this.components.add(() -> List.of(component));
     }
 
     @NotNull
     @Override
     public List<Component> getTooltipComponents(int mouseX, int mouseY) {
-        return components;
+        List<Component> list = new ArrayList<>();
+
+        components.forEach((supplier) -> list.addAll(supplier.get()));
+        return list;
     }
 
     @Override

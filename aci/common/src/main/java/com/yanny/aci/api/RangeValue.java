@@ -106,6 +106,20 @@ public final class RangeValue {
         );
     }
 
+    /**
+     * Widens this range so that it covers {@code value} as well. Meant for a modifier that may or may not be applied -
+     * a conditional loot function - where both the original and the modified value are possible outcomes.
+     */
+    @NotNull
+    public RangeValue union(RangeValue value) {
+        return new RangeValue(
+                Math.min(this.min, value.min),
+                Math.max(this.max, value.max),
+                this.hasScore || value.hasScore,
+                this.isUnknown || value.isUnknown
+        );
+    }
+
     @NotNull
     public RangeValue clamp(RangeValue minRange, RangeValue maxRange) {
         if (this.isUnknown) {

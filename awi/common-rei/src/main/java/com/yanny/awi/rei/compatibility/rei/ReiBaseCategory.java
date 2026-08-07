@@ -130,7 +130,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
                     stack = EntryStacks.of(h.block.defaultBlockState().getFluidState().getType());
                 }
 
-                stack.tooltip(CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
+                stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
                 widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entry(stack).markOutput());
             }
 

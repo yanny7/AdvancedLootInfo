@@ -11,15 +11,22 @@ import com.yanny.awi.rei.compatibility.rei.RecipeHolder;
 import com.yanny.awi.rei.compatibility.rei.ReiBaseCategory;
 import com.yanny.awi.rei.compatibility.rei.ReiBiomeCategory;
 import com.yanny.awi.rei.compatibility.rei.ReiBiomeDisplay;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
+import me.shedaniel.rei.api.client.config.ConfigObject;
+import me.shedaniel.rei.api.client.config.entry.EntryStackProvider;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReasons;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
+import me.shedaniel.rei.api.common.entry.EntryStack;
+import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -58,6 +65,9 @@ public class ReiCompatibility implements REIClientPlugin {
 
         if (level != null) {
             Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
+            LongSet hiddenStacks = collectHiddenStacks();
+
+            GenericUtils.pruneHiddenBlocks(worldgenData, (block) -> isVisible(hiddenStacks, block));
 
             worldgenData.forEach((key, levelNode) -> {
                 WorldCategory category = new WorldCategory(key);
@@ -75,6 +85,37 @@ public class ReiCompatibility implements REIClientPlugin {
         } else {
             LOGGER.warn("REI integration was not loaded! Level is null!");
         }
+    }
+
+    /**
+     * REI has no {@code isDisabled}/{@code isHidden} pair like EMI - the entries the player hid live in the config as
+     * filtered stack providers. {@code EntryRegistry#getPreFilteredList} would also cover rule-based filtering, but it
+     * is not guaranteed to be populated while categories are still being registered, so the config is the safe source.
+     */
+    @NotNull
+    private static LongSet collectHiddenStacks() {
+        LongSet hidden = new LongOpenHashSet();
+
+        for (EntryStackProvider<?> provider : ConfigObject.getInstance().getFilteredStackProviders()) {
+            if (provider.isValid()) {
+                EntryStack<?> stack = provider.provide();
+
+                if (!stack.isEmpty()) {
+                    hidden.add(EntryStacks.hashFuzzy(stack));
+                }
+            }
+        }
+
+        return hidden;
+    }
+
+    /**
+     * Blocks with no item form (fire, {@code *_plant}, ...) yield an empty entry that can never be hidden - those are
+     * kept, the biome tree draws them as a block model.
+     */
+    private static boolean isVisible(LongSet hiddenStacks, Block block) {
+        EntryStack<ItemStack> entry = EntryStacks.of(block);
+        return entry.isEmpty() || !hiddenStacks.contains(EntryStacks.hashFuzzy(entry));
     }
 
     @NotNull

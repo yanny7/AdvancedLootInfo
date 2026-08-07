@@ -125,21 +125,27 @@ public class LevelStemNode extends ListNode {
                     }))
                     .toList();
 
-            for (Future<BiomeResult> future : futures) {
+            for (int i = 0; i < futures.size(); i++) {
+                Holder<Biome> biomeHolder = biomes.get(i);
+
                 try {
-                    BiomeResult res = future.get();
+                    BiomeResult res = futures.get(i).get();
                     addChildren(new BiomeNode(utils, res.biomeHolder().value(), tooltip, res.layers.getBlockInfos(), columnContext));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    LOGGER.error("Biome analysis interrupted", e);
+                    LOGGER.error("Biome analysis interrupted for {}", biomeName(biomeHolder), e);
                 } catch (Exception e) {
-                    LOGGER.error("Failed to analyze biome", e);
+                    LOGGER.error("Failed to analyze biome {}", biomeName(biomeHolder), e);
                 }
             }
         } finally {
             executor.shutdown();
             threadLocalCtx.remove();
         }
+    }
+
+    private static String biomeName(Holder<Biome> biomeHolder) {
+        return biomeHolder.unwrapKey().map(k -> k.identifier().toString()).orElse("<unnamed biome>");
     }
 
     record BiomeResult(Holder<Biome> biomeHolder, NodeUtils.LayerHolder layers) {}

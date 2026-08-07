@@ -29,7 +29,11 @@ public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void assertTooltip(TooltipNode tooltip, List<String> expected) {
-        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
+        assertTooltip(tooltip, true, expected);
+    }
+
+    public static void assertTooltip(TooltipNode tooltip, boolean isAdvanced, List<String> expected) {
+        List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, isAdvanced);
         List<Executable> executables = new LinkedList<>();
 
         executables.add(() -> Assertions.assertEquals(expected.size(), components.size()));
