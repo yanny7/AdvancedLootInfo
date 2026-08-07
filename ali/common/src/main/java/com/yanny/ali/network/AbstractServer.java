@@ -306,11 +306,11 @@ public abstract class AbstractServer {
     }
 
     private static boolean isIgnoredFunctions(AliConfig config, List<LootItemFunction> functions) {
-        return functions.stream().allMatch((f) -> config.defaultBlockLootFunctions.contains(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.getType())));
+        return functions.stream().allMatch((f) -> config.defaultBlockLootFunctions.contains(BuiltInRegistries.LOOT_FUNCTION_TYPE.getKey(f.codec())));
     }
 
     private static boolean isIgnoredConditions(AliConfig config, List<LootItemCondition> conditions) {
-        return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
+        return conditions.stream().allMatch((c) -> config.defaultBlockLootConditions.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.codec())));
     }
 
     private static boolean isConstant(AliServerRegistry serverRegistry, NumberProvider numberProvider, float value) {
