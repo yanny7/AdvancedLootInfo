@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class TestPlatformHelper implements IPlatformHelper {
+    public static Path CONFIG_DIR = null;
+
     @NotNull
     @Override
     public List<IPlugin> getPlugins() {
@@ -23,7 +25,7 @@ public class TestPlatformHelper implements IPlatformHelper {
     @NotNull
     @Override
     public Path getConfiguration() {
-        return null;
+        return CONFIG_DIR;
     }
 
     @Nullable

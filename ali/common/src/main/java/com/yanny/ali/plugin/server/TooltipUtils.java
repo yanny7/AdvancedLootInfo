@@ -71,48 +71,43 @@ public class TooltipUtils {
     }
 
     public static void applySetCount(IServerUtils utils, SetItemCountFunction function, EnchantedRanges count) {
-        if (!function.predicates.isEmpty()) {
-            return;
-        }
-
         RangeValue modifierValue = utils.convertNumber(utils, function.count);
+        boolean isConditional = isConditional(function);
 
         count.modifyAllEntries((value) -> {
-            if (function.add) {
-                return value.add(modifierValue);
-            } else {
-                return modifierValue;
-            }
+            RangeValue modifiedValue = function.add ? value.add(modifierValue) : modifierValue;
+
+            return isConditional ? value.union(modifiedValue) : modifiedValue;
         });
     }
 
     public static void applyBonus(IServerUtils ignoredUtils, ApplyBonusCount function, EnchantedRanges count) {
-        if (!function.predicates.isEmpty()) {
-            return;
-        }
+        boolean isConditional = isConditional(function);
 
-        count.computeAllLevels(function.enchantment, (level, value) -> calculateCount(function, value, level));
+        count.computeAllLevels(function.enchantment, (level, value) -> {
+            RangeValue modifiedValue = calculateCount(function, value, level);
+
+            return isConditional ? value.union(modifiedValue) : modifiedValue;
+        });
     }
 
     public static void applyLimitCount(IServerUtils utils, LimitCount function, EnchantedRanges bonusCount) {
-        if (!function.predicates.isEmpty()) {
-            return;
-        }
-
         RangeValue limitMin = utils.convertNumber(utils, function.limit.min);
         RangeValue limitMax = utils.convertNumber(utils, function.limit.max);
+        boolean isConditional = isConditional(function);
 
-        bonusCount.modifyAllEntries((value) -> value.clamp(limitMin, limitMax));
+        bonusCount.modifyAllEntries((value) -> {
+            RangeValue modifiedValue = value.clamp(limitMin, limitMax);
+
+            return isConditional ? value.union(modifiedValue) : modifiedValue;
+        });
     }
 
     public static void applyLootingEnchant(IServerUtils utils, EnchantedCountIncreaseFunction function, EnchantedRanges count) {
-        if (!function.predicates.isEmpty()) {
-            return;
-        }
-
         RangeValue modifierBonus = utils.convertNumber(utils, function.count);
         RangeValue floorLimit = new RangeValue(false, true);
         RangeValue ceilLimit = function.limit > 0 ? new RangeValue(function.limit) : null;
+        boolean isConditional = isConditional(function);
 
         count.computeLevels(function.enchantment, (level, value) -> {
             RangeValue updatedValue = value.add(modifierBonus.multiply(level));
@@ -121,8 +116,16 @@ public class TooltipUtils {
                 updatedValue = updatedValue.clamp(floorLimit, ceilLimit);
             }
 
-            return updatedValue;
+            return isConditional ? value.union(updatedValue) : updatedValue;
         });
+    }
+
+    /**
+     * A function guarded by predicates may or may not run, so the value it produces is only one of two possible
+     * outcomes - the unmodified value being the other one. Such a modifier widens the range instead of replacing it.
+     */
+    public static boolean isConditional(LootItemConditionalFunction function) {
+        return !function.predicates.isEmpty();
     }
 
     @NotNull

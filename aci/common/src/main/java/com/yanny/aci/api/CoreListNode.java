@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public abstract class CoreListNode<
         TServerUtils extends ICoreServerUtils<?>,
@@ -51,6 +52,53 @@ public abstract class CoreListNode<
         }
 
         nodes.add(node);
+    }
+
+    /**
+     * Whether this node only makes sense with every child present. A villager trade, for example, must not be shown
+     * with one of its two inputs missing - the remaining half would read as a different, cheaper trade. Such a node
+     * is dropped by {@link #prune} as soon as a single child is rejected, instead of keeping the remainder.
+     */
+    protected boolean requiresAllChildren() {
+        return false;
+    }
+
+    /**
+     * Recursively drops leaf nodes rejected by {@code keep}, then drops every list node left without children (or,
+     * for {@link #requiresAllChildren()} nodes, left incomplete).
+     * <p>
+     * Unlike {@link #optimizeList()} - which runs server-side on a freshly built, mutable tree - this is meant for
+     * the decoded client-side tree, whose child lists are unmodifiable. It therefore replaces the list rather than
+     * mutating it in place.
+     *
+     * @param keep tested against leaf nodes only; list nodes are kept exactly when something survives beneath them
+     * @return true if this node itself ended up empty and the caller should drop it
+     */
+    public boolean prune(Predicate<ICoreDataNode<?>> keep) {
+        if (nodes == null || nodes.isEmpty()) {
+            nodes = null;
+            return true;
+        }
+
+        List<TDataNode> kept = new ArrayList<>(nodes.size());
+
+        for (TDataNode node : nodes) {
+            if (node instanceof CoreListNode<?, ?, ?> listNode) {
+                if (!listNode.prune(keep)) {
+                    kept.add(node);
+                }
+            } else if (keep.test(node)) {
+                kept.add(node);
+            }
+        }
+
+        if (kept.isEmpty() || (requiresAllChildren() && kept.size() != nodes.size())) {
+            nodes = null;
+            return true;
+        }
+
+        nodes = Collections.unmodifiableList(kept);
+        return false;
     }
 
     public void optimizeList() {

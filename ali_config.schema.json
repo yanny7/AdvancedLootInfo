@@ -161,6 +161,21 @@
       "type": "boolean",
       "description": "If true, displays names instead of Identifier",
       "default": true
+    },
+    "hideDefaultBlockLoot": {
+      "type": "boolean",
+      "description": "If true, hides loot tables of blocks that only drop themselves (vanilla dropSelf), unless a global loot modifier or fake loot table adds something to them.",
+      "default": true
+    },
+    "defaultBlockLootConditions": {
+      "type": "array",
+      "description": "Loot condition types that do not stop a block loot table from being treated as a default drop by hideDefaultBlockLoot. Defaults to minecraft:survives_explosion.",
+      "items": { "$ref": "#/definitions/ResourceLocation" }
+    },
+    "defaultBlockLootFunctions": {
+      "type": "array",
+      "description": "Loot function types that do not stop a block loot table from being treated as a default drop by hideDefaultBlockLoot. Defaults to minecraft:explosion_decay.",
+      "items": { "$ref": "#/definitions/ResourceLocation" }
     }
   },
   "required": [],

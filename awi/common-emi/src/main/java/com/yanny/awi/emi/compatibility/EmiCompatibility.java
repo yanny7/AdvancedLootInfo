@@ -13,6 +13,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.runtime.EmiHidden;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
@@ -42,17 +43,37 @@ public class EmiCompatibility implements EmiPlugin {
         if (level != null) {
             Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
 
+            GenericUtils.pruneHiddenBlocks(worldgenData, EmiCompatibility::isVisible);
+
             worldgenData.forEach((key, levelNode) -> {
                 EmiRecipeCategory category = new RecipeCategory(key);
 
                 registry.addCategory(category);
 
                 for (IDataNode biomeNode : levelNode.nodes()) {
-                    List<Block> blocks = GenericUtils.collectBlocks(biomeNode);
-                    registry.addRecipe(new EmiBiomeLoot(category, ((BiomeNode) biomeNode).getBiomeId(), biomeNode, blocks));
+                    ResourceLocation biomeId = ((BiomeNode) biomeNode).getBiomeId();
+
+                    try {
+                        List<Block> blocks = GenericUtils.collectBlocks(biomeNode);
+
+                        registry.addRecipe(new EmiBiomeLoot(category, biomeId, biomeNode, blocks));
+                    } catch (Throwable e) {
+                        LOGGER.error("Failed to add EMI recipe for biome {} in category {}", biomeId, key, e);
+                    }
                 }
             });
         }
+    }
+
+    /**
+     * Mirrors {@code EmiStackList#bakeFiltered}, which is what decides whether the player can see a stack at all:
+     * {@code isDisabled} covers datapack/plugin-disabled stacks, {@code isHidden} the ones hidden in the EMI UI.
+     * Blocks with no item form (fire, {@code *_plant}, ...) map to an empty stack that neither test understands -
+     * they are kept and drawn as a 3D block model by {@code EmiBlockSlotWidget}.
+     */
+    private static boolean isVisible(Block block) {
+        EmiStack stack = EmiStack.of(block);
+        return stack.isEmpty() || (!EmiHidden.isDisabled(stack) && !EmiHidden.isHidden(stack));
     }
 
     private static class RecipeCategory extends EmiRecipeCategory {

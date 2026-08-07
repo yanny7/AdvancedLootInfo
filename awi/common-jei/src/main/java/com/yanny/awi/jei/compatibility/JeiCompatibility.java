@@ -12,15 +12,18 @@ import com.yanny.awi.plugin.common.nodes.BiomeNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IIngredientVisibility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -56,11 +59,14 @@ public class JeiCompatibility implements IModPlugin {
         AwiClientRegistry clientRegistry = PluginManager.getInstance().clientRegistry;
         ClientLevel level = Minecraft.getInstance().level;
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+        IIngredientVisibility ingredientVisibility = registration.getJeiHelpers().getIngredientVisibility();
 
         LOGGER.info("Adding worldgen information to JEI");
 
         if (level != null) {
             Map<Identifier, LevelStemNode> worldgenData = GenericUtils.decompressWorldgenData(clientRegistry, fullCompressedData, level.registryAccess());
+
+            GenericUtils.pruneHiddenBlocks(worldgenData, (block) -> isVisible(ingredientVisibility, block));
 
             worldgenData.forEach((key, levelNode) -> {
                 RecipeType<RecipeHolder> type = new RecipeType<>(key, RecipeHolder.class);
@@ -78,6 +84,16 @@ public class JeiCompatibility implements IModPlugin {
                 dimensions.put(category, recipes);
             });
         }
+    }
+
+    /**
+     * {@link IIngredientVisibility} already accounts for both JEI's own blacklist and the ingredients the player
+     * hid at runtime. Blocks with no item form yield an empty stack JEI cannot classify - those are kept, the
+     * biome tree draws them as a block model.
+     */
+    private static boolean isVisible(IIngredientVisibility ingredientVisibility, Block block) {
+        ItemStack stack = new ItemStack(block);
+        return stack.isEmpty() || ingredientVisibility.isIngredientVisible(VanillaTypes.ITEM_STACK, stack);
     }
 
     @NotNull

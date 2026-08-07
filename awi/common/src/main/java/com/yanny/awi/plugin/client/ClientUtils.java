@@ -5,6 +5,7 @@ import com.yanny.aci.api.RelativeRect;
 import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
+import com.yanny.awi.configuration.AwiConfig;
 import com.yanny.awi.manager.PluginManager;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -24,5 +25,11 @@ public abstract class ClientUtils implements IWidgetUtils, IClientUtils {
     @Override
     public BiFunction<IClientUtils, RegistryFriendlyByteBuf, IDataNode> getDataNodeFactory(Identifier id) {
         return PluginManager.getInstance().clientRegistry.getDataNodeFactory(id);
+    }
+
+    @NotNull
+    @Override
+    public AwiConfig getConfiguration() {
+        return PluginManager.getInstance().clientRegistry.getConfiguration();
     }
 }

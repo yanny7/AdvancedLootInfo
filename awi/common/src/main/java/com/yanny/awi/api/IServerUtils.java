@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface IServerUtils extends ICoreServerUtils<IServerUtils> {
+public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
     <T extends FeatureConfiguration> List<Block> collectBlocks(IServerUtils utils, T entry);
 

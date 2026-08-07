@@ -2,6 +2,7 @@ package com.yanny.ali.plugin.server;
 
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.language.Lang;
 import net.minecraft.advancements.predicates.ItemPredicate;
@@ -38,10 +39,7 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getConditionsSectionTooltip(IServerUtils utils, List<LootItemCondition> conditions) {
         if (!conditions.isEmpty()) {
-            return TooltipBuilder.array((b) -> {
-                b.add(TooltipBuilder.keyOnly("ali.util.advanced_loot_info.delimiter.conditions"));
-                b.add(utils.getValueTooltip(utils, conditions));
-            });
+            return getSectionTooltip(utils.getValueTooltip(utils, conditions).build(), "ali.util.advanced_loot_info.delimiter.conditions");
         }
 
         return TooltipBuilder.empty();
@@ -50,13 +48,33 @@ public class GenericTooltipUtils {
     @NotNull
     public static TooltipBuilder getFunctionsSectionTooltip(IServerUtils utils, List<LootItemFunction> functions) {
         if (!functions.isEmpty()) {
-            return TooltipBuilder.array((b) -> {
-                b.add(TooltipBuilder.keyOnly("ali.util.advanced_loot_info.delimiter.functions"));
-                b.add(utils.getValueTooltip(utils, functions));
-            });
+            return getSectionTooltip(utils.getValueTooltip(utils, functions).build(), "ali.util.advanced_loot_info.delimiter.functions");
         }
 
         return TooltipBuilder.empty();
+    }
+
+    /**
+     * Prepends a delimiter line to a section. The delimiter is a sibling of the content, so it has to mirror the
+     * content's visibility itself - otherwise a section whose entries are all advanced-only would render as a lone
+     * delimiter with nothing under it.
+     */
+    @NotNull
+    private static TooltipBuilder getSectionTooltip(TooltipNode content, String delimiterKey) {
+        if (content.isBlank(true)) {
+            return TooltipBuilder.empty();
+        }
+
+        TooltipBuilder delimiter = TooltipBuilder.keyOnly(delimiterKey);
+
+        if (content.isBlank(false)) {
+            delimiter.isAdvancedTooltip();
+        }
+
+        return TooltipBuilder.array((b) -> {
+            b.add(delimiter);
+            b.add(content);
+        });
     }
 
     @NotNull
