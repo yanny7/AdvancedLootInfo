@@ -9,6 +9,7 @@ import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
+import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
@@ -62,6 +63,7 @@ public abstract class AbstractServer {
             }
         }
 
+        FeatureBytecodeScanner.clearCaches();
         worldgenNodes = removeEmptyNodes(worldgenNodes);
 
         BaseLayoutScanner.Stats baseLayoutStats = baseLayoutScanner.getStats();
