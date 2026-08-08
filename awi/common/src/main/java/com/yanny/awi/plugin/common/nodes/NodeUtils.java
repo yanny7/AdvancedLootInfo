@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -97,7 +98,7 @@ public class NodeUtils {
     }
 
     public static class DimensionContext {
-        private final RegistryAccess registryAccess;
+        private final HolderLookup.Provider codecLookup;
         private final SurfaceRules.RuleSource masterSurfaceRule;
         private final SurfaceRules.Context context;
         private SurfaceRules.SurfaceRule compiledRule;
@@ -112,11 +113,13 @@ public class NodeUtils {
         private final BlockState defaultFluid;
         private final BiomeHolderWrapper biomeWrapper = new BiomeHolderWrapper();
 
-        public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
+        /** @param codecLookup see {@link SurfaceRuleSpecializer}; {@code registryAccess} in game, a test's own provider otherwise. */
+        public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, HolderLookup.Provider codecLookup, NoiseBasedChunkGenerator noiseGenerator,
+                                RandomState randomState) {
             Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
 
-            this.registryAccess = registryAccess;
+            this.codecLookup = codecLookup;
             this.masterSurfaceRule = settings.surfaceRule();
 
             LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
@@ -161,7 +164,7 @@ public class NodeUtils {
 
             if (options.settings().specializeRulePerBiome()) {
                 if (specializer == null) {
-                    specializer = new SurfaceRuleSpecializer(masterSurfaceRule, registryAccess, options.logStatistics());
+                    specializer = new SurfaceRuleSpecializer(masterSurfaceRule, codecLookup, options.logStatistics());
                 }
 
                 compiledRule = specializer.specialize(biome).apply(context);
