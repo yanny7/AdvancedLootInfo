@@ -32,7 +32,7 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration configuration) {
-        LOGGER.warn("FeatureConfiguration {} not implemented", configuration.getClass().getSimpleName());
+//        LOGGER.warn("FeatureConfiguration {} not implemented", configuration.getClass().getSimpleName());
         //TODO auto detected placed feature
         return TooltipBuilder.error("Not implemented");
     }
