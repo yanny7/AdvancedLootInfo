@@ -5,11 +5,7 @@ import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -53,11 +49,6 @@ public class BaseLayoutTestUtils {
         WorldPreset preset = lookup.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.NORMAL).value();
 
         levelStems = preset.createWorldDimensions().dimensions();
-    }
-
-    @NotNull
-    public static Registry<LevelStem> levelStems() {
-        return levelStems;
     }
 
     /**
