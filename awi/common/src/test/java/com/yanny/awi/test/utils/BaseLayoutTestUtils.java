@@ -5,11 +5,7 @@ import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.NodeUtils;
 import net.minecraft.DetectedVersion;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -51,8 +47,10 @@ public class BaseLayoutTestUtils {
         registryAccess = new RegistryAccess.ImmutableRegistryAccess(List.of(copy(Registries.BIOME), copy(Registries.NOISE)));
 
         WorldPreset preset = lookup.lookupOrThrow(Registries.WORLD_PRESET).getOrThrow(WorldPresets.NORMAL).value();
+        MappedRegistry<LevelStem> registry = new MappedRegistry<>(Registries.LEVEL_STEM, Lifecycle.stable());
 
-        levelStems = preset.createWorldDimensions().dimensions();
+        preset.createWorldDimensions().dimensions().forEach((key, stem) -> Registry.register(registry, key, stem));
+        levelStems = registry.freeze();
     }
 
     @NotNull

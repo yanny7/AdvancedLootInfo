@@ -16,11 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Rewrites a dimension's surface rule into the subset that can fire for one specific biome. One instance per dimension
@@ -76,7 +72,7 @@ public class SurfaceRuleSpecializer {
         DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 
         try {
-            json = SurfaceRules.RuleSource.CODEC.encodeStart(dynamicOps, original).getOrThrow(false, (error) -> {});
+            json = SurfaceRules.RuleSource.CODEC.encodeStart(dynamicOps, original).getOrThrow();
         } catch (Throwable t) {
             LOGGER.warn("Could not encode the surface rule, per-biome specialization is off for this dimension", t);
         }
@@ -107,7 +103,7 @@ public class SurfaceRuleSpecializer {
                 return original;
             }
 
-            SurfaceRules.RuleSource result = SurfaceRules.RuleSource.CODEC.parse(ops, pruned).getOrThrow(false, (error) -> {});
+            SurfaceRules.RuleSource result = SurfaceRules.RuleSource.CODEC.parse(ops, pruned).getOrThrow();
 
             log("specialized", encoded, pruned);
 

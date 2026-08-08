@@ -9,6 +9,7 @@ version = "${awi_version}" #mandatory
 displayName = "${awi_mod_name}" #mandatory
 displayTest = "IGNORE_ALL_VERSION"
 displayURL="https://github.com/yanny7/advancedlootinfo" #optional (displayed in the mod UI)
+logoFile="logo.png" #optional
 logoBlur = false
 authors = "${mod_author}" #optional
 description = '''${awi_description}''' #mandatory (Supports multiline text)
