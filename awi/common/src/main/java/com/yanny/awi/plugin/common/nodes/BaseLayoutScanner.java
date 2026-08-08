@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
@@ -74,12 +75,13 @@ public class BaseLayoutScanner {
 
     @NotNull
     public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry, boolean logStatistics) {
-        return scan(level.registryAccess(), level.getSeed(), levelStemRegistry, NodeUtils.ScanSettings.DEFAULT, logStatistics);
+        return scan(level.registryAccess(), level.palettedContainerFactory(), level.getSeed(), levelStemRegistry,
+                NodeUtils.ScanSettings.DEFAULT, logStatistics);
     }
 
     @NotNull
-    public static BaseLayoutScanner scan(RegistryAccess registryAccess, long seed, Registry<LevelStem> levelStemRegistry,
-                                         NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
+    public static BaseLayoutScanner scan(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, long seed,
+                                         Registry<LevelStem> levelStemRegistry, NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
         List<Task> tasks = new ArrayList<>();
 
         // Grouped by dimension so each worker keeps reusing the DimensionContext it already built (see ContextCache).
@@ -120,7 +122,7 @@ public class BaseLayoutScanner {
 
         try {
             List<Future<TaskResult>> futures = tasks.stream()
-                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, seed, cache, threadLocalCtx.get(), scanOptions)))
+                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, palettedContainerFactory, seed, cache, threadLocalCtx.get(), scanOptions)))
                     .toList();
 
             for (int i = 0; i < futures.size(); i++) {
@@ -165,8 +167,8 @@ public class BaseLayoutScanner {
     }
 
     @NotNull
-    private static TaskResult runTask(Task task, RegistryAccess registryAccess, long seed, Map<CacheKey, NodeUtils.LayerHolder> cache,
-                                      ContextCache contextCache, NodeUtils.ScanOptions scanOptions) {
+    private static TaskResult runTask(Task task, RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, long seed,
+                                      Map<CacheKey, NodeUtils.LayerHolder> cache, ContextCache contextCache, NodeUtils.ScanOptions scanOptions) {
         CacheKey key = new CacheKey(settingsKey(task.generator()), biomeKey(task.biome()));
         NodeUtils.LayerHolder cached = cache.get(key);
 
@@ -174,7 +176,7 @@ public class BaseLayoutScanner {
             return new TaskResult(task, cached, 0, true);
         }
 
-        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, seed);
+        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, palettedContainerFactory, seed);
         long startTime = System.nanoTime();
         NodeUtils.LayerHolder layers = NodeUtils.getBaseBlocksForBiome(ctx, task.biome(), scanOptions);
         long duration = System.nanoTime() - startTime;
@@ -232,7 +234,7 @@ public class BaseLayoutScanner {
         private NodeUtils.DimensionContext context;
 
         @NotNull
-        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, long seed) {
+        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, long seed) {
             if (context == null || !task.dimension().equals(dimension)) {
                 RandomState randomState = RandomState.create(
                         task.generator().generatorSettings().value(),
@@ -241,7 +243,7 @@ public class BaseLayoutScanner {
                 );
 
                 dimension = task.dimension();
-                context = new NodeUtils.DimensionContext(registryAccess, task.generator(), randomState);
+                context = new NodeUtils.DimensionContext(registryAccess, palettedContainerFactory, task.generator(), randomState);
             }
 
             return context;

@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.PalettedContainerFactory;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.presets.WorldPreset;
 import net.minecraft.world.level.levelgen.presets.WorldPresets;
@@ -59,7 +60,8 @@ public class BaseLayoutTestUtils {
      */
     @NotNull
     public static Map<String, Map<String, List<String>>> scan(long seed, NodeUtils.ScanSettings settings) {
-        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, seed, levelStems, settings, true);
+        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, PalettedContainerFactory.create(registryAccess), seed,
+                levelStems, settings, true);
         Map<String, Map<String, List<String>>> result = new TreeMap<>();
 
         for (LevelStem levelStem : levelStems) {
