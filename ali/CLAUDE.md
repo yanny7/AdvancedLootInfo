@@ -62,7 +62,7 @@ Backs the datapack-based `ali_config.schema.json` format:
 
 ## Networking (canonical pattern — `awi/CLAUDE.md` mirrors this)
 
-`ali/common/.../network` implements ALI's on-demand data-sync protocol; packet registration/codec wiring itself lives in the loader modules (`ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`, `ali/neoforge/CLAUDE.md`), this package holds the shared logic and abstract template.
+`ali/common/.../network` implements ALI's data-sync protocol — on-demand in its *transfer* only, the data itself is built eagerly at server start (see the root `CLAUDE.md` and step 3 below); packet registration/codec wiring itself lives in the loader modules (`ali/fabric/CLAUDE.md`, `ali/forge/CLAUDE.md`, `ali/neoforge/CLAUDE.md`), this package holds the shared logic and abstract template.
 
 **Packets**: `StartMessage(int totalMessages)`, `DoneMessage()` (empty marker), `LootDataChunkMessage(int index, byte[] data)` (chunk payload), `RequestLootDataMessage()` (empty client→server request marker).
 
