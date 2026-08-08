@@ -104,6 +104,7 @@ public class NodeUtils {
         @Nullable
         private SurfaceRuleSpecializer specializer;
         private final int minBuildHeight;
+        /** Inclusive top of the build range ({@link LevelHeightAccessor#getMaxY()}). */
         private final int maxBuildHeight;
         private final int seaLevel;
         private final BlockState defaultBlock;
@@ -567,7 +568,7 @@ public class NodeUtils {
                     // Once per column: every walk below shares these 2D noise values.
                     dimCtx.context.updateXZ(posX, posZ);
 
-                    for (int h = dimCtx.maxBuildHeight - 1 - heightPhase; h >= dimCtx.minBuildHeight; h -= settings.surfaceHeightStep()) {
+                    for (int h = dimCtx.maxBuildHeight - heightPhase; h >= dimCtx.minBuildHeight; h -= settings.surfaceHeightStep()) {
                         // Normal surface: solid stone from the world bottom up to h. The walk itself may stop early
                         // (deepWalkWindow) — every Y is still reached, because h itself sweeps the whole build range.
                         int walkBottom = settings.deepWalkWindow() > 0

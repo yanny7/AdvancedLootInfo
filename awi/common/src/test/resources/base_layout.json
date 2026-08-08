@@ -251,6 +251,13 @@
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:podzol RELATIVE [0] DRY ANY"
       ],
+      "minecraft:pale_garden": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+      ],
       "minecraft:plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
@@ -686,6 +693,13 @@
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:podzol RELATIVE [0] DRY ANY"
       ],
+      "minecraft:pale_garden": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
+      ],
       "minecraft:plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
@@ -1117,6 +1131,13 @@
         "minecraft:grass_block RELATIVE [0] DRY ANY",
         "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
         "minecraft:podzol RELATIVE [0] DRY ANY"
+      ],
+      "minecraft:pale_garden": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:dirt RELATIVE [0-4] ANY ANY",
+        "minecraft:grass_block RELATIVE [0] DRY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR"
       ],
       "minecraft:plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
