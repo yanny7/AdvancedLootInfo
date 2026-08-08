@@ -53,11 +53,6 @@ public class BaseLayoutTestUtils {
         levelStems = registry.freeze();
     }
 
-    @NotNull
-    public static Registry<LevelStem> levelStems() {
-        return levelStems;
-    }
-
     /**
      * Scans every (dimension, biome) of the vanilla world preset and flattens the result into
      * {@code dimension -> biome -> sorted block descriptions}, ready to be compared or serialized.
