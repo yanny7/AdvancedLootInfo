@@ -93,7 +93,7 @@ public class SurfaceRuleSpecializer {
         }
 
         try {
-            JsonElement pruned = prune(encoded, key.get().location().toString(), false);
+            JsonElement pruned = prune(encoded, key.get().identifier().toString(), false);
 
             if (pruned == null || pruned.equals(encoded)) {
                 // Nothing in this rule is decidable per biome — stop paying the encode for the rest of the dimension.

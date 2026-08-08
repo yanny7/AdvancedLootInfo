@@ -8,8 +8,8 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.PalettedContainerFactory;
@@ -65,7 +65,7 @@ public class BaseLayoutTestUtils {
         Map<String, Map<String, List<String>>> result = new TreeMap<>();
 
         for (LevelStem levelStem : levelStems) {
-            ResourceLocation dimension = levelStems.getKey(levelStem);
+            Identifier dimension = levelStems.getKey(levelStem);
             Map<String, List<String>> biomes = new TreeMap<>();
 
             scanner.getBaseLayouts(dimension).forEach((biome, layers) -> biomes.put(biomeName(biome), describe(layers)));
@@ -99,7 +99,7 @@ public class BaseLayoutTestUtils {
 
     @NotNull
     private static String biomeName(Holder<Biome> biome) {
-        return biome.unwrapKey().map((key) -> key.location().toString()).orElse("<unnamed biome>");
+        return biome.unwrapKey().map((key) -> key.identifier().toString()).orElse("<unnamed biome>");
     }
 
     @NotNull

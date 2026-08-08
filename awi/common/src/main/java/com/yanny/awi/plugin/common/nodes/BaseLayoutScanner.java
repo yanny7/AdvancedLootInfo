@@ -5,7 +5,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.PalettedContainerFactory;
@@ -18,15 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,7 +37,7 @@ import java.util.concurrent.Future;
 public class BaseLayoutScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private final Map<ResourceLocation, Map<Holder<Biome>, NodeUtils.LayerHolder>> resultsByDimension;
+    private final Map<Identifier, Map<Holder<Biome>, NodeUtils.LayerHolder>> resultsByDimension;
     private final Stats stats;
 
     /**
@@ -60,15 +52,15 @@ public class BaseLayoutScanner {
                         List<DimensionCost> costliestDimensions) {}
 
     /** Summed scan time of one dimension — the whole scan is dominated by a few of these, so they are worth naming. */
-    public record DimensionCost(ResourceLocation dimension, long timeMs, int biomeCount, int roundCappedCount) {}
+    public record DimensionCost(Identifier dimension, long timeMs, int biomeCount, int roundCappedCount) {}
 
     private record CacheKey(Object settings, Object biome) {}
 
-    private record Task(ResourceLocation dimension, NoiseBasedChunkGenerator generator, Holder<Biome> biome) {}
+    private record Task(Identifier dimension, NoiseBasedChunkGenerator generator, Holder<Biome> biome) {}
 
     private record TaskResult(Task task, NodeUtils.LayerHolder layers, long durationNanos, boolean cached) {}
 
-    private BaseLayoutScanner(Map<ResourceLocation, Map<Holder<Biome>, NodeUtils.LayerHolder>> resultsByDimension, Stats stats) {
+    private BaseLayoutScanner(Map<Identifier, Map<Holder<Biome>, NodeUtils.LayerHolder>> resultsByDimension, Stats stats) {
         this.resultsByDimension = resultsByDimension;
         this.stats = stats;
     }
@@ -87,7 +79,7 @@ public class BaseLayoutScanner {
         // Grouped by dimension so each worker keeps reusing the DimensionContext it already built (see ContextCache).
         for (LevelStem levelStem : levelStemRegistry) {
             if (levelStem.generator() instanceof NoiseBasedChunkGenerator generator) {
-                ResourceLocation dimension = levelStemRegistry.getKey(levelStem);
+                Identifier dimension = levelStemRegistry.getKey(levelStem);
 
                 for (Holder<Biome> biome : generator.getBiomeSource().possibleBiomes()) {
                     tasks.add(new Task(dimension, generator, biome));
@@ -99,7 +91,7 @@ public class BaseLayoutScanner {
         // multi-thousand-node trees of a modded pack. The identity set filters first, so equals/hashCode runs a handful
         // of times instead of once per biome.
         Set<SurfaceRules.RuleSource> distinctRuleInstances = Collections.newSetFromMap(new IdentityHashMap<>());
-        Set<ResourceLocation> scannedDimensions = new HashSet<>();
+        Set<Identifier> scannedDimensions = new HashSet<>();
 
         for (Task task : tasks) {
             if (scannedDimensions.add(task.dimension())) {
@@ -114,9 +106,9 @@ public class BaseLayoutScanner {
         NodeUtils.ScanOptions scanOptions = new NodeUtils.ScanOptions(scanSettings, logStatistics);
         int threadCount = Math.max(1, Runtime.getRuntime().availableProcessors() - 1);
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
-        Map<ResourceLocation, Map<Holder<Biome>, NodeUtils.LayerHolder>> results = new HashMap<>();
+        Map<Identifier, Map<Holder<Biome>, NodeUtils.LayerHolder>> results = new HashMap<>();
         List<Long> scanDurations = new ArrayList<>();
-        Map<ResourceLocation, DimensionCost> costs = new HashMap<>();
+        Map<Identifier, DimensionCost> costs = new HashMap<>();
         int cachedCount = 0;
         long startTime = System.nanoTime();
 
@@ -215,7 +207,7 @@ public class BaseLayoutScanner {
 
     /** Base blocks discovered for one dimension, keyed by biome; empty for dimensions without a noise generator. */
     @NotNull
-    public Map<Holder<Biome>, NodeUtils.LayerHolder> getBaseLayouts(@Nullable ResourceLocation dimension) {
+    public Map<Holder<Biome>, NodeUtils.LayerHolder> getBaseLayouts(@Nullable Identifier dimension) {
         return resultsByDimension.getOrDefault(dimension, Map.of());
     }
 
@@ -230,7 +222,7 @@ public class BaseLayoutScanner {
      * alive at a time, which bounds the memory the mock chunks hold.
      */
     private static class ContextCache {
-        private ResourceLocation dimension;
+        private Identifier dimension;
         private NodeUtils.DimensionContext context;
 
         @NotNull
@@ -254,16 +246,16 @@ public class BaseLayoutScanner {
     @NotNull
     private static Object settingsKey(NoiseBasedChunkGenerator generator) {
         Holder<NoiseGeneratorSettings> settings = generator.generatorSettings();
-        return settings.unwrapKey().map((key) -> (Object) key.location()).orElseGet(settings::value);
+        return settings.unwrapKey().map((key) -> (Object) key.identifier()).orElseGet(settings::value);
     }
 
     @NotNull
     private static Object biomeKey(Holder<Biome> biome) {
-        return biome.unwrapKey().map((key) -> (Object) key.location()).orElseGet(biome::value);
+        return biome.unwrapKey().map((key) -> (Object) key.identifier()).orElseGet(biome::value);
     }
 
     @NotNull
     private static String biomeName(Holder<Biome> biome) {
-        return biome.unwrapKey().map((key) -> key.location().toString()).orElse("<unnamed biome>");
+        return biome.unwrapKey().map((key) -> key.identifier().toString()).orElse("<unnamed biome>");
     }
 }

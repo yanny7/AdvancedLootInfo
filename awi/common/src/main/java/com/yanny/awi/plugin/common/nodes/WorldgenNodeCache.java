@@ -4,18 +4,14 @@ import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Reuses {@link PlacedFeatureNode}s and {@link GenerationStepNode}s across the whole scan - biomes of one dimension and
@@ -50,7 +46,7 @@ public class WorldgenNodeCache {
         List<PlacedFeatureNode> children = new ArrayList<>();
 
         for (Holder<PlacedFeature> placedFeatureHolder : features) {
-            ResourceLocation featureId = placedFeatureHolder.unwrapKey().map(ResourceKey::location).orElse(null);
+            Identifier featureId = placedFeatureHolder.unwrapKey().map(ResourceKey::identifier).orElse(null);
             children.add(getOrCreate(utils, placedFeatureHolder.value(), columnContext, featureId));
         }
 
@@ -71,7 +67,7 @@ public class WorldgenNodeCache {
 
     @NotNull
     private PlacedFeatureNode getOrCreate(IServerUtils utils, PlacedFeature placedFeature, ColumnContext columnContext,
-                                          @Nullable ResourceLocation featureId) {
+                                          @Nullable Identifier featureId) {
         Map<PlacedFeature, PlacedFeatureNode> nodes = placedFeatureNodes.computeIfAbsent(columnContext, (c) -> new IdentityHashMap<>());
         PlacedFeatureNode cached = nodes.get(placedFeature);
 
