@@ -2,6 +2,7 @@ package com.yanny.awi.plugin.common.nodes;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
@@ -74,12 +75,15 @@ public class BaseLayoutScanner {
 
     @NotNull
     public static BaseLayoutScanner scan(ServerLevel level, Registry<LevelStem> levelStemRegistry, boolean logStatistics) {
-        return scan(level.registryAccess(), level.getSeed(), levelStemRegistry, NodeUtils.ScanSettings.DEFAULT, logStatistics);
+        return scan(level.registryAccess(), level.registryAccess(), level.getSeed(), levelStemRegistry,
+                NodeUtils.ScanSettings.DEFAULT, logStatistics);
     }
 
+    /** @param codecLookup see {@link SurfaceRuleSpecializer}; the same object as {@code registryAccess} in game. */
     @NotNull
-    public static BaseLayoutScanner scan(RegistryAccess registryAccess, long seed, Registry<LevelStem> levelStemRegistry,
-                                         NodeUtils.ScanSettings scanSettings, boolean logStatistics) {
+    public static BaseLayoutScanner scan(RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+                                         Registry<LevelStem> levelStemRegistry, NodeUtils.ScanSettings scanSettings,
+                                         boolean logStatistics) {
         List<Task> tasks = new ArrayList<>();
 
         // Grouped by dimension so each worker keeps reusing the DimensionContext it already built (see ContextCache).
@@ -120,7 +124,7 @@ public class BaseLayoutScanner {
 
         try {
             List<Future<TaskResult>> futures = tasks.stream()
-                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, seed, cache, threadLocalCtx.get(), scanOptions)))
+                    .map((task) -> executor.submit(() -> runTask(task, registryAccess, codecLookup, seed, cache, threadLocalCtx.get(), scanOptions)))
                     .toList();
 
             for (int i = 0; i < futures.size(); i++) {
@@ -165,8 +169,9 @@ public class BaseLayoutScanner {
     }
 
     @NotNull
-    private static TaskResult runTask(Task task, RegistryAccess registryAccess, long seed, Map<CacheKey, NodeUtils.LayerHolder> cache,
-                                      ContextCache contextCache, NodeUtils.ScanOptions scanOptions) {
+    private static TaskResult runTask(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed,
+                                      Map<CacheKey, NodeUtils.LayerHolder> cache, ContextCache contextCache,
+                                      NodeUtils.ScanOptions scanOptions) {
         CacheKey key = new CacheKey(settingsKey(task.generator()), biomeKey(task.biome()));
         NodeUtils.LayerHolder cached = cache.get(key);
 
@@ -174,7 +179,7 @@ public class BaseLayoutScanner {
             return new TaskResult(task, cached, 0, true);
         }
 
-        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, seed);
+        NodeUtils.DimensionContext ctx = contextCache.get(task, registryAccess, codecLookup, seed);
         long startTime = System.nanoTime();
         NodeUtils.LayerHolder layers = NodeUtils.getBaseBlocksForBiome(ctx, task.biome(), scanOptions);
         long duration = System.nanoTime() - startTime;
@@ -232,7 +237,7 @@ public class BaseLayoutScanner {
         private NodeUtils.DimensionContext context;
 
         @NotNull
-        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, long seed) {
+        NodeUtils.DimensionContext get(Task task, RegistryAccess registryAccess, HolderLookup.Provider codecLookup, long seed) {
             if (context == null || !task.dimension().equals(dimension)) {
                 RandomState randomState = RandomState.create(
                         task.generator().generatorSettings().value(),
@@ -241,7 +246,7 @@ public class BaseLayoutScanner {
                 );
 
                 dimension = task.dimension();
-                context = new NodeUtils.DimensionContext(registryAccess, task.generator(), randomState);
+                context = new NodeUtils.DimensionContext(registryAccess, codecLookup, task.generator(), randomState);
             }
 
             return context;
