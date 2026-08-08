@@ -145,8 +145,6 @@ public final class Lang {
         CORNER_HOLE_CHANCE("corner_hole_chance", "Corner Hole Chance: %s"),
         CRACK_POINT_OFFSET("crack_point_offset", "Crack Point Offset: %s"),
         CRYSTAL_BEAM_TARGET("crystal_beam_target", "Crystal Beam Target: %s"),
-        DEFAULT_BLOCK("default_block", "Default Block: %s"),
-        DEFAULT_FLUID("default_fluid", "Default Fluid: %s"),
         DEPTH_BELOW_SURFACE("depth_below_surface", "Depth Below Surface: %s"),
         DEVIATION("deviation", "Deviation: %s"),
         DIRECTION("direction", "Direction: %s"),
@@ -456,6 +454,24 @@ public final class Lang {
 
         Branch(String k, String e) {
             this.translation = new Translation("awi.property.branch." + k, e);
+        }
+
+        @NotNull
+        @Override
+        public Translation getTranslation() {
+            return translation;
+        }
+    }
+
+    public enum BaseTerrain implements ITooltipKey {
+        DEFAULT_BLOCK("default_block", "Default Block"),
+        DEFAULT_FLUID("default_fluid", "Default Fluid"),
+        ;
+
+        private final Translation translation;
+
+        BaseTerrain(String k, String e) {
+            this.translation = new Translation("awi.property.base_terrain." + k, e);
         }
 
         @NotNull

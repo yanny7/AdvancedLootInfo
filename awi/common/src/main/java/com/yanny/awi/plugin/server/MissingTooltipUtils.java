@@ -2,8 +2,8 @@ package com.yanny.awi.plugin.server;
 
 import com.google.gson.JsonElement;
 import com.mojang.logging.LogUtils;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.yanny.aci.language.CoreLang;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
@@ -35,7 +35,7 @@ public class MissingTooltipUtils {
 
     @NotNull
     public static TooltipBuilder getMissingFeatureConfigurationTooltip(IServerUtils utils, FeatureConfiguration configuration) {
-        LOGGER.warn("FeatureConfiguration {} not implemented", configuration.getClass().getSimpleName());
+//        LOGGER.warn("FeatureConfiguration {} not implemented", configuration.getClass().getSimpleName());
         //TODO auto detected placed feature
         return TooltipBuilder.error("Not implemented");
     }
@@ -47,8 +47,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<PlacementModifier> codec = ((Codec<PlacementModifier>) placement.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placement).getOrThrow();
+            MapCodec<PlacementModifier> codec = ((MapCodec<PlacementModifier>) placement.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placement).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -69,8 +69,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<IntProvider> codec = ((Codec<IntProvider>) provider.codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
+            MapCodec<IntProvider> codec = ((MapCodec<IntProvider>) provider.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -91,8 +91,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<RuleTest> codec = ((Codec<RuleTest>) test.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, test).getOrThrow();
+            MapCodec<RuleTest> codec = ((MapCodec<RuleTest>) test.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, test).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -113,8 +113,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<HeightProvider> codec = ((Codec<HeightProvider>) provider.getType().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
+            MapCodec<HeightProvider> codec = ((MapCodec<HeightProvider>) provider.getType().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -135,8 +135,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<BlockPredicate> codec = ((Codec<BlockPredicate>) predicate.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, predicate).getOrThrow();
+            MapCodec<BlockPredicate> codec = ((MapCodec<BlockPredicate>) predicate.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, predicate).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -157,8 +157,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<BlockStateProvider> codec = ((Codec<BlockStateProvider>) provider.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
+            MapCodec<BlockStateProvider> codec = ((MapCodec<BlockStateProvider>) provider.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -179,8 +179,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<TreeDecorator> codec = ((Codec<TreeDecorator>) decorator.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, decorator).getOrThrow();
+            MapCodec<TreeDecorator> codec = ((MapCodec<TreeDecorator>) decorator.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, decorator).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -201,8 +201,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<FeatureSize> codec = ((Codec<FeatureSize>) size.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, size).getOrThrow();
+            MapCodec<FeatureSize> codec = ((MapCodec<FeatureSize>) size.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, size).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -223,8 +223,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<RootPlacer> codec = ((Codec<RootPlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow();
+            MapCodec<RootPlacer> codec = ((MapCodec<RootPlacer>) placer.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placer).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -245,8 +245,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<FoliagePlacer> codec = ((Codec<FoliagePlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow();
+            MapCodec<FoliagePlacer> codec = ((MapCodec<FoliagePlacer>) placer.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placer).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -267,8 +267,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<TrunkPlacer> codec = ((Codec<TrunkPlacer>) placer.type().codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, placer).getOrThrow();
+            MapCodec<TrunkPlacer> codec = ((MapCodec<TrunkPlacer>) placer.type().codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, placer).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -289,8 +289,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<FloatProvider> codec = ((Codec<FloatProvider>) provider.codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, provider).getOrThrow();
+            MapCodec<FloatProvider> codec = ((MapCodec<FloatProvider>) provider.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, provider).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {
@@ -311,8 +311,8 @@ public class MissingTooltipUtils {
         try {
             RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, utils.lookupProvider());
             //noinspection unchecked
-            Codec<StructureProcessor> codec = ((Codec<StructureProcessor>) processor.codec());
-            JsonElement jsonElement = codec.encodeStart(registryOps, processor).getOrThrow();
+            MapCodec<StructureProcessor> codec = ((MapCodec<StructureProcessor>) processor.codec());
+            JsonElement jsonElement = codec.codec().encodeStart(registryOps, processor).getOrThrow();
 
             tooltip.add(TooltipUtils.getJsonTooltip(utils, jsonElement));
         } catch (Throwable e) {

@@ -90,6 +90,17 @@ public final class FeatureBytecodeScanner {
         });
     }
 
+    /**
+     * Drops every cached scan result and the intermediate ASM/class caches. Must be called once the worldgen scan is
+     * done: the caches are only useful within a single scan, they retain the {@link ClassNode} graph of every visited
+     * class, and cached results derived from block tags would go stale on a datapack reload.
+     */
+    public static void clearCaches() {
+        RESULT_CACHE.clear();
+        CLASS_NODE_CACHE.clear();
+        CLASS_CACHE.clear();
+    }
+
     private Set<Block> doScan(IServerUtils utils, Class<?> featureClass) {
         ClassLoader cl = featureClass.getClassLoader();
         Registry<Block> blockRegistry = utils.getServerLevel().registryAccess().lookupOrThrow(Registries.BLOCK);

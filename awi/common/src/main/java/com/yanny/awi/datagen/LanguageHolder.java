@@ -14,6 +14,7 @@ public class LanguageHolder {
         CoreLang.register(Lang.RuleTest.class);
         CoreLang.register(Lang.Value.class);
         CoreLang.register(Lang.Branch.class);
+        CoreLang.register(Lang.BaseTerrain.class);
         CoreLang.register(Lang.Placement.class);
         CoreLang.register(Lang.PlacementModifier.class);
         CoreLang.register(Lang.TrunkPlacer.class);

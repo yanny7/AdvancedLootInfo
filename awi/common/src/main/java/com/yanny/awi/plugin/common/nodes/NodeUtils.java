@@ -18,6 +18,7 @@ import net.minecraft.world.level.chunk.UpgradeData;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -45,28 +46,66 @@ import java.util.function.Function;
 public class NodeUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    // Sampling knobs (performance/coverage trade-off, NOT rule-logic magic values).
-    // The scan converges: each round samples a fresh batch of horizontal points and a shifted surface-height phase;
-    // it repeats while rounds keep discovering new (block, position) observations and stops once a full phase cycle
-    // adds nothing. This lets simple dimensions finish in a couple rounds while volumetric ones densify themselves.
-    private static final int COLUMNS_PER_ROUND = 8;
-    private static final int SURFACE_HEIGHT_STEP = 4;
-    // Stop after this many consecutive rounds add nothing new. A full phase cycle (== step) guarantees every surface
-    // height was retried before concluding coverage is complete.
-    private static final int STABLE_ROUNDS = SURFACE_HEIGHT_STEP;
-    // Hard safety cap so a pathological rule cannot loop forever; hitting it is logged, never silently truncated.
-    private static final int MAX_ROUNDS = 40;
     // How far below the preliminary surface vanilla builds surface (SurfaceRules.Context constant), used to derive minSurfaceLevel.
     private static final int SURFACE_BUILD_DEPTH = 8;
-    // Besides the solid column, each surface height is also probed as a thin floating stone slab (air below it) so that
-    // ceiling-gated rules fire: ON_CEILING (stoneDepthBelow<=1, e.g. badlands red_sandstone) and UNDER_CEILING
-    // (stoneDepthBelow<=1+surfaceDepth). Slab thickness is swept 1..this to cover that window.
-    private static final int MAX_CEILING_THICKNESS = 8;
+
+    /**
+     * Sampling knobs (performance/coverage trade-off, NOT rule-logic magic values), parameterised so the scan's cost
+     * can be swept against its coverage — see {@code BaseLayoutSweepTest}. {@link #DEFAULT} is what production uses.
+     * <p>
+     * The scan converges: each round samples a fresh batch of horizontal points and a shifted surface-height phase; it
+     * repeats while rounds keep discovering new (block, position) observations and stops once a full phase cycle adds
+     * nothing. This lets simple dimensions finish in a couple rounds while volumetric ones densify themselves.
+     *
+     * @param columnsPerRound     horizontal sample columns added per round
+     * @param surfaceHeightStep   vertical stride between assumed surface heights within one round; consecutive rounds
+     *                            shift the phase so a full cycle of {@code surfaceHeightStep} rounds retries every height
+     * @param stableRounds        stop after this many consecutive rounds add nothing new; a full phase cycle
+     *                            ({@code >= surfaceHeightStep}) guarantees every surface height was retried before
+     *                            concluding coverage is complete
+     * @param maxRounds           hard safety cap so a pathological rule cannot loop forever; hitting it is logged, never
+     *                            silently truncated
+     * @param maxCeilingThickness besides the solid column, each surface height is also probed as a thin floating stone
+     *                            slab (air below it) so ceiling-gated rules fire: ON_CEILING ({@code stoneDepthBelow<=1},
+     *                            e.g. badlands red_sandstone) and UNDER_CEILING ({@code stoneDepthBelow<=1+surfaceDepth}).
+     *                            Slab thickness is swept {@code 1..this} to cover that window.
+     * @param deepWalkWindow      how many blocks below the assumed surface a normal column walk still evaluates
+     *                            ({@code 0} = down to the world bottom). Every Y is reached regardless, because the
+     *                            assumed surface height sweeps the whole build range; only the combination "this Y with
+     *                            a very large stone depth above it" stops being sampled. Bounding it turns the walk's
+     *                            cost from quadratic in world height into linear.
+     * @param extentStableRounds  second, weaker stop condition ({@code 0} disables it): stop after this many consecutive
+     *                            rounds in which nothing <i>widened</i> the reported result (no new block, flag, or wider
+     *                            depth/Y extent), even though new positions keep turning up. Noise-banded rules
+     *                            (badlands) reveal new interior band positions forever, so {@code stableRounds} alone
+     *                            never triggers for them and they always run to {@code maxRounds}. It has to be the
+     *                            weaker of the two conditions rather than a replacement: raising {@code stableRounds}
+     *                            instead taxes every simple biome, which is most of them in a real pack.
+     * @param specializeRulePerBiome recompile the surface rule per biome with the branches that cannot fire for it
+     *                            removed — see {@link SurfaceRuleSpecializer}. Semantics-preserving, so it must never
+     *                            change the result; it only stops the compiled rule from re-testing every other biome's
+     *                            branch on every cell.
+     */
+    public record ScanSettings(int columnsPerRound, int surfaceHeightStep, int stableRounds, int extentStableRounds,
+                               int maxRounds, int maxCeilingThickness, int deepWalkWindow, boolean specializeRulePerBiome) {
+        public static final ScanSettings DEFAULT = new ScanSettings(8, 4, 8, 12, 40, 8, 32, true);
+    }
+
+    /** The sampling knobs plus the run-time switches that are not part of them — currently only diagnostic logging. */
+    public record ScanOptions(ScanSettings settings, boolean logStatistics) {
+        public static final ScanOptions DEFAULT = new ScanOptions(ScanSettings.DEFAULT, false);
+    }
 
     public static class DimensionContext {
-        private final SurfaceRules.SurfaceRule compiledRule;
+        private final RegistryAccess registryAccess;
+        private final SurfaceRules.RuleSource masterSurfaceRule;
         private final SurfaceRules.Context context;
+        private SurfaceRules.SurfaceRule compiledRule;
+        /** Built on first use and reused for every biome of this dimension — the encode behind it is not free. */
+        @Nullable
+        private SurfaceRuleSpecializer specializer;
         private final int minBuildHeight;
+        /** Inclusive top of the build range ({@link LevelHeightAccessor#getMaxY()}). */
         private final int maxBuildHeight;
         private final int seaLevel;
         private final BlockState defaultBlock;
@@ -76,7 +115,9 @@ public class NodeUtils {
         public DimensionContext(RegistryAccess registryAccess, PalettedContainerFactory palettedContainerFactory, NoiseBasedChunkGenerator noiseGenerator, RandomState randomState) {
             Registry<Biome> biomeRegistry = registryAccess.lookupOrThrow(Registries.BIOME);
             NoiseGeneratorSettings settings = noiseGenerator.generatorSettings().value();
-            SurfaceRules.RuleSource masterSurfaceRule = settings.surfaceRule();
+
+            this.registryAccess = registryAccess;
+            this.masterSurfaceRule = settings.surfaceRule();
 
             LevelHeightAccessor heightAccessor = new LevelHeightAccessor() {
                 @Override
@@ -111,7 +152,20 @@ public class NodeUtils {
                     randomState.surfaceSystem(), randomState, mockChunk,
                     dummyNoiseChunk, biomeWrapper, genContext, null
             );
-            this.compiledRule = masterSurfaceRule.apply(this.context);
+            this.compiledRule = this.masterSurfaceRule.apply(this.context);
+        }
+
+        /** Points the context at the biome about to be scanned, compiling a rule specialized for it when asked to. */
+        void useBiome(Holder<Biome> biome, ScanOptions options) {
+            biomeWrapper.currentBiome = biome;
+
+            if (options.settings().specializeRulePerBiome()) {
+                if (specializer == null) {
+                    specializer = new SurfaceRuleSpecializer(masterSurfaceRule, registryAccess, options.logStatistics());
+                }
+
+                compiledRule = specializer.specialize(biome).apply(context);
+            }
         }
 
         private static class BiomeHolderWrapper implements Function<BlockPos, Holder<Biome>> {
@@ -127,9 +181,19 @@ public class NodeUtils {
     /** Collects a set of integer positions and compacts them into contiguous ranges. */
     public static class RangeHolder {
         private final Set<Integer> positions = new HashSet<>();
+        // Tracked on insert: the convergence check reads them once per round per block, and scanning the whole set for
+        // them showed up as a per-round tax on biomes with large position sets.
+        private int min = Integer.MAX_VALUE;
+        private int max = Integer.MIN_VALUE;
 
         public boolean add(int position) {
-            return positions.add(position);
+            if (positions.add(position)) {
+                min = Math.min(min, position);
+                max = Math.max(max, position);
+                return true;
+            }
+
+            return false;
         }
 
         public int size() {
@@ -146,21 +210,19 @@ public class NodeUtils {
             return buildRanges().size();
         }
 
+        /** Lowest recorded position, or {@link Integer#MAX_VALUE} when nothing was recorded. */
+        public int min() {
+            return min;
+        }
+
+        /** Highest recorded position, or {@link Integer#MIN_VALUE} when nothing was recorded. */
+        public int max() {
+            return max;
+        }
+
         /** Span between the lowest and highest recorded position (0 when empty or single-valued). */
         public int spread() {
-            if (positions.isEmpty()) {
-                return 0;
-            }
-
-            int min = Integer.MAX_VALUE;
-            int max = Integer.MIN_VALUE;
-
-            for (int p : positions) {
-                min = Math.min(min, p);
-                max = Math.max(max, p);
-            }
-
-            return max - min;
+            return positions.isEmpty() ? 0 : max - min;
         }
 
         public List<RangeValue> buildRanges() {
@@ -251,11 +313,30 @@ public class NodeUtils {
             return ceiling ? Placement.CEILING : Placement.FLOOR;
         }
 
-        Kind classify() {
+        /**
+         * Everything about this observation that can still widen the reported result: the extremes of each axis and the
+         * water/placement flags. Interior positions are deliberately excluded — see {@link ScanSettings#convergeOnExtent}.
+         */
+        long extentSignature() {
+            long signature = (seenUnderwater ? 1 : 0) + (seenDry ? 2 : 0);
+
+            for (RangeHolder holder : List.of(depths, absolute, floorDepths, ceilingDepths)) {
+                signature = signature * 31 + holder.min();
+                signature = signature * 31 + holder.max();
+            }
+
+            return signature;
+        }
+
+        Kind classify(ScanSettings settings) {
             // Surface-relative: depth-below-surface stays tighter than absolute Y as the assumed surface height is
             // swept (grass/sand track the surface), whereas absolute features (deepslate, bedrock) and volumetric
             // fills (netherrack) keep a smaller — or no smaller — absolute span.
-            boolean surfaceRelative = depths.spread() < absolute.spread();
+            // A bounded deep walk censors the depth axis at the window, so a block whose observed depths run into that
+            // window is treated as unbounded-depth (absolute) rather than as a very thick surface layer — without this,
+            // deepslate/bedrock would flip to "1..window blocks below the surface" as soon as the window is enabled.
+            boolean depthCensored = settings.deepWalkWindow() > 0 && depths.max() >= settings.deepWalkWindow() - 1;
+            boolean surfaceRelative = !depthCensored && depths.spread() < absolute.spread();
 
             if (!surfaceRelative) {
                 return Kind.ABSOLUTE;
@@ -266,7 +347,7 @@ public class NodeUtils {
             // regular grid (spacing == the step) that mimics banding — a sampling artifact, not strata (a one-block
             // ice skin on frozen peaks, a lava-sea top). Only when the depth window bridges the step do consecutive
             // surface heights overlap, making the absolute-Y clustering a real property of the rule rather than the grid.
-            if (depths.spread() >= SURFACE_HEIGHT_STEP && absolute.clusterCount() >= LAYERED_MIN_BANDS) {
+            if (depths.spread() >= settings.surfaceHeightStep() && absolute.clusterCount() >= LAYERED_MIN_BANDS) {
                 return Kind.LAYERED;
             }
 
@@ -301,9 +382,26 @@ public class NodeUtils {
 
     public static class LayerHolder {
         private final Map<Block, BlockObservation> blocks = new HashMap<>();
+        /** The settings the observations were collected with — {@link BlockObservation#classify} is relative to them. */
+        private final ScanSettings settings;
+        /** How the scan ended, for diagnostics: rounds used, and whether it stopped only because of the safety cap. */
+        private int rounds;
+        private boolean hitRoundCap;
+
+        LayerHolder(ScanSettings settings) {
+            this.settings = settings;
+        }
 
         public boolean isEmpty() {
             return blocks.isEmpty();
+        }
+
+        public int rounds() {
+            return rounds;
+        }
+
+        public boolean hitRoundCap() {
+            return hitRoundCap;
         }
 
         void record(Block block, int assumedSurface, int y, boolean underwater, boolean ceiling) {
@@ -311,11 +409,22 @@ public class NodeUtils {
         }
 
         /** Total number of distinct (block, depth) and (block, absoluteY) observations collected so far. */
-        int observationCount() {
-            int total = 0;
+        long observationCount() {
+            long total = 0;
 
             for (BlockObservation obs : blocks.values()) {
                 total += obs.depths.size() + obs.absolute.size();
+            }
+
+            return total;
+        }
+
+        /** Only the extent of what would be reported: block set, flags, axis extremes — interior positions ignored. */
+        long extentSignature() {
+            long total = 0;
+
+            for (Map.Entry<Block, BlockObservation> entry : blocks.entrySet()) {
+                total += entry.getKey().hashCode() * 31L + entry.getValue().extentSignature();
             }
 
             return total;
@@ -339,7 +448,7 @@ public class NodeUtils {
                 BlockObservation obs = entry.getValue();
                 WaterConstraint water = obs.waterConstraint();
 
-                switch (obs.classify()) {
+                switch (obs.classify(settings)) {
                     case SURFACE -> {
                         boolean hasFloor = obs.floorDepths.size() > 0;
                         boolean hasCeiling = obs.ceilingDepths.size() > 0;
@@ -377,14 +486,17 @@ public class NodeUtils {
      *     <li>a thin floating slab / overhang — {@code stoneBottom} just below the surface, air below it, which drives
      *     {@code stoneDepthBelow} down to 1 and fires ceiling-gated rules.</li>
      * </ul>
+     * {@code walkBottom} is where the walk stops evaluating, which is not necessarily where the modelled stone run ends:
+     * the run's shape (and with it {@code stoneDepthBelow}) still comes from {@code stoneBottom}, so shortening the walk
+     * skips deep cells without pretending the column floats. The caller must have called
+     * {@link SurfaceRules.Context#updateXZ} for {@code posX}/{@code posZ} — it is hoisted out because every walk over the
+     * same column would otherwise re-sample the same surface-depth noise.
      */
     private static void walkColumn(DimensionContext dimCtx, LayerHolder holder, int posX, int posZ,
-                                   int surfaceTop, int stoneBottom, boolean hasWaterAbove) {
+                                   int surfaceTop, int stoneBottom, int walkBottom, boolean hasWaterAbove) {
         SurfaceRules.Context context = dimCtx.context;
         SurfaceRules.SurfaceRule rule = dimCtx.compiledRule;
         int seaLevel = dimCtx.seaLevel;
-
-        context.updateXZ(posX, posZ);
 
         // Pin the preliminary surface to the assumed surface height so that surface-relative conditions
         // (above_preliminary_surface) resolve against it, exactly as vanilla derives minSurfaceLevel.
@@ -397,7 +509,7 @@ public class NodeUtils {
         int stoneDepthAbove = 0;
         int waterHeight = Integer.MIN_VALUE;
 
-        for (int y = top; y >= stoneBottom; y--) {
+        for (int y = top; y >= walkBottom; y--) {
             if (y > surfaceTop) {
                 // above the solid surface: water down to sea level (if any), else air
                 if (water && y <= seaLevel) {
@@ -427,59 +539,80 @@ public class NodeUtils {
     }
 
     @NotNull
-    public static LayerHolder getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome) {
-        LayerHolder discoveredBlocks = new LayerHolder();
+    public static LayerHolder getBaseBlocksForBiome(DimensionContext dimCtx, Holder<Biome> targetBiome, ScanOptions options) {
+        ScanSettings settings = options.settings();
+        LayerHolder discoveredBlocks = new LayerHolder(settings);
         int round = 0;
         int stableRounds = 0;
+        int extentStableRounds = 0;
+        long observations = 0;
+        long extent = 0;
 
         try {
-            dimCtx.biomeWrapper.currentBiome = targetBiome;
+            dimCtx.useBiome(targetBiome, options);
 
-            // Repeat until a full phase cycle discovers nothing new (or the safety cap is hit).
-            while (stableRounds < STABLE_ROUNDS && round < MAX_ROUNDS) {
-                int before = discoveredBlocks.observationCount();
+            // Repeat until a full phase cycle discovers nothing new — or, for rules whose interior never settles, until
+            // nothing has widened the result for a (longer) while. Plus the safety cap.
+            while (stableRounds < settings.stableRounds() && round < settings.maxRounds()
+                    && (settings.extentStableRounds() <= 0 || extentStableRounds < settings.extentStableRounds())) {
+                long beforeObservations = observations;
+                long beforeExtent = extent;
                 // Fresh horizontal points every round (new 2D noise values) and a shifted surface-height phase so that,
                 // over a full cycle, every possible surface height is retried (fills absolute-Y gaps in volumetric dims).
-                int heightPhase = round % SURFACE_HEIGHT_STEP;
-                List<long[]> samples = sampleColumns(round * COLUMNS_PER_ROUND);
+                int heightPhase = round % settings.surfaceHeightStep();
+                List<long[]> samples = sampleColumns(round * settings.columnsPerRound(), settings.columnsPerRound());
 
                 for (long[] xz : samples) {
                     int posX = (int) xz[0];
                     int posZ = (int) xz[1];
 
-                    for (int h = dimCtx.maxBuildHeight - 1 - heightPhase; h >= dimCtx.minBuildHeight; h -= SURFACE_HEIGHT_STEP) {
-                        // Normal surface: solid stone from the world bottom up to h.
-                        walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, dimCtx.minBuildHeight, true);
+                    // Once per column: every walk below shares these 2D noise values.
+                    dimCtx.context.updateXZ(posX, posZ);
+
+                    for (int h = dimCtx.maxBuildHeight - heightPhase; h >= dimCtx.minBuildHeight; h -= settings.surfaceHeightStep()) {
+                        // Normal surface: solid stone from the world bottom up to h. The walk itself may stop early
+                        // (deepWalkWindow) — every Y is still reached, because h itself sweeps the whole build range.
+                        int walkBottom = settings.deepWalkWindow() > 0
+                                ? Math.max(dimCtx.minBuildHeight, h - settings.deepWalkWindow() + 1)
+                                : dimCtx.minBuildHeight;
+
+                        walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, dimCtx.minBuildHeight, walkBottom, true);
 
                         // Overhang surfaces: thin floating slabs so ceiling-gated rules fire. Dry slabs cover land
                         // overhangs (badlands red_sandstone); below sea level a water-covered slab is also probed so
                         // underwater ceiling rules fire (lukewarm-ocean sandstone), which a dry column never reaches.
-                        for (int thickness = 1; thickness <= MAX_CEILING_THICKNESS; thickness++) {
+                        for (int thickness = 1; thickness <= settings.maxCeilingThickness(); thickness++) {
                             int stoneBottom = h - thickness + 1;
 
                             if (stoneBottom < dimCtx.minBuildHeight) {
                                 break;
                             }
 
-                            walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, false);
+                            walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, stoneBottom, false);
 
                             if (h < dimCtx.seaLevel) {
-                                walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, true);
+                                walkColumn(dimCtx, discoveredBlocks, posX, posZ, h, stoneBottom, stoneBottom, true);
                             }
                         }
                     }
                 }
 
-                stableRounds = (discoveredBlocks.observationCount() == before) ? stableRounds + 1 : 0;
+                observations = discoveredBlocks.observationCount();
+                extent = discoveredBlocks.extentSignature();
+                stableRounds = (observations == beforeObservations) ? stableRounds + 1 : 0;
+                extentStableRounds = (extent == beforeExtent) ? extentStableRounds + 1 : 0;
                 round++;
             }
         } catch (Throwable t) {
             LOGGER.warn("Surface scan failed for biome {}", targetBiome.unwrapKey().map(Object::toString).orElse("?"), t);
         }
 
-        if (round >= MAX_ROUNDS) {
+        discoveredBlocks.rounds = round;
+        discoveredBlocks.hitRoundCap = round >= settings.maxRounds();
+
+        if (round >= settings.maxRounds()) {
             LOGGER.warn("Surface scan for biome {} hit the {}-round cap; coverage may be incomplete",
-                    targetBiome.unwrapKey().map(Object::toString).orElse("?"), MAX_ROUNDS);
+                    targetBiome.unwrapKey().map(Object::toString).orElse("?"), settings.maxRounds());
         }
 
         return discoveredBlocks;
@@ -489,8 +622,8 @@ public class NodeUtils {
      * Returns {@code count} chunk-center block positions along an outward spiral around the origin, skipping the first
      * {@code start} points. Consecutive batches therefore cover distinct, ever-widening horizontal samples.
      */
-    private static List<long[]> sampleColumns(int start) {
-        int total = start + NodeUtils.COLUMNS_PER_ROUND;
+    private static List<long[]> sampleColumns(int start, int count) {
+        int total = start + count;
         List<long[]> spiral = new ArrayList<>(total);
         int cx = 0, cz = 0, dx = 0, dz = -1;
         int step = 1, stepCount = 0, turnCount = 0;
