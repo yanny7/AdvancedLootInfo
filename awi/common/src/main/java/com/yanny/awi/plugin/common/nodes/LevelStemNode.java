@@ -33,7 +33,8 @@ public class LevelStemNode extends ListNode {
 
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public LevelStemNode(IServerUtils utils, LevelStem levelStem, Map<Holder<Biome>, NodeUtils.LayerHolder> baseLayouts) {
+    public LevelStemNode(IServerUtils utils, LevelStem levelStem, Map<Holder<Biome>, NodeUtils.LayerHolder> baseLayouts,
+                         WorldgenNodeCache nodeCache) {
         ChunkGenerator generator = levelStem.generator();
         ColumnContext columnContext = new ColumnContext(generator.getMinY(), generator.getGenDepth());
         Block defaultBlock = Blocks.AIR;
@@ -53,7 +54,7 @@ public class LevelStemNode extends ListNode {
             Set<NodeUtils.BlockInfo> baseBlocks = layers != null ? layers.getBlockInfos() : Collections.emptySet();
 
             try {
-                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, baseBlocks, columnContext));
+                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, baseBlocks, columnContext, nodeCache));
             } catch (Exception e) {
                 LOGGER.error("Failed to analyze biome {}", biomeName(biomeHolder), e);
             }

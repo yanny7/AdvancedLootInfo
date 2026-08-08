@@ -25,7 +25,8 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks, ColumnContext columnContext) {
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks,
+                     ColumnContext columnContext, WorldgenNodeCache nodeCache) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
@@ -35,7 +36,7 @@ public class BiomeNode extends ListNode {
             HolderSet<PlacedFeature> feature = features.get(i);
             GenerationStep.Decoration step = GenerationStep.Decoration.values()[i];
 
-            addChildren(new GenerationStepNode(utils, step, feature, columnContext));
+            addChildren(nodeCache.getOrCreate(utils, step, feature, columnContext));
         }
 
         this.tooltip = tooltip;

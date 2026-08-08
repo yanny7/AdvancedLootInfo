@@ -9,6 +9,7 @@ import com.yanny.awi.manager.AwiServerRegistry;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.common.nodes.BaseLayoutScanner;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
+import com.yanny.awi.plugin.common.nodes.WorldgenNodeCache;
 import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -49,13 +50,14 @@ public abstract class AbstractServer {
         Registry<LevelStem> levelStemRegistry = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
         Map<ResourceLocation, IDataNode> worldgenNodes = new HashMap<>();
         BaseLayoutScanner baseLayoutScanner = BaseLayoutScanner.scan(level, levelStemRegistry, serverRegistry.getConfiguration().logMoreStatistics);
+        WorldgenNodeCache nodeCache = new WorldgenNodeCache();
 
         for (LevelStem levelStem : levelStemRegistry) {
             ResourceLocation location = levelStemRegistry.getKey(levelStem);
 
             try {
                 TooltipContext.set(location);
-                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem, baseLayoutScanner.getBaseLayouts(location)));
+                worldgenNodes.put(location, new LevelStemNode(serverRegistry, levelStem, baseLayoutScanner.getBaseLayouts(location), nodeCache));
             } catch (Throwable e) {
                 LOGGER.error("Failed to build level stem {}", location, e);
             } finally {
@@ -77,6 +79,9 @@ public abstract class AbstractServer {
                     baseLayoutStats.scannedDimensionCount(), baseLayoutStats.distinctSurfaceRules(), baseLayoutStats.distinctSurfaceRuleInstances());
             LOGGER.info("Base Layout time per biome: min {}ms, max {}ms, mean {}ms",
                     baseLayoutStats.minBiomeTimeMs(), baseLayoutStats.maxBiomeTimeMs(), DOUBLE_FORMAT.format(baseLayoutStats.meanBiomeTimeMs()));
+
+            LOGGER.info("Placed feature nodes: {} built, {} reused from cache", nodeCache.getPlacedFeatureMisses(), nodeCache.getPlacedFeatureHits());
+            LOGGER.info("Generation step nodes: {} built, {} reused from cache", nodeCache.getGenerationStepMisses(), nodeCache.getGenerationStepHits());
 
             for (BaseLayoutScanner.DimensionCost cost : baseLayoutStats.costliestDimensions()) {
                 LOGGER.info("Base Layout costliest dimension {}: {}ms over {} biomes, {} of them stopped only at the round cap",
