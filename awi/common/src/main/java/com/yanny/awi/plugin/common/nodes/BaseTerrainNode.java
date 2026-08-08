@@ -32,14 +32,14 @@ public class BaseTerrainNode extends ListNode {
         // The surface rule never places the generator's default block/fluid, so the scan cannot observe them — add them
         // explicitly, otherwise the bulk of the terrain would be missing from the list.
         if (!defaultBlock.defaultBlockState().isAir() && !detectedBlocks.contains(defaultBlock)) {
-            addChildren(new BlockNode(utils, defaultBlock, value(translate(Lang.BaseTerrain.DEFAULT_BLOCK.singular())).build()));
+            addChildren(new BlockNode(utils, defaultBlock, keyOnly(Lang.BaseTerrain.DEFAULT_BLOCK).build()));
         }
 
         if (!defaultFluid.isSame(Fluids.EMPTY)) {
             Block fluidBlock = defaultFluid.defaultFluidState().createLegacyBlock().getBlock();
 
             if (!detectedBlocks.contains(fluidBlock)) {
-                addChildren(new BlockNode(utils, fluidBlock, value(translate(Lang.BaseTerrain.DEFAULT_FLUID.singular())).build()));
+                addChildren(new BlockNode(utils, fluidBlock, keyOnly(Lang.BaseTerrain.DEFAULT_FLUID).build()));
             }
         }
 

@@ -1,6 +1,6 @@
 # awi/CLAUDE.md
 
-Guidance for working on **AWI** (`AdvancedWorldInfo`, `com.yanny.awi`) — the recipe-viewer plugin that displays worldgen information (placed features, placement modifiers, height providers, block predicates, biome surface blocks, ...). See the repo-root `CLAUDE.md` for the multi-mod monorepo layout, and `aci/CLAUDE.md` for the shared tooltip/plugin-manager mechanism this mod instantiates (read that first — this doc assumes it). AWI's architecture mirrors ALI's almost 1:1 at the plugin/registry/network layer — where it does, this doc says so and points at `ali/CLAUDE.md` instead of restating.
+Guidance for working on **AWI** (`AdvancedWorldgenInfo`, `com.yanny.awi`) — the recipe-viewer plugin that displays worldgen information (placed features, placement modifiers, height providers, block predicates, biome surface blocks, ...). See the repo-root `CLAUDE.md` for the multi-mod monorepo layout, and `aci/CLAUDE.md` for the shared tooltip/plugin-manager mechanism this mod instantiates (read that first — this doc assumes it). AWI's architecture mirrors ALI's almost 1:1 at the plugin/registry/network layer — where it does, this doc says so and points at `ali/CLAUDE.md` instead of restating.
 
 ## Module layout
 

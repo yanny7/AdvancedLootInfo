@@ -38,7 +38,7 @@ The mod's architecture, package layout, and plugin model described across this d
 This is a Minecraft mod monorepo built on the **Architectury MultiLoader template**. It produces two related but independently-versioned mods:
 
 - **ALI** (`AdvancedLootInfo`, group `com.yanny.ali`) — a recipe-viewer (EMI/JEI/REI) plugin that displays detailed information about loot tables and villager trades. See `ali/CLAUDE.md`.
-- **AWI** (`AdvancedWorldInfo`, group `com.yanny.awi`) — a recipe-viewer plugin that displays worldgen information. See `awi/CLAUDE.md`.
+- **AWI** (`AdvancedWorldgenInfo`, group `com.yanny.awi`) — a recipe-viewer plugin that displays worldgen information. See `awi/CLAUDE.md`.
 
 Both mods share a common core library, **ACI** (`com.yanny.aci`, under `aci/`), which provides the generic, mod-agnostic building blocks (plugin manager, tooltip tree builder, registries, widgets) that ALI and AWI each specialize. See `aci/CLAUDE.md`.
 
