@@ -7,7 +7,7 @@ import com.mojang.logging.LogUtils;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
@@ -67,9 +67,14 @@ public class SurfaceRuleSpecializer {
 
     private boolean effective = true;
 
-    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, RegistryAccess registryAccess, boolean logStatistics) {
+    /**
+     * @param codecLookup the provider that <i>owns</i> the holders the rule references — a different provider holding
+     *                    equal values still fails the codec's ownership check and turns specialization off. In game
+     *                    that is simply the level's {@code RegistryAccess}.
+     */
+    public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup, boolean logStatistics) {
         JsonElement json = null;
-        DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
+        DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, codecLookup);
 
         try {
             json = SurfaceRules.RuleSource.CODEC.encodeStart(dynamicOps, original).getOrThrow();

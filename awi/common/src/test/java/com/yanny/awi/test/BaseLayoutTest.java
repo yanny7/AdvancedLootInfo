@@ -34,6 +34,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <p>
  * Regenerate after an intentional change with:
  * {@code ./gradlew :awi:common:test --tests "com.yanny.awi.test.BaseLayoutTest" -Dawi.baselayout.regenerate=true}
+ * <p>
+ * The golden file alone cannot guard {@link com.yanny.awi.plugin.common.nodes.SurfaceRuleSpecializer}: it is a pure
+ * cost cut, so a specializer that silently stops specializing keeps producing the same file. The second test compares
+ * the two paths against each other instead.
  */
 public class BaseLayoutTest {
     private static final List<Long> SEEDS = List.of(1234L, 987654321L, -42L);
@@ -67,6 +71,38 @@ public class BaseLayoutTest {
         keys.addAll(actualEntries.keySet());
 
         assertAll(keys.stream().map((key) -> () -> assertEquals(expectedEntries.get(key), actualEntries.get(key), key)));
+    }
+
+    /**
+     * Per-biome rule specialization only removes branches that cannot fire for that biome, so it must never change what
+     * the scan finds — one seed is enough, since this compares the two paths against each other rather than against a
+     * recorded expectation.
+     */
+    @Test
+    public void testSpecializationDoesNotChangeResult() {
+        NodeUtils.ScanSettings settings = NodeUtils.ScanSettings.DEFAULT;
+        NodeUtils.ScanSettings unspecialized = new NodeUtils.ScanSettings(settings.columnsPerRound(), settings.surfaceHeightStep(),
+                settings.stableRounds(), settings.extentStableRounds(), settings.maxRounds(), settings.maxCeilingThickness(),
+                settings.deepWalkWindow(), false);
+
+        Map<String, String> specializedEntries = flatten(BaseLayoutTestUtils.scan(SEEDS.get(0), settings));
+        Map<String, String> unspecializedEntries = flatten(BaseLayoutTestUtils.scan(SEEDS.get(0), unspecialized));
+        Set<String> keys = new TreeSet<>(unspecializedEntries.keySet());
+
+        keys.addAll(specializedEntries.keySet());
+
+        assertAll(keys.stream().map((key) -> () ->
+                assertEquals(unspecializedEntries.get(key), specializedEntries.get(key), key)));
+    }
+
+    /** Flattens {@code dimension -> biome -> blocks} into one comparable entry per biome, for precise failures. */
+    private static Map<String, String> flatten(Map<String, Map<String, List<String>>> scan) {
+        Map<String, String> entries = new LinkedHashMap<>();
+
+        scan.forEach((dimension, biomes) -> biomes.forEach((biome, blocks) ->
+                entries.put("%s %s".formatted(dimension, biome), blocks.toString())));
+
+        return entries;
     }
 
     /** Flattens {@code seed -> dimension -> biome -> blocks} into one comparable entry per biome, for precise failures. */
