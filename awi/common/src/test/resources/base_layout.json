@@ -334,6 +334,13 @@
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
         "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
       ],
+      "minecraft:sulfur_caves": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
+      ],
       "minecraft:sunflower_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
@@ -775,6 +782,13 @@
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
         "minecraft:gravel RELATIVE [0-3] ANY FLOOR"
       ],
+      "minecraft:sulfur_caves": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
+      ],
       "minecraft:sunflower_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
@@ -1213,6 +1227,13 @@
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
         "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
         "minecraft:gravel RELATIVE [0-4] ANY FLOOR"
+      ],
+      "minecraft:sulfur_caves": [
+        "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",
+        "minecraft:cinnabar ABSOLUTE [-63-319] ANY ANY",
+        "minecraft:deepslate ABSOLUTE [-63-7] ANY ANY",
+        "minecraft:gravel RELATIVE [0] UNDERWATER FLOOR",
+        "minecraft:sulfur ABSOLUTE [-63-319] ANY ANY"
       ],
       "minecraft:sunflower_plains": [
         "minecraft:bedrock ABSOLUTE [-64--60] ANY ANY",

@@ -57,6 +57,7 @@ public class SurfaceRuleSpecializer {
     private static final String IF_TRUE_FIELD = "if_true";
     private static final String THEN_RUN_FIELD = "then_run";
     private static final String BIOME_IS_FIELD = "biome_is";
+    private static final String TAG_PREFIX = "#";
     private static final String INVERT_FIELD = "invert";
 
     private final SurfaceRules.RuleSource original;
@@ -74,7 +75,10 @@ public class SurfaceRuleSpecializer {
      */
     public SurfaceRuleSpecializer(SurfaceRules.RuleSource original, HolderLookup.Provider codecLookup, boolean logStatistics) {
         JsonElement json = null;
-        DynamicOps<JsonElement> dynamicOps = RegistryOps.create(JsonOps.INSTANCE, codecLookup);
+        // Not RegistryOps.create(ops, provider): that adapter derives each registry's HolderOwner from the lookup it
+        // hands out, while a provider may serialize under a different owner than it looks up under (a datapack-registry
+        // set built by RegistrySetBuilder does exactly that). Asking the provider keeps the two consistent.
+        DynamicOps<JsonElement> dynamicOps = codecLookup.createSerializationContext(JsonOps.INSTANCE);
 
         try {
             json = SurfaceRules.RuleSource.CODEC.encodeStart(dynamicOps, original).getOrThrow();
@@ -238,20 +242,46 @@ public class SurfaceRuleSpecializer {
         JsonObject object = condition.getAsJsonObject();
         String type = typeOf(object);
 
-        if (BIOME.equals(type) && object.has(BIOME_IS_FIELD) && object.get(BIOME_IS_FIELD).isJsonArray()) {
-            for (JsonElement entry : object.getAsJsonArray(BIOME_IS_FIELD)) {
-                if (entry.isJsonPrimitive() && biomeId.equals(entry.getAsString())) {
-                    return Boolean.TRUE;
-                }
-            }
-
-            return Boolean.FALSE;
+        if (BIOME.equals(type) && object.has(BIOME_IS_FIELD)) {
+            return biomeSetVerdict(object.get(BIOME_IS_FIELD), biomeId);
         }
 
         if (NOT.equals(type)) {
             Boolean inner = biomeVerdict(object.get(INVERT_FIELD), biomeId);
 
             return inner == null ? null : !inner;
+        }
+
+        return null;
+    }
+
+    /**
+     * The biome set of a {@code minecraft:biome} condition serializes in three shapes: a {@code "#tag"} reference, a
+     * bare id when it holds a single biome, or an array of ids. Only the last two name their biomes; a tag does not
+     * carry its contents in the rule, so it stays undecidable.
+     */
+    @Nullable
+    private static Boolean biomeSetVerdict(JsonElement biomeIs, String biomeId) {
+        if (biomeIs.isJsonArray()) {
+            boolean matches = false;
+
+            for (JsonElement entry : biomeIs.getAsJsonArray()) {
+                Boolean verdict = biomeSetVerdict(entry, biomeId);
+
+                if (verdict == null) {
+                    return null;
+                }
+
+                matches |= verdict;
+            }
+
+            return matches;
+        }
+
+        if (biomeIs.isJsonPrimitive()) {
+            String id = biomeIs.getAsString();
+
+            return id.startsWith(TAG_PREFIX) ? null : biomeId.equals(id);
         }
 
         return null;
