@@ -57,7 +57,9 @@ public class BaseLayoutTestUtils {
      */
     @NotNull
     public static Map<String, Map<String, List<String>>> scan(long seed, NodeUtils.ScanSettings settings) {
-        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, seed, levelStems, settings, true);
+        // The copied registries are a different HolderOwner than the one the surface rules' holders came from, so the
+        // codec ops have to go through the original lookup or the specializer's encode fails its ownership check.
+        BaseLayoutScanner scanner = BaseLayoutScanner.scan(registryAccess, lookup, seed, levelStems, settings, true);
         Map<String, Map<String, List<String>>> result = new TreeMap<>();
 
         for (LevelStem levelStem : levelStems) {
