@@ -37,4 +37,11 @@ sourceSets {
 
 test {
     useJUnitPlatform()
+
+    // Forwarded to the test JVM: base-layout golden regeneration and the scan-settings sweep (see BaseLayoutTest).
+    ["awi.baselayout.regenerate", "awi.baselayout.sweep"].each { property ->
+        if (System.getProperty(property) != null) {
+            systemProperty property, System.getProperty(property)
+        }
+    }
 }

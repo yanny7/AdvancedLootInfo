@@ -6,15 +6,13 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
-import com.yanny.awi.plugin.server.summary.ColumnContext;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import static com.yanny.aci.tooltip.TooltipBuilder.*;
 
@@ -24,10 +22,9 @@ public class GenerationStepNode extends ListNode {
     private final TooltipNode tooltip;
     private final int generationStep;
 
-    public GenerationStepNode(IServerUtils utils, GenerationStep.Decoration step, HolderSet<PlacedFeature> features, ColumnContext columnContext) {
-        for (Holder<PlacedFeature> placedFeatureHolder : features) {
-            Identifier featureId = placedFeatureHolder.unwrapKey().map(ResourceKey::identifier).orElse(null);
-            addChildren(new PlacedFeatureNode(utils, placedFeatureHolder.value(), columnContext, featureId));
+    GenerationStepNode(GenerationStep.Decoration step, List<PlacedFeatureNode> features) {
+        for (PlacedFeatureNode feature : features) {
+            addChildren(feature);
         }
 
         tooltip = array((b) -> {
