@@ -47,14 +47,14 @@ public class LevelStemNode extends ListNode {
             defaultFluid = settings.defaultFluid().getFluidState().getType();
         }
 
-        TooltipNode tooltip = buildTooltip(utils, defaultBlock, defaultFluid, seaLevel);
+        TooltipNode tooltip = buildTooltip(utils, defaultFluid, seaLevel);
 
         for (Holder<Biome> biomeHolder : generator.getBiomeSource().possibleBiomes()) {
             NodeUtils.LayerHolder layers = baseLayouts.get(biomeHolder);
             Set<NodeUtils.BlockInfo> baseBlocks = layers != null ? layers.getBlockInfos() : Collections.emptySet();
 
             try {
-                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, baseBlocks, columnContext, nodeCache));
+                addChildren(new BiomeNode(utils, biomeHolder.value(), tooltip, baseBlocks, defaultBlock, defaultFluid, columnContext, nodeCache));
             } catch (Exception e) {
                 LOGGER.error("Failed to analyze biome {}", biomeName(biomeHolder), e);
             }
@@ -81,12 +81,9 @@ public class LevelStemNode extends ListNode {
         return ID;
     }
 
-    private TooltipNode buildTooltip(IServerUtils utils, Block defaultBlock, Fluid defaultFluid, int seaLevel) {
+    private TooltipNode buildTooltip(IServerUtils utils, Fluid defaultFluid, int seaLevel) {
         return TooltipBuilder.array((b) -> {
-            b.add(utils.getValueTooltip(utils, defaultBlock).build(Lang.Value.DEFAULT_BLOCK));
-
             if (!defaultFluid.isSame(Fluids.EMPTY)) {
-                b.add(utils.getValueTooltip(utils, defaultFluid).build(Lang.Value.DEFAULT_FLUID));
                 b.add(utils.getValueTooltip(utils, seaLevel).build(Lang.Value.SEA_LEVEL));
             }
         }).build();

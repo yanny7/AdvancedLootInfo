@@ -13,7 +13,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -25,12 +27,12 @@ public class BiomeNode extends ListNode {
     private final TooltipNode tooltip;
     private final ResourceLocation biomeId;
 
-    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks,
+    public BiomeNode(IServerUtils utils, Biome biome, TooltipNode tooltip, Set<NodeUtils.BlockInfo> blocks, Block defaultBlock, Fluid defaultFluid,
                      ColumnContext columnContext, WorldgenNodeCache nodeCache) {
         BiomeGenerationSettings settings = biome.getGenerationSettings();
         List<HolderSet<PlacedFeature>> features = settings.features();
 
-        addChildren(new BaseTerrainNode(utils, blocks));
+        addChildren(new BaseTerrainNode(utils, blocks, defaultBlock, defaultFluid));
 
         for (int i = 0; i < features.size(); i++) {
             HolderSet<PlacedFeature> feature = features.get(i);

@@ -10,10 +10,14 @@ import com.yanny.awi.plugin.server.TooltipUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.yanny.aci.tooltip.TooltipBuilder.*;
 
@@ -22,7 +26,23 @@ public class BaseTerrainNode extends ListNode {
 
     private final TooltipNode tooltip;
 
-    public BaseTerrainNode(IServerUtils utils, Set<NodeUtils.BlockInfo> baseBlocks) {
+    public BaseTerrainNode(IServerUtils utils, Set<NodeUtils.BlockInfo> baseBlocks, Block defaultBlock, Fluid defaultFluid) {
+        Set<Block> detectedBlocks = baseBlocks.stream().map(NodeUtils.BlockInfo::block).collect(Collectors.toSet());
+
+        // The surface rule never places the generator's default block/fluid, so the scan cannot observe them — add them
+        // explicitly, otherwise the bulk of the terrain would be missing from the list.
+        if (!defaultBlock.defaultBlockState().isAir() && !detectedBlocks.contains(defaultBlock)) {
+            addChildren(new BlockNode(utils, defaultBlock, value(translate(Lang.BaseTerrain.DEFAULT_BLOCK.singular())).build()));
+        }
+
+        if (!defaultFluid.isSame(Fluids.EMPTY)) {
+            Block fluidBlock = defaultFluid.defaultFluidState().createLegacyBlock().getBlock();
+
+            if (!detectedBlocks.contains(fluidBlock)) {
+                addChildren(new BlockNode(utils, fluidBlock, value(translate(Lang.BaseTerrain.DEFAULT_FLUID.singular())).build()));
+            }
+        }
+
         baseBlocks.stream()
                 .sorted(Comparator.comparing((info) -> BuiltInRegistries.BLOCK.getKey(info.block()).getPath()))
                 .forEach((info) -> addChildren(new BlockNode(utils, info.block(), TooltipUtils.getBlockInfoTooltip(utils, info).build())));
