@@ -43,7 +43,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, List<Block>>> rootPlacerBlockCollector = registerClassKeyed("root placer block collectors", false, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, List<Block>>> treeDecoratorBlockCollector = registerClassKeyed("tree decorator block collectors", false, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
     // tooltips
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, TooltipBuilder>> featureTooltips = registerClassKeyed("feature tooltips", true, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, PlacementModifier, TooltipBuilder>> placementModifierTooltips = registerClassKeyed("placement modifier tooltips", true, HashMap::new, BuiltInRegistries.PLACEMENT_MODIFIER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, IntProvider, TooltipBuilder>> intProviderTooltips = registerClassKeyed("int provider tooltips", true, HashMap::new, BuiltInRegistries.INT_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RuleTest, TooltipBuilder>> ruleTestTooltips = registerClassKeyed("rule test tooltips", true, HashMap::new, BuiltInRegistries.RULE_TEST);
