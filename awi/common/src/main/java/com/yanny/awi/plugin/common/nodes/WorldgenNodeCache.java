@@ -1,5 +1,6 @@
 package com.yanny.awi.plugin.common.nodes;
 
+import com.mojang.logging.LogUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import net.minecraft.core.Holder;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -32,8 +34,11 @@ import java.util.*;
  * {@code optimizeList} is idempotent over it. Not thread safe: node building runs on the server thread.
  */
 public class WorldgenNodeCache {
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     private final Map<ColumnContext, Map<PlacedFeature, PlacedFeatureNode>> placedFeatureNodes = new HashMap<>();
     private final Map<StepKey, GenerationStepNode> generationStepNodes = new HashMap<>();
+    private final Set<Identifier> unboundFeatures = new HashSet<>();
 
     private int placedFeatureHits = 0;
     private int placedFeatureMisses = 0;
@@ -47,6 +52,15 @@ public class WorldgenNodeCache {
 
         for (Holder<PlacedFeature> placedFeatureHolder : features) {
             Identifier featureId = placedFeatureHolder.unwrapKey().map(ResourceKey::identifier).orElse(null);
+
+            if (!placedFeatureHolder.isBound()) {
+                if (unboundFeatures.add(featureId)) {
+                    LOGGER.warn("Skipping unbound placed feature {}", featureId != null ? featureId : "<unnamed placed feature>");
+                }
+
+                continue;
+            }
+
             children.add(getOrCreate(utils, placedFeatureHolder.value(), columnContext, featureId));
         }
 
