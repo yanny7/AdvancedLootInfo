@@ -35,6 +35,8 @@ public class ItemTagNode implements IDataNode, IItemNode {
     private final RangeValue count;
     private final float chance;
     private final boolean modified;
+    /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
+    private final boolean hasPredicates;
 
     public ItemTagNode(IServerUtils utils, TagKey<? extends ItemLike> entry, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
         this(utils, entry, chance, false, functions, conditions, preserveCount);
@@ -46,6 +48,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
         this.tag = entry;
         this.chance = chance;
         this.modified = modified;
+        this.hasPredicates = false;
 
         if (preserveCount) {
             tooltip = getItemTooltip(utils, chance, functions, conditions);
@@ -62,6 +65,7 @@ public class ItemTagNode implements IDataNode, IItemNode {
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
+        hasPredicates = buf.readBoolean();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
@@ -100,12 +104,18 @@ public class ItemTagNode implements IDataNode, IItemNode {
     }
 
     @Override
+    public boolean hasPredicates() {
+        return hasPredicates;
+    }
+
+    @Override
     public void encode(IServerUtils utils, FriendlyByteBuf buf) {
         buf.writeResourceLocation(tag.location());
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);
+        buf.writeBoolean(NodeUtils.hasPredicates(utils, conditions));
     }
 
     @NotNull

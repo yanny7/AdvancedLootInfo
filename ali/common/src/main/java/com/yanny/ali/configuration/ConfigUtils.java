@@ -115,6 +115,9 @@ public class ConfigUtils {
         if (config.defaultBlockLootFunctions == null) {
             config.defaultBlockLootFunctions = defaults.defaultBlockLootFunctions;
         }
+        if (config.ignoredPredicateConditions == null) {
+            config.ignoredPredicateConditions = defaults.ignoredPredicateConditions;
+        }
 
         return config;
     }

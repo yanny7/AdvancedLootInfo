@@ -17,6 +17,9 @@ import java.util.List;
 
 public class WidgetUtils {
     public static final ResourceLocation TEXTURE_LOC = Utils.modLoc("textures/gui/gui.png");
+    /** Slot background tint marking an item entry that is gated by predicates. */
+    public static final int PREDICATES_COLOR = 0x40FFD700;
+    public static final int SLOT_SIZE = 18;
 
     private static final int GROUP_WIDGET_WIDTH = 7;
     private static final int GROUP_WIDGET_HEIGHT = 18;

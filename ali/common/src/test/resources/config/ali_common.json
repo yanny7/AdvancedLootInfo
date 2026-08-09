@@ -153,6 +153,12 @@
   "defaultBlockLootFunctions": [
     "minecraft:explosion_decay"
   ],
+  "ignoredPredicateConditions": [
+    "minecraft:random_chance",
+    "minecraft:random_chance_with_looting",
+    "minecraft:table_bonus",
+    "minecraft:survives_explosion"
+  ],
   "logMoreStatistics": false,
   "showInGameNames": true,
   "hideDefaultBlockLoot": true

@@ -29,6 +29,7 @@ public class AliConfig {
     public List<ResourceLocation> disabledEntities;
     public List<ResourceLocation> defaultBlockLootConditions;
     public List<ResourceLocation> defaultBlockLootFunctions;
+    public List<ResourceLocation> ignoredPredicateConditions;
 
     public boolean logMoreStatistics = false;
     public boolean showInGameNames = true;
@@ -59,6 +60,12 @@ public class AliConfig {
 
         defaultBlockLootConditions = new ArrayList<>(List.of(new ResourceLocation("survives_explosion")));
         defaultBlockLootFunctions = new ArrayList<>(List.of(new ResourceLocation("explosion_decay")));
+        ignoredPredicateConditions = new ArrayList<>(List.of(
+                new ResourceLocation("random_chance"),
+                new ResourceLocation("random_chance_with_looting"),
+                new ResourceLocation("table_bonus"),
+                new ResourceLocation("survives_explosion")
+        ));
     }
 
     @NotNull

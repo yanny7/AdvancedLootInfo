@@ -176,6 +176,11 @@
       "type": "array",
       "description": "Loot function types that do not stop a block loot table from being treated as a default drop by hideDefaultBlockLoot. Defaults to minecraft:explosion_decay.",
       "items": { "$ref": "#/definitions/ResourceLocation" }
+    },
+    "ignoredPredicateConditions": {
+      "type": "array",
+      "description": "Loot condition types that do not mark an item as having predicates, so its slot is not highlighted. Defaults to minecraft:random_chance, minecraft:random_chance_with_looting, minecraft:table_bonus and minecraft:survives_explosion.",
+      "items": { "$ref": "#/definitions/ResourceLocation" }
     }
   },
   "required": [],
