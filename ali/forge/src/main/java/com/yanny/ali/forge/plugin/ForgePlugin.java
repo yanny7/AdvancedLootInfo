@@ -1,26 +1,32 @@
 package com.yanny.ali.forge.plugin;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.yanny.aci.tooltip.TooltipBuilder;
+import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
 import com.yanny.ali.forge.mixin.MixinForgeInternalHandler;
 import com.yanny.ali.forge.mixin.MixinLootModifier;
 import com.yanny.ali.language.Lang;
 import com.yanny.ali.platform.Services;
+import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.common.BasicItemListing;
 import net.minecraftforge.common.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -40,7 +46,39 @@ public class ForgePlugin implements IPlugin {
         registry.registerConditionTooltip(CanToolPerformAction.class, ForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, ForgePlugin::getLootTableIdTooltip);
 
+        registry.registerItemListing(BasicItemListing.class, ForgePlugin::getBasicItemListingNode);
+        registry.registerItemListingCollector(BasicItemListing.class, ForgePlugin::collectBasicItemListingItems);
+
         registry.registerLootModifiers(ForgePlugin::registerLootModifiers);
+    }
+
+    @NotNull
+    public static ItemsToItemsNode getBasicItemListingNode(IServerUtils utils, BasicItemListing listing, TooltipNode condition) {
+        MixinBasicItemListing accessor = (MixinBasicItemListing) listing;
+
+        return new ItemsToItemsNode(
+                utils,
+                Either.left(accessor.getPrice()),
+                new RangeValue(accessor.getPrice().getCount()),
+                Either.left(accessor.getPrice2()),
+                new RangeValue(accessor.getPrice2().getCount()),
+                Either.left(accessor.getForSale()),
+                new RangeValue(accessor.getForSale().getCount()),
+                accessor.getMaxTrades(),
+                accessor.getXp(),
+                accessor.getPriceMult(),
+                condition
+        );
+    }
+
+    @NotNull
+    public static Pair<List<Item>, List<Item>> collectBasicItemListingItems(IServerUtils ignoredUtils, BasicItemListing listing) {
+        MixinBasicItemListing accessor = (MixinBasicItemListing) listing;
+
+        return new Pair<>(
+                List.of(accessor.getPrice().getItem(), accessor.getPrice2().getItem()),
+                List.of(accessor.getForSale().getItem())
+        );
     }
 
     @NotNull
