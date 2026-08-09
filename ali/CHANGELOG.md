@@ -12,7 +12,7 @@
 - Blocks that only drop themselves are hidden by default (configurable)
 - Used colored background for loot that has some predicates (except few configurable exceptions like chance or if survives explosion)
 - Fixed blocks sharing a loot table (e.g. wall variants) losing their loot modifiers and entries
-- Added support for Forge's `BasicItemListing` trades
+- Added support for NeoForge's `BasicItemListing` trades
 
 ## [1.12.0]
 
