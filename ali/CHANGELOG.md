@@ -10,6 +10,8 @@
 - Conditional count modifiers are no longer hidden in non-advanced tooltip
 - Conditional count modifiers widen displayed count range instead of being ignored
 - Blocks that only drop themselves are hidden by default (configurable)
+- Used colored background for loot that has some predicates (except few configurable exceptions like chance or if survives explosion)
+- Fixed blocks sharing a loot table (e.g. wall variants) losing their loot modifiers and entries
 
 ## [1.12.0]
 

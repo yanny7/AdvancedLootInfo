@@ -200,6 +200,13 @@ public class NodeUtils {
         return children.stream().map((c) -> utils.getEntryFactory(utils, c).create(utils, c, chance, sumWeight, functions, conditions)).toList();
     }
 
+    /** Condition types listed in {@code ignoredPredicateConditions} don't count as predicates. */
+    public static boolean hasPredicates(IServerUtils utils, List<LootItemCondition> conditions) {
+        List<ResourceLocation> ignored = utils.getConfiguration().ignoredPredicateConditions;
+
+        return conditions.stream().anyMatch((c) -> !ignored.contains(BuiltInRegistries.LOOT_CONDITION_TYPE.getKey(c.getType())));
+    }
+
     @NotNull
     public static EnchantedRanges getEnchantedChance(IServerUtils utils, List<LootItemCondition> conditions, float rawChance) {
         EnchantedRanges chance = new EnchantedRanges(1);
