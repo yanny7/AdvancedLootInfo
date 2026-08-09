@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.yanny.ali.forge.mixin",
   "mixins": [
+    "MixinBasicItemListing",
     "MixinCanToolPerformAction",
     "MixinForgeInternalHandler",
     "MixinLootModifier",
