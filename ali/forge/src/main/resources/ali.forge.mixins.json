@@ -5,11 +5,16 @@
   "mixins": [
     "MixinBasicItemListing",
     "MixinCanToolPerformAction",
+    "MixinCompoundIngredient",
+    "MixinDifferenceIngredient",
     "MixinForgeInternalHandler",
+    "MixinIntersectionIngredient",
     "MixinLootModifier",
     "MixinLootTableForge",
     "MixinLootTableIdCondition",
-    "MixinMinecraftServer"
+    "MixinMinecraftServer",
+    "MixinPartialNBTIngredient",
+    "MixinStrictNBTIngredient"
   ],
   "injectors": {
     "defaultRequire": 1

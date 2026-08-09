@@ -13,6 +13,7 @@
 - Used colored background for loot that has some predicates (except few configurable exceptions like chance or if survives explosion)
 - Fixed blocks sharing a loot table (e.g. wall variants) losing their loot modifiers and entries
 - Added support for Forge's `BasicItemListing` trades
+- Added support for Forge's ingredients (compound, difference, intersection, partial NBT, strict NBT)
 
 ## [1.12.0]
 
