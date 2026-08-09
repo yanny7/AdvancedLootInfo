@@ -4,7 +4,9 @@
   "package": "com.yanny.ali.fabric.mixin",
   "mixins": [
     "MixinCombinedIngredient",
-    "MixinLootTableFabric"
+    "MixinDifferenceIngredient",
+    "MixinLootTableFabric",
+    "MixinNbtIngredient"
   ],
   "client": [
     "MixinMinecraft"

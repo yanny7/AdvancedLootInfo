@@ -14,6 +14,7 @@
 - Fixed blocks sharing a loot table (e.g. wall variants) losing their loot modifiers and entries
 - Added support for Forge's `BasicItemListing` trades
 - Added support for Forge's ingredients (compound, difference, intersection, partial NBT, strict NBT)
+- Added support for Fabric's difference and NBT ingredients
 
 ## [1.12.0]
 

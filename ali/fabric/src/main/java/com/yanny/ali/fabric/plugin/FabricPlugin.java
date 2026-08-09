@@ -7,7 +7,7 @@ import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 import org.jetbrains.annotations.NotNull;
 
 @AliEntrypoint
-public class FabricLootJsPlugin implements IPlugin {
+public class FabricPlugin implements IPlugin {
     @NotNull
     @Override
     public String getModId() {
@@ -16,6 +16,6 @@ public class FabricLootJsPlugin implements IPlugin {
 
     @Override
     public void registerServer(IServerRegistry registry) {
-        registry.registerIngredientTooltip(CustomIngredientImpl.class, LootJsIngredientTooltipUtils::getCustomIngredientTooltip);
+        registry.registerIngredientTooltip(CustomIngredientImpl.class, FabricIngredientTooltipUtils::getCustomIngredientTooltip);
     }
 }

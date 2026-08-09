@@ -15,12 +15,12 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 ## Mixins
 
-`MixinLootTableFabric` (accessor), `MixinMinecraft`, `MixinCombinedIngredient`.
+`MixinLootTableFabric` (accessor), `MixinMinecraft`, plus accessors for Fabric API's builtin custom ingredients (`MixinCombinedIngredient`, `MixinDifferenceIngredient`, `MixinNbtIngredient`).
 
 ## Fabric-only compat plugins
 
 `plugin/` holds third-party compatibility that's genuinely Fabric-only because it targets Fabric-specific APIs — don't try to port these to `ali/forge` without checking whether the target API even has a Forge equivalent:
-- LootJS integration glue (`FabricLootJsPlugin`, `LootJsIngredientTooltipUtils`) — note the bulk of LootJS compat logic lives in `ali/common-lootjs` (see `ali/common-lootjs/CLAUDE.md`); this is just the Fabric wiring.
+- `FabricPlugin` + `FabricIngredientTooltipUtils` — registers a tooltip for Fabric API's `CustomIngredientImpl`, unwrapping its Any/All/Difference/Nbt builtins. LootJS compat itself lives in `ali/common-lootjs` (see `ali/common-lootjs/CLAUDE.md`).
 - Farmer's Delight and Porting Lib (GLM) compat glue, hooking Fabric-specific `CustomIngredientImpl` and Porting Lib's `LootModifier`/`IGlmPlugin`.
 
 ## Boilerplate vs genuine glue

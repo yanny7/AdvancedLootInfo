@@ -4,17 +4,21 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.ali.api.IServerUtils;
 import com.yanny.ali.fabric.mixin.MixinCombinedIngredient;
+import com.yanny.ali.fabric.mixin.MixinDifferenceIngredient;
+import com.yanny.ali.fabric.mixin.MixinNbtIngredient;
 import com.yanny.ali.language.Lang;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.CustomIngredientImpl;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AllIngredient;
 import net.fabricmc.fabric.impl.recipe.ingredient.builtin.AnyIngredient;
+import net.fabricmc.fabric.impl.recipe.ingredient.builtin.DifferenceIngredient;
+import net.fabricmc.fabric.impl.recipe.ingredient.builtin.NbtIngredient;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 @SuppressWarnings("UnstableApiUsage")
-public class LootJsIngredientTooltipUtils {
+public class FabricIngredientTooltipUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     @NotNull
@@ -39,6 +43,21 @@ public class LootJsIngredientTooltipUtils {
                     b.add(utils.getValueTooltip(utils, i2));
                 }
             }).key(Lang.Branch.ALL);
+        } else if (i instanceof DifferenceIngredient differenceIngredient) {
+            MixinDifferenceIngredient accessor = (MixinDifferenceIngredient) differenceIngredient;
+
+            return TooltipBuilder.array((b) -> b
+                    .add(utils.getValueTooltip(utils, accessor.getBase()).build(Lang.Branch.BASE))
+                    .add(utils.getValueTooltip(utils, accessor.getSubtracted()).build(Lang.Branch.SUBTRACTED))
+            );
+        } else if (i instanceof NbtIngredient nbtIngredient) {
+            MixinNbtIngredient accessor = (MixinNbtIngredient) nbtIngredient;
+
+            return TooltipBuilder.array((b) -> b
+                    .add(utils.getValueTooltip(utils, accessor.getBase()).build(Lang.Branch.BASE))
+                    .add(utils.getValueTooltip(utils, accessor.getNbt()).build(Lang.Value.NBT))
+                    .add(utils.getValueTooltip(utils, accessor.isStrict()).build(Lang.Value.EXACT))
+            );
         } else if (i == null) {
             LOGGER.warn("NULL custom ingredient");
             return TooltipBuilder.empty();
