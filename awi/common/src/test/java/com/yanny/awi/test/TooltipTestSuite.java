@@ -1,5 +1,6 @@
 package com.yanny.awi.test;
 
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNodePalette;
@@ -17,6 +18,7 @@ import net.minecraft.Util;
 import net.minecraft.client.resources.ClientPackSource;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.TagKey;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.server.Bootstrap;
@@ -132,7 +134,7 @@ public class TooltipTestSuite {
             }
 
             @Override
-            public @NotNull <T extends FeatureConfiguration> List<Block> collectBlocks(IServerUtils utils, T entry) {
+            public @NotNull <T extends FeatureConfiguration> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry) {
                 return PluginManager.getInstance().serverRegistry.collectBlocks(utils, entry);
             }
 

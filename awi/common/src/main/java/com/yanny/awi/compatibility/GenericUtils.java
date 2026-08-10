@@ -8,7 +8,6 @@ import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
-import com.yanny.awi.plugin.common.nodes.BlockNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -125,13 +124,23 @@ public class GenericUtils {
      * or biome left empty by that. Must run before the tree is handed to a recipe/widget, so that the rendered tree
      * and {@link #collectBlocks} agree on what is visible.
      *
+     * <p>A node standing for a block tag loses its hidden members rather than being kept whole, and is dropped once
+     * none are left - a tag whose every member is hidden must not survive as an empty slot.
+     *
      * @param isVisible viewer-specific visibility test; memoized here because the same block recurs across biomes
      */
     public static void pruneHiddenBlocks(Map<ResourceLocation, LevelStemNode> worldgenData, Predicate<Block> isVisible) {
         Map<Block, Boolean> cache = new IdentityHashMap<>();
+        Predicate<Block> memoized = (block) -> cache.computeIfAbsent(block, isVisible::test);
 
-        worldgenData.values().removeIf((level) -> level.prune(
-                (node) -> !(node instanceof IBlockNode blockNode) || cache.computeIfAbsent(blockNode.getBlock(), isVisible::test)));
+        worldgenData.values().removeIf((level) -> level.prune((node) -> {
+            if (!(node instanceof IBlockNode blockNode)) {
+                return true;
+            }
+
+            blockNode.retainBlocks(memoized);
+            return blockNode.getBlocks().stream().anyMatch(memoized);
+        }));
     }
 
     /**
@@ -166,8 +175,10 @@ public class GenericUtils {
             for (IDataNode iDataNode : listNode.nodes()) {
                 blocks.addAll(collectBlocks(iDataNode));
             }
-        } else if (node instanceof BlockNode blockNode) {
-            blocks.add(blockNode.getBlock());
+        } else if (node instanceof IBlockNode blockNode) {
+            // A tag contributes its members, so the reverse lookup (which biome generates this block?) keeps working
+            // for a block that only ever reaches the world through a tag.
+            blocks.addAll(blockNode.getBlocks());
         }
 
         return blocks;

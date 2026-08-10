@@ -1,6 +1,7 @@
 package com.yanny.awi.rei.compatibility.rei;
 
 import com.mojang.blaze3d.platform.Lighting;
+import com.mojang.datafixers.util.Either;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -8,6 +9,7 @@ import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
+import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
@@ -32,7 +34,9 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -119,23 +123,21 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             int slotX = h.rect.getX() + bounds.getX();
             int slotY = h.rect.getY() + bounds.getY();
 
-            if (GenericUtils.rendersAsBlockModel(h.block)) {
+            // One slot per node, cycling through the members when the node stands for a tag. Item-less blocks with a
+            // model of their own are no REI entry at all, so a tag made only of those falls back to a rendered model.
+            List<Block> blocks = ((IBlockNode) h.entry).getBlocks();
+            List<EntryStack<?>> stacks = blocks.stream().filter((b) -> !GenericUtils.rendersAsBlockModel(b)).map(ReiBaseCategory::toStack).toList();
+
+            if (stacks.isEmpty()) {
+                Block block = blocks.isEmpty() ? Blocks.AIR : blocks.get(0);
                 Rectangle slotRect = new Rectangle(slotX, slotY, 18, 18);
 
                 widgets.add(Widgets.createSlotBase(slotRect));
-                widgets.add(Widgets.wrapRenderer(slotRect, new BlockSlotRenderer(h.block)));
-                widgets.add(Widgets.createTooltip(slotRect, Component.translatable(h.block.getDescriptionId())));
+                widgets.add(Widgets.wrapRenderer(slotRect, new BlockSlotRenderer(block)));
+                widgets.add(Widgets.createTooltip(slotRect, Component.translatable(block.getDescriptionId())));
             } else {
-                EntryStack<?> stack;
-
-                if (GenericUtils.rendersAsFluid(h.block)) {
-                    stack = EntryStacks.of(h.block.defaultBlockState().getFluidState().getType());
-                } else {
-                    stack = EntryStacks.of(h.block);
-                }
-
-                stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
-                widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entry(stack).markOutput());
+                stacks.forEach((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
+                widgets.add(Widgets.createSlot(new Point(slotX + 1, slotY + 1)).entries(stacks).markOutput());
             }
 
             widgets.add(Widgets.wrapRenderer(new Rectangle(slotX, slotY, 18, 18), new SlotCountRenderer(new RangeValue(1))));
@@ -159,13 +161,18 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             }
 
             @Override
-            public void addSlotWidget(Block block, IDataNode entry, RelativeRect rect) {
+            public void addSlotWidget(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {
                 widgets.add(new Holder(block, entry, rect));
             }
         };
     }
 
-    private record Holder(Block block, IDataNode entry, RelativeRect rect) {}
+    @NotNull
+    private static EntryStack<?> toStack(Block block) {
+        return GenericUtils.rendersAsFluid(block) ? EntryStacks.of(block.defaultBlockState().getFluidState().getType()) : EntryStacks.of(block);
+    }
+
+    private record Holder(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {}
 
     private static class SlotCountRenderer implements Renderer {
         @Nullable

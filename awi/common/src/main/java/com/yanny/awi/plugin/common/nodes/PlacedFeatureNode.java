@@ -1,5 +1,6 @@
 package com.yanny.awi.plugin.common.nodes;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.awi.Utils;
@@ -12,6 +13,7 @@ import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.PlacementSummaryUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -21,7 +23,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class PlacedFeatureNode extends ListNode {
@@ -43,7 +45,7 @@ public class PlacedFeatureNode extends ListNode {
 
         ConfiguredFeature<?, ?> configuredFeature = placedFeature.feature().value();
         FeatureConfiguration featureConfiguration = configuredFeature.config(); // values
-        Set<Block> blocks = new HashSet<>(FeatureConfigurationCollectorUtils.collectConfiguredFeatureBlocks(utils, configuredFeature));
+        Set<Either<Block, TagKey<Block>>> blocks = new LinkedHashSet<>(FeatureConfigurationCollectorUtils.collectConfiguredFeatureBlocks(utils, configuredFeature));
 
         tooltip = TooltipBuilder.branch((b) -> {
             PlacementSummaryUtils.appendSummary(b, utils, placedFeature.placement(), columnContext);
@@ -63,8 +65,12 @@ public class PlacedFeatureNode extends ListNode {
             }, Lang.Branch.PLACEMENT));
         }).build();
 
-        for (Block block : blocks.stream().filter((b) -> b != Blocks.AIR && b != Blocks.CAVE_AIR && b != Blocks.VOID_AIR && b != Blocks.BARRIER).toList()) {
-            addChildren(new BlockNode(utils, block));
+        for (Either<Block, TagKey<Block>> block : blocks) {
+            block.ifLeft((b) -> {
+                if (b != Blocks.AIR && b != Blocks.CAVE_AIR && b != Blocks.VOID_AIR && b != Blocks.BARRIER) {
+                    addChildren(new BlockNode(utils, b));
+                }
+            }).ifRight((tag) -> addChildren(new BlockNode(utils, tag, utils.getValueTooltip(utils, tag).build(Lang.Value.TAG))));
         }
     }
 

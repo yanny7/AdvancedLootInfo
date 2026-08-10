@@ -1,6 +1,8 @@
 package com.yanny.awi.plugin.server;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.awi.api.IServerUtils;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -22,148 +24,148 @@ import java.util.stream.Stream;
 
 public class FeatureConfigurationCollectorUtils {
     @NotNull
-    public static List<Block> collectBlockColumnConfigurationBlocks(IServerUtils utils, BlockColumnConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectBlockColumnConfigurationBlocks(IServerUtils utils, BlockColumnConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(configuration.layers().stream().map((layer) -> utils.collectBlocks(utils, layer.state())).flatMap(Collection::stream).toList());
+        blocks.addAll(wrap(configuration.layers().stream().map((layer) -> utils.collectBlocks(utils, layer.state())).flatMap(Collection::stream).toList()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectBlockPileConfigurationBlocks(IServerUtils utils, BlockPileConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectBlockPileConfigurationBlocks(IServerUtils utils, BlockPileConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.stateProvider));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.stateProvider)));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectBlockStateConfigurationBlocks(IServerUtils utils, BlockStateConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectBlockStateConfigurationBlocks(IServerUtils utils, BlockStateConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.state.getBlock());
-        return blocks;
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Block> collectColumnFeatureConfigurationBlocks(IServerUtils utils, ColumnFeatureConfiguration configuration) {
-        return collectFeatureBlocks(utils, configuration);
-    }
-
-    @Unmodifiable
-    @NotNull
-    public static List<Block> collectCountConfigurationBlocks(IServerUtils utils, CountConfiguration configuration) {
-        return collectFeatureBlocks(utils, configuration);
-    }
-
-    @NotNull
-    public static List<Block> collectDeltaFeatureConfigurationBlocks(IServerUtils utils, DeltaFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
-
-        blocks.add(configuration.contents().getBlock());
-        blocks.add(configuration.rim().getBlock());
-        return blocks;
-    }
-
-    @NotNull
-    public static List<Block> collectDiskConfigurationBlocks(IServerUtils utils, DiskConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
-
-        blocks.addAll(collectRuleBasedBlockStateProvider(utils, configuration.stateProvider()));
+        blocks.add(Either.left(configuration.state.getBlock()));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectDripstoneClusterConfigurationBlocks(IServerUtils utils, DripstoneClusterConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectColumnFeatureConfigurationBlocks(IServerUtils utils, ColumnFeatureConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectEndGatewayConfigurationBlocks(IServerUtils utils, EndGatewayConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectCountConfigurationBlocks(IServerUtils utils, CountConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectGeodeConfigurationBlocks(IServerUtils utils, GeodeConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectDeltaFeatureConfigurationBlocks(IServerUtils utils, DeltaFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.fillingProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.innerLayerProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.alternateInnerLayerProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.middleLayerProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.geodeBlockSettings.outerLayerProvider));
-        blocks.addAll(configuration.geodeBlockSettings.innerPlacements.stream().map(BlockBehaviour.BlockStateBase::getBlock).toList());
+        blocks.add(Either.left(configuration.contents().getBlock()));
+        blocks.add(Either.left(configuration.rim().getBlock()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectHugeMushroomFeatureConfigurationBlocks(IServerUtils utils, HugeMushroomFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectDiskConfigurationBlocks(IServerUtils utils, DiskConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.capProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.stemProvider));
+        blocks.addAll(wrap(collectRuleBasedBlockStateProvider(utils, configuration.stateProvider())));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectLargeDripstoneConfigurationBlocks(IServerUtils utils, LargeDripstoneConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectDripstoneClusterConfigurationBlocks(IServerUtils utils, DripstoneClusterConfiguration configuration) {
+        return collectFeatureBlocks(utils, configuration);
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Either<Block, TagKey<Block>>> collectEndGatewayConfigurationBlocks(IServerUtils utils, EndGatewayConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectLayeredConfigurationBlocks(IServerUtils utils, LayerConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectGeodeConfigurationBlocks(IServerUtils utils, GeodeConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.state.getBlock());
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.geodeBlockSettings.fillingProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.geodeBlockSettings.innerLayerProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.geodeBlockSettings.alternateInnerLayerProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.geodeBlockSettings.middleLayerProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.geodeBlockSettings.outerLayerProvider)));
+        blocks.addAll(wrap(configuration.geodeBlockSettings.innerPlacements.stream().map(BlockBehaviour.BlockStateBase::getBlock).toList()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectMultifaceGrowthConfigurationBlocks(IServerUtils utils, MultifaceGrowthConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectHugeMushroomFeatureConfigurationBlocks(IServerUtils utils, HugeMushroomFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.placeBlock);
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.capProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.stemProvider)));
+        return blocks;
+    }
+
+    @Unmodifiable
+    @NotNull
+    public static List<Either<Block, TagKey<Block>>> collectLargeDripstoneConfigurationBlocks(IServerUtils utils, LargeDripstoneConfiguration configuration) {
+        return collectFeatureBlocks(utils, configuration);
+    }
+
+    @NotNull
+    public static List<Either<Block, TagKey<Block>>> collectLayeredConfigurationBlocks(IServerUtils utils, LayerConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.add(Either.left(configuration.state.getBlock()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectNetherForestVegetationConfigurationBlocks(IServerUtils utils, NetherForestVegetationConfig configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectMultifaceGrowthConfigurationBlocks(IServerUtils utils, MultifaceGrowthConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+
+        blocks.add(Either.left(configuration.placeBlock));
+        return blocks;
+    }
+
+    @NotNull
+    public static List<Either<Block, TagKey<Block>>> collectNetherForestVegetationConfigurationBlocks(IServerUtils utils, NetherForestVegetationConfig configuration) {
         return collectBlockPileConfigurationBlocks(utils, configuration);
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectNoneFeatureConfigurationBlocks(IServerUtils utils, NoneFeatureConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectNoneFeatureConfigurationBlocks(IServerUtils utils, NoneFeatureConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectOreConfigurationBlocks(IServerUtils utils, OreConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectOreConfigurationBlocks(IServerUtils utils, OreConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(configuration.targetStates.stream().map((state) -> state.state.getBlock()).toList());
+        blocks.addAll(wrap(configuration.targetStates.stream().map((state) -> state.state.getBlock()).toList()));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectPointedDripstoneConfigurationBlocks(IServerUtils utils, PointedDripstoneConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectPointedDripstoneConfigurationBlocks(IServerUtils utils, PointedDripstoneConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectProbabilityFeatureConfigurationBlocks(IServerUtils utils, ProbabilityFeatureConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectProbabilityFeatureConfigurationBlocks(IServerUtils utils, ProbabilityFeatureConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectRandomBooleanFeatureConfigurationBlocks(IServerUtils utils, RandomBooleanFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectRandomBooleanFeatureConfigurationBlocks(IServerUtils utils, RandomBooleanFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.featureTrue.value().feature().value()));
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.featureFalse.value().feature().value()));
@@ -171,8 +173,8 @@ public class FeatureConfigurationCollectorUtils {
     }
 
     @NotNull
-    public static List<Block> collectRandomFeatureConfigurationBlocks(IServerUtils utils, RandomFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectRandomFeatureConfigurationBlocks(IServerUtils utils, RandomFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.defaultFeature.value().feature().value()));
         blocks.addAll(configuration.features.stream().map((feature) -> collectConfiguredFeatureBlocks(utils, feature.feature.value().feature().value())).flatMap(Collection::stream).toList());
@@ -180,118 +182,118 @@ public class FeatureConfigurationCollectorUtils {
     }
 
     @NotNull
-    public static List<Block> collectRandomPatchConfigurationBlocks(IServerUtils utils, RandomPatchConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectRandomPatchConfigurationBlocks(IServerUtils utils, RandomPatchConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.feature().value().feature().value()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectReplaceBlockConfigurationBlocks(IServerUtils utils, ReplaceBlockConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectReplaceBlockConfigurationBlocks(IServerUtils utils, ReplaceBlockConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(configuration.targetStates.stream().map((state) -> state.state.getBlock()).toList());
+        blocks.addAll(wrap(configuration.targetStates.stream().map((state) -> state.state.getBlock()).toList()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectReplaceSphereConfigurationBlocks(IServerUtils utils, ReplaceSphereConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectReplaceSphereConfigurationBlocks(IServerUtils utils, ReplaceSphereConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.targetState.getBlock()); //TODO maybe remove this?
-        blocks.add(configuration.replaceState.getBlock());
+        blocks.add(Either.left(configuration.targetState.getBlock())); //TODO maybe remove this?
+        blocks.add(Either.left(configuration.replaceState.getBlock()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectRootSystemConfigurationBlocks(IServerUtils utils, RootSystemConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectRootSystemConfigurationBlocks(IServerUtils utils, RootSystemConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.rootStateProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.hangingRootStateProvider));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.rootStateProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.hangingRootStateProvider)));
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.treeFeature.value().feature().value()));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectSculkPatchConfigurationBlocks(IServerUtils utils, SculkPatchConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectSculkPatchConfigurationBlocks(IServerUtils utils, SculkPatchConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectSimpleBlockConfigurationBlocks(IServerUtils utils, SimpleBlockConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectSimpleBlockConfigurationBlocks(IServerUtils utils, SimpleBlockConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.toPlace()));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.toPlace())));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectSimpleRandomFeatureConfigurationBlocks(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectSimpleRandomFeatureConfigurationBlocks(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectSpikeConfigurationBlocks(IServerUtils utils, SpikeConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectSpikeConfigurationBlocks(IServerUtils utils, SpikeConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectSpringConfigurationBlocks(IServerUtils utils, SpringConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectSpringConfigurationBlocks(IServerUtils utils, SpringConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.state.createLegacyBlock().getBlock());
+        blocks.add(Either.left(configuration.state.createLegacyBlock().getBlock()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectTreeConfigurationBlocks(IServerUtils utils, TreeConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectTreeConfigurationBlocks(IServerUtils utils, TreeConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.trunkProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.dirtProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.foliageProvider));
-        configuration.rootPlacer.ifPresent((rootPlacer) -> blocks.addAll(utils.collectBlocks(utils, rootPlacer)));
-        blocks.addAll(configuration.decorators.stream().map((d) -> utils.collectBlocks(utils, d)).flatMap(Collection::stream).toList());
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.trunkProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.dirtProvider)));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.foliageProvider)));
+        configuration.rootPlacer.ifPresent((rootPlacer) -> blocks.addAll(wrap(utils.collectBlocks(utils, rootPlacer))));
+        blocks.addAll(wrap(configuration.decorators.stream().map((d) -> utils.collectBlocks(utils, d)).flatMap(Collection::stream).toList()));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectTwistingVinesConfigurationBlocks(IServerUtils utils, TwistingVinesConfig configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectTwistingVinesConfigurationBlocks(IServerUtils utils, TwistingVinesConfig configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectUnderwaterMagmaConfigurationBlocks(IServerUtils utils, UnderwaterMagmaConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectUnderwaterMagmaConfigurationBlocks(IServerUtils utils, UnderwaterMagmaConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 
     @NotNull
-    public static List<Block> collectVegetationPatchConfigurationBlocks(IServerUtils utils, VegetationPatchConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectVegetationPatchConfigurationBlocks(IServerUtils utils, VegetationPatchConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.groundState));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.groundState)));
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.vegetationFeature.value().feature().value()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectLakeFeatureConfigurationBlocks(IServerUtils utils, @SuppressWarnings("deprecation") LakeFeature.Configuration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectLakeFeatureConfigurationBlocks(IServerUtils utils, @SuppressWarnings("deprecation") LakeFeature.Configuration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.barrier()));
-        blocks.addAll(utils.collectBlocks(utils, configuration.fluid()));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.barrier())));
+        blocks.addAll(wrap(utils.collectBlocks(utils, configuration.fluid())));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectFossilFeatureConfigurationBlocks(IServerUtils utils, FossilFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectFossilFeatureConfigurationBlocks(IServerUtils utils, FossilFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
         StructureTemplateManager manager = utils.getServerLevel().getServer().getStructureManager();
 
         Stream.concat(configuration.fossilStructures.stream(), configuration.overlayStructures.stream())
@@ -302,7 +304,7 @@ public class FeatureConfigurationCollectorUtils {
                             Block block = info.state().getBlock();
 
                             if (block != Blocks.AIR && block != Blocks.STRUCTURE_VOID) { // palettes contain structure_void markers
-                                blocks.add(block);
+                                blocks.add(Either.left(block));
                             }
                         }
                     }
@@ -312,18 +314,18 @@ public class FeatureConfigurationCollectorUtils {
     }
 
     @NotNull
-    public static List<Block> collectHugeFungusConfigurationBlocks(IServerUtils utils, HugeFungusConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectHugeFungusConfigurationBlocks(IServerUtils utils, HugeFungusConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.stemState.getBlock());
-        blocks.add(configuration.hatState.getBlock());
-        blocks.add(configuration.decorState.getBlock());
+        blocks.add(Either.left(configuration.stemState.getBlock()));
+        blocks.add(Either.left(configuration.hatState.getBlock()));
+        blocks.add(Either.left(configuration.decorState.getBlock()));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    private static List<Block> collectFeatureBlocks(IServerUtils utils, FeatureConfiguration configuration) {
+    private static List<Either<Block, TagKey<Block>>> collectFeatureBlocks(IServerUtils utils, FeatureConfiguration configuration) {
         return configuration.getFeatures().map((feature) -> collectConfiguredFeatureBlocks(utils, feature)).flatMap(Collection::stream).toList();
     }
 
@@ -333,12 +335,18 @@ public class FeatureConfigurationCollectorUtils {
      * carries no blocks of its own is dropped entirely otherwise. That is not a corner case: warm ocean's coral
      * reaches the world only as three {@code NoneFeatureConfiguration} features nested inside
      * {@code warm_ocean_vegetation}, so scanning just the outer feature finds nothing at all.
+     *
+     * <p>The scanner's tags travel out as tags rather than as their members, which is also why every collector in this
+     * class hands back {@code Either}s: the coral tags are found this deep in the nesting, and flattening them here
+     * would leave the display nothing to name the slot after.
      */
     @NotNull
-    public static List<Block> collectConfiguredFeatureBlocks(IServerUtils utils, ConfiguredFeature<?, ?> feature) {
-        List<Block> blocks = new ArrayList<>(utils.collectBlocks(utils, feature.config()));
+    public static List<Either<Block, TagKey<Block>>> collectConfiguredFeatureBlocks(IServerUtils utils, ConfiguredFeature<?, ?> feature) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(utils.collectBlocks(utils, feature.config()));
+        FeatureBytecodeScanner.ScanResult scan = FeatureBytecodeScanner.scan(feature.feature().getClass());
 
-        blocks.addAll(FeatureBytecodeScanner.scan(utils, feature.feature()));
+        blocks.addAll(wrap(scan.blocks()));
+        scan.tags().forEach((tag) -> blocks.add(Either.right(tag)));
         return blocks;
     }
 
@@ -351,5 +359,12 @@ public class FeatureConfigurationCollectorUtils {
         }
 
         return blocks;
+    }
+
+    /** Lifts plain blocks into the {@code Either} the feature collectors hand back. */
+    @Unmodifiable
+    @NotNull
+    private static List<Either<Block, TagKey<Block>>> wrap(Collection<Block> blocks) {
+        return blocks.stream().map(Either::<Block, TagKey<Block>>left).toList();
     }
 }

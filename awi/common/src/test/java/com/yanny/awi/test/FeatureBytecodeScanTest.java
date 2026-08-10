@@ -6,9 +6,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
 import com.yanny.awi.test.utils.BaseLayoutTestUtils;
-import com.yanny.awi.test.utils.TestUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,8 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * breadth-first and hard-capped, so a wider walk can push a feature over the cap and make it lose blocks it finds
  * today. A pure improvement must add blocks and remove none.
  * <p>
- * The vanilla tags are bound before scanning, so blocks reached through {@code expandBlockTag} resolve here the way
- * they do in game.
+ * Tags are recorded as tag keys rather than as their members, matching what the scanner reports, so the file does not
+ * depend on any tags being bound.
  * <p>
  * Regenerate after an intentional change with:
  * {@code ./gradlew :awi:common:test --tests "com.yanny.awi.test.FeatureBytecodeScanTest" -Dawi.featurescan.regenerate=true}
@@ -54,9 +54,6 @@ public class FeatureBytecodeScanTest {
     @BeforeAll
     static void setUp() {
         BaseLayoutTestUtils.bootstrap();
-        // Without the vanilla tags bound, every block the scanner reaches through expandBlockTag would silently
-        // resolve to nothing and this file could not tell a working tag lookup from a broken one.
-        TestUtils.bindVanillaTags();
     }
 
     @Test
@@ -70,12 +67,13 @@ public class FeatureBytecodeScanTest {
 
         for (Map.Entry<net.minecraft.resources.ResourceKey<Feature<?>>, Feature<?>> entry : BuiltInRegistries.FEATURE.entrySet()) {
             String id = entry.getKey().location().toString();
-            FeatureBytecodeScanner.ScanResult result = FeatureBytecodeScanner.scan(BuiltInRegistries.BLOCK, entry.getValue().getClass());
+            FeatureBytecodeScanner.ScanResult result = FeatureBytecodeScanner.scan(entry.getValue().getClass());
             Map<String, Object> report = new LinkedHashMap<>();
 
             report.put("visitedMethods", result.visitedMethods());
             report.put("methodLimitReached", result.methodLimitReached());
             report.put("blocks", blockIds(result.blocks()));
+            report.put("tags", tagIds(result.tags()));
             actual.put(id, report);
 
             if (result.methodLimitReached()) {
@@ -113,6 +111,10 @@ public class FeatureBytecodeScanTest {
 
     private static List<String> blockIds(Set<Block> blocks) {
         return blocks.stream().map(BuiltInRegistries.BLOCK::getKey).map(ResourceLocation::toString).sorted().toList();
+    }
+
+    private static List<String> tagIds(Set<TagKey<Block>> tags) {
+        return tags.stream().map((tag) -> "#" + tag.location()).sorted().toList();
     }
 
     private static JsonObject readGolden() throws IOException {

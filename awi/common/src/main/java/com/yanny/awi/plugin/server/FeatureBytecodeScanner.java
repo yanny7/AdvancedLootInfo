@@ -1,8 +1,6 @@
 package com.yanny.awi.plugin.server;
 
 import com.mojang.logging.LogUtils;
-import com.yanny.awi.api.IServerUtils;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.LevelWriter;
@@ -105,31 +103,27 @@ public final class FeatureBytecodeScanner {
         PLACE_DESC = place != null ? Type.getMethodDescriptor(place) : null;
     }
 
-    /** Callee method key -> parameter position -> blocks its call sites were seen passing in. One scan's worth. */
-    private final Map<String, Map<Integer, Set<Block>>> parameterCandidates = new HashMap<>();
+    /** Callee method key -> parameter position -> what its call sites were seen passing in. One scan's worth. */
+    private final Map<String, Map<Integer, Candidates>> parameterCandidates = new HashMap<>();
 
     /** Key of the method being analyzed, so a parameter can be matched against {@link #parameterCandidates}. */
     private String currentMethodKey;
 
     private FeatureBytecodeScanner() {}
 
-    public static Set<Block> scan(IServerUtils utils, Feature<?> feature) {
-        return scan(utils.getServerLevel().registryAccess().registryOrThrow(Registries.BLOCK), feature.getClass()).blocks();
-    }
-
     /**
-     * Scans one feature class against an explicit block registry, exposing how much of the {@link #MAX_METHODS} budget
-     * the walk consumed. Split out of {@link #scan(IServerUtils, Feature)} so the scan can be measured without a
-     * running server.
+     * Scans one feature class for the blocks and block tags it places. Needs no registry and no running server: a tag
+     * is reported as the tag itself, and resolving it into members is the display's job
+     * ({@link com.yanny.awi.plugin.common.nodes.BlockNode}).
      */
-    public static ScanResult scan(Registry<Block> blockRegistry, Class<?> featureClass) {
+    public static ScanResult scan(Class<?> featureClass) {
         if (PLACE_NAME == null) {
             return ScanResult.EMPTY;
         }
 
         return RESULT_CACHE.computeIfAbsent(featureClass, (cls) -> {
             try {
-                return new FeatureBytecodeScanner().doScan(blockRegistry, cls);
+                return new FeatureBytecodeScanner().doScan(cls);
             } catch (Throwable t) {
                 LOGGER.warn("Bytecode scan failed for {}", cls.getName(), t);
                 return ScanResult.EMPTY;
@@ -139,8 +133,8 @@ public final class FeatureBytecodeScanner {
 
     /**
      * Drops every cached scan result and the intermediate ASM/class caches. Must be called once the worldgen scan is
-     * done: the caches are only useful within a single scan, they retain the {@link ClassNode} graph of every visited
-     * class, and cached results derived from block tags would go stale on a datapack reload.
+     * done: the caches are only useful within a single scan and they retain the {@link ClassNode} graph of every
+     * visited class.
      */
     public static void clearCaches() {
         RESULT_CACHE.clear();
@@ -148,11 +142,11 @@ public final class FeatureBytecodeScanner {
         CLASS_CACHE.clear();
     }
 
-    private ScanResult doScan(Registry<Block> blockRegistry, Class<?> featureClass) {
+    private ScanResult doScan(Class<?> featureClass) {
         ClassLoader cl = featureClass.getClassLoader();
         String rootPkg = rootPackage(Type.getInternalName(featureClass));
 
-        Set<Block> out = new HashSet<>();
+        Candidates out = Candidates.create();
         Set<String> visited = new HashSet<>();
         Deque<MethodRef> worklist = new ArrayDeque<>();
         int analyzed = 0;
@@ -186,17 +180,17 @@ public final class FeatureBytecodeScanner {
             analyzed++;
             // Keyed by the reference, not the declaring class, so it matches what a call site records for it.
             currentMethodKey = ref.key();
-            analyzeMethod(cl, declaration.owner(), declaration.method(), blockRegistry, rootPkg, out, worklist, visited);
+            analyzeMethod(cl, declaration.owner(), declaration.method(), rootPkg, out, worklist, visited);
         }
 
         // Only a still-pending, not-yet-visited method means the budget actually cut the walk short.
         boolean truncated = worklist.stream().anyMatch((ref) -> !visited.contains(ref.key()));
 
-        return new ScanResult(out, analyzed, truncated);
+        return new ScanResult(out.blocks(), out.tags(), analyzed, truncated);
     }
 
-    private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, Registry<Block> blockRegistry,
-                               String rootPkg, Set<Block> out, Deque<MethodRef> worklist, Set<String> visited) {
+    private void analyzeMethod(ClassLoader cl, ClassNode owner, MethodNode method, String rootPkg, Candidates out,
+                               Deque<MethodRef> worklist, Set<String> visited) {
         Frame<SourceValue>[] frames;
 
         try {
@@ -228,11 +222,11 @@ public final class FeatureBytecodeScanner {
             // Transitive follow into feature/block/level-gen code and the mod's own package.
             if (shouldRecurse(call.owner, rootPkg)) {
                 worklist.add(new MethodRef(call.owner, call.name, call.desc));
-                bindArguments(cl, call, frame, frames, method, blockRegistry, worklist, visited);
+                bindArguments(cl, call, frame, frames, method, worklist, visited);
             }
 
             // Not gated on shouldRecurse: the call handing a lambda its values is usually a JDK one (Optional#ifPresent).
-            bindLambdaParameters(cl, call, frame, frames, method, blockRegistry, rootPkg, worklist, visited);
+            bindLambdaParameters(cl, call, frame, frames, method, rootPkg, worklist, visited);
 
             Class<?> callOwner = loadClass(cl, call.owner);
 
@@ -249,7 +243,7 @@ public final class FeatureBytecodeScanner {
                     SourceValue value = argValue(frame, call, i);
 
                     if (value != null) {
-                        resolve(value, frames, method, cl, blockRegistry, out, new HashSet<>(), 0);
+                        resolve(value, frames, method, cl, out, new HashSet<>(), 0);
                     }
                 }
             }
@@ -257,7 +251,7 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Records, per callee parameter, the blocks a call site passes in - the caller half of the interprocedural link.
+     * Records, per callee parameter, what a call site passes in - the caller half of the interprocedural link.
      * A feature that hands the block to a helper ({@code placeFeature(level, random, pos, state)} in {@code
      * CoralFeature}) places it through a parameter, which has no producer instruction of its own; the callee half
      * ({@link #addParameterCandidates}) picks these up when that parameter reaches a placement sink.
@@ -269,9 +263,8 @@ public final class FeatureBytecodeScanner {
      * {@code visited} and re-queued. The candidate sets only ever grow, so the re-queueing terminates.
      */
     private void bindArguments(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
-                               MethodNode method, Registry<Block> blockRegistry, Deque<MethodRef> worklist, Set<String> visited) {
+                               MethodNode method, Deque<MethodRef> worklist, Set<String> visited) {
         Type[] args = Type.getArgumentTypes(call.desc);
-        String calleeKey = MethodRef.key(call.owner, call.name, call.desc);
 
         for (int i = 0; i < args.length; i++) {
             Class<?> argClass = loadClass(cl, args[i].getInternalName());
@@ -280,9 +273,9 @@ public final class FeatureBytecodeScanner {
                 continue;
             }
 
-            Set<Block> resolved = new HashSet<>();
+            Candidates resolved = Candidates.create();
 
-            resolve(argValue(frame, call, i), frames, method, cl, blockRegistry, resolved, new HashSet<>(), 0);
+            resolve(argValue(frame, call, i), frames, method, cl, resolved, new HashSet<>(), 0);
 
             if (resolved.isEmpty()) {
                 continue;
@@ -303,14 +296,13 @@ public final class FeatureBytecodeScanner {
      * only to parameters that can carry a block, so a lambda over positions or random sources binds nothing.
      */
     private void bindLambdaParameters(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
-                                      MethodNode method, Registry<Block> blockRegistry, String rootPkg,
-                                      Deque<MethodRef> worklist, Set<String> visited) {
+                                      MethodNode method, String rootPkg, Deque<MethodRef> worklist, Set<String> visited) {
         if (call.getOpcode() == Opcodes.INVOKESTATIC) {
             return;
         }
 
         Type[] args = Type.getArgumentTypes(call.desc);
-        Set<Block> fromReceiver = null;
+        Candidates fromReceiver = null;
 
         for (int i = 0; i < args.length; i++) {
             SourceValue value = argValue(frame, call, i);
@@ -325,8 +317,8 @@ public final class FeatureBytecodeScanner {
                 }
 
                 if (fromReceiver == null) {
-                    fromReceiver = new HashSet<>();
-                    resolve(receiverValue(frame, call), frames, method, cl, blockRegistry, fromReceiver, new HashSet<>(), 0);
+                    fromReceiver = Candidates.create();
+                    resolve(receiverValue(frame, call), frames, method, cl, fromReceiver, new HashSet<>(), 0);
                 }
 
                 if (!fromReceiver.isEmpty()) {
@@ -337,11 +329,11 @@ public final class FeatureBytecodeScanner {
     }
 
     /**
-     * Binds {@code blocks} to the parameters of a lambda body that come from the functional interface. An
+     * Binds {@code candidates} to the parameters of a lambda body that come from the functional interface. An
      * {@code INVOKEDYNAMIC} consumes exactly the captured values off the stack, so the implementation method's
      * parameters start with the captures and the functional arguments make up the rest.
      */
-    private void bindFunctionalParameters(ClassLoader cl, InvokeDynamicInsnNode indy, Set<Block> blocks, String rootPkg,
+    private void bindFunctionalParameters(ClassLoader cl, InvokeDynamicInsnNode indy, Candidates candidates, String rootPkg,
                                           Deque<MethodRef> worklist, Set<String> visited) {
         int captured = Type.getArgumentTypes(indy.desc).length;
 
@@ -360,35 +352,35 @@ public final class FeatureBytecodeScanner {
                 Class<?> type = loadClass(cl, implArgs[i].getInternalName());
 
                 if (type != null && carriesBlocks(type)) {
-                    recordCandidates(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()), i, blocks,
+                    recordCandidates(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()), i, candidates,
                             worklist, visited);
                 }
             }
         }
     }
 
-    /** Adds call-site blocks to a callee parameter, re-queueing the callee if it was already analyzed without them. */
-    private void recordCandidates(MethodRef callee, int parameter, Set<Block> blocks, Deque<MethodRef> worklist, Set<String> visited) {
-        Set<Block> known = parameterCandidates.computeIfAbsent(callee.key(), (key) -> new HashMap<>())
-                .computeIfAbsent(parameter, (index) -> new HashSet<>());
+    /** Adds call-site values to a callee parameter, re-queueing the callee if it was already analyzed without them. */
+    private void recordCandidates(MethodRef callee, int parameter, Candidates candidates, Deque<MethodRef> worklist, Set<String> visited) {
+        Candidates known = parameterCandidates.computeIfAbsent(callee.key(), (key) -> new HashMap<>())
+                .computeIfAbsent(parameter, (index) -> Candidates.create());
 
-        if (known.addAll(blocks) && visited.remove(callee.key())) {
+        if (known.addAll(candidates) && visited.remove(callee.key())) {
             worklist.add(callee);
         }
     }
 
     /** Callee half of the interprocedural link: a parameter resolves to whatever its call sites were seen passing in. */
-    private void addParameterCandidates(VarInsnNode local, MethodNode method, Set<Block> out) {
-        Map<Integer, Set<Block>> known = currentMethodKey != null ? parameterCandidates.get(currentMethodKey) : null;
+    private void addParameterCandidates(VarInsnNode local, MethodNode method, Candidates out) {
+        Map<Integer, Candidates> known = currentMethodKey != null ? parameterCandidates.get(currentMethodKey) : null;
 
         if (local.getOpcode() != Opcodes.ALOAD || known == null) {
             return;
         }
 
-        Set<Block> blocks = known.get(parameterIndex(method, local.var));
+        Candidates candidates = known.get(parameterIndex(method, local.var));
 
-        if (blocks != null) {
-            out.addAll(blocks);
+        if (candidates != null) {
+            out.addAll(candidates);
         }
     }
 
@@ -430,9 +422,12 @@ public final class FeatureBytecodeScanner {
         }
     }
 
-    /** Resolves a stack value (producer instructions) to concrete blocks, following defaultBlockState()/setValue() chains. */
+    /**
+     * Resolves a stack value (producer instructions) to concrete blocks and block tags, following
+     * defaultBlockState()/setValue() chains.
+     */
     private void resolve(SourceValue value, Frame<SourceValue>[] frames, MethodNode method, ClassLoader cl,
-                         Registry<Block> blockRegistry, Set<Block> out, Set<AbstractInsnNode> guard, int depth) {
+                         Candidates out, Set<AbstractInsnNode> guard, int depth) {
         if (value == null || depth > MAX_RESOLVE_DEPTH) {
             return;
         }
@@ -443,19 +438,19 @@ public final class FeatureBytecodeScanner {
             }
 
             if (producer instanceof FieldInsnNode field && producer.getOpcode() == Opcodes.GETSTATIC) {
-                addFieldValue(cl, field, blockRegistry, out);
+                addFieldValue(cl, field, out);
             } else if (producer instanceof VarInsnNode local) {
                 SourceValue stored = throughLocal(local, frames, method);
 
                 if (stored != null && !stored.insns.isEmpty()) {
-                    resolve(stored, frames, method, cl, blockRegistry, out, guard, depth + 1);
+                    resolve(stored, frames, method, cl, out, guard, depth + 1);
                 } else {
                     addParameterCandidates(local, method, out);
                 }
             } else if (producer instanceof TypeInsnNode cast && producer.getOpcode() == Opcodes.CHECKCAST) {
                 // Optional#get() and friends return Object; the cast is the only thing standing between the call and
                 // the block it produced.
-                resolve(stackTop(cast, frames, method), frames, method, cl, blockRegistry, out, guard, depth + 1);
+                resolve(stackTop(cast, frames, method), frames, method, cl, out, guard, depth + 1);
             } else if (producer instanceof MethodInsnNode call) {
                 int index = method.instructions.indexOf(call);
                 Frame<SourceValue> frame = index >= 0 && index < frames.length ? frames[index] : null;
@@ -468,7 +463,7 @@ public final class FeatureBytecodeScanner {
                 // dependencies: defaultBlockState()/setValue() live in the receiver chain, while a tag-driven pick
                 // (BuiltInRegistries.BLOCK.getTag(BlockTags.CORAL_BLOCKS)...) only exposes its TagKey as an argument.
                 if (call.getOpcode() != Opcodes.INVOKESTATIC) {
-                    resolve(receiverValue(frame, call), frames, method, cl, blockRegistry, out, guard, depth + 1);
+                    resolve(receiverValue(frame, call), frames, method, cl, out, guard, depth + 1);
                 }
 
                 Type[] args = Type.getArgumentTypes(call.desc);
@@ -477,7 +472,7 @@ public final class FeatureBytecodeScanner {
                     Class<?> argClass = loadClass(cl, args[i].getInternalName());
 
                     if (argClass != null && carriesBlocks(argClass)) {
-                        resolve(argValue(frame, call, i), frames, method, cl, blockRegistry, out, guard, depth + 1);
+                        resolve(argValue(frame, call, i), frames, method, cl, out, guard, depth + 1);
                     }
                 }
             }
@@ -521,7 +516,8 @@ public final class FeatureBytecodeScanner {
         return frame != null && frame.getStackSize() > 0 ? frame.getStack(frame.getStackSize() - 1) : null;
     }
 
-    private void addFieldValue(ClassLoader cl, FieldInsnNode field, Registry<Block> blockRegistry, Set<Block> out) {
+    @SuppressWarnings("unchecked")
+    private void addFieldValue(ClassLoader cl, FieldInsnNode field, Candidates out) {
         Type type = Type.getType(field.desc);
 
         if (type.getSort() != Type.OBJECT) {
@@ -545,21 +541,12 @@ public final class FeatureBytecodeScanner {
         Object staticValue = staticFieldValue(cl, field.owner, field.name);
 
         if (staticValue instanceof Block block) {
-            out.add(block);
+            out.blocks().add(block);
         } else if (staticValue instanceof BlockState state) {
-            out.add(state.getBlock());
-        } else if (staticValue instanceof TagKey<?> tag) {
-            expandBlockTag(tag, blockRegistry, out);
+            out.blocks().add(state.getBlock());
+        } else if (staticValue instanceof TagKey<?> tag && tag.registry().equals(Registries.BLOCK)) {
+            out.tags().add((TagKey<Block>) tag);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private void expandBlockTag(TagKey<?> tag, Registry<Block> blockRegistry, Set<Block> out) {
-        if (!tag.registry().equals(Registries.BLOCK)) {
-            return;
-        }
-
-        blockRegistry.getTag((TagKey<Block>) tag).ifPresent((named) -> named.forEach((holder) -> out.add(holder.value())));
     }
 
     // -- ASM stack helpers -----------------------------------------------------------------------------------------
@@ -685,11 +672,30 @@ public final class FeatureBytecodeScanner {
 
     /**
      * @param blocks             blocks that flow into a placement sink
+     * @param tags               block tags that flow into a placement sink, left unexpanded so a caller can either
+     *                           display the tag itself or resolve its current members
      * @param visitedMethods     methods analyzed, out of the {@link #MAX_METHODS} budget
-     * @param methodLimitReached whether the budget cut the walk short, so {@code blocks} may be incomplete
+     * @param methodLimitReached whether the budget cut the walk short, so the results may be incomplete
      */
-    public record ScanResult(Set<Block> blocks, int visitedMethods, boolean methodLimitReached) {
-        public static final ScanResult EMPTY = new ScanResult(Set.of(), 0, false);
+    public record ScanResult(Set<Block> blocks, Set<TagKey<Block>> tags, int visitedMethods, boolean methodLimitReached) {
+        public static final ScanResult EMPTY = new ScanResult(Set.of(), Set.of(), 0, false);
+    }
+
+    /** What a value resolved to: concrete blocks, plus the block tags it was reached through. */
+    private record Candidates(Set<Block> blocks, Set<TagKey<Block>> tags) {
+        static Candidates create() {
+            return new Candidates(new HashSet<>(), new HashSet<>());
+        }
+
+        boolean isEmpty() {
+            return blocks.isEmpty() && tags.isEmpty();
+        }
+
+        boolean addAll(Candidates other) {
+            boolean grown = blocks.addAll(other.blocks);
+
+            return tags.addAll(other.tags) || grown;
+        }
     }
 
     private record Declaration(ClassNode owner, MethodNode method) {
