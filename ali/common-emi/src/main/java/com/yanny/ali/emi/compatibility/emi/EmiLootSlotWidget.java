@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.ali.api.IDataNode;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.Minecraft;
@@ -17,13 +18,15 @@ import java.util.List;
 
 public class EmiLootSlotWidget extends SlotWidget {
     private final IDataNode entry;
+    private final boolean hasPredicates;
     @Nullable
     private Component count;
     private boolean isRange = false;
 
-    public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count) {
+    public EmiLootSlotWidget(IDataNode entry, EmiIngredient ingredient, int x, int y, RangeValue count, boolean hasPredicates) {
         super(ingredient, x, y);
         this.entry = entry;
+        this.hasPredicates = hasPredicates;
         setCount(count);
     }
 
@@ -32,6 +35,15 @@ public class EmiLootSlotWidget extends SlotWidget {
         CoreTooltipUtils.toComponents(entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)
                 .forEach((c) -> list.add(ClientTooltipComponent.create(c.getVisualOrderText())));
         super.addSlotTooltip(list);
+    }
+
+    @Override
+    public void drawBackground(GuiGraphics draw, int mouseX, int mouseY, float delta) {
+        super.drawBackground(draw, mouseX, mouseY, delta);
+
+        if (hasPredicates) {
+            draw.fill(x + 1, y + 1, x + WidgetUtils.SLOT_SIZE - 1, y + WidgetUtils.SLOT_SIZE - 1, WidgetUtils.PREDICATES_COLOR);
+        }
     }
 
     @Override

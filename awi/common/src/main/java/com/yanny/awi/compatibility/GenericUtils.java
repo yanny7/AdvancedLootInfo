@@ -8,7 +8,6 @@ import com.yanny.awi.api.ListNode;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.network.AbstractClient;
 import com.yanny.awi.network.RequestWorldgenDataMessage;
-import com.yanny.awi.plugin.common.nodes.BlockNode;
 import com.yanny.awi.plugin.common.nodes.LevelStemNode;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,7 +15,10 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -123,13 +125,47 @@ public class GenericUtils {
      * or biome left empty by that. Must run before the tree is handed to a recipe/widget, so that the rendered tree
      * and {@link #collectBlocks} agree on what is visible.
      *
+     * <p>A node standing for a block tag loses its hidden members rather than being kept whole, and is dropped once
+     * none are left - a tag whose every member is hidden must not survive as an empty slot.
+     *
      * @param isVisible viewer-specific visibility test; memoized here because the same block recurs across biomes
      */
     public static void pruneHiddenBlocks(Map<ResourceLocation, LevelStemNode> worldgenData, Predicate<Block> isVisible) {
         Map<Block, Boolean> cache = new IdentityHashMap<>();
+        Predicate<Block> memoized = (block) -> cache.computeIfAbsent(block, isVisible::test);
 
-        worldgenData.values().removeIf((level) -> level.prune(
-                (node) -> !(node instanceof IBlockNode blockNode) || cache.computeIfAbsent(blockNode.getBlock(), isVisible::test)));
+        worldgenData.values().removeIf((level) -> level.prune((node) -> {
+            if (!(node instanceof IBlockNode blockNode)) {
+                return true;
+            }
+
+            blockNode.retainBlocks(memoized);
+            return blockNode.getBlocks().stream().anyMatch(memoized);
+        }));
+    }
+
+    /**
+     * Whether a block can only be shown as its fluid: it has no item form <i>and</i> nothing to draw, so the fluid is
+     * all that is left (water, lava, bubble_column).
+     *
+     * <p>The fluid must stay the last resort. Anything waterlogged in its default state reports a fluid - every coral
+     * and coral fan, seagrass, kelp, sea pickle, conduit - and picking the fluid first drew all 34 of them as plain
+     * water. Testing only for an item is not enough either: {@code tall_seagrass} and {@code kelp_plant} have no item
+     * but do have a model, and would still end up as water.
+     */
+    public static boolean rendersAsFluid(Block block) {
+        BlockState state = block.defaultBlockState();
+
+        return block.asItem() == Items.AIR && state.getRenderShape() == RenderShape.INVISIBLE
+                && !state.getFluidState().isEmpty();
+    }
+
+    /**
+     * Whether a block has to be shown as a 3D block model - it has no item form (fire, end_gateway, {@code *_plant},
+     * ...) and no fluid that could stand in for it.
+     */
+    public static boolean rendersAsBlockModel(Block block) {
+        return block.asItem() == Items.AIR && !rendersAsFluid(block);
     }
 
     @NotNull
@@ -140,8 +176,10 @@ public class GenericUtils {
             for (IDataNode iDataNode : listNode.nodes()) {
                 blocks.addAll(collectBlocks(iDataNode));
             }
-        } else if (node instanceof BlockNode blockNode) {
-            blocks.add(blockNode.getBlock());
+        } else if (node instanceof IBlockNode blockNode) {
+            // A tag contributes its members, so the reverse lookup (which biome generates this block?) keeps working
+            // for a block that only ever reaches the world through a tag.
+            blocks.addAll(blockNode.getBlocks());
         }
 
         return blocks;

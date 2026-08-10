@@ -13,6 +13,7 @@ import com.yanny.ali.compatibility.common.IType;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -103,7 +104,7 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
         for (int i = 0; i < slotParams.size(); i++) {
             Holder h = slotParams.get(i);
             IRecipeSlotBuilder slotBuilder = builder.addSlot(RecipeIngredientRole.RENDER_ONLY)
-                    .setStandardSlotBackground()
+                    .setBackground(getSlotBackground(((IItemNode) h.entry()).hasPredicates()), -1, -1)
                     .setSlotName(String.valueOf(i))
                     .setPosition(h.rect.getX(), h.rect.getY())
                     .addRichTooltipCallback((iRecipeSlotView, tooltipBuilder)
@@ -188,6 +189,17 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     @NotNull
+    private IDrawable getSlotBackground(boolean hasPredicates) {
+        // deliberately two separate returns - a ternary/joined branch makes the architectury transformer
+        // resolve the common supertype of both, which fails when JEI is not on the classpath (EMI/REI runs)
+        if (hasPredicates) {
+            return new PredicatesSlotBackground(guiHelper.getSlotDrawable());
+        }
+
+        return guiHelper.getSlotDrawable();
+    }
+
+    @NotNull
     private IWidgetUtils getJeiUtils(List<Holder> slotParams) {
         return new ClientUtils() {
             @Nullable
@@ -210,5 +222,24 @@ public abstract class JeiBaseLoot<T extends IType, V> implements IRecipeCategory
     }
 
     public record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {
+    }
+
+    /** Standard slot background tinted to mark an entry gated by predicates - drawn as background, so it stays below the item. */
+    private record PredicatesSlotBackground(IDrawable slot) implements IDrawable {
+        @Override
+        public int getWidth() {
+            return slot.getWidth();
+        }
+
+        @Override
+        public int getHeight() {
+            return slot.getHeight();
+        }
+
+        @Override
+        public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+            slot.draw(guiGraphics, xOffset, yOffset);
+            guiGraphics.fill(xOffset + 1, yOffset + 1, xOffset + getWidth() - 1, yOffset + getHeight() - 1, WidgetUtils.PREDICATES_COLOR);
+        }
     }
 }

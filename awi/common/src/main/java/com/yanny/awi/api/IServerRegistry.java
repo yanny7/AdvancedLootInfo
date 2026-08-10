@@ -1,10 +1,12 @@
 package com.yanny.awi.api;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerRegistry;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.CountSpan;
 import com.yanny.awi.plugin.server.summary.HeightSpanPropagator;
 import com.yanny.awi.plugin.server.summary.PlacementPropagator;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
-    <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
+    <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter);
 
     <T extends BlockStateProvider> void registerStateProviderBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter);
 

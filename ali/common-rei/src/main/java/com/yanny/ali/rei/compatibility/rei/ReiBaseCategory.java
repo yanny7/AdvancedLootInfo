@@ -13,12 +13,14 @@ import com.yanny.ali.compatibility.common.AbstractScrollWidget;
 import com.yanny.ali.configuration.LootCategory;
 import com.yanny.ali.manager.PluginManager;
 import com.yanny.ali.plugin.client.ClientUtils;
+import com.yanny.ali.plugin.client.WidgetUtils;
 import com.yanny.ali.plugin.client.widget.LootTableWidget;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.config.ConfigObject;
 import me.shedaniel.rei.api.client.gui.Renderer;
 import me.shedaniel.rei.api.client.gui.config.SearchFieldLocation;
+import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
@@ -129,22 +131,37 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
         slotWidgets.forEach((h) -> {
             Optional<ItemStack> left = h.item.left();
             Optional<TagKey<? extends ItemLike>> right = h.item.right();
+            IItemNode node = (IItemNode) h.entry;
+            Point point = new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1);
+            Rectangle slotBounds = new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), SLOT_SIZE, SLOT_SIZE);
+            Slot slot = null;
 
             if (left.isPresent()) {
                 ItemStack itemStack = left.get();
                 EntryStack<ItemStack> stack = EntryStacks.of(itemStack);
 
                 stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));
-                widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entry(stack).markOutput());
+                slot = Widgets.createSlot(point).entry(stack).markOutput();
             } else if (right.isPresent()) {
                 TagKey<? extends ItemLike> tagKey = right.get();
                 EntryIngredient ingredient = EntryIngredients.ofItemTag(tagKey);
 
                 ingredient.map((stack) -> stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
-                widgets.add(Widgets.createSlot(new Point(h.rect.getX() + bounds.getX() + 1, h.rect.getY() + bounds.getY() + 1)).entries(ingredient).markOutput());
+                slot = Widgets.createSlot(point).entries(ingredient).markOutput();
             }
 
-            widgets.add(Widgets.wrapRenderer(new Rectangle(h.rect.getX() + bounds.getX(), h.rect.getY() + bounds.getY(), 18, 18), new SlotCountRenderer(((IItemNode) h.entry).getCount())));
+            if (slot != null) {
+                if (node.hasPredicates()) {
+                    // the slot draws its own background right before the item, so draw base + tint ourselves to get the tint in between
+                    slot.disableBackground();
+                    widgets.add(Widgets.createSlotBackground(point));
+                    widgets.add(Widgets.wrapRenderer(slotBounds, new PredicatesRenderer()));
+                }
+
+                widgets.add(slot);
+            }
+
+            widgets.add(Widgets.wrapRenderer(slotBounds, new SlotCountRenderer(node.getCount())));
         });
         return new WidgetHolder(widgets, widget.getRect());
     }
@@ -172,6 +189,13 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay, U> implements Di
     }
 
     private record Holder(Either<ItemStack, TagKey<? extends ItemLike>> item, IDataNode entry, RelativeRect rect) {}
+
+    private static class PredicatesRenderer implements Renderer {
+        @Override
+        public void render(GuiGraphics guiGraphics, Rectangle bounds, int mouseX, int mouseY, float delta) {
+            guiGraphics.fill(bounds.getX() + 1, bounds.getY() + 1, bounds.getMaxX() - 1, bounds.getMaxY() - 1, WidgetUtils.PREDICATES_COLOR);
+        }
+    }
 
     private static class SlotCountRenderer implements Renderer {
         @Nullable

@@ -70,7 +70,7 @@ public class EmiCompatibility implements EmiPlugin {
                     fullCompressedData,
                     EmiCompatibility::isVisible,
                     (node, location, block, outputs) ->
-                            addRecipe(registry, blockCategories, block, (category) -> new EmiBlockLoot(category, location, block, node, outputs)),
+                            addRecipe(registry, blockCategories, block, (category) -> new EmiBlockLoot(category, block, node, outputs)),
                     (node, location, entity, outputs) ->
                             addRecipe(registry, entityCategories, entity, (category) -> new EmiEntityLoot(category, location, entity, node, outputs)),
                     (node, location, outputs) ->

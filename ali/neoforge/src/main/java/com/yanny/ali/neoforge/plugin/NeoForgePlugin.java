@@ -1,9 +1,11 @@
 package com.yanny.ali.neoforge.plugin;
 
 import com.google.gson.JsonElement;
+import com.mojang.datafixers.util.Either;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
+import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.aci.tooltip.TooltipNode;
 import com.yanny.ali.api.*;
@@ -11,19 +13,31 @@ import com.yanny.ali.language.Lang;
 import com.yanny.ali.neoforge.mixin.*;
 import com.yanny.ali.platform.Services;
 import com.yanny.ali.plugin.common.NodeUtils;
+import com.yanny.ali.plugin.common.trades.ItemsToItemsNode;
 import com.yanny.ali.plugin.glm.GlobalLootModifierUtils;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierPlugin;
 import com.yanny.ali.plugin.glm.IGlobalLootModifierWrapper;
 import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.BasicItemListing;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.common.crafting.BlockTagIngredient;
+import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
+import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IntersectionIngredient;
 import net.neoforged.neoforge.common.loot.*;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.slf4j.Logger;
+import oshi.util.tuples.Pair;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -43,9 +57,54 @@ public class NeoForgePlugin implements IPlugin {
         registry.registerConditionTooltip(CanItemPerformAbility.class, NeoForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, NeoForgePlugin::getLootTableIdTooltip);
 
+        registry.registerIngredientUnwrapper(NeoForgePlugin::unwrapCustomIngredient);
+
+        registry.registerValueTooltip(CompoundIngredient.class, NeoForgeIngredientTooltipUtils::getCompoundIngredientTooltip);
+        registry.registerValueTooltip(DifferenceIngredient.class, NeoForgeIngredientTooltipUtils::getDifferenceIngredientTooltip);
+        registry.registerValueTooltip(IntersectionIngredient.class, NeoForgeIngredientTooltipUtils::getIntersectionIngredientTooltip);
+        registry.registerValueTooltip(DataComponentIngredient.class, NeoForgeIngredientTooltipUtils::getDataComponentIngredientTooltip);
+        registry.registerValueTooltip(BlockTagIngredient.class, NeoForgeIngredientTooltipUtils::getBlockTagIngredientTooltip);
+
+        registry.registerItemListing(BasicItemListing.class, NeoForgePlugin::getBasicItemListingNode);
+        registry.registerItemListingCollector(BasicItemListing.class, NeoForgePlugin::collectBasicItemListingItems);
+
         registry.registerLootModifiers(NeoForgePlugin::registerLootModifiers);
 
         registry.registerValueTooltip(ItemAbility.class, NeoForgePlugin::getItemAbilityTooltip);
+    }
+
+    @Nullable
+    private static ICustomIngredient unwrapCustomIngredient(Ingredient ingredient) {
+        return ingredient.isCustom() ? ingredient.getCustomIngredient() : null;
+    }
+
+    @NotNull
+    public static ItemsToItemsNode getBasicItemListingNode(IServerUtils utils, BasicItemListing listing, TooltipNode condition) {
+        MixinBasicItemListing accessor = (MixinBasicItemListing) listing;
+
+        return new ItemsToItemsNode(
+                utils,
+                Either.left(accessor.getPrice()),
+                new RangeValue(accessor.getPrice().getCount()),
+                Either.left(accessor.getPrice2()),
+                new RangeValue(accessor.getPrice2().getCount()),
+                Either.left(accessor.getForSale()),
+                new RangeValue(accessor.getForSale().getCount()),
+                accessor.getMaxTrades(),
+                accessor.getXp(),
+                accessor.getPriceMult(),
+                condition
+        );
+    }
+
+    @NotNull
+    public static Pair<List<Item>, List<Item>> collectBasicItemListingItems(IServerUtils ignoredUtils, BasicItemListing listing) {
+        MixinBasicItemListing accessor = (MixinBasicItemListing) listing;
+
+        return new Pair<>(
+                List.of(accessor.getPrice().getItem(), accessor.getPrice2().getItem()),
+                List.of(accessor.getForSale().getItem())
+        );
     }
 
     @Unmodifiable
