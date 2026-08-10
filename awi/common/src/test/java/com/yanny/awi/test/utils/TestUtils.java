@@ -42,6 +42,9 @@ import java.util.function.BiFunction;
 public class TestUtils {
     private static final Logger LOGGER = LogUtils.getLogger();
 
+    /** Several test classes need the tags; binding them opens the vanilla pack, so it is done once per JVM. */
+    private static boolean tagsBound;
+
     public static void assertTooltip(TooltipNode tooltip, List<String> expected) {
         List<Component> components = CoreTooltipUtils.toComponents(tooltip, 0, true);
         List<Executable> executables = new LinkedList<>();
@@ -133,7 +136,13 @@ public class TestUtils {
      * view of {@code MappedRegistry#tags}), every {@code lookupOrThrow(Registries.BLOCK).getOrThrow(someTag)} fails.
      * This loads the vanilla datapack and binds its tags into the built-in registries, mirroring what {@code TagManager} does.
      */
-    public static void bindVanillaTags() {
+    public static synchronized void bindVanillaTags() {
+        if (tagsBound) {
+            return;
+        }
+
+        tagsBound = true;
+
         PackRepository packRepository = ServerPacksSource.createVanillaTrustedRepository();
 
         packRepository.reload();

@@ -1,0 +1,483 @@
+{
+  "minecraft:bamboo": {
+    "visitedMethods": 37,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:bamboo",
+      "minecraft:podzol"
+    ],
+    "tags": []
+  },
+  "minecraft:basalt_columns": {
+    "visitedMethods": 53,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:basalt"
+    ],
+    "tags": []
+  },
+  "minecraft:basalt_pillar": {
+    "visitedMethods": 41,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:basalt"
+    ],
+    "tags": []
+  },
+  "minecraft:block_column": {
+    "visitedMethods": 38,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:block_pile": {
+    "visitedMethods": 35,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:blue_ice": {
+    "visitedMethods": 23,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:blue_ice"
+    ],
+    "tags": []
+  },
+  "minecraft:bonus_chest": {
+    "visitedMethods": 54,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:chest",
+      "minecraft:torch"
+    ],
+    "tags": []
+  },
+  "minecraft:chorus_plant": {
+    "visitedMethods": 43,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:chorus_flower",
+      "minecraft:chorus_plant"
+    ],
+    "tags": []
+  },
+  "minecraft:coral_claw": {
+    "visitedMethods": 54,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:sea_pickle"
+    ],
+    "tags": [
+      "#minecraft:coral_blocks",
+      "#minecraft:corals",
+      "#minecraft:wall_corals"
+    ]
+  },
+  "minecraft:coral_mushroom": {
+    "visitedMethods": 43,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:sea_pickle"
+    ],
+    "tags": [
+      "#minecraft:coral_blocks",
+      "#minecraft:corals",
+      "#minecraft:wall_corals"
+    ]
+  },
+  "minecraft:coral_tree": {
+    "visitedMethods": 50,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:sea_pickle"
+    ],
+    "tags": [
+      "#minecraft:coral_blocks",
+      "#minecraft:corals",
+      "#minecraft:wall_corals"
+    ]
+  },
+  "minecraft:delta_feature": {
+    "visitedMethods": 35,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:desert_well": {
+    "visitedMethods": 39,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:suspicious_sand"
+    ],
+    "tags": []
+  },
+  "minecraft:disk": {
+    "visitedMethods": 48,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:dripstone_cluster": {
+    "visitedMethods": 93,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:dripstone_block",
+      "minecraft:water"
+    ],
+    "tags": []
+  },
+  "minecraft:end_gateway": {
+    "visitedMethods": 112,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air",
+      "minecraft:bedrock",
+      "minecraft:end_gateway"
+    ],
+    "tags": []
+  },
+  "minecraft:end_island": {
+    "visitedMethods": 15,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:end_stone"
+    ],
+    "tags": []
+  },
+  "minecraft:end_platform": {
+    "visitedMethods": 29,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air",
+      "minecraft:obsidian"
+    ],
+    "tags": []
+  },
+  "minecraft:end_spike": {
+    "visitedMethods": 159,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air",
+      "minecraft:bedrock",
+      "minecraft:iron_bars",
+      "minecraft:obsidian"
+    ],
+    "tags": []
+  },
+  "minecraft:fill_layer": {
+    "visitedMethods": 18,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:flower": {
+    "visitedMethods": 38,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:forest_rock": {
+    "visitedMethods": 33,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:fossil": {
+    "visitedMethods": 407,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:barrier"
+    ],
+    "tags": []
+  },
+  "minecraft:freeze_top_layer": {
+    "visitedMethods": 63,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:ice",
+      "minecraft:snow"
+    ],
+    "tags": []
+  },
+  "minecraft:geode": {
+    "visitedMethods": 132,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air"
+    ],
+    "tags": []
+  },
+  "minecraft:glowstone_blob": {
+    "visitedMethods": 23,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:glowstone"
+    ],
+    "tags": []
+  },
+  "minecraft:huge_brown_mushroom": {
+    "visitedMethods": 59,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:huge_fungus": {
+    "visitedMethods": 55,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air",
+      "minecraft:weeping_vines",
+      "minecraft:weeping_vines_plant"
+    ],
+    "tags": []
+  },
+  "minecraft:huge_red_mushroom": {
+    "visitedMethods": 59,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:ice_spike": {
+    "visitedMethods": 33,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:packed_ice"
+    ],
+    "tags": []
+  },
+  "minecraft:iceberg": {
+    "visitedMethods": 48,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:air",
+      "minecraft:snow_block",
+      "minecraft:water"
+    ],
+    "tags": []
+  },
+  "minecraft:kelp": {
+    "visitedMethods": 24,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:kelp",
+      "minecraft:kelp_plant"
+    ],
+    "tags": []
+  },
+  "minecraft:lake": {
+    "visitedMethods": 72,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:cave_air",
+      "minecraft:ice"
+    ],
+    "tags": []
+  },
+  "minecraft:large_dripstone": {
+    "visitedMethods": 82,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:dripstone_block"
+    ],
+    "tags": []
+  },
+  "minecraft:monster_room": {
+    "visitedMethods": 163,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:cave_air",
+      "minecraft:chest",
+      "minecraft:cobblestone",
+      "minecraft:mossy_cobblestone",
+      "minecraft:spawner"
+    ],
+    "tags": []
+  },
+  "minecraft:multiface_growth": {
+    "visitedMethods": 106,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:nether_forest_vegetation": {
+    "visitedMethods": 25,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:netherrack_replace_blobs": {
+    "visitedMethods": 45,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:no_bonemeal_flower": {
+    "visitedMethods": 38,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:no_op": {
+    "visitedMethods": 1,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:ore": {
+    "visitedMethods": 120,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:pointed_dripstone": {
+    "visitedMethods": 57,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:dripstone_block"
+    ],
+    "tags": []
+  },
+  "minecraft:random_boolean_selector": {
+    "visitedMethods": 19,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:random_patch": {
+    "visitedMethods": 38,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:random_selector": {
+    "visitedMethods": 20,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:replace_single_block": {
+    "visitedMethods": 5,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:root_system": {
+    "visitedMethods": 73,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:scattered_ore": {
+    "visitedMethods": 32,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:sculk_patch": {
+    "visitedMethods": 145,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:sculk_catalyst",
+      "minecraft:sculk_shrieker"
+    ],
+    "tags": []
+  },
+  "minecraft:sea_pickle": {
+    "visitedMethods": 16,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:sea_pickle"
+    ],
+    "tags": []
+  },
+  "minecraft:seagrass": {
+    "visitedMethods": 24,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:seagrass",
+      "minecraft:tall_seagrass"
+    ],
+    "tags": []
+  },
+  "minecraft:simple_block": {
+    "visitedMethods": 32,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:simple_random_selector": {
+    "visitedMethods": 19,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:spring_feature": {
+    "visitedMethods": 28,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:tree": {
+    "visitedMethods": 103,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:twisting_vines": {
+    "visitedMethods": 47,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:twisting_vines",
+      "minecraft:twisting_vines_plant"
+    ],
+    "tags": []
+  },
+  "minecraft:underwater_magma": {
+    "visitedMethods": 74,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:magma_block"
+    ],
+    "tags": []
+  },
+  "minecraft:vegetation_patch": {
+    "visitedMethods": 74,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:vines": {
+    "visitedMethods": 57,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:vine"
+    ],
+    "tags": []
+  },
+  "minecraft:void_start_platform": {
+    "visitedMethods": 34,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:cobblestone",
+      "minecraft:stone"
+    ],
+    "tags": []
+  },
+  "minecraft:waterlogged_vegetation_patch": {
+    "visitedMethods": 74,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:weeping_vines": {
+    "visitedMethods": 43,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:nether_wart_block",
+      "minecraft:weeping_vines",
+      "minecraft:weeping_vines_plant"
+    ],
+    "tags": []
+  }
+}

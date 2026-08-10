@@ -10,6 +10,10 @@
     "defaultRequire": 1
   },
   "mixins": [
+    "MixinCombinedIngredient",
+    "MixinComponentsIngredient",
+    "MixinCustomDataIngredient",
+    "MixinDifferenceIngredient",
     "ReloadableServerResourceMixin"
   ]
 }

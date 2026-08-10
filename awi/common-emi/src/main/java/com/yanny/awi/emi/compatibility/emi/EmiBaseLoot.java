@@ -1,13 +1,16 @@
 package com.yanny.awi.emi.compatibility.emi;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.TooltipNodePalette;
+import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
+import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.client.ClientUtils;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
@@ -18,10 +21,11 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,22 +54,20 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
         List<Widget> widgets = new ArrayList<>();
 
         widgets.addAll(slotWidgets.stream().map((h) -> {
-            // Blocks without an item form (fire, end_gateway, *_plant, ...) are drawn as a 3D block model.
-            if (h.block.asItem() == Items.AIR && h.block.defaultBlockState().getFluidState().isEmpty()) {
-                EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, h.block, h.rect.getX(), h.rect.getY());
+            // One slot per node, cycling when the node stands for a tag. Blocks without an item form (fire,
+            // end_gateway, *_plant, ...) have no EMI ingredient and are drawn as a 3D block model instead, so a tag
+            // made only of those falls back to rendering its first member.
+            List<Block> blocks = ((IBlockNode) h.entry).getBlocks();
+            List<EmiStack> stacks = blocks.stream().filter((b) -> !GenericUtils.rendersAsBlockModel(b)).map(EmiBaseLoot::toStack).toList();
+
+            if (stacks.isEmpty()) {
+                EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, blocks.isEmpty() ? Blocks.AIR : blocks.get(0), h.rect.getX(), h.rect.getY());
 
                 blockWidget.recipeContext(h.recipe);
                 return blockWidget;
             }
 
-            EmiIngredient ingredient;
-
-            if (h.block.defaultBlockState().getFluidState().isEmpty()) {
-                ingredient = EmiStack.of(h.block);
-            } else {
-                ingredient = EmiStack.of(h.block.defaultBlockState().getFluidState().getType());
-            }
-
+            EmiIngredient ingredient = stacks.size() == 1 ? stacks.get(0) : EmiIngredient.of(stacks);
             EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), new RangeValue(1));
 
             widget.recipeContext(h.recipe);
@@ -125,11 +127,16 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
             }
 
             @Override
-            public void addSlotWidget(Block block, IDataNode entry, RelativeRect rect) {
+            public void addSlotWidget(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {
                 slotWidgets.add(new Holder(this, block, entry, rect, recipe));
             }
         };
     }
 
-    private record Holder(IWidgetUtils utils, Block block, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
+    @NotNull
+    private static EmiStack toStack(Block block) {
+        return GenericUtils.rendersAsFluid(block) ? EmiStack.of(block.defaultBlockState().getFluidState().getType()) : EmiStack.of(block);
+    }
+
+    private record Holder(IWidgetUtils utils, Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect, EmiRecipe recipe) {}
 }

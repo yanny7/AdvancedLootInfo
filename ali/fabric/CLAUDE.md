@@ -17,13 +17,16 @@ Guidance for `ali/fabric` (`com.yanny.ali.fabric`) — ALI's Fabric loader entry
 
 ## Mixins
 
-`ali.fabric.mixins.json` — two `client` mixins and one common:
+`ali.fabric.mixins.json` — two `client` mixins and the common ones:
 
 - `MixinClientPlayNetworkAddon` (client) — injects `ClientPlayNetworkAddon.receive` HEAD and re-dispatches `StartMessage`/`LootDataChunkMessage`/`DoneMessage` **on the networking thread** (hand-building the `ClientPlayNetworking.Context`, then cancelling), to avoid the deadlock Fabric's default main-thread hand-off causes for the bulk data sync. It touches Fabric's `impl` package, so it is the most upgrade-fragile piece in this module. `awi/fabric` carries a copy.
 - `MixinMinecraft` (client) — `setLevel` HEAD → `EntityStorage.onUnloadLevel()` when a level is already loaded. Forge/NeoForge do this with `LevelEvent.Unload` in their client bus subscriber instead.
 - `ReloadableServerResourceMixin` — `loadResources` HEAD → captures `layeredRegistryAccess.compositeAccess()` into `FabricPlatformHelper.PROVIDER`; the Fabric stand-in for Forge/NeoForge's `AddReloadListenerEvent`.
+- `MixinCombinedIngredient`/`MixinComponentsIngredient`/`MixinCustomDataIngredient`/`MixinDifferenceIngredient` — pure `@Accessor` interfaces onto Fabric API's builtin custom ingredients (`impl.recipe.ingredient.builtin`), read by `plugin/FabricIngredientTooltipUtils`. `CombinedIngredient` is package-private, hence the string `targets` form.
 
 ## Fabric-only compat plugins
+
+`plugin/FabricPlugin` (mod id `fabric`) registers an ingredient tooltip for Fabric API's `CustomIngredientImpl`, which `FabricIngredientTooltipUtils` unwraps into its Any/All/Difference/Components/Custom-Data builtins. It is the only loader where custom ingredients are `Ingredient` subclasses and can therefore be dispatched by class; see `ali/neoforge/CLAUDE.md` for the unwrapper hook NeoForge needs instead.
 
 `plugin/mods/` holds third-party compatibility that is genuinely Fabric-only because it targets Fabric ports of Forge APIs — don't try to move these to `ali/forge`/`ali/neoforge` without checking whether the target API even exists there. Both are `@AliEntrypoint` classes **and** listed in `fabric.mod.json`'s `ali` entrypoint array (on Fabric the annotation alone does nothing):
 
