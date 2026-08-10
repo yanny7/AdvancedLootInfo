@@ -55,36 +55,84 @@
     ]
   },
   "minecraft:coral_claw": {
-    "visitedMethods": 9,
+    "visitedMethods": 60,
     "methodLimitReached": false,
     "blocks": [
+      "minecraft:brain_coral",
       "minecraft:brain_coral_block",
+      "minecraft:brain_coral_fan",
+      "minecraft:brain_coral_wall_fan",
+      "minecraft:bubble_coral",
       "minecraft:bubble_coral_block",
+      "minecraft:bubble_coral_fan",
+      "minecraft:bubble_coral_wall_fan",
+      "minecraft:fire_coral",
       "minecraft:fire_coral_block",
+      "minecraft:fire_coral_fan",
+      "minecraft:fire_coral_wall_fan",
+      "minecraft:horn_coral",
       "minecraft:horn_coral_block",
-      "minecraft:tube_coral_block"
+      "minecraft:horn_coral_fan",
+      "minecraft:horn_coral_wall_fan",
+      "minecraft:sea_pickle",
+      "minecraft:tube_coral",
+      "minecraft:tube_coral_block",
+      "minecraft:tube_coral_fan",
+      "minecraft:tube_coral_wall_fan"
     ]
   },
   "minecraft:coral_mushroom": {
-    "visitedMethods": 9,
+    "visitedMethods": 49,
     "methodLimitReached": false,
     "blocks": [
+      "minecraft:brain_coral",
       "minecraft:brain_coral_block",
+      "minecraft:brain_coral_fan",
+      "minecraft:brain_coral_wall_fan",
+      "minecraft:bubble_coral",
       "minecraft:bubble_coral_block",
+      "minecraft:bubble_coral_fan",
+      "minecraft:bubble_coral_wall_fan",
+      "minecraft:fire_coral",
       "minecraft:fire_coral_block",
+      "minecraft:fire_coral_fan",
+      "minecraft:fire_coral_wall_fan",
+      "minecraft:horn_coral",
       "minecraft:horn_coral_block",
-      "minecraft:tube_coral_block"
+      "minecraft:horn_coral_fan",
+      "minecraft:horn_coral_wall_fan",
+      "minecraft:sea_pickle",
+      "minecraft:tube_coral",
+      "minecraft:tube_coral_block",
+      "minecraft:tube_coral_fan",
+      "minecraft:tube_coral_wall_fan"
     ]
   },
   "minecraft:coral_tree": {
-    "visitedMethods": 9,
+    "visitedMethods": 56,
     "methodLimitReached": false,
     "blocks": [
+      "minecraft:brain_coral",
       "minecraft:brain_coral_block",
+      "minecraft:brain_coral_fan",
+      "minecraft:brain_coral_wall_fan",
+      "minecraft:bubble_coral",
       "minecraft:bubble_coral_block",
+      "minecraft:bubble_coral_fan",
+      "minecraft:bubble_coral_wall_fan",
+      "minecraft:fire_coral",
       "minecraft:fire_coral_block",
+      "minecraft:fire_coral_fan",
+      "minecraft:fire_coral_wall_fan",
+      "minecraft:horn_coral",
       "minecraft:horn_coral_block",
-      "minecraft:tube_coral_block"
+      "minecraft:horn_coral_fan",
+      "minecraft:horn_coral_wall_fan",
+      "minecraft:sea_pickle",
+      "minecraft:tube_coral",
+      "minecraft:tube_coral_block",
+      "minecraft:tube_coral_fan",
+      "minecraft:tube_coral_wall_fan"
     ]
   },
   "minecraft:delta_feature": {
@@ -144,7 +192,7 @@
     "blocks": []
   },
   "minecraft:flower": {
-    "visitedMethods": 37,
+    "visitedMethods": 38,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -183,7 +231,7 @@
     ]
   },
   "minecraft:huge_brown_mushroom": {
-    "visitedMethods": 54,
+    "visitedMethods": 59,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -197,7 +245,7 @@
     ]
   },
   "minecraft:huge_red_mushroom": {
-    "visitedMethods": 54,
+    "visitedMethods": 59,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -267,7 +315,7 @@
     "blocks": []
   },
   "minecraft:no_bonemeal_flower": {
-    "visitedMethods": 37,
+    "visitedMethods": 38,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -289,17 +337,17 @@
     ]
   },
   "minecraft:random_boolean_selector": {
-    "visitedMethods": 18,
+    "visitedMethods": 19,
     "methodLimitReached": false,
     "blocks": []
   },
   "minecraft:random_patch": {
-    "visitedMethods": 37,
+    "visitedMethods": 38,
     "methodLimitReached": false,
     "blocks": []
   },
   "minecraft:random_selector": {
-    "visitedMethods": 19,
+    "visitedMethods": 20,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -309,7 +357,7 @@
     "blocks": []
   },
   "minecraft:root_system": {
-    "visitedMethods": 72,
+    "visitedMethods": 73,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -347,7 +395,7 @@
     "blocks": []
   },
   "minecraft:simple_random_selector": {
-    "visitedMethods": 18,
+    "visitedMethods": 19,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -377,7 +425,7 @@
     ]
   },
   "minecraft:vegetation_patch": {
-    "visitedMethods": 73,
+    "visitedMethods": 74,
     "methodLimitReached": false,
     "blocks": []
   },
@@ -397,7 +445,7 @@
     ]
   },
   "minecraft:waterlogged_vegetation_patch": {
-    "visitedMethods": 73,
+    "visitedMethods": 74,
     "methodLimitReached": false,
     "blocks": []
   },

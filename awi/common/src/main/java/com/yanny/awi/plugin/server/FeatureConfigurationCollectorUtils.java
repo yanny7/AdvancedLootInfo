@@ -165,8 +165,8 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectRandomBooleanFeatureConfigurationBlocks(IServerUtils utils, RandomBooleanFeatureConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.featureTrue.value().feature().value().config()));
-        blocks.addAll(utils.collectBlocks(utils, configuration.featureFalse.value().feature().value().config()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.featureTrue.value().feature().value()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.featureFalse.value().feature().value()));
         return blocks;
     }
 
@@ -174,8 +174,8 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectRandomFeatureConfigurationBlocks(IServerUtils utils, RandomFeatureConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.defaultFeature.value().feature().value().config()));
-        blocks.addAll(configuration.features.stream().map((feature) -> utils.collectBlocks(utils, feature.feature.value().feature().value().config())).flatMap(Collection::stream).toList());
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.defaultFeature.value().feature().value()));
+        blocks.addAll(configuration.features.stream().map((feature) -> collectConfiguredFeatureBlocks(utils, feature.feature.value().feature().value())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
@@ -183,7 +183,7 @@ public class FeatureConfigurationCollectorUtils {
     public static List<Block> collectRandomPatchConfigurationBlocks(IServerUtils utils, RandomPatchConfiguration configuration) {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(utils.collectBlocks(utils, configuration.feature().value().feature().value().config()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.feature().value().feature().value()));
         return blocks;
     }
 
@@ -210,7 +210,7 @@ public class FeatureConfigurationCollectorUtils {
 
         blocks.addAll(utils.collectBlocks(utils, configuration.rootStateProvider));
         blocks.addAll(utils.collectBlocks(utils, configuration.hangingRootStateProvider));
-        blocks.addAll(utils.collectBlocks(utils, configuration.treeFeature.value().feature().value().config()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.treeFeature.value().feature().value()));
         return blocks;
     }
 
@@ -230,10 +230,7 @@ public class FeatureConfigurationCollectorUtils {
 
     @NotNull
     public static List<Block> collectSimpleRandomFeatureConfigurationBlocks(IServerUtils utils, SimpleRandomFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
-
-        blocks.addAll(configuration.getFeatures().map(ConfiguredFeature::config).map((config) -> utils.collectBlocks(utils, config)).flatMap(Collection::stream).toList());
-        return blocks;
+        return collectFeatureBlocks(utils, configuration);
     }
 
     @Unmodifiable
@@ -279,7 +276,7 @@ public class FeatureConfigurationCollectorUtils {
         List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(utils.collectBlocks(utils, configuration.groundState));
-        blocks.addAll(utils.collectBlocks(utils, configuration.vegetationFeature.value().feature().value().config()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.vegetationFeature.value().feature().value()));
         return blocks;
     }
 
@@ -327,7 +324,22 @@ public class FeatureConfigurationCollectorUtils {
     @Unmodifiable
     @NotNull
     private static List<Block> collectFeatureBlocks(IServerUtils utils, FeatureConfiguration configuration) {
-        return configuration.getFeatures().map(ConfiguredFeature::config).map((config) -> utils.collectBlocks(utils, config)).flatMap(Collection::stream).toList();
+        return configuration.getFeatures().map((feature) -> collectConfiguredFeatureBlocks(utils, feature)).flatMap(Collection::stream).toList();
+    }
+
+    /**
+     * Blocks of one configured feature: what its configuration declares, plus what its {@code place()} bytecode
+     * hardcodes. Every descent into a nested feature has to go through here - a nested feature whose configuration
+     * carries no blocks of its own is dropped entirely otherwise. That is not a corner case: warm ocean's coral
+     * reaches the world only as three {@code NoneFeatureConfiguration} features nested inside
+     * {@code warm_ocean_vegetation}, so scanning just the outer feature finds nothing at all.
+     */
+    @NotNull
+    public static List<Block> collectConfiguredFeatureBlocks(IServerUtils utils, ConfiguredFeature<?, ?> feature) {
+        List<Block> blocks = new ArrayList<>(utils.collectBlocks(utils, feature.config()));
+
+        blocks.addAll(FeatureBytecodeScanner.scan(utils, feature.feature()));
+        return blocks;
     }
 
     @NotNull

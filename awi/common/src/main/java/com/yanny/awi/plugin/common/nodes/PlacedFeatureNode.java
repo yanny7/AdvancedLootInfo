@@ -7,7 +7,7 @@ import com.yanny.awi.api.IClientUtils;
 import com.yanny.awi.api.IServerUtils;
 import com.yanny.awi.api.ListNode;
 import com.yanny.awi.language.Lang;
-import com.yanny.awi.plugin.server.FeatureBytecodeScanner;
+import com.yanny.awi.plugin.server.FeatureConfigurationCollectorUtils;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.PlacementSummaryUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,8 +43,7 @@ public class PlacedFeatureNode extends ListNode {
 
         ConfiguredFeature<?, ?> configuredFeature = placedFeature.feature().value();
         FeatureConfiguration featureConfiguration = configuredFeature.config(); // values
-        Set<Block> blocks = new HashSet<>(utils.collectBlocks(utils, featureConfiguration));
-        blocks.addAll(FeatureBytecodeScanner.scan(utils, configuredFeature.feature())); // PoC: hardcoded blocks via ASM bytecode scan
+        Set<Block> blocks = new HashSet<>(FeatureConfigurationCollectorUtils.collectConfiguredFeatureBlocks(utils, configuredFeature));
 
         tooltip = TooltipBuilder.branch((b) -> {
             PlacementSummaryUtils.appendSummary(b, utils, placedFeature.placement(), columnContext);

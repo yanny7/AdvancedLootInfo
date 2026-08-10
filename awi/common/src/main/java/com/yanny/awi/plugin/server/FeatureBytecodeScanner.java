@@ -61,14 +61,19 @@ import java.util.concurrent.ConcurrentHashMap;
  *     <li>{@code CHECKCAST}, and the receiver plus block-carrying arguments of the call that produced the value, which
  *     is what exposes a tag-driven pick such as {@code BLOCK.getTag(BlockTags.CORAL_BLOCKS)} through an {@code Optional}
  *     chain;</li>
- *     <li>lambda and method-reference bodies, through the {@code INVOKEDYNAMIC} bootstrap handle.</li>
+ *     <li>lambda and method-reference bodies, through the {@code INVOKEDYNAMIC} bootstrap handle, including the
+ *     parameters the lambda receives from the call it is handed to rather than from a capture
+ *     ({@link #bindLambdaParameters}).</li>
  * </ul>
  *
- * <p>Method lookup walks up the superclass chain, because {@code place()} is frequently declared on an abstract base
- * ({@code CoralFeature}, {@code AbstractHugeMushroomFeature}) rather than on the registered subclass.
+ * <p>Method lookup walks the class hierarchy in both directions. Up, because {@code place()} is frequently declared
+ * on an abstract base ({@code CoralFeature}, {@code AbstractHugeMushroomFeature}) rather than on the registered
+ * subclass. Down, because such a base then calls back into an abstract method the subclass implements
+ * ({@code CoralFeature#place} -> abstract {@code placeFeature}); stopping at the abstract declaration would lose
+ * every block placed below it.
  *
- * <p>Known limitation: a value that arrives in a lambda body as one of its own parameters is not resolved - the
- * analysis is per-method and the bootstrap handle carries no argument mapping.
+ * <p>Known limitations: a lambda parameter is only bound when the receiver it is applied to resolves to blocks, and
+ * an abstract call is only dispatched to the class being scanned, not to arbitrary implementors.
  */
 public final class FeatureBytecodeScanner {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -161,24 +166,27 @@ public final class FeatureBytecodeScanner {
                 continue;
             }
 
-            ClassNode owner = classNode(cl, ref.owner);
-            MethodNode method = null;
+            Declaration declaration = declaration(cl, ref.owner, ref.name, ref.desc);
 
-            // Walk up to the declaring class: place() often lives on an abstract base (CoralFeature,
-            // AbstractHugeMushroomFeature), so the subclass the feature registry holds declares no such method.
-            while (owner != null && (method = findMethod(owner, ref.name, ref.desc)) == null) {
-                owner = owner.superName != null ? classNode(cl, owner.superName) : null;
+            // An abstract declaration is dispatched at runtime. A feature calling itself (CoralFeature#place ->
+            // abstract placeFeature) has the scanned class as its receiver, so the body to analyze is the override
+            // there - stopping at the abstract declaration loses everything below it.
+            if (declaration != null && declaration.isAbstract() && isSubclass(cl, featureClass, ref.owner)) {
+                Declaration override = declaration(cl, Type.getInternalName(featureClass), ref.name, ref.desc);
+
+                declaration = override != null && !override.isAbstract() ? override : declaration;
             }
 
-            if (method == null || (method.access & (Opcodes.ACC_ABSTRACT | Opcodes.ACC_NATIVE)) != 0
-                    || method.instructions.size() == 0) {
+            if (declaration == null || declaration.isAbstract()
+                    || (declaration.method().access & Opcodes.ACC_NATIVE) != 0
+                    || declaration.method().instructions.size() == 0) {
                 continue;
             }
 
             analyzed++;
             // Keyed by the reference, not the declaring class, so it matches what a call site records for it.
             currentMethodKey = ref.key();
-            analyzeMethod(cl, owner, method, blockRegistry, rootPkg, out, worklist, visited);
+            analyzeMethod(cl, declaration.owner(), declaration.method(), blockRegistry, rootPkg, out, worklist, visited);
         }
 
         // Only a still-pending, not-yet-visited method means the budget actually cut the walk short.
@@ -222,6 +230,9 @@ public final class FeatureBytecodeScanner {
                 worklist.add(new MethodRef(call.owner, call.name, call.desc));
                 bindArguments(cl, call, frame, frames, method, blockRegistry, worklist, visited);
             }
+
+            // Not gated on shouldRecurse: the call handing a lambda its values is usually a JDK one (Optional#ifPresent).
+            bindLambdaParameters(cl, call, frame, frames, method, blockRegistry, rootPkg, worklist, visited);
 
             Class<?> callOwner = loadClass(cl, call.owner);
 
@@ -277,12 +288,92 @@ public final class FeatureBytecodeScanner {
                 continue;
             }
 
-            Set<Block> known = parameterCandidates.computeIfAbsent(calleeKey, (key) -> new HashMap<>())
-                    .computeIfAbsent(i, (index) -> new HashSet<>());
+            recordCandidates(new MethodRef(call.owner, call.name, call.desc), i, resolved, worklist, visited);
+        }
+    }
 
-            if (known.addAll(resolved) && visited.remove(calleeKey)) {
-                worklist.add(new MethodRef(call.owner, call.name, call.desc));
+    /**
+     * Binds the parameters a lambda receives from the call it is handed to, rather than from a capture. In
+     * {@code BLOCK.getTag(BlockTags.CORALS)...ifPresent(block -> level.setBlock(pos, block.defaultBlockState(), 2))}
+     * the placed block is the {@code Consumer}'s own argument, so it has no producer anywhere in the enclosing method
+     * - it comes out of the receiver the lambda is being applied to. Resolving that receiver and binding it to the
+     * implementation method's trailing parameters is what recovers the coral fans.
+     *
+     * <p>The receiver is only resolved once a lambda is actually found among the arguments, and the result is bound
+     * only to parameters that can carry a block, so a lambda over positions or random sources binds nothing.
+     */
+    private void bindLambdaParameters(ClassLoader cl, MethodInsnNode call, Frame<SourceValue> frame, Frame<SourceValue>[] frames,
+                                      MethodNode method, Registry<Block> blockRegistry, String rootPkg,
+                                      Deque<MethodRef> worklist, Set<String> visited) {
+        if (call.getOpcode() == Opcodes.INVOKESTATIC) {
+            return;
+        }
+
+        Type[] args = Type.getArgumentTypes(call.desc);
+        Set<Block> fromReceiver = null;
+
+        for (int i = 0; i < args.length; i++) {
+            SourceValue value = argValue(frame, call, i);
+
+            if (value == null) {
+                continue;
             }
+
+            for (AbstractInsnNode producer : value.insns) {
+                if (!(producer instanceof InvokeDynamicInsnNode indy)) {
+                    continue;
+                }
+
+                if (fromReceiver == null) {
+                    fromReceiver = new HashSet<>();
+                    resolve(receiverValue(frame, call), frames, method, cl, blockRegistry, fromReceiver, new HashSet<>(), 0);
+                }
+
+                if (!fromReceiver.isEmpty()) {
+                    bindFunctionalParameters(cl, indy, fromReceiver, rootPkg, worklist, visited);
+                }
+            }
+        }
+    }
+
+    /**
+     * Binds {@code blocks} to the parameters of a lambda body that come from the functional interface. An
+     * {@code INVOKEDYNAMIC} consumes exactly the captured values off the stack, so the implementation method's
+     * parameters start with the captures and the functional arguments make up the rest.
+     */
+    private void bindFunctionalParameters(ClassLoader cl, InvokeDynamicInsnNode indy, Set<Block> blocks, String rootPkg,
+                                          Deque<MethodRef> worklist, Set<String> visited) {
+        int captured = Type.getArgumentTypes(indy.desc).length;
+
+        for (Object arg : indy.bsmArgs) {
+            if (!(arg instanceof Handle handle) || handle.getTag() < Opcodes.H_INVOKEVIRTUAL
+                    || !shouldRecurse(handle.getOwner(), rootPkg)) {
+                continue;
+            }
+
+            // A non-static implementation takes its receiver from the first captured value, so it consumes one
+            // capture without spending a parameter.
+            Type[] implArgs = Type.getArgumentTypes(handle.getDesc());
+            int first = Math.max(captured - (handle.getTag() == Opcodes.H_INVOKESTATIC ? 0 : 1), 0);
+
+            for (int i = first; i < implArgs.length; i++) {
+                Class<?> type = loadClass(cl, implArgs[i].getInternalName());
+
+                if (type != null && carriesBlocks(type)) {
+                    recordCandidates(new MethodRef(handle.getOwner(), handle.getName(), handle.getDesc()), i, blocks,
+                            worklist, visited);
+                }
+            }
+        }
+    }
+
+    /** Adds call-site blocks to a callee parameter, re-queueing the callee if it was already analyzed without them. */
+    private void recordCandidates(MethodRef callee, int parameter, Set<Block> blocks, Deque<MethodRef> worklist, Set<String> visited) {
+        Set<Block> known = parameterCandidates.computeIfAbsent(callee.key(), (key) -> new HashMap<>())
+                .computeIfAbsent(parameter, (index) -> new HashSet<>());
+
+        if (known.addAll(blocks) && visited.remove(callee.key())) {
+            worklist.add(callee);
         }
     }
 
@@ -508,6 +599,29 @@ public final class FeatureBytecodeScanner {
         });
     }
 
+    /** Resolves a method reference to the class that actually declares it, walking up the superclass chain. */
+    private static Declaration declaration(ClassLoader cl, String internalName, String name, String desc) {
+        ClassNode owner = classNode(cl, internalName);
+
+        while (owner != null) {
+            MethodNode method = findMethod(owner, name, desc);
+
+            if (method != null) {
+                return new Declaration(owner, method);
+            }
+
+            owner = owner.superName != null ? classNode(cl, owner.superName) : null;
+        }
+
+        return null;
+    }
+
+    private static boolean isSubclass(ClassLoader cl, Class<?> type, String internalName) {
+        Class<?> superType = loadClass(cl, internalName);
+
+        return superType != null && superType != type && superType.isAssignableFrom(type);
+    }
+
     private static MethodNode findMethod(ClassNode owner, String name, String desc) {
         for (MethodNode method : owner.methods) {
             if (method.name.equals(name) && method.desc.equals(desc)) {
@@ -576,6 +690,12 @@ public final class FeatureBytecodeScanner {
      */
     public record ScanResult(Set<Block> blocks, int visitedMethods, boolean methodLimitReached) {
         public static final ScanResult EMPTY = new ScanResult(Set.of(), 0, false);
+    }
+
+    private record Declaration(ClassNode owner, MethodNode method) {
+        boolean isAbstract() {
+            return (method.access & Opcodes.ACC_ABSTRACT) != 0;
+        }
     }
 
     private record MethodRef(String owner, String name, String desc) {
