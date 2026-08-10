@@ -78,7 +78,8 @@ import java.util.concurrent.ExecutionException;
         PlacementSummaryTest.class,
         TooltipUtilsTest.class,
         ConfigTest.class,
-        BaseLayoutTest.class
+        BaseLayoutTest.class,
+        FeatureBytecodeScanTest.class
 })
 public class TooltipTestSuite {
     public static IServerUtils UTILS;
