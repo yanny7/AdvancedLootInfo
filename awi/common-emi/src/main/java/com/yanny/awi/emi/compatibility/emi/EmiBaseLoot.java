@@ -8,6 +8,7 @@ import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
+import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.client.ClientUtils;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
@@ -19,7 +20,6 @@ import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
@@ -51,7 +51,7 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
         widgets.addAll(slotWidgets.stream().map((h) -> {
             // Blocks without an item form (fire, end_gateway, *_plant, ...) are drawn as a 3D block model.
-            if (h.block.asItem() == Items.AIR && h.block.defaultBlockState().getFluidState().isEmpty()) {
+            if (GenericUtils.rendersAsBlockModel(h.block)) {
                 EmiBlockSlotWidget blockWidget = new EmiBlockSlotWidget(h.entry, h.block, h.rect.getX(), h.rect.getY());
 
                 blockWidget.recipeContext(h.recipe);
@@ -60,10 +60,10 @@ public abstract class EmiBaseLoot extends BasicEmiRecipe {
 
             EmiIngredient ingredient;
 
-            if (h.block.defaultBlockState().getFluidState().isEmpty()) {
-                ingredient = EmiStack.of(h.block);
-            } else {
+            if (GenericUtils.rendersAsFluid(h.block)) {
                 ingredient = EmiStack.of(h.block.defaultBlockState().getFluidState().getType());
+            } else {
+                ingredient = EmiStack.of(h.block);
             }
 
             EmiLootSlotWidget widget = new EmiLootSlotWidget(h.entry, ingredient, h.rect.getX(), h.rect.getY(), new RangeValue(1));

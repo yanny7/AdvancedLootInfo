@@ -15,7 +15,10 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -129,6 +132,30 @@ public class GenericUtils {
 
         worldgenData.values().removeIf((level) -> level.prune(
                 (node) -> !(node instanceof IBlockNode blockNode) || cache.computeIfAbsent(blockNode.getBlock(), isVisible::test)));
+    }
+
+    /**
+     * Whether a block can only be shown as its fluid: it has no item form <i>and</i> nothing to draw, so the fluid is
+     * all that is left (water, lava, bubble_column).
+     *
+     * <p>The fluid must stay the last resort. Anything waterlogged in its default state reports a fluid - every coral
+     * and coral fan, seagrass, kelp, sea pickle, conduit - and picking the fluid first drew all 34 of them as plain
+     * water. Testing only for an item is not enough either: {@code tall_seagrass} and {@code kelp_plant} have no item
+     * but do have a model, and would still end up as water.
+     */
+    public static boolean rendersAsFluid(Block block) {
+        BlockState state = block.defaultBlockState();
+
+        return block.asItem() == Items.AIR && state.getRenderShape() == RenderShape.INVISIBLE
+                && !state.getFluidState().isEmpty();
+    }
+
+    /**
+     * Whether a block has to be shown as a 3D block model - it has no item form (fire, end_gateway, {@code *_plant},
+     * ...) and no fluid that could stand in for it.
+     */
+    public static boolean rendersAsBlockModel(Block block) {
+        return block.asItem() == Items.AIR && !rendersAsFluid(block);
     }
 
     @NotNull

@@ -75,6 +75,8 @@ GUI-side rendering: `ClientUtils`, `WidgetUtils` (dispatch to per-node-id widget
 ### `compatibility`
 `AbstractScrollWidget` (custom scrollbar widget base), `GenericUtils` (gunzip + decode the reassembled network buffer client-side into `Map<ResourceLocation, LevelStemNode>` — the recipe-viewer-integration glue analogous to ALI's `compatibility/common`, consumed by `awi/common-emi`/`common-jei`/`common-rei`).
 
+`GenericUtils` also owns `rendersAsFluid`/`rendersAsBlockModel`, the shared rule for how a `Block` becomes a viewer ingredient — item, else fluid, else 3D model. It lives here because all three viewer modules need the same answer and previously each carried its own copy, all three with the same bug: the fluid was tested first, so every block waterlogged in its default state (all 30 coral/coral-fan variants, seagrass, kelp, sea pickle, conduit) rendered as plain water. The fluid must stay the *last* resort, gated on `RenderShape.INVISIBLE` — an item-less block that still has a model (`tall_seagrass`, `kelp_plant`) belongs in the 3D-model branch, not the fluid one.
+
 ### `datagen`
 Only `LanguageHolder` — registers `Lang.*` enum classes into `aci.CoreLang.TRANSLATION_MAP` (see `aci/CLAUDE.md`'s "Language wiring"). Unlike ALI, AWI's `datagen` generates no config: the whole user-config surface is the two-field `AwiConfig` described under Module layout above.
 

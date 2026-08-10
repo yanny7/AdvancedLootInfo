@@ -11,6 +11,7 @@ import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
 import com.yanny.awi.compatibility.AbstractScrollWidget;
+import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.client.ClientUtils;
 import com.yanny.awi.plugin.client.widget.BiomeWidget;
@@ -31,7 +32,6 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -119,7 +119,7 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             int slotX = h.rect.getX() + bounds.getX();
             int slotY = h.rect.getY() + bounds.getY();
 
-            if (h.block.asItem() == Items.AIR && h.block.defaultBlockState().getFluidState().isEmpty()) {
+            if (GenericUtils.rendersAsBlockModel(h.block)) {
                 Rectangle slotRect = new Rectangle(slotX, slotY, 18, 18);
 
                 widgets.add(Widgets.createSlotBase(slotRect));
@@ -128,10 +128,10 @@ public abstract class ReiBaseCategory<T extends ReiBaseDisplay> implements Displ
             } else {
                 EntryStack<?> stack;
 
-                if (h.block.defaultBlockState().getFluidState().isEmpty()) {
-                    stack = EntryStacks.of(h.block);
-                } else {
+                if (GenericUtils.rendersAsFluid(h.block)) {
                     stack = EntryStacks.of(h.block.defaultBlockState().getFluidState().getType());
+                } else {
+                    stack = EntryStacks.of(h.block);
                 }
 
                 stack.tooltip((s) -> CoreTooltipUtils.toComponents(h.entry.getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips));

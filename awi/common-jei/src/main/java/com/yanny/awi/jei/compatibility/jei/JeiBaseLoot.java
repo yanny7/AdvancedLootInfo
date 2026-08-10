@@ -8,6 +8,7 @@ import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
+import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.client.ClientUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -24,7 +25,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +94,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                             -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
 
 
-            if (!h.block.defaultBlockState().getFluidState().isEmpty()) {
+            if (GenericUtils.rendersAsFluid(h.block)) {
                 slotBuilder.addFluidStack(h.block.defaultBlockState().getFluidState().getType());
             } else {
                 slotBuilder.addItemLike(h.block);
@@ -153,7 +153,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
      * (see {@link JeiBlockSlotWidget}) rather than as a JEI item/fluid ingredient.
      */
     static boolean isBlockModel(Block block) {
-        return block.asItem() == Items.AIR && block.defaultBlockState().getFluidState().isEmpty();
+        return GenericUtils.rendersAsBlockModel(block);
     }
 
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, RecipeHolder recipe);
