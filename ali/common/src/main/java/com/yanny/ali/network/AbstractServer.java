@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.tooltip.TooltipContext;
 import com.yanny.aci.tooltip.TooltipNode;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.*;
 import com.yanny.ali.configuration.AliConfig;
 import com.yanny.ali.manager.AliServerRegistry;
@@ -204,69 +205,76 @@ public abstract class AbstractServer {
 
     @NotNull
     private static Map<Identifier, IDataNode> processBlocks(AliServerRegistry serverRegistry, AliConfig config, Map<Identifier, LootTable> lootTables,
-                                                                  Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> blockLootModifiers,
-                                                                  List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
+                                                            Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> blockLootModifiers,
+                                                            List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
         Map<Identifier, IDataNode> lootNodes = new HashMap<>();
+        Map<Identifier, List<Block>> blocksByLootTable = new LinkedHashMap<>();
         int defaultDropLootTables = 0;
 
         for (Block block : BuiltInRegistries.BLOCK) {
-            Optional<ResourceKey<LootTable>> resourceKey = block.getLootTable();
+            blocksByLootTable.computeIfAbsent(Utils.getLootTableKey(block), (k) -> new ArrayList<>()).add(block);
+        }
 
-            if (resourceKey.isPresent()) {
-                Identifier location = resourceKey.get().identifier();
-                LootTable lootTable = lootTables.remove(location);
+        // blocks sharing a single loot table (vanilla's dropsLike, e.g. wall banner -> banner) all contribute their
+        // loot modifiers to the one node stored under that table's id, instead of the first block claiming it
+        for (Map.Entry<Identifier, List<Block>> entry : blocksByLootTable.entrySet()) {
+            Identifier location = entry.getKey();
+            List<Block> blocks = entry.getValue().stream()
+                    .filter((b) -> config.blockCategories.stream().filter((f) -> f.validate(b)).findFirst().map((f) -> !f.isHidden()).orElse(false))
+                    .toList();
+            LootTable lootTable = lootTables.remove(location);
 
-                TooltipContext.set(location);
+            TooltipContext.set(location);
 
-                if (config.blockCategories.stream().filter((f) -> f.validate(block)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                    List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
-                    List<ILootModifier<?>> lootModifiers = Stream.concat(
-                            blockLootModifiers.stream().filter((m) -> predicateModifier(m, block, items)),
-                            lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                    ).toList();
+            if (!blocks.isEmpty()) {
+                List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
+                List<ILootModifier<?>> lootModifiers = Stream.concat(
+                        blockLootModifiers.stream().filter((m) -> blocks.stream().anyMatch((b) -> predicateModifier(m, b, items))),
+                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                ).toList();
 
-                    if (config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
-                            && isDefaultBlockDrop(serverRegistry, config, block, lootTable)) {
-                        defaultDropLootTables++;
-                        TooltipContext.clear();
-                        continue;
-                    }
-
-                    try {
-                        if (lootTable != null) {
-                            IDataNode node = serverRegistry.parseTable(lootModifiers, lootTable);
-                            List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
-
-                            if (node instanceof LootTableNode lootTableNode) {
-                                fakePools.forEach(lootTableNode::addChildren);
-                            }
-
-                            lootNodes.put(location, node);
-                        } else if (!lootModifiers.isEmpty()) {
-                            IDataNode node = serverRegistry.parseTable(lootModifiers);
-                            List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
-
-                            if (node instanceof LootTableNode lootTableNode) {
-                                fakePools.forEach(lootTableNode::addChildren);
-                            }
-
-                            lootNodes.put(location, node);
-                        } else {
-                            LootTable fakeLootTable = fakeLootTables.get(location);
-
-                            if (fakeLootTable != null) {
-                                lootNodes.put(location, serverRegistry.parseTable(Collections.emptyList(), fakeLootTable));
-                            } else {
-                                LOGGER.debug("Missing block loot table for {}", location);
-                            }
-                        }
-                    } catch (Throwable e) {
-                        LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage(), e);
-                    }
+                if (config.hideDefaultBlockLoot && lootModifiers.isEmpty() && !fakeLootTables.containsKey(location)
+                        && blocks.stream().anyMatch((b) -> isDefaultBlockDrop(serverRegistry, config, b, lootTable))) {
+                    defaultDropLootTables++;
+                    TooltipContext.clear();
+                    continue;
                 }
 
-                TooltipContext.clear();
+                try {
+                    if (lootTable != null) {
+                        IDataNode node = serverRegistry.parseTable(lootModifiers, lootTable);
+                        List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
+
+                        if (node instanceof LootTableNode lootTableNode) {
+                            fakePools.forEach(lootTableNode::addChildren);
+                        }
+
+                        lootNodes.put(location, node);
+                    } else if (!lootModifiers.isEmpty()) {
+                        IDataNode node = serverRegistry.parseTable(lootModifiers);
+                        List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
+
+                        if (node instanceof LootTableNode lootTableNode) {
+                            fakePools.forEach(lootTableNode::addChildren);
+                        }
+
+                        lootNodes.put(location, node);
+                    } else {
+                        LootTable fakeLootTable = fakeLootTables.get(location);
+
+                        if (fakeLootTable != null) {
+                            lootNodes.put(location, serverRegistry.parseTable(Collections.emptyList(), fakeLootTable));
+                        } else if (blocks.stream().noneMatch((b) -> b.getLootTable().isEmpty())) {
+                            // noLootTable() blocks are keyed by themselves and have no table by definition
+                            LOGGER.debug("Missing block loot table for {}", location);
+                        }
+                    }
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to parse block loot table {} with error {}", location, e.getMessage(), e);
+                }
             }
+
+            TooltipContext.clear();
         }
 
         if (defaultDropLootTables > 0) {
@@ -322,14 +330,16 @@ public abstract class AbstractServer {
 
     @NotNull
     private static Map<Identifier, IDataNode> processEntities(AliServerRegistry serverRegistry, AliConfig config, ServerLevel level, Map<Identifier, LootTable> lootTables,
-                                                                    Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
-                                                                    List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
+                                                              Map<Identifier, LootTable> fakeLootTables, List<ILootModifier<?>> entityLootModifiers,
+                                                              List<ILootModifier<?>> lootTableLootModifiers, Map<Identifier, List<Item>> lootTableItems) {
         Map<Identifier, IDataNode> lootNodes = new HashMap<>();
+        Map<Identifier, List<Entity>> entitiesByLootTable = new LinkedHashMap<>();
+        Set<Identifier> disabledLootTables = new HashSet<>();
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
                 // at least remove entity default loot table, otherwise it will end up in gameplay category
-                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootTables.remove(lootTableResourceKey.identifier()));
+                entityType.getDefaultLootTable().ifPresent((resourceKey) -> disabledLootTables.add(resourceKey.identifier()));
                 continue;
             }
 
@@ -341,58 +351,65 @@ public abstract class AbstractServer {
 
             for (Entity entity : entityList) {
                 if (entity instanceof Mob mob) {
-                    mob.getLootTable().ifPresent((resourceKey) -> {
-                        Identifier location = resourceKey.identifier();
-                        LootTable lootTable = lootTables.remove(location);
-
-                        TooltipContext.set(location);
-
-                        if (config.entityCategories.stream().filter((f) -> f.validate(entityType)).findFirst().map((f) -> !f.isHidden()).orElse(false)) {
-                            List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
-                            List<ILootModifier<?>> lootModifiers = Stream.concat(
-                                    entityLootModifiers.stream().filter((m) -> predicateModifier(m, entity, items)),
-                                    lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
-                            ).toList();
-
-                            try {
-                                if (lootTable != null) {
-                                    IDataNode node = serverRegistry.parseTable(lootModifiers, lootTable);
-                                    List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
-
-                                    if (node instanceof LootTableNode lootTableNode) {
-                                        fakePools.forEach(lootTableNode::addChildren);
-                                    }
-
-                                    lootNodes.put(location, node);
-                                } else if (!lootModifiers.isEmpty()) {
-                                    IDataNode node = serverRegistry.parseTable(lootModifiers);
-                                    List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
-
-                                    if (node instanceof LootTableNode lootTableNode) {
-                                        fakePools.forEach(lootTableNode::addChildren);
-                                    }
-
-                                    lootNodes.put(location, node);
-                                } else {
-                                    LootTable fakeLootTable = fakeLootTables.get(location);
-
-                                    if (fakeLootTable != null) {
-                                        lootNodes.put(location, serverRegistry.parseTable(Collections.emptyList(), fakeLootTable));
-                                    } else {
-                                        LOGGER.debug("Missing entity loot table for {}", location);
-                                    }
-                                }
-                            } catch (Throwable e) {
-                                LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage(), e);
-                            }
-                        }
-
-                        TooltipContext.clear();
-                    });
+                    mob.getLootTable().ifPresent((resourceKey) -> entitiesByLootTable.computeIfAbsent(resourceKey.identifier(), (k) -> new ArrayList<>()).add(entity));
                 }
             }
         }
 
+        // same grouping as for blocks: all entities sharing a loot table contribute to the single node under its id
+        for (Map.Entry<Identifier, List<Entity>> entry : entitiesByLootTable.entrySet()) {
+            Identifier location = entry.getKey();
+            List<Entity> entities = entry.getValue().stream()
+                    .filter((e) -> config.entityCategories.stream().filter((f) -> f.validate(e.getType())).findFirst().map((f) -> !f.isHidden()).orElse(false))
+                    .toList();
+            LootTable lootTable = lootTables.remove(location);
+
+            TooltipContext.set(location);
+
+            if (!entities.isEmpty()) {
+                List<Item> items = lootTableItems.getOrDefault(location, Collections.emptyList());
+                List<ILootModifier<?>> lootModifiers = Stream.concat(
+                        entityLootModifiers.stream().filter((m) -> entities.stream().anyMatch((e) -> predicateModifier(m, e, items))),
+                        lootTableLootModifiers.stream().filter((m) -> predicateModifier(m, location, items))
+                ).toList();
+
+                try {
+                    if (lootTable != null) {
+                        IDataNode node = serverRegistry.parseTable(lootModifiers, lootTable);
+                        List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
+
+                        if (node instanceof LootTableNode lootTableNode) {
+                            fakePools.forEach(lootTableNode::addChildren);
+                        }
+
+                        lootNodes.put(location, node);
+                    } else if (!lootModifiers.isEmpty()) {
+                        IDataNode node = serverRegistry.parseTable(lootModifiers);
+                        List<IDataNode> fakePools = getFakeLootPools(location, serverRegistry, fakeLootTables);
+
+                        if (node instanceof LootTableNode lootTableNode) {
+                            fakePools.forEach(lootTableNode::addChildren);
+                        }
+
+                        lootNodes.put(location, node);
+                    } else {
+                        LootTable fakeLootTable = fakeLootTables.get(location);
+
+                        if (fakeLootTable != null) {
+                            lootNodes.put(location, serverRegistry.parseTable(Collections.emptyList(), fakeLootTable));
+                        } else {
+                            LOGGER.debug("Missing entity loot table for {}", location);
+                        }
+                    }
+                } catch (Throwable e) {
+                    LOGGER.warn("Failed to parse entity loot table {} with error {}", location, e.getMessage(), e);
+                }
+            }
+
+            TooltipContext.clear();
+        }
+
+        lootTables.keySet().removeAll(disabledLootTables);
         return lootNodes;
     }
 

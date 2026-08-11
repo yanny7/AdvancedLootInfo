@@ -25,4 +25,7 @@ public interface IItemNode {
     RangeValue getCount();
 
     float getChance();
+
+    /** Client-side flag: whether the entry is gated by conditions other than plain drop chance. */
+    boolean hasPredicates();
 }

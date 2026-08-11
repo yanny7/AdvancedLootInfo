@@ -9,6 +9,7 @@ import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
 import com.yanny.ali.api.IServerUtils;
+import com.yanny.ali.plugin.common.NodeUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -76,6 +77,8 @@ public class ItemNode implements IDataNode, IItemNode {
     private final Either<ItemStack, TagKey<? extends ItemLike>> item;
     private final RangeValue count;
     private final float chance;
+    /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
+    private final boolean hasPredicates;
 
     public ItemNode(float chance, RangeValue count, ItemStack item, TooltipNode tooltip, List<LootItemFunction> functions, List<LootItemCondition> conditions) {
         this(chance, count, Either.left(item), tooltip, functions, conditions);
@@ -92,6 +95,7 @@ public class ItemNode implements IDataNode, IItemNode {
         this.tooltip = tooltip;
         this.functions = functions;
         this.conditions = conditions;
+        this.hasPredicates = false;
     }
 
     public ItemNode(IClientUtils utils, RegistryFriendlyByteBuf buf) {
@@ -99,6 +103,7 @@ public class ItemNode implements IDataNode, IItemNode {
         tooltip = utils.getTooltipCache().getNodeById(buf.readVarInt());
         count = new RangeValue(buf);
         chance = buf.readFloat();
+        hasPredicates = buf.readBoolean();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
@@ -134,6 +139,11 @@ public class ItemNode implements IDataNode, IItemNode {
     }
 
     @Override
+    public boolean hasPredicates() {
+        return hasPredicates;
+    }
+
+    @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         int index = buf.writerIndex();
 
@@ -148,6 +158,7 @@ public class ItemNode implements IDataNode, IItemNode {
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         count.encode(buf);
         buf.writeFloat(chance);
+        buf.writeBoolean(NodeUtils.hasPredicates(utils, conditions));
     }
 
     @NotNull

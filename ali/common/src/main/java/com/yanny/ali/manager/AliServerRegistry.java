@@ -78,6 +78,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     private final Map<Identifier, LootTable> lootTableMap = new HashMap<>();
     private final Map<Identifier, Integer> hitMap = new HashMap<>();
     private final List<Function<IServerUtils, List<ILootModifier<?>>>> lootModifierGetters = new LinkedList<>();
+    private final List<Function<Ingredient, Object>> ingredientUnwrappers = new LinkedList<>();
     private final List<ILootModifier<?>> lootModifierMap = new LinkedList<>();
 
     private final LootContext lootContext;
@@ -90,6 +91,7 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     public void clearData() {
         super.clearData();
         lootTableMap.clear();
+        ingredientUnwrappers.clear();
         lootModifierGetters.clear();
         lootModifierMap.clear();
     }
@@ -189,6 +191,11 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     }
 
     @Override
+    public void registerIngredientUnwrapper(Function<Ingredient, Object> unwrapper) {
+        ingredientUnwrappers.add(unwrapper);
+    }
+
+    @Override
     public void registerLootModifiers(Function<IServerUtils, List<ILootModifier<?>>> getter) {
         lootModifierGetters.add(getter);
     }
@@ -236,6 +243,14 @@ public class AliServerRegistry extends CoreServerRegistry<AliConfig, AliCommonRe
     @NotNull
     @Override
     public <T extends Ingredient> TooltipBuilder getIngredientTooltip(IServerUtils utils, T ingredient) {
+        for (Function<Ingredient, Object> unwrapper : ingredientUnwrappers) {
+            Object unwrapped = unwrapper.apply(ingredient);
+
+            if (unwrapped != null) {
+                return getValueTooltip(utils, unwrapped);
+            }
+        }
+
         return ingredientTooltips.get(ingredient.getClass())
                 .map((i) -> i.apply(utils, ingredient))
                 .orElseGet(() -> MissingTooltipUtils.getMissingIngredientTooltip(utils, ingredient));

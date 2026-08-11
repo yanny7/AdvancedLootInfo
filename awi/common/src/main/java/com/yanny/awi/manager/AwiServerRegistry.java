@@ -1,5 +1,6 @@
 package com.yanny.awi.manager;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.manager.ClassKeyedMap;
 import com.yanny.aci.manager.CoreServerRegistry;
@@ -13,6 +14,7 @@ import com.yanny.awi.plugin.server.MissingTooltipUtils;
 import com.yanny.awi.plugin.server.summary.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
@@ -38,7 +40,7 @@ import java.util.function.BiFunction;
 
 public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRegistry, IServerUtils> implements IServerRegistry, IServerUtils, ICommonUtils {
     // collectors
-    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Block>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
+    private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, FeatureConfiguration, List<Either<Block, TagKey<Block>>>>> featureBlockCollector = registerClassKeyed("feature block collectors", false, HashMap::new, null);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, BlockStateProvider, List<Block>>> stateProviderBlockCollector = registerClassKeyed("state provider block collectors", false, HashMap::new, BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, RootPlacer, List<Block>>> rootPlacerBlockCollector = registerClassKeyed("root placer block collectors", false, HashMap::new, BuiltInRegistries.ROOT_PLACER_TYPE);
     private final ManagedRegistry<Class<?>, BiFunction<IServerUtils, TreeDecorator, List<Block>>> treeDecoratorBlockCollector = registerClassKeyed("tree decorator block collectors", false, HashMap::new, BuiltInRegistries.TREE_DECORATOR_TYPE);
@@ -67,7 +69,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
     }
 
     @Override
-    public <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Block>> getter) {
+    public <T extends FeatureConfiguration> void registerFeatureBlockCollector(Class<T> type, BiFunction<IServerUtils, T, List<Either<Block, TagKey<Block>>>> getter) {
         //noinspection unchecked
         featureBlockCollector.put(type, (u, t) -> getter.apply(u, (T) t));
     }
@@ -199,7 +201,7 @@ public class AwiServerRegistry extends CoreServerRegistry<AwiConfig, AwiCommonRe
 
     @NotNull
     @Override
-    public <T extends FeatureConfiguration> List<Block> collectBlocks(IServerUtils utils, T entry) {
+    public <T extends FeatureConfiguration> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry) {
         return featureBlockCollector.get(entry.getClass())
                 .map((e) -> e.apply(utils, entry))
                 .orElseGet(List::of); //TODO log missing collector ?

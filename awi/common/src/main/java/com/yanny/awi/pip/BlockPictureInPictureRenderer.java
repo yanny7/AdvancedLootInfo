@@ -36,11 +36,14 @@ public final class BlockPictureInPictureRenderer extends PictureInPictureRendere
             featureRenderDispatcher = Minecraft.getInstance().gameRenderer.featureRenderDispatcher();
         }
 
-        float scale = renderState.scale();
         BlockState state = renderState.state();
         SubmitNodeStorage collector = new SubmitNodeStorage();
 
-        poseStack.scale(RENDER_SIZE * scale, -RENDER_SIZE * scale, -RENDER_SIZE * scale);
+        // PictureInPictureRenderer#prepare has already scaled the pose by the render state's scale - multiplying it in
+        // again here would square it (which is why a state with scale != 1 came out the wrong size).
+        poseStack.scale(RENDER_SIZE, -RENDER_SIZE, -RENDER_SIZE);
+        // apply already ends with a translate(-0.5) that centres the 0..1 model on the origin, which is the texture's
+        // centre - do not add another one here.
         DEFAULT_TRANSFORM.apply(false, poseStack.last());
         poseStack.translate(.5, .5, .5);
         poseStack.last().normal().rotate(LIGHT_FIX_ROT);

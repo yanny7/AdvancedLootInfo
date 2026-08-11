@@ -1,11 +1,13 @@
 package com.yanny.awi.api;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.ICoreServerUtils;
 import com.yanny.aci.tooltip.TooltipBuilder;
 import com.yanny.awi.plugin.server.summary.ColumnContext;
 import com.yanny.awi.plugin.server.summary.CountSpan;
 import com.yanny.awi.plugin.server.summary.HeightSpan;
 import com.yanny.awi.plugin.server.summary.PlacementContribution;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.FloatProvider;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.level.block.Block;
@@ -27,7 +29,7 @@ import java.util.List;
 
 public interface IServerUtils extends ICoreServerUtils<IServerUtils>, ICommonUtils {
     @NotNull
-    <T extends FeatureConfiguration> List<Block> collectBlocks(IServerUtils utils, T entry);
+    <T extends FeatureConfiguration> List<Either<Block, TagKey<Block>>> collectBlocks(IServerUtils utils, T entry);
 
     @NotNull
     <T extends BlockStateProvider> List<Block> collectBlocks(IServerUtils utils, T entry);

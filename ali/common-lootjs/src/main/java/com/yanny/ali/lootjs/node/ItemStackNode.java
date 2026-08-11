@@ -35,6 +35,8 @@ public class ItemStackNode implements IDataNode, IItemNode {
     private final RangeValue count;
     private final float chance;
     private final boolean modified;
+    /** Only populated on the client - on the server it is derived from {@link #conditions} in {@link #encode}. */
+    private final boolean hasPredicates;
 
     public ItemStackNode(IServerUtils utils, ItemStack itemStack, float chance, List<LootItemFunction> functions, List<LootItemCondition> conditions, boolean preserveCount) {
        this(utils, itemStack, chance, false, functions, conditions, preserveCount);
@@ -46,6 +48,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
         this.itemStack = TooltipUtils.getItemStack(utils, itemStack.copyWithCount(1), this.functions);
         this.chance = chance;
         this.modified = modified;
+        this.hasPredicates = false;
 
         if (preserveCount) {
             tooltip = getItemTooltip(utils, 1, chance, functions, conditions);
@@ -62,6 +65,7 @@ public class ItemStackNode implements IDataNode, IItemNode {
         count = new RangeValue(buf);
         modified = buf.readBoolean();
         chance = buf.readFloat();
+        hasPredicates = buf.readBoolean();
 
         conditions = Collections.emptyList();
         functions = Collections.emptyList();
@@ -101,12 +105,18 @@ public class ItemStackNode implements IDataNode, IItemNode {
     }
 
     @Override
+    public boolean hasPredicates() {
+        return hasPredicates;
+    }
+
+    @Override
     public void encode(IServerUtils utils, RegistryFriendlyByteBuf buf) {
         ItemStack.STREAM_CODEC.encode(buf, itemStack);
         buf.writeVarInt(utils.getTooltipCache().getNodeId(tooltip));
         count.encode(buf);
         buf.writeBoolean(modified);
         buf.writeFloat(chance);
+        buf.writeBoolean(NodeUtils.hasPredicates(utils, conditions));
     }
 
     @NotNull

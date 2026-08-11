@@ -10,6 +10,12 @@
 - Conditional count modifiers are no longer hidden in non-advanced tooltip
 - Conditional count modifiers widen displayed count range instead of being ignored
 - Blocks that only drop themselves are hidden by default (configurable)
+- Used colored background for loot that has some predicates (except few configurable exceptions like chance or if survives explosion)
+- Fixed blocks sharing a loot table (e.g. wall variants) losing their loot modifiers and entries
+- Added support for NeoForge's `BasicItemListing` trades
+- Added support for Forge's ingredients (compound, difference, intersection, partial NBT, strict NBT)
+- Added support for NeoForge's ingredients (compound, difference, intersection, data component, block tag)
+- Added support for Fabric's ingredients (any, all, difference, components, custom data)
 
 ## [1.12.1]
 
