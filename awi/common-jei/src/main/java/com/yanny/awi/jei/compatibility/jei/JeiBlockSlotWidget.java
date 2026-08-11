@@ -1,6 +1,7 @@
 package com.yanny.awi.jei.compatibility.jei;
 
 import com.yanny.aci.api.Rect;
+import com.yanny.awi.compatibility.AbstractScrollWidget;
 import com.yanny.awi.pip.BlockRenderState;
 import com.yanny.awi.platform.Services;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
@@ -20,6 +21,9 @@ import org.joml.Matrix3x2fStack;
 import java.util.Optional;
 
 public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
+    /** Block edge length in GUI pixels - fits an 18px slot with a pixel of margin. */
+    private static final float BLOCK_SIZE = 9;
+
     private final BlockState blockState;
     private final Block block;
     private final ScreenPosition position;
@@ -53,13 +57,19 @@ public class JeiBlockSlotWidget implements ISlottedRecipeWidget {
     public void drawWidget(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         Matrix3x2fStack poseStack = guiGraphics.pose();
 
-        poseStack.pushMatrix();
+        poseStack.translate(1, 1);
         slotDrawable.draw(guiGraphics);
+        poseStack.translate(-1, -1);
 
-        int x = (int) guiGraphics.pose().m20() - 4;
-        int y = (int) guiGraphics.pose().m21() - 4;
+        // The scroll widget draws its children itself, so the pose is not translated to this widget's position -
+        // it has to be applied here before the absolute render position is read off the pose.
+        poseStack.pushMatrix();
+        poseStack.translate(rect.x(), rect.y());
 
-        BlockRenderState renderState = BlockRenderState.of(blockState, level, x, y, rect.width() + x, rect.height() + y, 1, null);
+        int centerX = (int) poseStack.m20() + rect.width() / 2;
+        int centerY = (int) poseStack.m21() + rect.height() / 2;
+
+        BlockRenderState renderState = BlockRenderState.centered(blockState, level, centerX, centerY, BLOCK_SIZE, AbstractScrollWidget.getCurrentViewport());
         Services.getClientPlatform().renderBlockInGui(guiGraphics, renderState);
 
         poseStack.popMatrix();

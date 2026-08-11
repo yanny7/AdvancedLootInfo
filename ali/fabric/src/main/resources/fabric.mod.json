@@ -26,7 +26,8 @@
             "com.yanny.ali.fabric.datagen.DataGeneration"
         ],
         "ali": [
-            "com.yanny.ali.plugin.Plugin"
+            "com.yanny.ali.plugin.Plugin",
+            "com.yanny.ali.fabric.plugin.FabricPlugin"
         ],
         "emi": [
             "com.yanny.ali.emi.compatibility.EmiCompatibility"

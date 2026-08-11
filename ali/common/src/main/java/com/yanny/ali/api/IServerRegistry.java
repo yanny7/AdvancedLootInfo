@@ -40,6 +40,14 @@ public interface IServerRegistry extends ICoreServerRegistry<IServerUtils> {
 
     <T extends DataComponentPredicate> void registerDataComponentPredicateTooltip(Class<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
+    /**
+     * Registers an unwrapper that turns a loader-specific composite {@link Ingredient} into the object actually
+     * describing it, so that its tooltip can be looked up as a value tooltip. Needed on loaders where custom
+     * ingredients are not {@link Ingredient} subclasses (NeoForge's {@code ICustomIngredient}) and therefore cannot be
+     * dispatched by {@link #registerIngredientTooltip}. Returns {@code null} for ingredients it does not handle.
+     */
+    void registerIngredientUnwrapper(Function<Ingredient, Object> unwrapper);
+
     <T extends EntitySubPredicate> void registerEntitySubPredicateTooltip(MapCodec<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);
 
     <T> void registerDataComponentTypeTooltip(DataComponentType<T> type, BiFunction<IServerUtils, T, TooltipBuilder> getter);

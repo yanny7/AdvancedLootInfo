@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3x2fStack;
 
 public abstract class AbstractScrollWidget {
@@ -16,6 +17,16 @@ public abstract class AbstractScrollWidget {
     protected static final int SCROLL_RATE = 8;
     /** Slack around the viewport, so widgets that draw outside their declared bounds (3D block models) are never clipped. */
     protected static final int CULLING_MARGIN = 32;
+
+    /**
+     * Absolute area the widget being rendered right now is clipped to, or null outside {@link #renderWidgets}. A
+     * picture-in-picture render state carries its own scissor rectangle instead of honouring {@link GuiGraphics}'
+     * scissor stack, so a block drawn through one has to be told where the viewport ends or it draws over the rest of
+     * the screen. Kept as static state rather than plumbed through, because the widgets that need it are handed to the
+     * recipe viewer before the scroll widget that owns them exists.
+     */
+    @Nullable
+    private static ScreenRectangle currentViewport;
 
     protected final Rect rect;
     protected final Rect contentRect;
@@ -147,8 +158,10 @@ public abstract class AbstractScrollWidget {
     private void drawContents(GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         Matrix3x2fStack poseStack = guiGraphics.pose();
         ScreenRectangle scissorArea = new ScreenRectangle(rect.x(), rect.y(), rect.width(), rect.height());
+        ScreenRectangle previousViewport = currentViewport;
         float scrollAmount = getScrollAmount();
 
+        currentViewport = scissorArea.transformAxisAligned(poseStack);
         guiGraphics.enableScissor(scissorArea.left(), scissorArea.top(), scissorArea.right(), scissorArea.bottom());
         poseStack.pushMatrix();
         poseStack.translateLocal(0.0F, -scrollAmount);
@@ -158,7 +171,13 @@ public abstract class AbstractScrollWidget {
         } finally {
             poseStack.popMatrix();
             guiGraphics.disableScissor();
+            currentViewport = previousViewport;
         }
+    }
+
+    @Nullable
+    public static ScreenRectangle getCurrentViewport() {
+        return currentViewport;
     }
 
     public static int getScrollbarExtraWidth() {
