@@ -124,17 +124,8 @@
     "blocks": [],
     "tags": []
   },
-  "minecraft:dripstone_cluster": {
-    "visitedMethods": 86,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:dripstone_block",
-      "minecraft:water"
-    ],
-    "tags": []
-  },
   "minecraft:end_gateway": {
-    "visitedMethods": 121,
+    "visitedMethods": 132,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -161,7 +152,7 @@
     "tags": []
   },
   "minecraft:end_spike": {
-    "visitedMethods": 154,
+    "visitedMethods": 159,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air",
@@ -184,7 +175,7 @@
     "tags": []
   },
   "minecraft:fossil": {
-    "visitedMethods": 417,
+    "visitedMethods": 433,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:barrier"
@@ -201,7 +192,7 @@
     "tags": []
   },
   "minecraft:geode": {
-    "visitedMethods": 135,
+    "visitedMethods": 166,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:air"
@@ -258,7 +249,7 @@
     "tags": []
   },
   "minecraft:lake": {
-    "visitedMethods": 61,
+    "visitedMethods": 60,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
@@ -267,7 +258,7 @@
     "tags": []
   },
   "minecraft:large_dripstone": {
-    "visitedMethods": 76,
+    "visitedMethods": 77,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:dripstone_block"
@@ -275,7 +266,7 @@
     "tags": []
   },
   "minecraft:monster_room": {
-    "visitedMethods": 152,
+    "visitedMethods": 163,
     "methodLimitReached": false,
     "blocks": [
       "minecraft:cave_air",
@@ -311,17 +302,9 @@
     "tags": []
   },
   "minecraft:ore": {
-    "visitedMethods": 127,
+    "visitedMethods": 138,
     "methodLimitReached": false,
     "blocks": [],
-    "tags": []
-  },
-  "minecraft:pointed_dripstone": {
-    "visitedMethods": 53,
-    "methodLimitReached": false,
-    "blocks": [
-      "minecraft:dripstone_block"
-    ],
     "tags": []
   },
   "minecraft:random_boolean_selector": {
@@ -331,7 +314,7 @@
     "tags": []
   },
   "minecraft:random_selector": {
-    "visitedMethods": 20,
+    "visitedMethods": 23,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
@@ -343,7 +326,7 @@
     "tags": []
   },
   "minecraft:root_system": {
-    "visitedMethods": 67,
+    "visitedMethods": 88,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
@@ -380,6 +363,12 @@
     ],
     "tags": []
   },
+  "minecraft:sequence": {
+    "visitedMethods": 20,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
   "minecraft:simple_block": {
     "visitedMethods": 85,
     "methodLimitReached": false,
@@ -389,9 +378,23 @@
     "tags": []
   },
   "minecraft:simple_random_selector": {
-    "visitedMethods": 19,
+    "visitedMethods": 20,
     "methodLimitReached": false,
     "blocks": [],
+    "tags": []
+  },
+  "minecraft:speleothem": {
+    "visitedMethods": 61,
+    "methodLimitReached": false,
+    "blocks": [],
+    "tags": []
+  },
+  "minecraft:speleothem_cluster": {
+    "visitedMethods": 101,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:water"
+    ],
     "tags": []
   },
   "minecraft:spike": {
@@ -404,6 +407,14 @@
     "visitedMethods": 25,
     "methodLimitReached": false,
     "blocks": [],
+    "tags": []
+  },
+  "minecraft:template": {
+    "visitedMethods": 418,
+    "methodLimitReached": false,
+    "blocks": [
+      "minecraft:barrier"
+    ],
     "tags": []
   },
   "minecraft:tree": {
@@ -430,7 +441,7 @@
     "tags": []
   },
   "minecraft:vegetation_patch": {
-    "visitedMethods": 69,
+    "visitedMethods": 79,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
@@ -453,7 +464,7 @@
     "tags": []
   },
   "minecraft:waterlogged_vegetation_patch": {
-    "visitedMethods": 69,
+    "visitedMethods": 79,
     "methodLimitReached": false,
     "blocks": [],
     "tags": []
@@ -466,6 +477,12 @@
       "minecraft:weeping_vines",
       "minecraft:weeping_vines_plant"
     ],
+    "tags": []
+  },
+  "minecraft:weighted_random_selector": {
+    "visitedMethods": 22,
+    "methodLimitReached": false,
+    "blocks": [],
     "tags": []
   }
 }

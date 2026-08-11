@@ -164,7 +164,7 @@ public class FeatureConfigurationCollectorUtils {
         List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.defaultFeature().value().feature().value()));
-        blocks.addAll(configuration.features().stream().map((feature) -> collectConfiguredFeatureBlocks(utils, feature.feature().value().feature().value().config())).flatMap(Collection::stream).toList());
+        blocks.addAll(configuration.features().stream().map((feature) -> collectConfiguredFeatureBlocks(utils, feature.feature().value().feature().value())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
@@ -191,7 +191,7 @@ public class FeatureConfigurationCollectorUtils {
 
         blocks.addAll(wrap(utils.collectBlocks(utils, configuration.rootStateProvider())));
         blocks.addAll(wrap(utils.collectBlocks(utils, configuration.hangingRootStateProvider())));
-        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.treeFeature().value().feature().value().config()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.treeFeature().value().feature().value()));
         return blocks;
     }
 
@@ -252,7 +252,7 @@ public class FeatureConfigurationCollectorUtils {
         List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
         blocks.addAll(wrap(utils.collectBlocks(utils, configuration.groundState())));
-        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.vegetationFeature().value().feature().value().config()));
+        blocks.addAll(collectConfiguredFeatureBlocks(utils, configuration.vegetationFeature().value().feature().value()));
         return blocks;
     }
 
@@ -333,42 +333,42 @@ public class FeatureConfigurationCollectorUtils {
     }
 
     @NotNull
-    public static List<Block> collectCompositeFeatureConfigurationBlocks(IServerUtils utils, CompositeFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectCompositeFeatureConfigurationBlocks(IServerUtils utils, CompositeFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(configuration.features().stream().map((feature) -> utils.collectBlocks(utils, feature.value().feature().value().config())).flatMap(Collection::stream).toList());
+        blocks.addAll(configuration.features().stream().map((feature) -> collectConfiguredFeatureBlocks(utils, feature.value().feature().value())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectSpeleothemClusterConfigurationBlocks(IServerUtils utils, SpeleothemClusterConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectSpeleothemClusterConfigurationBlocks(IServerUtils utils, SpeleothemClusterConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.baseBlock().getBlock());
-        blocks.add(configuration.pointedBlock().getBlock());
+        blocks.add(Either.left(configuration.baseBlock().getBlock()));
+        blocks.add(Either.left(configuration.pointedBlock().getBlock()));
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectWeightedRandomFeatureConfigurationBlocks(IServerUtils utils, WeightedRandomFeatureConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectWeightedRandomFeatureConfigurationBlocks(IServerUtils utils, WeightedRandomFeatureConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.addAll(configuration.features().unwrap().stream().map((feature) -> utils.collectBlocks(utils, feature.value().value().feature().value().config())).flatMap(Collection::stream).toList());
+        blocks.addAll(configuration.features().unwrap().stream().map((feature) -> collectConfiguredFeatureBlocks(utils, feature.value().value().feature().value())).flatMap(Collection::stream).toList());
         return blocks;
     }
 
     @NotNull
-    public static List<Block> collectSpeleothemConfigurationBlocks(IServerUtils utils, SpeleothemConfiguration configuration) {
-        List<Block> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
+    public static List<Either<Block, TagKey<Block>>> collectSpeleothemConfigurationBlocks(IServerUtils utils, SpeleothemConfiguration configuration) {
+        List<Either<Block, TagKey<Block>>> blocks = new ArrayList<>(collectFeatureBlocks(utils, configuration));
 
-        blocks.add(configuration.baseBlock().getBlock());
-        blocks.add(configuration.pointedBlock().getBlock());
+        blocks.add(Either.left(configuration.baseBlock().getBlock()));
+        blocks.add(Either.left(configuration.pointedBlock().getBlock()));
         return blocks;
     }
 
     @Unmodifiable
     @NotNull
-    public static List<Block> collectTemplateFeatureConfigurationBlocks(IServerUtils utils, TemplateFeatureConfiguration configuration) {
+    public static List<Either<Block, TagKey<Block>>> collectTemplateFeatureConfigurationBlocks(IServerUtils utils, TemplateFeatureConfiguration configuration) {
         return collectFeatureBlocks(utils, configuration);
     }
 

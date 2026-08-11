@@ -435,7 +435,9 @@ public final class Lang {
     public enum Branch implements ITooltipKey {
         ADVANCEMENTS("advancements", "Advancements:"),
         ALLOWED_ENTITIES(Value.ALLOWED_ENTITY, "allowed_entities", "Allowed Entities:"),
+        ALL("all", "All:"),
         ALL_OF("all_of", "All Of:"),
+        ANY("any", "Any:"),
         ANY_OF("any_of", "Any Of:"),
         ATTRIBUTES(Value.ATTRIBUTE, "attributes", "Attributes:"),
         ATTRIBUTE_MODIFIER("attribute_modifier", "Attribute Modifier:"),
