@@ -4,6 +4,7 @@
   "package": "com.yanny.ali.neoforge.mixin",
   "mixins": [
     "MixinAddTableLootModifier",
+    "MixinBasicItemListing",
     "MixinCanItemPerformAbility",
     "MixinLootModifier",
     "MixinLootTableIdCondition",

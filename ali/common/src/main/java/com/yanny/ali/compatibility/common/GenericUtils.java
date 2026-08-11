@@ -3,6 +3,7 @@ package com.yanny.ali.compatibility.common;
 import com.mojang.logging.LogUtils;
 import com.yanny.aci.api.ICoreDataNode;
 import com.yanny.aci.api.Rect;
+import com.yanny.ali.Utils;
 import com.yanny.ali.api.IClientUtils;
 import com.yanny.ali.api.IDataNode;
 import com.yanny.ali.api.IItemNode;
@@ -37,6 +38,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.jetbrains.annotations.NotNull;
@@ -268,22 +270,36 @@ public class GenericUtils {
         pruneHiddenItems(lootData, isVisible);
         pruneHiddenTrades(tradeData, isVisible);
 
-        for (Block block : BuiltInRegistries.BLOCK) {
-            block.getLootTable().ifPresent((resourceKey -> {
-                ResourceLocation location = resourceKey.location();
-                LootData data = lootData.get(location);
+        // a loot table is claimed only after every block using it got its own entry - blocks sharing one table
+        // (vanilla's dropsLike) must not hide each other; claimed tables are dropped before the gameplay pass
+        Set<ResourceLocation> claimedLootTables = new HashSet<>();
+        // entities keep the one-entry-per-table rule: entity entries are identified by their loot table, so a table
+        // shared by two entity types would produce two entries under the same id
+        Set<ResourceLocation> handledEntityLootTables = new HashSet<>();
+        Map<ResourceLocation, Set<Item>> handledBlockItems = new HashMap<>();
 
-                if (data != null) {
+        for (Block block : BuiltInRegistries.BLOCK) {
+            ResourceLocation location = Utils.getLootTableKey(block);
+            LootData data = lootData.get(location);
+
+            if (data != null) {
+                // blocks sharing both a loot table and an item (StandingAndWallBlockItem, e.g. banner + wall
+                // banner) would render as two identical entries; blocks with no item of their own are drawn as
+                // the block itself, so those stay distinguishable and are always kept
+                Item item = block.asItem();
+
+                if (item == Items.AIR || handledBlockItems.computeIfAbsent(location, (k) -> new HashSet<>()).add(item)) {
                     blockConsumer.accept(data.node, location, block, data.items);
-                    lootData.remove(location);
                 }
-            }));
+
+                claimedLootTables.add(location);
+            }
         }
 
         for (EntityType<?> entityType : BuiltInRegistries.ENTITY_TYPE) {
             if (config.disabledEntities.stream().anyMatch((f) -> f.equals(BuiltInRegistries.ENTITY_TYPE.getKey(entityType)))) {
                 // at least remove entity default loot table
-                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> lootData.remove(lootTableResourceKey.location()));
+                entityType.getDefaultLootTable().ifPresent(lootTableResourceKey -> claimedLootTables.add(lootTableResourceKey.location()));
                 continue;
             }
 
@@ -299,15 +315,17 @@ public class GenericUtils {
                         ResourceLocation location = resourceKey.location();
                         LootData data = lootData.get(location);
 
-                        if (data != null) {
+                        if (data != null && handledEntityLootTables.add(location)) {
                             entityConsumer.accept(data.node, location, entityType, data.items);
                         }
 
-                        lootData.remove(location);
+                        claimedLootTables.add(location);
                     });
                 }
             }
         }
+
+        lootData.keySet().removeAll(claimedLootTables);
 
         for (Map.Entry<ResourceLocation, LootData> entry : lootData.entrySet()) {
             gameplayConsumer.accept(entry.getValue().node, entry.getKey(), entry.getValue().items());

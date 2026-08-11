@@ -17,6 +17,11 @@ import com.yanny.ali.plugin.glm.ILootTableIdConditionPredicate;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.common.crafting.ingredients.CompoundIngredient;
+import net.minecraftforge.common.crafting.ingredients.DifferenceIngredient;
+import net.minecraftforge.common.crafting.ingredients.IntersectionIngredient;
+import net.minecraftforge.common.crafting.ingredients.PartialNBTIngredient;
+import net.minecraftforge.common.crafting.ingredients.StrictNBTIngredient;
 import net.minecraftforge.common.loot.*;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +44,12 @@ public class ForgePlugin implements IPlugin {
     public void registerServer(IServerRegistry registry) {
         registry.registerConditionTooltip(CanToolPerformAction.class, ForgePlugin::getCanToolPerformActionTooltip);
         registry.registerConditionTooltip(LootTableIdCondition.class, ForgePlugin::getLootTableIdTooltip);
+
+        registry.registerIngredientTooltip(CompoundIngredient.class, ForgeIngredientTooltipUtils::getCompoundIngredientTooltip);
+        registry.registerIngredientTooltip(DifferenceIngredient.class, ForgeIngredientTooltipUtils::getDifferenceIngredientTooltip);
+        registry.registerIngredientTooltip(IntersectionIngredient.class, ForgeIngredientTooltipUtils::getIntersectionIngredientTooltip);
+        registry.registerIngredientTooltip(PartialNBTIngredient.class, ForgeIngredientTooltipUtils::getPartialNbtIngredientTooltip);
+        registry.registerIngredientTooltip(StrictNBTIngredient.class, ForgeIngredientTooltipUtils::getStrictNbtIngredientTooltip);
 
         registry.registerLootModifiers(ForgePlugin::registerLootModifiers);
     }

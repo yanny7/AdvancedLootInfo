@@ -1,6 +1,9 @@
 package com.yanny.ali;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class Utils {
@@ -10,5 +13,15 @@ public class Utils {
     @NotNull
     public static ResourceLocation modLoc(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+
+    /**
+     * Key under which a block's loot node is stored. Blocks declared with {@code noLootTable()} report no loot table at
+     * all - keying them by themselves keeps a GLM-only node attached to the one block it belongs to, instead of
+     * collapsing every such block into a single entry. Server and client must derive this identically.
+     */
+    @NotNull
+    public static ResourceLocation getLootTableKey(Block block) {
+        return block.getLootTable().map(ResourceKey::location).orElseGet(() -> BuiltInRegistries.BLOCK.getKey(block));
     }
 }

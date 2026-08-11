@@ -1,13 +1,16 @@
 package com.yanny.awi.jei.compatibility.jei;
 
+import com.mojang.datafixers.util.Either;
 import com.yanny.aci.api.IWidget;
 import com.yanny.aci.api.RangeValue;
 import com.yanny.aci.api.Rect;
 import com.yanny.aci.api.RelativeRect;
 import com.yanny.aci.tooltip.CoreTooltipUtils;
 import com.yanny.aci.tooltip.TooltipNodePalette;
+import com.yanny.awi.api.IBlockNode;
 import com.yanny.awi.api.IDataNode;
 import com.yanny.awi.api.IWidgetUtils;
+import com.yanny.awi.compatibility.GenericUtils;
 import com.yanny.awi.manager.PluginManager;
 import com.yanny.awi.plugin.client.ClientUtils;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -25,7 +28,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Items;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -95,10 +98,14 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
                             -> tooltipBuilder.addAll(CoreTooltipUtils.toComponents(h.entry().getTooltip(), 0, Minecraft.getInstance().options.advancedItemTooltips)));
 
 
-            if (!h.block.defaultBlockState().getFluidState().isEmpty()) {
-                slotBuilder.add(h.block.defaultBlockState().getFluidState().getType());
-            } else {
-                slotBuilder.add(h.block);
+            // A tag adds every member to the same slot, which is what makes JEI cycle through them. Item-less blocks
+            // with a model of their own are drawn by JeiBlockSlotWidget below and contribute no ingredient.
+            for (Block block : ingredientBlocks(h)) {
+                if (GenericUtils.rendersAsFluid(block)) {
+                    slotBuilder.addFluidStack(block.defaultBlockState().getFluidState().getType());
+                } else {
+                    slotBuilder.addItemLike(block);
+                }
             }
         }
     }
@@ -122,8 +129,10 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
             Holder h = slotParams.get(i);
 
             builder.getRecipeSlots().findSlotByName(String.valueOf(i)).ifPresent((slotDrawable) -> {
-                if (isBlockModel(h.block)) {
-                    scrollWidgets.add(new JeiBlockSlotWidget(slotDrawable, h.block, h.rect.getX(), h.rect.getY()));
+                List<Block> models = modelBlocks(h);
+
+                if (!models.isEmpty() && ingredientBlocks(h).isEmpty()) {
+                    scrollWidgets.add(new JeiBlockSlotWidget(slotDrawable, models.get(0), h.rect.getX(), h.rect.getY()));
                 } else {
                     scrollWidgets.add(new JeiLootSlotWidget(slotDrawable, h.rect.getX(), h.rect.getY(), new RangeValue(1)));
                 }
@@ -154,7 +163,7 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
      * (see {@link JeiBlockSlotWidget}) rather than as a JEI item/fluid ingredient.
      */
     static boolean isBlockModel(Block block) {
-        return block.asItem() == Items.AIR && block.defaultBlockState().getFluidState().isEmpty();
+        return GenericUtils.rendersAsBlockModel(block);
     }
 
     abstract Pair<List<IRecipeWidget>, List<IRecipeSlotDrawable>> getWidgets(IRecipeExtrasBuilder builder, RecipeHolder recipe);
@@ -202,12 +211,23 @@ public abstract class JeiBaseLoot implements IRecipeCategory<RecipeHolder> {
             }
 
             @Override
-            public void addSlotWidget(Block block, IDataNode node, RelativeRect rect) {
+            public void addSlotWidget(Either<Block, TagKey<Block>> block, IDataNode node, RelativeRect rect) {
                 slotParams.add(new Holder(block, node, rect));
             }
         };
     }
 
-    public record Holder(Block block, IDataNode entry, RelativeRect rect) {
+    /** Members JEI can hold as an ingredient - everything except item-less blocks that only have a model. */
+    @NotNull
+    private static List<Block> ingredientBlocks(Holder holder) {
+        return ((IBlockNode) holder.entry).getBlocks().stream().filter((b) -> !isBlockModel(b)).toList();
+    }
+
+    @NotNull
+    private static List<Block> modelBlocks(Holder holder) {
+        return ((IBlockNode) holder.entry).getBlocks().stream().filter(JeiBaseLoot::isBlockModel).toList();
+    }
+
+    public record Holder(Either<Block, TagKey<Block>> block, IDataNode entry, RelativeRect rect) {
     }
 }
